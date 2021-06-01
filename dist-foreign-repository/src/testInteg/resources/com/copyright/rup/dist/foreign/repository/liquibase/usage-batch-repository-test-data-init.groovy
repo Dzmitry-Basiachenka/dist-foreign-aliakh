@@ -10,8 +10,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000813806)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
@@ -22,8 +22,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017004)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-08-16')
-            column(name: 'fiscal_year', value: '2019')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2019)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
         }
@@ -34,8 +34,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017010)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2015-09-10')
-            column(name: 'fiscal_year', value: '2016')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2016)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }
@@ -46,8 +46,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000813800)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-10-30')
-            column(name: 'fiscal_year', value: '2018')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2018)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 1)
             column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
@@ -81,7 +81,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -106,7 +106,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -131,7 +131,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'gross_amount', value: '2125.24')
+            column(name: 'gross_amount', value: 2125.24)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -158,7 +158,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
             column(name: 'service_fee', value: '0.32000')
@@ -183,8 +183,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017000)
             column(name: 'product_family', value: 'FAS2')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'updated_datetime', value: '2017-01-14 11:41:52.735531+03')
         }
@@ -199,7 +199,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -224,7 +224,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'gross_amount', value: '2125.24')
+            column(name: 'gross_amount', value: 2125.24)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -257,7 +257,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 123456789)
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2020')
+            column(name: 'fiscal_year', value: 2020)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 0, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7, "excluding_stm": true}')
@@ -275,7 +275,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -301,7 +301,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -322,7 +322,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000000001)
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2020')
+            column(name: 'fiscal_year', value: 2020)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 0, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
@@ -340,7 +340,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -366,7 +366,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -399,7 +399,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000000001)
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2020')
+            column(name: 'fiscal_year', value: 2020)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
                     '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
@@ -417,7 +417,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -443,7 +443,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -468,7 +468,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000000001)
             column(name: 'payment_date', value: '2019-01-11')
             column(name: 'product_family', value: 'NTS')
-            column(name: 'fiscal_year', value: '2020')
+            column(name: 'fiscal_year', value: 2020)
             column(name: 'initial_usages_count', value: 1)
             column(name: 'nts_fields', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, "fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
             column(name: 'updated_datetime', value: '2019-01-04 12:45:51.335531+03')
@@ -484,7 +484,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '0804709114')
-            column(name: 'gross_amount', value: '0.00')
+            column(name: 'gross_amount', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -508,8 +508,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017000)
             column(name: 'product_family', value: 'FAS2')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'updated_datetime', value: '2017-01-13 11:41:52.735531+03')
         }
@@ -523,7 +523,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -547,7 +547,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'gross_amount', value: '2125.24')
+            column(name: 'gross_amount', value: 2125.24)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -568,8 +568,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017000)
             column(name: 'product_family', value: 'FAS2')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 3)
             column(name: 'updated_datetime', value: '2017-01-12 11:41:52.735531+03')
         }
@@ -583,7 +583,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -607,7 +607,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS2')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '200')
-            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'gross_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -631,7 +631,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'gross_amount', value: '2125.24')
+            column(name: 'gross_amount', value: 2125.24)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -655,7 +655,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL Batch With New and RH Not Found usages')
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2015')
+            column(name: 'fiscal_year', value: 2015)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 5588, "licensee_name": "RGS Energy Group"}')
             column(name: 'updated_datetime', value: '2017-01-10 11:41:52.735531+03')
@@ -729,7 +729,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL usage batch attached to a scenario')
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2015')
+            column(name: 'fiscal_year', value: 2015)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
             column(name: 'updated_datetime', value: '2017-01-09 11:41:52.735531+03')

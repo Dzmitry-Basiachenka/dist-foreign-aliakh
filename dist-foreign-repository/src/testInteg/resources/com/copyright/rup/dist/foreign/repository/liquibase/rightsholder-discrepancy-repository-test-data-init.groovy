@@ -10,8 +10,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 7000800832)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '30000')
+            column(name: 'fiscal_year', value: 2017)
+            column(name: 'gross_amount', value: 30000)
             column(name: 'initial_usages_count', value: 1)
         }
 
@@ -34,7 +34,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'gross_amount', value: 16437.40)
             column(name: 'net_amount', value: '11177.40')
             column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.32000')
@@ -69,8 +69,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017010)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2015-09-10')
-            column(name: 'fiscal_year', value: '2016')
-            column(name: 'gross_amount', value: '35000')
+            column(name: 'fiscal_year', value: 2016)
+            column(name: 'gross_amount', value: 35000)
             column(name: 'initial_usages_count', value: 2)
         }
 
@@ -93,7 +93,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'gross_amount', value: 16437.40)
             column(name: 'net_amount', value: '11177.40')
             column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.32000')
@@ -123,7 +123,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'gross_amount', value: 35000.00)
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
             column(name: 'service_fee', value: '0.32000')

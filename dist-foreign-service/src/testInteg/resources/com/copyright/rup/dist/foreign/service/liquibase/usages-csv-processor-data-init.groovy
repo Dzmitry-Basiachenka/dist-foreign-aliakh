@@ -10,8 +10,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 2000017010)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
-            column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '2000.00')
+            column(name: 'fiscal_year', value: 2020)
+            column(name: 'gross_amount', value: 2000.00)
             column(name: 'initial_usages_count', value: 1)
         }
 
@@ -24,7 +24,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'standard_number', value: '9780150000000')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'gross_amount', value: 10000.00)
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
             column(name: 'service_fee', value: '0.16000')

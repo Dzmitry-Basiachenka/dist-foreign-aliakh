@@ -10,8 +10,8 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: 1000023401)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-24')
-            column(name: 'fiscal_year', value: '2018')
-            column(name: 'gross_amount', value: '1394.00')
+            column(name: 'fiscal_year', value: 2018)
+            column(name: 'gross_amount', value: 1394.00)
             column(name: 'initial_usages_count', value: 10)
             column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
@@ -24,7 +24,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '70.00')
+            column(name: 'gross_amount', value: 70.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -46,7 +46,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '25.00')
+            column(name: 'gross_amount', value: 25.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -67,7 +67,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '99.00')
+            column(name: 'gross_amount', value: 99.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -88,7 +88,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '100.00')
+            column(name: 'gross_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -109,7 +109,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '200.00')
+            column(name: 'gross_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -130,7 +130,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '300.00')
+            column(name: 'gross_amount', value: 300.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -152,7 +152,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '150.00')
+            column(name: 'gross_amount', value: 150.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -173,7 +173,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '250.00')
+            column(name: 'gross_amount', value: 250.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -194,7 +194,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '150.00')
+            column(name: 'gross_amount', value: 150.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -213,7 +213,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'gross_amount', value: '50.00')
+            column(name: 'gross_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -233,7 +233,7 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL Batch With New and RH Not Found usages')
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: '2015')
+            column(name: 'fiscal_year', value: 2015)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 5588, "licensee_name": "RGS Energy Group"}')
         }
