@@ -30,9 +30,7 @@ class UdmTouToRmsTouResultHandler implements ResultHandler {
     }
 
     /**
-     * Gets map of UDM type of uses to RMS type of uses.
-     *
-     * @return a map of batches names to scenarios names
+     * @return a map of UDM type of uses to RMS type of uses.
      */
     Map<String, String> getUdmTousToRmsTous() {
         return udmTousToRmsTous;
@@ -72,7 +70,6 @@ class UdmTouToRmsTouResultHandler implements ResultHandler {
             }
             UdmTouRmsTouPair that = (UdmTouRmsTouPair) o;
             return new EqualsBuilder()
-                .appendSuper(super.equals(o))
                 .append(udmTypeOfUse, that.udmTypeOfUse)
                 .append(rmsTypeOfUse, that.rmsTypeOfUse)
                 .isEquals();
@@ -81,7 +78,6 @@ class UdmTouToRmsTouResultHandler implements ResultHandler {
         @Override
         public int hashCode() {
             return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
                 .append(udmTypeOfUse)
                 .append(rmsTypeOfUse)
                 .toHashCode();
@@ -90,7 +86,6 @@ class UdmTouToRmsTouResultHandler implements ResultHandler {
         @Override
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .appendSuper(super.toString())
                 .append("udmTypeOfUse", udmTypeOfUse)
                 .append("rmsTypeOfUse", rmsTypeOfUse)
                 .toString();

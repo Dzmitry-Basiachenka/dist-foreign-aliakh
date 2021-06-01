@@ -28,16 +28,15 @@ import java.util.List;
  */
 public class ReportedTypeOfUseValidatorTest {
 
-    private static final String TOU_1 = "TOU_1";
-    private static final String TOU_2 = "TOU_2";
-    private static final String TOU_3 = "TOU_3";
-    private static final String TITLE_1 = "Title 1";
-    private static final String TITLE_2 = "Title 2";
+    private static final String COPY_FOR_MYSELF = "COPY_FOR_MYSELF";
+    private static final String EMAIL_COPY = "EMAIL_COPY";
+    private static final String TITLE_1 = "Colloids and surfaces. B, Biointerfaces";
+    private static final String TITLE_2 = "Tenside, surfactants, detergents";
     private static final String NONE_TITLE_ERROR_MESSAGE = "Reported TOU should be blank if Reported Title equals to " +
         "'None', otherwise it should be filled in";
     private static final String TOU_NOT_EXIST_ERROR_MESSAGE = "Reported TOU doesn't exist in the system";
 
-    private final List<String> udmTous = Arrays.asList(TOU_1, TOU_2, TOU_3);
+    private final List<String> udmTous = Arrays.asList(COPY_FOR_MYSELF, EMAIL_COPY);
 
     private ReportedTypeOfUseValidator validator;
 
@@ -52,7 +51,7 @@ public class ReportedTypeOfUseValidatorTest {
 
     @Test
     public void testIsValid() {
-        UdmUsage usage = buildUdmUsage(TOU_1, TITLE_1);
+        UdmUsage usage = buildUdmUsage(COPY_FOR_MYSELF, TITLE_1);
         assertTrue(validator.isValid(usage));
     }
 
@@ -68,7 +67,7 @@ public class ReportedTypeOfUseValidatorTest {
 
     @Test
     public void testIsValidTitleNull() {
-        UdmUsage usage = buildUdmUsage(TOU_2, null);
+        UdmUsage usage = buildUdmUsage(EMAIL_COPY, null);
         assertTrue(validator.isValid(usage));
     }
 
@@ -95,28 +94,28 @@ public class ReportedTypeOfUseValidatorTest {
 
     @Test
     public void testNoneTitleGetErrorMessage() {
-        UdmUsage usage = buildUdmUsage(TOU_2, "None");
+        UdmUsage usage = buildUdmUsage(EMAIL_COPY, "None");
         assertFalse(validator.isValid(usage));
         assertEquals(NONE_TITLE_ERROR_MESSAGE, validator.getErrorMessage());
     }
 
     @Test
     public void testTouGetErrorMessage() {
-        UdmUsage usage = buildUdmUsage("Tou_3", TITLE_2);
+        UdmUsage usage = buildUdmUsage("Email_COPY", TITLE_2);
         assertFalse(validator.isValid(usage));
         assertEquals(TOU_NOT_EXIST_ERROR_MESSAGE, validator.getErrorMessage());
     }
 
     @Test
     public void testTitleNullGetErrorMessage() {
-        UdmUsage usage = buildUdmUsage("Tou_3", null);
+        UdmUsage usage = buildUdmUsage("STORE COPY", null);
         assertFalse(validator.isValid(usage));
         assertEquals(TOU_NOT_EXIST_ERROR_MESSAGE, validator.getErrorMessage());
     }
 
     @Test
     public void testTitleEmptyGetErrorMessage() {
-        UdmUsage usage = buildUdmUsage("Tou_3", "");
+        UdmUsage usage = buildUdmUsage("FAX_COPY", "");
         assertFalse(validator.isValid(usage));
         assertEquals(TOU_NOT_EXIST_ERROR_MESSAGE, validator.getErrorMessage());
     }
