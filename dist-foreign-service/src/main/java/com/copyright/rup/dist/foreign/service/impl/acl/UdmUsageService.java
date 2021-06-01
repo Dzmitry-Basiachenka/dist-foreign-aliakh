@@ -73,9 +73,9 @@ public class UdmUsageService implements IUdmUsageService {
         LocalDate periodEndDate = createPeriodEndDate(udmBatch);
         Map<String, String> udmTouToRmsTou = udmTypeOfUseService.getUdmTouToRmsTouMap();
         udmUsages.forEach(usage -> {
-            usage.setTypeOfUse(udmTouToRmsTou.get(usage.getReportedTypeOfUse()));
             usage.setBatchId(udmBatch.getId());
             usage.setPeriodEndDate(periodEndDate);
+            usage.setTypeOfUse(udmTouToRmsTou.get(usage.getReportedTypeOfUse()));
             usage.setAnnualMultiplier(udmAnnualMultiplierCalculator.calculate(usage.getSurveyStartDate(),
                 usage.getSurveyEndDate()));
             usage.setStatisticalMultiplier(DEFAULT_STATISTICAL_MULTIPLIER);

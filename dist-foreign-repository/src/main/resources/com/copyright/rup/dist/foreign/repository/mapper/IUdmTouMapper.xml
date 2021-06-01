@@ -20,6 +20,5 @@
             type_of_use,
             rms_type_of_use
         from ${schema}.df_udm_tou_mapping
-        order by type_of_use asc
     </select>
 </mapper>
