@@ -43,9 +43,9 @@ public class TelesalesCacheServiceTest {
         CompanyInformation companyInformation1 = buildCompanyInformation(COMPANY_NAME_1);
         CompanyInformation companyInformation2 = buildCompanyInformation(COMPANY_NAME_2);
         CompanyInformation companyInformation3 = buildCompanyInformation(COMPANY_NAME_3);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_1)).andReturn(companyInformation1);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_2)).andReturn(companyInformation2);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_3)).andReturn(companyInformation3);
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_1)).andReturn(companyInformation1).once();
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_2)).andReturn(companyInformation2).once();
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_3)).andReturn(companyInformation3).once();
         replay(telesalesService);
         assertEquals(COMPANY_NAME_1, telesalesCacheService.getLicenseeName(COMPANY_ID_1));
         assertEquals(COMPANY_NAME_2, telesalesCacheService.getLicenseeName(COMPANY_ID_2));
@@ -58,9 +58,9 @@ public class TelesalesCacheServiceTest {
         CompanyInformation companyInformation1 = buildCompanyInformation(COMPANY_NAME_1);
         CompanyInformation companyInformation2 = buildCompanyInformation(COMPANY_NAME_2);
         CompanyInformation companyInformation3 = buildCompanyInformation(COMPANY_NAME_3);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_1)).andReturn(companyInformation1);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_2)).andReturn(companyInformation2);
-        expect(telesalesService.getCompanyInformation(COMPANY_ID_3)).andReturn(companyInformation3);
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_1)).andReturn(companyInformation1).once();
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_2)).andReturn(companyInformation2).once();
+        expect(telesalesService.getCompanyInformation(COMPANY_ID_3)).andReturn(companyInformation3).once();
         replay(telesalesService);
         assertEquals(companyInformation1, telesalesCacheService.getCompanyInformation(COMPANY_ID_1));
         assertEquals(companyInformation2, telesalesCacheService.getCompanyInformation(COMPANY_ID_2));

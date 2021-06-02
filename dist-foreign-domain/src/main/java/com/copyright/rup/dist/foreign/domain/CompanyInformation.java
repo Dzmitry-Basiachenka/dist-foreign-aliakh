@@ -18,7 +18,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class CompanyInformation extends StoredEntity<Long> {
 
     private String name;
-    private Integer detailedLicenseeClassId;
+    private Integer detailLicenseeClassId;
 
     /**
      * @return company name.
@@ -37,19 +37,19 @@ public class CompanyInformation extends StoredEntity<Long> {
     }
 
     /**
-     * @return detailed licensee class id.
+     * @return detail licensee class id.
      */
-    public Integer getDetailedLicenseeClassId() {
-        return detailedLicenseeClassId;
+    public Integer getDetailLicenseeClassId() {
+        return detailLicenseeClassId;
     }
 
     /**
-     * Sets detailed licensee class id.
+     * Sets detail licensee class id.
      *
-     * @param detailedLicenseeClassId detailed licensee class id to set
+     * @param detailLicenseeClassId detail licensee class id to set
      */
-    public void setDetailedLicenseeClassId(Integer detailedLicenseeClassId) {
-        this.detailedLicenseeClassId = detailedLicenseeClassId;
+    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
+        this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CompanyInformation extends StoredEntity<Long> {
         return new EqualsBuilder()
             .appendSuper(super.equals(that))
             .append(this.name, that.name)
-            .append(this.detailedLicenseeClassId, that.detailedLicenseeClassId)
+            .append(this.detailLicenseeClassId, that.detailLicenseeClassId)
             .isEquals();
     }
 
@@ -73,7 +73,7 @@ public class CompanyInformation extends StoredEntity<Long> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
-            .append(detailedLicenseeClassId)
+            .append(detailLicenseeClassId)
             .toHashCode();
     }
 
@@ -82,7 +82,7 @@ public class CompanyInformation extends StoredEntity<Long> {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("name", name)
-            .append("detailedLicenseeClassId", detailedLicenseeClassId)
+            .append("detailLicenseeClassId", detailLicenseeClassId)
             .toString();
     }
 }

@@ -47,12 +47,12 @@ public class TelesalesService implements ITelesalesService {
     @Override
     public String getLicenseeName(Long licenseeAccountNumber) {
         String result;
-        LOGGER.info("Get company information. Started. LicneseeAccountNumber={}",
+        LOGGER.info("Get licensee information. Started. LicneseeAccountNumber={}",
             Objects.requireNonNull(licenseeAccountNumber));
         CompanyInformation companyInformation =
             handleResponse(salesInfoUrl, ImmutableMap.of("companyCode", licenseeAccountNumber));
         result = companyInformation.getName();
-        LOGGER.info("Get company information. Finished. LicneseeAccountNumber={}. Result={}", licenseeAccountNumber,
+        LOGGER.info("Get licensee information. Finished. LicneseeAccountNumber={}, Result={}", licenseeAccountNumber,
             result);
         return result;
     }
@@ -62,7 +62,7 @@ public class TelesalesService implements ITelesalesService {
         LOGGER.info("Get company information. Started. CompanyId={}", Objects.requireNonNull(companyId));
         CompanyInformation companyInformation =
             handleResponse(salesInfoUrl, ImmutableMap.of("companyCode", companyId));
-        LOGGER.info("Get company information. Finished. CompanyId={}. Result={}", companyId, companyInformation);
+        LOGGER.info("Get company information. Finished. CompanyId={}, Result={}", companyId, companyInformation);
         return companyInformation;
     }
 
@@ -102,7 +102,7 @@ public class TelesalesService implements ITelesalesService {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(companyId);
         companyInformation.setName(JsonUtils.getStringValue(companyInformationNode.get("companyName")));
-        companyInformation.setDetailedLicenseeClassId(
+        companyInformation.setDetailLicenseeClassId(
             JsonUtils.getIntegerValue(companyInformationNode.get("validatedICode")));
         return companyInformation;
     }

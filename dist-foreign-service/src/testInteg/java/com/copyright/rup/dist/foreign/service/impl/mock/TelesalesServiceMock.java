@@ -30,7 +30,7 @@ public class TelesalesServiceMock implements ITelesalesService {
             companyInformation = new CompanyInformation();
             companyInformation.setId(COMPANY_ID_1136);
             companyInformation.setName("Albany International Corp.");
-            companyInformation.setDetailedLicenseeClassId(2);
+            companyInformation.setDetailLicenseeClassId(2);
         } else if (COMPANY_ID_1139.equals(companyId)) {
             companyInformation = new CompanyInformation();
             companyInformation.setId(COMPANY_ID_1139);
@@ -38,7 +38,7 @@ public class TelesalesServiceMock implements ITelesalesService {
             companyInformation = new CompanyInformation();
             companyInformation.setId(COMPANY_ID_1142);
             companyInformation.setName("Educational Testing Service");
-            companyInformation.setDetailedLicenseeClassId(1000);
+            companyInformation.setDetailLicenseeClassId(1000);
         }
         return companyInformation;
     }
