@@ -23,9 +23,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 420.00)
+            column(name: 'service_fee_amount', value: 80.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -48,9 +48,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 420.00)
+            column(name: 'service_fee_amount', value: 80.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -73,9 +73,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 420.00)
+            column(name: 'service_fee_amount', value: 80.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {

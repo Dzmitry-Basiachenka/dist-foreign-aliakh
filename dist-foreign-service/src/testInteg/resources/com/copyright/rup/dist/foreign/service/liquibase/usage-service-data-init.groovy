@@ -48,9 +48,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '2558902245377325XX')
             column(name: 'number_of_copies', value: '250232')
             column(name: 'gross_amount', value: 26776.51)
-            column(name: 'service_fee_amount', value: '8568.48')
-            column(name: 'net_amount', value: '18208.03')
-            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: 8568.48)
+            column(name: 'net_amount', value: 18208.03)
+            column(name: 'service_fee', value: 0.32)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -79,9 +79,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '25')
             column(name: 'gross_amount', value: 13523.49)
-            column(name: 'service_fee_amount', value: '4327.52')
-            column(name: 'net_amount', value: '9195.97')
-            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: 4327.52)
+            column(name: 'net_amount', value: 9195.97)
+            column(name: 'service_fee', value: 0.32)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -110,9 +110,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1003324112314587XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 6509.31)
-            column(name: 'service_fee_amount', value: '2082.98')
-            column(name: 'net_amount', value: '4426.33')
-            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: 2082.98)
+            column(name: 'net_amount', value: 4426.33)
+            column(name: 'service_fee', value: 0.32)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -141,9 +141,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 1301.86)
-            column(name: 'service_fee_amount', value: '416.60')
-            column(name: 'net_amount', value: '885.26')
-            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: 416.60)
+            column(name: 'net_amount', value: 885.26)
+            column(name: 'service_fee', value: 0.32)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -172,9 +172,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 2438.82)
-            column(name: 'service_fee_amount', value: '780.42')
-            column(name: 'net_amount', value: '1658.40')
-            column(name: 'service_fee', value: '0.32')
+            column(name: 'service_fee_amount', value: 780.42)
+            column(name: 'net_amount', value: 1658.40)
+            column(name: 'service_fee', value: 0.32)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -269,9 +269,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '80.00')
-            column(name: 'service_fee_amount', value: '420.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 80.00)
+            column(name: 'service_fee_amount', value: 420.00)
+            column(name: 'service_fee', value: 0.16000)
             column(name: 'check_number', value: '578945')
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'ccc_event_id', value: '53256')

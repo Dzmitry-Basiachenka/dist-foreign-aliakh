@@ -172,9 +172,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 68.00)
+            column(name: 'service_fee_amount', value: 32.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -202,9 +202,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '84.00')
-            column(name: 'service_fee_amount', value: '16.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 84.00)
+            column(name: 'service_fee_amount', value: 16.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -234,9 +234,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '3008902112317645XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 68.00)
+            column(name: 'service_fee_amount', value: 32.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -286,9 +286,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 68.00)
+            column(name: 'service_fee_amount', value: 32.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -316,9 +316,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '84.00')
-            column(name: 'service_fee_amount', value: '16.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 84.00)
+            column(name: 'service_fee_amount', value: 16.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -348,9 +348,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '3008902112317645XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'net_amount', value: '68.00')
-            column(name: 'service_fee_amount', value: '32.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 68.00)
+            column(name: 'service_fee_amount', value: 32.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -391,9 +391,9 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 10000.00)
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 8400.00)
+            column(name: 'service_fee_amount', value: 1600.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -416,9 +416,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'number_of_copies', value: '250232')
             column(name: 'gross_amount', value: 10000.00)
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 8400.00)
+            column(name: 'service_fee_amount', value: 1600.00)
+            column(name: 'service_fee', value: 0.16000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -565,9 +565,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112377654XX')
             column(name: 'number_of_copies', value: '250232')
             column(name: 'gross_amount', value: 16437.40)
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 11177.40)
+            column(name: 'service_fee_amount', value: 5260.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
@@ -597,9 +597,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317622XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 16437.40)
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 11177.40)
+            column(name: 'service_fee_amount', value: 5260.00)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
