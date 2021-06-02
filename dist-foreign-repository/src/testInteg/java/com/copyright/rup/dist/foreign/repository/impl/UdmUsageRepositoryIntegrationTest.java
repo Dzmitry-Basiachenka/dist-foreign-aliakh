@@ -134,13 +134,13 @@ public class UdmUsageRepositoryIntegrationTest {
         List<UdmUsageDto> usages =
             udmUsageRepository.findDtosByFilter(filter, null, new Sort("detailId", Sort.Direction.ASC));
         assertEquals(1, usages.size());
-        verifyUsageDto(buildUdmUsageDto("cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a"), usages.get(0));
+        verifyUsageDto(buildUdmUsageDto(UDM_USAGE_UID_3), usages.get(0));
     }
 
     @Test
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "detailId");
-        assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "period");
+        assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "period");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "usageOrigin");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "usageDetailId");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "status");
@@ -157,7 +157,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "article");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "language");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyId");
-        assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "companyName");
+        assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyName");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "detLcId");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "detLcName");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "surveyRespondent");
@@ -296,7 +296,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private UdmUsageDto buildUdmUsageDto(String usageId) {
         UdmUsageDto udmUsage = new UdmUsageDto();
         udmUsage.setId(usageId);
-        udmUsage.setPeriod(202106);
+        udmUsage.setPeriod(202406);
         udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
         udmUsage.setChannel(UdmChannelEnum.CCC);
         udmUsage.setOriginalDetailId("OGN674GHHSB001");
