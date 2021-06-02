@@ -25,7 +25,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class UdmWorkInfoValidatorTest {
 
-    private static final long WR_WRK_INST = 185367895L;
+    private static final Long WR_WRK_INST = 185367895L;
     private static final String TITLE = "Delmar Learning, a division of Cengage Learning";
     private static final String STANDARD_NUMBER = "5212-4152";
 
