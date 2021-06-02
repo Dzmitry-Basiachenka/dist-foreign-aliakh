@@ -45,7 +45,7 @@ public class CompanyIdValidatorTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
-        companyInformation.setDetailedLicenseeClassId(333);
+        companyInformation.setDetailLicenseeClassId(333);
         expect(telesalesService.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(licenseeClassService.detailLicenseeClassExists(333)).andReturn(false).once();
         replay(telesalesService, licenseeClassService);
@@ -73,7 +73,7 @@ public class CompanyIdValidatorTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
-        companyInformation.setDetailedLicenseeClassId(1);
+        companyInformation.setDetailLicenseeClassId(1);
         expect(telesalesService.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(licenseeClassService.detailLicenseeClassExists(1)).andReturn(true).once();
         replay(telesalesService, licenseeClassService);

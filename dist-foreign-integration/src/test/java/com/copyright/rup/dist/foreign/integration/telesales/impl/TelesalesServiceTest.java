@@ -60,17 +60,14 @@ public class TelesalesServiceTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(COMPANY_ID);
         companyInformation.setName(COMPANY_NAME);
-        companyInformation.setDetailedLicenseeClassId(2);
-        expect(
-            restTemplate.getForObject(
-                TELESALES_URL, String.class, ImmutableBiMap.of("companyCode", COMPANY_ID)))
-            .andReturn(TestUtils.fileToString(this.getClass(), "sales_data_response.json"))
-            .once();
+        companyInformation.setDetailLicenseeClassId(2);
+        expect(restTemplate.getForObject(TELESALES_URL, String.class, ImmutableBiMap.of("companyCode", COMPANY_ID)))
+            .andReturn(TestUtils.fileToString(this.getClass(), "sales_data_response.json")).once();
         replay(restTemplate);
         CompanyInformation actualCompanyInformation = telesalesService.getCompanyInformation(COMPANY_ID);
         assertEquals(Long.valueOf(1136), actualCompanyInformation.getId());
         assertEquals(COMPANY_NAME, actualCompanyInformation.getName());
-        assertEquals(Integer.valueOf(2), actualCompanyInformation.getDetailedLicenseeClassId());
+        assertEquals(Integer.valueOf(2), actualCompanyInformation.getDetailLicenseeClassId());
         verify(restTemplate);
     }
 }

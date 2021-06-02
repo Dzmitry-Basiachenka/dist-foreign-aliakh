@@ -110,7 +110,7 @@ public class UdmUsageServiceTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(45489489L);
         companyInformation.setName("Skadden, Arps, Slate, Meagher & Flom LLP");
-        companyInformation.setDetailedLicenseeClassId(1);
+        companyInformation.setDetailLicenseeClassId(1);
         expect(udmTypeOfUseService.getUdmTouToRmsTouMap())
             .andReturn(ImmutableMap.of(FAX_PHOTOCOPIES, PRINT, COPY_FOR_MYSELF, DIGITAL)).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();

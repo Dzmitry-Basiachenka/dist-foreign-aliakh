@@ -5,6 +5,7 @@ out
 *.class
 derby.log
 styles.css.gz
+addons.scss
 
 # IntelliJ project files 
 *.iml

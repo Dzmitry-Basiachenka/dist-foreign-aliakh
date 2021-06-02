@@ -85,7 +85,7 @@ public class UdmUsageService implements IUdmUsageService {
             }
             CompanyInformation companyInformation = telesalesService.getCompanyInformation(usage.getCompanyId());
             usage.setCompanyName(companyInformation.getName());
-            usage.setDetailLicenseeClassId(companyInformation.getDetailedLicenseeClassId());
+            usage.setDetailLicenseeClassId(companyInformation.getDetailLicenseeClassId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);
