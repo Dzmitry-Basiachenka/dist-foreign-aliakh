@@ -36,9 +36,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 1000.00)
-            column(name: 'net_amount', value: '840.00')
-            column(name: 'service_fee_amount', value: '160.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 840.00)
+            column(name: 'service_fee_amount', value: 160.00)
+            column(name: 'service_fee', value: 0.16000)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -92,9 +92,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 2000.00)
-            column(name: 'net_amount', value: '1680.00')
-            column(name: 'service_fee_amount', value: '320.00')
-            column(name: 'service_fee', value: '0.16000')
+            column(name: 'net_amount', value: 1680.00)
+            column(name: 'service_fee_amount', value: 320.00)
+            column(name: 'service_fee', value: 0.16000)
             column(name: 'comment', value: 'usage from usages.csv')
         }
 
@@ -147,9 +147,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'NTS')
             column(name: 'gross_amount', value: 90.63)
-            column(name: 'service_fee_amount', value: '29.00')
-            column(name: 'net_amount', value: '61.63')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'service_fee_amount', value: 29.00)
+            column(name: 'net_amount', value: 61.63)
+            column(name: 'service_fee', value: 0.32000)
             column(name: 'created_datetime', value: '2016-03-12')
         }
 
@@ -170,9 +170,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'NTS')
             column(name: 'gross_amount', value: 13503.37)
-            column(name: 'net_amount', value: '9182.28')
-            column(name: 'service_fee_amount', value: '4321.07')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'net_amount', value: 9182.28)
+            column(name: 'service_fee_amount', value: 4321.07)
+            column(name: 'service_fee', value: 0.32000)
             column(name: 'created_datetime', value: '2016-03-12')
         }
 
@@ -215,9 +215,9 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'number_of_copies', value: '300')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.25')
+            column(name: 'net_amount', value: 420.00)
+            column(name: 'service_fee_amount', value: 80.00)
+            column(name: 'service_fee', value: 0.25)
             column(name: 'comment', value: 'AACL archived usage')
         }
 
@@ -247,9 +247,9 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'number_of_copies', value: '20')
             column(name: 'gross_amount', value: 1500.00)
-            column(name: 'net_amount', value: '1125.00')
-            column(name: 'service_fee_amount', value: '375.00')
-            column(name: 'service_fee', value: '0.25')
+            column(name: 'net_amount', value: 1125.00)
+            column(name: 'service_fee_amount', value: 375.00)
+            column(name: 'service_fee', value: 0.25)
             column(name: 'comment', value: 'AACL archived usage')
         }
 
@@ -279,9 +279,9 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'number_of_copies', value: '300')
             column(name: 'gross_amount', value: 500.00)
-            column(name: 'net_amount', value: '80.00')
-            column(name: 'service_fee_amount', value: '420.00')
-            column(name: 'service_fee', value: '0.25')
+            column(name: 'net_amount', value: 80.00)
+            column(name: 'service_fee_amount', value: 420.00)
+            column(name: 'service_fee', value: 0.25)
             column(name: 'comment', value: 'AACL archived usage')
         }
 

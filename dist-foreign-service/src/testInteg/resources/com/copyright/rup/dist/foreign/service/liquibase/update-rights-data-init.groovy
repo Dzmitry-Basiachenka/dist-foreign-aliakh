@@ -48,8 +48,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 124.9783785347)
         }
 
@@ -74,8 +74,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 390.1883929693)
         }
 
@@ -97,8 +97,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 390.1883929693)
         }
 
@@ -120,8 +120,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 282.4630168157)
         }
 
@@ -145,8 +145,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 118.9783790616)
         }
 
@@ -170,8 +170,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 118.9783790616)
         }
 
@@ -195,8 +195,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 118.9783790616)
         }
 
@@ -220,8 +220,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 1040.5866734081)
         }
 
@@ -245,8 +245,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 1382.4756606371)
         }
 
@@ -270,8 +270,8 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
-            column(name: 'net_amount', value: '0.0000000000')
-            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'net_amount', value: 0.0000000000)
+            column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 1395.1194841293)
         }
 

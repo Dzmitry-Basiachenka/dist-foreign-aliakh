@@ -43,9 +43,9 @@ databaseChangeLog {
             column(name: 'standard_number', value: '452365874521235XX')
             column(name: 'number_of_copies', value: '100')
             column(name: 'gross_amount', value: 90.63)
-            column(name: 'service_fee_amount', value: '29.00')
-            column(name: 'net_amount', value: '61.63')
-            column(name: 'service_fee', value: '0.32000')
+            column(name: 'service_fee_amount', value: 29.00)
+            column(name: 'net_amount', value: 61.63)
+            column(name: 'service_fee', value: 0.32000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
