@@ -6,13 +6,11 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -41,8 +39,8 @@ public class DeleteUsageProcessorTest {
 
     @Test
     public void testProcess() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("b470e65d-f6f7-47a2-9b59-beeb1a9c39b3");
+        Usage usage2 = buildUsage("0b8e70ac-e3cc-46b5-a09b-321dffc8f155");
         usageService.deleteById(usage1.getId());
         expectLastCall().once();
         usageService.deleteById(usage2.getId());
@@ -57,9 +55,9 @@ public class DeleteUsageProcessorTest {
         assertEquals(ChainProcessorTypeEnum.DELETE, deleteUsageProcessor.getChainProcessorType());
     }
 
-    private Usage buildUsage() {
+    private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         return usage;
     }
 }

@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
@@ -73,7 +72,7 @@ public class UdmUsageChainExecutorTest {
 
     private UdmUsage buildUdmUsage() {
         UdmUsage udmUsage = new UdmUsage();
-        udmUsage.setId(RupPersistUtils.generateUuid());
+        udmUsage.setId("896c6aac-87c8-4058-be1d-745b8003712a");
         return udmUsage;
     }
 }

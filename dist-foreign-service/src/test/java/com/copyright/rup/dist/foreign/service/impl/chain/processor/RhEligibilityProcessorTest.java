@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -61,7 +60,7 @@ public class RhEligibilityProcessorTest {
 
     private List<Usage> buildUsages() {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId("960efdd6-d853-44b0-9a5a-341da4605cbe");
         usage.setWrWrkInst(854030733L);
         usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);

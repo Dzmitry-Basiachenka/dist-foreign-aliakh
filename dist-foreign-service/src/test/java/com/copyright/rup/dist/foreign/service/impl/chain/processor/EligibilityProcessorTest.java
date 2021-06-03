@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -16,7 +15,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -50,8 +48,8 @@ public class EligibilityProcessorTest {
 
     @Test
     public void testProcess() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("709a9486-6d13-41be-8df9-9327934ed53d");
+        Usage usage2 = buildUsage("9f9ada01-f27f-4c75-a794-4af0ec83db04");
         HashSet<String> usageIds = Sets.newHashSet(usage1.getId(), usage2.getId());
         usageRepository.updateStatus(usageIds, UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
@@ -67,9 +65,9 @@ public class EligibilityProcessorTest {
         assertEquals(ChainProcessorTypeEnum.ELIGIBILITY, eligibilityProcessor.getChainProcessorType());
     }
 
-    private Usage buildUsage() {
+    private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         return usage;
     }
 }

@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -87,7 +86,7 @@ public class UdmRightsProcessorTest {
 
     private List<UdmUsage> buildUdmUsages(UsageStatusEnum status) {
         UdmUsage udmUsage = new UdmUsage();
-        udmUsage.setId(RupPersistUtils.generateUuid());
+        udmUsage.setId("14348f5e-cbf5-46b5-8289-d31942f6338e");
         udmUsage.setStatus(status);
         return Collections.singletonList(udmUsage);
     }

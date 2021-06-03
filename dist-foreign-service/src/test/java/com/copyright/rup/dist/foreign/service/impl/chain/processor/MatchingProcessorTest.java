@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -88,7 +87,7 @@ public class MatchingProcessorTest {
 
     private List<Usage> buildUsages(UsageStatusEnum status) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId("0aa431c7-0bb4-414b-a6b8-797b55912da2");
         usage.setStatus(status);
         usage.setProductFamily("FAS");
         return Collections.singletonList(usage);

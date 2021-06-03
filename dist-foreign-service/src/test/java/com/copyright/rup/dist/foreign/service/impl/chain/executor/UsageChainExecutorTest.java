@@ -8,7 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -79,9 +78,8 @@ public class UsageChainExecutorTest {
                 "SAL", salProcessor);
         Map<String, IChainProcessor<Usage>> actualProductFamilyToProcessorMap =
             executor.getProductFamilyToProcessorMap();
-        expectedProductFamilyToProcessorMap.entrySet().forEach((entry) -> {
-            assertTrue(actualProductFamilyToProcessorMap.entrySet().contains(entry));
-        });
+        expectedProductFamilyToProcessorMap.entrySet().forEach((entry) ->
+            assertTrue(actualProductFamilyToProcessorMap.entrySet().contains(entry)));
     }
 
     @Test
@@ -145,7 +143,6 @@ public class UsageChainExecutorTest {
 
     private Usage buildUsage(String productFamily) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
         usage.setProductFamily(productFamily);
         return usage;
     }

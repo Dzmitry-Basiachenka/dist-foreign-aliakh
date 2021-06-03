@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -61,7 +60,7 @@ public class RhTaxProcessorTest {
 
     private List<Usage> buildUsages() {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId("ff3cdf72-7aa6-445e-921b-99ca5f643387");
         usage.setWrWrkInst(854030733L);
         usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.RH_FOUND);

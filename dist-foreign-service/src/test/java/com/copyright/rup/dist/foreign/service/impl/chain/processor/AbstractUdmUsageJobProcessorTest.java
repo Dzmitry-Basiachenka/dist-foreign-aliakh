@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -61,8 +60,8 @@ public class AbstractUdmUsageJobProcessorTest {
 
     @Test
     public void testJobProcess() {
-        UdmUsage usage1 = buildUsage();
-        UdmUsage usage2 = buildUsage();
+        UdmUsage usage1 = buildUsage("cff900a1-8f8a-4a49-8171-d3ae5dba1cac");
+        UdmUsage usage2 = buildUsage("896c6aac-87c8-4058-be1d-745b8003712b");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(udmUsageService.getUdmUsageIdsByStatus(UsageStatusEnum.NEW)).andReturn(usageIds).once();
         expect(udmUsageService.getUdmUsagesByIds(usageIds)).andReturn(Arrays.asList(usage1, usage2)).once();
@@ -86,9 +85,9 @@ public class AbstractUdmUsageJobProcessorTest {
         verify(udmUsageService, usageConsumer, successProcessor, failureProcessor);
     }
 
-    private UdmUsage buildUsage() {
+    private UdmUsage buildUsage(String usageId) {
         UdmUsage usage = new UdmUsage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         usage.setStatus(UsageStatusEnum.NEW);
         return usage;
     }
