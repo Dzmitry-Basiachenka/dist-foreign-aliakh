@@ -1,3 +1,15 @@
+13.1.27
+-
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: make changes based on comments in CR-DIST-FOREIGN-235
+* B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: make changes based on comments in CR-DIST-FOREIGN-235
+* B-66634 FDA & UDM: RMS Rights: FDA: make changes based on comments in CR-DIST-FOREIGN-236
+* B-66754 FDA & UDM: Pull Company Information from Telesales: make changes based on comments in CR-DIST-FOREIGN-233
+* B-67105 FDA & UDM: UDM TOU Mapping: make changes based on comments in CR-DIST-FOREIGN-232
+* B-67327 Tech Debt: FDA: remove quotes from integer values for FAS product family
+* B-67327 Tech Debt: FDA: remove quotes from integer values for amount fields
+* B-67327 Tech Debt: FDA: remove quotes from integer values for batch related fields
+* Update release notes and revving up build version for 13.1.26
+
 13.1.26
 -
 * CDP-992 FDA: df.service.getRightsQuartzJob: WORK_FOUND UDM usages are not processed by getRights job
