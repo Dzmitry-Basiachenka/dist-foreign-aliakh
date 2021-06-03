@@ -8,13 +8,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool')
-            column(name: 'total_amount', value: '10.95')
+            column(name: 'total_amount', value: 10.95)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '7dc93e89-d1f4-4721-81be-fd32606e4a66')
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
-            column(name: 'df_aggregate_licensee_class_id', value: '108')
+            column(name: 'df_aggregate_licensee_class_id', value: 108)
             column(name: 'gross_amount', value: 10.95)
         }
 
@@ -50,11 +50,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '2f3988e1-7cca-42b2-bdf8-a8850dbf315b')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Feb 2019 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 

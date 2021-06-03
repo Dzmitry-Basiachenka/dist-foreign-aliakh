@@ -299,7 +299,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
-            column(name: 'total_amount', value: '10.00')
+            column(name: 'total_amount', value: 10.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

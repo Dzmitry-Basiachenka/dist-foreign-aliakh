@@ -346,9 +346,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'b23cb103-9242-4d58-a65d-2634b3e5a8cf')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -364,9 +364,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '7e7b97d1-ad60-4d47-915b-2834c5cc056a')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '199')
+            column(name: 'number_of_pages', value: 199)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -382,9 +382,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '10c9a60f-28b6-466c-975c-3ea930089a9e')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
         }
     }
 
@@ -493,7 +493,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '1b6055be-fc4e-4b49-aeab-28563366c9fd')
             column(name: 'name', value: 'UDM Batch 2020')
-            column(name: 'period', value: '202006')
+            column(name: 'period', value: 202006)
             column(name: 'usage_origin', value: 'RFA')
             column(name: 'channel', value: 'Rightsdirect')
         }
@@ -514,7 +514,7 @@ databaseChangeLog {
             column(name: 'publication_format', value: 'Digital')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'language', value: 'English')
-            column(name: 'company_id', value: '1136')
+            column(name: 'company_id', value: 1136)
             column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
             column(name: 'detail_licensee_class_id', value: 2)
             column(name: 'survey_respondent', value: 'c6615155-f82b-402c-8f22-77e2722ae448')
@@ -525,11 +525,11 @@ databaseChangeLog {
             column(name: 'survey_end_date', value: '2020-05-15')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'reported_type_of_use', value: 'PRINT_COPIES')
-            column(name: 'annualized_copies', value: '4')
-            column(name: 'quantity', value: '3')
-            column(name: 'annual_multiplier', value: '25')
-            column(name: 'statistical_multiplier', value: '1')
-            column(name: 'annualized_copies', value: '300')
+            column(name: 'annualized_copies', value: 4)
+            column(name: 'quantity', value: 3)
+            column(name: 'annual_multiplier', value: 25)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'annualized_copies', value: 300)
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
@@ -552,7 +552,7 @@ databaseChangeLog {
             column(name: 'publication_format', value: 'Digital')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'language', value: 'English')
-            column(name: 'company_id', value: '1136')
+            column(name: 'company_id', value: 1136)
             column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
             column(name: 'detail_licensee_class_id', value: 2)
             column(name: 'survey_respondent', value: 'c6615155-f82b-402c-8f22-77e2722ae448')
@@ -563,11 +563,11 @@ databaseChangeLog {
             column(name: 'survey_end_date', value: '2020-05-15')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'reported_type_of_use', value: 'PRINT_COPIES')
-            column(name: 'annualized_copies', value: '4')
-            column(name: 'quantity', value: '3')
-            column(name: 'annual_multiplier', value: '25')
-            column(name: 'statistical_multiplier', value: '1')
-            column(name: 'annualized_copies', value: '300')
+            column(name: 'annualized_copies', value: 4)
+            column(name: 'quantity', value: 3)
+            column(name: 'annual_multiplier', value: 25)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'annualized_copies', value: 300)
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
