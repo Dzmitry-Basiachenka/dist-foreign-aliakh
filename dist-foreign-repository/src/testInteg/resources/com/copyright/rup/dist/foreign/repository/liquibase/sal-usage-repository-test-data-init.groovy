@@ -358,7 +358,7 @@ databaseChangeLog {
             column(name: 'reported_article', value: 'Learning in Your Sleep')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'TEXT')
-            column(name: 'media_type_weight', value: '1.0')
+            column(name: 'media_type_weight', value: 1.0)
             column(name: 'reported_author', value: 'Stephen Ornes')
             column(name: 'reported_publisher', value: 'Associated Press')
             column(name: 'reported_publication_date', value: '2014-01-02')
@@ -567,7 +567,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '1b032d29-21e5-41ce-80d0-9739d10630ee')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 1')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "09/28/2020", "assessment_name": "FY2020 COG", "licensee_account_number": "4444", ' +
                     '"licensee_name": "Truman State University", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, ' +
                     '"grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 600.00, ' +
@@ -601,7 +601,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2190')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -633,7 +633,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2190')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -666,7 +666,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2191')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -699,7 +699,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2191')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -720,7 +720,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '462111b6-5d30-4a43-a35b-14796d34d847')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool to test deletion')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 100, "grade_9_12_number_of_students": 0, ' +
@@ -848,7 +848,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '26d9bd2f-7024-474e-9dbf-c009158d81cd')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool to test calculation')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, ' +
@@ -1125,7 +1125,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'd638222e-1f02-4a53-806a-66162e795927')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool For Drill Down Window')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.02000, "service_fee": 0.25000}')
         }
 
@@ -1269,7 +1269,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '57d0d356-65a1-4169-acab-a522475fb4d5')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool to test audit 1')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001573389, "licensee_name": "Questar Assessment", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 100, "grade_9_12_number_of_students": 0, ' +
@@ -1394,7 +1394,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '79702b06-3848-419b-9eae-726ac1f11875')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool to test audit 2')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 2000017003, "licensee_name": "ProLitteris", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 100, "grade_9_12_number_of_students": 0, ' +

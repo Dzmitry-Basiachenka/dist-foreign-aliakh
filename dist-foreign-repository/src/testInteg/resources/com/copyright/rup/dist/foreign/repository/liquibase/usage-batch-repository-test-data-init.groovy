@@ -739,7 +739,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '91be9a6b-dd23-46dd-a05f-a9d09a99cebc')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 3')
-            column(name: 'total_amount', value: '10.00')
+            column(name: 'total_amount', value: 10.00)
             column(name: 'sal_fields', value: '{"date_received": "12/30/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, ' +
                     '"licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 2, "grade_6_8_number_of_students": 1, ' +
                     '"grade_9_12_number_of_students": 0, "gross_amount": 10.00, "grade_K_5_gross_amount": 6.00, "grade_6_8_gross_amount": 0.00, ' +

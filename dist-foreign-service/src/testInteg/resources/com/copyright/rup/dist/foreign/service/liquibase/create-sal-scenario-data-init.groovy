@@ -20,7 +20,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '462111b6-5d30-4a43-a35b-14796d34d847')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 100, "grade_9_12_number_of_students": 0, ' +

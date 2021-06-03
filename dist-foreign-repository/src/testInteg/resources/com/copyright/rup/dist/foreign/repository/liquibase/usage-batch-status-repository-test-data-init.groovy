@@ -437,7 +437,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS pre service fee fund')
             column(name: 'comment', value: 'Test comment')
-            column(name: 'total_amount', value: '150.01')
+            column(name: 'total_amount', value: 150.01)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -991,7 +991,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '327ecb4d-e091-41ef-a0ab-56201331b0c6')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2018')
+            column(name: 'usage_period', value: 2018)
             column(name: 'usage_source', value: 'Feb 2018 TUR')
             column(name: 'number_of_pages', value: 341)
         }
@@ -1134,7 +1134,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '570c19f3-85bd-4495-82d7-dc74dc3b809b')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2018')
+            column(name: 'usage_period', value: 2018)
             column(name: 'usage_source', value: 'Feb 2018 TUR')
             column(name: 'number_of_pages', value: 341)
         }
@@ -1548,7 +1548,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2190')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -1802,7 +1802,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2190')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')
@@ -1837,7 +1837,7 @@ databaseChangeLog {
             column(name: 'reported_work_portion_id', value: '1101024IB2190')
             column(name: 'reported_standard_number', value: '978-0-87664-361-7')
             column(name: 'reported_media_type', value: 'Image')
-            column(name: 'media_type_weight', value: '0.3')
+            column(name: 'media_type_weight', value: 0.3)
             column(name: 'reported_author', value: 'Linda J. S. Allen')
             column(name: 'reported_publisher', value: 'Rosen')
             column(name: 'reported_publication_date', value: '2016-11-03')

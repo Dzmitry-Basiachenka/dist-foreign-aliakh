@@ -79,7 +79,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:45:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -91,7 +91,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:45:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -305,7 +305,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '9f96760c-0de9-4cee-abf2-65521277281b')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -317,7 +317,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'e4a81fad-7b0e-4c67-8df2-112c8913e45e')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -329,7 +329,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '2641e7fe-2a5a-4cdf-8879-48816d705169')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -341,7 +341,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '405491b1-49a9-4b70-9cdb-d082be6a802d')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -353,7 +353,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '4ddfcb74-cb72-48f6-9ee4-8b4e05afce75')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
+            column(name: 'record_version', value: 1)
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
             column(name: 'updated_by_user', value: 'SYSTEM')
@@ -777,7 +777,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
-            column(name: 'total_amount', value: '155.00')
+            column(name: 'total_amount', value: 155.00)
             column(name: 'updated_datetime', value: '2019-03-26 16:35:52.735531+03')
         }
 
@@ -5163,13 +5163,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '6288ed1e-43d1-4a43-a19c-60f54c6cb524')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AT_service-fee-true-up-report_AACL_FUND_POOL')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '820c819b-02fc-42d0-a61a-3e42d98b0601')
             column(name: 'df_fund_pool_uid', value: '6288ed1e-43d1-4a43-a19c-60f54c6cb524')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
+            column(name: 'df_aggregate_licensee_class_id', value: 141)
             column(name: 'gross_amount', value: 200.00)
         }
 
@@ -5245,16 +5245,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '152e607e-7c9d-4f08-9bda-ee1315764417')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 5.0000000)
+            column(name: 'volume_weight', value: 54.0000000)
+            column(name: 'volume_share', value: 1.0000000)
+            column(name: 'value_share', value: 1.0000000)
+            column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -5576,7 +5576,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund1')
             column(name: 'comment', value: 'test comment')
-            column(name: 'total_amount', value: '10.00')
+            column(name: 'total_amount', value: 10.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -5584,7 +5584,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund2')
             column(name: 'comment', value: 'test comment')
-            column(name: 'total_amount', value: '10.00')
+            column(name: 'total_amount', value: 10.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -5592,7 +5592,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'Test fund3')
             column(name: 'comment', value: 'test comment')
-            column(name: 'total_amount', value: '10.00')
+            column(name: 'total_amount', value: 10.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -6388,9 +6388,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '94ef6c15-bcd1-41ab-a65e-6dccec4a3213')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -6406,9 +6406,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '731ce234-0c44-41f3-971c-e5de3be7ab91')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
-            column(name: 'number_of_pages', value: '199')
+            column(name: 'number_of_pages', value: 199)
         }
     }
 
@@ -6441,10 +6441,10 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '8315e53b-0a7e-452a-a62c-17fe959f3f84')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Aug 2019 TUR')
-            column(name: 'number_of_pages', value: '6')
+            column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
         }
 
@@ -6466,10 +6466,10 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '64194cf9-177f-4220-9eb5-01040324b8b2')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'detail_licensee_class_id', value: '120')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'detail_licensee_class_id', value: 120)
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Aug 2019 TUR')
-            column(name: 'number_of_pages', value: '6')
+            column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
         }
 
@@ -6503,14 +6503,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '2eb52c26-b555-45ae-b8c5-21289dfeeac4')
             column(name: 'wr_wrk_inst', value: 123986581)
-            column(name: 'usage_period', value: '2016')
+            column(name: 'usage_period', value: 2016)
             column(name: 'usage_source', value: 'Aug 2016 FR')
             column(name: 'number_of_copies', value: 30)
-            column(name: 'number_of_pages', value: '6')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'number_of_pages', value: 6)
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'original_publication_type', value: 'Scholarly Journal')
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'publication_type_weight', value: '2')
+            column(name: 'publication_type_weight', value: 2)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage')
             column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
@@ -6546,10 +6546,10 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: 'c794662f-a5d6-4b86-8955-582723631656')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
-            column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Aug 2019 TUR')
-            column(name: 'number_of_pages', value: '6')
+            column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
         }
 
@@ -6575,10 +6575,10 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '3c96f468-abaa-4db7-9004-4012d8ba8e0d')
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'detail_licensee_class_id', value: '143')
-            column(name: 'usage_period', value: '2016')
+            column(name: 'detail_licensee_class_id', value: 143)
+            column(name: 'usage_period', value: 2016)
             column(name: 'usage_source', value: 'Aug 201 FR')
-            column(name: 'number_of_pages', value: '6')
+            column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
             column(name: 'baseline_uid', value: '2eb52c26-b555-45ae-b8c5-21289dfeeac4')
         }
@@ -6626,13 +6626,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '3a8eed5d-a2f2-47d2-9cba-b047d9947706')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool Test')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '65e72126-2d74-4018-a06a-7fa4c81f0b33')
             column(name: 'df_fund_pool_uid', value: '3a8eed5d-a2f2-47d2-9cba-b047d9947706')
-            column(name: 'df_aggregate_licensee_class_id', value: '171')
+            column(name: 'df_aggregate_licensee_class_id', value: 171)
             column(name: 'gross_amount', value: 1000.00)
         }
 
@@ -6677,16 +6677,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '8eb9dbbc-3535-42cc-8094-2d90849952e2')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '680.0000000000')
-            column(name: 'volume_weight', value: '10.0000000000')
-            column(name: 'volume_share', value: '0.4098360656')
-            column(name: 'value_share', value: '0.3970571062')
-            column(name: 'total_share', value: '0.4095917984')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 680.0000000000)
+            column(name: 'volume_weight', value: 10.0000000000)
+            column(name: 'volume_share', value: 0.4098360656)
+            column(name: 'value_share', value: 0.3970571062)
+            column(name: 'total_share', value: 0.4095917984)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6715,16 +6715,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'e951defc-79c7-48d0-b7c7-958df4bdf2cb')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '791.8000000000')
-            column(name: 'volume_weight', value: '3.7000000000')
-            column(name: 'volume_share', value: '0.1516393443')
-            column(name: 'value_share', value: '0.4623379657')
-            column(name: 'total_share', value: '0.3093360901')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 791.8000000000)
+            column(name: 'volume_weight', value: 3.7000000000)
+            column(name: 'volume_share', value: 0.1516393443)
+            column(name: 'value_share', value: 0.4623379657)
+            column(name: 'total_share', value: 0.3093360901)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6753,16 +6753,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'f6411672-02d2-4e2e-8682-69f5ad7db8c4')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '240.8000000000')
-            column(name: 'volume_weight', value: '10.7000000000')
-            column(name: 'volume_share', value: '0.4385245902')
-            column(name: 'value_share', value: '0.1406049282')
-            column(name: 'total_share', value: '0.2810721113')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 240.8000000000)
+            column(name: 'volume_weight', value: 10.7000000000)
+            column(name: 'volume_share', value: 0.4385245902)
+            column(name: 'value_share', value: 0.1406049282)
+            column(name: 'total_share', value: 0.2810721113)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6791,16 +6791,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '5408ee8b-30e0-416f-ada8-cbf08d62b26e')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '113')
-            column(name: 'value_weight', value: '240.8000000000')
-            column(name: 'volume_weight', value: '10.7000000000')
-            column(name: 'volume_share', value: '1.0000000000')
-            column(name: 'value_share', value: '1.0000000000')
-            column(name: 'total_share', value: '1.0000000000')
+            column(name: 'detail_licensee_class_id', value: 113)
+            column(name: 'value_weight', value: 240.8000000000)
+            column(name: 'volume_weight', value: 10.7000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'total_share', value: 1.0000000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6809,13 +6809,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '149ab28f-c795-4e29-9418-815c87dec127')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool Test 2')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: 'f88db923-ed05-4980-bb1d-8ae327824346')
             column(name: 'df_fund_pool_uid', value: '3a8eed5d-a2f2-47d2-9cba-b047d9947706')
-            column(name: 'df_aggregate_licensee_class_id', value: '171')
+            column(name: 'df_aggregate_licensee_class_id', value: 171)
             column(name: 'gross_amount', value: 1000.00)
         }
 
@@ -6865,16 +6865,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '3ae57b51-691d-4a97-95dd-434304325654')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '680.0000000000')
-            column(name: 'volume_weight', value: '10.0000000000')
-            column(name: 'volume_share', value: '0.4098360656')
-            column(name: 'value_share', value: '0.3970571062')
-            column(name: 'total_share', value: '0.4095917984')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 680.0000000000)
+            column(name: 'volume_weight', value: 10.0000000000)
+            column(name: 'volume_share', value: 0.4098360656)
+            column(name: 'value_share', value: 0.3970571062)
+            column(name: 'total_share', value: 0.4095917984)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6908,16 +6908,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '4444ed28-cba5-4bea-9923-64a6264bca9d')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '791.8000000000')
-            column(name: 'volume_weight', value: '3.7000000000')
-            column(name: 'volume_share', value: '0.1516393443')
-            column(name: 'value_share', value: '0.4623379657')
-            column(name: 'total_share', value: '0.3093360901')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 791.8000000000)
+            column(name: 'volume_weight', value: 3.7000000000)
+            column(name: 'volume_share', value: 0.1516393443)
+            column(name: 'value_share', value: 0.4623379657)
+            column(name: 'total_share', value: 0.3093360901)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6951,16 +6951,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'af7a5a9c-363c-4360-8fc0-7a318528f431')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '110')
-            column(name: 'value_weight', value: '240.8000000000')
-            column(name: 'volume_weight', value: '10.7000000000')
-            column(name: 'volume_share', value: '0.4385245902')
-            column(name: 'value_share', value: '0.1406049282')
-            column(name: 'total_share', value: '0.2810721113')
+            column(name: 'detail_licensee_class_id', value: 110)
+            column(name: 'value_weight', value: 240.8000000000)
+            column(name: 'volume_weight', value: 10.7000000000)
+            column(name: 'volume_share', value: 0.4385245902)
+            column(name: 'value_share', value: 0.1406049282)
+            column(name: 'total_share', value: 0.2810721113)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -6994,16 +6994,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '190a8e32-37ed-4fe2-987a-b481849c7939')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '180')
+            column(name: 'number_of_pages', value: 180)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '113')
-            column(name: 'value_weight', value: '240.8000000000')
-            column(name: 'volume_weight', value: '10.7000000000')
-            column(name: 'volume_share', value: '1.0000000000')
-            column(name: 'value_share', value: '1.0000000000')
-            column(name: 'total_share', value: '1.0000000000')
+            column(name: 'detail_licensee_class_id', value: 113)
+            column(name: 'value_weight', value: 240.8000000000)
+            column(name: 'volume_weight', value: 10.7000000000)
+            column(name: 'volume_share', value: 1.0000000000)
+            column(name: 'value_share', value: 1.0000000000)
+            column(name: 'total_share', value: 1.0000000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -7016,7 +7016,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'ffc1587c-9b05-4681-a3cc-dc02cec7fadc')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool For Export Detail Scenario Test')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -7028,7 +7028,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '8474cceb-2367-4d03-b240-5ea6d2819a53')
             column(name: 'df_fund_pool_uid', value: 'ffc1587c-9b05-4681-a3cc-dc02cec7fadc')
-            column(name: 'df_aggregate_licensee_class_id', value: '171')
+            column(name: 'df_aggregate_licensee_class_id', value: 171)
             column(name: 'gross_amount', value: 1000.00)
         }
 
@@ -7051,14 +7051,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '13212981-431f-4311-97d5-1a39bc252afc')
             column(name: 'wr_wrk_inst', value: 269040891)
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
             column(name: 'number_of_copies', value: 10)
-            column(name: 'number_of_pages', value: '12')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'number_of_pages', value: 12)
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'original_publication_type', value: 'Textbook')
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'publication_type_weight', value: '1.71')
+            column(name: 'publication_type_weight', value: 1.71)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
             column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
@@ -7088,16 +7088,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '53079eb1-ddfb-4d9b-a914-4402cb4b0f49')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '0.1000000')
-            column(name: 'volume_weight', value: '0.2000000')
-            column(name: 'volume_share', value: '0.3000000')
-            column(name: 'value_share', value: '0.4000000')
-            column(name: 'total_share', value: '0.5000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 0.1000000)
+            column(name: 'volume_weight', value: 0.2000000)
+            column(name: 'volume_share', value: 0.3000000)
+            column(name: 'value_share', value: 0.4000000)
+            column(name: 'total_share', value: 0.5000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -7126,16 +7126,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '7ec3e2df-5274-4eba-a493-b9502db11f4c')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Feb 2019 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '113')
-            column(name: 'value_weight', value: '0.6000000')
-            column(name: 'volume_weight', value: '0.7000000')
-            column(name: 'volume_share', value: '0.8000000')
-            column(name: 'value_share', value: '0.9000000')
-            column(name: 'total_share', value: '0.56000000')
+            column(name: 'detail_licensee_class_id', value: 113)
+            column(name: 'value_weight', value: 0.6000000)
+            column(name: 'volume_weight', value: 0.7000000)
+            column(name: 'volume_share', value: 0.8000000)
+            column(name: 'value_share', value: 0.9000000)
+            column(name: 'total_share', value: 0.56000000)
             column(name: 'original_publication_type', value: 'Textbook')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'baseline_uid', value: '13212981-431f-4311-97d5-1a39bc252afc')
@@ -7159,7 +7159,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '0b28a1ff-ee07-4087-8980-ad7e7ea493f8')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool For Export Detail Archived Scenario Test')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -7171,7 +7171,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '1ec28821-2402-4063-bf2e-3bd0a20a8ed1')
             column(name: 'df_fund_pool_uid', value: '0b28a1ff-ee07-4087-8980-ad7e7ea493f8')
-            column(name: 'df_aggregate_licensee_class_id', value: '171')
+            column(name: 'df_aggregate_licensee_class_id', value: 171)
             column(name: 'gross_amount', value: 1000.00)
         }
 
@@ -7194,14 +7194,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '44f90e4f-3038-4738-a41a-4e989d80b0f2')
             column(name: 'wr_wrk_inst', value: 269040891)
-            column(name: 'usage_period', value: '2015')
+            column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
             column(name: 'number_of_copies', value: 10)
-            column(name: 'number_of_pages', value: '12')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'number_of_pages', value: 12)
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'original_publication_type', value: 'Textbook')
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'publication_type_weight', value: '1.71')
+            column(name: 'publication_type_weight', value: 1.71)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage')
             column(name: 'updated_datetime', value: '2020-02-14 11:45:52.735531+03')
@@ -7236,16 +7236,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '04a64d17-eab8-4191-b162-f9c12e540795')
             column(name: 'institution', value: 'University of Michigan')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Feb 2019 TUR')
-            column(name: 'number_of_pages', value: '200')
+            column(name: 'number_of_pages', value: 200)
             column(name: 'right_limitation', value: 'DIGITAL')
-            column(name: 'detail_licensee_class_id', value: '108')
-            column(name: 'value_weight', value: '0.7900000')
-            column(name: 'volume_weight', value: '0.5900000')
-            column(name: 'volume_share', value: '0.4500000')
-            column(name: 'value_share', value: '0.0780000')
-            column(name: 'total_share', value: '0.9500000')
+            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'value_weight', value: 0.7900000)
+            column(name: 'volume_weight', value: 0.5900000)
+            column(name: 'volume_share', value: 0.4500000)
+            column(name: 'value_share', value: 0.0780000)
+            column(name: 'total_share', value: 0.9500000)
             column(name: 'original_publication_type', value: 'Textbook')
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'baseline_uid', value: '44f90e4f-3038-4738-a41a-4e989d80b0f2')
@@ -7393,13 +7393,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '2a3aac29-6694-48fe-8c5d-c6709614ae73')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 1 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: 'a463d517-0887-4d68-9422-a99e8997ddd5')
             column(name: 'df_fund_pool_uid', value: '2a3aac29-6694-48fe-8c5d-c6709614ae73')
-            column(name: 'df_aggregate_licensee_class_id', value: '171')
+            column(name: 'df_aggregate_licensee_class_id', value: 171)
             column(name: 'gross_amount', value: 100.00)
         }
 
@@ -7408,13 +7408,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '6b2ba3de-f2a7-4d9b-8da1-d84118ddba30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 2 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '044f4190-5c0e-41e5-994b-983b7810ea74')
             column(name: 'df_fund_pool_uid', value: '6b2ba3de-f2a7-4d9b-8da1-d84118ddba30')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
+            column(name: 'df_aggregate_licensee_class_id', value: 141)
             column(name: 'gross_amount', value: 200.00)
         }
 
@@ -7458,16 +7458,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '3a70aab1-221c-46cd-89e2-417d0765fba2')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 5.0000000)
+            column(name: 'volume_weight', value: 54.0000000)
+            column(name: 'volume_share', value: 1.0000000)
+            column(name: 'value_share', value: 1.0000000)
+            column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -7477,13 +7477,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '404ba914-3c57-4551-867b-8bd4a1fdd8f2')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 6 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '24ddaead-40b3-47d9-af51-826878a6443e')
             column(name: 'df_fund_pool_uid', value: '404ba914-3c57-4551-867b-8bd4a1fdd8f2')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
+            column(name: 'df_aggregate_licensee_class_id', value: 141)
             column(name: 'gross_amount', value: 200.00)
         }
 
@@ -7527,16 +7527,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'f5bc77ec-1be3-4867-a5ef-98b0a49b0d4e')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 5.0000000)
+            column(name: 'volume_weight', value: 54.0000000)
+            column(name: 'volume_share', value: 1.0000000)
+            column(name: 'value_share', value: 1.0000000)
+            column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -7546,13 +7546,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '66bbea66-84e7-41cd-a5aa-9fd43f03dd5a')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 3 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '9124723e-bbd0-4750-bfad-764e7b5601e5')
             column(name: 'df_fund_pool_uid', value: '66bbea66-84e7-41cd-a5aa-9fd43f03dd5a')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
+            column(name: 'df_aggregate_licensee_class_id', value: 141)
             column(name: 'gross_amount', value: 200.00)
         }
 
@@ -7596,16 +7596,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '2c540f3a-0d43-4ca9-b1d2-73bb85774e43')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 5.0000000)
+            column(name: 'volume_weight', value: 54.0000000)
+            column(name: 'volume_share', value: 1.0000000)
+            column(name: 'value_share', value: 1.0000000)
+            column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -7615,13 +7615,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '3c79d8ee-42ef-4973-bdad-0a27d75504c9')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 5 for testAaclUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: 'ead693bc-e108-4d95-b660-17492b178823')
             column(name: 'df_fund_pool_uid', value: '3c79d8ee-42ef-4973-bdad-0a27d75504c9')
-            column(name: 'df_aggregate_licensee_class_id', value: '141')
+            column(name: 'df_aggregate_licensee_class_id', value: 141)
             column(name: 'gross_amount', value: 200.00)
         }
 
@@ -7664,16 +7664,16 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '381fcb77-8e28-4ab5-8f2d-ee295c2cf9e7')
             column(name: 'institution', value: 'University of Chicago')
-            column(name: 'usage_period', value: '2020')
+            column(name: 'usage_period', value: 2020)
             column(name: 'usage_source', value: 'Feb 2020 TUR')
-            column(name: 'number_of_pages', value: '100')
+            column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '171')
-            column(name: 'value_weight', value: '5.0000000')
-            column(name: 'volume_weight', value: '54.0000000')
-            column(name: 'volume_share', value: '1.0000000')
-            column(name: 'value_share', value: '1.0000000')
-            column(name: 'total_share', value: '1.0000000')
+            column(name: 'detail_licensee_class_id', value: 171)
+            column(name: 'value_weight', value: 5.0000000)
+            column(name: 'volume_weight', value: 54.0000000)
+            column(name: 'volume_share', value: 1.0000000)
+            column(name: 'value_share', value: 1.0000000)
+            column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
@@ -8040,7 +8040,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '815d6736-a34e-4fc8-96c3-662a114fa7f2')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS Fund Pool 4')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -8359,7 +8359,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '3680dbbf-e360-4658-b262-88e25652fa4e')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 1')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.02000, "service_fee": 0.25000}')
         }
 
@@ -8473,7 +8473,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '768a18ff-73d3-4eb5-8c8c-1cf0139c7818')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 2')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/25/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.02000, "service_fee": 0.25000}')
         }
 
@@ -8605,7 +8605,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'e6cb4b13-30cf-4629-991b-4095fcaaaae6')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL liabilities by Rightsholder report Fund Pool 1')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/08/2020", "assessment_name": "FY2020 AIR", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, ' +
@@ -8805,7 +8805,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '96a424f2-302e-42e5-850e-2f573fb6519b')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Liabilities by Rightsholder report Fund Pool 2')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/10/2020", "assessment_name": "FY2020 AIR", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 10, ' +
@@ -9029,7 +9029,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '462111b6-5d30-4a43-a35b-14796d34d847')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Liabilities Summary by Rightsholder and Work report Fund Pool 1')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/09/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, ' +
@@ -9151,7 +9151,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '93ad09c8-1ffa-4609-9917-e12aeee885a3')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Liabilities Summary by Rightsholder and Work report Fund Pool 2')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/11/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, ' +
@@ -9280,7 +9280,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '5f4df57b-b318-4a9d-b00a-82ab04ed9331')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 1 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 100.00, ' +
                     '"date_received": "10/15/2015", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, "grade_K_5_gross_amount": 90.00, ' +
@@ -9339,7 +9339,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '5652ec3a-1817-4598-bd6c-26506949e0d8')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 2 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 100.00, ' +
                     '"date_received": "05/20/2016", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, "grade_K_5_gross_amount": 90.00, ' +
@@ -9450,7 +9450,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '1a2f421d-5ae7-43ab-af08-482de7324534')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 3 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 100.00, ' +
                     '"date_received": "10/17/2017", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, "grade_K_5_gross_amount": 90.00, ' +
@@ -9561,7 +9561,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '44764d4d-04d6-47f0-8789-eec182fcf567')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 4 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '100.00')
+            column(name: 'total_amount', value: 100.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 100.00, ' +
                     '"date_received": "10/29/2018", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, "grade_K_5_gross_amount": 90.00, ' +
@@ -9672,7 +9672,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'f732a0ce-b59e-4cfa-9a9e-9e341065e042')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 5 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 200.00, ' +
                     '"date_received": "11/10/2019", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, ' +
@@ -9787,7 +9787,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '0ac98ae1-13b6-427e-a2df-2d59a164d313')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool Name 6 for testSalUndistributedLiabilitiesCsvReport')
-            column(name: 'total_amount', value: '200.00')
+            column(name: 'total_amount', value: 200.00)
             column(name: 'sal_fields', value: '{"service_fee": 0.25000, "gross_amount": 200.00, ' +
                     '"date_received": "12/30/2020", "licensee_name": "VG Wort, Verwertungsgesellschaft WORT", ' +
                     '"assessment_name": "Assessment", "grade_6_8_gross_amount": 0.00, ' +
@@ -9907,7 +9907,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '1dbec643-2133-4839-9cf4-60dcfd04cc59')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pools for Report 1')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "10/12/2020", "assessment_name": "FY2020 AIR", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", ' +
                     '"grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, ' +
@@ -9920,7 +9920,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '8b805b1a-e855-492a-b3a8-f14ec6598fa1')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pools for Report 2')
-            column(name: 'total_amount', value: '5000.00')
+            column(name: 'total_amount', value: 5000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/31/2018", "assessment_name": "FY1990 COG", ' +
                     '"licensee_account_number": 7001293454, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, ' +
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 5000.00, ' +
@@ -9932,7 +9932,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '8deedf18-7dbc-4521-b276-817de65dc220')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pools for Report 3')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/31/2018", "assessment_name": "FY1990 COG", ' +
                     '"licensee_account_number": 1000003007, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, ' +
                     '"grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, ' +
@@ -10170,7 +10170,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '79702b06-3848-419b-9eae-726ac1f11875')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool to test audit export')
-            column(name: 'total_amount', value: '2000.00')
+            column(name: 'total_amount', value: 2000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/28/2020", "assessment_name": "FY2020 EOC", ' +
                     '"licensee_account_number": 2000017003, "licensee_name": "ProLitteris", ' +
                     '"grade_K_5_number_of_students": 0, "grade_6_8_number_of_students": 100, "grade_9_12_number_of_students": 0, ' +

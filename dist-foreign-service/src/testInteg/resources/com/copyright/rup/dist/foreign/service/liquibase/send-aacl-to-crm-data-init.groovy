@@ -42,14 +42,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '9aeb87ed-5000-4bee-abcb-e3dfc4f84235')
             column(name: 'wr_wrk_inst', value: 123456789)
-            column(name: 'usage_period', value: '2016')
+            column(name: 'usage_period', value: 2016)
             column(name: 'usage_source', value: 'Aug 2016 FR')
             column(name: 'number_of_copies', value: 30)
-            column(name: 'number_of_pages', value: '35')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'number_of_pages', value: 35)
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'original_publication_type', value: 'Scholarly Journal')
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'publication_type_weight', value: '2')
+            column(name: 'publication_type_weight', value: 2)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage Comment 3')
         }
@@ -57,14 +57,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'a5e00786-c741-4460-b436-da832a285cf8')
             column(name: 'wr_wrk_inst', value: 123456789)
-            column(name: 'usage_period', value: '2016')
+            column(name: 'usage_period', value: 2016)
             column(name: 'usage_source', value: 'Aug 2016 FR')
             column(name: 'number_of_copies', value: 30)
-            column(name: 'number_of_pages', value: '35')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'number_of_pages', value: 35)
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'original_publication_type', value: 'Scholarly Journal')
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'publication_type_weight', value: '2')
+            column(name: 'publication_type_weight', value: 2)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage Comment 3')
         }
@@ -97,13 +97,13 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'e5ae9237-05a0-4c82-b607-0f91f19b2f24')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'number_of_pages', value: '1')
+            column(name: 'number_of_pages', value: 1)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'publication_type_weight', value: '1.71')
+            column(name: 'publication_type_weight', value: 1.71)
             column(name: 'baseline_uid', value: 'a5e00786-c741-4460-b436-da832a285cf8')
         }
 
@@ -135,13 +135,13 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '8ab89fcc-abf9-432e-b653-e84f2605697f')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'number_of_pages', value: '1')
+            column(name: 'number_of_pages', value: 1)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'publication_type_weight', value: '1.71')
+            column(name: 'publication_type_weight', value: 1.71)
             column(name: 'baseline_uid', value: '9aeb87ed-5000-4bee-abcb-e3dfc4f84235')
         }
     }

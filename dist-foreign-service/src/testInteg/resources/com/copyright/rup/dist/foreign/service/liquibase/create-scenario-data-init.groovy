@@ -544,7 +544,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS fund pool')
-            column(name: 'total_amount', value: '190.00')
+            column(name: 'total_amount', value: 190.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {

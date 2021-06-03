@@ -31,14 +31,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'a5e00786-c741-4460-b436-da832a285cf8')
             column(name: 'wr_wrk_inst', value: 123456789)
-            column(name: 'usage_period', value: '2016')
+            column(name: 'usage_period', value: 2016)
             column(name: 'usage_source', value: 'Aug 2016 FR')
             column(name: 'number_of_copies', value: 30)
-            column(name: 'number_of_pages', value: '35')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'number_of_pages', value: 35)
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'original_publication_type', value: 'Scholarly Journal')
             column(name: 'df_publication_type_uid', value: '46634907-882e-4f91-b1ad-f57db945aff7')
-            column(name: 'publication_type_weight', value: '2')
+            column(name: 'publication_type_weight', value: 2)
             column(name: 'institution', value: 'BIOLA UNIVERSITY')
             column(name: 'comment', value: 'AACL baseline usage Comment 3')
         }
@@ -71,13 +71,13 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: 'e5ae9237-05a0-4c82-b607-0f91f19b2f24')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'number_of_pages', value: '1')
+            column(name: 'number_of_pages', value: 1)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
-            column(name: 'publication_type_weight', value: '1.71')
+            column(name: 'publication_type_weight', value: 1.71)
             column(name: 'baseline_uid', value: 'a5e00786-c741-4460-b436-da832a285cf8')
         }
 
@@ -230,7 +230,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '2b664666-dcde-4abe-8757-34627606ee68')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool for testFindSalUsagesByIds')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 900.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
         }
 
@@ -352,7 +352,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '03aa3c29-7feb-48a5-bb86-2db6afd55cda')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 2 for testFindSalUsagesByIds')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 0, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 200.00, "grade_K_5_gross_amount": 900.00, "grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.10000, "service_fee": 0.25000}')
         }
 

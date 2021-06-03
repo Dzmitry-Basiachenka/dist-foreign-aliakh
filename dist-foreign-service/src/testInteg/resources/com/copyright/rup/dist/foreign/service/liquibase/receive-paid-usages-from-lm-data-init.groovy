@@ -225,11 +225,11 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '6e8172d6-c16f-4522-8606-e55db1b8e5a4')
             column(name: 'institution', value: 'University of Michigan')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            column(name: 'number_of_pages', value: '341')
+            column(name: 'number_of_pages', value: 341)
             column(name: 'right_limitation', value: 'ALL')
         }
 
@@ -257,11 +257,11 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '30771d65-8b91-42e5-865c-0c73fddbee0c')
             column(name: 'institution', value: 'University of Michigan')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            column(name: 'number_of_pages', value: '30')
+            column(name: 'number_of_pages', value: 30)
             column(name: 'right_limitation', value: 'ALL')
         }
 
@@ -289,11 +289,11 @@ databaseChangeLog {
             column(name: 'df_usage_aacl_uid', value: '7d8534bc-118c-4144-9bc4-9f376f99c854')
             column(name: 'institution', value: 'University of Michigan')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
-            column(name: 'usage_period', value: '2017')
+            column(name: 'usage_period', value: 2017)
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'detail_licensee_class_id', value: '143')
+            column(name: 'detail_licensee_class_id', value: 143)
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
-            column(name: 'number_of_pages', value: '341')
+            column(name: 'number_of_pages', value: 341)
             column(name: 'right_limitation', value: 'ALL')
         }
     }

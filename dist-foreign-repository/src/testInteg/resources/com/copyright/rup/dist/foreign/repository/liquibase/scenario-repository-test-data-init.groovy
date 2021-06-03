@@ -120,7 +120,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '5210b859-1239-4a60-9fab-999b84199321')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS Fund Pool 1')
-            column(name: 'total_amount', value: '500.00')
+            column(name: 'total_amount', value: 500.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -151,7 +151,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'a7131cd2-c7cd-4d70-a78f-9554e9598693')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS Fund Pool 2')
-            column(name: 'total_amount', value: '500.00')
+            column(name: 'total_amount', value: 500.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1118,7 +1118,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '7141290b-7042-4cc6-975f-10546370adce')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS Fund Pool 3')
-            column(name: 'total_amount', value: '50.00')
+            column(name: 'total_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1256,7 +1256,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '815d6736-a34e-4fc8-96c3-662a114fa7f2')
             column(name: 'product_family', value: 'NTS')
             column(name: 'name', value: 'NTS Fund Pool 4')
-            column(name: 'total_amount', value: '50.00')
+            column(name: 'total_amount', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1352,7 +1352,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '95faddb9-27b6-422e-9de8-01f3aaa9c64d')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 1')
-            column(name: 'total_amount', value: '10.95')
+            column(name: 'total_amount', value: 10.95)
             column(name: 'created_datetime', value: '2020-01-03 11:00:00-04')
             column(name: 'created_by_user', value: 'coordinator@copyright.com')
         }
@@ -1360,7 +1360,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '5ec2fbdf-29b2-4b42-b0eb-297e9dff53f3')
             column(name: 'df_fund_pool_uid', value: '95faddb9-27b6-422e-9de8-01f3aaa9c64d')
-            column(name: 'df_aggregate_licensee_class_id', value: '108')
+            column(name: 'df_aggregate_licensee_class_id', value: 108)
             column(name: 'gross_amount', value: 10.95)
         }
 
@@ -1374,13 +1374,13 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
             column(name: 'product_family', value: 'AACL')
             column(name: 'name', value: 'AACL Fund Pool 2')
-            column(name: 'total_amount', value: '10.95')
+            column(name: 'total_amount', value: 10.95)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool_detail') {
             column(name: 'df_fund_pool_detail_uid', value: '7dc93e89-d1f4-4721-81be-fd32606e4a66')
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
-            column(name: 'df_aggregate_licensee_class_id', value: '108')
+            column(name: 'df_aggregate_licensee_class_id', value: 108)
             column(name: 'gross_amount', value: 10.95)
         }
 
@@ -1416,11 +1416,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
             column(name: 'df_usage_aacl_uid', value: '2f3988e1-7cca-42b2-bdf8-a8850dbf315b')
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
-            column(name: 'usage_period', value: '2019')
+            column(name: 'usage_period', value: 2019)
             column(name: 'usage_source', value: 'Feb 2019 TUR')
-            column(name: 'number_of_pages', value: '12')
+            column(name: 'number_of_pages', value: 12)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: '108')
+            column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
         }
 
@@ -1446,7 +1446,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '462111b6-5d30-4a43-a35b-14796d34d847')
             column(name: 'product_family', value: 'SAL')
             column(name: 'name', value: 'SAL Fund Pool 1')
-            column(name: 'total_amount', value: '1000.00')
+            column(name: 'total_amount', value: 1000.00)
             column(name: 'sal_fields', value: '{"date_received": "12/24/2020", "assessment_name": "FY2020 COG", "licensee_account_number": 1000008985, "licensee_name": "FarmField Inc.", "grade_K_5_number_of_students": 10, "grade_6_8_number_of_students": 5, "grade_9_12_number_of_students": 0, "gross_amount": 1000.00, "item_bank_gross_amount": 20.01, "grade_K_5_gross_amount": 653.3, "grade_6_8_gross_amount": 326.66, "grade_9_12_gross_amount": 0.00, "item_bank_split_percent": 0.02000, "service_fee": 0.25000}')
         }
 
