@@ -41,7 +41,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '25')
+            column(name: 'number_of_copies', value: 25)
             column(name: 'gross_amount', value: 10.00)
         }
 
@@ -52,10 +52,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '10')
+            column(name: 'reported_value', value: 10)
         }
     }
 
@@ -99,7 +99,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '25')
+            column(name: 'number_of_copies', value: 25)
             column(name: 'gross_amount', value: 99.00)
         }
 
@@ -110,10 +110,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '99')
+            column(name: 'reported_value', value: 99)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -139,14 +139,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63b45167-a6ce-4cd5-84c6-5167916aee98')
             column(name: 'df_scenario_uid', value: 'd4834496-b680-4cc8-b4bc-295440b39c59')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'wr_wrk_inst', value: 243904752)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'gross_amount', value: 150.00)
             column(name: 'net_amount', value: 126.00)
             column(name: 'service_fee_amount', value: 24.00)
@@ -165,10 +165,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2016')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2016)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '150')
+            column(name: 'reported_value', value: 150)
         }
     }
 
@@ -274,7 +274,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '54e37b92-53a8-49a3-b731-340366efcc53')
             column(name: 'df_usage_batch_uid', value: 'a4407ece-c1b1-48ad-a961-2439cada4e13')
             column(name: 'df_scenario_uid', value: '450ed474-1919-460b-9485-ccea0f53ce46')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Snap to grid')
             column(name: 'system_title', value: 'Snap to grid')
             column(name: 'standard_number', value: '9780262122269')
@@ -287,7 +287,7 @@ databaseChangeLog {
             column(name: 'service_fee', value: 0.25000)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '155')
+            column(name: 'number_of_copies', value: 155)
             column(name: 'comment', value: 'AACL Comment')
         }
 
@@ -380,7 +380,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'a664e039-994d-43f4-959a-54ad84d88ecf')
             column(name: 'df_usage_batch_uid', value: 'c8ff486f-8aec-40ac-a249-2c828df81d0c')
             column(name: 'df_scenario_uid', value: '3c7b100c-0e30-4381-bd06-787e058af6f1')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'payee_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'LOCKED')

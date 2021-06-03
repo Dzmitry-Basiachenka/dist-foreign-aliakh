@@ -35,7 +35,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5ab5e80b-89c0-4d78-9675-54c7ab284450')
             column(name: 'df_usage_batch_uid', value: '6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'NEW')
@@ -74,7 +74,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7b5ac9fc-63e2-4162-8d63-953b7023293c')
             column(name: 'df_usage_batch_uid', value: '6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64')
-            column(name: 'wr_wrk_inst', value: '122830308')
+            column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'rh_account_number', value: 1000011450)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -113,7 +113,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c95654c0-a607-4683-878f-99606e90c065')
             column(name: 'df_usage_batch_uid', value: '56069b44-10b1-42d6-9a44-a3fae0029171')
-            column(name: 'wr_wrk_inst', value: '369040892')
+            column(name: 'wr_wrk_inst', value: 369040892)
             column(name: 'rh_account_number', value: 2000017004)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -152,7 +152,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'fc56debb-4265-4f92-b0bb-4189a2c694a8')
             column(name: 'df_usage_batch_uid', value: '3572dcec-b0b8-4a19-a18e-319be139f0d2')
-            column(name: 'wr_wrk_inst', value: '876543210')
+            column(name: 'wr_wrk_inst', value: 876543210)
             column(name: 'work_title', value: 'Medical Journal')
             column(name: 'standard_number', value: 'Medical Journal')
             column(name: 'standard_number_type', value: 'Medical Journal')
@@ -223,7 +223,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8edafa8e-a395-4775-94c4-b5da6c400228')
             column(name: 'df_usage_batch_uid', value: 'cb932497-086d-4a7e-9b34-e9a62f17adab4')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'NEW')
@@ -257,7 +257,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd32374ef-d4ae-41eb-9591-c4bb2ad632fe')
             column(name: 'df_usage_batch_uid', value: 'cb932497-086d-4a7e-9b34-e9a62f17adab4')
-            column(name: 'wr_wrk_inst', value: '122830308')
+            column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'rh_account_number', value: 1000011450)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -296,7 +296,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e3b4dfc5-a208-4b6e-996a-c667c705a08d')
             column(name: 'df_usage_batch_uid', value: 'b0e669d2-68d0-4add-9946-34215011f74b')
-            column(name: 'wr_wrk_inst', value: '369040892')
+            column(name: 'wr_wrk_inst', value: 369040892)
             column(name: 'rh_account_number', value: 2000017004)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -338,7 +338,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '527e2779-2146-4f20-ad38-e795db220189')
             column(name: 'df_usage_batch_uid', value: '48b77da2-c223-40c9-a655-bef4dbe7a807')
-            column(name: 'wr_wrk_inst', value: '876543210')
+            column(name: 'wr_wrk_inst', value: 876543210)
             column(name: 'work_title', value: 'Med. Journal')
             column(name: 'system_title', value: 'Medical Journal')
             column(name: 'standard_number', value: '978-0-7695-2365-2')
@@ -384,7 +384,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a47e2d1b-c09f-4e71-b949-223eb04c90c2')
             column(name: 'df_usage_batch_uid', value: '09cc64a7-171a-4921-8d99-500768137cb8')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'NEW')
@@ -418,7 +418,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '17f35785-8402-4dfc-83c9-d1bedc2e6364')
             column(name: 'df_usage_batch_uid', value: '09cc64a7-171a-4921-8d99-500768137cb8')
-            column(name: 'wr_wrk_inst', value: '122830308')
+            column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'rh_account_number', value: 1000011450)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -447,7 +447,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7a358ad5-cbcb-4912-b1ad-314617662614')
             column(name: 'df_usage_batch_uid', value: '09cc64a7-171a-4921-8d99-500768137cb8')
-            column(name: 'wr_wrk_inst', value: '369040892')
+            column(name: 'wr_wrk_inst', value: 369040892)
             column(name: 'rh_account_number', value: 2000017004)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -490,7 +490,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b89b64d2-30bc-484c-a233-bcb9fd92ab26')
             column(name: 'df_usage_batch_uid', value: 'b54293db-bfb9-478a-bc13-d70aef5d3ecb')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'NEW')
@@ -524,7 +524,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4ac5174a-6feb-4c9a-a8cd-7d3cc35ab8e2')
             column(name: 'df_usage_batch_uid', value: 'b54293db-bfb9-478a-bc13-d70aef5d3ecb')
-            column(name: 'wr_wrk_inst', value: '122830308')
+            column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'rh_account_number', value: 1000011450)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -585,7 +585,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e823d079-3e82-4a5c-bdad-a8707b47b665')
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
@@ -613,7 +613,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9439530a-d7a9-40a9-a881-f892d13eaf9f')
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
@@ -650,7 +650,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'ad4caa00-c95a-453e-9253-f9810d84d269')
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
             column(name: 'df_scenario_uid', value: '6252afe5-e756-42d4-b96a-708afeda9122')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
@@ -679,7 +679,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'd7764071-935f-4281-a643-656354ccf690')
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
             column(name: 'df_scenario_uid', value: '6252afe5-e756-42d4-b96a-708afeda9122')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
@@ -750,7 +750,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'd8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
             column(name: 'df_scenario_uid', value: 'c0b30809-4a38-46cc-a0dc-641924d1fc43')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -759,7 +759,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'gross_amount', value: 980.00)
             column(name: 'net_amount', value: 667.40)
             column(name: 'service_fee_amount', value: 312.60)
@@ -789,7 +789,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '71d1a5d2-ba9f-48b7-9b09-0516840a07ee')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
             column(name: 'df_scenario_uid', value: 'c0b30809-4a38-46cc-a0dc-641924d1fc43')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -798,7 +798,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'gross_amount', value: 980.00)
             column(name: 'net_amount', value: 667.40)
             column(name: 'service_fee_amount', value: 312.60)
@@ -879,7 +879,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '015207e3-568d-4f3e-9845-ef1786fac399')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -888,7 +888,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -915,7 +915,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '0fdb7912-2c56-49a9-b5bd-2364dd71c646')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -924,7 +924,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -951,7 +951,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '382f727b-6791-4579-a5c3-3099ba856e70')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -960,7 +960,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -987,7 +987,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '80a517a0-9a7a-4361-8840-e59d13d6e8db')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -996,7 +996,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -1028,7 +1028,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '98eedcf5-cd6d-46ee-9d70-912db0bf2997')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -1037,7 +1037,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -1069,7 +1069,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'cc2cf124-8c96-4662-8949-c56002247f39')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
             column(name: 'df_scenario_uid', value: '71d242e6-4009-4393-9962-45daf962706a')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -1078,7 +1078,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_sal') {
@@ -1150,7 +1150,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '1d437cb1-c262-44bf-a12a-65c562cfe8a7')
             column(name: 'df_usage_batch_uid', value: '35a5be09-00e3-49aa-9bfe-cd7a6c1b354e')
             column(name: 'df_scenario_uid', value: 'bafc8277-d9f2-44b6-a68c-9e46165175f8')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000000026)
             column(name: "system_title", value: 'Castanea')
@@ -1158,7 +1158,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'gross_amount', value: 100.00)
             column(name: 'net_amount', value: 75.00)
             column(name: 'service_fee_amount', value: 25.00)
@@ -1218,13 +1218,13 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '83e26dc4-87af-464d-9edc-bb37611947fa')
             column(name: 'df_usage_batch_uid', value: '33c9b62f-80dc-4583-8504-3757c80b4aec')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'WORK_NOT_GRANTED')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'gross_amount', value: 100.00)
             column(name: 'net_amount', value: 75.00)
             column(name: 'service_fee_amount', value: 25.00)
@@ -1311,7 +1311,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '7f82f654-d906-4cc3-83cf-0409c69a0891')
             column(name: 'df_usage_batch_uid', value: 'd67611c2-ee99-445b-9ce3-e798e2ed640a')
             column(name: 'df_scenario_uid', value: 'b27d5717-7d94-45e8-9f99-bde681d52c03')
-            column(name: 'wr_wrk_inst', value: '131858485')
+            column(name: 'wr_wrk_inst', value: 131858485)
             column(name: 'rh_account_number', value: 2000173934)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Leseleiter')
@@ -1350,7 +1350,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'c75305bc-9458-40bc-9926-004a47b072fc')
             column(name: 'df_usage_batch_uid', value: 'd67611c2-ee99-445b-9ce3-e798e2ed640a')
             column(name: 'df_scenario_uid', value: 'b27d5717-7d94-45e8-9f99-bde681d52c03')
-            column(name: 'wr_wrk_inst', value: '133335135')
+            column(name: 'wr_wrk_inst', value: 133335135)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 2000173934)
             column(name: 'work_title', value: 'Rimas')
@@ -1437,7 +1437,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a375c049-1289-4c85-994b-b2bd8ac043cf')
             column(name: 'df_scenario_uid', value: 'f8ea52bf-8822-43a4-80bc-e6dde96f857b')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'wr_wrk_inst', value: '123013764')
+            column(name: 'wr_wrk_inst', value: 123013764)
             column(name: 'work_title', value: 'Telling stories')
             column(name: 'system_title', value: 'Telling stories')
             column(name: 'rh_account_number', value: 1000002859)
@@ -1482,7 +1482,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a375c049-1289-4c85-994b-b2bd8ac043cf')
             column(name: 'df_scenario_uid', value: 'f8ea52bf-8822-43a4-80bc-e6dde96f857b')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'wr_wrk_inst', value: '123013764')
+            column(name: 'wr_wrk_inst', value: 123013764)
             column(name: 'work_title', value: 'Telling stories')
             column(name: 'system_title', value: 'Telling stories')
             column(name: 'rh_account_number', value: 1000002859)

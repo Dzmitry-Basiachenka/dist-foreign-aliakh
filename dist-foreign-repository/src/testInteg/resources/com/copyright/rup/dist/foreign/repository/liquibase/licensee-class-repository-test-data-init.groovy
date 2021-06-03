@@ -39,11 +39,11 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '2f3988e1-7cca-42b2-bdf8-a8850dbf315b')
             column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
             column(name: 'df_scenario_uid', value: '66d10c81-705e-4996-89f4-11e1635c4c31')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'AACL Scenario Comment')
         }
 

@@ -38,7 +38,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
@@ -46,7 +46,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 1176.916)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -65,10 +65,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -76,7 +76,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '448824345')
+            column(name: 'wr_wrk_inst', value: 448824345)
             column(name: 'work_title', value: 'Technical Journal')
             column(name: 'system_title', value: 'Technical Journal')
             column(name: 'rh_account_number', value: '1000002859')
@@ -84,7 +84,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'standard_number_type', value: 'VALISBN13')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 1176.916)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -103,21 +103,21 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: 'db8aca31-d542-4efb-9ba8-8b489014af36')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'classification', value: 'NON-STM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: '12546688-50f9-40d7-a0e1-adac4f48959c')
-            column(name: 'wr_wrk_inst', value: '122803148')
+            column(name: 'wr_wrk_inst', value: 122803148)
             column(name: 'classification', value: 'NON-STM')
         }
 
@@ -127,14 +127,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -153,10 +153,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2001')
-            column(name: 'market_period_to', value: '2003')
+            column(name: 'market_period_from', value: 2001)
+            column(name: 'market_period_to', value: 2003)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         // excluded from fund pool selection as Belletristic
@@ -165,14 +165,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '836698198')
+            column(name: 'wr_wrk_inst', value: 836698198)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 1176.916)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -191,15 +191,15 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Edu')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: '856159d4-c991-4b07-ad31-9d5413c24aee')
-            column(name: 'wr_wrk_inst', value: '836698198')
+            column(name: 'wr_wrk_inst', value: 836698198)
             column(name: 'classification', value: 'BELLETRISTIC')
         }
 

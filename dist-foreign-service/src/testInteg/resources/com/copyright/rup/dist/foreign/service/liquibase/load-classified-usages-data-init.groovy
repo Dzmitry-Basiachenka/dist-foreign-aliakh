@@ -21,11 +21,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd5973116-2ea0-4808-80f5-93016e24cfa4')
             column(name: 'df_usage_batch_uid', value: 'a7e971e0-2bd1-484e-b769-4712752a5441')
-            column(name: 'wr_wrk_inst', value: '122825976')
+            column(name: 'wr_wrk_inst', value: 122825976)
             column(name: 'rh_account_number', value: 7001413934)
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '20')
+            column(name: 'number_of_copies', value: 20)
             column(name: 'comment', value: 'comment')
         }
 
@@ -41,11 +41,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '833aa413-ee36-4f1c-bea1-ec7a0f6e507d')
             column(name: 'df_usage_batch_uid', value: 'a7e971e0-2bd1-484e-b769-4712752a5441')
-            column(name: 'wr_wrk_inst', value: '122825976')
+            column(name: 'wr_wrk_inst', value: 122825976)
             column(name: 'rh_account_number', value: 1000003578)
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '20')
+            column(name: 'number_of_copies', value: 20)
             column(name: 'comment', value: 'comment')
         }
 
@@ -61,11 +61,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9e4c3be6-fafd-44f3-af7f-915e861e31c7')
             column(name: 'df_usage_batch_uid', value: 'a7e971e0-2bd1-484e-b769-4712752a5441')
-            column(name: 'wr_wrk_inst', value: '122825976')
+            column(name: 'wr_wrk_inst', value: 122825976)
             column(name: 'rh_account_number', value: 7001413934)
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '20')
+            column(name: 'number_of_copies', value: 20)
             column(name: 'comment', value: 'comment')
         }
 

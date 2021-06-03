@@ -41,10 +41,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '9aeb87ed-5000-4bee-abcb-e3dfc4f84235')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'usage_period', value: '2016')
             column(name: 'usage_source', value: 'Aug 2016 FR')
-            column(name: 'number_of_copies', value: '30')
+            column(name: 'number_of_copies', value: 30)
             column(name: 'number_of_pages', value: '35')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
@@ -56,10 +56,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'a5e00786-c741-4460-b436-da832a285cf8')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'usage_period', value: '2016')
             column(name: 'usage_source', value: 'Aug 2016 FR')
-            column(name: 'number_of_copies', value: '30')
+            column(name: 'number_of_copies', value: 30)
             column(name: 'number_of_pages', value: '35')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
@@ -74,7 +74,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a87218a0-1966-40aa-846a-434b3fd41282')
             column(name: 'df_scenario_uid', value: '351e585c-0b08-429d-9e31-bea283ba33de')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'wr_wrk_inst', value: 243904752)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
@@ -112,7 +112,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'a87218a0-1966-40aa-846a-434b3fd41282')
             column(name: 'df_scenario_uid', value: '351e585c-0b08-429d-9e31-bea283ba33de')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'wr_wrk_inst', value: 243904752)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)

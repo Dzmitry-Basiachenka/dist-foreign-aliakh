@@ -16,7 +16,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f7361644-dd13-4280-938a-8c63c769a4e9')
             column(name: 'df_usage_batch_uid', value: '84196c4b-11f5-4bef-afb8-192cb97222e2')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
             column(name: 'comment', value: 'SAL comment 1')
@@ -42,7 +42,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9bedd525-a829-4eeb-9292-80e141662efc')
             column(name: 'df_usage_batch_uid', value: '84196c4b-11f5-4bef-afb8-192cb97222e2')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
             column(name: 'comment', value: 'SAL comment 2')

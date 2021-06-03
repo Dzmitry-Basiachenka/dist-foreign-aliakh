@@ -16,7 +16,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '54cbf219-5835-4637-bd1e-599f52321b74')
             column(name: 'df_usage_batch_uid', value: '10ddbb20-1b13-434d-8347-6db3f840e70f')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
@@ -43,7 +43,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '76185ca9-f61a-4d6e-b61e-4ae2edcd1d50')
             column(name: 'df_usage_batch_uid', value: '10ddbb20-1b13-434d-8347-6db3f840e70f')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
@@ -78,7 +78,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '44f47584-62e2-4cbe-8cd7-20e091e68307')
             column(name: 'df_usage_batch_uid', value: '3ad19d09-c54b-4cf8-95a9-0322a39df829')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')

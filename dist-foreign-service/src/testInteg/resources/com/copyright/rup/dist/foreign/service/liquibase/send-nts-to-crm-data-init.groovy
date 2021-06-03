@@ -22,7 +22,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'adcd15c4-eb44-4e67-847a-7f386082646a')
             column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
-            column(name: 'wr_wrk_inst', value: '151811999')
+            column(name: 'wr_wrk_inst', value: 151811999)
             column(name: 'work_title', value: 'NON-TITLE NTS')
             column(name: 'system_title', value: 'NON-TITLE NTS')
             column(name: 'rh_account_number', value: 1000003821)
@@ -45,13 +45,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'adcd15c4-eb44-4e67-847a-7f386082646a')
-            column(name: 'reported_value', value: '0.00')
+            column(name: 'reported_value', value: 0.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '6fa92092-5cd3-4a12-bbf4-762f7ff6f815')
             column(name: 'df_scenario_uid', value: '67027e15-17c6-4b9b-b7f0-12ec414ad344')
-            column(name: 'wr_wrk_inst', value: '151811999')
+            column(name: 'wr_wrk_inst', value: 151811999)
             column(name: 'work_title', value: 'NON-TITLE NTS')
             column(name: 'system_title', value: 'NON-TITLE NTS')
             column(name: 'rh_account_number', value: 7000429266)
@@ -74,7 +74,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: '6fa92092-5cd3-4a12-bbf4-762f7ff6f815')
-            column(name: 'reported_value', value: '0.00')
+            column(name: 'reported_value', value: 0.00)
         }
     }
 }

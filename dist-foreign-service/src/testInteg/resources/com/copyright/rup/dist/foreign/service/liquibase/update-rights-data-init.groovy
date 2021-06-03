@@ -42,7 +42,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ff321d96-04bd-11e8-ba89-0ed5f89f718b')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '127778306')
+            column(name: 'wr_wrk_inst', value: 127778306)
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'rh_account_number', value: 1000009522)
             column(name: 'status_ind', value: 'LOCKED')
@@ -58,17 +58,17 @@ databaseChangeLog {
             column(name: 'article', value: 'Appendix: The Principles of Newspeak')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'reported_value', value: 30.86)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '37c4d727-caeb-4a7f-b11a-34e313b0bfcc')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '127778305')
+            column(name: 'wr_wrk_inst', value: 127778305)
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'rh_account_number', value: 1000009522)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -84,10 +84,10 @@ databaseChangeLog {
             column(name: 'article', value: 'Appendix: The Principles of Newspeak')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'reported_value', value: 30.86)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -106,16 +106,16 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: '2de40e13-d353-44ce-b6bb-a11383ba9fb9')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
-            column(name: 'reported_value', value: '30.86')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
+            column(name: 'reported_value', value: 30.86)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b77e72d6-ef71-4f4b-a00b-5800e43e5bee')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '254030731')
+            column(name: 'wr_wrk_inst', value: 254030731)
             column(name: 'work_title', value: 'Akropolites: Nicaean Empire')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -130,17 +130,17 @@ databaseChangeLog {
             column(name: 'article', value: 'between orientalism and fundamentalism')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '22.34')
+            column(name: 'reported_value', value: 22.34)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8aded52d-9507-4883-ab4c-fd2e029298af')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '254030731')
+            column(name: 'wr_wrk_inst', value: 254030731)
             column(name: 'work_title', value: 'Akropolites: Nicaean Empire')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -155,17 +155,17 @@ databaseChangeLog {
             column(name: 'article', value: 'between orientalism and fundamentalism')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '9.41')
+            column(name: 'reported_value', value: 9.41)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '74ded52a-4454-1225-ab4c-fA2e029298af')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -180,17 +180,17 @@ databaseChangeLog {
             column(name: 'article', value: 'between orientalism and fundamentalism')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '9.41')
+            column(name: 'reported_value', value: 9.41)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3a6b6f25-9f68-4da7-be4f-dd65574f5168')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '488824345')
+            column(name: 'wr_wrk_inst', value: 488824345)
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -205,17 +205,17 @@ databaseChangeLog {
             column(name: 'article', value: 'between orientalism and fundamentalism')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '9.41')
+            column(name: 'reported_value', value: 9.41)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '11853c83-780a-4533-ad01-dde87c8b8592')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '122824345')
+            column(name: 'wr_wrk_inst', value: 122824345)
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
@@ -230,17 +230,17 @@ databaseChangeLog {
             column(name: 'article', value: 'between orientalism and fundamentalism')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '82.30')
+            column(name: 'reported_value', value: 82.30)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e6378e17-b0c9-420f-aa5c-a653156339d2')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '854030732')
+            column(name: 'wr_wrk_inst', value: 854030732)
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
@@ -255,17 +255,17 @@ databaseChangeLog {
             column(name: 'article', value: 'war stories and camouflaged politics')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '109.34')
+            column(name: 'reported_value', value: 109.34)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '19ca7776-48c8-472e-acfe-d49b6e8780ce')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'wr_wrk_inst', value: '346768461')
+            column(name: 'wr_wrk_inst', value: 346768461)
             column(name: 'work_title', value: 'ACI structural journal')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -280,10 +280,10 @@ databaseChangeLog {
             column(name: 'article', value: 'war stories and camouflaged politics')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2015')
+            column(name: 'market_period_from', value: 2015)
+            column(name: 'market_period_to', value: 2015)
             column(name: 'author', value: 'Aarseth, Espen J.')
-            column(name: 'reported_value', value: '110.34')
+            column(name: 'reported_value', value: 110.34)
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -301,7 +301,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ede81bc0-a756-43a2-b236-05a0184384f4')
             column(name: 'df_usage_batch_uid', value: 'ade32bd9-4c0f-4835-b980-6372b89c9caf')
-            column(name: 'wr_wrk_inst', value: '786768461')
+            column(name: 'wr_wrk_inst', value: 786768461)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -314,9 +314,9 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: 'ede81bc0-a756-43a2-b236-05a0184384f4')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '16.00')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'reported_value', value: 16.00)
         }
 
         rollback ""
@@ -336,10 +336,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b23cb103-9242-4d58-a65d-2634b3e5a8cf')
             column(name: 'df_usage_batch_uid', value: 'eb4b7bdb-3164-4e60-8d63-cae40c76de6e')
-            column(name: 'wr_wrk_inst', value: '122803735')
+            column(name: 'wr_wrk_inst', value: 122803735)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'AACL comment')
         }
 
@@ -354,10 +354,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7e7b97d1-ad60-4d47-915b-2834c5cc056a')
             column(name: 'df_usage_batch_uid', value: 'eb4b7bdb-3164-4e60-8d63-cae40c76de6e')
-            column(name: 'wr_wrk_inst', value: '130297955')
+            column(name: 'wr_wrk_inst', value: 130297955)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'comment', value: 'AACL comment')
         }
 
@@ -372,10 +372,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '10c9a60f-28b6-466c-975c-3ea930089a9e')
             column(name: 'df_usage_batch_uid', value: 'eb4b7bdb-3164-4e60-8d63-cae40c76de6e')
-            column(name: 'wr_wrk_inst', value: '200208329')
+            column(name: 'wr_wrk_inst', value: 200208329)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '18')
+            column(name: 'number_of_copies', value: 18)
             column(name: 'comment', value: 'AACL comment')
         }
 
@@ -505,7 +505,7 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2020-06-30')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'assignee', value: 'wjohn@copyright.com')
-            column(name: 'wr_wrk_inst', value: '122769421')
+            column(name: 'wr_wrk_inst', value: 122769421)
             column(name: 'reported_title', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'system_title', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'reported_standard_number', value: '1008902112377654XX')
@@ -541,7 +541,7 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2020-06-30')
             column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'assignee', value: 'wjohn@copyright.com')
-            column(name: 'wr_wrk_inst', value: '210001899')
+            column(name: 'wr_wrk_inst', value: 210001899)
             column(name: 'reported_title', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'system_title', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'reported_standard_number', value: '1008902112377654XX')
