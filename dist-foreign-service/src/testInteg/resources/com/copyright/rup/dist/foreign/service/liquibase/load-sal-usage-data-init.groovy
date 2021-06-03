@@ -16,7 +16,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b8ec0094-9351-4533-b24c-72a40ddeb7bf')
             column(name: 'df_usage_batch_uid', value: 'a04ad469-03ad-40dc-abaa-5770386c9367')
-            column(name: 'wr_wrk_inst', value: '876543210')
+            column(name: 'wr_wrk_inst', value: 876543210)
             column(name: 'work_title', value: 'Med. Journal')
             column(name: 'system_title', value: 'Medical Journal')
             column(name: 'standard_number', value: '978-0-7695-2365-2')
@@ -49,7 +49,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5339e5d3-1a78-4526-88ee-43f7e5f77eac')
             column(name: 'df_usage_batch_uid', value: 'a04ad469-03ad-40dc-abaa-5770386c9367')
-            column(name: 'wr_wrk_inst', value: '876543210')
+            column(name: 'wr_wrk_inst', value: 876543210)
             column(name: 'work_title', value: 'Med. Journal')
             column(name: 'system_title', value: 'Medical Journal')
             column(name: 'standard_number', value: '978-0-7695-2365-2')

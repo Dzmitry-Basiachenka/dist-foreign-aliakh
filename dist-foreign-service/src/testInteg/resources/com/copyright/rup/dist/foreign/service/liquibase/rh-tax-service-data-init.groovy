@@ -32,9 +32,9 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: 'eae81bc0-a756-43a2-b236-05a0184384f4')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '16.00')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'reported_value', value: 16.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -53,9 +53,9 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: '4ae8c9cb-3cd0-4497-ac8b-f19f85b259cb')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'market', value: 'Univ,Bus,Doc,S')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'reported_value', value: '16.00')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'reported_value', value: 16.00)
         }
 
         rollback ""

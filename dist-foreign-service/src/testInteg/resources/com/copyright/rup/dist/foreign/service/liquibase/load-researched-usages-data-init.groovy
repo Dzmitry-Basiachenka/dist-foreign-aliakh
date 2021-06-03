@@ -21,7 +21,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 420.00)
             column(name: 'service_fee_amount', value: 80.00)
@@ -34,10 +34,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '500.00')
+            column(name: 'reported_value', value: 500.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -46,7 +46,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 420.00)
             column(name: 'service_fee_amount', value: 80.00)
@@ -59,10 +59,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '500.00')
+            column(name: 'reported_value', value: 500.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -71,7 +71,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 420.00)
             column(name: 'service_fee_amount', value: 80.00)
@@ -84,10 +84,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '500.00')
+            column(name: 'reported_value', value: 500.00)
         }
     }
 }

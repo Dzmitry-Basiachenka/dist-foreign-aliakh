@@ -32,13 +32,13 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '25.00')
+            column(name: 'reported_value', value: 25.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '320121ee-5d27-4125-a0e8-9f00ee8a78e0')
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
-            column(name: 'wr_wrk_inst', value: '122267672')
+            column(name: 'wr_wrk_inst', value: 122267672)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -54,7 +54,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '25.00')
+            column(name: 'reported_value', value: 25.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -74,7 +74,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '150.01')
+            column(name: 'reported_value', value: 150.01)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -94,7 +94,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '49.99')
+            column(name: 'reported_value', value: 49.99)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -114,13 +114,13 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '50.00')
+            column(name: 'reported_value', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'cdcd7f35-a049-4519-b94c-3a8d94dd2531')
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'RH_FOUND')
@@ -139,13 +139,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ec908f1b-b349-4905-ad88-08a047619ecd')
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -163,13 +163,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '55708c2d-0a03-4bfd-ba62-fce0447c3ffe')
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -188,13 +188,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '65a522b6-b6b4-4476-8e22-786a7f032db4')
             column(name: 'df_usage_batch_uid', value: 'cf56b889-82fe-4990-b111-9c56ce986281')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -213,7 +213,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -245,7 +245,7 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '50.00')
+            column(name: 'reported_value', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -265,13 +265,13 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '50.00')
+            column(name: 'reported_value', value: 50.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '12c551c1-59f4-4210-9ab6-974645b4b7c8')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -289,13 +289,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f4c9c082-9684-49f2-8936-e487e6ebba6b')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'FAS')
@@ -313,13 +313,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8725dee1-4a2e-44ec-9bcb-2d7fce13e12b')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
@@ -337,13 +337,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'dab64021-aff2-43d3-8613-558d15c4333e')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -362,13 +362,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5007dfe1-f865-475b-88ae-79b960b85a38')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -387,13 +387,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8b3217d7-78d6-4098-91ad-313e366ba2cc')
             column(name: 'df_usage_batch_uid', value: '515a78e7-2a92-4b15-859a-fd9f70e80982')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -412,7 +412,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
     }
 
@@ -458,13 +458,13 @@ databaseChangeLog {
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
-            column(name: 'reported_value', value: '150.01')
+            column(name: 'reported_value', value: 150.01)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e810c237-84e9-48b4-ae61-1a2d6556502a')
             column(name: 'df_usage_batch_uid', value: 'fc4dc9a9-c301-4b1a-9e39-169ae47556d8')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -483,7 +483,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         // Associated with IN_PROGRESS scenario
@@ -509,7 +509,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c0ae8a59-17cb-4fea-821d-9429e06b751e')
             column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ELIGIBLE')
@@ -528,14 +528,14 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3c0c5ae2-0d6a-4f7d-b530-5f89f58ac796')
             column(name: 'df_usage_batch_uid', value: '38b6ae7e-20e4-46cf-a684-8d3c7c67a940')
             column(name: 'df_scenario_uid', value: 'e350b2c2-1102-435b-a8b8-e80516b7d792')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'LOCKED')
@@ -554,7 +554,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         // Associated with SENT_TO_LM scenario
@@ -573,7 +573,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a90436a0-1998-4959-8de5-ebdf1ed1321c')
             column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
             column(name: 'product_family', value: 'FAS')
@@ -591,7 +591,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -605,7 +605,7 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: '4ebb6197-bb64-4405-bace-00116332d583')
             column(name: 'df_usage_batch_uid', value: '0e5af78f-5b2e-469c-9bdc-2e5e396f1436')
             column(name: 'df_scenario_uid', value: '032640d3-44f4-4dd0-8bcd-168f55c6a59b')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'status_ind', value: 'ARCHIVED')
@@ -624,7 +624,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100.00')
+            column(name: 'reported_value', value: 100.00)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -662,7 +662,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '6090f212-2396-43d5-b975-2092f4b14aa4')
             column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009997)
@@ -681,14 +681,14 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '76cdf597-e8fc-49e7-8067-11b029858114')
             column(name: 'df_usage_batch_uid', value: '21aa1fab-cef7-4d22-be72-1336be7ff9fc')
             column(name: 'df_scenario_uid', value: 'a74f7b4a-cb79-4f73-8513-cc16c4887d0e')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009999)
@@ -707,7 +707,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
     }
 
@@ -730,7 +730,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c09aa888-85a5-4377-8c7a-85d84d255b5a')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009997)
@@ -749,13 +749,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a3b1f680-6f30-4e99-98fb-5547957da80f')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -773,13 +773,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4c7f2465-9f6a-4dc7-85aa-eada6392a7e2')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '642267671')
+            column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'RH_FOUND')
@@ -798,13 +798,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100')
+            column(name: 'reported_value', value: 100)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '92818564-32b1-418c-bec3-28ae03f80455')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '642267671')
+            column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'RH_FOUND')
@@ -823,13 +823,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100')
+            column(name: 'reported_value', value: 100)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '09c0f81a-22e7-4b63-8bb3-f8feb01c86f0')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '642267671')
+            column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'NON_STM_RH')
@@ -848,13 +848,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100')
+            column(name: 'reported_value', value: 100)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '97491bc3-815a-474c-a01d-9cc40b404bee')
             column(name: 'df_usage_batch_uid', value: 'a34417b5-12c1-48e2-9aed-d3861b49545b')
-            column(name: 'wr_wrk_inst', value: '642267671')
+            column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
             column(name: 'status_ind', value: 'US_TAX_COUNTRY')
@@ -873,7 +873,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '100')
+            column(name: 'reported_value', value: 100)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -892,7 +892,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5f491fe4-2f1a-434f-b536-92350c623dab')
             column(name: 'df_usage_batch_uid', value: '359de82f-374b-4d53-88ab-0be3982b22aa')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009997)
@@ -911,13 +911,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9522a3cc-5526-48e5-b4f0-182a6c8ccdb1')
             column(name: 'df_usage_batch_uid', value: '359de82f-374b-4d53-88ab-0be3982b22aa')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009997)
@@ -936,13 +936,13 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'aee126ca-f143-44c4-9e65-3ca80ba59875')
             column(name: 'df_usage_batch_uid', value: '359de82f-374b-4d53-88ab-0be3982b22aa')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'rh_account_number', value: 1000009997)
@@ -961,7 +961,7 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2013)
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '900')
+            column(name: 'reported_value', value: 900)
         }
     }
 
@@ -982,7 +982,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '327ecb4d-e091-41ef-a0ab-56201331b0c6')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 1)
@@ -999,7 +999,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e3e9d0e7-717f-4cdc-8e30-e0ec57badb14')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1021,7 +1021,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '81c8e8da-0888-4f9c-91aa-a94ea18fc1e4')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1043,7 +1043,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '58b39805-9eb9-48b0-8081-b25ac3dc7335')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1066,7 +1066,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f9286815-0760-4aa0-a801-f78b362f5e8e')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1089,7 +1089,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9f14014c-2b72-4c2e-9751-fb8ecb0123f0')
             column(name: 'df_usage_batch_uid', value: 'f77ab6ea-56d3-45dc-8926-9a8cd448f229')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1125,7 +1125,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '570c19f3-85bd-4495-82d7-dc74dc3b809b')
             column(name: 'df_usage_batch_uid', value: '3d7c9de0-3d14-42e4-a500-fb10344a77ff')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 1)
@@ -1142,7 +1142,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8afd52fb-ab50-47fd-8a2f-3b5564a23055')
             column(name: 'df_usage_batch_uid', value: '3d7c9de0-3d14-42e4-a500-fb10344a77ff')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1165,7 +1165,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '0804536d-d240-480f-9558-c860894cafd1')
             column(name: 'df_usage_batch_uid', value: '3d7c9de0-3d14-42e4-a500-fb10344a77ff')
-            column(name: 'wr_wrk_inst', value: '109040891')
+            column(name: 'wr_wrk_inst', value: 109040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1188,7 +1188,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '13ca08ff-5e52-4154-9654-c51b3ecdb8bf')
             column(name: 'df_usage_batch_uid', value: '3d7c9de0-3d14-42e4-a500-fb10344a77ff')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1213,7 +1213,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '98b0754c-cf62-44c3-8754-e46e8096012c')
             column(name: 'df_usage_batch_uid', value: '3d7c9de0-3d14-42e4-a500-fb10344a77ff')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'system_title', value: 'Biological Journal')
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
@@ -1253,7 +1253,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a9b37c8d-a0df-4cbb-91b3-d5d863e7fa26')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -1286,7 +1286,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3360093d-7902-4b15-952d-f7a05c5c96fe')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'SAL')
@@ -1319,7 +1319,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7db94f11-ed8c-4f25-be96-9c0400780e2a')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
@@ -1352,7 +1352,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b120eb42-8c80-4fa7-b740-598d2d6a1dfe')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -1387,7 +1387,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '55eb520c-c45e-4f4d-85fa-36b6a3819b25')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -1422,7 +1422,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '91507ae6-4ea7-4095-ae7d-ea9d45bb54be')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -1457,7 +1457,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3ac7211f-3f5d-4d93-8232-db4872d09f3c')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'system_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
@@ -1493,7 +1493,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'dc01d755-608c-4faa-9d51-e3b9f515e0cf')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'system_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
@@ -1529,7 +1529,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '59ac3f66-a48b-4ad5-8e43-cb5d092a5f06')
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
@@ -1575,7 +1575,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'dd7ba57b-42e4-4799-a8cf-9bdb18d35227')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
@@ -1608,7 +1608,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '81202fed-ab01-47ac-9ef3-2fe8be977807')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '269040891')
+            column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'work_title', value: 'Science News for students')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
@@ -1641,7 +1641,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'df9e3288-fc08-432f-a8a5-332a313fb533')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '251235125')
+            column(name: 'wr_wrk_inst', value: 251235125)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'system_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'standard_number', value: '1228902112377655XX')
@@ -1676,7 +1676,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8fdad02c-3879-4407-8d2f-55d1538137ec')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '122267677')
+            column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -1711,7 +1711,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a601b275-da3f-4e70-a107-826c9c59716f')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'system_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
@@ -1747,7 +1747,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '475bb615-1031-478b-9255-db4c09c7d431')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'system_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: 1000009997)
@@ -1783,7 +1783,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f0db6254-23d3-4760-9845-04e0ad9236c0')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')
@@ -1818,7 +1818,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3d3a27fa-5035-4580-b056-2913901e9456')
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
             column(name: "system_title", value: 'Castanea')
             column(name: "standard_number", value: '09639292')

@@ -42,7 +42,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd8daeed3-e4ee-4b09-b6ec-ef12a12bcd3d')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -51,7 +51,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'SAL usage comment 1')
         }
 
@@ -77,7 +77,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '71d1a5d2-ba9f-48b7-9b09-0516840a07ee')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
-            column(name: 'wr_wrk_inst', value: '243204754')
+            column(name: 'wr_wrk_inst', value: 243204754)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
@@ -86,7 +86,7 @@ databaseChangeLog {
             column(name: "standard_number_type", value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'SAL usage comment 2')
         }
 

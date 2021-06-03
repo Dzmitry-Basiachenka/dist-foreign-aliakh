@@ -63,11 +63,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4aa7d89f-9721-4ad3-a9ab-e267743a2851')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 2000133267)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'AACL comment 1')
         }
 
@@ -85,11 +85,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd5331924-72e9-43e7-9a7b-446ac09cff53')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'AACL comment 2')
         }
 
@@ -107,11 +107,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a96d23a9-a8e7-48e2-9f0e-c0a1ce3a0eab')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
-            column(name: 'wr_wrk_inst', value: '100010768')
+            column(name: 'wr_wrk_inst', value: 100010768)
             column(name: 'rh_account_number', value: 1000024497)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'comment', value: 'AACL comment 3')
         }
 
@@ -128,10 +128,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'f517f5b9-5f34-41f6-8984-67eeadf65ad1')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'usage_period', value: '2017')
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'number_of_pages', value: '12')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'original_publication_type', value: 'Textbook')
@@ -144,11 +144,11 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '2b969cb4-4257-4674-b329-f627d60f5c0d')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'comment', value: 'AACL baseline usage')
         }
 
@@ -168,20 +168,20 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c71c0c80-57c0-43d1-9c40-432c7cd112c6')
             column(name: 'df_usage_batch_uid', value: 'ea7b6e8d-8454-4052-b639-c0fdb0a3145c')
-            column(name: 'wr_wrk_inst', value: '100010768')
+            column(name: 'wr_wrk_inst', value: 100010768)
             column(name: 'rh_account_number', value: 2000073957)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'comment', value: 'AACL baseline usage 2')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '9aeb87ed-5000-4bee-abcb-e3dfc4f84235')
-            column(name: 'wr_wrk_inst', value: '100010768')
+            column(name: 'wr_wrk_inst', value: 100010768)
             column(name: 'usage_period', value: '2017')
             column(name: 'usage_source', value: 'Feb 2017 TUR')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'number_of_pages', value: '1')
             column(name: 'detail_licensee_class_id', value: '108')
             column(name: 'original_publication_type', value: 'Textbook')

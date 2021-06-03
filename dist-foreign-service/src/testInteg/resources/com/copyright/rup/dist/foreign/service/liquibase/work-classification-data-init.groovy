@@ -12,7 +12,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: 'db8aca31-d542-4efb-9ba8-8b489014af36')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'classification', value: 'NON-STM')
         }
 
@@ -38,14 +38,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 1176.916)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -64,10 +64,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -75,14 +75,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '658824345')
+            column(name: 'wr_wrk_inst', value: 658824345)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -101,10 +101,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2001')
-            column(name: 'market_period_to', value: '2003')
+            column(name: 'market_period_from', value: 2001)
+            column(name: 'market_period_to', value: 2003)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -112,14 +112,14 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
             column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '836698198')
+            column(name: 'wr_wrk_inst', value: 836698198)
             column(name: 'work_title', value: 'Corporate identity manuals')
             column(name: 'system_title', value: 'Corporate identity manuals')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'number_of_copies', value: '100')
+            column(name: 'number_of_copies', value: 100)
             column(name: 'gross_amount', value: 1176.916)
             column(name: 'net_amount', value: 80.00)
             column(name: 'service_fee_amount', value: 420.00)
@@ -138,10 +138,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2016-11-03')
             column(name: 'market', value: 'Edu')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'reported_value', value: '3000')
+            column(name: 'reported_value', value: 3000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -158,14 +158,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '85093193-00d9-436b-8fbc-078511b1d335')
             column(name: 'df_usage_batch_uid', value: 'e17ebc80-e74e-436d-ba6e-acf3d355b7ff')
-            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'wr_wrk_inst', value: 180382914)
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: 658824345)
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'gross_amount', value: 500.00)
         }
 
@@ -175,23 +175,23 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2012')
-            column(name: 'market_period_to', value: '2014')
+            column(name: 'market_period_from', value: 2012)
+            column(name: 'market_period_to', value: 2014)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '500')
+            column(name: 'reported_value', value: 500)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b51340ad-cf32-4c38-8445-4455e4ae81eb')
             column(name: 'df_usage_batch_uid', value: 'e17ebc80-e74e-436d-ba6e-acf3d355b7ff')
-            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'wr_wrk_inst', value: 243904752)
             column(name: 'work_title', value: 'Corporate identity manuals')
             column(name: 'system_title', value: 'Corporate identity manuals')
             column(name: 'rh_account_number', value: 836698198)
             column(name: 'status_ind', value: 'UNCLASSIFIED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'number_of_copies', value: '1')
+            column(name: 'number_of_copies', value: 1)
             column(name: 'gross_amount', value: 500.00)
         }
 
@@ -201,10 +201,10 @@ databaseChangeLog {
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Bus')
-            column(name: 'market_period_from', value: '2010')
-            column(name: 'market_period_to', value: '2011')
+            column(name: 'market_period_from', value: 2010)
+            column(name: 'market_period_to', value: 2011)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
-            column(name: 'reported_value', value: '500')
+            column(name: 'reported_value', value: 500)
         }
 
         rollback ""

@@ -6,10 +6,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '3b483859-f398-48cd-b3a2-76e1f7b8412d')
-            column(name: 'wr_wrk_inst', value: '100009840')
+            column(name: 'wr_wrk_inst', value: 100009840)
             column(name: 'usage_period', value: '2018')
             column(name: 'usage_source', value: 'Aug 2018 FR')
-            column(name: 'number_of_copies', value: '10')
+            column(name: 'number_of_copies', value: 10)
             column(name: 'number_of_pages', value: '15')
             column(name: 'detail_licensee_class_id', value: '113')
             column(name: 'original_publication_type', value: 'Textbook')
@@ -21,10 +21,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '81ee3d75-dd1b-4181-8d4c-f962ab6aa9e5')
-            column(name: 'wr_wrk_inst', value: '100010768')
+            column(name: 'wr_wrk_inst', value: 100010768)
             column(name: 'usage_period', value: '2018')
             column(name: 'usage_source', value: 'Aug 2018 FR')
-            column(name: 'number_of_copies', value: '20')
+            column(name: 'number_of_copies', value: 20)
             column(name: 'number_of_pages', value: '25')
             column(name: 'detail_licensee_class_id', value: '195')
             column(name: 'original_publication_type', value: 'Book series')
@@ -36,10 +36,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '97ea6a03-868f-4e57-b7b1-241a4c3d3f80')
-            column(name: 'wr_wrk_inst', value: '123456789')
+            column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'usage_period', value: '2016')
             column(name: 'usage_source', value: 'Aug 2016 FR')
-            column(name: 'number_of_copies', value: '30')
+            column(name: 'number_of_copies', value: 30)
             column(name: 'number_of_pages', value: '35')
             column(name: 'detail_licensee_class_id', value: '143')
             column(name: 'original_publication_type', value: 'Scholarly Journal')
@@ -51,10 +51,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '0dab496e-e126-4607-bafe-adf205d6ec54')
-            column(name: 'wr_wrk_inst', value: '963852741')
+            column(name: 'wr_wrk_inst', value: 963852741)
             column(name: 'usage_period', value: '2016')
             column(name: 'usage_source', value: 'Aug 2016 FR')
-            column(name: 'number_of_copies', value: '40')
+            column(name: 'number_of_copies', value: 40)
             column(name: 'number_of_pages', value: '45')
             column(name: 'detail_licensee_class_id', value: '141')
             column(name: 'original_publication_type', value: 'Fiction or Poetry')
@@ -66,10 +66,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '198b9660-c34b-4174-9067-07f19cfdcff0')
-            column(name: 'wr_wrk_inst', value: '100009840')
+            column(name: 'wr_wrk_inst', value: 100009840)
             column(name: 'usage_period', value: '2015')
             column(name: 'usage_source', value: 'Aug 2015 FR')
-            column(name: 'number_of_copies', value: '40')
+            column(name: 'number_of_copies', value: 40)
             column(name: 'number_of_pages', value: '45')
             column(name: 'detail_licensee_class_id', value: '164')
             column(name: 'original_publication_type', value: 'Database or Reference Book')
