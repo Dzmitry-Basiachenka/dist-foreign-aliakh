@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -88,7 +87,7 @@ public class RightsProcessorTest {
 
     private List<Usage> buildUsages(UsageStatusEnum status) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId("50f1c35f-40db-443b-a19e-f5fab1f7362e");
         usage.setProductFamily("NTS");
         usage.setStatus(status);
         return Collections.singletonList(usage);

@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -60,7 +59,7 @@ public class StmRhProcessorTest {
 
     private List<Usage> buildUsages() {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId("2e321a33-c0b0-424b-8977-d07600285a7e");
         usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
         return Collections.singletonList(usage);

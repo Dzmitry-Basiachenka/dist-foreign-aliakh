@@ -7,14 +7,12 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.nts.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -54,8 +52,8 @@ public class ClassificationProcessorTest {
 
     @Test
     public void testProcess() {
-        Usage usage1 = buildUsage(WR_WRK_INST_1);
-        Usage usage2 = buildUsage(WR_WRK_INST_2);
+        Usage usage1 = buildUsage("e3d8d7d5-0c8f-477a-af09-607088c39627", WR_WRK_INST_1);
+        Usage usage2 = buildUsage("f3c42fd7-6893-462a-ab12-923db420273b", WR_WRK_INST_2);
         expect(workClassificationService.getClassification(WR_WRK_INST_1)).andReturn("STM").once();
         expect(workClassificationService.getClassification(WR_WRK_INST_2)).andReturn(null).once();
         nonBelletristicProcessor.process(Collections.singletonList(usage1));
@@ -72,9 +70,9 @@ public class ClassificationProcessorTest {
         assertEquals(ChainProcessorTypeEnum.CLASSIFICATION, classificationProcessor.getChainProcessorType());
     }
 
-    private Usage buildUsage(Long wrWrkInst) {
+    private Usage buildUsage(String usageId, Long wrWrkInst) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         usage.setWrWrkInst(wrWrkInst);
         return usage;
     }

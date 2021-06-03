@@ -9,7 +9,6 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -73,8 +72,8 @@ public class AbstractUsageJobProcessorTest {
 
     @Test
     public void testJobProcessForFas() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("5d49ad9e-655f-4998-b034-42904e6c1f52");
+        Usage usage2 = buildUsage("23af4961-0a8f-4eac-9cf9-292e03b6c430");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
             .andReturn(usageIds).once();
@@ -91,8 +90,8 @@ public class AbstractUsageJobProcessorTest {
 
     @Test
     public void testJobProcessForFas2() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("6ceb3938-1862-4223-a905-068db3353fe2");
+        Usage usage2 = buildUsage("f5756692-4b8d-483a-bbc8-a0a8e0ee441a");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS2"))
             .andReturn(usageIds).once();
@@ -109,8 +108,8 @@ public class AbstractUsageJobProcessorTest {
 
     @Test
     public void testJobProcessForNts() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("9d092b9d-30d7-401c-908a-72636b3cb890");
+        Usage usage2 = buildUsage("9dca0ac3-eb3b-437a-8325-d0cfea5d3601");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "NTS"))
             .andReturn(usageIds).once();
@@ -127,8 +126,8 @@ public class AbstractUsageJobProcessorTest {
 
     @Test
     public void testJobProcessForAacl() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("42028bfb-9591-4f8e-b80d-3df6ff2c52ef");
+        Usage usage2 = buildUsage("300b2399-4f02-4e3e-ac0f-0e27ab32e865");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "AACL"))
             .andReturn(usageIds).once();
@@ -145,8 +144,8 @@ public class AbstractUsageJobProcessorTest {
 
     @Test
     public void testJobProcessForSal() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
+        Usage usage1 = buildUsage("06df61a8-8d3d-4c37-ae2b-95125abd3a89");
+        Usage usage2 = buildUsage("777fff3f-7a06-4aed-9498-ddb83c618b48");
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, "SAL"))
             .andReturn(usageIds).once();
@@ -184,9 +183,9 @@ public class AbstractUsageJobProcessorTest {
         verify(usageService, usageConsumer, aaclUsageService, salUsageService, successProcessor, failureProcessor);
     }
 
-    private Usage buildUsage() {
+    private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         usage.setStatus(UsageStatusEnum.NEW);
         return usage;
     }

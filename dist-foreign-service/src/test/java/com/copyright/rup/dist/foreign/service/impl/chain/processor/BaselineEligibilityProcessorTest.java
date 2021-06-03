@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -16,7 +15,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -50,8 +48,8 @@ public class BaselineEligibilityProcessorTest {
 
     @Test
     public void testProcess() {
-        Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
-        Usage usage2 = buildUsage(null);
+        Usage usage1 = buildUsage("0aa431c7-0bb4-414b-a6b8-797b55912da2", "5fd68081-9629-40be-8f7e-6e965d610448");
+        Usage usage2 = buildUsage(null, null);
         usageRepository.updateStatus(Collections.singleton(usage1.getId()), UsageStatusEnum.ELIGIBLE);
         expectLastCall().once();
         usageAuditService.logAction(Collections.singleton(usage1.getId()), UsageActionTypeEnum.ELIGIBLE,
@@ -67,9 +65,9 @@ public class BaselineEligibilityProcessorTest {
         assertEquals(ChainProcessorTypeEnum.ELIGIBILITY, baselineEligibilityProcessor.getChainProcessorType());
     }
 
-    private Usage buildUsage(String baselineId) {
+    private Usage buildUsage(String usageId, String baselineId) {
         Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
+        usage.setId(usageId);
         usage.setAaclUsage(buildAaclUsage(baselineId));
         return usage;
     }

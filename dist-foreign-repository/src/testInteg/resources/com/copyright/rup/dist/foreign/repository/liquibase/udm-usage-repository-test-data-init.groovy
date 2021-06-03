@@ -218,7 +218,7 @@ databaseChangeLog {
             column(name: 'reported_pub_type', value: 'Not Shared')
             column(name: 'publication_format', value: 'Digital')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
-            column(name: 'language', value: 'EMAIL_COPY')
+            column(name: 'language', value: 'English')
             column(name: 'company_id', value: 1138)
             column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
             column(name: 'detail_licensee_class_id', value: 2)
