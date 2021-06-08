@@ -23,11 +23,13 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
@@ -80,6 +82,7 @@ public class UdmUsageServiceTest {
     private UdmAnnualizedCopiesCalculator udmAnnualizedCopiesCalculator;
     private IUdmTypeOfUseService udmTypeOfUseService;
     private ITelesalesService telesalesService;
+    private IUdmUsageAuditService udmUsageAuditService;
     private IChainExecutor<UdmUsage> chainExecutor;
 
     @Before
@@ -89,6 +92,7 @@ public class UdmUsageServiceTest {
         udmAnnualizedCopiesCalculator = createMock(UdmAnnualizedCopiesCalculator.class);
         udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
         telesalesService = createMock(ITelesalesService.class);
+        udmUsageAuditService = createMock(IUdmUsageAuditService.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
         Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
@@ -96,6 +100,7 @@ public class UdmUsageServiceTest {
         Whitebox.setInternalState(udmUsageService, chainExecutor);
         Whitebox.setInternalState(udmUsageService, udmTypeOfUseService);
         Whitebox.setInternalState(udmUsageService, telesalesService);
+        Whitebox.setInternalState(udmUsageService, udmUsageAuditService);
     }
 
     @Test
@@ -104,6 +109,8 @@ public class UdmUsageServiceTest {
         UdmBatch udmBatch = buildUdmBatch();
         UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
         UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
+        udmUsage2.setStatus(UsageStatusEnum.INELIGIBLE);
+        udmUsage2.setIneligibleReason("Not reported use");
         udmUsage2.setReportedTypeOfUse(null);
         udmUsage2.setReportedTitle("None");
         List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
@@ -123,11 +130,19 @@ public class UdmUsageServiceTest {
             .andReturn(ANNUAL_MULTIPLIER).times(2);
         expect(udmAnnualizedCopiesCalculator.calculate(udmUsage1.getReportedTypeOfUse(), udmUsage1.getQuantity(),
             ANNUAL_MULTIPLIER, STATISTICAL_MULTIPLIER)).andReturn(ANNUALIZED_COPIES).once();
+        udmUsageAuditService.logAction(udmUsage1.getId(), UsageActionTypeEnum.LOADED,
+            "Uploaded in 'UDM Batch 2021 June' Batch");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.LOADED,
+            "Uploaded in 'UDM Batch 2021 June' Batch");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.INELIGIBLE, "Not reported use");
+        expectLastCall().once();
         replay(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
-            telesalesService, RupContextUtils.class);
+            telesalesService, udmUsageAuditService, RupContextUtils.class);
         udmUsageService.insertUdmUsages(udmBatch, udmUsages);
         verify(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
-            telesalesService, RupContextUtils.class);
+            telesalesService, udmUsageAuditService, RupContextUtils.class);
         assertUdmUsage(udmUsage1);
         assertEquals(DIGITAL, udmUsage1.getTypeOfUse());
         assertEquals(ANNUALIZED_COPIES, udmUsage1.getAnnualizedCopies());

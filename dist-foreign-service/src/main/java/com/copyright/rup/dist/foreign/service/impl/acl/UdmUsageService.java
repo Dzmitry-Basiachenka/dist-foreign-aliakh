@@ -8,11 +8,13 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -60,6 +62,8 @@ public class UdmUsageService implements IUdmUsageService {
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
     @Autowired
+    private IUdmUsageAuditService udmUsageAuditService;
+    @Autowired
     @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
 
@@ -89,6 +93,14 @@ public class UdmUsageService implements IUdmUsageService {
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             udmUsageRepository.insert(usage);
+        });
+        udmUsages.forEach(usage -> {
+            udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED,
+                "Uploaded in '" + udmBatch.getName() + "' Batch");
+            if (UsageStatusEnum.INELIGIBLE == usage.getStatus()) {
+                udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.INELIGIBLE,
+                    usage.getIneligibleReason());
+            }
         });
         LOGGER.info("Insert UDM usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
             size, userName);
