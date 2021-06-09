@@ -974,4 +974,144 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_audit', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-06-09-01', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-54393 FDA: Modify/Update AACL licensee classes: add AACL licensee classes with EXU2 enrollment profile")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 109)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Life Sciences')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 116)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Business Management')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 137)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Education')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 144)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Engineering')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 165)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Law & Legal Studies')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 172)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Arts & Humanities')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 193)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Medical & Health')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 207)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Physical Sciences & Mathematics')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+            column(name: 'aggregate_licensee_class_id', value: 228)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Social & Behavioral Sciences')
+            column(name: 'product_family', value: 'AACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 109)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Life Sciences')
+            column(name: 'aggregate_licensee_class_id', value: 109)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 116)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Business Management')
+            column(name: 'aggregate_licensee_class_id', value: 116)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 137)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Education')
+            column(name: 'aggregate_licensee_class_id', value: 137)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 144)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Engineering')
+            column(name: 'aggregate_licensee_class_id', value: 144)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 165)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Law & Legal Studies')
+            column(name: 'aggregate_licensee_class_id', value: 165)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 172)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Arts & Humanities')
+            column(name: 'aggregate_licensee_class_id', value: 172)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 193)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Medical & Health')
+            column(name: 'aggregate_licensee_class_id', value: 193)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 207)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Physical Sciences & Mathematics')
+            column(name: 'aggregate_licensee_class_id', value: 207)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+            column(name: 'detail_licensee_class_id', value: 228)
+            column(name: 'enrollment_profile', value: 'EXU2')
+            column(name: 'discipline', value: 'Social & Behavioral Sciences')
+            column(name: 'aggregate_licensee_class_id', value: 228)
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_detail_licensee_class') {
+                where "detail_licensee_class_id in (109, 116, 137, 144, 165, 172, 193, 207, 228)"
+            }
+
+            delete(schemaName: dbAppsSchema, tableName: 'df_aggregate_licensee_class') {
+                where "aggregate_licensee_class_id in (109, 116, 137, 144, 165, 172, 193, 207, 228)"
+            }
+        }
+    }
 }
