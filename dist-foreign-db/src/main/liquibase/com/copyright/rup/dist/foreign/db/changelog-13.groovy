@@ -968,7 +968,7 @@ databaseChangeLog {
                 baseColumnNames: 'df_udm_usage_uid',
                 referencedTableName: 'df_udm_usage',
                 referencedColumnNames: 'df_udm_usage_uid',
-                constraintName: 'fk_df_udm_usage_2_df_udm_audit')
+                constraintName: 'fk_df_udm_audit_2_df_udm_usage')
 
         rollback {
             dropTable(tableName: 'df_udm_audit', schemaName: dbAppsSchema)
