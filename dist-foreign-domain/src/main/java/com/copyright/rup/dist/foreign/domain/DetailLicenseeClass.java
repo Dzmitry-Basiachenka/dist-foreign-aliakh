@@ -21,6 +21,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
 
     private String enrollmentProfile;
     private String discipline;
+    private String description;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
 
     /**
@@ -38,6 +39,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
         this.setId(detailLicenseeClass.getId());
         this.enrollmentProfile = detailLicenseeClass.getEnrollmentProfile();
         this.discipline = detailLicenseeClass.getDiscipline();
+        this.description = detailLicenseeClass.getDescription();
         AggregateLicenseeClass aggregateLicenseeClassClone = detailLicenseeClass.getAggregateLicenseeClass();
         this.aggregateLicenseeClass = Objects.nonNull(aggregateLicenseeClassClone)
             ? new AggregateLicenseeClass(aggregateLicenseeClassClone)
@@ -68,6 +70,14 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
         this.aggregateLicenseeClass = aggregateLicenseeClass;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -81,6 +91,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.equals(obj))
             .append(enrollmentProfile, that.enrollmentProfile)
             .append(discipline, that.discipline)
+            .append(description, that.description)
             .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
             .isEquals();
     }
@@ -91,6 +102,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.hashCode())
             .append(enrollmentProfile)
             .append(discipline)
+            .append(description)
             .append(aggregateLicenseeClass)
             .toHashCode();
     }
@@ -101,6 +113,7 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.toString())
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
+            .append("description", description)
             .append("aggregateLicenseeClass", aggregateLicenseeClass)
             .toString();
     }
