@@ -3,6 +3,10 @@ package com.copyright.rup.dist.foreign.domain;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
+import com.copyright.rup.dist.foreign.domain.filter.FilterBetweenExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterEqualsExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterGreaterThanExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterLessThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
@@ -101,7 +105,11 @@ public class DomainVerifierTest {
             {UdmBatch.class},
             {UdmUsage.class},
             {UdmUsageDto.class},
-            {UdmUsageFilter.class}
+            {UdmUsageFilter.class},
+            {FilterEqualsExpression.class},
+            {FilterBetweenExpression.class},
+            {FilterGreaterThanExpression.class},
+            {FilterLessThanExpression.class}
         };
         return Arrays.asList(testData);
     }
