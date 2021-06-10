@@ -78,6 +78,11 @@ public enum UsageActionTypeEnum {
     ELIGIBLE,
 
     /**
+     * Action type for ineligible usages.
+     */
+    INELIGIBLE,
+
+    /**
      * Action type for adding {@link Usage} to {@link Scenario}.
      */
     ADDED_TO_SCENARIO,
