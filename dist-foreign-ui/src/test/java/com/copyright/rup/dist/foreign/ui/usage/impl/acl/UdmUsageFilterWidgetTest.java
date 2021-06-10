@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -143,6 +144,21 @@ public class UdmUsageFilterWidgetTest {
     }
 
     @Test
+    public void verifyMoreFiltersButtonClickListener() {
+        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Windows.showModalWindow(anyObject(UdmFiltersWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, udmUsageFilterController);
+        widget.init();
+        ClickListener clickListener = (ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
+            .getListeners(ClickEvent.class).iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, udmUsageFilterController);
+    }
+
+    @Test
     public void verifyApplyButtonClickListener() {
         expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
         mockStatic(Windows.class);
@@ -177,12 +193,13 @@ public class UdmUsageFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(5, verticalLayout.getComponentCount());
+        assertEquals(6, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyPeriodCombobox(verticalLayout.getComponent(2));
-        verifyUsageStatusCombobox(verticalLayout.getComponent(3));
-        verifyUsageOriginCombobox(verticalLayout.getComponent(4));
+        verifyPeriodComboBox(verticalLayout.getComponent(2));
+        verifyUsageStatusComboBox(verticalLayout.getComponent(3));
+        verifyUsageOriginComboBox(verticalLayout.getComponent(4));
+        verifyMoreFiltersButton(verticalLayout.getComponent(5));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -206,7 +223,7 @@ public class UdmUsageFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyPeriodCombobox(Component component) {
+    private void verifyPeriodComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Period", comboBox.getCaption());
@@ -218,7 +235,7 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(Collections.singletonList(202012), actualPeriods);
     }
 
-    private void verifyUsageStatusCombobox(Component component) {
+    private void verifyUsageStatusComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());
@@ -231,7 +248,17 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(ACL_STATUSES, actualStatuses);
     }
 
-    private void verifyUsageOriginCombobox(Component component) {
+    private void verifyMoreFiltersButton(Component component) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals("More Filters", component.getCaption());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        Collection<?> listeners = button.getListeners(ClickEvent.class);
+        assertTrue(CollectionUtils.isNotEmpty(listeners));
+        assertEquals(1, listeners.size());
+    }
+
+    private void verifyUsageOriginComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Usage Origin", comboBox.getCaption());
