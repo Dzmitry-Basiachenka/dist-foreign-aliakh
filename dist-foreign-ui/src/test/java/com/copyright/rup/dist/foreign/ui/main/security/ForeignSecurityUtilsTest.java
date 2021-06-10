@@ -35,6 +35,7 @@ public final class ForeignSecurityUtilsTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
     private static final String FDA_VIEW_SCENARIO = "FDA_VIEW_SCENARIO";
+    private static final String FDA_VIEW_ONLY_PERMISSION = "FDA_VIEW_ONLY_PERMISSION";
     private final Set<String> permissions;
 
     /**
@@ -48,18 +49,22 @@ public final class ForeignSecurityUtilsTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> setUpUserPermissions() {
-        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO)};
-        Object[] distributionManagerRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO)};
+        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, FDA_VIEW_ONLY_PERMISSION)};
+        Object[] distributionManagerRole =
+            {Sets.newHashSet(FDA_ACCESS_APPLICATION, FDA_VIEW_SCENARIO, "FDA_MANAGER_PERMISSION")};
         Object[] distributionSpecialistRole = {Sets.newHashSet(
             FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE", "FDA_LOAD_FUND_POOL",
             "FDA_VIEW_SCENARIO", "FDA_DELETE_FUND_POOL", "FDA_LOAD_RESEARCHED_USAGE", "FDA_CREATE_DELETE_FUND",
             "FDA_ASSIGN_CLASSIFICATION", "FDA_DELETE_SCENARIO", "FDA_EXCLUDE_FROM_SCENARIO",
-            "FDA_SEND_FOR_WORK_RESEARCH", "FDA_SEND_FOR_CLASSIFICATION", "FDA_LOAD_CLASSIFIED_USAGE")};
+            "FDA_SEND_FOR_WORK_RESEARCH", "FDA_SEND_FOR_CLASSIFICATION", "FDA_LOAD_CLASSIFIED_USAGE",
+            "FDA_SPECIALIST_PERMISSION")};
+        Object[] distributionResearchRole = {Collections.singleton("FDA_RESEARCHER_PERMISSION")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
         return Arrays.asList(
             viewOnlyRole,
             distributionManagerRole,
             distributionSpecialistRole,
+            distributionResearchRole,
             roleWithoutPermissions);
     }
 
@@ -109,6 +114,14 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasLoadClassifiedUsagePermission());
         assertEquals(permissions.contains("FDA_UPDATE_RIGHTSHOLDER"),
             ForeignSecurityUtils.hasUpdateRightsholderPermission());
+        assertEquals(permissions.contains("FDA_VIEW_ONLY_PERMISSION"),
+            ForeignSecurityUtils.hasViewOnlyPermission());
+        assertEquals(permissions.contains("FDA_MANAGER_PERMISSION"),
+            ForeignSecurityUtils.hasManagerPermission());
+        assertEquals(permissions.contains("FDA_SPECIALIST_PERMISSION"),
+            ForeignSecurityUtils.hasSpecialistPermission());
+        assertEquals(permissions.contains("FDA_RESEARCHER_PERMISSION"),
+            ForeignSecurityUtils.hasResearcherPermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

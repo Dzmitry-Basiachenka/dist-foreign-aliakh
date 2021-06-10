@@ -180,4 +180,32 @@ public final class ForeignSecurityUtils {
     public static boolean hasRefreshScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_REFRESH_SCENARIO");
     }
+
+    /**
+     * @return {@code true} if user has researcher permission.
+     */
+    public static boolean hasResearcherPermission() {
+        return SecurityUtils.hasPermission("FDA_RESEARCHER_PERMISSION");
+    }
+
+    /**
+     * @return {@code true} if user has manager permission.
+     */
+    public static boolean hasManagerPermission() {
+        return SecurityUtils.hasPermission("FDA_MANAGER_PERMISSION");
+    }
+
+    /**
+     * @return {@code true} if user has view only permission.
+     */
+    public static boolean hasViewOnlyPermission() {
+        return SecurityUtils.hasPermission("FDA_VIEW_ONLY_PERMISSION");
+    }
+
+    /**
+     * @return {@code true} if user has specialist permission.
+     */
+    public static boolean hasSpecialistPermission() {
+        return SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION");
+    }
 }
