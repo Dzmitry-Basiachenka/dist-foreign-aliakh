@@ -1,12 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -14,7 +18,10 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+
+import java.util.Iterator;
 
 /**
  * Verifies {@link UdmFiltersWindow}.
@@ -41,14 +48,14 @@ public class UdmFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(18, verticalLayout.getComponentCount());
-        verifyLabelFieldComponent(verticalLayout.getComponent(0), "Assignee");
-        verifyLabelFieldComponent(verticalLayout.getComponent(1), "Reported Pub Type");
-        verifyLabelFieldComponent(verticalLayout.getComponent(2), "Publication Format");
-        verifyLabelFieldComponent(verticalLayout.getComponent(3), "Det LC Name");
-        verifyLabelFieldComponent(verticalLayout.getComponent(4), "Channel");
+        assertEquals(15, verticalLayout.getComponentCount());
+        verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees");
+        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types");
+        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Publication Formats");
+        verifyItemsFilterLayout(verticalLayout.getComponent(3), "Detail Licensee Classes");
+        verifyComboBoxLayout(verticalLayout.getComponent(4));
         verifyDateFieldComponent(verticalLayout.getComponent(5), "Usage Date From", "Usage Date To");
-        verifyDateFieldComponent(verticalLayout.getComponent(6), "Survey Start From", "Survey Start To");
+        verifyDateFieldComponent(verticalLayout.getComponent(6), "Survey Start Date From", "Survey Start Date To");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Annual Multiplier From",
             "Annual Multiplier To");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Annualized Copies From",
@@ -56,37 +63,39 @@ public class UdmFiltersWindowTest {
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(9), "Statistical Multiplier From",
             "Statistical Multiplier To");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(10), "Quantity From", "Quantity To");
-        verifyComboBoxComponent(verticalLayout.getComponent(11), "Type Of Use");
-        verifyTextFieldComponent(verticalLayout.getComponent(12), "Survey Country");
-        verifyTextFieldComponent(verticalLayout.getComponent(13), "Language");
-        verifyTextFieldComponent(verticalLayout.getComponent(14), "Company Name");
-        verifyTextFieldComponent(verticalLayout.getComponent(15), "Company Id");
-        verifyTextFieldComponent(verticalLayout.getComponent(16), "Wr Wrk Inst");
-        verifyButtonsLayout(verticalLayout.getComponent(17));
+        verifyTextFieldLayout(verticalLayout.getComponent(11), "Company Id", "Company Name");
+        verifyTextFieldLayout(verticalLayout.getComponent(12), "Survey Country", "Language");
+        verifyTextFieldComponent(verticalLayout.getComponent(13), "Wr Wrk Inst", 50);
+        verifyButtonsLayout(verticalLayout.getComponent(14));
     }
 
-    private void verifyTextFieldComponent(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(50, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-    }
-
-    private void verifyComboBoxComponent(Component component, String caption) {
-        assertTrue(component instanceof ComboBox);
-        assertEquals(50, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-    }
-
-    private void verifyLabelFieldComponent(Component component, String caption) {
+    @SuppressWarnings("unchecked")
+    private void verifyComboBoxLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        assertTrue(layout.getComponent(0) instanceof Label);
-        assertEquals("(0)", ((Label) layout.getComponent(0)).getValue());
-        assertTrue(layout.getComponent(1) instanceof Button);
-        assertEquals(caption, layout.getComponent(1).getCaption());
+        ComboBox<UdmChannelEnum> channelComboBox = (ComboBox<UdmChannelEnum>) layout.getComponent(0);
+        assertEquals(100, channelComboBox.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
+        assertEquals(channelComboBox.getCaption(), "Channel");
+        ComboBox<String> typeOfUseComboBox = (ComboBox<String>) layout.getComponent(1);
+        assertEquals(100, typeOfUseComboBox.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, typeOfUseComboBox.getWidthUnits());
+        assertEquals(typeOfUseComboBox.getCaption(), "Type Of Use");
+    }
+
+    private void verifyItemsFilterLayout(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals(caption, button.getCaption());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private void verifyDateFieldComponent(Component component, String captionFrom, String captionTo) {
@@ -109,7 +118,21 @@ public class UdmFiltersWindowTest {
         assertEquals(captionTo, layout.getComponent(1).getCaption());
         assertTrue(layout.getComponent(2) instanceof ComboBox);
         assertEquals("Operator", layout.getComponent(2).getCaption());
+    }
 
+    private void verifyTextFieldLayout(Component component, String firstCaption, String secondCaption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        verifyTextFieldComponent(layout.getComponent(0), firstCaption, 100);
+        verifyTextFieldComponent(layout.getComponent(1), secondCaption, 100);
+    }
+
+    private void verifyTextFieldComponent(Component component, String caption, int componentWidth) {
+        assertTrue(component instanceof TextField);
+        assertEquals(componentWidth, component.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+        assertEquals(component.getCaption(), caption);
     }
 
     private void verifyButtonsLayout(Component component) {
