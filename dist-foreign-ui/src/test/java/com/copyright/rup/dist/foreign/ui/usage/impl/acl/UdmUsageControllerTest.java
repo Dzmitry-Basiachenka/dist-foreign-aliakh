@@ -7,32 +7,36 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -52,7 +56,7 @@ import java.util.List;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({StreamSource.class})
+@PrepareForTest({StreamSource.class, Windows.class})
 public class UdmUsageControllerTest {
 
     private static final String UDM_BATCH_UID = "5acc58a4-49c0-4c20-b96e-39e637a0657f";
@@ -65,6 +69,7 @@ public class UdmUsageControllerTest {
     private final UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
     private IUdmUsageService udmUsageService;
     private IUdmBatchService udmBatchService;
+    private IUdmUsageAuditService udmUsageAuditService;
     private CsvProcessorFactory csvProcessorFactory;
     private IUdmUsageFilterController udmUsageFilterController;
     private IUdmUsageFilterWidget udmUsageFilterWidget;
@@ -73,6 +78,7 @@ public class UdmUsageControllerTest {
     public void setUp() {
         udmUsageService = createMock(IUdmUsageService.class);
         udmBatchService = createMock(IUdmBatchService.class);
+        udmUsageAuditService = createMock(IUdmUsageAuditService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         udmUsageFilterController = createMock(IUdmUsageFilterController.class);
         udmUsageFilterWidget = createMock(IUdmUsageFilterWidget.class);
@@ -81,6 +87,7 @@ public class UdmUsageControllerTest {
         Whitebox.setInternalState(controller, udmUsageFilterController);
         Whitebox.setInternalState(controller, udmUsageFilterWidget);
         Whitebox.setInternalState(controller, udmBatchService);
+        Whitebox.setInternalState(controller, udmUsageAuditService);
     }
 
     @Test
@@ -144,9 +151,24 @@ public class UdmUsageControllerTest {
     public void testBatchExists() {
         String batchName = "Name";
         expect(udmBatchService.udmBatchExists(batchName)).andReturn(true).once();
-        PowerMock.replay(udmBatchService);
+        replay(udmBatchService);
         assertTrue(udmBatchService.udmBatchExists(batchName));
-        PowerMock.verify(udmBatchService);
+        verify(udmBatchService);
+    }
+
+    @Test
+    public void testShowUdmUsageHistory() {
+        mockStatic(Windows.class);
+        Capture<UsageHistoryWindow> windowCapture = newCapture();
+        String udmUsageId = "432320b8-5029-47dd-8137-99007cb69bf1";
+        List<UsageAuditItem> auditItems = Collections.emptyList();
+        expect(udmUsageAuditService.getUdmUsageAudit(udmUsageId)).andReturn(auditItems).once();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(Windows.class, udmUsageAuditService);
+        controller.showUdmUsageHistory(udmUsageId);
+        verify(Windows.class, udmUsageAuditService);
+        assertNotNull(windowCapture.getValue());
     }
 
     private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {

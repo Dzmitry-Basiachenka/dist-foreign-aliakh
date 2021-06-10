@@ -21,6 +21,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -110,8 +111,18 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private void addColumns() {
         FooterRow footer = udmUsagesGrid.appendFooterRow();
         udmUsagesGrid.setFooterVisible(true);
-        footer.getCell(addColumn(UdmUsageDto::getId, "table.column.detail_id", "detailId", false, 200))
-            .setText(String.format(FOOTER_LABEL, 0));
+        Column<UdmUsageDto, ?> column = udmUsagesGrid.addComponentColumn(usage -> {
+            String udmUsageId = usage.getId();
+            Button button = Buttons.createButton(udmUsageId);
+            button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> controller.showUdmUsageHistory(udmUsageId));
+            return button;
+        })
+            .setCaption(ForeignUi.getMessage("table.column.detail_id"))
+            .setId("detailId")
+            .setSortProperty("detailId")
+            .setWidth(200);
+        footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", true, 100),
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),

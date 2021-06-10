@@ -11,14 +11,17 @@ import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.io.Files;
@@ -50,6 +53,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private IUdmUsageService udmUsageService;
     @Autowired
     private IUdmBatchService udmBatchService;
+    @Autowired
+    private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -109,6 +114,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public boolean udmBatchExists(String name) {
         return udmBatchService.udmBatchExists(name);
+    }
+
+    @Override
+    public void showUdmUsageHistory(String udmUsageId) {
+        Windows.showModalWindow(new UsageHistoryWindow(udmUsageId, udmUsageAuditService.getUdmUsageAudit(udmUsageId)));
     }
 
     @Override
