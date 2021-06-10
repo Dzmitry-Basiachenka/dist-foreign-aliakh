@@ -5,6 +5,11 @@
     "discipline": "Life Sciences"
   },
   {
+    "id": 109,
+    "enrollmentProfile": "EXU2",
+    "discipline": "Life Sciences"
+  },
+  {
     "id": 110,
     "enrollmentProfile": "EXU4",
     "discipline": "Life Sciences"
@@ -22,6 +27,11 @@
   {
     "id": 115,
     "enrollmentProfile": "EXGP",
+    "discipline": "Business Management"
+  },
+  {
+    "id": 116,
+    "enrollmentProfile": "EXU2",
     "discipline": "Business Management"
   },
   {
@@ -45,6 +55,11 @@
     "discipline": "Education"
   },
   {
+    "id": 137,
+    "enrollmentProfile": "EXU2",
+    "discipline": "Education"
+  },
+  {
     "id": 138,
     "enrollmentProfile": "EXU4",
     "discipline": "Education"
@@ -62,6 +77,11 @@
   {
     "id": 143,
     "enrollmentProfile": "EXGP",
+    "discipline": "Engineering"
+  },
+  {
+    "id": 144,
+    "enrollmentProfile": "EXU2",
     "discipline": "Engineering"
   },
   {
@@ -85,6 +105,11 @@
     "discipline": "Law & Legal Studies"
   },
   {
+    "id": 165,
+    "enrollmentProfile": "EXU2",
+    "discipline": "Law & Legal Studies"
+  },
+  {
     "id": 166,
     "enrollmentProfile": "EXU4",
     "discipline": "Law & Legal Studies"
@@ -102,6 +127,11 @@
   {
     "id": 171,
     "enrollmentProfile": "EXGP",
+    "discipline": "Arts & Humanities"
+  },
+  {
+    "id": 172,
+    "enrollmentProfile": "EXU2",
     "discipline": "Arts & Humanities"
   },
   {
@@ -125,6 +155,11 @@
     "discipline": "Medical & Health"
   },
   {
+    "id": 193,
+    "enrollmentProfile": "EXU2",
+    "discipline": "Medical & Health"
+  },
+  {
     "id": 194,
     "enrollmentProfile": "EXU4",
     "discipline": "Medical & Health"
@@ -145,6 +180,11 @@
     "discipline": "Physical Sciences & Mathematics"
   },
   {
+    "id": 207,
+    "enrollmentProfile": "EXU2",
+    "discipline": "Physical Sciences & Mathematics"
+  },
+  {
     "id": 208,
     "enrollmentProfile": "EXU4",
     "discipline": "Physical Sciences & Mathematics"
@@ -162,6 +202,11 @@
   {
     "id": 227,
     "enrollmentProfile": "EXGP",
+    "discipline": "Social & Behavioral Sciences"
+  },
+  {
+    "id": 228,
+    "enrollmentProfile": "EXU2",
     "discipline": "Social & Behavioral Sciences"
   },
   {
