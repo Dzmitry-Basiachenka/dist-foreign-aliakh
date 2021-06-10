@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -20,6 +21,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,6 +42,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND);
 
     private Button applyButton;
+    private Button moreFiltersButton;
     private UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
     private UdmUsageFilter appliedUdmUsageFilter = new UdmUsageFilter();
     private UdmBatchFilterWidget udmBatchFilterWidget;
@@ -107,8 +110,9 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         initPeriodFilter();
         initStatusFilter();
         initUsageOriginFilter();
+        buildMoreFiltersButton();
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUdmUsageBatchFilter(),
-            periodComboBox, statusComboBox, usageOriginComboBox);
+            periodComboBox, statusComboBox, usageOriginComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -147,6 +151,12 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private void buildMoreFiltersButton() {
+        moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
+        moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
+        moreFiltersButton.addClickListener(event -> Windows.showModalWindow(new UdmFiltersWindow()));
     }
 
     private HorizontalLayout buildUdmUsageBatchFilter() {
