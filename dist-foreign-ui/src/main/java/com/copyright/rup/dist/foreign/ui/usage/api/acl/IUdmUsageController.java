@@ -93,4 +93,11 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return {@code true} - if batch exists, {@code false} - otherwise
      */
     boolean udmBatchExists(String name);
+
+    /**
+     * Shows modal window with UDM usage history.
+     *
+     * @param udmUsageId {@link UdmUsage} id
+     */
+    void showUdmUsageHistory(String udmUsageId);
 }

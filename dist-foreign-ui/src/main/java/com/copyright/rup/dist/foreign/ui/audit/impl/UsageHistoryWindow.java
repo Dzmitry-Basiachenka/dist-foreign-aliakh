@@ -37,7 +37,7 @@ public class UsageHistoryWindow extends Window {
      * @param detailId        detail id
      * @param usageAuditItems audit items
      */
-    UsageHistoryWindow(String detailId, List<UsageAuditItem> usageAuditItems) {
+    public UsageHistoryWindow(String detailId, List<UsageAuditItem> usageAuditItems) {
         setCaption(ForeignUi.getMessage("window.usage_history", detailId));
         setContent(initContent(usageAuditItems));
         setWidth(700, Unit.PIXELS);
