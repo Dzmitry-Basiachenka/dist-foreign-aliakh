@@ -1,3 +1,16 @@
+13.1.28
+-
+* B-54393 FDA: Modify/Update AACL licensee classes: fix LicenseeClassRepositoryIntegrationTest
+* B-54393 FDA: Modify/Update AACL licensee classes: implement liquibase script to add AACL licensee classes for EXU2 enrollment profile
+* B-65859 FDA: UDM in ACL Audit: implement Liquibase script to create df_udm_audit table
+* B-65859 FDA: UDM in ACL Audit: implement service and repository
+* B-65859 FDA: UDM in ACL Audit: rename foreign key constraint for df_udm_audit table
+* B-65860: FDA & UDM: Role-specific UDM view: add Researcher role and add permissions for new and current roles
+* B-65860: FDA & UDM: Role-specific UDM view: add new FDA_RESEACHER_PERMISSION, FDA_MANAGER_PERMISSION, FDA_SPECIALIST_PERMISSION and FDA_VIEW_ONLY_PERMISSION permissions to security utils
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering: implement window with additional UDM filters
+* B-67327 Tech Debt: FDA: remove quotes from integer values for product family specific fields
+* B-67327: Tech Debt: FDA: CsvReportsIntegrationTest: separate by product family
+
 13.1.27
 -
 * B-66633 FDA & UDM: PI matching for newly uploaded ACL usages: make changes based on comments in CR-DIST-FOREIGN-235
