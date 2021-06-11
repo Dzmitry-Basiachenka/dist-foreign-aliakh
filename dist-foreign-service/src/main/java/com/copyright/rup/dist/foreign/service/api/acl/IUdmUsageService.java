@@ -86,4 +86,9 @@ public interface IUdmUsageService {
      * @return list of {@link UdmUsage}s
      */
     List<UdmUsage> getUdmUsagesByIds(List<String> udmUsageIds);
+
+    /**
+     * @return list of assignees from UDM usages.
+     */
+    List<String> getAssignees();
 }
