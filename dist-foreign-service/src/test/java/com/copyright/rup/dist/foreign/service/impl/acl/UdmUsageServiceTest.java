@@ -33,8 +33,8 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -255,6 +255,15 @@ public class UdmUsageServiceTest {
         expect(udmUsageRepository.updateProcessedUsage(udmUsage)).andReturn(usageId).once();
         replay(udmUsageRepository);
         udmUsageService.updateProcessedUsage(udmUsage);
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetAssignees() {
+        List<String> assignees = ImmutableList.of("jjohn@copyright.com", "wjohn@copyright.com");
+        expect(udmUsageRepository.findAssignees()).andReturn(assignees).once();
+        replay(udmUsageRepository);
+        assertEquals(assignees, udmUsageService.getAssignees());
         verify(udmUsageRepository);
     }
 

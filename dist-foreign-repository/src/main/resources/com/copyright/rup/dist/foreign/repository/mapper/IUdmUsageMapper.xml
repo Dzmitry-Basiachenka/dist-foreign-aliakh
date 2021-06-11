@@ -413,4 +413,11 @@
         where status_ind = #{status}
         order by df_udm_usage_uid
     </select>
+
+    <select id="findAssignees" resultType="string">
+        select distinct assignee
+        from ${schema}.df_udm_usage
+        where assignee is not null
+        order by assignee
+    </select>
 </mapper>

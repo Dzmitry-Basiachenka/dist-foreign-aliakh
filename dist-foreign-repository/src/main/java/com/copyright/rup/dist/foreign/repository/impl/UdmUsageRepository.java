@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -72,5 +71,10 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     @Override
     public List<String> findIdsByStatus(UsageStatusEnum status) {
         return selectList("IUdmUsageMapper.findIdsByStatus", Objects.requireNonNull(status));
+    }
+
+    @Override
+    public List<String> findAssignees() {
+        return selectList("IUdmUsageMapper.findAssignees");
     }
 }

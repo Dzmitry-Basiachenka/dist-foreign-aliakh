@@ -76,4 +76,9 @@ public interface IUdmUsageRepository {
      * @return the list of found {@link UdmUsage} ids
      */
     List<String> findIdsByStatus(UsageStatusEnum status);
+
+    /**
+     * @return list of assignees from UDM usages.
+     */
+    List<String> findAssignees();
 }

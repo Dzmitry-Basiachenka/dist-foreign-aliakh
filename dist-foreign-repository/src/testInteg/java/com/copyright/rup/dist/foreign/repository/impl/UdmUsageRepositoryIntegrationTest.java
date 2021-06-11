@@ -21,8 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -209,6 +209,12 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.RH_FOUND, updatedUdmUsage.getStatus());
         assertEquals(STANDARD_NUMBER, updatedUdmUsage.getStandardNumber());
         assertEquals("Wissenschaft & Forschung France", updatedUdmUsage.getSystemTitle());
+    }
+
+    @Test
+    public void testFindAssignees() {
+        assertEquals(ImmutableList.of("jjohn@copyright.com", "wjohn@copyright.com"),
+            udmUsageRepository.findAssignees());
     }
 
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
