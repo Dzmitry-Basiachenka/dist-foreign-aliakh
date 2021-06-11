@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
@@ -12,11 +14,11 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Collections;
 
 /**
  * Window to apply additional filters for {@link UdmUsageFilterWidget}.
@@ -54,9 +56,10 @@ public class UdmFiltersWindow extends Window {
         new LocalDateWidget(ForeignUi.getMessage("label.usage_date_from"));
     private final LocalDateWidget usageDateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.usage_date_to"));
     private final LocalDateWidget surveyStartFromWidget =
-        new LocalDateWidget(ForeignUi.getMessage("label.survey_start_from"));
+        new LocalDateWidget(ForeignUi.getMessage("label.survey_start_date_from"));
     private final LocalDateWidget surveyStartToWidget =
-        new LocalDateWidget(ForeignUi.getMessage("label.survey_start_to"));
+        new LocalDateWidget(ForeignUi.getMessage("label.survey_start_date_to"));
+    private final ComboBox<UdmChannelEnum> channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
     private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.type_of_use"));
 
     /**
@@ -75,33 +78,77 @@ public class UdmFiltersWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         applyFormattingForFields();
-        rootLayout.addComponents(buildLabelLayout("label.assignee"), buildLabelLayout("label.reported_pub_type"),
-            buildLabelLayout("label.publication_format"), buildLabelLayout("label.det_lc_name"),
-            buildLabelLayout("label.channel"), initUsageDateField(), initSurveyDateField(),
-            initAnnualMultiplierField(), initAnnualizedCopiesField(), initStatisticalMultiplierField(),
-            initQuantityField(), typeOfUseComboBox, surveyCountryField, languageField, companyNameField, companyIdField,
-            wrWrkInstField, buttonsLayout);
-        rootLayout.setMargin(new MarginInfo(true, true, false, true));
+        rootLayout.addComponents(initAssigneeFilterWidget(),
+            initReportedPublicationTypeFilterWidget(), initPublicationFormatFilterWidget(),
+            initDetailLicenseeClassNameFilterWidget(), initComboBoxLayout(), initUsageDateLayout(),
+            initSurveyDateLayout(), initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(),
+            initStatisticalMultiplierLayout(), initQuantityLayout(), initCompanyLayout(),
+            initSurveyCountryLanguageLayout(), wrWrkInstField, buttonsLayout);
+        rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         return rootLayout;
     }
 
-    //TODO should be replaced with corresponding filter widget
-    private HorizontalLayout buildLabelLayout(String name) {
-        Label label = new Label("(0)");
-        Button button = new Button(ForeignUi.getMessage(name));
-        button.addStyleName(ValoTheme.BUTTON_LINK);
-        return new HorizontalLayout(label, button);
+    private AssigneeFilterWidget initAssigneeFilterWidget() {
+        AssigneeFilterWidget assigneeFilterWidget = new AssigneeFilterWidget(Collections::emptyList);
+        assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {
+            //TODO save selected items to filter
+        });
+        return assigneeFilterWidget;
     }
 
-    private HorizontalLayout initButtonsLayout() {
-        Button closeButton = Buttons.createCloseButton(this);
-        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
-        return new HorizontalLayout(saveButton, closeButton);
+    private ReportedPubTypeFilterWidget initReportedPublicationTypeFilterWidget() {
+        ReportedPubTypeFilterWidget reportedPublicationTypeFilterWidget =
+            new ReportedPubTypeFilterWidget(Collections::emptyList);
+        reportedPublicationTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {
+            //TODO save selected items to filter
+        });
+        return reportedPublicationTypeFilterWidget;
     }
 
-    private HorizontalLayout initAnnualMultiplierField() {
+    private PublicationFormatFilterWidget initPublicationFormatFilterWidget() {
+        PublicationFormatFilterWidget publicationFormatFilterWidget =
+            new PublicationFormatFilterWidget(Collections::emptyList);
+        publicationFormatFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {
+            //TODO save selected items to filter
+        });
+        return publicationFormatFilterWidget;
+    }
+
+    private DetailLicenseeClassFilterWidget initDetailLicenseeClassNameFilterWidget() {
+        DetailLicenseeClassFilterWidget detailLicenseeClassNameFilterWidget =
+            new DetailLicenseeClassFilterWidget(Collections::emptyList);
+        detailLicenseeClassNameFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {
+            //TODO save selected items to filter
+        });
+        return detailLicenseeClassNameFilterWidget;
+    }
+
+    private HorizontalLayout initComboBoxLayout() {
+        HorizontalLayout comboBoxLayout = new HorizontalLayout(channelComboBox, typeOfUseComboBox);
+        channelComboBox.setSizeFull();
+        typeOfUseComboBox.setSizeFull();
+        comboBoxLayout.setSizeFull();
+        comboBoxLayout.setSpacing(true);
+        return comboBoxLayout;
+    }
+
+    private HorizontalLayout initUsageDateLayout() {
+        HorizontalLayout usageDateLayout = new HorizontalLayout(usageDateFromWidget, usageDateToWidget);
+        usageDateLayout.setSizeFull();
+        usageDateLayout.setSpacing(true);
+        return usageDateLayout;
+    }
+
+    private HorizontalLayout initSurveyDateLayout() {
+        HorizontalLayout surveyDateLayout = new HorizontalLayout(surveyStartFromWidget, surveyStartToWidget);
+        surveyDateLayout.setSizeFull();
+        surveyDateLayout.setSpacing(true);
+        return surveyDateLayout;
+    }
+
+    private HorizontalLayout initAnnualMultiplierLayout() {
         HorizontalLayout annualMultiplierLayout =
             new HorizontalLayout(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox);
         annualMultiplierFromField.setSizeFull();
@@ -110,7 +157,7 @@ public class UdmFiltersWindow extends Window {
         return annualMultiplierLayout;
     }
 
-    private HorizontalLayout initAnnualizedCopiesField() {
+    private HorizontalLayout initAnnualizedCopiesLayout() {
         HorizontalLayout annualizedCopiesLayout =
             new HorizontalLayout(annualizedCopiesFromField, annualizedCopiesToField, annualizedCopiesOperatorComboBox);
         annualizedCopiesFromField.setSizeFull();
@@ -119,7 +166,7 @@ public class UdmFiltersWindow extends Window {
         return annualizedCopiesLayout;
     }
 
-    private HorizontalLayout initStatisticalMultiplierField() {
+    private HorizontalLayout initStatisticalMultiplierLayout() {
         HorizontalLayout statisticalMultiplierLayout = new HorizontalLayout(statisticalMultiplierFromField,
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox);
         statisticalMultiplierFromField.setSizeFull();
@@ -128,7 +175,7 @@ public class UdmFiltersWindow extends Window {
         return statisticalMultiplierLayout;
     }
 
-    private HorizontalLayout initQuantityField() {
+    private HorizontalLayout initQuantityLayout() {
         HorizontalLayout quantityLayout =
             new HorizontalLayout(quantityFromField, quantityToField, quantityOperatorComboBox);
         quantityFromField.setSizeFull();
@@ -137,26 +184,28 @@ public class UdmFiltersWindow extends Window {
         return quantityLayout;
     }
 
-    private HorizontalLayout initUsageDateField() {
-        HorizontalLayout usageDateLayout = new HorizontalLayout(usageDateFromWidget, usageDateToWidget);
-        usageDateLayout.setSpacing(true);
-        usageDateLayout.setSizeFull();
-        return usageDateLayout;
+    private HorizontalLayout initCompanyLayout() {
+        HorizontalLayout companyLayout = new HorizontalLayout(companyIdField, companyNameField);
+        companyIdField.setSizeFull();
+        companyNameField.setSizeFull();
+        companyLayout.setSizeFull();
+        companyLayout.setSpacing(true);
+        return companyLayout;
     }
 
-    private HorizontalLayout initSurveyDateField() {
-        HorizontalLayout surveyDateLayout = new HorizontalLayout(surveyStartFromWidget, surveyStartToWidget);
-        surveyDateLayout.setSpacing(true);
-        surveyDateLayout.setSizeFull();
-        return surveyDateLayout;
+    private HorizontalLayout initSurveyCountryLanguageLayout() {
+        HorizontalLayout surveyCountryLanguageLayout = new HorizontalLayout(surveyCountryField, languageField);
+        surveyCountryField.setSizeFull();
+        languageField.setSizeFull();
+        surveyCountryLanguageLayout.setSizeFull();
+        surveyCountryLanguageLayout.setSpacing(true);
+        return surveyCountryLanguageLayout;
     }
 
     private void applyFormattingForFields() {
+        channelComboBox.setItems(UdmChannelEnum.values());
+        channelComboBox.setWidth(50, Unit.PERCENTAGE);
         typeOfUseComboBox.setWidth(50, Unit.PERCENTAGE);
-        surveyCountryField.setWidth(50, Unit.PERCENTAGE);
-        languageField.setWidth(50, Unit.PERCENTAGE);
-        companyNameField.setWidth(50, Unit.PERCENTAGE);
-        companyIdField.setWidth(50, Unit.PERCENTAGE);
         wrWrkInstField.setWidth(50, Unit.PERCENTAGE);
     }
 
@@ -165,5 +214,11 @@ public class UdmFiltersWindow extends Window {
         filterOperatorComboBox.setSizeFull();
         filterOperatorComboBox.setItems(FilterOperatorEnum.values());
         return filterOperatorComboBox;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        Button closeButton = Buttons.createCloseButton(this);
+        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        return new HorizontalLayout(saveButton, closeButton);
     }
 }
