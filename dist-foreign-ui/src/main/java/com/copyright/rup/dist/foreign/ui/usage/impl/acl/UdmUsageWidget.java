@@ -4,6 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -20,8 +21,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
-
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -123,61 +124,69 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setSortProperty("detailId")
             .setWidth(200);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
+        boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
         footer.join(
-            addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", true, 100),
-            addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", true, 100),
-            addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true, 130),
-            addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", true, 100),
-            addColumn(UdmUsageDto::getAssignee, "table.column.assignee", "assignee", true, 100),
-            addColumn(UdmUsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 150),
-            addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 150),
-            addColumn(UdmUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 100),
-            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", true, 120),
-            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 100),
+            addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", 100, false),
+            addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100,
+                hasResearcherPermission),
+            addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", 130, false),
+            addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", 100, false),
+            addColumn(UdmUsageDto::getAssignee, "table.column.assignee", "assignee", 100, false),
+            addColumn(UdmUsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 150, false),
+            addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", 150, false),
+            addColumn(UdmUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100, false),
+            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", 120, false),
+            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 100, false),
             addColumn(UdmUsageDto::getReportedStandardNumber, "table.column.reported_standard_number",
-                "reportedStandardNumber", true, 190),
-            addColumn(UdmUsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 150),
-            addColumn(UdmUsageDto::getReportedPubType, "table.column.reported_pub_type", "reportedPubType", true, 150),
-            addColumn(UdmUsageDto::getPubFormat, "table.column.publication_format", "publicationFormat", true, 150),
-            addColumn(UdmUsageDto::getArticle, "table.column.article", "article", true, 100),
-            addColumn(UdmUsageDto::getLanguage, "table.column.language", "language", true, 100),
-            addColumn(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", true, 100),
-            addColumn(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", true, 100),
-            addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", true, 100),
-            addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", true, 120),
-            addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", true,
-                150),
-            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", true, 100),
-            addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120),
-            addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", true, 100),
-            addColumn(u -> getStringFromLocalDate(u.getUsageDate()), "table.column.usage_date", "usageDate", true, 100),
+                "reportedStandardNumber", 190, false),
+            addColumn(UdmUsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 150, false),
+            addColumn(UdmUsageDto::getReportedPubType, "table.column.reported_pub_type", "reportedPubType", 150, false),
+            addColumn(UdmUsageDto::getPubFormat, "table.column.publication_format", "publicationFormat", 150, false),
+            addColumn(UdmUsageDto::getArticle, "table.column.article", "article", 100, false),
+            addColumn(UdmUsageDto::getLanguage, "table.column.language", "language", 100, false),
+            addColumn(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", 100, false),
+            addColumn(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 100, false),
+            addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", 100, hasResearcherPermission),
+            addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", 120,
+                hasResearcherPermission),
+            addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 150,
+                hasResearcherPermission),
+            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100,
+                !ForeignSecurityUtils.hasManagerPermission()),
+            addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
+                hasResearcherPermission),
+            addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
+            addColumn(u -> getStringFromLocalDate(u.getUsageDate()), "table.column.usage_date", "usageDate", 100,
+                false),
             addColumn(u -> getStringFromLocalDate(u.getSurveyStartDate()), "table.column.survey_start_date",
-                "surveyStartDate", true, 130),
+                "surveyStartDate", 130, false),
             addColumn(u -> getStringFromLocalDate(u.getSurveyEndDate()), "table.column.survey_end_date",
-                "surveyEndDate", true, 130),
-            addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", true,
-                130),
+                "surveyEndDate", 130, false),
+            addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", 130,
+                hasResearcherPermission),
             addColumn(UdmUsageDto::getStatisticalMultiplier, "table.column.statistical_multiplier",
-                "statisticalMultiplier", true, 150),
-            addColumn(UdmUsageDto::getReportedTypeOfUse, "table.column.reported_tou", "reportedTypeOfUse", true, 120),
-            addColumn(UdmUsageDto::getQuantity, "table.column.quantity", "quantity", true, 100),
-            addColumn(UdmUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", true,
-                130),
-            addColumn(UdmUsageDto::getIneligibleReason, "table.column.ineligible_reason", "ineligibleReason", true,
-                130),
-            addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", true, 100),
-            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", true, 100),
-            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", true, 110));
+                "statisticalMultiplier", 150, hasResearcherPermission),
+            addColumn(UdmUsageDto::getReportedTypeOfUse, "table.column.reported_tou", "reportedTypeOfUse", 120, false),
+            addColumn(UdmUsageDto::getQuantity, "table.column.quantity", "quantity", 100, hasResearcherPermission),
+            addColumn(UdmUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130,
+                hasResearcherPermission),
+            addColumn(UdmUsageDto::getIneligibleReason, "table.column.ineligible_reason", "ineligibleReason", 130,
+                false),
+            addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
+            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 100, false),
+            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
+                false));
     }
 
     private Column<UdmUsageDto, ?> addColumn(ValueProvider<UdmUsageDto, ?> valueProvider, String captionProperty,
-                                             String columnId, boolean isHidable, double width) {
+                                             String columnId, double width, boolean isHidden) {
         return udmUsagesGrid.addColumn(valueProvider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)
             .setSortProperty(columnId)
-            .setHidable(isHidable)
+            .setHidable(!isHidden)
+            .setHidden(isHidden)
             .setWidth(width);
     }
 
