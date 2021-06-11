@@ -19,15 +19,15 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * Widget provides functionality for configuring items filter widget for assignees.
+ * Widget provides functionality for configuring items filter widget for Type of Uses.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
- * Date: 06/10/2021
+ * Date: 06/14/2021
  *
  * @author Ihar Suvorau
  */
-public class AssigneeFilterWidget extends BaseItemsFilterWidget<String>
+public class TypeOfUseFilterWidget extends BaseItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
     private final Supplier<List<String>> supplier;
@@ -38,8 +38,8 @@ public class AssigneeFilterWidget extends BaseItemsFilterWidget<String>
      *
      * @param supplier {@link String}s list supplier
      */
-    public AssigneeFilterWidget(Supplier<List<String>> supplier) {
-        super(ForeignUi.getMessage("label.assignees"));
+    public TypeOfUseFilterWidget(Supplier<List<String>> supplier) {
+        super(ForeignUi.getMessage("label.type_of_uses"));
         this.supplier = supplier;
     }
 
@@ -60,8 +60,8 @@ public class AssigneeFilterWidget extends BaseItemsFilterWidget<String>
     }
 
     @Override
-    public String getBeanItemCaption(String assignee) {
-        return assignee;
+    public String getBeanItemCaption(String reportedPubType) {
+        return reportedPubType;
     }
 
     @Override
@@ -76,11 +76,11 @@ public class AssigneeFilterWidget extends BaseItemsFilterWidget<String>
     @Override
     public FilterWindow<String> showFilterWindow() {
         FilterWindow<String> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.assignees_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage("window.type_of_uses_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
-        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.assignee"));
-        VaadinUtils.addComponentStyle(filterWindow, "assignee-filter-window");
+        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.type_of_use"));
+        VaadinUtils.addComponentStyle(filterWindow, "type-of-use-filter-window");
         return filterWindow;
     }
 }
