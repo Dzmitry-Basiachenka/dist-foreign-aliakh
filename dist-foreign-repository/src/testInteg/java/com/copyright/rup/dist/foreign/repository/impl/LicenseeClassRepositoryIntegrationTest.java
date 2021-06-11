@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.repository.api.ILicenseeClassRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +75,22 @@ public class LicenseeClassRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDetailLicenseeClassesByProductFamily() throws IOException {
-        List<DetailLicenseeClass> expectedDetailsMapping = loadExpectedClasses("expected_detail_licensee_classes.json");
+    public void testFindDetailLicenseeClassesByProductFamilyAacl() throws IOException {
+        List<DetailLicenseeClass> expectedDetailsMapping =
+            loadExpectedClasses("expected_detail_licensee_classes_aacl.json");
         List<DetailLicenseeClass> actualDetailsMapping =
             licenseeClassRepository.findDetailLicenseeClassesByProductFamily("AACL");
+        assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
+        IntStream.range(0, expectedDetailsMapping.size())
+            .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));
+    }
+
+    @Test
+    public void testFindDetailLicenseeClassesByProductFamilyAcl() throws IOException {
+        List<DetailLicenseeClass> expectedDetailsMapping =
+            loadExpectedClasses("expected_detail_licensee_classes_acl.json");
+        List<DetailLicenseeClass> actualDetailsMapping =
+            licenseeClassRepository.findDetailLicenseeClassesByProductFamily("ACL");
         assertEquals(expectedDetailsMapping.size(), actualDetailsMapping.size());
         IntStream.range(0, expectedDetailsMapping.size())
             .forEach(i -> verifyLicenseeClass(expectedDetailsMapping.get(i), actualDetailsMapping.get(i)));
