@@ -1126,4 +1126,17 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2021-06-21-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-65859 FDA: UDM in ACL Audit: add index by df_udm_usage_uid to df_udm_audit")
+
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace,
+                tableName: 'df_udm_audit', indexName: 'ix_df_udm_audit_df_udm_usage_uid') {
+            column(name: 'df_udm_usage_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_udm_audit_df_udm_usage_uid")
+        }
+    }
 }

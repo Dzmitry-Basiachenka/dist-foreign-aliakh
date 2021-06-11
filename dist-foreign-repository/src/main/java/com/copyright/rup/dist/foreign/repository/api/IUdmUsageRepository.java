@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for UDM usages.
@@ -91,4 +92,12 @@ public interface IUdmUsageRepository {
      * @return list of publication formats from UDM usages.
      */
     List<String> findPublicationFormats();
+
+    /**
+     * Updates status of {@link UdmUsage}s by their ids.
+     *
+     * @param udmUsageIds set of ids of the {@link UdmUsage}
+     * @param status      instance of {@link UsageStatusEnum}
+     */
+    void updateStatusByIds(Set<String> udmUsageIds, UsageStatusEnum status);
 }

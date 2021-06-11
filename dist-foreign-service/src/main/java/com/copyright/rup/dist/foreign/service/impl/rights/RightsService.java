@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
@@ -85,6 +86,8 @@ public class RightsService implements IRightsService {
     private IAaclUsageService aaclUsageService;
     @Autowired
     private IUsageAuditService auditService;
+    @Autowired
+    private IUdmUsageAuditService udmAuditService;
     @Autowired
     @Qualifier("df.service.rmsGrantProcessorService")
     private IRmsGrantProcessorService rmsGrantProcessorService;
@@ -235,8 +238,12 @@ public class RightsService implements IRightsService {
                             Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
                             udmUsage.setRightsholder(buildRightsholder(rhAccountNumber));
                             udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+                            udmAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.RH_FOUND,
+                                String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber));
                         } else {
                             udmUsage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                            udmAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.RH_NOT_FOUND,
+                                String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
                         }
                         udmUsageService.updateProcessedUsage(udmUsage);
                     });
