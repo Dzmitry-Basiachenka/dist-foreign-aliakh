@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -12,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,20 +30,20 @@ public class UdmUsageFilter {
     private UsageStatusEnum usageStatus;
     private UdmUsageOriginEnum udmUsageOrigin;
     private Integer period;
-    private List<String> assignees;
-    private List<String> reportedPubTypes;
-    private List<String> pubFormats;
-    private List<DetailLicenseeClass> detailLicenseeClasses;
-    private String channel;
+    private Set<String> assignees;
+    private Set<String> reportedPubTypes;
+    private Set<String> pubFormats;
+    private Set<DetailLicenseeClass> detailLicenseeClasses;
+    private UdmChannelEnum channel;
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
     private LocalDate surveyStartDateFrom;
     private LocalDate surveyStartDateTo;
-    private FilterExpression<Number> annualMultiplierExpression;
-    private FilterExpression<Number> annualizedCopiesExpression;
-    private FilterExpression<Number> statisticalMultiplierExpression;
-    private FilterExpression<Number> quantityExpression;
-    private List<String> reportedTypeOfUses;
+    private FilterExpression<Number> annualMultiplierExpression = new FilterExpression<>();
+    private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
+    private FilterExpression<Number> statisticalMultiplierExpression = new FilterExpression<>();
+    private FilterExpression<Number> quantityExpression = new FilterExpression<>();
+    private Set<String> reportedTypeOfUses;
     private String surveyCountry;
     private String language;
     private String companyName;
@@ -121,43 +121,43 @@ public class UdmUsageFilter {
         this.period = period;
     }
 
-    public List<String> getAssignees() {
+    public Set<String> getAssignees() {
         return assignees;
     }
 
-    public void setAssignees(List<String> assignees) {
+    public void setAssignees(Set<String> assignees) {
         this.assignees = assignees;
     }
 
-    public List<String> getReportedPubTypes() {
+    public Set<String> getReportedPubTypes() {
         return reportedPubTypes;
     }
 
-    public void setReportedPubTypes(List<String> reportedPubTypes) {
+    public void setReportedPubTypes(Set<String> reportedPubTypes) {
         this.reportedPubTypes = reportedPubTypes;
     }
 
-    public List<String> getPubFormats() {
+    public Set<String> getPubFormats() {
         return pubFormats;
     }
 
-    public void setPubFormats(List<String> pubFormats) {
+    public void setPubFormats(Set<String> pubFormats) {
         this.pubFormats = pubFormats;
     }
 
-    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+    public Set<DetailLicenseeClass> getDetailLicenseeClasses() {
         return detailLicenseeClasses;
     }
 
-    public void setDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
+    public void setDetailLicenseeClasses(Set<DetailLicenseeClass> detailLicenseeClasses) {
         this.detailLicenseeClasses = detailLicenseeClasses;
     }
 
-    public String getChannel() {
+    public UdmChannelEnum getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    public void setChannel(UdmChannelEnum channel) {
         this.channel = channel;
     }
 
@@ -217,11 +217,11 @@ public class UdmUsageFilter {
         this.statisticalMultiplierExpression = statisticalMultiplierExpression;
     }
 
-    public List<String> getReportedTypeOfUses() {
+    public Set<String> getReportedTypeOfUses() {
         return reportedTypeOfUses;
     }
 
-    public void setReportedTypeOfUses(List<String> reportedTypeOfUses) {
+    public void setReportedTypeOfUses(Set<String> reportedTypeOfUses) {
         this.reportedTypeOfUses = reportedTypeOfUses;
     }
 
@@ -281,25 +281,25 @@ public class UdmUsageFilter {
             && null == usageStatus
             && null == udmUsageOrigin
             && null == period
-            && CollectionUtils.isEmpty(assignees)
-            && CollectionUtils.isEmpty(reportedPubTypes)
-            && CollectionUtils.isEmpty(pubFormats)
-            && CollectionUtils.isEmpty(detailLicenseeClasses)
             && null == channel
             && null == usageDateFrom
             && null == usageDateTo
             && null == surveyStartDateFrom
             && null == surveyStartDateTo
-            && null == annualMultiplierExpression
-            && null == annualizedCopiesExpression
-            && null == statisticalMultiplierExpression
-            && CollectionUtils.isEmpty(reportedTypeOfUses)
-            && null == quantityExpression
             && null == surveyCountry
             && null == language
             && null == companyName
             && null == companyId
-            && null == wrWrkInst;
+            && null == wrWrkInst
+            && annualMultiplierExpression.isEmpty()
+            && annualizedCopiesExpression.isEmpty()
+            && statisticalMultiplierExpression.isEmpty()
+            && quantityExpression.isEmpty()
+            && CollectionUtils.isEmpty(assignees)
+            && CollectionUtils.isEmpty(reportedPubTypes)
+            && CollectionUtils.isEmpty(pubFormats)
+            && CollectionUtils.isEmpty(detailLicenseeClasses)
+            && CollectionUtils.isEmpty(reportedTypeOfUses);
     }
 
     @Override

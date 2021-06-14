@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -24,7 +25,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -74,10 +74,10 @@ public class AssigneeFilterWidgetTest {
     public void testShowFilterWindow() {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Capture<ValueProvider<String, List<String>>> providerCapture = new Capture<>();
+        Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         Windows.showFilterWindow(eq("Assignees filter"), same(assigneeFilterWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(new HashSet<>());
+        filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("assignee-filter-window");

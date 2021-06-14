@@ -46,8 +46,8 @@ public class DetailLicenseeClassFilterWidget extends BaseItemsFilterWidget<Detai
 
     @Override
     public void reset() {
-        selectedItemsIds.clear();
         super.reset();
+        selectedItemsIds.clear();
     }
 
     @Override

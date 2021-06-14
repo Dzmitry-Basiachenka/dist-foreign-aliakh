@@ -12,7 +12,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -25,12 +24,11 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link DetailLicenseeClassFilterWidget}.
+ * Verifies {@link TypeOfUseFilterWidget}.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -40,35 +38,35 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class DetailLicenseeClassFilterWidgetTest {
+public class TypeOfUserFilterWidgetTest {
 
-    private final DetailLicenseeClass detailLicenseeClass = buildDetailLicenseeClass();
-    private final DetailLicenseeClassFilterWidget detailLcFilterWidget =
-        new DetailLicenseeClassFilterWidget(() -> Collections.singletonList(detailLicenseeClass));
+    private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
+    private final TypeOfUseFilterWidget typeOfUseFilterWidget =
+        new TypeOfUseFilterWidget(() -> Collections.singletonList(REPORTED_TYPE_OF_USE));
 
     @Test
     public void testLoadBeans() {
-        List<DetailLicenseeClass> assignees = detailLcFilterWidget.loadBeans();
-        assertEquals(1, assignees.size());
-        assertEquals(detailLicenseeClass, assignees.get(0));
+        List<String> typeOfUses = typeOfUseFilterWidget.loadBeans();
+        assertEquals(1, typeOfUses.size());
+        assertEquals(REPORTED_TYPE_OF_USE, typeOfUses.get(0));
     }
 
     @Test
     public void testGetBeanClass() {
-        assertEquals(DetailLicenseeClass.class, detailLcFilterWidget.getBeanClass());
+        assertEquals(String.class, typeOfUseFilterWidget.getBeanClass());
     }
 
     @Test
     public void testGetBeanItemCaption() {
-        assertEquals("26 - Law Firms", detailLcFilterWidget.getBeanItemCaption(detailLicenseeClass));
+        assertEquals(REPORTED_TYPE_OF_USE, typeOfUseFilterWidget.getBeanItemCaption(REPORTED_TYPE_OF_USE));
     }
 
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(detailLicenseeClass)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(REPORTED_TYPE_OF_USE)).once();
         replay(filterSaveEvent);
-        detailLcFilterWidget.onSave(filterSaveEvent);
+        typeOfUseFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
     }
 
@@ -76,27 +74,21 @@ public class DetailLicenseeClassFilterWidgetTest {
     public void testShowFilterWindow() {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Capture<ValueProvider<DetailLicenseeClass, List<String>>> providerCapture = newCapture();
-        Windows.showFilterWindow(eq("Detail Licensee Classes filter"), same(detailLcFilterWidget),
+        Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
+        Windows.showFilterWindow(eq("Type of Uses filter"), same(typeOfUseFilterWidget),
             capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
-        filterWindow.addStyleName("detail-licensee-class-filter-window");
+        filterWindow.addStyleName("type-of-use-filter-window");
         expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter Detail Licensee Class Name/Id");
+        filterWindow.setSearchPromptString("Enter Type of Use");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
-        detailLcFilterWidget.showFilterWindow();
-        assertEquals(Arrays.asList("26", "Law Firms"), providerCapture.getValue().apply(detailLicenseeClass));
+        typeOfUseFilterWidget.showFilterWindow();
+        assertEquals(Collections.singletonList(REPORTED_TYPE_OF_USE),
+            providerCapture.getValue().apply(REPORTED_TYPE_OF_USE));
         verify(filterWindow, Windows.class);
-    }
-
-    private DetailLicenseeClass buildDetailLicenseeClass() {
-        DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
-        licenseeClass.setId(26);
-        licenseeClass.setDescription("Law Firms");
-        return licenseeClass;
     }
 }

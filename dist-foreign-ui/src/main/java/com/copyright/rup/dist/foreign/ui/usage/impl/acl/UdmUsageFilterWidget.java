@@ -50,6 +50,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     private ComboBox<Integer> periodComboBox;
     private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
     private IUdmUsageFilterController controller;
+    private UdmFiltersWindow udmFiltersWindow;
 
     /**
      * Constructor.
@@ -95,6 +96,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     @Override
     public void clearFilter() {
         clearFilterValues();
+        udmFiltersWindow.clearFilters();
         refreshFilter();
         applyFilter();
     }
@@ -154,9 +156,18 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     }
 
     private void buildMoreFiltersButton() {
+        udmFiltersWindow = new UdmFiltersWindow();
+        udmFiltersWindow.setUdmUsageFilter(udmUsageFilter);
+        udmFiltersWindow.addCloseListener(event -> {
+            udmUsageFilter = udmFiltersWindow.getAppliedUsageFilter();
+            filterChanged();
+        });
         moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
-        moreFiltersButton.addClickListener(event -> Windows.showModalWindow(new UdmFiltersWindow()));
+        moreFiltersButton.addClickListener(event -> {
+            udmFiltersWindow.setUdmUsageFilter(udmUsageFilter);
+            Windows.showModalWindow(udmFiltersWindow);
+        });
     }
 
     private HorizontalLayout buildUdmUsageBatchFilter() {

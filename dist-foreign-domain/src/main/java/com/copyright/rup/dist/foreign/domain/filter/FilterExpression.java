@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Objects;
+
 /**
  * Abstract class for filter expressions. Contains field values and operator.
  * <p>
@@ -16,9 +18,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class FilterExpression<T> {
 
-    private final FilterOperatorEnum operatorEnum;
-    private final T fieldFirstValue;
-    private final T fieldSecondValue;
+    private FilterOperatorEnum operatorEnum;
+    private T fieldFirstValue;
+    private T fieldSecondValue;
+
+    /**
+     * Default constructor.
+     */
+    public FilterExpression() {
+    }
 
     /**
      * @param operatorEnum     instance of {@link FilterOperatorEnum}
@@ -35,12 +43,28 @@ public class FilterExpression<T> {
         return operatorEnum;
     }
 
+    public void setOperatorEnum(FilterOperatorEnum operatorEnum) {
+        this.operatorEnum = operatorEnum;
+    }
+
     public T getFieldFirstValue() {
         return fieldFirstValue;
     }
 
+    public void setFieldFirstValue(T fieldFirstValue) {
+        this.fieldFirstValue = fieldFirstValue;
+    }
+
     public T getFieldSecondValue() {
         return fieldSecondValue;
+    }
+
+    public void setFieldSecondValue(T fieldSecondValue) {
+        this.fieldSecondValue = fieldSecondValue;
+    }
+
+    public boolean isEmpty() {
+        return Objects.isNull(fieldFirstValue) && Objects.isNull(fieldSecondValue);
     }
 
     @Override

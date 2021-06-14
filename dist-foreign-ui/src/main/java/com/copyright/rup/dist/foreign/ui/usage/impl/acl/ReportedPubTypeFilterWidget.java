@@ -45,8 +45,8 @@ public class ReportedPubTypeFilterWidget extends BaseItemsFilterWidget<String>
 
     @Override
     public void reset() {
-        selectedItemsIds.clear();
         super.reset();
+        selectedItemsIds.clear();
     }
 
     @Override
