@@ -44,7 +44,7 @@ databaseChangeLog {
             column(name: 'reported_standard_number', value: '0927-7765')
             column(name: 'standard_number', value: '1873-7773')
             column(name: 'reported_pub_type', value: 'Book')
-            column(name: 'publication_format', value: 'format')
+            column(name: 'publication_format', value: 'Not Specified')
             column(name: 'article', value: 'Tenside, surfactants, detergents')
             column(name: 'language', value: 'German')
             column(name: 'company_id', value: 454984566)

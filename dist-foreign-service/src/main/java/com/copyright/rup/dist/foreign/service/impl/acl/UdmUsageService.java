@@ -157,6 +157,16 @@ public class UdmUsageService implements IUdmUsageService {
         return udmUsageRepository.findAssignees();
     }
 
+    @Override
+    public List<String> getPublicationTypes() {
+        return udmUsageRepository.findPublicationTypes();
+    }
+
+    @Override
+    public List<String> getPublicationFormats() {
+        return udmUsageRepository.findPublicationFormats();
+    }
+
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {
         String stringPeriod = String.valueOf(udmBatch.getPeriod());
         int year = Integer.parseInt(stringPeriod.substring(0, 4));

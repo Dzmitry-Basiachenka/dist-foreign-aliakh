@@ -267,6 +267,24 @@ public class UdmUsageServiceTest {
         verify(udmUsageRepository);
     }
 
+    @Test
+    public void testGetPublicationTypes() {
+        List<String> pubTypes = ImmutableList.of("Book", "Not Shared");
+        expect(udmUsageRepository.findPublicationTypes()).andReturn(pubTypes).once();
+        replay(udmUsageRepository);
+        assertEquals(pubTypes, udmUsageService.getPublicationTypes());
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetPublicationFormats() {
+        List<String> pubFormats = ImmutableList.of("Digital", "Not Specified");
+        expect(udmUsageRepository.findPublicationFormats()).andReturn(pubFormats).once();
+        replay(udmUsageRepository);
+        assertEquals(pubFormats, udmUsageService.getPublicationFormats());
+        verify(udmUsageRepository);
+    }
+
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(UDM_BATCH_UID);

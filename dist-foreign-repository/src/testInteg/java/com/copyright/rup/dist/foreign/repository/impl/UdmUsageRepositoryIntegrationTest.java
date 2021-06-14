@@ -217,6 +217,16 @@ public class UdmUsageRepositoryIntegrationTest {
             udmUsageRepository.findAssignees());
     }
 
+    @Test
+    public void testFindPublicationTypes() {
+        assertEquals(ImmutableList.of("Book", "Not Shared"), udmUsageRepository.findPublicationTypes());
+    }
+
+    @Test
+    public void testFindPublicationFormats() {
+        assertEquals(ImmutableList.of("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
+    }
+
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
@@ -317,7 +327,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setReportedTitle(REPORTED_TITLE);
         udmUsage.setSystemTitle("Tenside, surfactants, detergents");
         udmUsage.setReportedPubType("Book");
-        udmUsage.setPubFormat("format");
+        udmUsage.setPubFormat("Not Specified");
         udmUsage.setArticle("Tenside, surfactants, detergents");
         udmUsage.setLanguage("German");
         udmUsage.setCompanyId(454984566L);

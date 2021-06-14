@@ -81,4 +81,14 @@ public interface IUdmUsageRepository {
      * @return list of assignees from UDM usages.
      */
     List<String> findAssignees();
+
+    /**
+     * @return list of publication types from UDM usages.
+     */
+    List<String> findPublicationTypes();
+
+    /**
+     * @return list of publication formats from UDM usages.
+     */
+    List<String> findPublicationFormats();
 }
