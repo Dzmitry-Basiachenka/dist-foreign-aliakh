@@ -91,4 +91,14 @@ public interface IUdmUsageService {
      * @return list of assignees from UDM usages.
      */
     List<String> getAssignees();
+
+    /**
+     * @return list of publication types from UDM usages.
+     */
+    List<String> getPublicationTypes();
+
+    /**
+     * @return list of publication formats from UDM usages.
+     */
+    List<String> getPublicationFormats();
 }

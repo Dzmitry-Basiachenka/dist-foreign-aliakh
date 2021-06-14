@@ -77,4 +77,14 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     public List<String> findAssignees() {
         return selectList("IUdmUsageMapper.findAssignees");
     }
+
+    @Override
+    public List<String> findPublicationTypes() {
+        return selectList("IUdmUsageMapper.findPublicationTypes");
+    }
+
+    @Override
+    public List<String> findPublicationFormats() {
+        return selectList("IUdmUsageMapper.findPublicationFormats");
+    }
 }

@@ -420,4 +420,18 @@
         where assignee is not null
         order by assignee
     </select>
+
+    <select id="findPublicationTypes" resultType="string">
+        select distinct reported_pub_type
+        from ${schema}.df_udm_usage
+        where reported_pub_type is not null
+        order by reported_pub_type
+    </select>
+
+    <select id="findPublicationFormats" resultType="string">
+        select distinct publication_format
+        from ${schema}.df_udm_usage
+        where publication_format is not null
+        order by publication_format
+    </select>
 </mapper>
