@@ -122,6 +122,7 @@ public class ForeignUiTest {
         Whitebox.setInternalState(foreignUi, reportController);
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         controller.refreshWidget();
         expectLastCall().once();
         replay(controller, reportController, ForeignSecurityUtils.class);
@@ -133,6 +134,7 @@ public class ForeignUiTest {
     public void testGetAdditionalComponents() {
         Whitebox.setInternalState(foreignUi, new MainWidgetController());
         mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
         List<Component> additionalComponents = foreignUi.getAdditionalComponents();
         assertNotNull(additionalComponents);

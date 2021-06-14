@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.main;
 
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -10,8 +9,9 @@ import com.copyright.rup.vaadin.ui.CommonUi;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.IController;
+import com.copyright.rup.vaadin.widget.api.IMediator;
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * Entry point for application.
@@ -40,11 +39,8 @@ import java.util.Set;
 @EnableVaadin
 @Theme("foreign")
 @SpringUI
-public class ForeignUi extends CommonUi {
+public class ForeignUi extends CommonUi implements IMediatorProvider {
 
-    private static final Set<String> PRODUCT_FAMILIES = ImmutableSet.of(
-        FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY,
-        FdaConstants.AACL_PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY, FdaConstants.ACL_PRODUCT_FAMILY);
     private static final ResourceBundle MESSAGES =
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
 
@@ -57,6 +53,8 @@ public class ForeignUi extends CommonUi {
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
 
+    private ComboBox<String> productFamilyComboBox;
+
     /**
      * Gets a message associated with specified {@code key}.
      *
@@ -66,6 +64,17 @@ public class ForeignUi extends CommonUi {
      */
     public static String getMessage(String key, Object... parameters) {
         return String.format(MESSAGES.getString(key), parameters);
+    }
+
+    @Override
+    public IMediator initMediator() {
+        ForeignUiMediator mediator = new ForeignUiMediator();
+        productFamilyComboBox = new ComboBox<>(getMessage("label.product_family"));
+        mediator.setProductFamilyComboBox(productFamilyComboBox);
+        mediator.setController(controller);
+        mediator.setProductFamilyProvider(productFamilyProvider);
+        mediator.setReportController(reportController);
+        return mediator;
     }
 
     @Override
@@ -110,8 +119,7 @@ public class ForeignUi extends CommonUi {
     }
 
     private ComboBox<String> initProductFamilyComboBox() {
-        ComboBox<String> productFamilyComboBox = new ComboBox<>(getMessage("label.product_family"), PRODUCT_FAMILIES);
-        productFamilyComboBox.setSelectedItem(FdaConstants.FAS_PRODUCT_FAMILY);
+        initMediator().applyPermissions();
         productFamilyComboBox.setEmptySelectionAllowed(false);
         productFamilyComboBox.setTextInputAllowed(false);
         productFamilyComboBox.addValueChangeListener(event -> {

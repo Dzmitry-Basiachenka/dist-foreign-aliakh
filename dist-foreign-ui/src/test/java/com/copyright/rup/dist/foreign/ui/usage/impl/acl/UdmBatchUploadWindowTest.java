@@ -42,7 +42,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Verifies {@link UdmBathUploadWindow}.
+ * Verifies {@link UdmBatchUploadWindow}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -51,15 +51,15 @@ import java.io.ByteArrayOutputStream;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, UdmBathUploadWindow.class})
-public class UdmBathUploadWindowTest {
+@PrepareForTest({Windows.class, UdmBatchUploadWindow.class})
+public class UdmBatchUploadWindowTest {
 
     private static final String PERIOD_YEAR_FIELD = "2020";
     private static final String MONTH_FIELD = "12";
     private static final String METHOD_NAME = "getValue";
 
     private IUdmUsageController controller;
-    private UdmBathUploadWindow window;
+    private UdmBatchUploadWindow window;
 
     @Before
     public void setUp() {
@@ -75,7 +75,7 @@ public class UdmBathUploadWindowTest {
         ComboBox channelField = createPartialMock(ComboBox.class, METHOD_NAME);
         ComboBox originField = createPartialMock(ComboBox.class, METHOD_NAME);
         ProcessingResult<UdmUsage> processingResult = buildCsvProcessingResult();
-        window = createPartialMock(UdmBathUploadWindow.class, "isValid");
+        window = createPartialMock(UdmBatchUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "udmUsageController", controller);
         Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, "periodYearField", new TextField("Period Year", PERIOD_YEAR_FIELD));
@@ -100,7 +100,7 @@ public class UdmBathUploadWindowTest {
 
     @Test
     public void testConstructor() {
-        window = new UdmBathUploadWindow(controller);
+        window = new UdmBatchUploadWindow(controller);
         assertEquals("Upload UDM Usage Batch", window.getCaption());
         assertEquals(400, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
@@ -112,7 +112,7 @@ public class UdmBathUploadWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testIsValid() {
-        window = new UdmBathUploadWindow(controller);
+        window = new UdmBatchUploadWindow(controller);
         assertFalse(window.isValid());
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
