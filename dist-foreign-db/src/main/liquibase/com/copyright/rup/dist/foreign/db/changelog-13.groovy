@@ -1114,4 +1114,16 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-06-14-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-67395 FDA & UDM: Create UDM shell - UI Search: add comment column to df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'comment', type: 'VARCHAR(4000)', remarks: 'Comment')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
