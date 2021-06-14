@@ -1,3 +1,15 @@
+13.1.29
+-
+* B-65859 FDA: UDM in ACL Audit: implement widget to show audit table
+* B-65860: FDA & UDM: Role-specific UDM view: adjust logic related to hidden columns based on Permissions on UDM Usage Tab
+* B-65860: FDA & UDM: Role-specific UDM view: adjust logic related to hide all product families excepting ACL and hide all tabs excepting UDM for Researcher role and set visible upload button for spesialist role
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: adjust logic to load Detail LCs
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: implement logic to load assignees
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: implement logic to load publication types and formats
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering: implement filter widget for additional UDM filters
+* B-67395 FDA & UDM: Create UDM shell - UI Search: add comment column to df_udm_usage table
+* clipboardPatchFile
+
 13.1.28
 -
 * B-54393 FDA: Modify/Update AACL licensee classes: fix LicenseeClassRepositoryIntegrationTest
