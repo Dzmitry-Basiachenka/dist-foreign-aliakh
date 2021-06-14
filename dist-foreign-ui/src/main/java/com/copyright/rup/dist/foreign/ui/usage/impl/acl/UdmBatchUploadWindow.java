@@ -40,7 +40,7 @@ import java.util.Arrays;
  *
  * @author Anton Azarenka
  */
-public class UdmBathUploadWindow extends Window {
+public class UdmBatchUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
@@ -60,7 +60,7 @@ public class UdmBathUploadWindow extends Window {
      *
      * @param controller instance of {@link IUdmUsageController}
      */
-    public UdmBathUploadWindow(IUdmUsageController controller) {
+    public UdmBatchUploadWindow(IUdmUsageController controller) {
         this.udmUsageController = controller;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_udm_usage_batch"));

@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -46,6 +47,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
+    private Button loadButton;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -56,6 +58,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         setLocked(true);
         setSizeFull();
         return this;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        UdmUsageMediator mediator = new UdmUsageMediator();
+        mediator.setLoadButton(loadButton);
+        return mediator;
     }
 
     @Override
@@ -80,9 +89,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private HorizontalLayout initButtonsLayout() {
-        //TODO apply permissions for load button
-        Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBathUploadWindow(controller)));
+        loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
+        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         HorizontalLayout layout = new HorizontalLayout(loadButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-usages-buttons");
