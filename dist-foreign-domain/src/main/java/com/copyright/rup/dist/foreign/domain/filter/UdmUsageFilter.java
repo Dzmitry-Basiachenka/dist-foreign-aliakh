@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -49,6 +50,7 @@ public class UdmUsageFilter {
     private String companyName;
     private Long companyId;
     private Long wrWrkInst;
+    private String searchValue;
 
     /**
      * Default constructor.
@@ -86,6 +88,7 @@ public class UdmUsageFilter {
             setCompanyId(filter.getCompanyId());
             setCompanyName(filter.getCompanyName());
             setWrWrkInst(filter.getWrWrkInst());
+            setSearchValue(filter.getSearchValue());
         }
     }
 
@@ -273,6 +276,14 @@ public class UdmUsageFilter {
         this.wrWrkInst = wrWrkInst;
     }
 
+    public String getSearchValue() {
+        return searchValue;
+    }
+
+    public void setSearchValue(String searchValue) {
+        this.searchValue = searchValue;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
@@ -299,7 +310,8 @@ public class UdmUsageFilter {
             && CollectionUtils.isEmpty(reportedPubTypes)
             && CollectionUtils.isEmpty(pubFormats)
             && CollectionUtils.isEmpty(detailLicenseeClasses)
-            && CollectionUtils.isEmpty(reportedTypeOfUses);
+            && CollectionUtils.isEmpty(reportedTypeOfUses)
+            && StringUtils.isBlank(searchValue);
     }
 
     @Override
@@ -335,6 +347,7 @@ public class UdmUsageFilter {
             .append(companyName, that.companyName)
             .append(companyId, that.companyId)
             .append(wrWrkInst, that.wrWrkInst)
+            .append(searchValue, that.searchValue)
             .isEquals();
     }
 
@@ -364,6 +377,7 @@ public class UdmUsageFilter {
             .append(companyName)
             .append(companyId)
             .append(wrWrkInst)
+            .append(searchValue)
             .toHashCode();
     }
 
@@ -393,6 +407,7 @@ public class UdmUsageFilter {
             .append("companyName", companyName)
             .append("companyId", companyId)
             .append("wrWrkInst", wrWrkInst)
+            .append("searchValue", searchValue)
             .toString();
     }
 }
