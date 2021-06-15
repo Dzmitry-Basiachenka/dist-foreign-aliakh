@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
@@ -75,6 +76,7 @@ public class UdmFiltersWindow extends Window {
     private UdmUsageFilter usageFilter;
     private UdmUsageFilter appliedUsageFilter;
     private final IUdmUsageFilterController controller;
+    private final boolean isFilterPermittedForUser = !ForeignSecurityUtils.hasResearcherPermission();
 
     /**
      * Constructor.
@@ -255,6 +257,7 @@ public class UdmFiltersWindow extends Window {
         annualMultiplierToField.setEnabled(false);
         annualMultiplierFromField.setSizeFull();
         annualMultiplierToField.setSizeFull();
+        annualMultiplierLayout.setEnabled(isFilterPermittedForUser);
         annualMultiplierLayout.setSizeFull();
         return annualMultiplierLayout;
     }
@@ -267,6 +270,7 @@ public class UdmFiltersWindow extends Window {
         annualizedCopiesToField.setEnabled(false);
         annualizedCopiesFromField.setSizeFull();
         annualizedCopiesToField.setSizeFull();
+        annualizedCopiesLayout.setEnabled(isFilterPermittedForUser);
         annualizedCopiesLayout.setSizeFull();
         return annualizedCopiesLayout;
     }
@@ -279,6 +283,7 @@ public class UdmFiltersWindow extends Window {
         statisticalMultiplierToField.setEnabled(false);
         statisticalMultiplierFromField.setSizeFull();
         statisticalMultiplierToField.setSizeFull();
+        statisticalMultiplierLayout.setEnabled(isFilterPermittedForUser);
         statisticalMultiplierLayout.setSizeFull();
         return statisticalMultiplierLayout;
     }
@@ -291,6 +296,7 @@ public class UdmFiltersWindow extends Window {
         quantityToField.setEnabled(false);
         quantityFromField.setSizeFull();
         quantityToField.setSizeFull();
+        quantityLayout.setEnabled(isFilterPermittedForUser);
         quantityLayout.setSizeFull();
         return quantityLayout;
     }
@@ -299,6 +305,7 @@ public class UdmFiltersWindow extends Window {
         HorizontalLayout companyLayout = new HorizontalLayout(companyIdField, companyNameField);
         companyIdField.setSizeFull();
         companyNameField.setSizeFull();
+        companyLayout.setEnabled(isFilterPermittedForUser);
         companyLayout.setSizeFull();
         companyLayout.setSpacing(true);
         return companyLayout;
@@ -306,6 +313,7 @@ public class UdmFiltersWindow extends Window {
 
     private HorizontalLayout initSurveyCountryLanguageLayout() {
         HorizontalLayout surveyCountryLanguageLayout = new HorizontalLayout(surveyCountryField, languageField);
+        surveyCountryField.setEnabled(isFilterPermittedForUser);
         surveyCountryField.setSizeFull();
         languageField.setSizeFull();
         surveyCountryLanguageLayout.setSizeFull();
