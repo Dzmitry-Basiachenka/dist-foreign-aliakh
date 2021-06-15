@@ -53,6 +53,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private Integer quantity;
     private BigDecimal annualizedCopies;
     private String ineligibleReason;
+    private String comment;
 
     public Integer getPeriod() {
         return period;
@@ -318,6 +319,14 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -362,6 +371,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(annualMultiplier, udmUsage.annualMultiplier)
             .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
             .append(annualizedCopies, udmUsage.annualizedCopies)
+            .append(comment, udmUsage.comment)
             .isEquals();
     }
 
@@ -402,6 +412,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(annualMultiplier)
             .append(statisticalMultiplier)
             .append(annualizedCopies)
+            .append(comment)
             .toHashCode();
     }
 
@@ -443,6 +454,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("annualMultiplier", annualMultiplier)
             .append("statisticalMultiplier", statisticalMultiplier)
             .append("annualizedCopies", annualizedCopies)
+            .append("comment", comment)
             .toString();
     }
 }
