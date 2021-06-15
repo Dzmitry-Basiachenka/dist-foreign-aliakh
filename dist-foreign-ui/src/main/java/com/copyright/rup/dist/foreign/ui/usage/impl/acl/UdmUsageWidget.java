@@ -152,6 +152,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getPubFormat, "table.column.publication_format", "publicationFormat", 150, false),
             addColumn(UdmUsageDto::getArticle, "table.column.article", "article", 100, false),
             addColumn(UdmUsageDto::getLanguage, "table.column.language", "language", 100, false),
+            addColumn(UdmUsageDto::getComment, "table.column.comment", "comment", 200, false),
             addColumn(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", 100, false),
             addColumn(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 100, false),
             addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", 100, hasResearcherPermission),
