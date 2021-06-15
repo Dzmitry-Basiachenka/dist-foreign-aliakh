@@ -52,6 +52,7 @@ public class UdmUsage extends StoredEntity<String> {
     private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
     private BigDecimal annualizedCopies;
+    private String comment;
 
     public String getOriginalDetailId() {
         return originalDetailId;
@@ -301,6 +302,14 @@ public class UdmUsage extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -343,6 +352,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(annualMultiplier, udmUsage.annualMultiplier)
             .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
             .append(annualizedCopies, udmUsage.annualizedCopies)
+            .append(comment, udmUsage.comment)
             .isEquals();
     }
 
@@ -381,6 +391,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(annualMultiplier)
             .append(statisticalMultiplier)
             .append(annualizedCopies)
+            .append(comment)
             .toHashCode();
     }
 
@@ -420,6 +431,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append("annualMultiplier", annualMultiplier)
             .append("statisticalMultiplier", statisticalMultiplier)
             .append("annualizedCopies", annualizedCopies)
+            .append("comment", comment)
             .toString();
     }
 }
