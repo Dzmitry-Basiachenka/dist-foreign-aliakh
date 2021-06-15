@@ -1,14 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
@@ -26,6 +31,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -41,6 +49,8 @@ import java.util.Iterator;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ForeignSecurityUtils.class})
 public class UdmFiltersWindowTest {
 
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
@@ -48,12 +58,16 @@ public class UdmFiltersWindowTest {
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String SURVEY_COUNTRY = "United States";
     private static final String LANGUAGE = "English";
-
-    private final UdmFiltersWindow window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class));
+    private UdmFiltersWindow window;
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        replay(ForeignSecurityUtils.class);
+        window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class));
         window.setUdmUsageFilter(new UdmUsageFilter());
+        verify(ForeignSecurityUtils.class);
     }
 
     @Test
@@ -110,6 +124,29 @@ public class UdmFiltersWindowTest {
         assertTrue(window.getAppliedUsageFilter().isEmpty());
     }
 
+    @Test
+    public void testFilterPermissions() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
+        replay(ForeignSecurityUtils.class);
+        window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class));
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        assertTrue(verticalLayout.getComponent(0).isEnabled());
+        assertTrue(verticalLayout.getComponent(1).isEnabled());
+        assertTrue(verticalLayout.getComponent(2).isEnabled());
+        assertTrue(verticalLayout.getComponent(3).isEnabled());
+        assertTrue(verticalLayout.getComponent(4).isEnabled());
+        assertTrue(verticalLayout.getComponent(5).isEnabled());
+        assertFalse(verticalLayout.getComponent(6).isEnabled());
+        HorizontalLayout layout = (HorizontalLayout) verticalLayout.getComponent(7);
+        verifyTextFieldComponent(layout.getComponent(0), "Survey Country", false);
+        assertFalse(verticalLayout.getComponent(8).isEnabled());
+        assertFalse(verticalLayout.getComponent(9).isEnabled());
+        assertFalse(verticalLayout.getComponent(10).isEnabled());
+        assertFalse(verticalLayout.getComponent(11).isEnabled());
+        verify(ForeignSecurityUtils.class);
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -143,6 +180,7 @@ public class UdmFiltersWindowTest {
     private void verifyItemsFilterWidget(Component component, String caption) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isEnabled());
         assertTrue(layout.isSpacing());
         Iterator<Component> iterator = layout.iterator();
         assertEquals("(0)", ((Label) iterator.next()).getValue());
@@ -157,6 +195,7 @@ public class UdmFiltersWindowTest {
     private void verifyDateFieldComponent(Component component, String captionFrom, String captionTo) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isEnabled());
         assertEquals(2, layout.getComponentCount());
         assertTrue(layout.getComponent(0) instanceof LocalDateWidget);
         assertEquals(captionFrom, layout.getComponent(0).getCaption());
@@ -168,12 +207,13 @@ public class UdmFiltersWindowTest {
     private void verifyChannelWrWkrInstLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isEnabled());
         assertEquals(2, layout.getComponentCount());
         ComboBox<UdmChannelEnum> channelComboBox = (ComboBox<UdmChannelEnum>) layout.getComponent(0);
         assertEquals(100, channelComboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
         assertEquals(channelComboBox.getCaption(), "Channel");
-        verifyTextFieldComponent(layout.getComponent(1), "Wr Wrk Inst");
+        verifyTextFieldComponent(layout.getComponent(1), "Wr Wrk Inst", true);
     }
 
     private void verifyFieldWithOperatorComponent(Component component, String captionFrom, String captionTo) {
@@ -192,15 +232,16 @@ public class UdmFiltersWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyTextFieldComponent(layout.getComponent(0), firstCaption);
-        verifyTextFieldComponent(layout.getComponent(1), secondCaption);
+        verifyTextFieldComponent(layout.getComponent(0), firstCaption, true);
+        verifyTextFieldComponent(layout.getComponent(1), secondCaption, true);
     }
 
-    private void verifyTextFieldComponent(Component component, String caption) {
+    private void verifyTextFieldComponent(Component component, String caption, boolean isEnabled) {
         assertTrue(component instanceof TextField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
+        assertEquals(isEnabled, component.isEnabled());
     }
 
     private void verifyButtonsLayout(Component component) {
