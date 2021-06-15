@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
@@ -29,4 +30,29 @@ public interface IUdmUsageFilterController extends IFilterController<IUdmUsageFi
      * @return list of {@link UdmBatch}es
      */
     List<UdmBatch> getUdmBatches();
+
+    /**
+     * @return list of assignees.
+     */
+    List<String> getAssignees();
+
+    /**
+     * @return list of publication types.
+     */
+    List<String> getPublicationTypes();
+
+    /**
+     * @return list of publication formats.
+     */
+    List<String> getPublicationFormats();
+
+    /**
+     * @return list of type of uses.
+     */
+    List<String> getTypeOfUses();
+
+    /**
+     * @return list of detail licensee classes.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
 }

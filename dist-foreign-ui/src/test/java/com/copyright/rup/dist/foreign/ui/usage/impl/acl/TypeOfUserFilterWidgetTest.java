@@ -75,7 +75,7 @@ public class TypeOfUserFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
-        Windows.showFilterWindow(eq("Type of Uses filter"), same(typeOfUseFilterWidget),
+        Windows.showFilterWindow(eq("Types of Use filter"), same(typeOfUseFilterWidget),
             capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
