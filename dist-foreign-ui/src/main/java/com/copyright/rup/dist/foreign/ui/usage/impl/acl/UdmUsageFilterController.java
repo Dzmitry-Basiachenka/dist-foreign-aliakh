@@ -1,7 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -29,6 +34,12 @@ public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWi
 
     @Autowired
     private IUdmBatchService udmBatchService;
+    @Autowired
+    private IUdmUsageService udmUsageService;
+    @Autowired
+    private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
 
     @Override
     public List<Integer> getPeriods() {
@@ -38,6 +49,31 @@ public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWi
     @Override
     public List<UdmBatch> getUdmBatches() {
         return udmBatchService.getUdmBatches();
+    }
+
+    @Override
+    public List<String> getAssignees() {
+        return udmUsageService.getAssignees();
+    }
+
+    @Override
+    public List<String> getPublicationTypes() {
+        return udmUsageService.getPublicationTypes();
+    }
+
+    @Override
+    public List<String> getPublicationFormats() {
+        return udmUsageService.getPublicationFormats();
+    }
+
+    @Override
+    public List<String> getTypeOfUses() {
+        return udmTypeOfUseService.getAllUdmTous();
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override

@@ -3,9 +3,13 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
@@ -20,8 +24,12 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Iterator;
 
 /**
@@ -35,10 +43,21 @@ import java.util.Iterator;
  */
 public class UdmFiltersWindowTest {
 
+    private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
+    private static final LocalDate DATE_TO = LocalDate.of(2021, 1, 2);
+    private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
+    private static final String SURVEY_COUNTRY = "United States";
+    private static final String LANGUAGE = "English";
+
+    private final UdmFiltersWindow window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class));
+
+    @Before
+    public void setUp() {
+        window.setUdmUsageFilter(new UdmUsageFilter());
+    }
+
     @Test
     public void testConstructor() {
-        UdmFiltersWindow window = new UdmFiltersWindow();
-        window.setUdmUsageFilter(new UdmUsageFilter());
         assertEquals("UDM additional filters", window.getCaption());
         assertEquals(550, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
@@ -47,12 +66,56 @@ public class UdmFiltersWindowTest {
         verifyRootLayout(window.getContent());
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testFilterOperatorChangeListener() {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout annualMultiplierLayout = (HorizontalLayout) verticalLayout.getComponent(8);
+        TextField fromField = (TextField) annualMultiplierLayout.getComponent(0);
+        TextField toField = (TextField) annualMultiplierLayout.getComponent(1);
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox =
+            (ComboBox<FilterOperatorEnum>) annualMultiplierLayout.getComponent(2);
+        assertEquals(FilterOperatorEnum.EQUALS, filterOperatorComboBox.getValue());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        filterOperatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        filterOperatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        filterOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        assertTrue(fromField.isEnabled());
+        assertTrue(toField.isEnabled());
+    }
+
+    @Test
+    public void testSaveButtonClickListener() {
+        UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
+        assertTrue(appliedUsageFilter.isEmpty());
+        populateData();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(12);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
+    }
+
+    @Test
+    public void testClearButtonClickListener() {
+        window.setUdmUsageFilter(buildExpectedFilter());
+        populateData();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(12);
+        Button clearButton = (Button) buttonsLayout.getComponent(1);
+        clearButton.click();
+        assertTrue(window.getAppliedUsageFilter().isEmpty());
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(13, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
-        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Type of Uses");
+        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
@@ -152,5 +215,53 @@ public class UdmFiltersWindowTest {
     private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
+    }
+
+    private UdmUsageFilter buildExpectedFilter() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUsageDateFrom(DATE_FROM);
+        filter.setUsageDateTo(DATE_TO);
+        filter.setSurveyStartDateFrom(DATE_FROM);
+        filter.setSurveyStartDateTo(DATE_TO);
+        filter.setChannel(UdmChannelEnum.CCC);
+        filter.setWrWrkInst(243904752L);
+        filter.setCompanyId(454984566L);
+        filter.setCompanyName(COMPANY_NAME);
+        filter.setSurveyCountry(SURVEY_COUNTRY);
+        filter.setLanguage(LANGUAGE);
+        filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 10));
+        filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.5"), null));
+        filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("2.2"), null));
+        filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 3, null));
+        return filter;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void populateData() {
+        ((LocalDateWidget) Whitebox.getInternalState(window, "usageDateFromWidget")).setValue(DATE_FROM);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "usageDateToWidget")).setValue(DATE_TO);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartFromWidget")).setValue(DATE_FROM);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartToWidget")).setValue(DATE_TO);
+        ((ComboBox<UdmChannelEnum>) Whitebox.getInternalState(window, "channelComboBox")).setValue(UdmChannelEnum.CCC);
+        ((TextField) Whitebox.getInternalState(window, "wrWrkInstField")).setValue("243904752");
+        ((TextField) Whitebox.getInternalState(window, "companyIdField")).setValue("454984566");
+        ((TextField) Whitebox.getInternalState(window, "companyNameField")).setValue(COMPANY_NAME);
+        ((TextField) Whitebox.getInternalState(window, "surveyCountryField")).setValue(SURVEY_COUNTRY);
+        ((TextField) Whitebox.getInternalState(window, "languageField")).setValue(LANGUAGE);
+        ((TextField) Whitebox.getInternalState(window, "annualMultiplierFromField")).setValue("1");
+        ((TextField) Whitebox.getInternalState(window, "annualMultiplierToField")).setValue("10");
+        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window,
+            "annualMultiplierOperatorComboBox")).setValue(FilterOperatorEnum.BETWEEN);
+        ((TextField) Whitebox.getInternalState(window, "annualizedCopiesFromField")).setValue("5.5");
+        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window,
+            "annualizedCopiesOperatorComboBox")).setValue(FilterOperatorEnum.EQUALS);
+        ((TextField) Whitebox.getInternalState(window, "statisticalMultiplierFromField")).setValue("2.2");
+        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window,
+            "statisticalMultiplierOperatorComboBox")).setValue(FilterOperatorEnum.GREATER_THAN);
+        ((TextField) Whitebox.getInternalState(window, "quantityFromField")).setValue("3");
+        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, "quantityOperatorComboBox"))
+            .setValue(FilterOperatorEnum.LESS_THAN);
     }
 }

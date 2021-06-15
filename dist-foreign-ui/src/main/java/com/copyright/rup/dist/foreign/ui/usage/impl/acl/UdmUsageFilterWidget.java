@@ -156,7 +156,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     }
 
     private void buildMoreFiltersButton() {
-        udmFiltersWindow = new UdmFiltersWindow();
+        udmFiltersWindow = new UdmFiltersWindow(controller);
         udmFiltersWindow.setUdmUsageFilter(udmUsageFilter);
         udmFiltersWindow.addCloseListener(event -> {
             udmUsageFilter = udmFiltersWindow.getAppliedUsageFilter();

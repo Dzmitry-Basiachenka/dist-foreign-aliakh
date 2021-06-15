@@ -39,7 +39,7 @@ public class TypeOfUseFilterWidget extends BaseItemsFilterWidget<String>
      * @param supplier {@link String}s list supplier
      */
     public TypeOfUseFilterWidget(Supplier<List<String>> supplier) {
-        super(ForeignUi.getMessage("label.type_of_uses"));
+        super(ForeignUi.getMessage("label.types_of_use"));
         this.supplier = supplier;
     }
 
@@ -76,7 +76,7 @@ public class TypeOfUseFilterWidget extends BaseItemsFilterWidget<String>
     @Override
     public FilterWindow<String> showFilterWindow() {
         FilterWindow<String> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.type_of_uses_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage("window.types_of_use_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.type_of_use"));

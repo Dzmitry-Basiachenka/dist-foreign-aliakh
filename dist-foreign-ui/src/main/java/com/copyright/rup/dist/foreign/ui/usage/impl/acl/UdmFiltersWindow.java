@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -24,7 +25,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.function.Function;
 
 /**
@@ -41,9 +41,9 @@ public class UdmFiltersWindow extends Window {
     private final TextField annualMultiplierFromField =
         new TextField(ForeignUi.getMessage("label.annual_multiplier_from"));
     private final TextField annualMultiplierToField = new TextField(ForeignUi.getMessage("label.annual_multiplier_to"));
+    private final ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox = buildOperatorComboBox();
     private final TextField annualizedCopiesFromField =
         new TextField(ForeignUi.getMessage("label.annualized_copies_from"));
-    private final ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox = buildOperatorComboBox();
     private final TextField annualizedCopiesToField = new TextField(ForeignUi.getMessage("label.annualized_copies_to"));
     private final ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox = buildOperatorComboBox();
     private final TextField statisticalMultiplierFromField =
@@ -74,11 +74,15 @@ public class UdmFiltersWindow extends Window {
     private TypeOfUseFilterWidget typeOfUseFilterWidget;
     private UdmUsageFilter usageFilter;
     private UdmUsageFilter appliedUsageFilter;
+    private final IUdmUsageFilterController controller;
 
     /**
      * Constructor.
+     *
+     * @param controller instance of {@link IUdmUsageFilterController}
      */
-    public UdmFiltersWindow() {
+    public UdmFiltersWindow(IUdmUsageFilterController controller) {
+        this.controller = controller;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_additional_filters"));
         setResizable(false);
@@ -108,7 +112,7 @@ public class UdmFiltersWindow extends Window {
      * Clears all additional filters.
      */
     public void clearFilters() {
-        usageFilter = appliedUsageFilter;
+        clearUsageFilter();
         assigneeFilterWidget.reset();
         reportedPubTypeFilterWidget.reset();
         publicationFormatFilterWidget.reset();
@@ -131,6 +135,29 @@ public class UdmFiltersWindow extends Window {
         clearOperatorLayout(quantityFromField, quantityToField, quantityOperatorComboBox);
     }
 
+    private void clearUsageFilter() {
+        appliedUsageFilter.setAssignees(null);
+        appliedUsageFilter.setPubFormats(null);
+        appliedUsageFilter.setReportedTypeOfUses(null);
+        appliedUsageFilter.setReportedPubTypes(null);
+        appliedUsageFilter.setDetailLicenseeClasses(null);
+        appliedUsageFilter.setUsageDateFrom(null);
+        appliedUsageFilter.setUsageDateTo(null);
+        appliedUsageFilter.setSurveyStartDateFrom(null);
+        appliedUsageFilter.setSurveyStartDateTo(null);
+        appliedUsageFilter.setChannel(null);
+        appliedUsageFilter.setWrWrkInst(null);
+        appliedUsageFilter.setCompanyId(null);
+        appliedUsageFilter.setCompanyName(null);
+        appliedUsageFilter.setSurveyCountry(null);
+        appliedUsageFilter.setLanguage(null);
+        appliedUsageFilter.setAnnualMultiplierExpression(new FilterExpression<>());
+        appliedUsageFilter.setAnnualizedCopiesExpression(new FilterExpression<>());
+        appliedUsageFilter.setStatisticalMultiplierExpression(new FilterExpression<>());
+        appliedUsageFilter.setQuantityExpression(new FilterExpression<>());
+        usageFilter = new UdmUsageFilter(appliedUsageFilter);
+    }
+
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         initAssigneeFilterWidget();
@@ -150,32 +177,32 @@ public class UdmFiltersWindow extends Window {
     }
 
     private void initAssigneeFilterWidget() {
-        assigneeFilterWidget = new AssigneeFilterWidget(Collections::emptyList);
+        assigneeFilterWidget = new AssigneeFilterWidget(controller::getAssignees);
         assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             usageFilter.setAssignees(saveEvent.getSelectedItemsIds()));
     }
 
     private void initReportedPublicationTypeFilterWidget() {
-        reportedPubTypeFilterWidget = new ReportedPubTypeFilterWidget(Collections::emptyList);
+        reportedPubTypeFilterWidget = new ReportedPubTypeFilterWidget(controller::getPublicationTypes);
         reportedPubTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             usageFilter.setReportedPubTypes(saveEvent.getSelectedItemsIds()));
     }
 
     private void initPublicationFormatFilterWidget() {
-        publicationFormatFilterWidget = new PublicationFormatFilterWidget(Collections::emptyList);
+        publicationFormatFilterWidget = new PublicationFormatFilterWidget(controller::getPublicationFormats);
         publicationFormatFilterWidget.addFilterSaveListener(
             (IFilterSaveListener<String>) saveEvent -> usageFilter.setPubFormats(saveEvent.getSelectedItemsIds()));
     }
 
     private void initDetailLicenseeClassNameFilterWidget() {
-        detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(Collections::emptyList);
+        detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses);
         detailLicenseeClassFilterWidget.addFilterSaveListener(
             (IFilterSaveListener<DetailLicenseeClass>) saveEvent ->
                 usageFilter.setDetailLicenseeClasses(saveEvent.getSelectedItemsIds()));
     }
 
     private void initTypeOfUseFilterWidget() {
-        typeOfUseFilterWidget = new TypeOfUseFilterWidget(Collections::emptyList);
+        typeOfUseFilterWidget = new TypeOfUseFilterWidget(controller::getTypeOfUses);
         typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             usageFilter.setReportedTypeOfUses(saveEvent.getSelectedItemsIds()));
     }
@@ -288,10 +315,10 @@ public class UdmFiltersWindow extends Window {
 
     private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
         filterOperatorComboBox.setItems(FilterOperatorEnum.values());
+        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
 
@@ -308,7 +335,7 @@ public class UdmFiltersWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
-            populateFilters();
+            populateUsageFilter();
             appliedUsageFilter = usageFilter;
             close();
         });
@@ -324,8 +351,7 @@ public class UdmFiltersWindow extends Window {
         comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
     }
 
-    //TODO {isuvorau} cover by tests after all test data will be populated
-    private void populateFilters() {
+    private void populateUsageFilter() {
         usageFilter.setUsageDateFrom(usageDateFromWidget.getValue());
         usageFilter.setUsageDateTo(usageDateToWidget.getValue());
         usageFilter.setSurveyStartDateFrom(surveyStartFromWidget.getValue());
