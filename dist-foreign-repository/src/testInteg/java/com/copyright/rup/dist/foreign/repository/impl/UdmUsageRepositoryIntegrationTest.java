@@ -9,11 +9,13 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
@@ -22,9 +24,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmUsageRepository}.
@@ -61,15 +65,20 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_USAGE_UID_2 = "0dfba00c-6d72-4a0e-8f84-f7c365432f85";
     private static final String UDM_USAGE_UID_3 = "cc3269aa-2f56-21c7-b0d1-34dd0edfcf5a";
     private static final String UDM_USAGE_UID_4 = "847dfefd-3cf8-4853-8b1b-d59b5cd163e9";
+    private static final String UDM_USAGE_UID_5 = "9c7f64a7-95c1-4825-ad85-ff0672d252c4";
+    private static final String UDM_USAGE_UID_6 = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
+    private static final String UDM_USAGE_UID_7 = "c3e3082f-9c3e-4e14-9640-c485a9eae24f";
     private static final String UDM_BATCH_UID_1 = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_BATCH_UID_2 = "bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a";
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
+    private static final String UDM_BATCH_UID_4 = "80452178-e250-415f-b3e4-71a48ca3e218";
     private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
     private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private static final String REPORTED_TITLE = "Colloids and surfaces. B, Biointerfaces";
-    private static final String REPORTED_PUB_TYPE = "Journal";
-    private static final String PUBLICATION_FORMAT = "Format";
+    private static final String PUB_TYPE_JOURNAL = "Journal";
+    private static final String PUB_TYPE_NOT_SHARED = "Not Shared";
+    private static final String PUBLICATION_FORMAT = "Digital";
     private static final String ARTICLE = "Green chemistry";
     private static final String LANGUAGE = "English";
     private static final String SURVEY_COUNTRY = "United States";
@@ -79,7 +88,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
     private static final Long WR_WRK_INST = 122825347L;
     private static final Long COMPANY_ID = 454984566L;
-    private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
+    private static final String COMPANY_NAME_1 = "Skadden, Arps, Slate, Meagher & Flom LLP";
+    private static final String COMPANY_NAME_2 = "Albany International Corp.";
     private static final Integer QUANTITY = 10;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
@@ -89,6 +99,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String DIGITAL = "DIGITAL";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -128,13 +139,187 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDtosByFilter() {
+    public void testFindDtosByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_2));
-        List<UdmUsageDto> usages =
-            udmUsageRepository.findDtosByFilter(filter, null, new Sort("detailId", Sort.Direction.ASC));
+        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        filter.setAssignees(ImmutableSet.of(ASSIGNEE));
+        filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED));
+        filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT));
+        filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(22)));
+        filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE));
+        filter.setChannel(UdmChannelEnum.CCC);
+        filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
+        filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
+        filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
+        filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
+        filter.setSurveyCountry(SURVEY_COUNTRY);
+        filter.setLanguage(LANGUAGE);
+        filter.setCompanyName(COMPANY_NAME_2);
+        filter.setCompanyId(1136L);
+        filter.setWrWrkInst(254327612L);
+        filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
+        filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
+        filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
+        filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400));
+        List<UdmUsageDto> usages = udmUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, usages.size());
-        verifyUsageDto(buildUdmUsageDto(UDM_USAGE_UID_3), usages.get(0));
+        verifyUsageDto(loadExpectedUsageDto("json/udm/udm_usage_b989e02b.json").get(0), usages.get(0));
+    }
+
+    @Test
+    public void testFindDtosByFilter() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriod(202106), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(ImmutableSet.of(ASSIGNEE)), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+            filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 11)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 10)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> {
+            filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
+            filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
+        }, UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> {
+            filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
+            filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
+        }, UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyId(1136L), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(254327612L), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)),
+            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 20, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 20, 25)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 425, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 100, 400)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 2, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 7, 100)));
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter ->
+                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    public void testFindCountByFilter() {
+        assertFilteringFindCountByFilter(filter -> filter.setPeriod(202106), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(ImmutableSet.of(ASSIGNEE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT)), 3);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(2))), 1);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 20)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 20)), 2);
+        assertFilteringFindCountByFilter(filter -> {
+            filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
+            filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
+        }, 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)), 2);
+        assertFilteringFindCountByFilter(filter -> {
+            filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
+            filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
+        }, 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyId(1136L), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(254327612L), 3);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)), 2);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)), 1);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 20, null)), 2);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 20, 25)), 2);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 425, null)), 1);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null)), 2);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 2);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 100, 400)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 7, 100)), 0);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)), 1);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)), 3);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 1);
+        assertFilteringFindCountByFilter(filter ->
+            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400)), 2);
     }
 
     @Test
@@ -179,10 +364,29 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByFilter() {
+    public void testFindCountByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Sets.newHashSet(UDM_BATCH_UID_2, UDM_BATCH_UID_3));
-        assertEquals(2, udmUsageRepository.findCountByFilter(filter));
+        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        filter.setAssignees(ImmutableSet.of(ASSIGNEE));
+        filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED));
+        filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT));
+        filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(22)));
+        filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE));
+        filter.setChannel(UdmChannelEnum.CCC);
+        filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
+        filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
+        filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
+        filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
+        filter.setSurveyCountry(SURVEY_COUNTRY);
+        filter.setLanguage(LANGUAGE);
+        filter.setCompanyName(COMPANY_NAME_2);
+        filter.setCompanyId(1136L);
+        filter.setWrWrkInst(254327612L);
+        filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
+        filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
+        filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
+        filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400));
+        assertEquals(1, udmUsageRepository.findCountByFilter(filter));
     }
 
     @Test
@@ -219,7 +423,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindPublicationTypes() {
-        assertEquals(ImmutableList.of("Book", "Not Shared"), udmUsageRepository.findPublicationTypes());
+        assertEquals(ImmutableList.of("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
     }
 
     @Test
@@ -236,6 +440,24 @@ public class UdmUsageRepositoryIntegrationTest {
         usageDtos =
             udmUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.DESC));
         assertEquals(detailIdDesc, usageDtos.get(0).getId());
+    }
+
+    private void assertFilteringFindDtosByFilter(Consumer<UdmUsageFilter> consumer, String... usageIds) {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        consumer.accept(filter);
+        List<UdmUsageDto> usages = udmUsageRepository.findDtosByFilter(filter, null, buildSort());
+        assertEquals(usageIds.length, usages.size());
+        IntStream.range(0, usageIds.length)
+            .forEach(index -> assertEquals(usageIds[index], usages.get(index).getId()));
+    }
+
+    private void assertFilteringFindCountByFilter(Consumer<UdmUsageFilter> consumer, int count) {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        consumer.accept(filter);
+        int usagesCount = udmUsageRepository.findCountByFilter(filter);
+        assertEquals(count, usagesCount);
     }
 
     private void verifyUsageDto(UdmUsageDto expectedUsage, UdmUsageDto actualUsage) {
@@ -309,45 +531,6 @@ public class UdmUsageRepositoryIntegrationTest {
         assertNull(actualUsage.getIneligibleReason());
     }
 
-    private UdmUsageDto buildUdmUsageDto(String usageId) {
-        UdmUsageDto udmUsage = new UdmUsageDto();
-        udmUsage.setId(usageId);
-        udmUsage.setPeriod(202406);
-        udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
-        udmUsage.setChannel(UdmChannelEnum.CCC);
-        udmUsage.setOriginalDetailId("OGN674GHHSB001");
-        udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
-        udmUsage.setUsageDate(LocalDate.of(2020, 9, 10));
-        udmUsage.setAssignee("jjohn@copyright.com");
-        udmUsage.setRhAccountNumber(1000002859L);
-        udmUsage.setRhName("John Wiley & Sons - Books");
-        udmUsage.setWrWrkInst(306985867L);
-        udmUsage.setReportedStandardNumber(REPORTED_STANDARD_NUMBER);
-        udmUsage.setStandardNumber("1873-7773");
-        udmUsage.setReportedTitle(REPORTED_TITLE);
-        udmUsage.setSystemTitle("Tenside, surfactants, detergents");
-        udmUsage.setReportedPubType("Book");
-        udmUsage.setPubFormat("Not Specified");
-        udmUsage.setArticle("Tenside, surfactants, detergents");
-        udmUsage.setLanguage("German");
-        udmUsage.setCompanyId(454984566L);
-        udmUsage.setCompanyName("Skadden, Arps, Slate, Meagher & Flom LLP");
-        udmUsage.setDetailLicenseeClassId(1);
-        udmUsage.setDetailLicenseeClassName("Food and Tobacco");
-        udmUsage.setSurveyRespondent("56282dbc-2468-48d4-b926-93d3458a656a");
-        udmUsage.setIpAddress(IP_ADDRESS);
-        udmUsage.setSurveyCountry("USA");
-        udmUsage.setSurveyStartDate(LocalDate.of(2020, 9, 10));
-        udmUsage.setSurveyEndDate(LocalDate.of(2021, 9, 10));
-        udmUsage.setAnnualMultiplier(5);
-        udmUsage.setStatisticalMultiplier(new BigDecimal("0.10000"));
-        udmUsage.setReportedTypeOfUse("EMAIL_COPY");
-        udmUsage.setQuantity(10);
-        udmUsage.setAnnualizedCopies(new BigDecimal("2.00000"));
-        udmUsage.setIneligibleReason(StringUtils.EMPTY);
-        return udmUsage;
-    }
-
     private UdmUsage buildUdmUsage() {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setId(UDM_USAGE_UID_1);
@@ -359,12 +542,12 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setWrWrkInst(WR_WRK_INST);
         udmUsage.setReportedStandardNumber(REPORTED_STANDARD_NUMBER);
         udmUsage.setReportedTitle(REPORTED_TITLE);
-        udmUsage.setReportedPubType(REPORTED_PUB_TYPE);
+        udmUsage.setReportedPubType(PUB_TYPE_JOURNAL);
         udmUsage.setPubFormat(PUBLICATION_FORMAT);
         udmUsage.setArticle(ARTICLE);
         udmUsage.setLanguage(LANGUAGE);
         udmUsage.setCompanyId(COMPANY_ID);
-        udmUsage.setCompanyName(COMPANY_NAME);
+        udmUsage.setCompanyName(COMPANY_NAME_1);
         udmUsage.setDetailLicenseeClassId(1);
         udmUsage.setSurveyRespondent(SURVEY_RESPONDENT);
         udmUsage.setIpAddress(IP_ADDRESS);
@@ -380,6 +563,16 @@ public class UdmUsageRepositoryIntegrationTest {
         return udmUsage;
     }
 
+    private Sort buildSort() {
+        return new Sort("detailId", Sort.Direction.ASC);
+    }
+
+    private DetailLicenseeClass buildDetailLicenseeClass(Integer id) {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(id);
+        return detailLicenseeClass;
+    }
+
     private List<UdmUsage> loadExpectedUsage(String fileName) {
         List<UdmUsage> usages = new ArrayList<>();
         try {
@@ -390,5 +583,17 @@ public class UdmUsageRepositoryIntegrationTest {
             throw new AssertionError(e);
         }
         return usages;
+    }
+
+    private List<UdmUsageDto> loadExpectedUsageDto(String fileName) {
+        List<UdmUsageDto> udmUsageDtos = new ArrayList<>();
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            udmUsageDtos.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UdmUsageDto>>() {
+            }));
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return udmUsageDtos;
     }
 }

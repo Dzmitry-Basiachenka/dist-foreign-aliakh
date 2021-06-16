@@ -93,7 +93,114 @@
             <if test="null != filter.udmUsageOrigin">
                 and ub.usage_origin = #{filter.udmUsageOrigin}
             </if>
+            <if test="null != filter.assignees and filter.assignees.size() > 0">
+                and
+                <foreach collection="filter.assignees" item="assignee" open="(" separator=" or " close=")">
+                    u.assignee = #{assignee}
+                </foreach>
+            </if>
+            <if test="null != filter.reportedPubTypes and filter.reportedPubTypes.size() > 0">
+                and
+                <foreach collection="filter.reportedPubTypes" item="reportedPubType" open="(" separator=" or " close=")">
+                    u.reported_pub_type = #{reportedPubType}
+                </foreach>
+            </if>
+            <if test="null != filter.pubFormats and filter.pubFormats.size() > 0">
+                and
+                <foreach collection="filter.pubFormats" item="pubFormat" open="(" separator=" or " close=")">
+                    u.publication_format = #{pubFormat}
+                </foreach>
+            </if>
+            <if test="null != filter.detailLicenseeClasses and filter.detailLicenseeClasses.size() > 0">
+                and
+                <foreach collection="filter.detailLicenseeClasses" item="detailLicenseeClass" open="(" separator=" or " close=")">
+                    u.detail_licensee_class_id = #{detailLicenseeClass.id}
+                </foreach>
+            </if>
+            <if test="null != filter.reportedTypeOfUses and filter.reportedTypeOfUses.size() > 0">
+                and
+                <foreach collection="filter.reportedTypeOfUses" item="reportedTypeOfUse" open="(" separator=" or " close=")">
+                    u.reported_type_of_use = #{reportedTypeOfUse}
+                </foreach>
+            </if>
+            <if test="null != filter.channel">
+                and ub.channel = #{filter.channel}
+            </if>
+            <if test="null != filter.usageDateFrom">
+                and <![CDATA[u.usage_date::date >= #{filter.usageDateFrom}]]>
+            </if>
+            <if test="null != filter.usageDateTo">
+                and <![CDATA[u.usage_date::date <= #{filter.usageDateTo}]]>
+            </if>
+            <if test="null != filter.surveyStartDateFrom">
+                and <![CDATA[u.survey_start_date::date >= #{filter.surveyStartDateFrom}]]>
+            </if>
+            <if test="null != filter.surveyStartDateTo">
+                and <![CDATA[u.survey_start_date::date <= #{filter.surveyStartDateTo}]]>
+            </if>
+            <if test="null != filter.surveyCountry">
+                and u.survey_country = #{filter.surveyCountry}
+            </if>
+            <if test="null != filter.language">
+                and u.language = #{filter.language}
+            </if>
+            <if test="null != filter.companyName">
+                and u.company_name = #{filter.companyName}
+            </if>
+            <if test="null != filter.companyId">
+                and u.company_id = #{filter.companyId}
+            </if>
+            <if test="null != filter.wrWrkInst">
+                and u.wr_wrk_inst = #{filter.wrWrkInst}
+            </if>
+            <if test="!filter.annualMultiplierExpression.isEmpty()">
+                <include refid="filterExpression">
+                    <property name="column" value="u.annual_multiplier"/>
+                    <property name="operatorEnum" value="filter.annualMultiplierExpression.operatorEnum"/>
+                    <property name="fieldFirstValue" value="${filter.annualMultiplierExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.annualMultiplierExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.annualizedCopiesExpression.isEmpty()">
+                <include refid="filterExpression">
+                    <property name="column" value="u.annualized_copies"/>
+                    <property name="operatorEnum" value="filter.annualizedCopiesExpression.operatorEnum"/>
+                    <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.annualizedCopiesExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.statisticalMultiplierExpression.isEmpty()">
+                <include refid="filterExpression">
+                    <property name="column" value="u.statistical_multiplier"/>
+                    <property name="operatorEnum" value="filter.statisticalMultiplierExpression.operatorEnum"/>
+                    <property name="fieldFirstValue" value="${filter.statisticalMultiplierExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.statisticalMultiplierExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.quantityExpression.isEmpty()">
+                <include refid="filterExpression">
+                    <property name="column" value="u.quantity"/>
+                    <property name="operatorEnum" value="filter.quantityExpression.operatorEnum"/>
+                    <property name="fieldFirstValue" value="${filter.quantityExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.quantityExpression.fieldSecondValue}"/>
+                </include>
+            </if>
         </where>
+    </sql>
+
+    <sql id="filterExpression">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operatorEnum}">
+            and ${column} &lt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operatorEnum}">
+            and ${column} &gt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operatorEnum}">
+            and ${column} = ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operatorEnum}">
+            and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
+        </if>
     </sql>
 
     <insert id="insert" parameterType="UdmUsage">
