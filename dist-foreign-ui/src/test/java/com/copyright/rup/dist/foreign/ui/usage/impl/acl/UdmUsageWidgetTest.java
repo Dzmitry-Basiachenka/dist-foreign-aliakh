@@ -12,13 +12,16 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
+import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -27,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.List;
@@ -88,14 +92,37 @@ public class UdmUsageWidgetTest {
         verify(controller, ForeignSecurityUtils.class);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget);
+        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout);
+        verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        verifyToolbarLayout(layout.getComponent(0));
+        verifyGrid((Grid) layout.getComponent(1));
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+    }
+
+    @Test
+    public void testWidgetStructureForResearcher() {
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
+        replay(controller, ForeignSecurityUtils.class);
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        verify(controller, ForeignSecurityUtils.class);
+        assertTrue(usagesWidget.isLocked());
+        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        Component secondComponent = usagesWidget.getSecondComponent();
+        assertTrue(secondComponent instanceof VerticalLayout);
+        VerticalLayout layout = (VerticalLayout) secondComponent;
+        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        assertEquals(2, layout.getComponentCount());
+        verifyToolbarLayoutForResearcher(layout.getComponent(0));
         verifyGrid((Grid) layout.getComponent(1));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -154,27 +181,65 @@ public class UdmUsageWidgetTest {
             columns.stream().filter(column -> !column.isHidden()).map(Column::getCaption).collect(Collectors.toList()));
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
+    private void verifyToolbarLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
         assertTrue(layout.isSpacing());
+        verifySize(layout, 100, -1, Unit.PIXELS);
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
-        assertEquals("Load", layout.getComponent(0).getCaption());
+        assertEquals(2, layout.getComponentCount());
+        verifyLoadButton(layout.getComponent(0));
+        verifySearchWidget(layout.getComponent(1));
+    }
+
+    private void verifyToolbarLayoutForResearcher(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        verifySize(layout, 100, -1, Unit.PIXELS);
+        assertEquals(new MarginInfo(true), layout.getMargin());
+        assertEquals(2, layout.getComponentCount());
+        verifyLoadButton(layout.getComponent(0));
+        verifySearchWidgetForResearcher(layout.getComponent(1));
+    }
+
+    private void verifyLoadButton(Component component) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals("Load", button.getCaption());
+    }
+
+    private void verifySearchWidget(Component component) {
+        assertTrue(component instanceof SearchWidget);
+        SearchWidget searchWidget = (SearchWidget) component;
+        verifySize(searchWidget, 65, -1, Unit.PIXELS);
+        assertEquals("Enter Reported/System Title or Usage Detail ID or Standard Number or Article or " +
+                "Survey Respondent or Comment",
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+    }
+
+    private void verifySearchWidgetForResearcher(Component component) {
+        assertTrue(component instanceof SearchWidget);
+        SearchWidget searchWidget = (SearchWidget) component;
+        verifySize(searchWidget, 65, -1, Unit.PIXELS);
+        assertEquals("Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment",
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(VISIBLE_COLUMNS_FOR_MANAGER, columns.stream().map(Column::getCaption)
             .collect(Collectors.toList()));
-        verifySize(grid);
+        verifySize(grid, 100, 100, Unit.PERCENTAGE);
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Usages Count: 0", footerRow.getCell("detailId").getText());
     }
 
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
+    private void verifySize(Component component, float width, float height, Unit heightUnit) {
+        assertEquals(width, component.getWidth(), 0);
+        assertEquals(height, component.getHeight(), 0);
+        assertEquals(heightUnit, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }

@@ -11,10 +11,12 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -44,10 +46,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
+    private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
     private Button loadButton;
+    private SearchWidget searchWidget;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -77,9 +81,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         this.controller = controller;
     }
 
+    public String getSearchValue() {
+        return StringUtils.defaultIfBlank(searchWidget.getSearchValue(), null);
+    }
+
     private VerticalLayout initUsagesLayout() {
         initUsagesGrid();
-        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), udmUsagesGrid);
+        VerticalLayout layout = new VerticalLayout(initToolbarLayout(), udmUsagesGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -88,13 +96,24 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return layout;
     }
 
-    private HorizontalLayout initButtonsLayout() {
+    private HorizontalLayout initToolbarLayout() {
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
-        HorizontalLayout layout = new HorizontalLayout(loadButton);
-        layout.setMargin(true);
-        VaadinUtils.addComponentStyle(layout, "udm-usages-buttons");
-        return layout;
+        searchWidget = new SearchWidget(this::refresh);
+        searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
+        searchWidget.setWidth(65, Unit.PERCENTAGE);
+        HorizontalLayout toolbar = new HorizontalLayout(loadButton, searchWidget);
+        VaadinUtils.setMaxComponentsWidth(toolbar);
+        toolbar.setComponentAlignment(loadButton, Alignment.BOTTOM_LEFT);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
+        toolbar.setExpandRatio(searchWidget, 1f);
+        toolbar.setMargin(true);
+        VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");
+        return toolbar;
+    }
+
+    private String getSearchMessage() {
+        return hasResearcherPermission ? "prompt.udm_search_researcher" : "prompt.udm_search";
     }
 
     private void initUsagesGrid() {
@@ -132,7 +151,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setSortProperty("detailId")
             .setWidth(200);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
-        boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
         footer.join(
             addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", 100, false),
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100,

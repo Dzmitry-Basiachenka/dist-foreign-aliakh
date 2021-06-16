@@ -29,9 +29,11 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -56,7 +58,7 @@ import java.util.List;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({StreamSource.class, Windows.class})
+@PrepareForTest({StreamSource.class, Windows.class, ForeignSecurityUtils.class})
 public class UdmUsageControllerTest {
 
     private static final String UDM_BATCH_UID = "5acc58a4-49c0-4c20-b96e-39e637a0657f";
@@ -117,7 +119,12 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        replay(ForeignSecurityUtils.class);
+        IUdmUsageWidget udmUsageWidget = controller.instantiateWidget();
+        verify(ForeignSecurityUtils.class);
+        assertNotNull(udmUsageWidget);
     }
 
     @Test

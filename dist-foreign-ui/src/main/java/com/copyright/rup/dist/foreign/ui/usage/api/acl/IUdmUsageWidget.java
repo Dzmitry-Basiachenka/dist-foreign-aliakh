@@ -14,4 +14,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Ihar Suvorau
  */
 public interface IUdmUsageWidget extends IWidget<IUdmUsageController>, IRefreshable, IMediatorProvider {
+
+    /**
+     * @return search value string.
+     */
+    String getSearchValue();
 }
