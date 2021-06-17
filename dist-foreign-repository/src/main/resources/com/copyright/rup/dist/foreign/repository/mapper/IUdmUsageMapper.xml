@@ -58,6 +58,7 @@
         <result property="pubFormat" column="publication_format"/>
         <result property="article" column="article"/>
         <result property="language" column="language"/>
+        <result property="comment" column="comment"/>
         <result property="companyId" column="company_id"/>
         <result property="companyName" column="company_name"/>
         <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
@@ -185,6 +186,16 @@
                     <property name="fieldSecondValue" value="${filter.quantityExpression.fieldSecondValue}"/>
                 </include>
             </if>
+            <if test="null != filter.searchValue">
+                and (
+                reported_title ilike '%' || #{filter.searchValue} || '%' or
+                system_title ilike '%' || #{filter.searchValue} || '%' or
+                original_detail_id ilike '%' || #{filter.searchValue} || '%' or
+                standard_number ilike '%' || #{filter.searchValue} || '%' or
+                article ilike '%' || #{filter.searchValue} || '%' or
+                survey_respondent ilike '%' || #{filter.searchValue} || '%' or
+                comment ilike '%' || #{filter.searchValue} || '%')
+            </if>
         </where>
     </sql>
 
@@ -295,6 +306,7 @@
             publication_format,
             article,
             language,
+            comment,
             company_id,
             company_name,
             u.detail_licensee_class_id,
@@ -385,6 +397,9 @@
             </when>
             <when test="sort.property == 'language'">
                 language <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'comment'">
+                comment <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'companyId'">
                 company_id <include refid="IUsageMapper.direction"/>
