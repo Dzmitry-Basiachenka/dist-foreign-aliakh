@@ -6,7 +6,6 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.vaadin.data.ValueProvider;
 
@@ -27,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @author Ihar Suvorau
  */
-public class TypeOfUseFilterWidget extends BaseItemsFilterWidget<String>
+public class TypeOfUseFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
 
     private final Supplier<List<String>> supplier;
@@ -36,11 +35,14 @@ public class TypeOfUseFilterWidget extends BaseItemsFilterWidget<String>
     /**
      * Constructor.
      *
-     * @param supplier {@link String}s list supplier
+     * @param supplier         {@link String}s list supplier
+     * @param selectedItemsIds list of selected items
      */
-    public TypeOfUseFilterWidget(Supplier<List<String>> supplier) {
+    public TypeOfUseFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
         super(ForeignUi.getMessage("label.types_of_use"));
         this.supplier = supplier;
+        this.selectedItemsIds.addAll(selectedItemsIds);
+        setLabelValue(selectedItemsIds.size());
     }
 
     @Override

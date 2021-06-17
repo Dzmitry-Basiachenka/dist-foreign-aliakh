@@ -7,7 +7,6 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.vaadin.data.ValueProvider;
 
@@ -28,7 +27,7 @@ import java.util.function.Supplier;
  *
  * @author Ihar Suvorau
  */
-public class DetailLicenseeClassFilterWidget extends BaseItemsFilterWidget<DetailLicenseeClass>
+public class DetailLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget<DetailLicenseeClass>
     implements IFilterWindowController<DetailLicenseeClass> {
 
     private final Supplier<List<DetailLicenseeClass>> supplier;
@@ -37,11 +36,15 @@ public class DetailLicenseeClassFilterWidget extends BaseItemsFilterWidget<Detai
     /**
      * Constructor.
      *
-     * @param supplier {@link DetailLicenseeClass}es list supplier
+     * @param supplier         {@link DetailLicenseeClass}es list supplier
+     * @param selectedItemsIds list of selected items
      */
-    public DetailLicenseeClassFilterWidget(Supplier<List<DetailLicenseeClass>> supplier) {
+    public DetailLicenseeClassFilterWidget(Supplier<List<DetailLicenseeClass>> supplier,
+                                           Set<DetailLicenseeClass> selectedItemsIds) {
         super(ForeignUi.getMessage("label.detail_licensee_classes"));
         this.supplier = supplier;
+        this.selectedItemsIds.addAll(selectedItemsIds);
+        setLabelValue(selectedItemsIds.size());
     }
 
     @Override

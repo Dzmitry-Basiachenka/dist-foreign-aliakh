@@ -42,7 +42,7 @@ public class AssigneeFilterWidgetTest {
 
     private static final String ASSIGNEE = "user@copyright.com";
     private final AssigneeFilterWidget assigneeFilterWidget =
-        new AssigneeFilterWidget(() -> Collections.singletonList(ASSIGNEE));
+        new AssigneeFilterWidget(() -> Collections.singletonList(ASSIGNEE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
