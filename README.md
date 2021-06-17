@@ -1,3 +1,17 @@
+13.1.30
+-
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: Adjust repository logic to load usages by new filters
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: apply backend logic to populate filters
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: apply permissions for UDM additional filters
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: implement logic to populate applied usage filter
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: implement validation rules for additional UDM filters
+* B-67395 FDA & UDM: Create UDM shell - UI Search: add  search widget to UDM usage tab
+* B-67395 FDA & UDM: Create UDM shell - UI Search: add Comment column on UI
+* B-67395 FDA & UDM: Create UDM shell - UI Search: add comment field to UdmUsage, UdmUsageDto
+* B-67395 FDA & UDM: Create UDM shell - UI Search: add search value field to UdmUsageFilter
+* B-67459: FDA & UDM: Validate Upload Country: fix validator test
+* B-67459: FDA & UDM: Validate Uploaded Country: implement business validation
+
 13.1.29
 -
 * B-65859 FDA: UDM in ACL Audit: implement widget to show audit table
