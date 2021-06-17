@@ -36,7 +36,6 @@ public class CountryValidatorTest {
 
     private final String country;
     private final boolean expectedResult;
-    private IPrmIntegrationService prmIntegrationService;
     private CountryValidator validator;
     private final Map<String, Country> expectedCountries = ImmutableMap.of(
         "BLR", createCountry("Belarus", "BLR"),
@@ -44,8 +43,11 @@ public class CountryValidatorTest {
 
     @Before
     public void setUp() {
-        prmIntegrationService = createMock(IPrmIntegrationService.class);
+        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
+        expect(prmIntegrationService.getCountries()).andReturn(expectedCountries).once();
+        replay(prmIntegrationService);
         validator = new CountryValidator(prmIntegrationService);
+        verify(prmIntegrationService);
     }
 
     public CountryValidatorTest(String country, boolean expectedResult) {
@@ -67,11 +69,8 @@ public class CountryValidatorTest {
 
     @Test
     public void testIsValid() {
-        expect(prmIntegrationService.getCountries()).andReturn(expectedCountries).once();
-        replay(prmIntegrationService);
         assertEquals(expectedResult, validator.isValid(buildUdmUsage(country)));
         assertEquals("Survey country is not found in PRM or does not meet ISO standard", validator.getErrorMessage());
-        verify(prmIntegrationService);
     }
 
     private Country createCountry(String name, String isoCode) {
