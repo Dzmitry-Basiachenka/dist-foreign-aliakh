@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicens
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.CompanyIdValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.CountryValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.OriginalDetailIdValidator;
@@ -61,6 +63,8 @@ public class CsvProcessorFactory {
     private IUdmUsageService udmUsageService;
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
@@ -148,7 +152,8 @@ public class CsvProcessorFactory {
         UdmCsvProcessor processor = new UdmCsvProcessor();
         processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
             new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService),
-            new UdmWorkInfoValidator(), new CompanyIdValidator(telesalesService, licenseeClassService));
+            new UdmWorkInfoValidator(), new CompanyIdValidator(telesalesService, licenseeClassService),
+            new CountryValidator(prmIntegrationService));
         return processor;
     }
 }
