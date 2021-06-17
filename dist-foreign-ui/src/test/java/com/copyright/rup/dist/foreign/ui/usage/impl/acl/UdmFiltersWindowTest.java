@@ -18,6 +18,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -39,6 +42,8 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmFiltersWindow}.
@@ -58,7 +63,11 @@ public class UdmFiltersWindowTest {
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String SURVEY_COUNTRY = "United States";
     private static final String LANGUAGE = "English";
+    private static final String VALID_INTEGER = "123456789";
+    private static final String VALID_DECIMAL = "1.2345678";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private UdmFiltersWindow window;
+    private Binder<UdmUsageFilter> binder;
 
     @Before
     public void setUp() {
@@ -67,6 +76,7 @@ public class UdmFiltersWindowTest {
         replay(ForeignSecurityUtils.class);
         window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class));
         window.setUdmUsageFilter(new UdmUsageFilter());
+        binder = Whitebox.getInternalState(window, "filterBinder");
         verify(ForeignSecurityUtils.class);
     }
 
@@ -145,6 +155,99 @@ public class UdmFiltersWindowTest {
         assertFalse(verticalLayout.getComponent(10).isEnabled());
         assertFalse(verticalLayout.getComponent(11).isEnabled());
         verify(ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testUsageDateValidation() {
+        LocalDateWidget usageDateFromWidget = Whitebox.getInternalState(window, "usageDateFromWidget");
+        LocalDateWidget usageDateToWidget = Whitebox.getInternalState(window, "usageDateToWidget");
+        LocalDate localDateFrom = LocalDate.of(2021, 1, 1);
+        LocalDate localDateTo = LocalDate.of(2022, 1, 1);
+        verifyDateWidgetValidationMessage(usageDateFromWidget, localDateFrom, StringUtils.EMPTY, true);
+        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        usageDateFromWidget.setValue(LocalDate.of(2023, 1, 1));
+        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo,
+            "Field value should be greater or equal to Usage Date From", false);
+        usageDateFromWidget.setValue(null);
+        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo, StringUtils.EMPTY, true);
+    }
+
+    @Test
+    public void testSurveyStartDateValidation() {
+        LocalDateWidget surveyStartDateFromWidget = Whitebox.getInternalState(window, "surveyStartDateFromWidget");
+        LocalDateWidget surveyStartDateToWidget = Whitebox.getInternalState(window, "surveyStartDateToWidget");
+        LocalDate localDateFrom = LocalDate.of(2021, 1, 1);
+        LocalDate localDateTo = LocalDate.of(2022, 1, 1);
+        verifyDateWidgetValidationMessage(surveyStartDateFromWidget, null, StringUtils.EMPTY, true);
+        verifyDateWidgetValidationMessage(surveyStartDateToWidget, null, StringUtils.EMPTY, true);
+        verifyDateWidgetValidationMessage(surveyStartDateFromWidget, localDateFrom, StringUtils.EMPTY, true);
+        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        surveyStartDateFromWidget.setValue(LocalDate.of(2023, 1, 1));
+        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo,
+            "Field value should be greater or equal to Survey Start Date From", false);
+        surveyStartDateFromWidget.setValue(null);
+        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo, StringUtils.EMPTY, true);
+    }
+
+    @Test
+    public void testAnnualMultiplierValidation() {
+        TextField annualMultiplierFromField = Whitebox.getInternalState(window, "annualMultiplierFromField");
+        TextField annualMultiplierToField = Whitebox.getInternalState(window, "annualMultiplierToField");
+        ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox =
+            Whitebox.getInternalState(window, "annualMultiplierOperatorComboBox");
+        validateCommonOperationValidations(annualMultiplierFromField, annualMultiplierToField,
+            annualMultiplierOperatorComboBox);
+    }
+
+    @Test
+    public void testWrWrkInstValidation() {
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
+            "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(wrWrkInstField, "a12345678", NUMBER_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
+    public void testCompanyIdValidation() {
+        TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
+        verifyTextFieldValidationMessage(companyIdField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, "1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, "12345678901",
+            "Field value should not exceed 10 digits", false);
+        verifyTextFieldValidationMessage(companyIdField, "a12345678", NUMBER_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
+    public void testCompanyNameValidation() {
+        TextField companyNameField = Whitebox.getInternalState(window, "companyNameField");
+        verifyTextFieldValidationMessage(companyNameField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyNameField, buildStringWithExpectedLength(200),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyNameField, buildStringWithExpectedLength(201),
+            "Field value should not exceed 200 characters", false);
+    }
+
+    @Test
+    public void testSurveyCountryValidation() {
+        TextField surveyCountryField = Whitebox.getInternalState(window, "surveyCountryField");
+        verifyTextFieldValidationMessage(surveyCountryField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(surveyCountryField, buildStringWithExpectedLength(100),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(surveyCountryField, buildStringWithExpectedLength(101),
+            "Field value should not exceed 100 characters", false);
+    }
+
+    @Test
+    public void testLanguageValidation() {
+        TextField languageField = Whitebox.getInternalState(window, "languageField");
+        verifyTextFieldValidationMessage(languageField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(languageField, buildStringWithExpectedLength(255),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(languageField, buildStringWithExpectedLength(256),
+            "Field value should not exceed 255 characters", false);
     }
 
     private void verifyRootLayout(Component component) {
@@ -258,6 +361,22 @@ public class UdmFiltersWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
+    private void validateCommonOperationValidations(TextField fromField, TextField toField,
+                                                    ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox) {
+        annualMultiplierOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY,
+            "Field value should be populated for Between Operator", false);
+        verifyTextFieldValidationMessage(toField, StringUtils.EMPTY,
+            "Field value should be populated for Between Operator", false);
+        annualMultiplierOperatorComboBox.setValue(FilterOperatorEnum.EQUALS);
+        verifyTextFieldValidationMessage(fromField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(fromField, "1.23456789", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(toField, "1.23456789", "Field value should not exceed 9 digits", false);
+    }
+
     private UdmUsageFilter buildExpectedFilter() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUsageDateFrom(DATE_FROM);
@@ -283,8 +402,8 @@ public class UdmFiltersWindowTest {
     private void populateData() {
         ((LocalDateWidget) Whitebox.getInternalState(window, "usageDateFromWidget")).setValue(DATE_FROM);
         ((LocalDateWidget) Whitebox.getInternalState(window, "usageDateToWidget")).setValue(DATE_TO);
-        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartFromWidget")).setValue(DATE_FROM);
-        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartToWidget")).setValue(DATE_TO);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartDateFromWidget")).setValue(DATE_FROM);
+        ((LocalDateWidget) Whitebox.getInternalState(window, "surveyStartDateToWidget")).setValue(DATE_TO);
         ((ComboBox<UdmChannelEnum>) Whitebox.getInternalState(window, "channelComboBox")).setValue(UdmChannelEnum.CCC);
         ((TextField) Whitebox.getInternalState(window, "wrWrkInstField")).setValue("243904752");
         ((TextField) Whitebox.getInternalState(window, "companyIdField")).setValue("454984566");
@@ -304,5 +423,34 @@ public class UdmFiltersWindowTest {
         ((TextField) Whitebox.getInternalState(window, "quantityFromField")).setValue("3");
         ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, "quantityOperatorComboBox"))
             .setValue(FilterOperatorEnum.LESS_THAN);
+    }
+
+    private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
+                                                   boolean isValid) {
+        localDateWidget.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
+    }
+
+    private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
+        field.setValue(value);
+        BinderValidationStatus<UdmUsageFilter> binderStatus = binder.validate();
+        assertEquals(isValid, binderStatus.isOk());
+        if (!isValid) {
+            List<ValidationResult> errors = binderStatus.getValidationErrors();
+            List<String> errorMessages =
+                errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+            assertTrue(errorMessages.contains(message));
+        }
+    }
+
+    private String buildStringWithExpectedLength(int length) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            result.append('a');
+        }
+        return result.toString();
     }
 }
