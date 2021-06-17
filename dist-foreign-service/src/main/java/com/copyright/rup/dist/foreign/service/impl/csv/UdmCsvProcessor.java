@@ -142,7 +142,7 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
             result.setQuantity(getInteger(row, Header.QUANTITY, headers));
             result.setSurveyRespondent(getString(row, Header.SURVEY_RESPONDED, headers));
             result.setCompanyId(getLong(row, Header.COMPANY_ID, headers));
-            result.setSurveyCountry(getString(row, Header.SURVEY_COUNTRY, headers));
+            result.setSurveyCountry(StringUtils.trim(getString(row, Header.SURVEY_COUNTRY, headers)));
             result.setStatus(isTitleNoneAndQuantityZero(result) ? UsageStatusEnum.INELIGIBLE : UsageStatusEnum.NEW);
             result.setIneligibleReason(isTitleNoneAndQuantityZero(result) ? "No reported use" : null);
             result.setIpAddress(getString(row, Header.IP_ADDRESS, headers));
