@@ -1,3 +1,8 @@
+13.1.31
+-
+* B-67395 FDA & UDM: Create UDM shell - UI Search: adjust sql queries for getting by UDM usage filter with searchValue
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: implement logic to restore applied filter after filter window was closed
+
 13.1.30
 -
 * B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: Adjust repository logic to load usages by new filters
