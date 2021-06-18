@@ -42,7 +42,7 @@ public class PublicationFormatFilterWidgetTest {
 
     private static final String PUBLICATION_FORMAT = "Digital";
     private final PublicationFormatFilterWidget publicationFormatFilterWidget =
-        new PublicationFormatFilterWidget(() -> Collections.singletonList(PUBLICATION_FORMAT));
+        new PublicationFormatFilterWidget(() -> Collections.singletonList(PUBLICATION_FORMAT), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {

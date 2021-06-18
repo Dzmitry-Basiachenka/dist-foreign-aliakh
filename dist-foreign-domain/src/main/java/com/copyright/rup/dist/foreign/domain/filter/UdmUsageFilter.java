@@ -31,10 +31,11 @@ public class UdmUsageFilter {
     private UsageStatusEnum usageStatus;
     private UdmUsageOriginEnum udmUsageOrigin;
     private Integer period;
-    private Set<String> assignees;
-    private Set<String> reportedPubTypes;
-    private Set<String> pubFormats;
-    private Set<DetailLicenseeClass> detailLicenseeClasses;
+    private Set<String> assignees = new HashSet<>();
+    private Set<String> reportedPubTypes = new HashSet<>();
+    private Set<String> pubFormats = new HashSet<>();
+    private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
+    private Set<String> reportedTypeOfUses = new HashSet<>();
     private UdmChannelEnum channel;
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
@@ -44,7 +45,6 @@ public class UdmUsageFilter {
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> statisticalMultiplierExpression = new FilterExpression<>();
     private FilterExpression<Number> quantityExpression = new FilterExpression<>();
-    private Set<String> reportedTypeOfUses;
     private String surveyCountry;
     private String language;
     private String companyName;

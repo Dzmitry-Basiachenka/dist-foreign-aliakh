@@ -43,14 +43,14 @@ import java.util.List;
 public class DetailLicenseeClassFilterWidgetTest {
 
     private final DetailLicenseeClass detailLicenseeClass = buildDetailLicenseeClass();
-    private final DetailLicenseeClassFilterWidget detailLcFilterWidget =
-        new DetailLicenseeClassFilterWidget(() -> Collections.singletonList(detailLicenseeClass));
+    private final DetailLicenseeClassFilterWidget detailLcFilterWidget = new DetailLicenseeClassFilterWidget(() ->
+        Collections.singletonList(detailLicenseeClass), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
-        List<DetailLicenseeClass> assignees = detailLcFilterWidget.loadBeans();
-        assertEquals(1, assignees.size());
-        assertEquals(detailLicenseeClass, assignees.get(0));
+        List<DetailLicenseeClass> detailLicenseeClasses = detailLcFilterWidget.loadBeans();
+        assertEquals(1, detailLicenseeClasses.size());
+        assertEquals(detailLicenseeClass, detailLicenseeClasses.get(0));
     }
 
     @Test

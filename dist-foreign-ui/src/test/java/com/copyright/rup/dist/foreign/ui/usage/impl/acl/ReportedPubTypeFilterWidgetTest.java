@@ -42,7 +42,7 @@ public class ReportedPubTypeFilterWidgetTest {
 
     private static final String REPORTED_PUB_TYPE = "Journal";
     private final ReportedPubTypeFilterWidget reportedPubTypeFilterWidget =
-        new ReportedPubTypeFilterWidget(() -> Collections.singletonList(REPORTED_PUB_TYPE));
+        new ReportedPubTypeFilterWidget(() -> Collections.singletonList(REPORTED_PUB_TYPE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {

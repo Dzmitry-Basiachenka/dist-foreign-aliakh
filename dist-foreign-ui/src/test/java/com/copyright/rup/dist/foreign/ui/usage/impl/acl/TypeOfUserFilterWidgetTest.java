@@ -42,7 +42,7 @@ public class TypeOfUserFilterWidgetTest {
 
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private final TypeOfUseFilterWidget typeOfUseFilterWidget =
-        new TypeOfUseFilterWidget(() -> Collections.singletonList(REPORTED_TYPE_OF_USE));
+        new TypeOfUseFilterWidget(() -> Collections.singletonList(REPORTED_TYPE_OF_USE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
