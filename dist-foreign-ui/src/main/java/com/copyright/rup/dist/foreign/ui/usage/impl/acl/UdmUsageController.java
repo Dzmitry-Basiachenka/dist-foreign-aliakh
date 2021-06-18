@@ -64,8 +64,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public int getBeansCount() {
-        UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
-        return udmUsageService.getUsagesCount(udmUsageFilter);
+        return udmUsageService.getUsagesCount(getFilter());
     }
 
     @Override
@@ -75,8 +74,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
-        return udmUsageService.getUsageDtos(udmUsageFilter, new Pageable(startIndex, count), sort);
+        return udmUsageService.getUsageDtos(getFilter(), new Pageable(startIndex, count), sort);
     }
 
     @Override
@@ -124,5 +122,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     protected IUdmUsageWidget instantiateWidget() {
         return new UdmUsageWidget();
+    }
+
+    private UdmUsageFilter getFilter() {
+        UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
+        udmUsageFilter.setSearchValue(getWidget().getSearchValue());
+        return udmUsageFilter;
     }
 }

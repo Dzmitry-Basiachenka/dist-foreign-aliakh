@@ -46,7 +46,7 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     @Override
     public List<UdmUsageDto> findDtosByFilter(UdmUsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUdmUsageMapper.findDtosByFilter", parameters);
@@ -55,7 +55,7 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     @Override
     public int findCountByFilter(UdmUsageFilter filter) {
         return selectOne("IUdmUsageMapper.findCountByFilter",
-            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+            ImmutableMap.of(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter))));
     }
 
     @Override
@@ -86,5 +86,11 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     @Override
     public List<String> findPublicationFormats() {
         return selectList("IUdmUsageMapper.findPublicationFormats");
+    }
+
+    private UdmUsageFilter escapeSqlLikePattern(UdmUsageFilter udmUsageFilter) {
+        UdmUsageFilter filterCopy = new UdmUsageFilter(udmUsageFilter);
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

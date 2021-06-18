@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,9 +42,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -68,6 +73,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_USAGE_UID_5 = "9c7f64a7-95c1-4825-ad85-ff0672d252c4";
     private static final String UDM_USAGE_UID_6 = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
     private static final String UDM_USAGE_UID_7 = "c3e3082f-9c3e-4e14-9640-c485a9eae24f";
+    private static final String UDM_USAGE_UID_8 = "4a39452b-1319-4bf9-9a66-f79e6c7063be";
+    private static final String UDM_USAGE_UID_9 = "1d856581-09aa-4f70-9e0c-cf7fe121135f";
     private static final String UDM_BATCH_UID_1 = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_BATCH_UID_2 = "bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a";
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
@@ -101,6 +108,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String DIGITAL = "DIGITAL";
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final String INVALID_VALUE = "Invalid value";
 
     static {
         OBJECT_MAPPER.registerModule(new JavaTimeModule());
@@ -341,6 +349,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "publicationFormat");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "article");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "language");
+        assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "comment");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyId");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyName");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "detLcId");
@@ -429,6 +438,97 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     public void testFindPublicationFormats() {
         assertEquals(ImmutableList.of("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
+    }
+
+    @Test
+    public void testSearchByReportedTitle() {
+        verifyFindBySearchValue("Brain surgery", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("ain surg", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("Bra in");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("ADVANCES", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("advances", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("aDvaNCes", UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchBySystemTitle() {
+        verifyFindBySearchValue("Castanea and surgery. C, Biointerfaces", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("Castanea an", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("Cast anea");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("TRANSACTION", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("transaction", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("TrAnSaCtiON", UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchByUsageDetailId() {
+        verifyFindBySearchValue("OGN674GHHSB0110", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("OGN674GHHSB011", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("OGN674G HHSB0110");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("ogn674ghhsb011", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("Ogn674gHHsb011", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchByStandardNumber() {
+        verifyFindBySearchValue("100891123776UXX", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("23776UXX", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("1008911 23776UXX");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("100891123776YXX", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("100891123776yxx", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("100891123776yXx", UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchByArticle() {
+        verifyFindBySearchValue("Appendix: The Principles of Newspeak", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("Appendix: The", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("Appe ndix");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("NEWSPEAK", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("newspeak", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("NeWsPeAK", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchBySurveyRespondent() {
+        verifyFindBySearchValue("Survey respondent value 1", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("Survey respondent", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("Sur vey");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("RESPONDENT VALUE 2", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("survey respondent", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("SuRvEy ResponDenT", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testSearchByComment() {
+        verifyFindBySearchValue("UDM search comment 1", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("UDM searc", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("com ment");
+        verifyFindBySearchValue(INVALID_VALUE);
+        verifyFindBySearchValue("UDM SEARCH", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("udm search", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("UdM sEaRcH", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+    }
+
+    private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {
+        int expectedSize = Arrays.asList(udmUsageIds).size();
+        UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
+        udmUsageFilter.setSearchValue(searchValue);
+        assertEquals(expectedSize, udmUsageRepository.findCountByFilter(udmUsageFilter));
+
+        List<UdmUsageDto> udmUsageDtos = udmUsageRepository.findDtosByFilter(udmUsageFilter, null, null);
+        assertNotNull(udmUsageDtos);
+        assertEquals(expectedSize, udmUsageDtos.size());
+        List<String> actualIds = udmUsageDtos.stream()
+            .map(UdmUsageDto::getId)
+            .collect(Collectors.toList());
+        assertThat(actualIds, containsInAnyOrder(udmUsageIds));
     }
 
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {

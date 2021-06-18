@@ -35,6 +35,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,6 +77,7 @@ public class UdmUsageControllerTest {
     private CsvProcessorFactory csvProcessorFactory;
     private IUdmUsageFilterController udmUsageFilterController;
     private IUdmUsageFilterWidget udmUsageFilterWidget;
+    private IUdmUsageWidget udmUsageWidget;
 
     @Before
     public void setUp() {
@@ -84,12 +87,14 @@ public class UdmUsageControllerTest {
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         udmUsageFilterController = createMock(IUdmUsageFilterController.class);
         udmUsageFilterWidget = createMock(IUdmUsageFilterWidget.class);
+        udmUsageWidget = createMock(IUdmUsageWidget.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, udmUsageService);
         Whitebox.setInternalState(controller, udmUsageFilterController);
         Whitebox.setInternalState(controller, udmUsageFilterWidget);
         Whitebox.setInternalState(controller, udmBatchService);
         Whitebox.setInternalState(controller, udmUsageAuditService);
+        Whitebox.setInternalState(controller, udmUsageWidget);
     }
 
     @Test
@@ -98,23 +103,25 @@ public class UdmUsageControllerTest {
         Capture<Pageable> pageableCapture = newCapture();
         expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
         expect(udmUsageFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
+        expect(udmUsageWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         expect(udmUsageService.getUsageDtos(eq(udmUsageFilter), capture(pageableCapture), isNull()))
             .andReturn(udmUsages).once();
-        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
+        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService, udmUsageWidget);
         assertSame(udmUsages, controller.loadBeans(0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
-        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
+        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService, udmUsageWidget);
     }
 
     @Test
     public void testGetBeansCount() {
         expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
         expect(udmUsageFilterWidget.getAppliedFilter()).andReturn(udmUsageFilter).once();
+        expect(udmUsageWidget.getSearchValue()).andReturn(StringUtils.EMPTY).once();
         expect(udmUsageService.getUsagesCount(udmUsageFilter)).andReturn(10).once();
-        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
+        replay(udmUsageFilterController, udmUsageFilterWidget, udmUsageService, udmUsageWidget);
         assertEquals(10, controller.getBeansCount());
-        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService);
+        verify(udmUsageFilterController, udmUsageFilterWidget, udmUsageService, udmUsageWidget);
     }
 
     @Test
@@ -122,7 +129,7 @@ public class UdmUsageControllerTest {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
-        IUdmUsageWidget udmUsageWidget = controller.instantiateWidget();
+        udmUsageWidget = controller.instantiateWidget();
         verify(ForeignSecurityUtils.class);
         assertNotNull(udmUsageWidget);
     }
