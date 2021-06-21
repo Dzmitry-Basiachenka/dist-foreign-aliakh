@@ -69,7 +69,14 @@ public class UdmFiltersWindowTest {
     private static final String LANGUAGE = "English";
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
+    private static final String INVALID_NUMBER = "a12345678";
+    private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
+    private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String DECIMAL_VALIDATION_MESSAGE =
+        "Field value should be positive number and should not exceed 9 digits";
+    private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
+        "Field value should be populated for Between Operator";
     private UdmFiltersWindow window;
     private Binder<UdmUsageFilter> binder;
 
@@ -214,8 +221,37 @@ public class UdmFiltersWindowTest {
         TextField annualMultiplierToField = Whitebox.getInternalState(window, "annualMultiplierToField");
         ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "annualMultiplierOperatorComboBox");
-        validateCommonOperationValidations(annualMultiplierFromField, annualMultiplierToField,
+        verifyIntegerOperationValidations(annualMultiplierFromField, annualMultiplierToField,
             annualMultiplierOperatorComboBox);
+    }
+
+    @Test
+    public void testAnnualizedCopiesValidation() {
+        TextField annualizedCopiesFromField = Whitebox.getInternalState(window, "annualizedCopiesFromField");
+        TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesToField");
+        ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
+            Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
+        verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
+            annualizedCopiesOperatorComboBox);
+    }
+
+    @Test
+    public void testStatisticalMultiplierValidation() {
+        TextField statisticalMultiplierFromField = Whitebox.getInternalState(window, "statisticalMultiplierFromField");
+        TextField statisticalMultiplierToField = Whitebox.getInternalState(window, "statisticalMultiplierToField");
+        ComboBox<FilterOperatorEnum> statisticalMultiplierOperatorComboBox =
+            Whitebox.getInternalState(window, "statisticalMultiplierOperatorComboBox");
+        verifyBigDecimalOperationValidations(statisticalMultiplierFromField, statisticalMultiplierToField,
+            statisticalMultiplierOperatorComboBox);
+    }
+
+    @Test
+    public void testQuantityValidation() {
+        TextField quantityFromField = Whitebox.getInternalState(window, "quantityFromField");
+        TextField quantityToField = Whitebox.getInternalState(window, "quantityToField");
+        ComboBox<FilterOperatorEnum> quantityOperatorComboBox =
+            Whitebox.getInternalState(window, "quantityOperatorComboBox");
+        verifyIntegerOperationValidations(quantityFromField, quantityToField, quantityOperatorComboBox);
     }
 
     @Test
@@ -223,20 +259,25 @@ public class UdmFiltersWindowTest {
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
             "Field value should not exceed 9 digits", false);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, "a12345678", NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
     }
 
     @Test
     public void testCompanyIdValidation() {
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
         verifyTextFieldValidationMessage(companyIdField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(companyIdField, "1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(companyIdField, "12345678901",
             "Field value should not exceed 10 digits", false);
-        verifyTextFieldValidationMessage(companyIdField, "a12345678", NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
     }
 
     @Test
@@ -380,20 +421,38 @@ public class UdmFiltersWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
-    private void validateCommonOperationValidations(TextField fromField, TextField toField,
-                                                    ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox) {
-        annualMultiplierOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY,
-            "Field value should be populated for Between Operator", false);
-        verifyTextFieldValidationMessage(toField, StringUtils.EMPTY,
-            "Field value should be populated for Between Operator", false);
-        annualMultiplierOperatorComboBox.setValue(FilterOperatorEnum.EQUALS);
-        verifyTextFieldValidationMessage(fromField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(toField, VALID_INTEGER, StringUtils.EMPTY, true);
+    private void verifyIntegerOperationValidations(TextField fromField, TextField toField,
+                                                   ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
         verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(fromField, "1.23456789", "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(toField, "1.23456789", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(fromField, "1234567890", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(toField, "1234567890", "Field value should not exceed 9 digits", false);
+    }
+
+    private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
+                                                      ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, DECIMAL_VALIDATION_MESSAGE);
+        verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+    }
+
+    private void verifyCommonOperationValidations(TextField fromField, TextField toField,
+                                                  ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                  String numberValidationMessage) {
+        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(fromField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(fromField, SPACES_STRING, numberValidationMessage, false);
+        operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        operatorComboBox.setValue(FilterOperatorEnum.EQUALS);
+        verifyTextFieldValidationMessage(fromField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, VALID_INTEGER, StringUtils.EMPTY, true);
     }
 
     private UdmUsageFilter buildExpectedFilter() {
