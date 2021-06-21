@@ -38,6 +38,6 @@ public class CountryValidator implements DistCsvProcessor.IValidator<UdmUsage> {
 
     @Override
     public String getErrorMessage() {
-        return "Survey country is not found in PRM or does not meet ISO standard";
+        return "Survey country is not found in PRM or does not match ISO Country Name standard";
     }
 }
