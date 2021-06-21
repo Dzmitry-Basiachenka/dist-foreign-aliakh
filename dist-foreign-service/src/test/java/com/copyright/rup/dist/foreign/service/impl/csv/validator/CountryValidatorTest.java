@@ -70,7 +70,8 @@ public class CountryValidatorTest {
     @Test
     public void testIsValid() {
         assertEquals(expectedResult, validator.isValid(buildUdmUsage(country)));
-        assertEquals("Survey country is not found in PRM or does not meet ISO standard", validator.getErrorMessage());
+        assertEquals("Survey country is not found in PRM or does not match ISO Country Name standard",
+            validator.getErrorMessage());
     }
 
     private Country createCountry(String name, String isoCode) {
@@ -80,9 +81,9 @@ public class CountryValidatorTest {
         return newCountry;
     }
 
-    private UdmUsage buildUdmUsage(String surveycountry) {
+    private UdmUsage buildUdmUsage(String surveyCountry) {
         UdmUsage udmUsage = new UdmUsage();
-        udmUsage.setSurveyCountry(surveycountry);
+        udmUsage.setSurveyCountry(surveyCountry);
         return udmUsage;
     }
 }
