@@ -428,8 +428,8 @@ public class UdmFiltersWindow extends Window {
         languageField.setSizeFull();
         surveyCountryLanguageLayout.setSizeFull();
         surveyCountryLanguageLayout.setSpacing(true);
-        VaadinUtils.addComponentStyle(companyIdField, "udm-survey-country-filter");
-        VaadinUtils.addComponentStyle(companyNameField, "udm-language-filter");
+        VaadinUtils.addComponentStyle(surveyCountryField, "udm-survey-country-filter");
+        VaadinUtils.addComponentStyle(languageField, "udm-language-filter");
         return surveyCountryLanguageLayout;
     }
 
@@ -563,11 +563,11 @@ public class UdmFiltersWindow extends Window {
     }
 
     private Long getLongFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? Long.valueOf(textField.getValue()) : null;
+        return StringUtils.isNotEmpty(textField.getValue()) ? Long.valueOf(textField.getValue().trim()) : null;
     }
 
     private String getStringFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue() : null;
+        return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
     }
 
     private FilterExpression<Number> buildNumberFilterExpression(TextField fromField, TextField toField,
@@ -575,20 +575,22 @@ public class UdmFiltersWindow extends Window {
                                                                  Function<String, Number> valueConverter) {
         FilterExpression<Number> filterExpression = new FilterExpression<>();
         if (StringUtils.isNotEmpty(fromField.getValue())) {
-            filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue()));
+            filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
-                StringUtils.isNotEmpty(toField.getValue()) ? valueConverter.apply(toField.getValue()) : null);
+                StringUtils.isNotEmpty(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
             filterExpression.setOperatorEnum(comboBox.getValue());
         }
         return filterExpression;
     }
 
     private SerializablePredicate<String> getAmountValidator() {
-        return value -> new AmountValidator(false).isValid(StringUtils.trimToEmpty(value));
+        return value -> null == value
+            || StringUtils.isEmpty(value)
+            || StringUtils.isNotBlank(value) && new AmountValidator(false).isValid(value.trim());
     }
 
     private SerializablePredicate<String> getNumberValidator() {
-        return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(StringUtils.trim(value));
+        return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
     }
 
     private SerializablePredicate<String> getBetweenOperatorValidator(TextField fieldToValidate,
@@ -604,7 +606,7 @@ public class UdmFiltersWindow extends Window {
             || StringUtils.isEmpty(toValue)
             || !getAmountValidator().test(fromValue)
             || !getAmountValidator().test(toValue)
-            || 0 <= new BigDecimal(toValue).compareTo(new BigDecimal(fromValue));
+            || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
     }
 
     private boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
@@ -614,6 +616,6 @@ public class UdmFiltersWindow extends Window {
             || StringUtils.isEmpty(toValue)
             || !getNumberValidator().test(fromValue)
             || !getNumberValidator().test(toValue)
-            || 0 <= Integer.valueOf(toValue).compareTo(Integer.valueOf(fromValue));
+            || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
     }
 }
