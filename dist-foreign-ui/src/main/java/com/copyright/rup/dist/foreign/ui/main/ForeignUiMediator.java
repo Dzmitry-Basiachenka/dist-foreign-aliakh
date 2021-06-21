@@ -13,7 +13,7 @@ import com.vaadin.ui.ComboBox;
 import java.util.Set;
 
 /**
- * Discription {@link SomeClass}.
+ * Mediator for the {@link ForeignUi}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>

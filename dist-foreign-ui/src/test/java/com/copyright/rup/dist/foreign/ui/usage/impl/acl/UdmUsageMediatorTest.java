@@ -53,7 +53,7 @@ public class UdmUsageMediatorTest {
     }
 
     @Test
-    public void testApplyPermissionsDistributionManager() {
+    public void testApplyManagerPermissions() {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
@@ -62,7 +62,7 @@ public class UdmUsageMediatorTest {
     }
 
     @Test
-    public void testApplyPermissionsDistributionSpecialist() {
+    public void testApplySpecialistPermissions() {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
@@ -71,7 +71,7 @@ public class UdmUsageMediatorTest {
     }
 
     @Test
-    public void testApplyPermissionsResearcher() {
+    public void testApplyResearcherPermissions() {
         mockResearcherPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();

@@ -182,28 +182,21 @@ public final class ForeignSecurityUtils {
     }
 
     /**
-     * @return {@code true} if user has researcher permission.
+     * @return {@code true} if user has researcher permission, {@code false} - otherwise.
      */
     public static boolean hasResearcherPermission() {
         return SecurityUtils.hasPermission("FDA_RESEARCHER_PERMISSION");
     }
 
     /**
-     * @return {@code true} if user has manager permission.
+     * @return {@code true} if user has manager permission, {@code false} - otherwise.
      */
     public static boolean hasManagerPermission() {
         return SecurityUtils.hasPermission("FDA_MANAGER_PERMISSION");
     }
 
     /**
-     * @return {@code true} if user has view only permission.
-     */
-    public static boolean hasViewOnlyPermission() {
-        return SecurityUtils.hasPermission("FDA_VIEW_ONLY_PERMISSION");
-    }
-
-    /**
-     * @return {@code true} if user has specialist permission.
+     * @return {@code true} if user has specialist permission, {@code false} - otherwise.
      */
     public static boolean hasSpecialistPermission() {
         return SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION");
