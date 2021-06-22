@@ -130,8 +130,8 @@ public class UdmUsageControllerTest {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
         udmUsageWidget = controller.instantiateWidget();
-        verify(ForeignSecurityUtils.class);
         assertNotNull(udmUsageWidget);
+        verify(ForeignSecurityUtils.class);
     }
 
     @Test
