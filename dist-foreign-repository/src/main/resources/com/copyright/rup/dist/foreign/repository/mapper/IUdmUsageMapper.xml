@@ -326,7 +326,8 @@
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
-            u.updated_by_user
+            u.updated_by_user,
+            u.record_version
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
@@ -506,6 +507,10 @@
             quantity,
             ineligible_reason,
             annualized_copies,
+            created_datetime,
+            updated_datetime,
+            created_by_user,
+            updated_by_user,
             record_version
         from ${schema}.df_udm_usage
         where df_udm_usage_uid in
@@ -556,4 +561,14 @@
         where publication_format is not null
         order by publication_format
     </select>
+
+    <update id="updateStatusByIds" parameterType="map">
+        update ${schema}.df_udm_usage
+        set status_ind = #{status},
+        <include refid="StoredEntityMapper.update"/>
+        where df_udm_usage_uid in
+            <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
+    </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -11,11 +12,13 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of UDM usage repository.
@@ -92,5 +95,15 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
         UdmUsageFilter filterCopy = new UdmUsageFilter(udmUsageFilter);
         filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
         return filterCopy;
+    }
+
+    @Override
+    public void updateStatusByIds(Set<String> udmUsageIds, UsageStatusEnum status) {
+        Objects.requireNonNull(udmUsageIds);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("status", Objects.requireNonNull(status));
+        parameters.put("updateUser", StoredEntity.DEFAULT_USER);
+        parameters.put("usageIds", udmUsageIds);
+        update("IUdmUsageMapper.updateStatusByIds", parameters);
     }
 }

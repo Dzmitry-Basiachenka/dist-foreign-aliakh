@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Service encapsulates logic for matching {@link Usage}s to works against PI (Publi).
@@ -49,6 +51,8 @@ public class WorkMatchingService implements IWorkMatchingService {
     private IUdmUsageService udmUsageService;
     @Autowired
     private IUsageAuditService auditService;
+    @Autowired
+    private IUdmUsageAuditService udmAuditService;
 
     @Override
     @Transactional
@@ -111,19 +115,24 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Transactional
     public void matchByStandardNumber(UdmUsage usage) {
         updateUdmUsageWorkInfo(usage,
-            piIntegrationService.findWorkByStandardNumber(usage.getReportedStandardNumber()));
+            piIntegrationService.findWorkByStandardNumber(usage.getReportedStandardNumber()),
+            () -> String.format("Wr Wrk Inst %s was found by standard number %s",
+                usage.getWrWrkInst(), usage.getReportedStandardNumber()));
     }
 
     @Override
     @Transactional
     public void matchByTitle(UdmUsage usage) {
-        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByTitle(usage.getReportedTitle()));
+        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByTitle(usage.getReportedTitle()),
+            () -> String.format("Wr Wrk Inst %s was found by title \"%s\"",
+                usage.getWrWrkInst(), usage.getReportedTitle()));
     }
 
     @Override
     @Transactional
     public void matchByWrWrkInst(UdmUsage usage) {
-        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst()));
+        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst()),
+            () -> String.format("Wr Wrk Inst %s was found in PI", usage.getWrWrkInst()));
     }
 
     @Override
@@ -159,14 +168,18 @@ public class WorkMatchingService implements IWorkMatchingService {
         return work;
     }
 
-    private void updateUdmUsageWorkInfo(UdmUsage usage, Work work) {
+    private void updateUdmUsageWorkInfo(UdmUsage usage, Work work, Supplier<String> actionReasonSupplier) {
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumber(work.getMainIdno());
+            udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                actionReasonSupplier.get());
         } else {
             usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+            udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                String.format("Wr Wrk Inst %s was not found in PI", usage.getWrWrkInst()));
         }
         udmUsageService.updateProcessedUsage(usage);
     }

@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.junit.Before;
@@ -42,10 +43,12 @@ public class WorkMatchingServiceTest {
     private static final String TITLE = "The theological roots of Pentecostalism";
     private static final String VALISSN = "VALISSN";
     private static final String VALISBN10 = "VALISBN10";
+    private static final String WORK_FOUND_REASON = "Wr Wrk Inst 112930820 was found in PI";
     private IPiIntegrationService piIntegrationService;
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
     private IUsageAuditService auditService;
+    private IUdmUsageAuditService udmAuditService;
     private IUsageService usageService;
     private IUdmUsageService udmUsageService;
 
@@ -57,9 +60,11 @@ public class WorkMatchingServiceTest {
         usageService = createMock(IUsageService.class);
         udmUsageService = createMock(IUdmUsageService.class);
         auditService = createMock(IUsageAuditService.class);
+        udmAuditService = createMock(IUdmUsageAuditService.class);
         Whitebox.setInternalState(workMatchingService, piIntegrationService);
         Whitebox.setInternalState(workMatchingService, usageRepository);
         Whitebox.setInternalState(workMatchingService, auditService);
+        Whitebox.setInternalState(workMatchingService, udmAuditService);
         Whitebox.setInternalState(workMatchingService, usageService);
         Whitebox.setInternalState(workMatchingService, udmUsageService);
     }
@@ -133,12 +138,15 @@ public class WorkMatchingServiceTest {
         expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         udmUsageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        replay(piIntegrationService, udmUsageService);
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by standard number 000043122-1");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
         workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        verify(piIntegrationService, udmUsageService);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
     @Test
@@ -187,12 +195,15 @@ public class WorkMatchingServiceTest {
         expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(work).once();
         udmUsageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        replay(piIntegrationService, udmUsageService);
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by title \"The theological roots of Pentecostalism\"");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
         workMatchingService.matchByTitle(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        verify(piIntegrationService, udmUsageService);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
     @Test
@@ -202,7 +213,7 @@ public class WorkMatchingServiceTest {
             .andReturn(new Work(112930820L, TITLE, STANDARD_NUMBER, VALISSN)).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 112930820 was found in PI");
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
         expectLastCall().once();
         replay(piIntegrationService, usageRepository, auditService);
         workMatchingService.matchByWrWrkInst(usage);
@@ -240,12 +251,14 @@ public class WorkMatchingServiceTest {
         expect(piIntegrationService.findWorkByWrWrkInst(112930820L)).andReturn(work).once();
         udmUsageService.updateProcessedUsage(usage);
         expectLastCall().once();
-        replay(piIntegrationService, udmUsageService);
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, WORK_FOUND_REASON);
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
         workMatchingService.matchByWrWrkInst(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        verify(piIntegrationService, udmUsageService);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
     private Usage buildUsage(Long wrWrkInst) {

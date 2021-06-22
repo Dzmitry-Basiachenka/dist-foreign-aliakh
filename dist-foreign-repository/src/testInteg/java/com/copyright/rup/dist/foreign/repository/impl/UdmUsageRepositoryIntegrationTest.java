@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -75,6 +76,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_USAGE_UID_7 = "c3e3082f-9c3e-4e14-9640-c485a9eae24f";
     private static final String UDM_USAGE_UID_8 = "4a39452b-1319-4bf9-9a66-f79e6c7063be";
     private static final String UDM_USAGE_UID_9 = "1d856581-09aa-4f70-9e0c-cf7fe121135f";
+    private static final String UDM_USAGE_UID_10 = "d147235f-3595-4b74-b091-f6f91fba2e7d";
+    private static final String UDM_USAGE_UID_11 = "cb241298-5c9e-4222-8fc1-5ee80c0e48f1";
     private static final String UDM_BATCH_UID_1 = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_BATCH_UID_2 = "bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a";
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
@@ -107,6 +110,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String DIGITAL = "DIGITAL";
     private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INVALID_VALUE = "Invalid value";
 
@@ -514,6 +518,28 @@ public class UdmUsageRepositoryIntegrationTest {
         verifyFindBySearchValue("UDM SEARCH", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
         verifyFindBySearchValue("udm search", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
         verifyFindBySearchValue("UdM sEaRcH", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+    }
+
+    @Test
+    public void testUpdateStatusByIds() {
+        List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
+        assertEquals(2, udmUsages.size());
+        UdmUsage udmUsage1 = udmUsages.get(0);
+        assertEquals(UsageStatusEnum.NEW, udmUsage1.getStatus());
+        assertEquals(USER_NAME, udmUsage1.getUpdateUser());
+        UdmUsage udmUsage2 = udmUsages.get(1);
+        assertEquals(UsageStatusEnum.NEW, udmUsage2.getStatus());
+        assertEquals(USER_NAME, udmUsage2.getUpdateUser());
+        udmUsageRepository.updateStatusByIds(ImmutableSet.of(udmUsage1.getId(), udmUsage2.getId()),
+            UsageStatusEnum.WORK_FOUND);
+        udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
+        assertEquals(2, udmUsages.size());
+        udmUsage1 = udmUsages.get(0);
+        assertEquals(UsageStatusEnum.WORK_FOUND, udmUsage1.getStatus());
+        assertEquals(StoredEntity.DEFAULT_USER, udmUsage1.getUpdateUser());
+        udmUsage2 = udmUsages.get(1);
+        assertEquals(UsageStatusEnum.WORK_FOUND, udmUsage2.getStatus());
+        assertEquals(StoredEntity.DEFAULT_USER, udmUsage2.getUpdateUser());
     }
 
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {

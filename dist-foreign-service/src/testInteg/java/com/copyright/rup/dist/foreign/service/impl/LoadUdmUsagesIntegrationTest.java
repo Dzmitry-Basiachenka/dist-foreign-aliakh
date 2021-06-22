@@ -10,9 +10,12 @@ import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
@@ -22,6 +25,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import com.google.common.collect.ImmutableMap;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +38,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -53,6 +60,7 @@ import java.util.stream.IntStream;
 public class LoadUdmUsagesIntegrationTest {
 
     private static final String UDM_BATCH_NAME = "UDM Batch 2021 June";
+    private static final String LOADED_REASON = "Uploaded in 'UDM Batch 2021 June' Batch";
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
@@ -64,6 +72,8 @@ public class LoadUdmUsagesIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
     @Autowired
     private IUdmBatchRepository udmBatchRepository;
+    @Autowired
+    private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private ServiceTestHelper testHelper;
 
@@ -77,9 +87,11 @@ public class LoadUdmUsagesIntegrationTest {
         testHelper.expectGetRmsRights("rights/rms_grants_udm_987654321_request.json",
             "rights/rms_grants_empty_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);
-        List<String> usageIds = loadUdmBatch();
+        List<String> udmUsageIds = loadUdmBatch();
         verifyUdmBatch();
-        verifyUdmUsages(usageIds);
+        verifyUdmUsages(udmUsageIds);
+        verifyUdmAudit(udmUsageIds);
+        testHelper.verifyRestServer();
     }
 
     private List<String> loadUdmBatch() throws IOException {
@@ -100,9 +112,9 @@ public class LoadUdmUsagesIntegrationTest {
         assertEquals(batch.getUsageOrigin(), actualBatch.getUsageOrigin());
     }
 
-    private void verifyUdmUsages(List<String> usageIds) throws IOException {
+    private void verifyUdmUsages(List<String> udmUsageIds) throws IOException {
         List<UdmUsage> expectedUsages = loadExpectedUdmUsages();
-        List<UdmUsage> actualUsages = udmUsageRepository.findByIds(usageIds);
+        List<UdmUsage> actualUsages = udmUsageRepository.findByIds(udmUsageIds);
         assertEquals(expectedUsages.size(), actualUsages.size());
         IntStream.range(0, expectedUsages.size())
             .forEach(index -> verifyUdmUsage(expectedUsages.get(index), actualUsages.get(index)));
@@ -140,6 +152,56 @@ public class LoadUdmUsagesIntegrationTest {
         assertEquals(expectedUsage.getStatisticalMultiplier(), actualUsage.getStatisticalMultiplier());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getRightsholder(), actualUsage.getRightsholder());
+    }
+
+    private void verifyUdmAudit(List<String> udmUsageIds) {
+        List<UdmUsage> actualUsages = udmUsageRepository.findByIds(udmUsageIds);
+        Map<String, String> originalDetailIdsToIds = actualUsages
+            .stream()
+            .collect(Collectors.toMap(UdmUsage::getOriginalDetailId, UdmUsage::getId));
+        String udmUsageId1 = originalDetailIdsToIds.get("OGN674GHHSB001");
+        assertUdmAudit(udmUsageId1, buildUsageAuditItems(udmUsageId1, ImmutableMap.of(
+            UsageActionTypeEnum.INELIGIBLE, "No reported use",
+            UsageActionTypeEnum.LOADED, LOADED_REASON)));
+        String udmUsageId2 = originalDetailIdsToIds.get("OGN674GHHSB002");
+        assertUdmAudit(udmUsageId2, buildUsageAuditItems(udmUsageId2, ImmutableMap.of(
+            UsageActionTypeEnum.WORK_NOT_FOUND, "Wr Wrk Inst 122825347 was not found in PI",
+            UsageActionTypeEnum.LOADED, LOADED_REASON)));
+        String udmUsageId3 = originalDetailIdsToIds.get("OGN674GHHSB003");
+        assertUdmAudit(udmUsageId3, buildUsageAuditItems(udmUsageId3, ImmutableMap.of(
+            UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1",
+            UsageActionTypeEnum.LOADED, LOADED_REASON)));
+        String udmUsageId4 = originalDetailIdsToIds.get("OGN674GHHSB004");
+        assertUdmAudit(udmUsageId4, buildUsageAuditItems(udmUsageId4, ImmutableMap.of(
+            UsageActionTypeEnum.RH_NOT_FOUND, "Rightsholder account for 987654321 was not found in RMS",
+            UsageActionTypeEnum.WORK_FOUND, "Wr Wrk Inst 987654321 was found in PI",
+            UsageActionTypeEnum.LOADED, LOADED_REASON)));
+    }
+
+    private List<UsageAuditItem> buildUsageAuditItems(String udmUsageId,
+                                                      Map<UsageActionTypeEnum, String> actionTypesToActionReasonsMap) {
+        List<UsageAuditItem> usageAuditItems = new ArrayList<>();
+        actionTypesToActionReasonsMap.forEach((actionType, actionReason) -> {
+            UsageAuditItem usageAuditItem = new UsageAuditItem();
+            usageAuditItem.setUsageId(udmUsageId);
+            usageAuditItem.setActionType(actionType);
+            usageAuditItem.setActionReason(actionReason);
+            usageAuditItems.add(usageAuditItem);
+        });
+        return usageAuditItems;
+    }
+
+    private void assertUdmAudit(String udmUsageId, List<UsageAuditItem> expectedAuditItems) {
+        List<UsageAuditItem> actualAuditItems = udmUsageAuditService.getUdmUsageAudit(udmUsageId);
+        assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
+        IntStream.range(0, expectedAuditItems.size())
+            .forEach(index -> {
+                UsageAuditItem expectedItem = expectedAuditItems.get(index);
+                UsageAuditItem actualItem = actualAuditItems.get(index);
+                assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
+                assertEquals(expectedItem.getActionType(), actualItem.getActionType());
+            });
     }
 
     private ByteArrayOutputStream getCsvOutputStream() throws IOException {
