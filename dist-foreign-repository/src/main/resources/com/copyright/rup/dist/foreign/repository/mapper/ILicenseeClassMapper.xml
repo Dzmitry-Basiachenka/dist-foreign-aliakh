@@ -13,6 +13,7 @@
     <resultMap id="detailLicenseeClassResultMap" type="DetailLicenseeClass" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="detail_licensee_class_id"/>
         <result property="discipline" column="discipline"/>
+        <result property="description" column="description"/>
         <result property="enrollmentProfile" column="enrollment_profile"/>
         <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClass.discipline" column="agg_discipline"/>

@@ -111,7 +111,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         initPeriodFilter();
         initStatusFilter();
         initUsageOriginFilter();
-        buildMoreFiltersButton();
+        initMoreFiltersButton();
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUdmUsageBatchFilter(),
             periodComboBox, statusComboBox, usageOriginComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
@@ -154,7 +154,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         return filterHeaderLabel;
     }
 
-    private void buildMoreFiltersButton() {
+    private void initMoreFiltersButton() {
         moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
         moreFiltersButton.addClickListener(event -> {

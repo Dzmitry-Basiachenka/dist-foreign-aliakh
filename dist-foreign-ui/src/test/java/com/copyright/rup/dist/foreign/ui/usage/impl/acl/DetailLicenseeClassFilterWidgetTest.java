@@ -74,12 +74,11 @@ public class DetailLicenseeClassFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<DetailLicenseeClass, List<String>>> providerCapture = newCapture();
-        Windows.showFilterWindow(eq("Detail Licensee Classes filter"), same(detailLcFilterWidget),
-            capture(providerCapture));
-        expectLastCall().andReturn(filterWindow).once();
+        expect(Windows.showFilterWindow(eq("Detail Licensee Classes filter"), same(detailLcFilterWidget),
+            capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();

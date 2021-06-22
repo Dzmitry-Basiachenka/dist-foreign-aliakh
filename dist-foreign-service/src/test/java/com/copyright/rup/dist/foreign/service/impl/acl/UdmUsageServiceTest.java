@@ -33,8 +33,8 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -260,7 +260,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetAssignees() {
-        List<String> assignees = ImmutableList.of("jjohn@copyright.com", "wjohn@copyright.com");
+        List<String> assignees = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
         expect(udmUsageRepository.findAssignees()).andReturn(assignees).once();
         replay(udmUsageRepository);
         assertEquals(assignees, udmUsageService.getAssignees());
@@ -269,7 +269,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<String> pubTypes = ImmutableList.of("Book", "Not Shared");
+        List<String> pubTypes = Arrays.asList("Book", "Not Shared");
         expect(udmUsageRepository.findPublicationTypes()).andReturn(pubTypes).once();
         replay(udmUsageRepository);
         assertEquals(pubTypes, udmUsageService.getPublicationTypes());
@@ -278,7 +278,7 @@ public class UdmUsageServiceTest {
 
     @Test
     public void testGetPublicationFormats() {
-        List<String> pubFormats = ImmutableList.of("Digital", "Not Specified");
+        List<String> pubFormats = Arrays.asList("Digital", "Not Specified");
         expect(udmUsageRepository.findPublicationFormats()).andReturn(pubFormats).once();
         replay(udmUsageRepository);
         assertEquals(pubFormats, udmUsageService.getPublicationFormats());

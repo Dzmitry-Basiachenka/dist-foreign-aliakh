@@ -26,8 +26,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -153,12 +151,12 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     public void testFindDtosByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
-        filter.setAssignees(ImmutableSet.of(ASSIGNEE));
-        filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED));
-        filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT));
-        filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(22)));
-        filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE));
+        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
+        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
+        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
+        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -184,16 +182,17 @@ public class UdmUsageRepositoryIntegrationTest {
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(ImmutableSet.of(ASSIGNEE)), UDM_USAGE_UID_5,
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED)),
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT)),
+        assertFilteringFindDtosByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter ->
-            filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
+            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter ->
-                filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
+                filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
@@ -275,13 +274,14 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriod(202106), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(ImmutableSet.of(ASSIGNEE)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE)), 2);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)), 3);
         assertFilteringFindCountByFilter(filter ->
-            filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(2))), 1);
+            filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), 1);
         assertFilteringFindCountByFilter(filter ->
-            filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE)), 2);
+            filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 20)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 20)), 2);
@@ -379,12 +379,12 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     public void testFindCountByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
-        filter.setAssignees(ImmutableSet.of(ASSIGNEE));
-        filter.setReportedPubTypes(ImmutableSet.of(PUB_TYPE_NOT_SHARED));
-        filter.setPubFormats(ImmutableSet.of(PUBLICATION_FORMAT));
-        filter.setDetailLicenseeClasses(ImmutableSet.of(buildDetailLicenseeClass(22)));
-        filter.setReportedTypeOfUses(ImmutableSet.of(REPORTED_TYPE_OF_USE));
+        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
+        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
+        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
+        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -430,18 +430,18 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindAssignees() {
-        assertEquals(ImmutableList.of("jjohn@copyright.com", "wjohn@copyright.com"),
+        assertEquals(Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com"),
             udmUsageRepository.findAssignees());
     }
 
     @Test
     public void testFindPublicationTypes() {
-        assertEquals(ImmutableList.of("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
+        assertEquals(Arrays.asList("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
     }
 
     @Test
     public void testFindPublicationFormats() {
-        assertEquals(ImmutableList.of("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
+        assertEquals(Arrays.asList("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
     }
 
     @Test
@@ -530,7 +530,7 @@ public class UdmUsageRepositoryIntegrationTest {
         UdmUsage udmUsage2 = udmUsages.get(1);
         assertEquals(UsageStatusEnum.NEW, udmUsage2.getStatus());
         assertEquals(USER_NAME, udmUsage2.getUpdateUser());
-        udmUsageRepository.updateStatusByIds(ImmutableSet.of(udmUsage1.getId(), udmUsage2.getId()),
+        udmUsageRepository.updateStatusByIds(Sets.newHashSet(udmUsage1.getId(), udmUsage2.getId()),
             UsageStatusEnum.WORK_FOUND);
         udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
         assertEquals(2, udmUsages.size());
@@ -570,7 +570,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private void assertFilteringFindDtosByFilter(Consumer<UdmUsageFilter> consumer, String... usageIds) {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
         consumer.accept(filter);
         List<UdmUsageDto> usages = udmUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(usageIds.length, usages.size());
@@ -580,7 +580,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     private void assertFilteringFindCountByFilter(Consumer<UdmUsageFilter> consumer, int count) {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(ImmutableSet.of(UDM_BATCH_UID_4));
+        filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
         consumer.accept(filter);
         int usagesCount = udmUsageRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);

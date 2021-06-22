@@ -36,7 +36,7 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
      * Constructor.
      *
      * @param supplier         {@link String}s list supplier
-     * @param selectedItemsIds list of selected items
+     * @param selectedItemsIds set of selected items
      */
     public AssigneeFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
         super(ForeignUi.getMessage("label.assignees"));

@@ -36,7 +36,7 @@ public class PublicationFormatFilterWidget extends BaseUdmItemsFilterWidget<Stri
      * Constructor.
      *
      * @param supplier         {@link String}s list supplier
-     * @param selectedItemsIds list of selected items
+     * @param selectedItemsIds set of selected items
      */
     public PublicationFormatFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
         super(ForeignUi.getMessage("label.publication_formats"));

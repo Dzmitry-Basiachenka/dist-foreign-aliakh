@@ -72,11 +72,11 @@ public class AssigneeFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
-        Windows.showFilterWindow(eq("Assignees filter"), same(assigneeFilterWidget), capture(providerCapture));
-        expectLastCall().andReturn(filterWindow).once();
+        expect(Windows.showFilterWindow(eq("Assignees filter"), same(assigneeFilterWidget), capture(providerCapture)))
+            .andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
