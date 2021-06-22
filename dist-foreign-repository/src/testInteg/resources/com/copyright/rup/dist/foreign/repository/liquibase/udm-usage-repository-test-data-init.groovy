@@ -405,7 +405,7 @@ databaseChangeLog {
             column(name: 'company_id', value: 1136)
             column(name: 'company_name', value: 'Albany International Corp.')
             column(name: 'detail_licensee_class_id', value: 22)
-            column(name: 'survey_respondent', value: 'Survey respondent value 1')
+            column(name: 'survey_respondent', value: 'c986xxxx-19c3-4530-8ffc-zzzzzz000000')
             column(name: 'ip_address', value: 'ip192.168.211.211')
             column(name: 'survey_country', value: 'United States')
             column(name: 'usage_date', value: '2020-05-10')
@@ -421,7 +421,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
-            column(name: 'record_version', value: 2)
+            column(name: 'record_version', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
@@ -445,7 +445,7 @@ databaseChangeLog {
             column(name: 'company_id', value: 1138)
             column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
             column(name: 'detail_licensee_class_id', value: 2)
-            column(name: 'survey_respondent', value: 'Survey respondent value 2')
+            column(name: 'survey_respondent', value: 'C986xxxx-19c3-4530-8ffc-zzzzzz111111')
             column(name: 'ip_address', value: 'ip192.168.211.211')
             column(name: 'survey_country', value: 'Portugal')
             column(name: 'usage_date', value: '2020-09-10')

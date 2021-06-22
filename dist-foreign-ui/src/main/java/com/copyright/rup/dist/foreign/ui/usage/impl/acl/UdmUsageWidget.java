@@ -81,6 +81,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         this.controller = controller;
     }
 
+    @Override
     public String getSearchValue() {
         return StringUtils.defaultIfBlank(searchWidget.getSearchValue(), null);
     }

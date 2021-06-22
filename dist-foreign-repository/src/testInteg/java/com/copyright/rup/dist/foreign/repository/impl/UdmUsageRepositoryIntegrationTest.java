@@ -1,11 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
@@ -500,13 +498,13 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     public void testSearchBySurveyRespondent() {
-        verifyFindBySearchValue("Survey respondent value 1", UDM_USAGE_UID_8);
-        verifyFindBySearchValue("Survey respondent", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
-        verifyFindBySearchValue("Sur vey");
+        verifyFindBySearchValue("c986xxxx-19c3-4530-8ffc-zzzzzz000000", UDM_USAGE_UID_8);
+        verifyFindBySearchValue("c986xxxx-19c3-4530-8ffc", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("c986xxxx-19 c3-4530-8ffc");
         verifyFindBySearchValue(INVALID_VALUE);
-        verifyFindBySearchValue("RESPONDENT VALUE 2", UDM_USAGE_UID_9);
-        verifyFindBySearchValue("survey respondent", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
-        verifyFindBySearchValue("SuRvEy ResponDenT", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("C986XXXX-19C3-4530-8FFC-ZZZZZZ111111", UDM_USAGE_UID_9);
+        verifyFindBySearchValue("c986xxxx-19c3-4530-8ffc-", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
+        verifyFindBySearchValue("C986XXxx-19C3-4530-8fFc-", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
     }
 
     @Test
@@ -543,18 +541,21 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {
-        int expectedSize = Arrays.asList(udmUsageIds).size();
+        List<String> expectedUdmUsageIds = Arrays.stream(udmUsageIds)
+            .sorted()
+            .collect(Collectors.toList());
+        int expectedSize = expectedUdmUsageIds.size();
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setSearchValue(searchValue);
         assertEquals(expectedSize, udmUsageRepository.findCountByFilter(udmUsageFilter));
-
         List<UdmUsageDto> udmUsageDtos = udmUsageRepository.findDtosByFilter(udmUsageFilter, null, null);
         assertNotNull(udmUsageDtos);
         assertEquals(expectedSize, udmUsageDtos.size());
         List<String> actualIds = udmUsageDtos.stream()
             .map(UdmUsageDto::getId)
+            .sorted()
             .collect(Collectors.toList());
-        assertThat(actualIds, containsInAnyOrder(udmUsageIds));
+        assertEquals(expectedUdmUsageIds, actualIds);
     }
 
     private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
