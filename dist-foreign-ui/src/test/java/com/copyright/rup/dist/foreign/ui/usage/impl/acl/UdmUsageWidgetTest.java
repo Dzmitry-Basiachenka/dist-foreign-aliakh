@@ -11,7 +11,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
-import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -46,7 +45,7 @@ import java.util.stream.Collectors;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, SecurityUtils.class})
+@PrepareForTest({ForeignSecurityUtils.class})
 public class UdmUsageWidgetTest {
 
     private static final List<String> VISIBLE_COLUMNS_FOR_RESEARCHER =

@@ -11,7 +11,9 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.impl.MainWidget;
 import com.copyright.rup.dist.foreign.ui.main.impl.MainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -68,7 +70,6 @@ public class ForeignUiTest {
 
     @Test
     public void testGetMessage() {
-        mockStatic(ResourceBundle.class);
         ResourceBundle bundle = createMock(ResourceBundle.class);
         Whitebox.setInternalState(ForeignUi.class, bundle);
         expect(bundle.getString("Case without parameters")).andReturn("No parameters");
@@ -128,6 +129,34 @@ public class ForeignUiTest {
         replay(controller, reportController, ForeignSecurityUtils.class);
         foreignUi.initUi();
         verify(controller, reportController, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testInitUiForResearcherRole() {
+        MockSecurityContext context = new MockSecurityContext();
+        SecurityContextHolder.setContext(context);
+        IMainWidgetController controller = createMock(IMainWidgetController.class);
+        IReportController reportController = createMock(IReportController.class);
+        mockStatic(ForeignSecurityUtils.class);
+        MainWidget mainWidget = new MainWidget();
+        IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
+        Whitebox.setInternalState(foreignUi, controller);
+        Whitebox.setInternalState(foreignUi, reportController);
+        Whitebox.setInternalState(foreignUi, productFamilyProvider);
+        expect(controller.initWidget()).andReturn(mainWidget).once();
+        expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
+        controller.onProductFamilyChanged();
+        expectLastCall().once();
+        reportController.onProductFamilyChanged();
+        expectLastCall().once();
+        productFamilyProvider.setProductFamily(FdaConstants.ACL_PRODUCT_FAMILY);
+        expectLastCall().once();
+        controller.refreshWidget();
+        expectLastCall().once();
+        replay(controller, reportController, productFamilyProvider, ForeignSecurityUtils.class);
+        foreignUi.initUi();
+        verify(controller, reportController, productFamilyProvider, ForeignSecurityUtils.class);
     }
 
     @Test
