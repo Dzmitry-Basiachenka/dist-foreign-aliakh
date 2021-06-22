@@ -128,7 +128,7 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testColumnsIsVisibleForResearcher() {
+    public void testUdmTableResearcher() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
         replay(controller, ForeignSecurityUtils.class);
@@ -146,7 +146,7 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testColumnsIsVisibleForSpecialistAndViewOnly() {
+    public void testUdmTableSpecialistAndViewOnly() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
         replay(controller, ForeignSecurityUtils.class);
@@ -164,7 +164,7 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testColumnsIsVisibleForManager() {
+    public void testUdmTableManager() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
