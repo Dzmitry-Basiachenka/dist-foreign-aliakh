@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 public class FilterExpression<T> {
 
-    private FilterOperatorEnum operatorEnum;
+    private FilterOperatorEnum operator;
     private T fieldFirstValue;
     private T fieldSecondValue;
 
@@ -29,22 +29,22 @@ public class FilterExpression<T> {
     }
 
     /**
-     * @param operatorEnum     instance of {@link FilterOperatorEnum}
+     * @param operator         instance of {@link FilterOperatorEnum}
      * @param fieldFirstValue  first value of a field
      * @param fieldSecondValue second value of a field
      */
-    public FilterExpression(FilterOperatorEnum operatorEnum, T fieldFirstValue, T fieldSecondValue) {
-        this.operatorEnum = operatorEnum;
+    public FilterExpression(FilterOperatorEnum operator, T fieldFirstValue, T fieldSecondValue) {
+        this.operator = operator;
         this.fieldFirstValue = fieldFirstValue;
         this.fieldSecondValue = fieldSecondValue;
     }
 
-    public FilterOperatorEnum getOperatorEnum() {
-        return operatorEnum;
+    public FilterOperatorEnum getOperator() {
+        return operator;
     }
 
-    public void setOperatorEnum(FilterOperatorEnum operatorEnum) {
-        this.operatorEnum = operatorEnum;
+    public void setOperator(FilterOperatorEnum operator) {
+        this.operator = operator;
     }
 
     public T getFieldFirstValue() {
@@ -77,7 +77,7 @@ public class FilterExpression<T> {
         }
         FilterExpression<?> that = (FilterExpression<?>) obj;
         return new EqualsBuilder()
-            .append(operatorEnum, that.operatorEnum)
+            .append(operator, that.operator)
             .append(fieldFirstValue, that.fieldFirstValue)
             .append(fieldSecondValue, that.fieldSecondValue)
             .isEquals();
@@ -86,7 +86,7 @@ public class FilterExpression<T> {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(operatorEnum)
+            .append(operator)
             .append(fieldFirstValue)
             .append(fieldSecondValue)
             .toHashCode();
@@ -95,7 +95,7 @@ public class FilterExpression<T> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("operatorEnum", operatorEnum)
+            .append("operator", operator)
             .append("fieldFirstValue", fieldFirstValue)
             .append("fieldSecondValue", fieldSecondValue)
             .toString();

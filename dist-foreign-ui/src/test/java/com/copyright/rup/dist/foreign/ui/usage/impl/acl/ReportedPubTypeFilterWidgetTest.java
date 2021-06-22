@@ -72,12 +72,11 @@ public class ReportedPubTypeFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
-        Windows.showFilterWindow(eq("Reported Pub Types filter"), same(reportedPubTypeFilterWidget),
-            capture(providerCapture));
-        expectLastCall().andReturn(filterWindow).once();
+        expect(Windows.showFilterWindow(eq("Reported Pub Types filter"), same(reportedPubTypeFilterWidget),
+            capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();

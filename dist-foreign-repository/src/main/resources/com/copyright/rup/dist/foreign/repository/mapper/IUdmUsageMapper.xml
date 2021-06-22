@@ -157,7 +157,7 @@
             <if test="!filter.annualMultiplierExpression.isEmpty()">
                 <include refid="filterExpression">
                     <property name="column" value="u.annual_multiplier"/>
-                    <property name="operatorEnum" value="filter.annualMultiplierExpression.operatorEnum"/>
+                    <property name="operator" value="filter.annualMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualMultiplierExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.annualMultiplierExpression.fieldSecondValue}"/>
                 </include>
@@ -165,7 +165,7 @@
             <if test="!filter.annualizedCopiesExpression.isEmpty()">
                 <include refid="filterExpression">
                     <property name="column" value="u.annualized_copies"/>
-                    <property name="operatorEnum" value="filter.annualizedCopiesExpression.operatorEnum"/>
+                    <property name="operator" value="filter.annualizedCopiesExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.annualizedCopiesExpression.fieldSecondValue}"/>
                 </include>
@@ -173,7 +173,7 @@
             <if test="!filter.statisticalMultiplierExpression.isEmpty()">
                 <include refid="filterExpression">
                     <property name="column" value="u.statistical_multiplier"/>
-                    <property name="operatorEnum" value="filter.statisticalMultiplierExpression.operatorEnum"/>
+                    <property name="operator" value="filter.statisticalMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.statisticalMultiplierExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.statisticalMultiplierExpression.fieldSecondValue}"/>
                 </include>
@@ -181,7 +181,7 @@
             <if test="!filter.quantityExpression.isEmpty()">
                 <include refid="filterExpression">
                     <property name="column" value="u.quantity"/>
-                    <property name="operatorEnum" value="filter.quantityExpression.operatorEnum"/>
+                    <property name="operator" value="filter.quantityExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.quantityExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.quantityExpression.fieldSecondValue}"/>
                 </include>
@@ -200,16 +200,16 @@
     </sql>
 
     <sql id="filterExpression">
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operatorEnum}">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
             and ${column} &lt; ${fieldFirstValue}
         </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operatorEnum}">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
             and ${column} &gt; ${fieldFirstValue}
         </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operatorEnum}">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
             and ${column} = ${fieldFirstValue}
         </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operatorEnum}">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
             and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
         </if>
     </sql>

@@ -37,7 +37,7 @@ public class DetailLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget<De
      * Constructor.
      *
      * @param supplier         {@link DetailLicenseeClass}es list supplier
-     * @param selectedItemsIds list of selected items
+     * @param selectedItemsIds set of selected items
      */
     public DetailLicenseeClassFilterWidget(Supplier<List<DetailLicenseeClass>> supplier,
                                            Set<DetailLicenseeClass> selectedItemsIds) {

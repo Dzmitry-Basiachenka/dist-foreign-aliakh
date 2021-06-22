@@ -291,7 +291,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
-            column(name: 'record_version', value: 2)
+            column(name: 'record_version', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
@@ -330,7 +330,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
-            column(name: 'record_version', value: 2)
+            column(name: 'record_version', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
@@ -421,7 +421,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
-            column(name: 'record_version', value: 2)
+            column(name: 'record_version', value: 3)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {

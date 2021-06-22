@@ -86,6 +86,8 @@ public class UdmFiltersWindow extends Window {
     private final LocalDateWidget surveyStartDateToWidget =
         new LocalDateWidget(ForeignUi.getMessage("label.survey_start_date_to"));
     private final ComboBox<UdmChannelEnum> channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
+    private final boolean isFilterPermittedForUser = !ForeignSecurityUtils.hasResearcherPermission();
+    private final Binder<UdmUsageFilter> filterBinder = new Binder<>();
     private AssigneeFilterWidget assigneeFilterWidget;
     private ReportedPubTypeFilterWidget reportedPubTypeFilterWidget;
     private PublicationFormatFilterWidget publicationFormatFilterWidget;
@@ -94,8 +96,6 @@ public class UdmFiltersWindow extends Window {
     private UdmUsageFilter appliedUsageFilter;
     private final UdmUsageFilter usageFilter;
     private final IUdmUsageFilterController controller;
-    private final boolean isFilterPermittedForUser = !ForeignSecurityUtils.hasResearcherPermission();
-    private final Binder<UdmUsageFilter> filterBinder = new Binder<>();
 
     /**
      * Constructor.
@@ -127,7 +127,7 @@ public class UdmFiltersWindow extends Window {
         initAssigneeFilterWidget();
         initReportedPublicationTypeFilterWidget();
         initPublicationFormatFilterWidget();
-        initDetailLicenseeClassNameFilterWidget();
+        initDetailLicenseeClassFilterWidget();
         initTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
@@ -161,7 +161,7 @@ public class UdmFiltersWindow extends Window {
             (IFilterSaveListener<String>) saveEvent -> usageFilter.setPubFormats(saveEvent.getSelectedItemsIds()));
     }
 
-    private void initDetailLicenseeClassNameFilterWidget() {
+    private void initDetailLicenseeClassFilterWidget() {
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
         detailLicenseeClassFilterWidget.addFilterSaveListener(
@@ -449,7 +449,7 @@ public class UdmFiltersWindow extends Window {
         Number secondFieldValue = filterExpression.getFieldSecondValue();
         toField.setEnabled(Objects.nonNull(secondFieldValue));
         if (Objects.nonNull(firstFieldValue)) {
-            FilterOperatorEnum filterOperator = filterExpression.getOperatorEnum();
+            FilterOperatorEnum filterOperator = filterExpression.getOperator();
             fromField.setValue(firstFieldValue.toString());
             toField.setValue(Objects.nonNull(secondFieldValue) ? secondFieldValue.toString() : StringUtils.EMPTY);
             comboBox.setSelectedItem(filterOperator);
@@ -562,6 +562,7 @@ public class UdmFiltersWindow extends Window {
             quantityOperatorComboBox, Integer::valueOf));
     }
 
+    //TODO analyze does it make sense to move converters and validators to separate Utils class
     private Long getLongFromTextField(TextField textField) {
         return StringUtils.isNotEmpty(textField.getValue()) ? Long.valueOf(textField.getValue().trim()) : null;
     }
@@ -578,7 +579,7 @@ public class UdmFiltersWindow extends Window {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
                 StringUtils.isNotEmpty(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
-            filterExpression.setOperatorEnum(comboBox.getValue());
+            filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
     }

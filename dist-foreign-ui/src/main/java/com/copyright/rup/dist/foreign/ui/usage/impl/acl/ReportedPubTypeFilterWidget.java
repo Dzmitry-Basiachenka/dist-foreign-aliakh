@@ -36,7 +36,7 @@ public class ReportedPubTypeFilterWidget extends BaseUdmItemsFilterWidget<String
      * Constructor.
      *
      * @param supplier         {@link String}s list supplier
-     * @param selectedItemsIds list of selected items
+     * @param selectedItemsIds set of selected items
      */
     public ReportedPubTypeFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
         super(ForeignUi.getMessage("label.reported_pub_types"));
