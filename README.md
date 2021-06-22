@@ -1,3 +1,11 @@
+13.1.32
+-
+* B-65859 FDA: UDM in ACL Audit: implement adding audit records during background processing steps
+* B-65860: FDA & UDM: Role-specific UDM view: make changes based on comments in CR-DIST-FOREIGN-237
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: apply trim for additional UDM filters
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: disable Usage Origin filter for Researcher role
+* B-67459: FDA & UDM: Validate Uploaded Country: make changes based on comments in CR-DIST-FOREIGN-239
+
 13.1.31
 -
 * B-67395 FDA & UDM: Create UDM shell - UI Search: adjust sql queries for getting by UDM usage filter with searchValue
