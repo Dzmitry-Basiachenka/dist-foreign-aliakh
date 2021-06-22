@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.UdmBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
@@ -199,6 +200,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
 
     private void initUsageOriginFilter() {
         usageOriginComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
+        usageOriginComboBox.setEnabled(!ForeignSecurityUtils.hasResearcherPermission());
         VaadinUtils.setMaxComponentsWidth(usageOriginComboBox);
         usageOriginComboBox.addValueChangeListener(event -> {
             udmUsageFilter.setUdmUsageOrigin(usageOriginComboBox.getValue());
