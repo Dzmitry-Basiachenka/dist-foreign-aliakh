@@ -109,6 +109,25 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
+    public void testMatchStandardNumberByHostIdnoForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
+        work.setHostIdnoFlag(true);
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by host IDNO 000043122-1");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByStandardNumber(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
     public void testMatchByStandardNumberForNts() {
         String batchId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(STANDARD_NUMBER, TITLE);
@@ -146,6 +165,42 @@ public class WorkMatchingServiceTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
+    public void testMatchByStandardNumberWithStandardNumberNotFoundForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(new Work()).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+            "Wr Wrk Inst was not found by standard number 000043122-1");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByStandardNumber(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getWrWrkInst());
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
+    public void testMatchByStandardNumberWithStandardNumberMultipleMatchesForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        Work value = new Work();
+        value.setMultipleMatches(true);
+        expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(value).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.MULTIPLE_RESULTS,
+            "Multiple results were found by standard number 000043122-1");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByStandardNumber(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getWrWrkInst());
         verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
@@ -207,6 +262,42 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
+    public void testMatchByTitleWithTitleNotFoundForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(new Work()).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+            "Wr Wrk Inst was not found by title \"The theological roots of Pentecostalism\"");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getWrWrkInst());
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
+    public void testMatchByTitleWithTitleMultipleMatchesForUdm() {
+        UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
+        Work value = new Work();
+        value.setMultipleMatches(true);
+        expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(value).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.MULTIPLE_RESULTS,
+            "Multiple results were found by title \"The theological roots of Pentecostalism\"");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getWrWrkInst());
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
     public void testMatchByWrWrkInst() {
         Usage usage = buildUsage(112930820L);
         expect(piIntegrationService.findWorkByWrWrkInst(112930820L))
@@ -257,6 +348,23 @@ public class WorkMatchingServiceTest {
         workMatchingService.matchByWrWrkInst(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
+    }
+
+    @Test
+    public void testMatchByWrWrkInstWithWorkNotFoundForUdm() {
+        UdmUsage usage = buildUdmUsage(112930820L);
+        expect(piIntegrationService.findWorkByWrWrkInst(112930820L)).andReturn(new Work()).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+            "Wr Wrk Inst 112930820 was not found in PI");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByWrWrkInst(usage);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, udmUsageService, udmAuditService);
     }
