@@ -106,6 +106,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         udmBatchService.insertUdmBatch(udmBatch, udmUsages);
         udmUsageService.sendForMatching(udmUsages);
         udmUsageFilterController.getWidget().clearFilter();
+        getWidget().clearSearch();
         return udmUsages.size();
     }
 

@@ -19,4 +19,9 @@ public interface IUdmUsageWidget extends IWidget<IUdmUsageController>, IRefresha
      * @return search value string.
      */
     String getSearchValue();
+
+    /**
+     * Clears search.
+     */
+    void clearSearch();
 }

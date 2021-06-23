@@ -86,6 +86,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return StringUtils.defaultIfBlank(searchWidget.getSearchValue(), null);
     }
 
+    @Override
+    public void clearSearch() {
+        searchWidget.clearSearchValue();
+    }
+
     private VerticalLayout initUsagesLayout() {
         initUsagesGrid();
         VerticalLayout layout = new VerticalLayout(initToolbarLayout(), udmUsagesGrid);

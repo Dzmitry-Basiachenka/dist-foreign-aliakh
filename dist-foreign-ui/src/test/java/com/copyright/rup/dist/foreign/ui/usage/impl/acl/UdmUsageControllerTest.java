@@ -156,6 +156,8 @@ public class UdmUsageControllerTest {
         expectLastCall().once();
         udmUsageService.sendForMatching(udmUsages);
         expectLastCall().once();
+        udmUsageWidget.clearSearch();
+        expectLastCall().once();
         replay(udmBatchService, udmUsageService, udmUsageFilterController, udmUsageFilterWidget);
         controller.loadUdmBatch(udmBatch, udmUsages);
         verify(udmBatchService, udmUsageService, udmUsageFilterController, udmUsageFilterWidget);
