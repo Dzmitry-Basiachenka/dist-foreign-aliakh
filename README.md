@@ -1,3 +1,10 @@
+13.1.33
+-
+* B-65859 FDA: UDM in ACL Audit: make changes based on comments in code review
+* B-65860: FDA & UDM: Role-specific UDM view: make changes based on comments in CR-DIST-FOREIGN-237
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: make changes based on comments in CR-DIST-FOREIGN-240
+* B-67395 FDA & UDM: Create UDM shell - UI Search: make changes based on comments in CR-DIST-FOREIGN-241
+
 13.1.32
 -
 * B-65859 FDA: UDM in ACL Audit: implement adding audit records during background processing steps
