@@ -13,7 +13,6 @@ import static org.junit.Assert.assertSame;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.impl.UdmUsageAuditRepository;
-import com.google.common.collect.ImmutableSet;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +32,7 @@ import java.util.List;
  */
 public class UdmUsageAuditServiceTest {
 
-    private static final String UDM_USAGE_UID_1 = "897b37e1-be26-42dd-975a-12161d57787a";
-    private static final String UDM_USAGE_UID_2 = "0e66da0c-4c14-471f-9f22-dc16a208c478";
+    private static final String UDM_USAGE_UID = "897b37e1-be26-42dd-975a-12161d57787a";
     private static final String REASON = "Uploaded in 'UDM Batch 2021' Batch";
 
     private UdmUsageAuditService udmUsageAuditService;
@@ -53,31 +51,9 @@ public class UdmUsageAuditServiceTest {
         udmUsageAuditRepository.insert(capture(auditItemCapture));
         expectLastCall().once();
         replay(udmUsageAuditRepository);
-        udmUsageAuditService.logAction(UDM_USAGE_UID_1, UsageActionTypeEnum.LOADED, REASON);
+        udmUsageAuditService.logAction(UDM_USAGE_UID, UsageActionTypeEnum.LOADED, REASON);
         UsageAuditItem auditItem = auditItemCapture.getValue();
-        assertEquals(UDM_USAGE_UID_1, auditItem.getUsageId());
-        assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
-        assertEquals(REASON, auditItem.getActionReason());
-        verify(udmUsageAuditRepository);
-    }
-
-    @Test
-    public void testLogActionUdmUsageIds() {
-        Capture<UsageAuditItem> auditItemCapture1 = newCapture();
-        udmUsageAuditRepository.insert(capture(auditItemCapture1));
-        expectLastCall().once();
-        Capture<UsageAuditItem> auditItemCapture2 = newCapture();
-        udmUsageAuditRepository.insert(capture(auditItemCapture2));
-        expectLastCall().once();
-        replay(udmUsageAuditRepository);
-        udmUsageAuditService.logAction(ImmutableSet.of(UDM_USAGE_UID_1, UDM_USAGE_UID_2),
-            UsageActionTypeEnum.LOADED, REASON);
-        UsageAuditItem auditItem1 = auditItemCapture1.getValue();
-        assertEquals(UDM_USAGE_UID_1, auditItem1.getUsageId());
-        assertEquals(UsageActionTypeEnum.LOADED, auditItem1.getActionType());
-        assertEquals(REASON, auditItem1.getActionReason());
-        UsageAuditItem auditItem = auditItemCapture2.getValue();
-        assertEquals(UDM_USAGE_UID_2, auditItem.getUsageId());
+        assertEquals(UDM_USAGE_UID, auditItem.getUsageId());
         assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
         assertEquals(REASON, auditItem.getActionReason());
         verify(udmUsageAuditRepository);
@@ -86,9 +62,9 @@ public class UdmUsageAuditServiceTest {
     @Test
     public void testGetUdmUsageAudit() {
         List<UsageAuditItem> auditItems = Collections.emptyList();
-        expect(udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID_1)).andReturn(auditItems).once();
+        expect(udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID)).andReturn(auditItems).once();
         replay(udmUsageAuditRepository);
-        assertSame(auditItems, udmUsageAuditService.getUdmUsageAudit(UDM_USAGE_UID_1));
+        assertSame(auditItems, udmUsageAuditService.getUdmUsageAudit(UDM_USAGE_UID));
         verify(udmUsageAuditRepository);
     }
 }

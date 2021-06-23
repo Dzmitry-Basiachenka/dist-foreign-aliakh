@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
@@ -32,6 +33,7 @@ import java.util.Set;
 @Repository
 public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepository {
 
+    private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -99,11 +101,13 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
 
     @Override
     public void updateStatusByIds(Set<String> udmUsageIds, UsageStatusEnum status) {
-        Objects.requireNonNull(udmUsageIds);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("status", Objects.requireNonNull(status));
         parameters.put("updateUser", StoredEntity.DEFAULT_USER);
-        parameters.put("usageIds", udmUsageIds);
-        update("IUdmUsageMapper.updateStatusByIds", parameters);
+        Iterables.partition(Objects.requireNonNull(udmUsageIds), MAX_VARIABLES_COUNT)
+            .forEach(partition -> {
+                parameters.put("usageIds", partition);
+                update("IUdmUsageMapper.updateStatusByIds", parameters);
+            });
     }
 }

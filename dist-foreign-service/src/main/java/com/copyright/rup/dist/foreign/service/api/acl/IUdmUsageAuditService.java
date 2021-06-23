@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for UDM usage audit service.
@@ -25,15 +24,6 @@ public interface IUdmUsageAuditService {
      * @param actionReason action reason
      */
     void logAction(String udmUsageId, UsageActionTypeEnum actionType, String actionReason);
-
-    /**
-     * Logs UDM usage action for multiple UDM usages.
-     *
-     * @param udmUsageIds  set of {@link com.copyright.rup.dist.foreign.domain.UdmUsage} ids
-     * @param actionType   usage action type
-     * @param actionReason action reason
-     */
-    void logAction(Set<String> udmUsageIds, UsageActionTypeEnum actionType, String actionReason);
 
     /**
      * Gets all actions for usage with given id.
