@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -22,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Service encapsulates logic for matching {@link Usage}s to works against PI (Publi).
@@ -116,23 +116,21 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByStandardNumber(UdmUsage usage) {
         updateUdmUsageWorkInfo(usage,
             piIntegrationService.findWorkByStandardNumber(usage.getReportedStandardNumber()),
-            () -> String.format("Wr Wrk Inst %s was found by standard number %s",
-                usage.getWrWrkInst(), usage.getReportedStandardNumber()));
+            UdmUsageGroupEnum.STANDARD_NUMBER);
     }
 
     @Override
     @Transactional
     public void matchByTitle(UdmUsage usage) {
         updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByTitle(usage.getReportedTitle()),
-            () -> String.format("Wr Wrk Inst %s was found by title \"%s\"",
-                usage.getWrWrkInst(), usage.getReportedTitle()));
+            UdmUsageGroupEnum.TITLE);
     }
 
     @Override
     @Transactional
     public void matchByWrWrkInst(UdmUsage usage) {
         updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst()),
-            () -> String.format("Wr Wrk Inst %s was found in PI", usage.getWrWrkInst()));
+            UdmUsageGroupEnum.WR_WRK_INST);
     }
 
     @Override
@@ -168,18 +166,29 @@ public class WorkMatchingService implements IWorkMatchingService {
         return work;
     }
 
-    private void updateUdmUsageWorkInfo(UdmUsage usage, Work work, Supplier<String> actionReasonSupplier) {
+    private void updateUdmUsageWorkInfo(UdmUsage usage, Work work, UdmUsageGroupEnum usageGroup) {
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumber(work.getMainIdno());
-            udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                actionReasonSupplier.get());
+            if (work.isHostIdnoFlag()) {
+                udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was found by host IDNO %s",
+                        usage.getWrWrkInst(), usage.getReportedStandardNumber()));
+            } else {
+                udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    usageGroup.getWorkFoundReasonFunction().apply(usage));
+            }
         } else {
             usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-            udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                String.format("Wr Wrk Inst %s was not found in PI", usage.getWrWrkInst()));
+            if (work.isMultipleMatches()) {
+                udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.MULTIPLE_RESULTS,
+                    usageGroup.getMultipleMatchesReasonFunction().apply(usage));
+            } else {
+                udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                    usageGroup.getWorkNotFoundReasonFunction().apply(usage));
+            }
         }
         udmUsageService.updateProcessedUsage(usage);
     }
@@ -292,5 +301,90 @@ public class WorkMatchingService implements IWorkMatchingService {
          * with {@link UsageActionTypeEnum#MULTIPLE_RESULTS} action type for {@link Usage}
          */
         abstract Function<Usage, String> getMultipleMatchesReasonFunction();
+    }
+
+    private enum UdmUsageGroupEnum {
+
+        /**
+         * Enum constant to separate groups of {@link UdmUsage}s with standard number.
+         */
+        STANDARD_NUMBER {
+            @Override
+            Function<UdmUsage, String> getWorkFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst %s was found by standard number %s",
+                    usage.getWrWrkInst(), usage.getReportedStandardNumber());
+            }
+
+            @Override
+            Function<UdmUsage, String> getWorkNotFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst was not found by standard number %s",
+                    usage.getReportedStandardNumber());
+            }
+
+            @Override
+            Function<UdmUsage, String> getMultipleMatchesReasonFunction() {
+                return usage -> String.format("Multiple results were found by standard number %s",
+                    usage.getReportedStandardNumber());
+            }
+        },
+        /**
+         * Enum constant to separate groups of {@link UdmUsage}s with work title.
+         */
+        TITLE {
+            @Override
+            Function<UdmUsage, String> getWorkFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst %s was found by title \"%s\"",
+                    usage.getWrWrkInst(), usage.getReportedTitle());
+            }
+
+            @Override
+            Function<UdmUsage, String> getWorkNotFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst was not found by title \"%s\"",
+                    usage.getReportedTitle());
+            }
+
+            @Override
+            Function<UdmUsage, String> getMultipleMatchesReasonFunction() {
+                return usage -> String.format("Multiple results were found by title \"%s\"",
+                    usage.getReportedTitle());
+            }
+        },
+        /**
+         * Enum constant to separate groups of {@link UdmUsage}s with work wrWrkInst.
+         */
+        WR_WRK_INST {
+            @Override
+            Function<UdmUsage, String> getWorkFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst %s was found in PI", usage.getWrWrkInst());
+            }
+
+            @Override
+            Function<UdmUsage, String> getWorkNotFoundReasonFunction() {
+                return usage -> String.format("Wr Wrk Inst %s was not found in PI", usage.getWrWrkInst());
+            }
+
+            @Override
+            Function<UdmUsage, String> getMultipleMatchesReasonFunction() {
+                throw new RupRuntimeException("PI should never have multiple matches by Wr Wrk Inst");
+            }
+        };
+
+        /**
+         * @return reason for making {@link UdmUsage}
+         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_FOUND}.
+         */
+        abstract Function<UdmUsage, String> getWorkFoundReasonFunction();
+
+        /**
+         * @return {@link Function} for building reason for setting status {@link UsageStatusEnum#WORK_NOT_FOUND}
+         * with {@link UsageActionTypeEnum#WORK_NOT_FOUND} action type for {@link UdmUsage}.
+         */
+        abstract Function<UdmUsage, String> getWorkNotFoundReasonFunction();
+
+        /**
+         * @return {@link Function} for building reason for setting status {@link UsageStatusEnum#WORK_NOT_FOUND}
+         * with {@link UsageActionTypeEnum#MULTIPLE_RESULTS} action type for {@link UdmUsage}
+         */
+        abstract Function<UdmUsage, String> getMultipleMatchesReasonFunction();
     }
 }
