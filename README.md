@@ -1,3 +1,8 @@
+13.1.34
+-
+* B-65859 FDA: UDM in ACL Audit: make changes based on comments in code review
+* CDP-993 FDA: UDM tab: Search results are not cleaned up after uploading a new batch
+
 13.1.33
 -
 * B-65859 FDA: UDM in ACL Audit: make changes based on comments in code review
