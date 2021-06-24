@@ -60,8 +60,8 @@ databaseChangeLog {
             column(name: 'df_udm_usage_uid', value: 'e6040f00-8564-4482-ab67-9965483a8a9f')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2021 June\' Batch')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
         }
 

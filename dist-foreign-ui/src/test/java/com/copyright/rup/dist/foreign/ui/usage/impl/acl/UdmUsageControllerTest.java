@@ -183,8 +183,8 @@ public class UdmUsageControllerTest {
         expectLastCall().once();
         replay(Windows.class, udmUsageAuditService);
         controller.showUdmUsageHistory(udmUsageId);
-        verify(Windows.class, udmUsageAuditService);
         assertNotNull(windowCapture.getValue());
+        verify(Windows.class, udmUsageAuditService);
     }
 
     private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {

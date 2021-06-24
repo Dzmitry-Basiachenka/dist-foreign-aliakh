@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Implementation of {@link IUdmUsageAuditService}.
@@ -33,11 +32,6 @@ public class UdmUsageAuditService implements IUdmUsageAuditService {
     @Override
     public void logAction(String udmUsageId, UsageActionTypeEnum actionType, String actionReason) {
         udmUsageAuditRepository.insert(buildUsageAuditItem(udmUsageId, actionType, actionReason));
-    }
-
-    @Override
-    public void logAction(Set<String> udmUsageIds, UsageActionTypeEnum actionType, String actionReason) {
-        udmUsageIds.forEach(udmUsageId -> logAction(udmUsageId, actionType, actionReason));
     }
 
     @Override
