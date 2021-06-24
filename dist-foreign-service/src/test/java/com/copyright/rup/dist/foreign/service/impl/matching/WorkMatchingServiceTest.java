@@ -111,18 +111,18 @@ public class WorkMatchingServiceTest {
     @Test
     public void testMatchStandardNumberByHostIdnoForUdm() {
         UdmUsage usage = buildUdmUsage(STANDARD_NUMBER, TITLE);
-        Work work = new Work(112930820L, TITLE, STANDARD_NUMBER, VALISBN10);
+        Work work = new Work(112930820L, TITLE, "2192-3558", VALISBN10);
         work.setHostIdnoFlag(true);
         expect(piIntegrationService.findWorkByStandardNumber(STANDARD_NUMBER)).andReturn(work).once();
         udmUsageService.updateProcessedUsage(usage);
         expectLastCall().once();
         udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 112930820 was found by host IDNO 000043122-1");
+            "Wr Wrk Inst 112930820 was found by host IDNO 2192-3558");
         expectLastCall().once();
         replay(piIntegrationService, udmUsageService, udmAuditService);
         workMatchingService.matchByStandardNumber(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
+        assertEquals("2192-3558", usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, udmUsageService, udmAuditService);
     }
@@ -241,6 +241,25 @@ public class WorkMatchingServiceTest {
         assertEquals(VALISSN, usage.getStandardNumberType());
         assertEquals("00485772", usage.getStandardNumber());
         verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchTitleByHostIdnoForUdm() {
+        UdmUsage usage = buildUdmUsage(null, TITLE);
+        Work work = new Work(112930820L, TITLE, "00583721", VALISSN);
+        work.setHostIdnoFlag(true);
+        expect(piIntegrationService.findWorkByTitle(TITLE)).andReturn(work).once();
+        udmUsageService.updateProcessedUsage(usage);
+        expectLastCall().once();
+        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 112930820 was found by host IDNO 00583721");
+        expectLastCall().once();
+        replay(piIntegrationService, udmUsageService, udmAuditService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals("00583721", usage.getStandardNumber());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 
     @Test

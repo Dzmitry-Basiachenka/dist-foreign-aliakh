@@ -175,7 +175,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             if (work.isHostIdnoFlag()) {
                 udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                     String.format("Wr Wrk Inst %s was found by host IDNO %s",
-                        usage.getWrWrkInst(), usage.getReportedStandardNumber()));
+                        usage.getWrWrkInst(), usage.getStandardNumber()));
             } else {
                 udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                     usageGroup.getWorkFoundReasonFunction().apply(usage));
