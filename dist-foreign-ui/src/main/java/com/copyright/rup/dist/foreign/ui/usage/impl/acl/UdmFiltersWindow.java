@@ -51,7 +51,7 @@ import java.util.function.Function;
 public class UdmFiltersWindow extends Window {
 
     private static final String AMOUNT_VALIDATION_MESSAGE =
-        ForeignUi.getMessage("field.error.positive_number_and_length", 9);
+        ForeignUi.getMessage("field.error.positive_number_and_length", 10);
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
