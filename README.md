@@ -1,3 +1,8 @@
+13.1.35
+-
+* B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: update validation error message for decimal multiplier fields
+* CDP-994 FDA: Audit in UDM: Audit for matching by host idno contains reported standard number instead of found host idno
+
 13.1.34
 -
 * B-65859 FDA: UDM in ACL Audit: make changes based on comments in code review
