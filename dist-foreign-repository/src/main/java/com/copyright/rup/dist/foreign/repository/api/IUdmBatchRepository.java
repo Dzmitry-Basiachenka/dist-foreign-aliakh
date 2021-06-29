@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for UDM usage batches.
@@ -51,4 +53,13 @@ public interface IUdmBatchRepository {
      * @return {@code true} - if batch exists, {@code false} - otherwise
      */
     boolean udmBatchExists(String name);
+
+    /**
+     * Verifies that UDM batch processing is completed for specific statuses.
+     *
+     * @param udmBatchId batch identifier
+     * @param statuses   intermediate statuses
+     * @return true if UDM batch status is completed, false - otherwise
+     */
+    boolean isUdmBatchProcessingCompleted(String udmBatchId, Set<UsageStatusEnum> statuses);
 }

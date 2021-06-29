@@ -20,6 +20,8 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
+import com.google.common.collect.Sets;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmBatchService}.
@@ -109,6 +112,16 @@ public class UdmBatchServiceTest {
         expect(udmBatchRepository.udmBatchExists(batchName)).andReturn(true).once();
         replay(udmBatchRepository);
         assertTrue(udmBatchService.udmBatchExists(batchName));
+        verify(udmBatchRepository);
+    }
+
+    @Test
+    public void testIsUdmBatchProcessingCompleted() {
+        Set<UsageStatusEnum> statuses =
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND);
+        expect(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID, statuses)).andReturn(true).once();
+        replay(udmBatchRepository);
+        assertTrue(udmBatchService.isUdmBatchProcessingCompleted(UDM_BATCH_UID));
         verify(udmBatchRepository);
     }
 
