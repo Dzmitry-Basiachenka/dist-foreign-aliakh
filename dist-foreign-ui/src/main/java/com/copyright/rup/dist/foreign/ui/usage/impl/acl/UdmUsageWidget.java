@@ -26,6 +26,7 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -110,10 +111,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         // TODO {dbasiachenka} Add action for exportButton
+        Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
+        editButton.addClickListener(event -> Windows.showModalWindow(new UdmEditUsageWindow(new UdmUsageDto())));
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
-        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar, exportButton);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar, editButton, exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
         toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);

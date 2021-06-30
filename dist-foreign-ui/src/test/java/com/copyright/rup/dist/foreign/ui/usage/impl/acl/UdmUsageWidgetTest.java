@@ -24,6 +24,7 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,7 +108,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -133,7 +134,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -159,7 +160,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -185,7 +186,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -201,13 +202,6 @@ public class UdmUsageWidgetTest {
         verifySearchWidget(layout.getComponent(1), searchPlaceholder);
     }
 
-    private void verifyButton(Component component, String name, boolean isVisible) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals(name, button.getCaption());
-        assertEquals(isVisible, button.isVisible());
-    }
-
     private void verifySearchWidget(Component component, String searchPlaceholder) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
@@ -218,10 +212,18 @@ public class UdmUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(false), layout.getMargin());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Load", buttonsVisibility[0]);
         verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
-        verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
+        verifyButton(layout.getComponent(2), "Edit Usage", buttonsVisibility[2]);
+        verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);
+    }
+
+    private void verifyButton(Component component, String name, boolean isVisible) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(name, button.getCaption());
+        assertEquals(isVisible, button.isVisible());
     }
 
     private void verifyMenuBar(Component component, String menuBarName, boolean isVisible, List<String> menuItems) {

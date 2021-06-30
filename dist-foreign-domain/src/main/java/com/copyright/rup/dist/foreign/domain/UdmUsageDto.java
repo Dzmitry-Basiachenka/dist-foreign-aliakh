@@ -36,6 +36,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private String pubFormat;
     private String article;
     private String language;
+    private String actionReason;
     private Integer detailLicenseeClassId;
     private String detailLicenseeClassName;
     private Long companyId;
@@ -54,6 +55,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private BigDecimal annualizedCopies;
     private String ineligibleReason;
     private String comment;
+    private String researchUrl;
 
     public Integer getPeriod() {
         return period;
@@ -189,6 +191,14 @@ public class UdmUsageDto extends StoredEntity<String> {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getActionReason() {
+        return actionReason;
+    }
+
+    public void setActionReason(String actionReason) {
+        this.actionReason = actionReason;
     }
 
     public String getPubFormat() {
@@ -327,6 +337,14 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public String getResearchUrl() {
+        return researchUrl;
+    }
+
+    public void setResearchUrl(String researchUrl) {
+        this.researchUrl = researchUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -355,6 +373,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(article, udmUsage.article)
             .append(reportedPubType, udmUsage.reportedPubType)
             .append(language, udmUsage.language)
+            .append(actionReason, udmUsage.actionReason)
             .append(pubFormat, udmUsage.pubFormat)
             .append(reportedTypeOfUse, udmUsage.reportedTypeOfUse)
             .append(quantity, udmUsage.quantity)
@@ -372,6 +391,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
             .append(annualizedCopies, udmUsage.annualizedCopies)
             .append(comment, udmUsage.comment)
+            .append(researchUrl, udmUsage.researchUrl)
             .isEquals();
     }
 
@@ -396,6 +416,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(article)
             .append(reportedPubType)
             .append(language)
+            .append(actionReason)
             .append(pubFormat)
             .append(reportedTypeOfUse)
             .append(quantity)
@@ -413,6 +434,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(statisticalMultiplier)
             .append(annualizedCopies)
             .append(comment)
+            .append(researchUrl)
             .toHashCode();
     }
 
@@ -438,6 +460,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("article", article)
             .append("reportedPubType", reportedPubType)
             .append("language", language)
+            .append("actionReason", actionReason)
             .append("pubFormat", pubFormat)
             .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("quantity", quantity)
@@ -455,6 +478,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("statisticalMultiplier", statisticalMultiplier)
             .append("annualizedCopies", annualizedCopies)
             .append("comment", comment)
+            .append("researchUrl", researchUrl)
             .toString();
     }
 }
