@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageAuditRepository;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +58,15 @@ public class UdmUsageAuditRepositoryIntegrationTest {
         assertEquals(UDM_USAGE_UID, auditItem2.getUsageId());
         assertEquals(UsageActionTypeEnum.LOADED, auditItem2.getActionType());
         assertEquals("Uploaded in 'UDM Batch 2021 June' Batch", auditItem2.getActionReason());
+    }
+
+    @Test
+    public void testDeleteByBatchId() {
+        assertEquals(1,
+            CollectionUtils.size(udmUsageAuditRepository.findByUdmUsageId("081dbeb4-ec1d-4519-882d-704acb68d8fa")));
+        udmUsageAuditRepository.deleteByBatchId("a42efa41-1531-49b2-b065-a40168082a84");
+        assertTrue(
+            CollectionUtils.isEmpty(udmUsageAuditRepository.findByUdmUsageId("081dbeb4-ec1d-4519-882d-704acb68d8fa")));
     }
 
     private UsageAuditItem buildUsageAuditItem() {

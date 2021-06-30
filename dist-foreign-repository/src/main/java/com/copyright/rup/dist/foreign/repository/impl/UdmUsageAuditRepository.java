@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageAuditRepository;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,5 +29,10 @@ public class UdmUsageAuditRepository extends BaseRepository implements IUdmUsage
     @Override
     public List<UsageAuditItem> findByUdmUsageId(String udmUsageId) {
         return selectList("IUdmUsageAuditMapper.findByUdmUsageId", Objects.requireNonNull(udmUsageId));
+    }
+
+    @Override
+    public void deleteByBatchId(String udmBatchId) {
+        delete("IUdmUsageAuditMapper.deleteByBatchId", Objects.requireNonNull(udmBatchId));
     }
 }

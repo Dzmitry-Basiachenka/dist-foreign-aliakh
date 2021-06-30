@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,11 @@ public class UdmUsageAuditService implements IUdmUsageAuditService {
     @Override
     public List<UsageAuditItem> getUdmUsageAudit(String udmUsageId) {
         return udmUsageAuditRepository.findByUdmUsageId(udmUsageId);
+    }
+
+    @Override
+    public void deleteActionsByBatchId(String udmBatchId) {
+        udmUsageAuditRepository.deleteByBatchId(udmBatchId);
     }
 
     private UsageAuditItem buildUsageAuditItem(String udmUsageId, UsageActionTypeEnum actionType, String actionReason) {

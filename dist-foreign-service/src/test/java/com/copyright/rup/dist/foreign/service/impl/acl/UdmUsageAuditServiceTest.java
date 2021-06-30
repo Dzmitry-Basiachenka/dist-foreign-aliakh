@@ -13,6 +13,7 @@ import static org.junit.Assert.assertSame;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.impl.UdmUsageAuditRepository;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,7 @@ import java.util.List;
 public class UdmUsageAuditServiceTest {
 
     private static final String UDM_USAGE_UID = "897b37e1-be26-42dd-975a-12161d57787a";
+    private static final String UDM_BATCH_UID = "7e256f71-d740-46fa-8e13-9ebc5378fd8d";
     private static final String REASON = "Uploaded in 'UDM Batch 2021' Batch";
 
     private UdmUsageAuditService udmUsageAuditService;
@@ -65,6 +67,15 @@ public class UdmUsageAuditServiceTest {
         expect(udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID)).andReturn(auditItems).once();
         replay(udmUsageAuditRepository);
         assertSame(auditItems, udmUsageAuditService.getUdmUsageAudit(UDM_USAGE_UID));
+        verify(udmUsageAuditRepository);
+    }
+
+    @Test
+    public void testDeleteActionsByBatchId() {
+        udmUsageAuditRepository.deleteByBatchId(UDM_BATCH_UID);
+        expectLastCall().once();
+        replay(udmUsageAuditRepository);
+        udmUsageAuditService.deleteActionsByBatchId(UDM_BATCH_UID);
         verify(udmUsageAuditRepository);
     }
 }
