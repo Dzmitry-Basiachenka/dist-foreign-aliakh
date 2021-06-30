@@ -109,7 +109,9 @@ public class DomainVerifierTest {
             {FilterEqualsExpression.class},
             {FilterBetweenExpression.class},
             {FilterGreaterThanExpression.class},
-            {FilterLessThanExpression.class}
+            {FilterLessThanExpression.class},
+            {UdmActionReason.class},
+            {UdmIneligibleReason.class}
         };
         return Arrays.asList(testData);
     }

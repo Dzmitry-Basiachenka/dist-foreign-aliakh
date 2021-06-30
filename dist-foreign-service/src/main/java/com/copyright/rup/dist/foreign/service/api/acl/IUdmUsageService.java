@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -101,4 +103,18 @@ public interface IUdmUsageService {
      * @return list of publication formats from UDM usages.
      */
     List<String> getPublicationFormats();
+
+    /**
+     * Gets list of {@link UdmActionReason}.
+     *
+     * @return list of {@link UdmActionReason}
+     */
+    List<UdmActionReason> getActionReasons();
+
+    /**
+     * Gets list of {@link UdmIneligibleReason}.
+     *
+     * @return list of {@link UdmIneligibleReason}
+     */
+    List<UdmIneligibleReason> getIneligibleReasons();
 }

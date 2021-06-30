@@ -18,8 +18,10 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
@@ -282,6 +284,28 @@ public class UdmUsageServiceTest {
         expect(udmUsageRepository.findPublicationFormats()).andReturn(pubFormats).once();
         replay(udmUsageRepository);
         assertEquals(pubFormats, udmUsageService.getPublicationFormats());
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetActionReasons() {
+        List<UdmActionReason> actionReasons = Arrays.asList(
+            new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
+            new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
+        expect(udmUsageRepository.findActionReasons()).andReturn(actionReasons).once();
+        replay(udmUsageRepository);
+        assertEquals(actionReasons, udmUsageService.getActionReasons());
+        verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testGetIneligibleReasons() {
+        List<UdmIneligibleReason> ineligibleReasons = Arrays.asList(
+            new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
+            new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"));
+        expect(udmUsageRepository.findIneligibleReasons()).andReturn(ineligibleReasons).once();
+        replay(udmUsageRepository);
+        assertEquals(ineligibleReasons, udmUsageService.getIneligibleReasons());
         verify(udmUsageRepository);
     }
 
