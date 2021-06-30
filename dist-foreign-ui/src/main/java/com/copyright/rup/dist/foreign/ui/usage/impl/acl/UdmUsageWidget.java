@@ -108,14 +108,16 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         initAssignmentMenuBar();
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        // TODO {dbasiachenka} Add action for exportButton
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
-        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar, exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
         toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
-        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_RIGHT);
         toolbar.setExpandRatio(searchWidget, 1f);
         toolbar.setMargin(true);
         VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");

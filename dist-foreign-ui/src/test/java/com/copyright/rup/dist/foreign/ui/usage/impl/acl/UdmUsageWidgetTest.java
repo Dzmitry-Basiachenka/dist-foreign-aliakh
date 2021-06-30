@@ -107,7 +107,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -133,7 +133,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -159,7 +159,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -185,7 +185,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -218,9 +218,10 @@ public class UdmUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(false), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Load", buttonsVisibility[0]);
         verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
+        verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
     }
 
     private void verifyMenuBar(Component component, String menuBarName, boolean isVisible, List<String> menuItems) {
