@@ -29,4 +29,11 @@ public interface IUdmUsageAuditRepository {
      * @return list of {@link UsageAuditItem}s
      */
     List<UsageAuditItem> findByUdmUsageId(String udmUsageId);
+
+    /**
+     * Deletes {@link UsageAuditItem}s by {@link com.copyright.rup.dist.foreign.domain.UdmBatch} identifier.
+     *
+     * @param udmBatchId batch identifier
+     */
+    void deleteByBatchId(String udmBatchId);
 }

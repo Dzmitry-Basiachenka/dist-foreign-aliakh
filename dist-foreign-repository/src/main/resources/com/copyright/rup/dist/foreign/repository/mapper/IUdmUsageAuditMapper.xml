@@ -42,4 +42,13 @@
         where df_udm_usage_uid = #{usageId}
         order by created_datetime desc
     </select>
+
+    <delete id="deleteByBatchId" parameterType="string">
+        delete from ${schema}.df_udm_audit
+        where df_udm_usage_uid in (
+            select df_udm_usage_uid
+            from ${schema}.df_udm_usage
+            where df_udm_usage_batch_uid = #{udmBatchId}
+        )
+    </delete>
 </mapper>

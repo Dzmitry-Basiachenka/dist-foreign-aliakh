@@ -32,4 +32,11 @@ public interface IUdmUsageAuditService {
      * @return list of {@link UsageAuditItem}
      */
     List<UsageAuditItem> getUdmUsageAudit(String udmUsageId);
+
+    /**
+     * Deletes UDM usage actions by UDM batch identifier.
+     *
+     * @param udmBatchId UDM batch identifier
+     */
+    void deleteActionsByBatchId(String udmBatchId);
 }
