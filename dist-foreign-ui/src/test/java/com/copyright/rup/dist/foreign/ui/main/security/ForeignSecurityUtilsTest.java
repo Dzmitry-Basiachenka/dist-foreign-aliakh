@@ -120,6 +120,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasSpecialistPermission());
         assertEquals(permissions.contains("FDA_RESEARCHER_PERMISSION"),
             ForeignSecurityUtils.hasResearcherPermission());
+        assertEquals(permissions.contains("FDA_ASSIGN_USAGE"),
+            ForeignSecurityUtils.hasAssignUsagePermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

@@ -20,10 +20,11 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmUsageWidget}.
@@ -69,6 +71,10 @@ public class UdmUsageWidgetTest {
             "Det LC Name", "Company ID", "Company Name", "Survey Respondent", "Survey Country", "Channel", "Usage Date",
             "Survey Start Date", "Survey End Date", "Annual Multiplier", "Statistical Multiplier", "Reported TOU",
             "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
+    private static final String SEARCH_PLACEHOLDER =
+        "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Survey Respondent or Comment";
+    private static final String SEARCH_PLACEHOLDER_RESEARCHER =
+        "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
 
@@ -81,13 +87,16 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testWidgetStructure() {
+    public void testWidgetStructureForSpecialist() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
         verify(controller, ForeignSecurityUtils.class);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -98,8 +107,60 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+    }
+
+    @Test
+    public void testWidgetStructureForManager() {
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
+        replay(controller, ForeignSecurityUtils.class);
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
+        verify(controller, ForeignSecurityUtils.class);
+        assertTrue(usagesWidget.isLocked());
+        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        Component secondComponent = usagesWidget.getSecondComponent();
+        assertTrue(secondComponent instanceof VerticalLayout);
+        VerticalLayout layout = (VerticalLayout) secondComponent;
+        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        assertEquals(2, layout.getComponentCount());
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER);
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+    }
+
+    @Test
+    public void testWidgetStructureForViewOnly() {
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(false).once();
+        replay(controller, ForeignSecurityUtils.class);
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
+        verify(controller, ForeignSecurityUtils.class);
+        assertTrue(usagesWidget.isLocked());
+        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
+        Component secondComponent = usagesWidget.getSecondComponent();
+        assertTrue(secondComponent instanceof VerticalLayout);
+        VerticalLayout layout = (VerticalLayout) secondComponent;
+        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        assertEquals(2, layout.getComponentCount());
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -107,10 +168,13 @@ public class UdmUsageWidgetTest {
     public void testWidgetStructureForResearcher() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
         replay(controller, ForeignSecurityUtils.class);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
         verify(controller, ForeignSecurityUtils.class);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -121,113 +185,63 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayoutForResearcher(layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUdmTableResearcher() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        replay(controller, ForeignSecurityUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        verify(controller, ForeignSecurityUtils.class);
-        Component secondComponent = usagesWidget.getSecondComponent();
-        VerticalLayout layout = (VerticalLayout) secondComponent;
-        Grid grid = (Grid) layout.getComponent(1);
-        List<Column<String, ?>> columns = grid.getColumns();
-        assertEquals(VISIBLE_COLUMNS_FOR_RESEARCHER,
-            columns.stream().filter(column -> !column.isHidden()).map(Column::getCaption).collect(Collectors.toList()));
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUdmTableSpecialistAndViewOnly() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        replay(controller, ForeignSecurityUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        verify(controller, ForeignSecurityUtils.class);
-        Component secondComponent = usagesWidget.getSecondComponent();
-        VerticalLayout layout = (VerticalLayout) secondComponent;
-        Grid grid = (Grid) layout.getComponent(1);
-        List<Column<String, ?>> columns = grid.getColumns();
-        assertEquals(VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY,
-            columns.stream().filter(column -> !column.isHidden()).map(Column::getCaption).collect(Collectors.toList()));
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testUdmTableManager() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).once();
-        replay(controller, ForeignSecurityUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        verify(controller, ForeignSecurityUtils.class);
-        Component secondComponent = usagesWidget.getSecondComponent();
-        VerticalLayout layout = (VerticalLayout) secondComponent;
-        Grid grid = (Grid) layout.getComponent(1);
-        List<Column<String, ?>> columns = grid.getColumns();
-        assertEquals(VISIBLE_COLUMNS_FOR_MANAGER,
-            columns.stream().filter(column -> !column.isHidden()).map(Column::getCaption).collect(Collectors.toList()));
-    }
-
-    private void verifyToolbarLayout(Component component) {
+    private void verifyToolbarLayout(Component component, String searchPlaceholder, boolean... buttonsVisibility) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertTrue(layout.isSpacing());
         verifySize(layout, 100, -1, Unit.PIXELS);
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
-        verifyLoadButton(layout.getComponent(0));
-        verifySearchWidget(layout.getComponent(1));
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
+        verifySearchWidget(layout.getComponent(1), searchPlaceholder);
     }
 
-    private void verifyToolbarLayoutForResearcher(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        verifySize(layout, 100, -1, Unit.PIXELS);
-        assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
-        verifyLoadButton(layout.getComponent(0));
-        verifySearchWidgetForResearcher(layout.getComponent(1));
-    }
-
-    private void verifyLoadButton(Component component) {
+    private void verifyButton(Component component, String name, boolean isVisible) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
-        assertEquals("Load", button.getCaption());
+        assertEquals(name, button.getCaption());
+        assertEquals(isVisible, button.isVisible());
     }
 
-    private void verifySearchWidget(Component component) {
+    private void verifySearchWidget(Component component, String searchPlaceholder) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget, 65, -1, Unit.PIXELS);
-        assertEquals("Enter Reported/System Title or Usage Detail ID or Standard Number or Article or " +
-                "Survey Respondent or Comment",
-            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+        assertEquals(searchPlaceholder, Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
-    private void verifySearchWidgetForResearcher(Component component) {
-        assertTrue(component instanceof SearchWidget);
-        SearchWidget searchWidget = (SearchWidget) component;
-        verifySize(searchWidget, 65, -1, Unit.PIXELS);
-        assertEquals("Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment",
-            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
+    private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
+        assertTrue(layout.isSpacing());
+        assertEquals(new MarginInfo(false), layout.getMargin());
+        assertEquals(2, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "Load", buttonsVisibility[0]);
+        verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
     }
 
-    private void verifyGrid(Grid grid) {
+    private void verifyMenuBar(Component component, String menuBarName, boolean isVisible, List<String> menuItems) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        assertEquals(isVisible, menuBar.isVisible());
+        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuBar.MenuItem item = parentItems.get(0);
+        assertEquals(menuBarName, item.getText());
+        List<MenuBar.MenuItem> childItems = item.getChildren();
+        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
+        IntStream.range(0, menuItems.size())
+            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
+    }
+
+    private void verifyGrid(Grid grid, List<String> expectedColumns) {
         List<Column> columns = grid.getColumns();
-        assertEquals(VISIBLE_COLUMNS_FOR_MANAGER, columns.stream().map(Column::getCaption)
+        assertEquals(expectedColumns, columns.stream()
+            .filter(column -> !column.isHidden())
+            .map(Column::getCaption)
             .collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
         assertTrue(grid.isFooterVisible());
