@@ -5,9 +5,12 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+
+import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +64,11 @@ public class UdmBatchService implements IUdmBatchService {
     @Override
     public boolean udmBatchExists(String name) {
         return udmBatchRepository.udmBatchExists(name);
+    }
+
+    @Override
+    public boolean isUdmBatchProcessingCompleted(String udmBatchId) {
+        return udmBatchRepository.isUdmBatchProcessingCompleted(udmBatchId,
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND));
     }
 }

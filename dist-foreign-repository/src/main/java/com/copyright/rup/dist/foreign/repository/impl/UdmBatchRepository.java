@@ -2,12 +2,17 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
+
+import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmBatchRepository}.
@@ -44,5 +49,13 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     @Override
     public boolean udmBatchExists(String name) {
         return selectOne("IUdmBatchMapper.batchExists", Objects.requireNonNull(name));
+    }
+
+    @Override
+    public boolean isUdmBatchProcessingCompleted(String udmBatchId, Set<UsageStatusEnum> statuses) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("udmBatchId", udmBatchId);
+        params.put("statuses", statuses);
+        return selectOne("IUdmBatchMapper.isUdmBatchProcessingCompleted", params);
     }
 }

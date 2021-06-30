@@ -8,7 +8,10 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
+
+import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,17 +71,26 @@ public class UdmBatchRepositoryIntegrationTest {
     public void testFindAll() {
         List<UdmBatch> udmBatches = udmBatchRepository.findAll();
         assertFalse(udmBatches.isEmpty());
-        assertEquals(4, udmBatches.size());
+        assertEquals(5, udmBatches.size());
         assertEquals("c57dbf33-b0b9-4493-bcff-c30fd07ee0e4", udmBatches.get(0).getId());
         assertEquals("faaab569-35c1-474e-923d-96f4c062a62a", udmBatches.get(1).getId());
         assertEquals("6a4b192c-8f1b-4887-a75d-67688544eb5f", udmBatches.get(2).getId());
         assertEquals("864911e5-34ac-42a5-a4c8-84dc4c24e7b4", udmBatches.get(3).getId());
+        assertEquals("7649518a-33a5-4929-8956-0c4ed0714250", udmBatches.get(4).getId());
     }
 
     @Test
     public void testBatchExists() {
         assertTrue(udmBatchRepository.udmBatchExists("UDM Batch 2021 1"));
         assertFalse(udmBatchRepository.udmBatchExists("No name in database"));
+    }
+
+    @Test
+    public void testIsUdmBatchProcessingCompleted() {
+        assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted("7649518a-33a5-4929-8956-0c4ed0714250",
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
+        assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted("7649518a-33a5-4929-8956-0c4ed0714250",
+            Collections.singleton(UsageStatusEnum.RH_FOUND)));
     }
 
     private UdmBatch buildUdmBatch() {

@@ -61,4 +61,16 @@
             where name = #{name}
         )
     </select>
+
+    <select id="isUdmBatchProcessingCompleted" resultType="boolean" parameterType="map">
+        select not exists (
+            select 1
+            from ${schema}.df_udm_usage
+            where df_udm_usage_batch_uid = #{udmBatchId}
+                and status_ind in
+                <foreach collection="statuses" item="status" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+        )
+    </select>
 </mapper>

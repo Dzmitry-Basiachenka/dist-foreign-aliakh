@@ -45,4 +45,12 @@ public interface IUdmBatchService {
      * @return {@code true} - if batch exists, {@code false} - otherwise
      */
     boolean udmBatchExists(String name);
+
+    /**
+     * Verifies that UDM batch processing is completed for intermediate statuses.
+     *
+     * @param udmBatchId batch identifier
+     * @return true if UDM batch processing is completed, false - otherwise
+     */
+    boolean isUdmBatchProcessingCompleted(String udmBatchId);
 }
