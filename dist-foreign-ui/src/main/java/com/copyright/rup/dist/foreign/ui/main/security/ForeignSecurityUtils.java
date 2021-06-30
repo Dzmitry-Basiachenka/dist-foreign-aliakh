@@ -201,4 +201,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasSpecialistPermission() {
         return SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION");
     }
+
+    /**
+     * @return {@code true} if user has assign usage permission, {@code false} - otherwise.
+     */
+    public static boolean hasAssignUsagePermission() {
+        return SecurityUtils.hasPermission("FDA_ASSIGN_USAGE");
+    }
 }

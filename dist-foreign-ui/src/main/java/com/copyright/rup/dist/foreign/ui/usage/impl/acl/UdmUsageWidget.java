@@ -22,10 +22,10 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -51,6 +51,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
     private Button loadButton;
+    private MenuBar assignmentMenuBar;
     private SearchWidget searchWidget;
 
     @Override
@@ -68,6 +69,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     public IMediator initMediator() {
         UdmUsageMediator mediator = new UdmUsageMediator();
         mediator.setLoadButton(loadButton);
+        mediator.setAssignmentMenuBar(assignmentMenuBar);
         return mediator;
     }
 
@@ -103,14 +105,16 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private HorizontalLayout initToolbarLayout() {
+        initAssignmentMenuBar();
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
-        HorizontalLayout toolbar = new HorizontalLayout(loadButton, searchWidget);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar);
+        HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
-        toolbar.setComponentAlignment(loadButton, Alignment.BOTTOM_LEFT);
+        toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
         toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
         toolbar.setExpandRatio(searchWidget, 1f);
         toolbar.setMargin(true);
@@ -120,6 +124,14 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private String getSearchMessage() {
         return hasResearcherPermission ? "prompt.udm_search_researcher" : "prompt.udm_search";
+    }
+
+    private void initAssignmentMenuBar() {
+        assignmentMenuBar = new MenuBar();
+        MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
+        item.addItem(ForeignUi.getMessage("menu.item.assign"), null, null);
+        item.addItem(ForeignUi.getMessage("menu.item.unassign"), null, null);
+        VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
     }
 
     private void initUsagesGrid() {
