@@ -256,4 +256,43 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2021-07-02-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: add df_udm_action_reason_uid, df_udm_ineligible_reason_uid columns to df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_action_reason_uid', type: 'VARCHAR(256)', remarks: 'The identifier of action reason')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_ineligible_reason_uid', type: 'VARCHAR(256)', remarks: 'The identifier of ineligible reason')
+        }
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_usage',
+                baseColumnNames: 'df_udm_action_reason_uid',
+                referencedTableName: 'df_udm_action_reason',
+                referencedColumnNames: 'df_udm_action_reason_uid',
+                constraintName: 'fk_df_udm_usage_2_df_udm_action_reason')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_usage',
+                baseColumnNames: 'df_udm_ineligible_reason_uid',
+                referencedTableName: 'df_udm_ineligible_reason',
+                referencedColumnNames: 'df_udm_ineligible_reason_uid',
+                constraintName: 'fk_df_udm_usage_2_df_udm_ineligible_reason')
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'ineligible_reason')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_action_reason_uid')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_ineligible_reason_uid')
+
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+                column(name: 'ineligible_reason', type: 'VARCHAR(100)', remarks: 'The ineligible reason')
+            }
+        }
+    }
 }

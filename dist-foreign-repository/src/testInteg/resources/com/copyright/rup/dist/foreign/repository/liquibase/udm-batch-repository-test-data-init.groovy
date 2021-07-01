@@ -86,7 +86,7 @@ databaseChangeLog {
             column(name: 'reported_type_of_use', value: 'PHOTOCOPY')
             column(name: 'annualized_copies', value: 3)
             column(name: 'quantity', value: 3)
-            column(name: 'ineligible_reason', value: 'work not found')
+            column(name: 'df_udm_ineligible_reason_uid', value: 'a4df53dd-26d9-4a0e-956c-e95543707674')
             column(name: "created_by_user", value: "user@copyright.com")
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')

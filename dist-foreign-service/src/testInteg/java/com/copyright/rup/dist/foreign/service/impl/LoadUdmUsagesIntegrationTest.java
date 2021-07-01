@@ -161,7 +161,7 @@ public class LoadUdmUsagesIntegrationTest {
             .collect(Collectors.toMap(UdmUsage::getOriginalDetailId, UdmUsage::getId));
         String udmUsageId1 = originalDetailIdsToIds.get("OGN674GHHSB001");
         assertUdmAudit(udmUsageId1, buildUsageAuditItems(udmUsageId1, ImmutableMap.of(
-            UsageActionTypeEnum.INELIGIBLE, "No reported use",
+            UsageActionTypeEnum.INELIGIBLE, "No Reported Use",
             UsageActionTypeEnum.LOADED, LOADED_REASON)));
         String udmUsageId2 = originalDetailIdsToIds.get("OGN674GHHSB002");
         assertUdmAudit(udmUsageId2, buildUsageAuditItems(udmUsageId2, ImmutableMap.of(

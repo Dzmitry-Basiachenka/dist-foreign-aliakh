@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmIneligibleReason extends StoredEntity<String> {
 
-    private String ineligibleReason;
+    private String text;
 
     /**
      * Constructor.
@@ -27,20 +27,20 @@ public class UdmIneligibleReason extends StoredEntity<String> {
     /**
      * Constructor.
      *
-     * @param id               id
-     * @param ineligibleReason ineligible reason
+     * @param id   ineligible reason id
+     * @param text ineligible reason text
      */
-    public UdmIneligibleReason(String id, String ineligibleReason) {
+    public UdmIneligibleReason(String id, String text) {
         this.setId(id);
-        this.ineligibleReason = ineligibleReason;
+        this.text = text;
     }
 
-    public String getIneligibleReason() {
-        return ineligibleReason;
+    public String getText() {
+        return text;
     }
 
-    public void setIneligibleReason(String ineligibleReason) {
-        this.ineligibleReason = ineligibleReason;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UdmIneligibleReason extends StoredEntity<String> {
         UdmIneligibleReason that = (UdmIneligibleReason) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(ineligibleReason, that.ineligibleReason)
+            .append(text, that.text)
             .isEquals();
     }
 
@@ -62,7 +62,7 @@ public class UdmIneligibleReason extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(ineligibleReason)
+            .append(text)
             .toHashCode();
     }
 
@@ -70,7 +70,7 @@ public class UdmIneligibleReason extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("ineligibleReason", ineligibleReason)
+            .append("text", text)
             .toString();
     }
 }

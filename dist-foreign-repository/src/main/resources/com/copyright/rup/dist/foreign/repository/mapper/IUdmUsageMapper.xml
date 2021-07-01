@@ -35,7 +35,10 @@
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
         <result property="annualizedCopies" column="annualized_copies"/>
-        <result property="ineligibleReason" column="ineligible_reason"/>
+        <result property="actionReason.id" column="df_udm_action_reason_uid"/>
+        <result property="actionReason.text" column="action_reason"/>
+        <result property="ineligibleReason.id" column="df_udm_ineligible_reason_uid"/>
+        <result property="ineligibleReason.text" column="ineligible_reason"/>
     </resultMap>
 
     <resultMap id="udmUsageDtoResultMap" type="UdmUsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -75,17 +78,20 @@
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
         <result property="annualizedCopies" column="annualized_copies"/>
-        <result property="ineligibleReason" column="ineligible_reason"/>
+        <result property="actionReason.id" column="df_udm_action_reason_uid"/>
+        <result property="actionReason.text" column="action_reason"/>
+        <result property="ineligibleReason.id" column="df_udm_ineligible_reason_uid"/>
+        <result property="ineligibleReason.text" column="ineligible_reason"/>
     </resultMap>
 
     <resultMap id="udmActionReasonResultMap" type="UdmActionReason" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_udm_action_reason_uid"/>
-        <result property="actionReason" column="action_reason"/>
+        <result property="text" column="action_reason"/>
     </resultMap>
 
     <resultMap id="udmIneligibleReasonResultMap" type="UdmIneligibleReason" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_udm_ineligible_reason_uid"/>
-        <result property="ineligibleReason" column="ineligible_reason"/>
+        <result property="text" column="ineligible_reason"/>
     </resultMap>
 
     <sql id="udmUsageFilter">
@@ -254,7 +260,8 @@
             type_of_use,
             reported_type_of_use,
             quantity,
-            ineligible_reason,
+            df_udm_action_reason_uid,
+            df_udm_ineligible_reason_uid,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -284,7 +291,8 @@
             #{typeOfUse},
             #{reportedTypeOfUse},
             #{quantity},
-            #{ineligibleReason},
+            #{actionReason.id},
+            #{ineligibleReason.id},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -334,7 +342,10 @@
             reported_type_of_use,
             quantity,
             annualized_copies,
-            ineligible_reason,
+            ar.df_udm_action_reason_uid,
+            ar.action_reason,
+            ir.df_udm_ineligible_reason_uid,
+            ir.ineligible_reason,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -344,6 +355,8 @@
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_udm_action_reason ar on u.df_udm_action_reason_uid = ar.df_udm_action_reason_uid
+        left join ${schema}.df_udm_ineligible_reason ir on u.df_udm_ineligible_reason_uid = ir.df_udm_ineligible_reason_uid
         <include refid="IUdmUsageMapper.udmUsageFilter"/>
         order by
         <choose>
@@ -463,7 +476,7 @@
                 annualized_copies <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'ineligibleReason'">
-                ineligible_reason <include refid="IUsageMapper.direction"/>
+                ir.ineligible_reason <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'createDate'">
                 u.created_datetime <include refid="IUsageMapper.direction"/>
@@ -517,14 +530,19 @@
             type_of_use,
             reported_type_of_use,
             quantity,
-            ineligible_reason,
+            ar.df_udm_action_reason_uid,
+            ar.action_reason,
+            ir.df_udm_ineligible_reason_uid,
+            ir.ineligible_reason,
             annualized_copies,
-            created_datetime,
-            updated_datetime,
-            created_by_user,
-            updated_by_user,
-            record_version
-        from ${schema}.df_udm_usage
+            u.created_datetime,
+            u.updated_datetime,
+            u.created_by_user,
+            u.updated_by_user,
+            u.record_version
+        from ${schema}.df_udm_usage u
+        left join ${schema}.df_udm_action_reason ar on u.df_udm_action_reason_uid = ar.df_udm_action_reason_uid
+        left join ${schema}.df_udm_ineligible_reason ir on u.df_udm_ineligible_reason_uid = ir.df_udm_ineligible_reason_uid
         where df_udm_usage_uid in
             <foreach collection="list" item="usageId" open="(" separator="," close=")">
                 #{usageId}
@@ -598,5 +616,13 @@
             ineligible_reason
         from ${schema}.df_udm_ineligible_reason
         order by ineligible_reason
+    </select>
+
+    <select id="findIneligibleReasonById" parameterType="string" resultMap="udmIneligibleReasonResultMap">
+        select
+            df_udm_ineligible_reason_uid,
+            ineligible_reason
+        from ${schema}.df_udm_ineligible_reason
+        where df_udm_ineligible_reason_uid = #{id}
     </select>
 </mapper>

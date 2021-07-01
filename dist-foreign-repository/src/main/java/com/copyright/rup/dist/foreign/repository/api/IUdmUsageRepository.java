@@ -116,4 +116,12 @@ public interface IUdmUsageRepository {
      * @return list of {@link UdmIneligibleReason}
      */
     List<UdmIneligibleReason> findIneligibleReasons();
+
+    /**
+     * Finds {@link UdmIneligibleReason} by id.
+     *
+     * @param id ineligible reason id
+     * @return instance of {@link UdmIneligibleReason}
+     */
+    UdmIneligibleReason findIneligibleReasonById(String id);
 }

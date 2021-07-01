@@ -36,7 +36,6 @@ public class UdmUsageDto extends StoredEntity<String> {
     private String pubFormat;
     private String article;
     private String language;
-    private String actionReason;
     private Integer detailLicenseeClassId;
     private String detailLicenseeClassName;
     private Long companyId;
@@ -53,7 +52,8 @@ public class UdmUsageDto extends StoredEntity<String> {
     private String reportedTypeOfUse;
     private Integer quantity;
     private BigDecimal annualizedCopies;
-    private String ineligibleReason;
+    private UdmActionReason actionReason;
+    private UdmIneligibleReason ineligibleReason;
     private String comment;
     private String researchUrl;
 
@@ -193,14 +193,6 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.language = language;
     }
 
-    public String getActionReason() {
-        return actionReason;
-    }
-
-    public void setActionReason(String actionReason) {
-        this.actionReason = actionReason;
-    }
-
     public String getPubFormat() {
         return pubFormat;
     }
@@ -273,11 +265,19 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.surveyEndDate = surveyEndDate;
     }
 
-    public String getIneligibleReason() {
+    public UdmActionReason getActionReason() {
+        return actionReason;
+    }
+
+    public void setActionReason(UdmActionReason actionReason) {
+        this.actionReason = actionReason;
+    }
+
+    public UdmIneligibleReason getIneligibleReason() {
         return ineligibleReason;
     }
 
-    public void setIneligibleReason(String ineligibleReason) {
+    public void setIneligibleReason(UdmIneligibleReason ineligibleReason) {
         this.ineligibleReason = ineligibleReason;
     }
 
@@ -373,7 +373,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(article, udmUsage.article)
             .append(reportedPubType, udmUsage.reportedPubType)
             .append(language, udmUsage.language)
-            .append(actionReason, udmUsage.actionReason)
             .append(pubFormat, udmUsage.pubFormat)
             .append(reportedTypeOfUse, udmUsage.reportedTypeOfUse)
             .append(quantity, udmUsage.quantity)
@@ -383,6 +382,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(ipAddress, udmUsage.ipAddress)
             .append(surveyStartDate, udmUsage.surveyStartDate)
             .append(surveyEndDate, udmUsage.surveyEndDate)
+            .append(actionReason, udmUsage.actionReason)
             .append(ineligibleReason, udmUsage.ineligibleReason)
             .append(detailLicenseeClassId, udmUsage.detailLicenseeClassId)
             .append(detailLicenseeClassName, udmUsage.detailLicenseeClassName)
@@ -416,7 +416,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(article)
             .append(reportedPubType)
             .append(language)
-            .append(actionReason)
             .append(pubFormat)
             .append(reportedTypeOfUse)
             .append(quantity)
@@ -426,6 +425,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(ipAddress)
             .append(surveyStartDate)
             .append(surveyEndDate)
+            .append(actionReason)
             .append(ineligibleReason)
             .append(detailLicenseeClassId)
             .append(detailLicenseeClassName)
@@ -460,7 +460,6 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("article", article)
             .append("reportedPubType", reportedPubType)
             .append("language", language)
-            .append("actionReason", actionReason)
             .append("pubFormat", pubFormat)
             .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("quantity", quantity)
@@ -470,6 +469,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("ipAddress", ipAddress)
             .append("surveyStartDate", surveyStartDate)
             .append("surveyEndDate", surveyEndDate)
+            .append("actionReason", actionReason)
             .append("ineligibleReason", ineligibleReason)
             .append("detailLicenseeClassId", detailLicenseeClassId)
             .append("detailLicenseeClassName", detailLicenseeClassName)

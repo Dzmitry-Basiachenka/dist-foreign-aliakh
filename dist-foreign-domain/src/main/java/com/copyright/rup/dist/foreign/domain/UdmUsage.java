@@ -44,7 +44,8 @@ public class UdmUsage extends StoredEntity<String> {
     private String ipAddress;
     private LocalDate surveyStartDate;
     private LocalDate surveyEndDate;
-    private String ineligibleReason;
+    private UdmActionReason actionReason;
+    private UdmIneligibleReason ineligibleReason;
     private Long companyId;
     private String companyName;
     private Integer detailLicenseeClassId;
@@ -246,11 +247,19 @@ public class UdmUsage extends StoredEntity<String> {
         this.surveyEndDate = surveyEndDate;
     }
 
-    public String getIneligibleReason() {
+    public UdmActionReason getActionReason() {
+        return actionReason;
+    }
+
+    public void setActionReason(UdmActionReason actionReason) {
+        this.actionReason = actionReason;
+    }
+
+    public UdmIneligibleReason getIneligibleReason() {
         return ineligibleReason;
     }
 
-    public void setIneligibleReason(String ineligibleReason) {
+    public void setIneligibleReason(UdmIneligibleReason ineligibleReason) {
         this.ineligibleReason = ineligibleReason;
     }
 
@@ -345,6 +354,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(ipAddress, udmUsage.ipAddress)
             .append(surveyStartDate, udmUsage.surveyStartDate)
             .append(surveyEndDate, udmUsage.surveyEndDate)
+            .append(actionReason, udmUsage.actionReason)
             .append(ineligibleReason, udmUsage.ineligibleReason)
             .append(detailLicenseeClassId, udmUsage.detailLicenseeClassId)
             .append(detailLicenseeClassName, udmUsage.detailLicenseeClassName)
@@ -384,6 +394,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(ipAddress)
             .append(surveyStartDate)
             .append(surveyEndDate)
+            .append(actionReason)
             .append(ineligibleReason)
             .append(detailLicenseeClassId)
             .append(detailLicenseeClassName)
@@ -424,6 +435,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append("ipAddress", ipAddress)
             .append("surveyStartDate", surveyStartDate)
             .append("surveyEndDate", surveyEndDate)
+            .append("actionReason", actionReason)
             .append("ineligibleReason", ineligibleReason)
             .append("detailLicenseeClassId", detailLicenseeClassId)
             .append("detailLicenseeClassName", detailLicenseeClassName)

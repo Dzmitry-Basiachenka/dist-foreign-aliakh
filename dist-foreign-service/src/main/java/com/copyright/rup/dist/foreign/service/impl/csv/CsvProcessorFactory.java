@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReasonEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
@@ -149,7 +150,8 @@ public class CsvProcessorFactory {
      * @return instance of {@link UdmCsvProcessor}.
      */
     public UdmCsvProcessor getUdmCsvProcessor() {
-        UdmCsvProcessor processor = new UdmCsvProcessor();
+        UdmCsvProcessor processor = new UdmCsvProcessor(udmUsageService.getIneligibleReasonById(
+            UdmIneligibleReasonEnum.NO_REPORTED_USE.getId()));
         processor.addBusinessValidators(new SurveyDateValidator(), new QuantityValidator(),
             new ReportedTypeOfUseValidator(udmTypeOfUseService), new OriginalDetailIdValidator(udmUsageService),
             new UdmWorkInfoValidator(), new CompanyIdValidator(telesalesService, licenseeClassService),

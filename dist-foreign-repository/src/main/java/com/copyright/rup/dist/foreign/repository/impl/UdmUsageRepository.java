@@ -122,4 +122,9 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     public List<UdmIneligibleReason> findIneligibleReasons() {
         return selectList("IUdmUsageMapper.findIneligibleReasons");
     }
+
+    @Override
+    public UdmIneligibleReason findIneligibleReasonById(String id) {
+        return selectOne("IUdmUsageMapper.findIneligibleReasonById", Objects.requireNonNull(id));
+    }
 }
