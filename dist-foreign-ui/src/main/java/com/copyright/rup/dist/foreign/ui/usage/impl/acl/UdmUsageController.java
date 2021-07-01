@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.PipedInputStream;
 import java.util.List;
 
 /**
@@ -123,6 +125,21 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     protected IUdmUsageWidget instantiateWidget() {
         return new UdmUsageWidget();
+    }
+
+    @Override
+    public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
+        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+    }
+
+    @Override
+    public IStreamSource getExportUdmUsagesStreamSourceResearcherRole() {
+        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+    }
+
+    @Override
+    public IStreamSource getExportUdmUsagesStreamSourceViewRole() {
+        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
     }
 
     private UdmUsageFilter getFilter() {

@@ -32,13 +32,13 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -128,6 +128,7 @@ public class UdmUsageControllerTest {
     public void testInstantiateWidget() {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
         udmUsageWidget = controller.instantiateWidget();
         assertNotNull(udmUsageWidget);
@@ -185,6 +186,24 @@ public class UdmUsageControllerTest {
         controller.showUdmUsageHistory(udmUsageId);
         assertNotNull(windowCapture.getValue());
         verify(Windows.class, udmUsageAuditService);
+    }
+
+    @Test
+    @Ignore
+    //TODO {dbasiachenka} implement after removing stubs in controller
+    public void testGetExportUsagesStreamSourceSpecialistManagerRoles() {
+    }
+
+    @Test
+    @Ignore
+    //TODO {dbasiachenka} implement after removing stubs in controller
+    public void testGetExportUsagesStreamSourceResearcherRole() {
+    }
+
+    @Test
+    @Ignore
+    //TODO {dbasiachenka} implement after removing stubs in controller
+    public void testGetExportUsagesStreamSourceViewRole() {
     }
 
     private UdmUsage buildUdmUsage(String usageId, String originalDetailId) {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -9,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -48,6 +50,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
+    private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
@@ -110,7 +113,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        // TODO {dbasiachenka} Add action for exportButton
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
+        fileDownloader.extend(exportButton);
         Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
         editButton.addClickListener(event -> Windows.showModalWindow(new UdmEditUsageWindow(new UdmUsageDto())));
         searchWidget = new SearchWidget(this::refresh);
@@ -201,8 +206,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 150,
                 hasResearcherPermission),
-            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100,
-                !ForeignSecurityUtils.hasManagerPermission()),
+            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100, !hasManagerPermission),
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
@@ -248,5 +252,15 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private IStreamSource getExportUdmUsagesStreamSourceForSpecificRole() {
+        if (ForeignSecurityUtils.hasSpecialistPermission() || hasManagerPermission) {
+            return controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles();
+        } else if (hasResearcherPermission) {
+            return controller.getExportUdmUsagesStreamSourceResearcherRole();
+        } else {
+            return controller.getExportUdmUsagesStreamSourceViewRole();
+        }
     }
 }

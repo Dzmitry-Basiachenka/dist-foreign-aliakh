@@ -100,4 +100,19 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param udmUsageId {@link UdmUsage} id
      */
     void showUdmUsageHistory(String udmUsageId);
+
+    /**
+     * @return instance of {@link IStreamSource} for export for specialist and manager roles.
+     */
+    IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles();
+
+    /**
+     * @return instance of {@link IStreamSource} for export for researcher role.
+     */
+    IStreamSource getExportUdmUsagesStreamSourceResearcherRole();
+
+    /**
+     * @return instance of {@link IStreamSource} for export for view role.
+     */
+    IStreamSource getExportUdmUsagesStreamSourceViewRole();
 }

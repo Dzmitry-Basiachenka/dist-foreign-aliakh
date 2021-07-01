@@ -8,6 +8,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
@@ -29,12 +30,15 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -78,6 +82,7 @@ public class UdmUsageWidgetTest {
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
@@ -85,20 +90,24 @@ public class UdmUsageWidgetTest {
         UdmUsageFilterWidget filterWidget = new UdmUsageFilterWidget(createMock(IUdmUsageFilterController.class));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         mockStatic(ForeignSecurityUtils.class);
+        streamSource = PowerMock.createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(PowerMock.createMock(Supplier.class),
+            PowerMock.createMock(Supplier.class))).once();
     }
 
     @Test
     public void testWidgetStructureForSpecialist() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
         expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
-        replay(controller, ForeignSecurityUtils.class);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        replay(controller, ForeignSecurityUtils.class, streamSource);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
         usagesWidget.initMediator().applyPermissions();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -117,14 +126,15 @@ public class UdmUsageWidgetTest {
     public void testWidgetStructureForManager() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
         expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
-        replay(controller, ForeignSecurityUtils.class);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        replay(controller, ForeignSecurityUtils.class, streamSource);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
         usagesWidget.initMediator().applyPermissions();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -143,14 +153,15 @@ public class UdmUsageWidgetTest {
     public void testWidgetStructureForViewOnly() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
         expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(false).once();
-        replay(controller, ForeignSecurityUtils.class);
+        expect(controller.getExportUdmUsagesStreamSourceViewRole()).andReturn(streamSource).once();
+        replay(controller, ForeignSecurityUtils.class, streamSource);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
         usagesWidget.initMediator().applyPermissions();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -169,14 +180,15 @@ public class UdmUsageWidgetTest {
     public void testWidgetStructureForResearcher() {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
         expect(ForeignSecurityUtils.hasAssignUsagePermission()).andReturn(true).once();
-        replay(controller, ForeignSecurityUtils.class);
+        expect(controller.getExportUdmUsagesStreamSourceResearcherRole()).andReturn(streamSource).once();
+        replay(controller, ForeignSecurityUtils.class, streamSource);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
         usagesWidget.initMediator().applyPermissions();
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
