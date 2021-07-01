@@ -28,7 +28,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -37,6 +36,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.PipedInputStream;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmUsageController}.
@@ -120,6 +120,16 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public void showUdmUsageHistory(String udmUsageId) {
         Windows.showModalWindow(new UsageHistoryWindow(udmUsageId, udmUsageAuditService.getUdmUsageAudit(udmUsageId)));
+    }
+
+    @Override
+    public void assignUsages(Set<String> usageIds) {
+        //TODO: use service logic here
+    }
+
+    @Override
+    public void unassignUsages(Set<String> usageIds) {
+        //TODO: use service logic here
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
@@ -29,12 +30,15 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmUsageWidget}.
@@ -56,6 +60,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private DataProvider<UdmUsageDto, Void> dataProvider;
     private Button loadButton;
     private MenuBar assignmentMenuBar;
+    private MenuBar.MenuItem assignItem;
+    private MenuBar.MenuItem unassignItem;
     private SearchWidget searchWidget;
 
     @Override
@@ -139,8 +145,30 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private void initAssignmentMenuBar() {
         assignmentMenuBar = new MenuBar();
         MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
-        item.addItem(ForeignUi.getMessage("menu.item.assign"), null, null);
-        item.addItem(ForeignUi.getMessage("menu.item.unassign"), null, null);
+        assignItem = item.addItem(ForeignUi.getMessage("menu.item.assign"), null,
+            selectedItem -> {
+                int usagesCount = udmUsagesGrid.getSelectedItems().size();
+                Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.assign", usagesCount),
+                    () -> {
+                        controller.assignUsages(getSelectedUsageIds());
+                        refresh();
+                        Windows.showNotificationWindow(
+                            ForeignUi.getMessage("message.notification.assignment_completed", usagesCount));
+                    });
+            });
+        assignItem.setEnabled(false);
+        unassignItem = item.addItem(ForeignUi.getMessage("menu.item.unassign"), null,
+            selectedItem -> {
+                int usagesCount = udmUsagesGrid.getSelectedItems().size();
+                Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
+                    () -> {
+                        controller.unassignUsages(getSelectedUsageIds());
+                        refresh();
+                        Windows.showNotificationWindow(
+                            ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
+                    });
+            });
+        unassignItem.setEnabled(false);
         VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
     }
 
@@ -159,7 +187,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             });
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
-        udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        udmUsagesGrid.addSelectionListener(event -> {
+            boolean isEnabled = CollectionUtils.isNotEmpty(event.getAllSelectedItems());
+            assignItem.setEnabled(isEnabled);
+            unassignItem.setEnabled(isEnabled);
+        });
         udmUsagesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
@@ -252,6 +285,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private Set<String> getSelectedUsageIds() {
+        return udmUsagesGrid.getSelectedItems()
+            .stream()
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
     }
 
     private IStreamSource getExportUdmUsagesStreamSourceForSpecificRole() {

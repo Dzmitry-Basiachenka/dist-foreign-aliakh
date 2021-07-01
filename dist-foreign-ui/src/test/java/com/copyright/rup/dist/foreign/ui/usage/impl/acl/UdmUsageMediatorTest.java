@@ -30,7 +30,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class UdmUsageMediatorTest {
 
-    private static final String FDA_ASSIGN_USAGE = "FDA_ASSIGN_USAGE";
+    private static final String FDA_RESEARCHER_PERMISSION = "FDA_RESEARCHER_PERMISSION";
+    private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
 
     private Button loadButton;
@@ -89,24 +90,25 @@ public class UdmUsageMediatorTest {
     private void mockResearcherPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_ASSIGN_USAGE)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(true).once();
     }
 
     private void mockViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_ASSIGN_USAGE)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
     }
 
     private void mockManagerPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
-        expect(SecurityUtils.hasPermission(FDA_ASSIGN_USAGE)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
     }
 
     private void mockSpecialistPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
-        expect(SecurityUtils.hasPermission(FDA_ASSIGN_USAGE)).andReturn(true).once();
     }
 }

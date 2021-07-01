@@ -22,8 +22,10 @@ public class UdmUsageMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        loadButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
-        assignmentMenuBar.setVisible(ForeignSecurityUtils.hasAssignUsagePermission());
+        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
+        loadButton.setVisible(isSpecialist);
+        assignmentMenuBar.setVisible(isSpecialist || ForeignSecurityUtils.hasManagerPermission() ||
+            ForeignSecurityUtils.hasResearcherPermission());
     }
 
     public void setLoadButton(Button loadButton) {
