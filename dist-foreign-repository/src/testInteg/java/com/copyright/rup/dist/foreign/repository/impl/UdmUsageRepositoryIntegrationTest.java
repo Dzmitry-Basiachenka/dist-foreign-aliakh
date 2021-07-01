@@ -620,6 +620,8 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+        assertEquals(expectedUsage.getResearchUrl(), actualUsage.getResearchUrl());
         assertNull(actualUsage.getIneligibleReason());
     }
 

@@ -59,6 +59,7 @@
         <result property="article" column="article"/>
         <result property="language" column="language"/>
         <result property="comment" column="comment"/>
+        <result property="researchUrl" column="research_url"/>
         <result property="companyId" column="company_id"/>
         <result property="companyName" column="company_name"/>
         <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
@@ -307,6 +308,7 @@
             article,
             language,
             comment,
+            research_url,
             company_id,
             company_name,
             u.detail_licensee_class_id,
