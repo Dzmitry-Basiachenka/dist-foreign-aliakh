@@ -5,7 +5,9 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -165,6 +167,16 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public List<String> getPublicationFormats() {
         return udmUsageRepository.findPublicationFormats();
+    }
+
+    @Override
+    public List<UdmActionReason> getActionReasons() {
+        return udmUsageRepository.findActionReasons();
+    }
+
+    @Override
+    public List<UdmIneligibleReason> getIneligibleReasons() {
+        return udmUsageRepository.findIneligibleReasons();
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {

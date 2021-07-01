@@ -77,6 +77,16 @@
         <result property="ineligibleReason" column="ineligible_reason"/>
     </resultMap>
 
+    <resultMap id="udmActionReasonResultMap" type="UdmActionReason" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_action_reason_uid"/>
+        <result property="actionReason" column="action_reason"/>
+    </resultMap>
+
+    <resultMap id="udmIneligibleReasonResultMap" type="UdmIneligibleReason" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_ineligible_reason_uid"/>
+        <result property="ineligibleReason" column="ineligible_reason"/>
+    </resultMap>
+
     <sql id="udmUsageFilter">
         <where>
             <if test="filter.udmBatchesIds.size() > 0">
@@ -520,7 +530,7 @@
         order by original_detail_id
     </select>
 
-    <select id="updateProcessedUsage"  resultType="string">
+    <select id="updateProcessedUsage" resultType="string">
         update ${schema}.df_udm_usage
         set
             rh_account_number = #{rightsholder.accountNumber},
@@ -571,4 +581,20 @@
                 #{usageId}
             </foreach>
     </update>
+
+    <select id="findActionReasons" resultMap="udmActionReasonResultMap">
+        select
+            df_udm_action_reason_uid,
+            action_reason
+        from ${schema}.df_udm_action_reason
+        order by action_reason
+    </select>
+
+    <select id="findIneligibleReasons" resultMap="udmIneligibleReasonResultMap">
+        select
+            df_udm_ineligible_reason_uid,
+            ineligible_reason
+        from ${schema}.df_udm_ineligible_reason
+        order by ineligible_reason
+    </select>
 </mapper>
