@@ -337,4 +337,12 @@
     .v-filterselect-error[role="combobox"] {
         border-radius: 3px 12px 12px 3px;
     }
+
+    .v-label-bold {
+        font-weight: bolder;
+    }
+
+    .edit-udm-usage-window .v-readonly.v-textfield {
+        border-style: none !important;
+    }
 }

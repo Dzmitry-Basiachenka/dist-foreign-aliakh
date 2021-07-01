@@ -320,7 +320,7 @@ public class UdmFiltersWindowTest {
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
         verifyChannelWrWkrInstLayout(verticalLayout.getComponent(5));
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "Company Id", "Company Name");
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "Company ID", "Company Name");
         verifyTextFieldLayout(verticalLayout.getComponent(7), "Survey Country", "Language");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Annual Multiplier From",
             "Annual Multiplier To");
