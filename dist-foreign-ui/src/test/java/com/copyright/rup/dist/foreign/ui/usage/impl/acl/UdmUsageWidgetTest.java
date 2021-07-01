@@ -33,6 +33,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -304,7 +305,7 @@ public class UdmUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(false), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Load", buttonsVisibility[0]);
+        verifyMenuBar(layout.getComponent(0), "UDM Batch", buttonsVisibility[0], Arrays.asList("Load", "View"));
         verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Edit Usage", buttonsVisibility[2]);
         verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);
