@@ -14,6 +14,7 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for UDM usage controller.
@@ -115,4 +116,18 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return instance of {@link IStreamSource} for export for view role.
      */
     IStreamSource getExportUdmUsagesStreamSourceViewRole();
+
+    /**
+     * Assigns provided usages to logged in user.
+     *
+     * @param usageIds set of usage ids to assign to logged in user
+     */
+    void assignUsages(Set<String> usageIds);
+
+    /**
+     * Un-assigns provided usages.
+     *
+     * @param usageIds set of usage ids to un-assign
+     */
+    void unassignUsages(Set<String> usageIds);
 }
