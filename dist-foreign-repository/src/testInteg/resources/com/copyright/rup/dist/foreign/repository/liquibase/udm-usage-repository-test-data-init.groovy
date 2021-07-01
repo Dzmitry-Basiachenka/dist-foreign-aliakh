@@ -326,6 +326,8 @@ databaseChangeLog {
             column(name: 'annual_multiplier', value: 25)
             column(name: 'statistical_multiplier', value: 1.00000)
             column(name: 'annualized_copies', value: 300.00000)
+            column(name: 'comment', value: 'Assigned to wjohn for review')
+            column(name: 'research_url', value: 'google.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')

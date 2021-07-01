@@ -243,4 +243,17 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_ineligible_reason', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-07-01-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-65865 FDA & UDM: update the usage information - Specialist/Manager role: add research_url column to " +
+                "df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'research_url', type: 'VARCHAR(1000)', remarks: 'Research URL')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
