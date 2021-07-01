@@ -36,8 +36,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private String pubFormat;
     private String article;
     private String language;
-    private Integer detailLicenseeClassId;
-    private String detailLicenseeClassName;
+    private DetailLicenseeClass detailLicenseeClass;
     private Long companyId;
     private String companyName;
     private String surveyRespondent;
@@ -281,20 +280,12 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.ineligibleReason = ineligibleReason;
     }
 
-    public Integer getDetailLicenseeClassId() {
-        return detailLicenseeClassId;
+    public DetailLicenseeClass getDetailLicenseeClass() {
+        return detailLicenseeClass;
     }
 
-    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
-        this.detailLicenseeClassId = detailLicenseeClassId;
-    }
-
-    public String getDetailLicenseeClassName() {
-        return detailLicenseeClassName;
-    }
-
-    public void setDetailLicenseeClassName(String detailLicenseeClassName) {
-        this.detailLicenseeClassName = detailLicenseeClassName;
+    public void setDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
+        this.detailLicenseeClass = detailLicenseeClass;
     }
 
     public String getCompanyName() {
@@ -384,8 +375,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(surveyEndDate, udmUsage.surveyEndDate)
             .append(actionReason, udmUsage.actionReason)
             .append(ineligibleReason, udmUsage.ineligibleReason)
-            .append(detailLicenseeClassId, udmUsage.detailLicenseeClassId)
-            .append(detailLicenseeClassName, udmUsage.detailLicenseeClassName)
+            .append(detailLicenseeClass, udmUsage.detailLicenseeClass)
             .append(companyName, udmUsage.companyName)
             .append(annualMultiplier, udmUsage.annualMultiplier)
             .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
@@ -427,8 +417,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(surveyEndDate)
             .append(actionReason)
             .append(ineligibleReason)
-            .append(detailLicenseeClassId)
-            .append(detailLicenseeClassName)
+            .append(detailLicenseeClass)
             .append(companyName)
             .append(annualMultiplier)
             .append(statisticalMultiplier)
@@ -471,8 +460,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("surveyEndDate", surveyEndDate)
             .append("actionReason", actionReason)
             .append("ineligibleReason", ineligibleReason)
-            .append("detailLicenseeClassId", detailLicenseeClassId)
-            .append("detailLicenseeClassName", detailLicenseeClassName)
+            .append("detailLicenseeClass", detailLicenseeClass)
             .append("companyName", companyName)
             .append("annualMultiplier", annualMultiplier)
             .append("statisticalMultiplier", statisticalMultiplier)

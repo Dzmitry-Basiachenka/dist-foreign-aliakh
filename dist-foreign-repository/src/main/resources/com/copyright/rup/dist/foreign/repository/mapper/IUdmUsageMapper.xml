@@ -65,8 +65,8 @@
         <result property="researchUrl" column="research_url"/>
         <result property="companyId" column="company_id"/>
         <result property="companyName" column="company_name"/>
-        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
-        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="detailLicenseeClass.id" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClass.description" column="detail_licensee_class_name"/>
         <result property="surveyRespondent" column="survey_respondent"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="surveyCountry" column="survey_country"/>

@@ -16,8 +16,10 @@
     "pubFormat": "Digital",
     "article": "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle",
     "language": "English",
-    "detailLicenseeClassId": 22,
-    "detailLicenseeClassName": "Banks/Ins/RE/Holding Cos",
+    "detailLicenseeClass": {
+      "id": 22,
+      "description": "Banks/Ins/RE/Holding Cos"
+    },
     "companyId": 1136,
     "companyName": "Albany International Corp.",
     "surveyRespondent": "c6615155-f82b-402c-8f22-77e2722ae448",

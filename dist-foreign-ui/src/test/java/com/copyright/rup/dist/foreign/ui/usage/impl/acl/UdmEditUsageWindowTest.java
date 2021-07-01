@@ -1,11 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -17,7 +25,10 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
 
 /**
  * Verifies {@link UdmEditUsageWindow}.
@@ -30,7 +41,22 @@ import org.junit.Test;
  */
 public class UdmEditUsageWindowTest {
 
-    private final UdmEditUsageWindow window = new UdmEditUsageWindow(new UdmUsageDto());
+    private UdmEditUsageWindow window;
+
+    @Before
+    public void setUp() {
+        IUdmUsageController controller = createMock(IUdmUsageController.class);
+        expect(controller.getActionReasons()).andReturn(Collections.singletonList(
+            new UdmActionReason("d7258aa1-801c-408f-8fff-685e5519a8db", "Metadata does not match Wr Wrk Inst"))).once();
+        expect(controller.getDetailLicenseeClasses())
+            .andReturn(Collections.singletonList(buildDetailLicenseeClass())).once();
+        expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(
+            new UdmIneligibleReason("ccbd22af-32bf-4162-8145-d49eae14c800", "User is not reporting a Mkt Rsch Rpt")))
+            .once();
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, new UdmUsageDto());
+        verify(controller);
+    }
 
     @Test
     public void testConstructor() {
@@ -157,5 +183,12 @@ public class UdmEditUsageWindowTest {
     private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
+    }
+
+    private DetailLicenseeClass buildDetailLicenseeClass() {
+        DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
+        licenseeClass.setId(26);
+        licenseeClass.setDescription("Law Firms");
+        return licenseeClass;
     }
 }

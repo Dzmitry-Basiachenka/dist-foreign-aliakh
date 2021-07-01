@@ -2,7 +2,10 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
@@ -130,4 +133,19 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param usageIds set of usage ids to un-assign
      */
     void unassignUsages(Set<String> usageIds);
+
+    /**
+     * @return list of {@link UdmActionReason}.
+     */
+    List<UdmActionReason> getActionReasons();
+
+    /**
+     * @return list of {@link UdmIneligibleReason}.
+     */
+    List<UdmIneligibleReason> getIneligibleReasons();
+
+    /**
+     * @return list of {@link DetailLicenseeClass}.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
 }
