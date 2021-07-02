@@ -51,6 +51,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsageService}.
@@ -322,6 +323,30 @@ public class UdmUsageServiceTest {
         replay(udmUsageRepository);
         udmUsageService.deleteUdmBatchDetails(udmBatch);
         verify(udmUsageRepository);
+    }
+
+    @Test
+    public void testAssignUsages() {
+        mockStatic(RupContextUtils.class);
+        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        udmUsageRepository.updateAssignee(usageIds, USER_NAME, USER_NAME);
+        expectLastCall().once();
+        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageService.assignUsages(usageIds);
+        verify(udmUsageRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUnAssignUsages() {
+        mockStatic(RupContextUtils.class);
+        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        udmUsageRepository.updateAssignee(usageIds, null, USER_NAME);
+        expectLastCall().once();
+        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageService.unassignUsages(usageIds);
+        verify(udmUsageRepository, RupContextUtils.class);
     }
 
     private UdmBatch buildUdmBatch() {

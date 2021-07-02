@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for UDM usages business logic.
@@ -132,4 +133,18 @@ public interface IUdmUsageService {
      * @param udmBatch {@link UdmBatch} to delete UDM usages from
      */
     void deleteUdmBatchDetails(UdmBatch udmBatch);
+
+    /**
+     * Assigns provided usages to logged in user.
+     *
+     * @param udmUsageIds set of usage ids to assign
+     */
+    void assignUsages(Set<String> udmUsageIds);
+
+    /**
+     * Un-assigns provided usages.
+     *
+     * @param udmUsageIds set of usage ids to un-assign
+     */
+    void unassignUsages(Set<String> udmUsageIds);
 }

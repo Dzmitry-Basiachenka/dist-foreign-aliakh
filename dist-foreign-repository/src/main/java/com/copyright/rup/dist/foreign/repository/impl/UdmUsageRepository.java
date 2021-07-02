@@ -132,4 +132,13 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     public void deleteByBatchId(String udmBatchId) {
         delete("IUdmUsageMapper.deleteByBatchId", Objects.requireNonNull(udmBatchId));
     }
+
+    @Override
+    public void updateAssignee(Set<String> udmUsageIds, String assignee, String updateUser) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("udmUsageIds", Objects.requireNonNull(udmUsageIds));
+        parameters.put("updateUser", Objects.requireNonNull(updateUser));
+        parameters.put("assignee", assignee);
+        update("IUdmUsageMapper.updateAssignee", parameters);
+    }
 }

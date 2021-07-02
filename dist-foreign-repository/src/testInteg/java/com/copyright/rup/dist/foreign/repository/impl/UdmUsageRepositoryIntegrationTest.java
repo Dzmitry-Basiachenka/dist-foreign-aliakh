@@ -107,7 +107,8 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String DIGITAL = "DIGITAL";
-    private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final String ASSIGNEE_1 = "wjohn@copyright.com";
+    private static final String ASSIGNEE_2 = "user@copyright.com";
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INVALID_VALUE = "Invalid value";
@@ -152,7 +153,7 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindDtosByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
-        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setAssignees(Collections.singleton(ASSIGNEE_1));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
@@ -182,8 +183,8 @@ public class UdmUsageRepositoryIntegrationTest {
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE)), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
@@ -274,7 +275,7 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriod(202106), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 2);
         assertFilteringFindCountByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)), 3);
@@ -380,7 +381,7 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindCountByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
-        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setAssignees(Collections.singleton(ASSIGNEE_1));
         filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED));
         filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT));
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
@@ -603,6 +604,30 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(1, udmUsageRepository.findCountByFilter(filter));
         udmUsageRepository.deleteByBatchId("2e92041d-42d1-44f2-b6bd-2e6e8a131831");
         assertEquals(0, udmUsageRepository.findCountByFilter(filter));
+    }
+
+    @Test
+    public void testUpdateAssignee() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setSearchValue("OGN674GHHHB0117");
+        UdmUsageDto udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        assertNull(udmUsagedto.getAssignee());
+        udmUsageRepository
+            .updateAssignee(Collections.singleton("22241298-5c9e-4222-8fc1-5ee80c0e48f1"), ASSIGNEE_2, USER_NAME);
+        udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        assertEquals(ASSIGNEE_2, udmUsagedto.getAssignee());
+    }
+
+    @Test
+    public void testUpdateAssigneeToNull() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setSearchValue("OGN674GHHHB0116");
+        UdmUsageDto udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        assertEquals(ASSIGNEE_1, udmUsagedto.getAssignee());
+        udmUsageRepository
+            .updateAssignee(Collections.singleton("d247235f-3595-4b74-b091-f6f91fba2e7d"), null, USER_NAME);
+        udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        assertNull(udmUsagedto.getAssignee());
     }
 
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {

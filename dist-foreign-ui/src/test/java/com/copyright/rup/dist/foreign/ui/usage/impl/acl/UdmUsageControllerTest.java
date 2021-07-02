@@ -53,6 +53,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmUsageController}.
@@ -223,6 +224,26 @@ public class UdmUsageControllerTest {
         controller.showUdmUsageHistory(udmUsageId);
         assertNotNull(windowCapture.getValue());
         verify(Windows.class, udmUsageAuditService);
+    }
+
+    @Test
+    public void testAssignUsages() {
+        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        udmUsageService.assignUsages(usageIds);
+        expectLastCall().once();
+        replay(udmUsageAuditService);
+        controller.assignUsages(usageIds);
+        verify(udmUsageAuditService);
+    }
+
+    @Test
+    public void testUnassignUsages() {
+        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        udmUsageService.unassignUsages(usageIds);
+        expectLastCall().once();
+        replay(udmUsageAuditService);
+        controller.unassignUsages(usageIds);
+        verify(udmUsageAuditService);
     }
 
     @Test
