@@ -117,4 +117,12 @@ public interface IUdmUsageService {
      * @return list of {@link UdmIneligibleReason}
      */
     List<UdmIneligibleReason> getIneligibleReasons();
+
+    /**
+     * Gets {@link UdmIneligibleReason} by id.
+     *
+     * @param id ineligible reason id
+     * @return instance of {@link UdmIneligibleReason}
+     */
+    UdmIneligibleReason getIneligibleReasonById(String id);
 }

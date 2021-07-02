@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
@@ -31,6 +32,17 @@ import java.util.stream.Stream;
  * @author Anton Azarenka
  */
 public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
+
+    private final UdmIneligibleReason ineligibleReasonNoReportedUse;
+
+    /**
+     * Constructor.
+     *
+     * @param ineligibleReasonNoReportedUse instance of {@link UdmIneligibleReason} for the case 'No Reported Use'
+     */
+    public UdmCsvProcessor(UdmIneligibleReason ineligibleReasonNoReportedUse) {
+        this.ineligibleReasonNoReportedUse = ineligibleReasonNoReportedUse;
+    }
 
     @Override
     public List<String> getHeadersForValidation() {
@@ -144,7 +156,7 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
             result.setCompanyId(getLong(row, Header.COMPANY_ID, headers));
             result.setSurveyCountry(StringUtils.trim(getString(row, Header.SURVEY_COUNTRY, headers)));
             result.setStatus(isTitleNoneAndQuantityZero(result) ? UsageStatusEnum.INELIGIBLE : UsageStatusEnum.NEW);
-            result.setIneligibleReason(isTitleNoneAndQuantityZero(result) ? "No reported use" : null);
+            result.setIneligibleReason(isTitleNoneAndQuantityZero(result) ? ineligibleReasonNoReportedUse : null);
             result.setIpAddress(getString(row, Header.IP_ADDRESS, headers));
             result.setSurveyStartDate(getDate(row, Header.SURVEY_START_DATE, headers));
             result.setSurveyEndDate(getDate(row, Header.SURVEY_END_DATE, headers));

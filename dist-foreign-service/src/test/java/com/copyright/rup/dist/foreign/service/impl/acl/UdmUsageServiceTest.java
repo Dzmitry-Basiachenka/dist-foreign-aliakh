@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReasonEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
@@ -112,7 +113,8 @@ public class UdmUsageServiceTest {
         UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
         UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
         udmUsage2.setStatus(UsageStatusEnum.INELIGIBLE);
-        udmUsage2.setIneligibleReason("Not reported use");
+        udmUsage2.setIneligibleReason(new UdmIneligibleReason(UdmIneligibleReasonEnum.NO_REPORTED_USE.getId(),
+            "No Reported Use"));
         udmUsage2.setReportedTypeOfUse(null);
         udmUsage2.setReportedTitle("None");
         List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
@@ -138,7 +140,7 @@ public class UdmUsageServiceTest {
         udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.LOADED,
             "Uploaded in 'UDM Batch 2021 June' Batch");
         expectLastCall().once();
-        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.INELIGIBLE, "Not reported use");
+        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.INELIGIBLE, "No Reported Use");
         expectLastCall().once();
         replay(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
             telesalesService, udmUsageAuditService, RupContextUtils.class);

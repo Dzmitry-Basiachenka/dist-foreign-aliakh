@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class UdmActionReason extends StoredEntity<String> {
 
-    private String actionReason;
+    private String text;
 
     /**
      * Constructor.
@@ -27,20 +27,20 @@ public class UdmActionReason extends StoredEntity<String> {
     /**
      * Constructor.
      *
-     * @param id           id
-     * @param actionReason action reason.
+     * @param id   action reason id
+     * @param text action reason text
      */
-    public UdmActionReason(String id, String actionReason) {
+    public UdmActionReason(String id, String text) {
         this.setId(id);
-        this.actionReason = actionReason;
+        this.text = text;
     }
 
-    public String getActionReason() {
-        return actionReason;
+    public String getText() {
+        return text;
     }
 
-    public void setActionReason(String actionReason) {
-        this.actionReason = actionReason;
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UdmActionReason extends StoredEntity<String> {
         UdmActionReason that = (UdmActionReason) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(actionReason, that.actionReason)
+            .append(text, that.text)
             .isEquals();
     }
 
@@ -62,7 +62,7 @@ public class UdmActionReason extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(actionReason)
+            .append(text)
             .toHashCode();
     }
 
@@ -70,7 +70,7 @@ public class UdmActionReason extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("actionReason", actionReason)
+            .append("text", text)
             .toString();
     }
 }

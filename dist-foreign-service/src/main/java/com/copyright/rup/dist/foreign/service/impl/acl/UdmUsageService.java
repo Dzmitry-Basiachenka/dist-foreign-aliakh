@@ -101,7 +101,7 @@ public class UdmUsageService implements IUdmUsageService {
                 "Uploaded in '" + udmBatch.getName() + "' Batch");
             if (UsageStatusEnum.INELIGIBLE == usage.getStatus()) {
                 udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.INELIGIBLE,
-                    usage.getIneligibleReason());
+                    usage.getIneligibleReason().getText());
             }
         });
         LOGGER.info("Insert UDM usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
@@ -177,6 +177,11 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public List<UdmIneligibleReason> getIneligibleReasons() {
         return udmUsageRepository.findIneligibleReasons();
+    }
+
+    @Override
+    public UdmIneligibleReason getIneligibleReasonById(String id) {
+        return udmUsageRepository.findIneligibleReasonById(id);
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {
