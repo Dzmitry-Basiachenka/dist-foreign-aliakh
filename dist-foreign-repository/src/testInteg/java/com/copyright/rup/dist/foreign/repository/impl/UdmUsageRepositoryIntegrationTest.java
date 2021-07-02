@@ -596,6 +596,15 @@ public class UdmUsageRepositoryIntegrationTest {
             .forEach(index -> assertEquals(expectedIneligibleReasons.get(index), actualIneligibleReasons.get(index)));
     }
 
+    @Test
+    public void testDeleteByBatchId() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
+        assertEquals(1, udmUsageRepository.findCountByFilter(filter));
+        udmUsageRepository.deleteByBatchId("2e92041d-42d1-44f2-b6bd-2e6e8a131831");
+        assertEquals(0, udmUsageRepository.findCountByFilter(filter));
+    }
+
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {
         List<String> expectedUdmUsageIds = Arrays.stream(udmUsageIds)
             .sorted()

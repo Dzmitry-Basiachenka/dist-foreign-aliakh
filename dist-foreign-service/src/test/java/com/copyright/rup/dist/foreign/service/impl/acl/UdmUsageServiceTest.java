@@ -311,6 +311,19 @@ public class UdmUsageServiceTest {
         verify(udmUsageRepository);
     }
 
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        UdmBatch udmBatch = new UdmBatch();
+        udmBatch.setId(UDM_BATCH_UID);
+        udmUsageRepository.deleteByBatchId(udmBatch.getId());
+        expectLastCall().once();
+        udmUsageAuditService.deleteActionsByBatchId(udmBatch.getId());
+        expectLastCall().once();
+        replay(udmUsageRepository);
+        udmUsageService.deleteUdmBatchDetails(udmBatch);
+        verify(udmUsageRepository);
+    }
+
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(UDM_BATCH_UID);

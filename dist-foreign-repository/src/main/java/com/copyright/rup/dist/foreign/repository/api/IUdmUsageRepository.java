@@ -124,4 +124,11 @@ public interface IUdmUsageRepository {
      * @return instance of {@link UdmIneligibleReason}
      */
     UdmIneligibleReason findIneligibleReasonById(String id);
+
+    /**
+     * Deletes all {@link UdmUsage}s from the batch with given id.
+     *
+     * @param udmBatchId {@link com.copyright.rup.dist.foreign.domain.UdmBatch} id
+     */
+    void deleteByBatchId(String udmBatchId);
 }

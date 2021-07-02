@@ -127,4 +127,9 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     public UdmIneligibleReason findIneligibleReasonById(String id) {
         return selectOne("IUdmUsageMapper.findIneligibleReasonById", Objects.requireNonNull(id));
     }
+
+    @Override
+    public void deleteByBatchId(String udmBatchId) {
+        delete("IUdmUsageMapper.deleteByBatchId", Objects.requireNonNull(udmBatchId));
+    }
 }
