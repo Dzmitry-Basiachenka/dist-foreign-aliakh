@@ -184,6 +184,13 @@ public class UdmUsageService implements IUdmUsageService {
         return udmUsageRepository.findIneligibleReasonById(id);
     }
 
+    @Override
+    @Transactional
+    public void deleteUdmBatchDetails(UdmBatch udmBatch) {
+        udmUsageAuditService.deleteActionsByBatchId(udmBatch.getId());
+        udmUsageRepository.deleteByBatchId(udmBatch.getId());
+    }
+
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {
         String stringPeriod = String.valueOf(udmBatch.getPeriod());
         int year = Integer.parseInt(stringPeriod.substring(0, 4));

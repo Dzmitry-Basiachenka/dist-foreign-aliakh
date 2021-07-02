@@ -125,4 +125,11 @@ public interface IUdmUsageService {
      * @return instance of {@link UdmIneligibleReason}
      */
     UdmIneligibleReason getIneligibleReasonById(String id);
+
+    /**
+     * Deletes all {@link UdmUsage}s associated with the given {@link UdmBatch}.
+     *
+     * @param udmBatch {@link UdmBatch} to delete UDM usages from
+     */
+    void deleteUdmBatchDetails(UdmBatch udmBatch);
 }
