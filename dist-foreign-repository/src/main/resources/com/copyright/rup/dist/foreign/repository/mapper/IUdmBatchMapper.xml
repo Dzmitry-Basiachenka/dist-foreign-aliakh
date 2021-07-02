@@ -73,4 +73,9 @@
                 </foreach>
         )
     </select>
+
+    <delete id="deleteUdmBatch">
+        delete from ${schema}.df_udm_usage_batch
+        where df_udm_usage_batch_uid = #{udmBatchId}
+    </delete>
 </mapper>

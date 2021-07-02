@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBatchRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.google.common.collect.Sets;
 
@@ -42,10 +43,13 @@ import java.util.List;
 public class UdmBatchRepositoryIntegrationTest {
 
     private static final String UDM_BATCH_UID = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
+    private static final String UDM_BATCH_UID_2 = "7649518a-33a5-4929-8956-0c4ed0714250";
     private static final String UDM_BATCH_NAME = "UDM Batch 2021 June";
 
     @Autowired
     private IUdmBatchRepository udmBatchRepository;
+    @Autowired
+    private IUdmUsageRepository udmUsageRepository;
 
     @Test
     public void testInsertUsageBatch() {
@@ -76,7 +80,7 @@ public class UdmBatchRepositoryIntegrationTest {
         assertEquals("faaab569-35c1-474e-923d-96f4c062a62a", udmBatches.get(1).getId());
         assertEquals("6a4b192c-8f1b-4887-a75d-67688544eb5f", udmBatches.get(2).getId());
         assertEquals("864911e5-34ac-42a5-a4c8-84dc4c24e7b4", udmBatches.get(3).getId());
-        assertEquals("7649518a-33a5-4929-8956-0c4ed0714250", udmBatches.get(4).getId());
+        assertEquals(UDM_BATCH_UID_2, udmBatches.get(4).getId());
     }
 
     @Test
@@ -87,10 +91,19 @@ public class UdmBatchRepositoryIntegrationTest {
 
     @Test
     public void testIsUdmBatchProcessingCompleted() {
-        assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted("7649518a-33a5-4929-8956-0c4ed0714250",
+        assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
-        assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted("7649518a-33a5-4929-8956-0c4ed0714250",
+        assertTrue(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
             Collections.singleton(UsageStatusEnum.RH_FOUND)));
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        String batchId = UDM_BATCH_UID_2;
+        assertEquals(5, udmBatchRepository.findAll().size());
+        udmUsageRepository.deleteByBatchId(batchId);
+        udmBatchRepository.deleteUdmBatch(batchId);
+        assertEquals(4, udmBatchRepository.findAll().size());
     }
 
     private UdmBatch buildUdmBatch() {
