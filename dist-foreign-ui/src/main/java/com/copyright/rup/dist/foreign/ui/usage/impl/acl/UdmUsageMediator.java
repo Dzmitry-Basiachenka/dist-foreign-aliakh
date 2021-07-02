@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -17,19 +16,19 @@ import com.vaadin.ui.MenuBar;
  */
 public class UdmUsageMediator implements IMediator {
 
-    private Button loadButton;
+    private MenuBar batchMenuItem;
     private MenuBar assignmentMenuBar;
 
     @Override
     public void applyPermissions() {
         boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
-        loadButton.setVisible(isSpecialist);
+        batchMenuItem.setVisible(isSpecialist);
         assignmentMenuBar.setVisible(isSpecialist || ForeignSecurityUtils.hasManagerPermission() ||
             ForeignSecurityUtils.hasResearcherPermission());
     }
 
-    public void setLoadButton(Button loadButton) {
-        this.loadButton = loadButton;
+    public void setBatchMenuItem(MenuBar batchMenuItem) {
+        this.batchMenuItem = batchMenuItem;
     }
 
     public void setAssignmentMenuBar(MenuBar assignmentMenuBar) {

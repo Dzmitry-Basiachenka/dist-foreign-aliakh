@@ -58,7 +58,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
-    private Button loadButton;
+    private MenuBar udmBatchMenuBar;
     private MenuBar assignmentMenuBar;
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
@@ -78,7 +78,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     @Override
     public IMediator initMediator() {
         UdmUsageMediator mediator = new UdmUsageMediator();
-        mediator.setLoadButton(loadButton);
+        mediator.setBatchMenuItem(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         return mediator;
     }
@@ -115,9 +115,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private HorizontalLayout initToolbarLayout() {
+        initUsageBatchMenuBar();
         initAssignmentMenuBar();
-        loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
@@ -127,7 +126,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
-        HorizontalLayout buttonsLayout = new HorizontalLayout(loadButton, assignmentMenuBar, editButton, exportButton);
+        HorizontalLayout buttonsLayout =
+            new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
         toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
@@ -140,6 +140,18 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private String getSearchMessage() {
         return hasResearcherPermission ? "prompt.udm_search_researcher" : "prompt.udm_search";
+    }
+
+    private void initUsageBatchMenuBar() {
+        udmBatchMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            udmBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.udm_usage_batch"), null, null);
+        menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewUdmBatchWindow()));
+        VaadinUtils.addComponentStyle(udmBatchMenuBar, "usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(udmBatchMenuBar, "v-menubar-df");
     }
 
     private void initAssignmentMenuBar() {

@@ -9,8 +9,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
-import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,16 +34,16 @@ public class UdmUsageMediatorTest {
     private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
 
-    private Button loadButton;
+    private MenuBar udmBatchMenuBar;
     private MenuBar assignmentMenuBar;
     private UdmUsageMediator mediator;
 
     @Before
     public void setUp() {
-        loadButton = new Button();
+        udmBatchMenuBar = new MenuBar();
         assignmentMenuBar = new MenuBar();
         mediator = new UdmUsageMediator();
-        mediator.setLoadButton(loadButton);
+        mediator.setBatchMenuItem(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
     }
 
@@ -52,7 +52,7 @@ public class UdmUsageMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(loadButton.isVisible());
+        assertFalse(udmBatchMenuBar.isVisible());
         assertFalse(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
@@ -62,7 +62,7 @@ public class UdmUsageMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(loadButton.isVisible());
+        assertFalse(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
@@ -72,7 +72,7 @@ public class UdmUsageMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertTrue(loadButton.isVisible());
+        assertTrue(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
@@ -82,7 +82,7 @@ public class UdmUsageMediatorTest {
         mockResearcherPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(loadButton.isVisible());
+        assertFalse(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
