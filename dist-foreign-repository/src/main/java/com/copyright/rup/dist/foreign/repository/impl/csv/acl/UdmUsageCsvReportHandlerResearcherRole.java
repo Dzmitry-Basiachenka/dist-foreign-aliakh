@@ -63,8 +63,8 @@ public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler
         beanProperties.add(getBeanPropertyAsString(bean.getActionReason().getText()));
         beanProperties.add(bean.getComment());
         beanProperties.add(bean.getResearchUrl());
-        beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClassId()));
-        beanProperties.add(bean.getDetailLicenseeClassName());
+        beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClass().getId()));
+        beanProperties.add(bean.getDetailLicenseeClass().getDescription());
         beanProperties.add(bean.getChannel().name());
         beanProperties.add(getBeanLocalDate(bean.getUsageDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
