@@ -11,8 +11,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -28,7 +31,11 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Verifies {@link UdmEditUsageWindow}.
@@ -41,31 +48,114 @@ import java.util.Collections;
  */
 public class UdmEditUsageWindowTest {
 
+    private static final String UDM_USAGE_UID = "75b110ff-c6c9-45e6-baac-34041ff62081";
+    private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "OGN674GHHSB0025";
+    private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
+    private static final String STANDARD_NUMBER = "2192-3558";
+    private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
+    private static final String REPORTED_TITLE = "Colloids and surfaces. B, Biointerfaces";
+    private static final String SYSTEM_TITLE = "Brain surgery";
+    private static final String PUB_TYPE = "Journal";
+    private static final String PUBLICATION_FORMAT = "Digital";
+    private static final String ARTICLE = "Green chemistry";
+    private static final String LANGUAGE = "English";
+    private static final String SURVEY_COUNTRY = "United States";
+    private static final LocalDate USAGE_DATE = LocalDate.of(2020, 12, 12);
+    private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
+    private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
+    private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
+    private static final Long WR_WRK_INST = 122825347L;
+    private static final Long RH_ACCOUNT_NUMBER = 1000023041L;
+    private static final String RH_NAME = "American College of Physicians - Journals";
+    private static final Long COMPANY_ID = 454984566L;
+    private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
+    private static final int DET_LC_ID = 26;
+    private static final String DET_LC_NAME = "Law Firms";
+    private static final Integer QUANTITY = 10;
+    private static final Integer ANNUAL_MULTIPLIER = 1;
+    private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
+    private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal("10.00000");
+    private static final String IP_ADDRESS = "ip24.12.119.203";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final String USER_NAME = "user@copyright.com";
+    private static final String COMMENT = "Should be reviewed by Specialist";
+    private static final String RESEARCH_URL = "google.com";
+    private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass();
+    private static final UdmActionReason ACTION_REASON =
+        new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
+    private static final UdmIneligibleReason INELIGIBLE_REASON =
+        new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey");
+
+    private IUdmUsageController controller;
     private UdmEditUsageWindow window;
 
     @Before
     public void setUp() {
-        IUdmUsageController controller = createMock(IUdmUsageController.class);
-        expect(controller.getActionReasons()).andReturn(Collections.singletonList(
-            new UdmActionReason("d7258aa1-801c-408f-8fff-685e5519a8db", "Metadata does not match Wr Wrk Inst"))).once();
-        expect(controller.getDetailLicenseeClasses())
-            .andReturn(Collections.singletonList(buildDetailLicenseeClass())).once();
-        expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(
-            new UdmIneligibleReason("ccbd22af-32bf-4162-8145-d49eae14c800", "User is not reporting a Mkt Rsch Rpt")))
-            .once();
-        replay(controller);
-        window = new UdmEditUsageWindow(controller, new UdmUsageDto());
-        verify(controller);
+        controller = createMock(IUdmUsageController.class);
+        expect(controller.getActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     @Test
     public void testConstructor() {
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
         assertEquals("Edit UDM Usage", window.getCaption());
         assertEquals(650, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
+        verify(controller);
+    }
+
+    @Test
+    public void testUdmUsageDataBinding() {
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
+        VerticalLayout verticalLayout =
+            (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+        assertTextFieldValue(verticalLayout.getComponent(0), UDM_USAGE_UID);
+        assertTextFieldValue(verticalLayout.getComponent(1), "202012");
+        assertTextFieldValue(verticalLayout.getComponent(2), "SS");
+        assertTextFieldValue(verticalLayout.getComponent(3), UDM_USAGE_ORIGINAL_DETAIL_UID);
+        assertComboBoxFieldValue(verticalLayout.getComponent(4), UsageStatusEnum.RH_FOUND);
+        assertTextFieldValue(verticalLayout.getComponent(5), ASSIGNEE);
+        assertTextFieldValue(verticalLayout.getComponent(6), "1000023041");
+        assertTextFieldValue(verticalLayout.getComponent(7), RH_NAME);
+        assertTextFieldValue(verticalLayout.getComponent(8), "122825347");
+        assertTextFieldValue(verticalLayout.getComponent(9), REPORTED_TITLE);
+        assertTextFieldValue(verticalLayout.getComponent(10), SYSTEM_TITLE);
+        assertTextFieldValue(verticalLayout.getComponent(11), REPORTED_STANDARD_NUMBER);
+        assertTextFieldValue(verticalLayout.getComponent(12), STANDARD_NUMBER);
+        assertTextFieldValue(verticalLayout.getComponent(13), PUB_TYPE);
+        assertTextFieldValue(verticalLayout.getComponent(14), PUBLICATION_FORMAT);
+        assertTextFieldValue(verticalLayout.getComponent(15), ARTICLE);
+        assertTextFieldValue(verticalLayout.getComponent(16), LANGUAGE);
+        assertComboBoxFieldValue(verticalLayout.getComponent(17), ACTION_REASON);
+        assertTextFieldValue(verticalLayout.getComponent(18), COMMENT);
+        assertTextFieldValue(verticalLayout.getComponent(19), RESEARCH_URL);
+        assertComboBoxFieldValue(verticalLayout.getComponent(20), LICENSEE_CLASS);
+        assertTextFieldValue(verticalLayout.getComponent(21), "454984566");
+        assertTextFieldValue(verticalLayout.getComponent(22), COMPANY_NAME);
+        assertTextFieldValue(verticalLayout.getComponent(23), SURVEY_RESPONDENT);
+        assertTextFieldValue(verticalLayout.getComponent(24), IP_ADDRESS);
+        assertTextFieldValue(verticalLayout.getComponent(25), SURVEY_COUNTRY);
+        assertTextFieldValue(verticalLayout.getComponent(26), "CCC");
+        assertTextFieldValue(verticalLayout.getComponent(27), "12/12/2020");
+        assertTextFieldValue(verticalLayout.getComponent(28), "12/12/2019");
+        assertTextFieldValue(verticalLayout.getComponent(29), "12/12/2022");
+        assertTextFieldValue(verticalLayout.getComponent(30), "1");
+        assertTextFieldValue(verticalLayout.getComponent(31), "1");
+        assertTextFieldValue(verticalLayout.getComponent(32), REPORTED_TYPE_OF_USE);
+        assertTextFieldValue(verticalLayout.getComponent(33), "10");
+        assertTextFieldValue(verticalLayout.getComponent(34), "10.00000");
+        assertComboBoxFieldValue(verticalLayout.getComponent(35), INELIGIBLE_REASON);
+        assertTextFieldValue(verticalLayout.getComponent(36), "01/01/2016");
+        assertTextFieldValue(verticalLayout.getComponent(37), USER_NAME);
+        assertTextFieldValue(verticalLayout.getComponent(38), "12/12/2020");
+        verify(controller);
     }
 
     private void verifyRootLayout(Component component) {
@@ -131,6 +221,16 @@ public class UdmEditUsageWindowTest {
         verifyTextField(layout.getComponent(1), isReadOnly);
     }
 
+    private void assertTextFieldValue(Component component, String expectedValue) {
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(expectedValue, ((TextField) layout.getComponent(1)).getValue());
+    }
+
+    private void assertComboBoxFieldValue(Component component, Object expectedValue) {
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(expectedValue, ((ComboBox) layout.getComponent(1)).getValue());
+    }
+
     private void verifyComboBoxLayout(Component component, String labelCaption) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
@@ -185,10 +285,49 @@ public class UdmEditUsageWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
-    private DetailLicenseeClass buildDetailLicenseeClass() {
-        DetailLicenseeClass licenseeClass = new DetailLicenseeClass();
-        licenseeClass.setId(26);
-        licenseeClass.setDescription("Law Firms");
-        return licenseeClass;
+    private UdmUsageDto buildUdmUsageDto() {
+        UdmUsageDto udmUsage = new UdmUsageDto();
+        udmUsage.setId(UDM_USAGE_UID);
+        udmUsage.setPeriod(202012);
+        udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmUsage.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
+        udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+        udmUsage.setAssignee(ASSIGNEE);
+        udmUsage.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        udmUsage.setRhName(RH_NAME);
+        udmUsage.setWrWrkInst(WR_WRK_INST);
+        udmUsage.setReportedTitle(REPORTED_TITLE);
+        udmUsage.setSystemTitle(SYSTEM_TITLE);
+        udmUsage.setReportedStandardNumber(REPORTED_STANDARD_NUMBER);
+        udmUsage.setStandardNumber(STANDARD_NUMBER);
+        udmUsage.setReportedPubType(PUB_TYPE);
+        udmUsage.setPubFormat(PUBLICATION_FORMAT);
+        udmUsage.setArticle(ARTICLE);
+        udmUsage.setLanguage(LANGUAGE);
+        udmUsage.setActionReason(ACTION_REASON);
+        udmUsage.setComment(COMMENT);
+        udmUsage.setResearchUrl(RESEARCH_URL);
+        LICENSEE_CLASS.setId(DET_LC_ID);
+        LICENSEE_CLASS.setDescription(DET_LC_NAME);
+        udmUsage.setDetailLicenseeClass(LICENSEE_CLASS);
+        udmUsage.setCompanyId(COMPANY_ID);
+        udmUsage.setCompanyName(COMPANY_NAME);
+        udmUsage.setSurveyRespondent(SURVEY_RESPONDENT);
+        udmUsage.setIpAddress(IP_ADDRESS);
+        udmUsage.setSurveyCountry(SURVEY_COUNTRY);
+        udmUsage.setChannel(UdmChannelEnum.CCC);
+        udmUsage.setUsageDate(USAGE_DATE);
+        udmUsage.setSurveyStartDate(SURVEY_START_DATE);
+        udmUsage.setSurveyEndDate(SURVEY_END_DATE);
+        udmUsage.setAnnualMultiplier(ANNUAL_MULTIPLIER);
+        udmUsage.setStatisticalMultiplier(STATISTICAL_MULTIPLIER);
+        udmUsage.setReportedTypeOfUse(REPORTED_TYPE_OF_USE);
+        udmUsage.setQuantity(QUANTITY);
+        udmUsage.setAnnualizedCopies(ANNUALIZED_COPIES);
+        udmUsage.setIneligibleReason(INELIGIBLE_REASON);
+        udmUsage.setCreateDate(Date.from(LocalDate.of(2016, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        udmUsage.setUpdateUser(USER_NAME);
+        udmUsage.setUpdateDate(Date.from(LocalDate.of(2020, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        return udmUsage;
     }
 }
