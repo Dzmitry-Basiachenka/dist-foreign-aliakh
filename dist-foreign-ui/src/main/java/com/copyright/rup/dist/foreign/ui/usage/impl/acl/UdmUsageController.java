@@ -132,12 +132,12 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public void assignUsages(Set<String> usageIds) {
-        //TODO: use service logic here
+        udmUsageService.assignUsages(usageIds);
     }
 
     @Override
     public void unassignUsages(Set<String> usageIds) {
-        //TODO: use service logic here
+        udmUsageService.unassignUsages(usageIds);
     }
 
     public List<UdmActionReason> getActionReasons() {

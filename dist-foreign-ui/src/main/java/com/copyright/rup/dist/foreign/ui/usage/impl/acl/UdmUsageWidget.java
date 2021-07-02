@@ -164,6 +164,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.assign", usagesCount),
                     () -> {
                         controller.assignUsages(getSelectedUsageIds());
+                        udmUsagesGrid.deselectAll();
                         refresh();
                         Windows.showNotificationWindow(
                             ForeignUi.getMessage("message.notification.assignment_completed", usagesCount));
@@ -176,6 +177,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
                     () -> {
                         controller.unassignUsages(getSelectedUsageIds());
+                        udmUsagesGrid.deselectAll();
                         refresh();
                         Windows.showNotificationWindow(
                             ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));

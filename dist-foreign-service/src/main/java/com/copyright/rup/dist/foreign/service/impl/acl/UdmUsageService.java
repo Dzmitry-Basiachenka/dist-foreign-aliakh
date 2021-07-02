@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -189,6 +190,17 @@ public class UdmUsageService implements IUdmUsageService {
     public void deleteUdmBatchDetails(UdmBatch udmBatch) {
         udmUsageAuditService.deleteActionsByBatchId(udmBatch.getId());
         udmUsageRepository.deleteByBatchId(udmBatch.getId());
+    }
+
+    @Override
+    public void assignUsages(Set<String> udmUsageIds) {
+        String userName = RupContextUtils.getUserName();
+        udmUsageRepository.updateAssignee(udmUsageIds, userName, userName);
+    }
+
+    @Override
+    public void unassignUsages(Set<String> udmUsageIds) {
+        udmUsageRepository.updateAssignee(udmUsageIds, null, RupContextUtils.getUserName());
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {

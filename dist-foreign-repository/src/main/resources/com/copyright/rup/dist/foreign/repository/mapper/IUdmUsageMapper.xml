@@ -630,4 +630,15 @@
         delete from ${schema}.df_udm_usage u
         where u.df_udm_usage_batch_uid = #{udmBatchId}
     </delete>
+
+    <update id="updateAssignee" parameterType="map">
+        update ${schema}.df_udm_usage
+        set
+            assignee = #{assignee},
+            <include refid="StoredEntityMapper.update"/>
+        where df_udm_usage_uid in
+            <foreach collection="udmUsageIds" item="udmUsageId" open="(" separator="," close=")">
+                #{udmUsageId}
+            </foreach>
+    </update>
 </mapper>

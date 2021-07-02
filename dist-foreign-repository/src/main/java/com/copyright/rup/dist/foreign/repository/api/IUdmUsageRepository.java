@@ -131,4 +131,13 @@ public interface IUdmUsageRepository {
      * @param udmBatchId {@link com.copyright.rup.dist.foreign.domain.UdmBatch} id
      */
     void deleteByBatchId(String udmBatchId);
+
+    /**
+     * Updates assignee for provided usages. Value to assign can be nullable.
+     *
+     * @param udmUsageIds usage ids to update
+     * @param assignee    assignee or null
+     * @param updateUser  user who updates assignee
+     */
+    void updateAssignee(Set<String> udmUsageIds, String assignee, String updateUser);
 }
