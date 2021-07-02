@@ -122,7 +122,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
         fileDownloader.extend(exportButton);
         Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
-        editButton.addClickListener(event -> Windows.showModalWindow(new UdmEditUsageWindow(new UdmUsageDto())));
+        editButton.addClickListener(event -> Windows.showModalWindow(
+            new UdmEditUsageWindow(controller, udmUsagesGrid.getSelectedItems().iterator().next())));
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
@@ -244,8 +245,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getArticle, "table.column.article", "article", 100, false),
             addColumn(UdmUsageDto::getLanguage, "table.column.language", "language", 100, false),
             addColumn(UdmUsageDto::getComment, "table.column.comment", "comment", 200, false),
-            addColumn(UdmUsageDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", 100, false),
-            addColumn(UdmUsageDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 100, false),
+            addColumn(u -> u.getDetailLicenseeClass().getId(), "table.column.det_lc_id", "detLcId", 100, false),
+            addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 100,
+                false),
             addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", 100, hasResearcherPermission),
             addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", 120,
                 hasResearcherPermission),

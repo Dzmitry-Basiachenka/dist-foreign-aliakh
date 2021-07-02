@@ -17,12 +17,16 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -171,6 +175,39 @@ public class UdmUsageControllerTest {
         replay(udmBatchService);
         assertTrue(udmBatchService.udmBatchExists(batchName));
         verify(udmBatchService);
+    }
+
+    @Test
+    public void testGetActionReasons() {
+        List<UdmActionReason> actionReasons = Arrays.asList(
+            new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
+            new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
+        expect(udmUsageService.getActionReasons()).andReturn(actionReasons).once();
+        replay(udmUsageService);
+        assertEquals(actionReasons, controller.getActionReasons());
+        verify(udmUsageService);
+    }
+
+    @Test
+    public void testGetIneligibleReasons() {
+        List<UdmIneligibleReason> ineligibleReasons = Arrays.asList(
+            new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
+            new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"));
+        expect(udmUsageService.getIneligibleReasons()).andReturn(ineligibleReasons).once();
+        replay(udmUsageService);
+        assertEquals(ineligibleReasons, controller.getIneligibleReasons());
+        verify(udmUsageService);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
+        Whitebox.setInternalState(controller, licenseeClassService);
+        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertEquals(licenseeClasses, controller.getDetailLicenseeClasses());
+        verify(licenseeClassService);
     }
 
     @Test

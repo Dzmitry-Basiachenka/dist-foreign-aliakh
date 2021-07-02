@@ -173,7 +173,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400));
         List<UdmUsageDto> usages = udmUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, usages.size());
-        verifyUsageDto(loadExpectedUsageDto("json/udm/udm_usage_b989e02b.json").get(0), usages.get(0));
+        verifyUsageDto(loadExpectedUsageDto("json/udm/udm_usage_dto_b989e02b.json").get(0), usages.get(0));
     }
 
     @Test
@@ -674,8 +674,9 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
         assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
         assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
-        assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
-        assertEquals(expectedUsage.getDetailLicenseeClassName(), actualUsage.getDetailLicenseeClassName());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getId(), actualUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getDescription(),
+            actualUsage.getDetailLicenseeClass().getDescription());
         assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
         assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());

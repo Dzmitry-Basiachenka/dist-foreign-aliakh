@@ -7,10 +7,15 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -28,6 +33,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -57,6 +63,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private IUdmBatchService udmBatchService;
     @Autowired
     private IUdmUsageAuditService udmUsageAuditService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -132,9 +140,18 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         //TODO: use service logic here
     }
 
+    public List<UdmActionReason> getActionReasons() {
+        return udmUsageService.getActionReasons();
+    }
+
     @Override
-    protected IUdmUsageWidget instantiateWidget() {
-        return new UdmUsageWidget();
+    public List<UdmIneligibleReason> getIneligibleReasons() {
+        return udmUsageService.getIneligibleReasons();
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override
@@ -150,6 +167,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceViewRole() {
         return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+    }
+
+    @Override
+    protected IUdmUsageWidget instantiateWidget() {
+        return new UdmUsageWidget();
     }
 
     private UdmUsageFilter getFilter() {

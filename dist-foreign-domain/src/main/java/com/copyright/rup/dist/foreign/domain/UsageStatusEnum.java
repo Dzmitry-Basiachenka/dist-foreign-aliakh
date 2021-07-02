@@ -78,6 +78,16 @@ public enum UsageStatusEnum {
     ELIGIBLE,
 
     /**
+     * Status for OPS review.
+     */
+    OPS_REVIEW,
+
+    /**
+     * Status for Specialist review.
+     */
+    SPECIALIST_REVIEW,
+
+    /**
      * Status for withdrawn usages.
      */
     NTS_WITHDRAWN,
