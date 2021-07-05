@@ -76,7 +76,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     @Override
     public IMediator initMediator() {
         UdmUsageMediator mediator = new UdmUsageMediator();
-        mediator.setBatchMenuItem(udmBatchMenuBar);
+        mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setUsageGrid(udmUsagesGrid);
         mediator.setAssignItem(assignItem);
@@ -151,7 +151,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
             item -> Windows.showModalWindow(new UdmBatchUploadWindow(controller)));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
-            item -> Windows.showModalWindow(new ViewUdmBatchWindow()));
+            item -> Windows.showModalWindow(new ViewUdmBatchWindow(controller)));
         VaadinUtils.addComponentStyle(udmBatchMenuBar, "usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(udmBatchMenuBar, "v-menubar-df");
     }

@@ -20,6 +20,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.components.grid.GridSelectionModel;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +50,7 @@ public class UdmUsageMediatorTest {
     private MenuBar udmBatchMenuBar;
     private MenuBar assignmentMenuBar;
     private MenuBar.MenuItem assignItem;
-    private MenuBar.MenuItem unassignItem;;
+    private MenuBar.MenuItem unassignItem;
     private Registration registration;
     private Grid<UdmUsageDto> uasgeGrid;
     private SelectionEvent<UdmUsageDto> selectionEvent;
@@ -70,7 +71,7 @@ public class UdmUsageMediatorTest {
         registration = createMock(Registration.class);
         mediator = new UdmUsageMediator();
         mediator.setUsageGrid(uasgeGrid);
-        mediator.setBatchMenuItem(udmBatchMenuBar);
+        mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setUnassignItem(unassignItem);
         mediator.setAssignItem(assignItem);

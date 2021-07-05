@@ -4,10 +4,13 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -33,16 +36,21 @@ import java.util.Objects;
  */
 public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchController {
 
+    private final SearchWidget searchWidget;
+    private final IUdmUsageController controller;
     private Grid<UdmBatch> grid;
     private Button deleteBatchButton;
 
     /**
      * Constructor.
+     *
+     * @param controller instance of {@link IUdmUsageController}
      */
-    public ViewUdmBatchWindow() {
+    public ViewUdmBatchWindow(IUdmUsageController controller) {
+        this.controller = controller;
         setWidth(1000, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
-        SearchWidget searchWidget = new SearchWidget(this);
+        searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search.udm"));
         initUdmBatchesGrid();
         HorizontalLayout buttonsLayout = initButtons();
@@ -57,13 +65,20 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
 
     @Override
     public void performSearch() {
-        //TODO will implement later
+        ListDataProvider<UdmBatch> dataProvider = (ListDataProvider<UdmBatch>) grid.getDataProvider();
+        dataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(batch -> StringUtils.containsIgnoreCase(batch.getName(), searchValue));
+        }
+        // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
+        grid.recalculateColumnWidths();
     }
 
     private void initUdmBatchesGrid() {
         grid = new Grid<>();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        //TODO {aazarenka} add logic to set items
+        grid.setItems(controller.getUdmBatches());
         grid.addSelectionListener(event -> deleteBatchButton.setEnabled(true));
         grid.setSizeFull();
         addGridColumns();
@@ -101,12 +116,27 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
     private HorizontalLayout initButtons() {
         Button closeButton = Buttons.createCloseButton(this);
         deleteBatchButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
-        //TODO {aazarenka} add logic to check processing batch is completed and delete udm batch
+        deleteBatchButton.addClickListener(event ->
+            deleteUdmBatch(grid.getSelectedItems().stream().findFirst().orElse(null)));
         deleteBatchButton.setEnabled(false);
         HorizontalLayout layout = new HorizontalLayout(deleteBatchButton, closeButton);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-batch-buttons");
         return layout;
+    }
+
+    private void deleteUdmBatch(UdmBatch udmBatch) {
+        if (controller.isUdmBatchProcessingCompleted(udmBatch.getId())) {
+            Windows.showConfirmDialog(
+                ForeignUi.getMessage("message.confirm.delete_action", udmBatch.getName(), "UDM batch"),
+                () -> {
+                    controller.deleteUdmBatch(udmBatch);
+                    grid.setItems(controller.getUdmBatches());
+                });
+        } else {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.error.delete_in_progress_batch", udmBatch.getName()));
+        }
     }
 
     private String getStringFromDate(Date date) {
