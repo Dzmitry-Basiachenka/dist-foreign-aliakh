@@ -356,6 +356,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "language");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "actionReason");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "comment");
+        assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "researchUrl");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyId");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "companyName");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "detLcId");

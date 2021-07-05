@@ -244,6 +244,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(u -> null != u.getActionReason() ? u.getActionReason().getText() : StringUtils.EMPTY,
                 "table.column.action_reason", "actionReason", 200, false),
             addColumn(UdmUsageDto::getComment, "table.column.comment", "comment", 200, false),
+            addColumn(UdmUsageDto::getResearchUrl, "table.column.research_url", "researchUrl", 200, false),
             addColumn(u -> u.getDetailLicenseeClass().getId(), "table.column.det_lc_id", "detLcId", 100, false),
             addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 100,
                 false),

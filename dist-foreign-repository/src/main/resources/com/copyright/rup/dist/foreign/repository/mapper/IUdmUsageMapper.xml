@@ -430,6 +430,9 @@
             <when test="sort.property == 'comment'">
                 comment <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'researchUrl'">
+                research_url <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'companyId'">
                 company_id <include refid="IUsageMapper.direction"/>
             </when>

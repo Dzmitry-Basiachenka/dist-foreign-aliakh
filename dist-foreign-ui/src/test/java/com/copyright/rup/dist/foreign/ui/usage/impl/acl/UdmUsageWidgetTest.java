@@ -69,22 +69,22 @@ public class UdmUsageWidgetTest {
         Arrays.asList("Detail ID", "Period", "Usage Detail ID", "Detail Status", "Assignee", "RH Account #",
             "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
-            "Comment", "Det LC ID", "Det LC Name", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
-            "Reported TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
+            "Comment", "Research URL", "Det LC ID", "Det LC Name", "Channel", "Usage Date", "Survey Start Date",
+            "Survey End Date", "Reported TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_MANAGER =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
-            "Comment", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent", "IP Address",
-            "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
-            "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date",
-            "Updated By", "Updated Date");
+            "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
+            "IP Address", "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
+            "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies",
+            "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final List<String> VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
-            "Comment", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent", "Survey Country",
-            "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
+            "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
+            "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
             "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date",
             "Updated By", "Updated Date");
     private static final String SEARCH_PLACEHOLDER =
