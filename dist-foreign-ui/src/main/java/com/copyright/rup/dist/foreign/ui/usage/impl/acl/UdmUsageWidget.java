@@ -29,8 +29,6 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -80,6 +78,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         UdmUsageMediator mediator = new UdmUsageMediator();
         mediator.setBatchMenuItem(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
+        mediator.setUsageGrid(udmUsagesGrid);
+        mediator.setAssignItem(assignItem);
+        mediator.setUnassignItem(unassignItem);
         return mediator;
     }
 
@@ -202,12 +203,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             });
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
-        udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-        udmUsagesGrid.addSelectionListener(event -> {
-            boolean isEnabled = CollectionUtils.isNotEmpty(event.getAllSelectedItems());
-            assignItem.setEnabled(isEnabled);
-            unassignItem.setEnabled(isEnabled);
-        });
         udmUsagesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
