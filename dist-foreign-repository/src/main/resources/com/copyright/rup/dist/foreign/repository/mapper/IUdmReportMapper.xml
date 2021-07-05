@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmReportMapper">
+    <select id="findUdmUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findUdmUsageDtosByFilter" resultMap="IUdmUsageMapper.udmUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmUsageMapper.selectDtosByFilterSql"/>
+    </select>
+</mapper>

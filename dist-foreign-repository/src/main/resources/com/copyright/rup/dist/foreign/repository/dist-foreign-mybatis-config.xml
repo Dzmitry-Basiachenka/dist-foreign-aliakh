@@ -115,5 +115,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmTouMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmUsageAuditMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmReportMapper.xml"/>
     </mappers>
 </configuration>

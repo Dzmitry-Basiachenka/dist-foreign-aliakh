@@ -60,7 +60,9 @@ public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler
         beanProperties.add(bean.getPubFormat());
         beanProperties.add(bean.getArticle());
         beanProperties.add(bean.getLanguage());
-        beanProperties.add(getBeanPropertyAsString(bean.getActionReason().getText()));
+        beanProperties.add(Objects.nonNull(bean.getActionReason())
+            ? bean.getActionReason().getText()
+            : StringUtils.EMPTY);
         beanProperties.add(bean.getComment());
         beanProperties.add(bean.getResearchUrl());
         beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClass().getId()));
@@ -70,7 +72,9 @@ public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler
         beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyEndDate()));
         beanProperties.add(bean.getReportedTypeOfUse());
-        beanProperties.add(getBeanPropertyAsString(bean.getIneligibleReason().getText()));
+        beanProperties.add(Objects.nonNull(bean.getIneligibleReason())
+            ? bean.getIneligibleReason().getText()
+            : StringUtils.EMPTY);
         beanProperties.add(getStringFromDate(bean.getCreateDate()));
         beanProperties.add(bean.getUpdateUser());
         beanProperties.add(getStringFromDate(bean.getUpdateDate()));
