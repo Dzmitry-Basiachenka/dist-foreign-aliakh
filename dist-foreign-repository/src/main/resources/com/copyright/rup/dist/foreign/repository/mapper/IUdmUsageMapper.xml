@@ -172,7 +172,7 @@
                 and u.wr_wrk_inst = #{filter.wrWrkInst}
             </if>
             <if test="!filter.annualMultiplierExpression.isEmpty()">
-                <include refid="filterExpression">
+                <include refid="IUdmUsageMapper.filterExpression">
                     <property name="column" value="u.annual_multiplier"/>
                     <property name="operator" value="filter.annualMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualMultiplierExpression.fieldFirstValue}"/>
@@ -180,7 +180,7 @@
                 </include>
             </if>
             <if test="!filter.annualizedCopiesExpression.isEmpty()">
-                <include refid="filterExpression">
+                <include refid="IUdmUsageMapper.filterExpression">
                     <property name="column" value="u.annualized_copies"/>
                     <property name="operator" value="filter.annualizedCopiesExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>
@@ -188,7 +188,7 @@
                 </include>
             </if>
             <if test="!filter.statisticalMultiplierExpression.isEmpty()">
-                <include refid="filterExpression">
+                <include refid="IUdmUsageMapper.filterExpression">
                     <property name="column" value="u.statistical_multiplier"/>
                     <property name="operator" value="filter.statisticalMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.statisticalMultiplierExpression.fieldFirstValue}"/>
@@ -196,7 +196,7 @@
                 </include>
             </if>
             <if test="!filter.quantityExpression.isEmpty()">
-                <include refid="filterExpression">
+                <include refid="IUdmUsageMapper.filterExpression">
                     <property name="column" value="u.quantity"/>
                     <property name="operator" value="filter.quantityExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.quantityExpression.fieldFirstValue}"/>
@@ -229,6 +229,81 @@
         <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
             and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
         </if>
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            df_udm_usage_uid,
+            ub.period,
+            ub.usage_origin,
+            ub.channel,
+            original_detail_id,
+            status_ind,
+            assignee,
+            u.rh_account_number,
+            r.name rh_name,
+            wr_wrk_inst,
+            reported_title,
+            system_title,
+            reported_standard_number,
+            standard_number,
+            reported_pub_type,
+            publication_format,
+            article,
+            language,
+            comment,
+            research_url,
+            company_id,
+            company_name,
+            u.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            survey_respondent,
+            ip_address,
+            survey_country,
+            usage_date,
+            survey_start_date,
+            survey_end_date,
+            annual_multiplier,
+            statistical_multiplier,
+            reported_type_of_use,
+            quantity,
+            annualized_copies,
+            ar.df_udm_action_reason_uid,
+            ar.action_reason,
+            ir.df_udm_ineligible_reason_uid,
+            ir.ineligible_reason,
+            u.created_datetime,
+            u.updated_datetime,
+            u.created_by_user,
+            u.updated_by_user,
+            u.record_version
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_udm_action_reason ar on u.df_udm_action_reason_uid = ar.df_udm_action_reason_uid
+        left join ${schema}.df_udm_ineligible_reason ir on u.df_udm_ineligible_reason_uid = ir.df_udm_ineligible_reason_uid
+        <include refid="IUdmUsageMapper.udmUsageFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUdmUsageMapper.udmChooseSortProperty"/>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>,
+        df_udm_usage_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <include refid="IUdmUsageMapper.udmUsageFilter"/>
     </sql>
 
     <insert id="insert" parameterType="UdmUsage">
@@ -306,69 +381,7 @@
     </select>
 
     <select id="findDtosByFilter" resultMap="udmUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        select
-            df_udm_usage_uid,
-            ub.period,
-            ub.usage_origin,
-            ub.channel,
-            original_detail_id,
-            status_ind,
-            assignee,
-            u.rh_account_number,
-            r.name rh_name,
-            wr_wrk_inst,
-            reported_title,
-            system_title,
-            reported_standard_number,
-            standard_number,
-            reported_pub_type,
-            publication_format,
-            article,
-            language,
-            comment,
-            research_url,
-            company_id,
-            company_name,
-            u.detail_licensee_class_id,
-            dlc.description detail_licensee_class_name,
-            survey_respondent,
-            ip_address,
-            survey_country,
-            usage_date,
-            survey_start_date,
-            survey_end_date,
-            annual_multiplier,
-            statistical_multiplier,
-            reported_type_of_use,
-            quantity,
-            annualized_copies,
-            ar.df_udm_action_reason_uid,
-            ar.action_reason,
-            ir.df_udm_ineligible_reason_uid,
-            ir.ineligible_reason,
-            u.created_datetime,
-            u.updated_datetime,
-            u.created_by_user,
-            u.updated_by_user,
-            u.record_version
-        from ${schema}.df_udm_usage u
-        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
-        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-        left join ${schema}.df_udm_action_reason ar on u.df_udm_action_reason_uid = ar.df_udm_action_reason_uid
-        left join ${schema}.df_udm_ineligible_reason ir on u.df_udm_ineligible_reason_uid = ir.df_udm_ineligible_reason_uid
-        <include refid="IUdmUsageMapper.udmUsageFilter"/>
-        order by
-        <choose>
-            <when test="null != sort">
-                <include refid="IUdmUsageMapper.udmChooseSortProperty"/>
-            </when>
-            <otherwise>
-                updated_datetime desc
-            </otherwise>
-        </choose>,
-        df_udm_usage_uid
-        <include refid="IUsageMapper.ifPageable"/>
+        <include refid="IUdmUsageMapper.selectDtosByFilterSql"/>
     </select>
 
     <sql id="udmChooseSortProperty">
@@ -497,12 +510,7 @@
     </sql>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_udm_usage u
-        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
-        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-        <include refid="IUdmUsageMapper.udmUsageFilter"/>
+        <include refid="IUdmUsageMapper.selectCountByFilterSql"/>
     </select>
 
     <select id="findByIds" resultMap="udmUsageResultMap">
