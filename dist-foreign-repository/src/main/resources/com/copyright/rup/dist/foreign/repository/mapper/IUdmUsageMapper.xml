@@ -424,6 +424,9 @@
             <when test="sort.property == 'language'">
                 language <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'actionReason'">
+                ar.action_reason <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'comment'">
                 comment <include refid="IUsageMapper.direction"/>
             </when>

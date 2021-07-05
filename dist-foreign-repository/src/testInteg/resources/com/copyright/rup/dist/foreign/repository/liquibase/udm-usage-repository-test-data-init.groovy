@@ -104,6 +104,7 @@ databaseChangeLog {
             column(name: 'reported_type_of_use', value: 'PRINT_COPIES')
             column(name: 'annualized_copies', value: 4)
             column(name: 'quantity', value: 3)
+            column(name: 'df_udm_action_reason_uid', value: 'ccbd22af-32bf-4162-8145-d49eae14c800')
             column(name: 'df_udm_ineligible_reason_uid', value: 'a4df53dd-26d9-4a0e-956c-e95543707674')
             column(name: 'updated_by_user', value: 'system@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
