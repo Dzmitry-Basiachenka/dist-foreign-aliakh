@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
@@ -113,6 +114,21 @@ public class UdmBatchServiceTest {
         replay(udmBatchRepository);
         assertTrue(udmBatchService.udmBatchExists(batchName));
         verify(udmBatchRepository);
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        UdmBatch udmBatch = new UdmBatch();
+        udmBatch.setId(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        udmUsageService.deleteUdmBatchDetails(udmBatch);
+        expectLastCall().once();
+        udmBatchRepository.deleteUdmBatch(udmBatch.getId());
+        expectLastCall().once();
+        replay(udmUsageService, udmBatchRepository, RupContextUtils.class);
+        udmBatchService.deleteUdmBatch(udmBatch);
+        verify(udmUsageService, udmBatchRepository, RupContextUtils.class);
     }
 
     @Test

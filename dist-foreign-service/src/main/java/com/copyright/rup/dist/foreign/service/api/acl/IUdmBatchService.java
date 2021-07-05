@@ -53,4 +53,11 @@ public interface IUdmBatchService {
      * @return true if UDM batch processing is completed, false - otherwise
      */
     boolean isUdmBatchProcessingCompleted(String udmBatchId);
+
+    /**
+     * Deletes given {@link UdmBatch} and all it's UDM usage details.
+     *
+     * @param udmBatch {@link UdmBatch}
+     */
+    void deleteUdmBatch(UdmBatch udmBatch);
 }

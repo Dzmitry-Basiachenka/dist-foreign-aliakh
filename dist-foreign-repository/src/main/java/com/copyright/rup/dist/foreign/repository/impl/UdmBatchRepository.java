@@ -58,4 +58,9 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
         params.put("statuses", statuses);
         return selectOne("IUdmBatchMapper.isUdmBatchProcessingCompleted", params);
     }
+
+    @Override
+    public void deleteUdmBatch(String udmBatchId) {
+        delete("IUdmBatchMapper.deleteUdmBatch", Objects.requireNonNull(udmBatchId));
+    }
 }
