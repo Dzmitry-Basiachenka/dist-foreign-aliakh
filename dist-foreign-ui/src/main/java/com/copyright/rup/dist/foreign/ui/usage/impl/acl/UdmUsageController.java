@@ -155,6 +155,22 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
+    public List<UdmBatch> getUdmBatches() {
+        return udmBatchService.getUdmBatches();
+    }
+
+    @Override
+    public void deleteUdmBatch(UdmBatch udmBatch) {
+        udmBatchService.deleteUdmBatch(udmBatch);
+        udmUsageFilterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public boolean isUdmBatchProcessingCompleted(String udmBatchId) {
+        return udmBatchService.isUdmBatchProcessingCompleted(udmBatchId);
+    }
+
+    @Override
     public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
         return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
     }

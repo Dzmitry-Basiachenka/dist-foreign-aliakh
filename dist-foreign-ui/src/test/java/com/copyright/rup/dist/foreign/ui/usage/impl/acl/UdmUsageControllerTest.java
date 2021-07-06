@@ -247,6 +247,36 @@ public class UdmUsageControllerTest {
     }
 
     @Test
+    public void testDeleteUsageBatch() {
+        UdmBatch usageBatch = new UdmBatch();
+        udmBatchService.deleteUdmBatch(usageBatch);
+        expectLastCall().once();
+        expect(udmUsageFilterController.getWidget()).andReturn(udmUsageFilterWidget).once();
+        udmUsageFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
+        controller.deleteUdmBatch(usageBatch);
+        verify(udmBatchService, udmUsageFilterController, udmUsageFilterWidget);
+    }
+
+    @Test
+    public void testGetUdmBathes() {
+        List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
+        expect(udmBatchService.getUdmBatches()).andReturn(udmBatches).once();
+        replay(udmBatchService);
+        assertEquals(udmBatches, controller.getUdmBatches());
+        verify(udmBatchService);
+    }
+
+    @Test
+    public void testIsUdmBatchProcessingCompleted() {
+        expect(udmBatchService.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(true).once();
+        replay(udmBatchService);
+        assertTrue(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID));
+        verify(udmBatchService);
+    }
+
+    @Test
     @Ignore
     //TODO {dbasiachenka} implement after removing stubs in controller
     public void testGetExportUsagesStreamSourceSpecialistManagerRoles() {

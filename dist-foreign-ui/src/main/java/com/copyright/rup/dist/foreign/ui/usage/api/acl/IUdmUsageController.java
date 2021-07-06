@@ -148,4 +148,26 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return list of {@link DetailLicenseeClass}.
      */
     List<DetailLicenseeClass> getDetailLicenseeClasses();
+
+    /**
+     * Gets list of {@link UdmBatch}es.
+     *
+     * @return list of found {@link UdmBatch}es
+     */
+    List<UdmBatch> getUdmBatches();
+
+    /**
+     * Deletes {@link UdmBatch} and all its details.
+     *
+     * @param udmBatch {@link UdmBatch} to delete
+     */
+    void deleteUdmBatch(UdmBatch udmBatch);
+
+    /**
+     * Returns true if selected UDM batch is completed based on intermediate statuses.
+     *
+     * @param udmBatchId batch identifier
+     * @return true if UDM batch processing is completed, false - otherwise
+     */
+    boolean isUdmBatchProcessingCompleted(String udmBatchId);
 }

@@ -6,6 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.MenuBar;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -19,7 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
  */
 public class UdmUsageMediator implements IMediator {
 
-    private MenuBar batchMenuItem;
+    private MenuBar batchMenuBar;
     private MenuBar assignmentMenuBar;
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
@@ -30,7 +31,7 @@ public class UdmUsageMediator implements IMediator {
         boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
         boolean isSelectionAvailable = isSpecialist || ForeignSecurityUtils.hasManagerPermission() ||
             ForeignSecurityUtils.hasResearcherPermission();
-        batchMenuItem.setVisible(isSpecialist);
+        batchMenuBar.setVisible(isSpecialist);
         assignmentMenuBar.setVisible(isSelectionAvailable);
         if (isSelectionAvailable) {
             usageGrid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -44,8 +45,8 @@ public class UdmUsageMediator implements IMediator {
         }
     }
 
-    public void setBatchMenuItem(MenuBar batchMenuItem) {
-        this.batchMenuItem = batchMenuItem;
+    public void setBatchMenuBar(MenuBar batchMenuBar) {
+        this.batchMenuBar = batchMenuBar;
     }
 
     public void setAssignmentMenuBar(MenuBar assignmentMenuBar) {
