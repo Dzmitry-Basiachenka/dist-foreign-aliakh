@@ -16,8 +16,12 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -28,14 +32,18 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmEditUsageWindow}.
@@ -86,34 +94,41 @@ public class UdmEditUsageWindowTest {
     private static final UdmIneligibleReason INELIGIBLE_REASON =
         new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey");
 
-    private IUdmUsageController controller;
+    private static final String VALID_INTEGER = "123456789";
+    private static final String VALID_DECIMAL = "1.2345678";
+    private static final String INVALID_NUMBER = "a12345678";
+    private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
+    private static final String SPACES_STRING = "   ";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
+
     private UdmEditUsageWindow window;
+    private Binder<UdmUsageFilter> binder;
 
     @Before
     public void setUp() {
-        controller = createMock(IUdmUsageController.class);
+        IUdmUsageController controller = createMock(IUdmUsageController.class);
         expect(controller.getActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
         expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
+        binder = Whitebox.getInternalState(window, "binder");
+        verify(controller);
     }
 
     @Test
     public void testConstructor() {
-        replay(controller);
-        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
         assertEquals("Edit UDM Usage", window.getCaption());
         assertEquals(650, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
-        verify(controller);
     }
 
     @Test
     public void testUdmUsageDataBinding() {
-        replay(controller);
-        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
         VerticalLayout verticalLayout =
             (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
         assertTextFieldValue(verticalLayout.getComponent(0), UDM_USAGE_UID);
@@ -155,7 +170,82 @@ public class UdmEditUsageWindowTest {
         assertTextFieldValue(verticalLayout.getComponent(36), "01/01/2016");
         assertTextFieldValue(verticalLayout.getComponent(37), USER_NAME);
         assertTextFieldValue(verticalLayout.getComponent(38), "12/12/2020");
-        verify(controller);
+    }
+
+    @Test
+    public void testWrWrkInstValidation() {
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
+            "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
+    public void testCompanyIdValidation() {
+        TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
+        verifyTextFieldValidationMessage(companyIdField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(companyIdField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, "12345678901",
+            "Field value should not exceed 10 digits", false);
+        verifyTextFieldValidationMessage(companyIdField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(companyIdField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
+    public void testQuantityValidation() {
+        verifyIntegerValidations(Whitebox.getInternalState(window, "quantityField"));
+    }
+
+    @Test
+    public void testAnnualMultiplierValidation() {
+        verifyIntegerValidations(Whitebox.getInternalState(window, "annualMultiplierField"));
+    }
+
+    @Test
+    public void testStatisticalMultiplierValidation() {
+        TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
+        String decimalValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, INVALID_NUMBER, decimalValidationMessage, false);
+    }
+
+    @Test
+    public void testTextFieldsLengthValidation() {
+        verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
+        verifyLengthValidation(Whitebox.getInternalState(window, "reportedStandardNumberField"), 100);
+        verifyLengthValidation(Whitebox.getInternalState(window, "reportedPubTypeField"), 100);
+        verifyLengthValidation(Whitebox.getInternalState(window, "commentField"), 4000);
+        verifyLengthValidation(Whitebox.getInternalState(window, "researchUrlField"), 1000);
+    }
+
+    private void verifyLengthValidation(TextField textField, int maxSize) {
+        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize + 1),
+            String.format("Field value should not exceed %s characters", maxSize), false);
+        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+    }
+
+    private void verifyIntegerValidations(TextField textField) {
+        verifyCommonNumberValidations(textField, NUMBER_VALIDATION_MESSAGE);
+        verifyTextFieldValidationMessage(textField, "1234567890", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+    }
+
+    private void verifyCommonNumberValidations(TextField textField, String numberValidationMessage) {
+        verifyTextFieldValidationMessage(textField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
     }
 
     private void verifyRootLayout(Component component) {
@@ -213,12 +303,12 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true);
     }
 
-    private void verifyTextFieldLayout(Component component, String labelCaption, boolean isReadOnly) {
+    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyLabel(layout.getComponent(0), labelCaption);
-        verifyTextField(layout.getComponent(1), isReadOnly);
+        verifyLabel(layout.getComponent(0), caption);
+        verifyTextField(layout.getComponent(1), isReadOnly ? null : caption, isReadOnly);
     }
 
     private void assertTextFieldValue(Component component, String expectedValue) {
@@ -231,11 +321,11 @@ public class UdmEditUsageWindowTest {
         assertEquals(expectedValue, ((ComboBox) layout.getComponent(1)).getValue());
     }
 
-    private void verifyComboBoxLayout(Component component, String labelCaption) {
+    private void verifyComboBoxLayout(Component component, String caption) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyLabel(layout.getComponent(0), labelCaption);
+        verifyLabel(layout.getComponent(0), caption);
         verifyComboBoxField(layout.getComponent(1));
     }
 
@@ -244,7 +334,7 @@ public class UdmEditUsageWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), "Company ID");
-        verifyTextField(layout.getComponent(1), false);
+        verifyTextField(layout.getComponent(1), "Company ID", false);
         verifyButton(layout.getComponent(2), "Verify");
     }
 
@@ -255,11 +345,11 @@ public class UdmEditUsageWindowTest {
         assertEquals(caption, ((Label) component).getValue());
     }
 
-    private void verifyTextField(Component component, boolean isReadOnly) {
+    private void verifyTextField(Component component, String caption, boolean isReadOnly) {
         assertTrue(component instanceof TextField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertNull(component.getCaption());
+        assertEquals(caption, component.getCaption());
         assertEquals(isReadOnly, ((TextField) component).isReadOnly());
     }
 
@@ -329,5 +419,25 @@ public class UdmEditUsageWindowTest {
         udmUsage.setUpdateUser(USER_NAME);
         udmUsage.setUpdateDate(Date.from(LocalDate.of(2020, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return udmUsage;
+    }
+
+    private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
+        field.setValue(value);
+        BinderValidationStatus<UdmUsageFilter> binderStatus = binder.validate();
+        assertEquals(isValid, binderStatus.isOk());
+        if (!isValid) {
+            List<ValidationResult> errors = binderStatus.getValidationErrors();
+            List<String> errorMessages =
+                errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+            assertTrue(errorMessages.contains(message));
+        }
+    }
+
+    private String buildStringWithExpectedLength(int length) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            result.append('a');
+        }
+        return result.toString();
     }
 }
