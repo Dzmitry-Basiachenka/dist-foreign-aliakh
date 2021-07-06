@@ -71,7 +71,7 @@ public class UdmUsageWidgetTest {
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Channel", "Usage Date", "Survey Start Date",
             "Survey End Date", "Reported TOU", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
-    private static final List<String> VISIBLE_COLUMNS_FOR_MANAGER =
+    private static final List<String> VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
@@ -79,14 +79,14 @@ public class UdmUsageWidgetTest {
             "IP Address", "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
             "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies",
             "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
-    private static final List<String> VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY =
+    private static final List<String> VISIBLE_COLUMNS_FOR_VIEW_ONLY =
         Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Detail Status", "Assignee",
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
-            "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
-            "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date",
-            "Updated By", "Updated Date");
+            "IP Address", "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
+            "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies",
+            "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
     private static final String SEARCH_PLACEHOLDER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Survey Respondent or Comment";
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
@@ -128,7 +128,7 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -154,7 +154,7 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -180,7 +180,7 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, true, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_SPECIALIST_AND_VIEW_ONLY);
+        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
