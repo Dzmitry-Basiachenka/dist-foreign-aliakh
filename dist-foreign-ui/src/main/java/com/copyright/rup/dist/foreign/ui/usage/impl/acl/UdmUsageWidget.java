@@ -29,6 +29,7 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -253,7 +254,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 150,
                 hasResearcherPermission),
-            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100, !hasManagerPermission),
+            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100, hasResearcherPermission),
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
