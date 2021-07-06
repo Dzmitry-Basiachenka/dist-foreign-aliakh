@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
@@ -10,18 +11,22 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -56,9 +61,23 @@ public class UdmEditUsageWindow extends Window {
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
+    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final IUdmUsageController controller;
     private final UdmUsageDto udmUsage;
+    private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
+    private final TextField companyIdField = new TextField(ForeignUi.getMessage("label.company_id"));
+    private final TextField reportedTitleField = new TextField(ForeignUi.getMessage("label.reported_title"));
+    private final TextField reportedStandardNumberField =
+        new TextField(ForeignUi.getMessage("label.reported_standard_number"));
+    private final TextField reportedPubTypeField = new TextField(ForeignUi.getMessage("label.reported_pub_type"));
+    private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
+    private final TextField researchUrlField = new TextField(ForeignUi.getMessage("label.research_url"));
+    private final TextField annualMultiplierField = new TextField(ForeignUi.getMessage("label.annual_multiplier"));
+    private final TextField statisticalMultiplierField =
+        new TextField(ForeignUi.getMessage("label.statistical_multiplier"));
+    private final TextField quantityField = new TextField(ForeignUi.getMessage("label.quantity"));
 
     /**
      * Constructor.
@@ -91,20 +110,22 @@ public class UdmEditUsageWindow extends Window {
                 usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY)),
             buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName),
             buildWrWrkInstLayout(),
-            buildEditableStringLayout("label.reported_title", UdmUsageDto::getReportedTitle,
+            buildEditableStringLayout(reportedTitleField, "label.reported_title", 1000, UdmUsageDto::getReportedTitle,
                 UdmUsageDto::setReportedTitle),
             buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle),
-            buildEditableStringLayout("label.reported_standard_number", UdmUsageDto::getReportedStandardNumber,
-                UdmUsageDto::setReportedStandardNumber),
+            buildEditableStringLayout(reportedStandardNumberField, "label.reported_standard_number", 100,
+                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber),
             buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber),
-            buildEditableStringLayout("label.reported_pub_type", UdmUsageDto::getReportedPubType,
-                UdmUsageDto::setReportedPubType),
+            buildEditableStringLayout(reportedPubTypeField, "label.reported_pub_type", 100,
+                UdmUsageDto::getReportedPubType, UdmUsageDto::setReportedPubType),
             buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat),
             buildReadOnlyLayout("label.article", UdmUsageDto::getArticle),
             buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage),
             initActionReasonLayout(),
-            buildEditableStringLayout("label.comment", UdmUsageDto::getComment, UdmUsageDto::setComment),
-            buildEditableStringLayout("label.research_url", UdmUsageDto::getResearchUrl, UdmUsageDto::setResearchUrl),
+            buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
+                UdmUsageDto::setComment),
+            buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
+                UdmUsageDto::setResearchUrl),
             initDetailLicenseeClassLayout(),
             buildCompanyLayout(),
             buildReadOnlyLayout("label.company_name", UdmUsageDto::getCompanyName),
@@ -115,12 +136,12 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.usage_date", usage -> getStringFromLocalDate(usage.getUsageDate())),
             buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
             buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
-            buildEditableIntegerLayout("label.annual_multiplier", UdmUsageDto::getAnnualMultiplier,
-                UdmUsageDto::setAnnualMultiplier),
-            buildEditableBigDecimalLayout("label.statistical_multiplier", UdmUsageDto::getStatisticalMultiplier,
-                UdmUsageDto::setStatisticalMultiplier),
+            buildEditableIntegerLayout(annualMultiplierField, "label.annual_multiplier",
+                UdmUsageDto::getAnnualMultiplier, UdmUsageDto::setAnnualMultiplier),
+            buildEditableBigDecimalLayout(UdmUsageDto::getStatisticalMultiplier, UdmUsageDto::setStatisticalMultiplier),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
-            buildEditableIntegerLayout("label.quantity", UdmUsageDto::getQuantity, UdmUsageDto::setQuantity),
+            buildEditableIntegerLayout(quantityField, "label.quantity", UdmUsageDto::getQuantity,
+                UdmUsageDto::setQuantity),
             buildReadOnlyLayout("label.annualized_copies", usage -> Objects.toString(usage.getAnnualizedCopies())),
             initIneligibleReasonLayout(),
             buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
@@ -145,69 +166,66 @@ public class UdmEditUsageWindow extends Window {
         textField.setReadOnly(true);
         textField.setSizeFull();
         binder.forField(textField).bind(getter, null);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel(caption), textField);
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
-        return layout;
+        return buildCommonLayout(textField, caption);
     }
 
-    private HorizontalLayout buildEditableStringLayout(String caption, ValueProvider<UdmUsageDto, String> getter,
+    private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
+                                                       ValueProvider<UdmUsageDto, String> getter,
                                                        Setter<UdmUsageDto, String> setter) {
-        TextField textField = new TextField();
         textField.setSizeFull();
-        binder.forField(textField).bind(getter, setter);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel(caption), textField);
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
-        return layout;
+        binder.forField(textField)
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
+            .bind(getter, setter);
+        return buildCommonLayout(textField, caption);
     }
 
-    private HorizontalLayout buildEditableBigDecimalLayout(String caption,
-                                                           ValueProvider<UdmUsageDto, BigDecimal> getter,
+    private HorizontalLayout buildEditableBigDecimalLayout(ValueProvider<UdmUsageDto, BigDecimal> getter,
                                                            Setter<UdmUsageDto, BigDecimal> setter) {
-        TextField textField = new TextField();
-        textField.setSizeFull();
-        binder.forField(textField)
+        statisticalMultiplierField.setSizeFull();
+        binder.forField(statisticalMultiplierField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> new AmountValidator().isValid(value.trim()),
+                "Field value should be positive number and should not exceed 10 digits")
             .withConverter(new StringToBigDecimalConverter("Field should be numeric")).bind(getter, setter);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel(caption), textField);
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
-        return layout;
+        return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
 
-    private HorizontalLayout buildEditableIntegerLayout(String caption, ValueProvider<UdmUsageDto, Integer> getter,
+    private HorizontalLayout buildEditableIntegerLayout(TextField textField, String caption,
+                                                        ValueProvider<UdmUsageDto, Integer> getter,
                                                         Setter<UdmUsageDto, Integer> setter) {
-        TextField textField = new TextField();
         textField.setSizeFull();
         binder.forField(textField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
             .withConverter(new StringToIntegerConverter("Field should be numeric"))
             .bind(getter, setter);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel(caption), textField);
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
-        return layout;
+        return buildCommonLayout(textField, caption);
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
-        TextField textField = new TextField();
-        textField.setSizeFull();
-        binder.forField(textField).bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
-            (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(value)));
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.wr_wrk_inst"), textField);
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
-        return layout;
+        wrWrkInstField.setSizeFull();
+        binder.forField(wrWrkInstField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(value)));
+        return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
     private HorizontalLayout buildCompanyLayout() {
-        TextField textField = new TextField();
-        binder.forField(textField).bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
-            (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value)));
-        textField.setSizeFull();
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.company_id"), textField,
-            Buttons.createButton(ForeignUi.getMessage("button.verify")));
-        layout.setSizeFull();
-        layout.setExpandRatio(textField, 1);
+        binder.forField(companyIdField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
+            .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
+                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value)));
+        companyIdField.setSizeFull();
+        Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        HorizontalLayout layout = buildCommonLayout(companyIdField, "label.company_id");
+        layout.addComponent(verifyButton);
         return layout;
     }
 
@@ -217,10 +235,7 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmIneligibleReason::getText);
         comboBox.setItems(controller.getIneligibleReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.ineligible_reason"), comboBox);
-        layout.setSizeFull();
-        layout.setExpandRatio(comboBox, 1);
-        return layout;
+        return buildCommonLayout(comboBox, "label.ineligible_reason");
     }
 
     private HorizontalLayout initDetailStatusLayout() {
@@ -232,10 +247,7 @@ public class UdmEditUsageWindow extends Window {
         statuses.addAll(EDIT_AVAILABLE_STATUSES);
         comboBox.setItems(statuses);
         binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.detail_status"), comboBox);
-        layout.setSizeFull();
-        layout.setExpandRatio(comboBox, 1);
-        return layout;
+        return buildCommonLayout(comboBox, "label.detail_status");
     }
 
     private HorizontalLayout initActionReasonLayout() {
@@ -244,10 +256,7 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmActionReason::getText);
         comboBox.setItems(controller.getActionReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.action_reason_udm"), comboBox);
-        layout.setSizeFull();
-        layout.setExpandRatio(comboBox, 1);
-        return layout;
+        return buildCommonLayout(comboBox, "label.action_reason_udm");
     }
 
     private HorizontalLayout initDetailLicenseeClassLayout() {
@@ -257,22 +266,32 @@ public class UdmEditUsageWindow extends Window {
             String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()));
         comboBox.setItems(controller.getDetailLicenseeClasses());
         binder.forField(comboBox).bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
-        HorizontalLayout layout = new HorizontalLayout(buildLabel("label.det_lc"), comboBox);
-        layout.setSizeFull();
-        layout.setExpandRatio(comboBox, 1);
-        return layout;
+        return buildCommonLayout(comboBox, "label.det_lc");
     }
 
-    private Label buildLabel(String caption) {
-        Label label = new Label(ForeignUi.getMessage(caption));
+    private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
+        Label label = new Label(ForeignUi.getMessage(labelCaption));
         label.addStyleName(Cornerstone.LABEL_BOLD);
         label.setWidth(165, Unit.PIXELS);
-        return label;
+        HorizontalLayout layout = new HorizontalLayout(label, component);
+        layout.setSizeFull();
+        layout.setExpandRatio(component, 1);
+        return layout;
     }
 
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        saveButton.addClickListener(event -> {
+            try {
+                binder.writeBean(udmUsage);
+                close();
+            } catch (ValidationException e) {
+                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
+                    reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField, companyIdField,
+                    annualMultiplierField, statisticalMultiplierField, quantityField));
+            }
+        });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }

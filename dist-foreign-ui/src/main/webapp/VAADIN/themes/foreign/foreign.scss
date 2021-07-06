@@ -345,4 +345,9 @@
     .edit-udm-usage-window .v-readonly.v-textfield {
         border-style: none !important;
     }
+
+    .edit-udm-usage-window .v-caption {
+        visibility: hidden;
+        height: 0px;
+    }
 }
