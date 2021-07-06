@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
-import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -17,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -40,7 +40,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.PipedInputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -65,6 +64,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IUdmReportService udmReportService;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -172,17 +173,20 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
-        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
+            pos -> udmReportService.writeUdmUsageCsvReportSpecialistManagerRoles(getFilter(), pos));
     }
 
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceResearcherRole() {
-        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
+            pos -> udmReportService.writeUdmUsageCsvReportResearcherRole(getFilter(), pos));
     }
 
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceViewRole() {
-        return new StreamSource(() -> "export_udm_usage_", "csv", PipedInputStream::new);
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
+            pos -> udmReportService.writeUdmUsageCsvReportViewRole(getFilter(), pos));
     }
 
     @Override
