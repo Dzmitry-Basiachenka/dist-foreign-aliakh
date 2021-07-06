@@ -1,3 +1,35 @@
+14.1.0
+-
+* B*57779: FDA& UDM: View and Delete UDM Loaded Batches: implement query to delete UDM usaga batch details
+* B-57779: FDA& UDM: View and Delete UDM Loaded Batches: implement View window for UDM batches
+* B-57779: FDA& UDM: View and Delete UDM Loaded Batches: implement controller logic related to delete UDM batch
+* B-57779: FDA& UDM: View and Delete UDM Loaded Batches: implement logic to delete UDM batch
+* B-57779: FDA& UDM: View and Delete UDM Loaded Batches: implement query to check that batch processing is completed
+* B-57779: FDA& UDM: View and Delete UDM Loaded Batches: implement query to delete UDM usage audit
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: add research URL column on UI for UDM usages grid
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: add research URL column to df_udm_usage table
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: bind read only fields to selected UDM usage on Edit window
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: implement initial edit UDM usage window
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: implement plain validation rules for editable fields on UDM edit usage window
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: populate comboBox fields on edit UDM usage window
+* B-66132 FDA & UDM: Export functionality for UDM: add export button on UI
+* B-66132 FDA & UDM: Export functionality for UDM: adjust controller logic with methods for getting export UDM usages stream source for each role
+* B-66132 FDA & UDM: Export functionality for UDM: fix detail licensee class fields in UDM usage handlers
+* B-66132 FDA & UDM: Export functionality for UDM: implement UdmReportRepository logic for csv export of UDM usages
+* B-66132 FDA & UDM: Export functionality for UDM: implement UdmReportService logic for csv export of UDM usages
+* B-66132 FDA & UDM: Export functionality for UDM: implement csv report handlers for each role
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: add permission and menu to allow assignment/un-assignment of usages
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: adjust UDM usages widget to assign/unassign usages and remove permission for assignment
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: implement service and repository logic
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: make usages selection role specific
+* B-67203 FDA: 'Action Reason' column on the UI: add column Action Reason to UDM usages table
+* B-67203 FDA: 'Action Reason' column on the UI: add sorting by column Action Reason in UDM usages table
+* B-67328 Tech Debt: FDA: fix security vulnerabilities CVE-2019-25028, CVE-2021-31403, CVE-2021-31409
+* B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: implement Liquibase script to create df_udm_action_reason, df_udm_ineligible_reason tables
+* B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: implement service methods to read Action Reasons and Ineligible Reasons
+* B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: refactor backend to use df_udm_action_reason, df_udm_ineligible_reason tables
+* B-68188: FDA&UDM: Enable IP Address visible for Specialist: adjust logic related to visible ip address column for specialist role on UDM tab
+
 13.1.35
 -
 * B-66635 FDA & UDM: Create UDM shell - UI Filtering - Part 2: update validation error message for decimal multiplier fields
