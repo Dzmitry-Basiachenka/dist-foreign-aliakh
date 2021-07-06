@@ -1,13 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -39,7 +40,6 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -62,7 +62,7 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, Windows.class})
+@PrepareForTest({UdmUsageWidget.class, ForeignSecurityUtils.class, Windows.class})
 public class UdmUsageWidgetTest {
 
     private static final List<String> VISIBLE_COLUMNS_FOR_RESEARCHER =
@@ -101,16 +101,16 @@ public class UdmUsageWidgetTest {
         UdmUsageFilterWidget filterWidget = new UdmUsageFilterWidget(createMock(IUdmUsageFilterController.class));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         mockStatic(ForeignSecurityUtils.class);
-        streamSource = PowerMock.createMock(IStreamSource.class);
-        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(PowerMock.createMock(Supplier.class),
-            PowerMock.createMock(Supplier.class))).once();
+        streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
     }
 
     @Test
     public void testWidgetStructureForSpecialist() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
         expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
         replay(controller, ForeignSecurityUtils.class, streamSource);
         usagesWidget = new UdmUsageWidget();
@@ -179,7 +179,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -205,7 +205,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, false, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -214,13 +214,13 @@ public class UdmUsageWidgetTest {
     @SuppressWarnings("unchecked")
     public void testSelectAssignMenuItem() {
         mockStatic(Windows.class);
-        Window confirmWindowMock = PowerMock.createMock(Window.class);
+        Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("efdf6040-d130-4ae4-a6b1-a9a807873a1e");
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
         expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to assign 1 selected usage(s) to yourself?"),
             capture(windowListenerCapture)))
@@ -251,13 +251,13 @@ public class UdmUsageWidgetTest {
     @SuppressWarnings("unchecked")
     public void testSelectUnassignMenuItem() {
         mockStatic(Windows.class);
-        Window confirmWindowMock = PowerMock.createMock(Window.class);
+        Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("afdf6040-d130-4ae4-a6b1-a9a807873a1e");
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
         expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to unassign 1 selected usage(s)?"),
             capture(windowListenerCapture)))
@@ -282,6 +282,34 @@ public class UdmUsageWidgetTest {
         menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
         windowListenerCapture.getValue().onActionConfirmed();
         verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testEditButtonClickListener() throws Exception {
+        mockStatic(Windows.class);
+        createMock(UdmEditUsageWindow.class);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("afdf6040-d130-4ae4-a6b1-a9a807873a1e");
+        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
+        expectNew(UdmEditUsageWindow.class, controller, udmUsageDto).andReturn(mockWindow);
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto);
+        grid.select(udmUsageDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
     }
 
     private void verifyToolbarLayout(Component component, String searchPlaceholder, boolean... buttonsVisibility) {
@@ -353,9 +381,13 @@ public class UdmUsageWidgetTest {
     }
 
     private List<MenuBar.MenuItem> getMenuBarItems(int menuBarIndex) {
-        HorizontalLayout buttonsBar = (HorizontalLayout) ((HorizontalLayout) ((VerticalLayout)
-            usagesWidget.getSecondComponent()).getComponent(0)).getComponent(0);
+        HorizontalLayout buttonsBar = getButtonsLayout();
         MenuBar menuBar = (MenuBar) buttonsBar.getComponent(menuBarIndex);
         return menuBar.getItems().get(0).getChildren();
+    }
+
+    private HorizontalLayout getButtonsLayout() {
+        return (HorizontalLayout) ((HorizontalLayout) ((VerticalLayout)
+            usagesWidget.getSecondComponent()).getComponent(0)).getComponent(0);
     }
 }
