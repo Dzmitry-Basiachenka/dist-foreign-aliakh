@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
@@ -36,6 +38,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -72,6 +75,9 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IUdmUsageFilterController udmUsageFilterController;
+    @Autowired
+    @Qualifier("df.integration.telesalesCacheService")
+    private ITelesalesService telesalesService;
 
     @Override
     public int getBeansCount() {
@@ -187,6 +193,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     public IStreamSource getExportUdmUsagesStreamSourceViewRole() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
             pos -> udmReportService.writeUdmUsageCsvReportViewRole(getFilter(), pos));
+    }
+
+    @Override
+    public CompanyInformation getCompanyInformation(Long companyId) {
+        return telesalesService.getCompanyInformation(companyId);
     }
 
     @Override

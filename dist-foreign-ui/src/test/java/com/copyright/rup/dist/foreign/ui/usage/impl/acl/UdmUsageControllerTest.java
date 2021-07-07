@@ -19,6 +19,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
@@ -28,6 +29,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
@@ -291,6 +293,20 @@ public class UdmUsageControllerTest {
         replay(udmBatchService);
         assertTrue(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID));
         verify(udmBatchService);
+    }
+
+    @Test
+    public void testGetCompanyInformation() {
+        ITelesalesService telesalesService = createMock(ITelesalesService.class);
+        Whitebox.setInternalState(controller, telesalesService);
+        CompanyInformation companyInformation = new CompanyInformation();
+        companyInformation.setId(1136L);
+        companyInformation.setName("Albany International Corp.");
+        companyInformation.setDetailLicenseeClassId(333);
+        expect(telesalesService.getCompanyInformation(1136L)).andReturn(companyInformation).once();
+        replay(telesalesService);
+        assertEquals(companyInformation, controller.getCompanyInformation(1136L));
+        verify(telesalesService);
     }
 
     @Test

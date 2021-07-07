@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
@@ -16,7 +18,6 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 
 import com.vaadin.data.Binder;
@@ -103,22 +104,22 @@ public class UdmEditUsageWindowTest {
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
 
     private UdmEditUsageWindow window;
-    private Binder<UdmUsageFilter> binder;
+    private Binder<UdmUsageDto> binder;
+    private IUdmUsageController controller;
+    private UdmUsageDto udmUsage;
 
     @Before
     public void setUp() {
-        IUdmUsageController controller = createMock(IUdmUsageController.class);
+        buildUdmUsageDto();
+        controller = createMock(IUdmUsageController.class);
         expect(controller.getActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
         expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        replay(controller);
-        window = new UdmEditUsageWindow(controller, buildUdmUsageDto());
-        binder = Whitebox.getInternalState(window, "binder");
-        verify(controller);
     }
 
     @Test
     public void testConstructor() {
+        initEditWindow();
         assertEquals("Edit UDM Usage", window.getCaption());
         assertEquals(650, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
@@ -129,6 +130,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testUdmUsageDataBinding() {
+        initEditWindow();
         VerticalLayout verticalLayout =
             (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
         assertTextFieldValue(verticalLayout.getComponent(0), UDM_USAGE_UID);
@@ -174,6 +176,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testWrWrkInstValidation() {
+        initEditWindow();
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
@@ -187,6 +190,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testCompanyIdValidation() {
+        initEditWindow();
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
         verifyTextFieldValidationMessage(companyIdField, VALID_INTEGER, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(companyIdField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
@@ -200,16 +204,19 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testQuantityValidation() {
+        initEditWindow();
         verifyIntegerValidations(Whitebox.getInternalState(window, "quantityField"));
     }
 
     @Test
     public void testAnnualMultiplierValidation() {
+        initEditWindow();
         verifyIntegerValidations(Whitebox.getInternalState(window, "annualMultiplierField"));
     }
 
     @Test
     public void testStatisticalMultiplierValidation() {
+        initEditWindow();
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
         String decimalValidationMessage = "Field value should be positive number and should not exceed 10 digits";
         verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
@@ -219,11 +226,60 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testTextFieldsLengthValidation() {
+        initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedStandardNumberField"), 100);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedPubTypeField"), 100);
         verifyLengthValidation(Whitebox.getInternalState(window, "commentField"), 4000);
         verifyLengthValidation(Whitebox.getInternalState(window, "researchUrlField"), 1000);
+    }
+
+    @Test
+    public void testVerifyButtonClickListener() {
+        CompanyInformation companyInformation = new CompanyInformation();
+        companyInformation.setId(1136L);
+        companyInformation.setName("Albany International Corp.");
+        companyInformation.setDetailLicenseeClassId(333);
+        expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, "binder");
+        VerticalLayout panelContent =
+            (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+        HorizontalLayout companyLayout = (HorizontalLayout) panelContent.getComponent(21);
+        TextField companyIdField = (TextField) companyLayout.getComponent(1);
+        Button verifyButton = (Button) companyLayout.getComponent(2);
+        TextField companyNameField = (TextField) ((HorizontalLayout) panelContent.getComponent(22)).getComponent(1);
+        assertEquals(COMPANY_NAME, companyNameField.getValue());
+        companyIdField.setValue("1136");
+        verifyButton.click();
+        verify(controller);
+    }
+
+    @Test
+    public void testSaveButtonClickListener() throws Exception {
+        binder = createMock(Binder.class);
+        binder.writeBean(udmUsage);
+        expectLastCall().once();
+        replay(controller, binder);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        Whitebox.setInternalState(window, binder);
+        HorizontalLayout buttonsLayout = getButtonsLayout();
+        ((Button) buttonsLayout.getComponent(0)).click();
+        verify(controller, binder);
+    }
+
+    @Test
+    public void testDiscardButtonClickListener() {
+        binder = createMock(Binder.class);
+        binder.readBean(udmUsage);
+        expectLastCall().once();
+        replay(controller, binder);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        Whitebox.setInternalState(window, binder);
+        HorizontalLayout buttonsLayout = getButtonsLayout();
+        ((Button) buttonsLayout.getComponent(1)).click();
+        verify(controller, binder);
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
@@ -375,8 +431,8 @@ public class UdmEditUsageWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
-    private UdmUsageDto buildUdmUsageDto() {
-        UdmUsageDto udmUsage = new UdmUsageDto();
+    private void buildUdmUsageDto() {
+        udmUsage = new UdmUsageDto();
         udmUsage.setId(UDM_USAGE_UID);
         udmUsage.setPeriod(202012);
         udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
@@ -418,12 +474,11 @@ public class UdmEditUsageWindowTest {
         udmUsage.setCreateDate(Date.from(LocalDate.of(2016, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         udmUsage.setUpdateUser(USER_NAME);
         udmUsage.setUpdateDate(Date.from(LocalDate.of(2020, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        return udmUsage;
     }
 
     private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
         field.setValue(value);
-        BinderValidationStatus<UdmUsageFilter> binderStatus = binder.validate();
+        BinderValidationStatus<UdmUsageDto> binderStatus = binder.validate();
         assertEquals(isValid, binderStatus.isOk());
         if (!isValid) {
             List<ValidationResult> errors = binderStatus.getValidationErrors();
@@ -433,11 +488,22 @@ public class UdmEditUsageWindowTest {
         }
     }
 
+    private HorizontalLayout getButtonsLayout() {
+        return (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
+    }
+
     private String buildStringWithExpectedLength(int length) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < length; i++) {
             result.append('a');
         }
         return result.toString();
+    }
+
+    private void initEditWindow() {
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, "binder");
+        verify(controller);
     }
 }
