@@ -17,6 +17,7 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -179,4 +180,16 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return instance of {@link CompanyInformation}
      */
     CompanyInformation getCompanyInformation(Long companyId);
+
+    /**
+     * Calculates annualized copies.
+     *
+     * @param reportedTypeOfUse     reported type of use
+     * @param quantity              quantity
+     * @param annualMultiplier      annual multiplier
+     * @param statisticalMultiplier statistical multiplier
+     * @return annualized copies
+     */
+    BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Integer quantity, Integer annualMultiplier,
+                                         BigDecimal statisticalMultiplier);
 }

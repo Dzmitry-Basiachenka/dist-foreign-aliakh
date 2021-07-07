@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.service.impl.acl.UdmAnnualizedCopiesCalculator;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
@@ -43,6 +44,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -78,6 +80,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
+    @Autowired
+    private UdmAnnualizedCopiesCalculator annualizedCopiesCalculator;
 
     @Override
     public int getBeansCount() {
@@ -198,6 +202,13 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public CompanyInformation getCompanyInformation(Long companyId) {
         return telesalesService.getCompanyInformation(companyId);
+    }
+
+    @Override
+    public BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Integer quantity, Integer annualMultiplier,
+                                                BigDecimal statisticalMultiplier) {
+        return annualizedCopiesCalculator.calculate(reportedTypeOfUse, quantity, annualMultiplier,
+            statisticalMultiplier);
     }
 
     @Override

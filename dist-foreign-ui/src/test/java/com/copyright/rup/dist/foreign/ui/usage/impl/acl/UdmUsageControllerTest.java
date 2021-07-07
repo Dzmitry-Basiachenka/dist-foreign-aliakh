@@ -35,6 +35,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.service.impl.acl.UdmAnnualizedCopiesCalculator;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
@@ -56,6 +57,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.InputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -307,6 +309,23 @@ public class UdmUsageControllerTest {
         replay(telesalesService);
         assertEquals(companyInformation, controller.getCompanyInformation(1136L));
         verify(telesalesService);
+    }
+
+    @Test
+    public void testCalculateAnnualizedCopies() {
+        UdmAnnualizedCopiesCalculator calculator = createMock(UdmAnnualizedCopiesCalculator.class);
+        Whitebox.setInternalState(controller, calculator);
+        String reportedTypeOfUse = "COPY_FOR_MYSELF";
+        Integer quantity = 1;
+        Integer annualMultiplier = 1;
+        BigDecimal statisticalMultiplier = BigDecimal.TEN;
+        BigDecimal annualizedCopies = BigDecimal.TEN;
+        expect(calculator.calculate(reportedTypeOfUse, quantity, annualMultiplier, statisticalMultiplier))
+            .andReturn(annualizedCopies).once();
+        replay(calculator);
+        assertEquals(annualizedCopies,
+            controller.calculateAnnualizedCopies(reportedTypeOfUse, quantity, annualMultiplier, statisticalMultiplier));
+        verify(calculator);
     }
 
     @Test

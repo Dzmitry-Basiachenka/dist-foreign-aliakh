@@ -1,6 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.anyInt;
+import static org.easymock.EasyMock.anyLong;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -94,7 +98,7 @@ public class UdmEditUsageWindowTest {
         new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
     private static final UdmIneligibleReason INELIGIBLE_REASON =
         new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey");
-
+    private static final String BINDER_NAME = "binder";
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
     private static final String INVALID_NUMBER = "a12345678";
@@ -131,8 +135,7 @@ public class UdmEditUsageWindowTest {
     @Test
     public void testUdmUsageDataBinding() {
         initEditWindow();
-        VerticalLayout verticalLayout =
-            (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+        VerticalLayout verticalLayout = getPanelContent();
         assertTextFieldValue(verticalLayout.getComponent(0), UDM_USAGE_UID);
         assertTextFieldValue(verticalLayout.getComponent(1), "202012");
         assertTextFieldValue(verticalLayout.getComponent(2), "SS");
@@ -190,16 +193,30 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testCompanyIdValidation() {
-        initEditWindow();
+        CompanyInformation companyInformation = new CompanyInformation();
+        companyInformation.setId(1136L);
+        companyInformation.setName("Albany International Corp.");
+        companyInformation.setDetailLicenseeClassId(333);
+        expect(controller.getCompanyInformation(anyLong())).andReturn(companyInformation).anyTimes();
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
-        verifyTextFieldValidationMessage(companyIdField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(companyIdField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(companyIdField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(companyIdField, "12345678901",
+        Button verifyButton = (Button) ((HorizontalLayout) getPanelContent().getComponent(21)).getComponent(2);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, INTEGER_WITH_SPACES_STRING,
+            StringUtils.EMPTY, true);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, StringUtils.EMPTY,
+            EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, "12345678901",
             "Field value should not exceed 10 digits", false);
-        verifyTextFieldValidationMessage(companyIdField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(companyIdField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(companyIdField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE,
+            false);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, SPACES_STRING,
+            EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE,
+            false);
+        verify(controller);
     }
 
     @Test
@@ -236,6 +253,8 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testVerifyButtonClickListener() {
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
@@ -243,9 +262,8 @@ public class UdmEditUsageWindowTest {
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage);
-        binder = Whitebox.getInternalState(window, "binder");
-        VerticalLayout panelContent =
-            (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        VerticalLayout panelContent = getPanelContent();
         HorizontalLayout companyLayout = (HorizontalLayout) panelContent.getComponent(21);
         TextField companyIdField = (TextField) companyLayout.getComponent(1);
         Button verifyButton = (Button) companyLayout.getComponent(2);
@@ -258,6 +276,8 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
         binder.writeBean(udmUsage);
         expectLastCall().once();
@@ -271,6 +291,8 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testDiscardButtonClickListener() {
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
         binder.readBean(udmUsage);
         expectLastCall().once();
@@ -280,6 +302,39 @@ public class UdmEditUsageWindowTest {
         HorizontalLayout buttonsLayout = getButtonsLayout();
         ((Button) buttonsLayout.getComponent(1)).click();
         verify(controller, binder);
+    }
+
+    @Test
+    public void testAnnualizedCopiesCalculation() {
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10, 2, BigDecimal.ONE))
+            .andReturn(new BigDecimal(20)).once();
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, BigDecimal.ONE))
+            .andReturn(new BigDecimal(40)).once();
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, new BigDecimal("2.2")))
+            .andReturn(new BigDecimal("88")).once();
+        replay(controller);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        String annualizedCopiesErrorMessage =
+            "Field value cannot be calculated. Please specify correct values for calculation";
+        TextField quantityField = Whitebox.getInternalState(window, "quantityField");
+        TextField annualizedCopiesField = Whitebox.getInternalState(window, "annualizedCopiesField");
+        TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
+        TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
+        assertEquals("10.00000", annualizedCopiesField.getValue());
+        annualMultiplierField.setValue(INVALID_NUMBER);
+        verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
+        annualMultiplierField.setValue("2");
+        assertEquals("20", annualizedCopiesField.getValue());
+        quantityField.setValue(INVALID_NUMBER);
+        verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
+        quantityField.setValue("20");
+        assertEquals("40", annualizedCopiesField.getValue());
+        statisticalMultiplierField.setValue(INVALID_NUMBER);
+        verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
+        statisticalMultiplierField.setValue("2.2");
+        assertEquals("88", annualizedCopiesField.getValue());
+        verify(controller);
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
@@ -318,53 +373,53 @@ public class UdmEditUsageWindowTest {
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(39, verticalLayout.getComponentCount());
-        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true);
+        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
         verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status");
-        verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(8), "Wr Wrk Inst", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(9), "Reported Title", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(10), "System Title", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(11), "Reported Standard Number", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(12), "Standard Number", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(13), "Reported Pub Type", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true);
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(8), "Wr Wrk Inst", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(9), "Reported Title", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(10), "System Title", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(11), "Reported Standard Number", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(12), "Standard Number", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(13), "Reported Pub Type", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true, false);
         verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason");
-        verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false);
+        verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false, true);
         verifyComboBoxLayout(verticalLayout.getComponent(20), "Detail Licensee Class");
         verifyCompanyIdLayout(verticalLayout.getComponent(21));
-        verifyTextFieldLayout(verticalLayout.getComponent(22), "Company Name", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(26), "Channel", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(27), "Usage Date", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(28), "Survey Start Date", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(29), "Survey End Date", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(30), "Annual Multiplier", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(31), "Statistical Multiplier", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false);
-        verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true);
+        verifyTextFieldLayout(verticalLayout.getComponent(22), "Company Name", true, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(26), "Channel", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(27), "Usage Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(28), "Survey Start Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(29), "Survey End Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(30), "Annual Multiplier", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(31), "Statistical Multiplier", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true);
         verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason");
-        verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true);
-        verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true);
+        verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
     }
 
-    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly) {
+    private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption);
-        verifyTextField(layout.getComponent(1), isReadOnly ? null : caption, isReadOnly);
+        verifyTextField(layout.getComponent(1), isValidated ? caption : null, isReadOnly);
     }
 
     private void assertTextFieldValue(Component component, String expectedValue) {
@@ -478,6 +533,17 @@ public class UdmEditUsageWindowTest {
 
     private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
         field.setValue(value);
+        verifyBinderStatusAndValidationMessage(message, isValid);
+    }
+
+    private void verifyCompanyTextFieldValidationMessage(TextField field, Button verifyButton, String value,
+                                                         String message, boolean isValid) {
+        field.setValue(value);
+        verifyButton.click();
+        verifyBinderStatusAndValidationMessage(message, isValid);
+    }
+
+    private void verifyBinderStatusAndValidationMessage(String message, boolean isValid) {
         BinderValidationStatus<UdmUsageDto> binderStatus = binder.validate();
         assertEquals(isValid, binderStatus.isOk());
         if (!isValid) {
@@ -492,6 +558,10 @@ public class UdmEditUsageWindowTest {
         return (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
     }
 
+    private VerticalLayout getPanelContent() {
+        return (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+    }
+
     private String buildStringWithExpectedLength(int length) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < length; i++) {
@@ -501,9 +571,11 @@ public class UdmEditUsageWindowTest {
     }
 
     private void initEditWindow() {
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage);
-        binder = Whitebox.getInternalState(window, "binder");
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
         verify(controller);
     }
 }
