@@ -54,6 +54,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
+    private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
@@ -82,6 +83,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         mediator.setUsageGrid(udmUsagesGrid);
         mediator.setAssignItem(assignItem);
         mediator.setUnassignItem(unassignItem);
+        mediator.setEditButton(editButton);
         return mediator;
     }
 
@@ -123,7 +125,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
         fileDownloader.extend(exportButton);
-        Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
+        editButton.setEnabled(false);
         editButton.addClickListener(event -> Windows.showModalWindow(
             new UdmEditUsageWindow(controller, udmUsagesGrid.getSelectedItems().iterator().next())));
         searchWidget = new SearchWidget(this::refresh);
