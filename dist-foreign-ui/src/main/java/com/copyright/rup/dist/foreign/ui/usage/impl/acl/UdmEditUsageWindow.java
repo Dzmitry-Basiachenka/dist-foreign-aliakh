@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
@@ -68,6 +69,7 @@ public class UdmEditUsageWindow extends Window {
     private final UdmUsageDto udmUsage;
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final TextField companyIdField = new TextField(ForeignUi.getMessage("label.company_id"));
+    private final TextField companyNameField = new TextField();
     private final TextField reportedTitleField = new TextField(ForeignUi.getMessage("label.reported_title"));
     private final TextField reportedStandardNumberField =
         new TextField(ForeignUi.getMessage("label.reported_standard_number"));
@@ -128,7 +130,7 @@ public class UdmEditUsageWindow extends Window {
                 UdmUsageDto::setResearchUrl),
             initDetailLicenseeClassLayout(),
             buildCompanyLayout(),
-            buildReadOnlyLayout("label.company_name", UdmUsageDto::getCompanyName),
+            buildCompanyNameLayout(),
             buildReadOnlyLayout("label.survey_respondent", UdmUsageDto::getSurveyRespondent),
             buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress),
             buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry),
@@ -211,7 +213,7 @@ public class UdmEditUsageWindow extends Window {
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
-                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(value)));
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(value.trim())));
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
@@ -221,12 +223,31 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
-                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value)));
+                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value.trim())));
         companyIdField.setSizeFull();
+        companyIdField.addValueChangeListener(event -> companyNameField.clear());
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        verifyButton.addClickListener(event -> {
+            if (Objects.isNull(companyIdField.getErrorMessage())) {
+                CompanyInformation information =
+                    controller.getCompanyInformation(Long.valueOf(companyIdField.getValue().trim()));
+                if (StringUtils.isNotBlank(information.getName())) {
+                    companyNameField.setValue(information.getName());
+                } else {
+                    companyNameField.clear();
+                }
+            }
+        });
         HorizontalLayout layout = buildCommonLayout(companyIdField, "label.company_id");
         layout.addComponent(verifyButton);
         return layout;
+    }
+
+    private HorizontalLayout buildCompanyNameLayout() {
+        companyNameField.setReadOnly(true);
+        companyNameField.setSizeFull();
+        binder.forField(companyNameField).bind(UdmUsageDto::getCompanyName, null);
+        return buildCommonLayout(companyNameField, "label.company_name");
     }
 
     private HorizontalLayout initIneligibleReasonLayout() {
@@ -293,6 +314,7 @@ public class UdmEditUsageWindow extends Window {
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
+        discardButton.addClickListener(event -> binder.readBean(udmUsage));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 

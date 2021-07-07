@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
@@ -170,4 +171,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return true if UDM batch processing is completed, false - otherwise
      */
     boolean isUdmBatchProcessingCompleted(String udmBatchId);
+
+    /**
+     * Gets company information by provided company identifier.
+     *
+     * @param companyId company identifier
+     * @return instance of {@link CompanyInformation}
+     */
+    CompanyInformation getCompanyInformation(Long companyId);
 }
