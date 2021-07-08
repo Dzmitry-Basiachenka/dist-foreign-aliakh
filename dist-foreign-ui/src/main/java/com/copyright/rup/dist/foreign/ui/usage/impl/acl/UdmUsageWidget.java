@@ -27,6 +27,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -127,8 +128,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
         fileDownloader.extend(exportButton);
         editButton.setEnabled(false);
-        editButton.addClickListener(event -> Windows.showModalWindow(
-            new UdmEditUsageWindow(controller, udmUsagesGrid.getSelectedItems().iterator().next())));
+        editButton.addClickListener(event -> {
+            Window editWindow = new UdmEditUsageWindow(controller, udmUsagesGrid.getSelectedItems().iterator().next());
+            editWindow.addCloseListener(closeEvent -> refresh());
+            Windows.showModalWindow(editWindow);
+        });
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);

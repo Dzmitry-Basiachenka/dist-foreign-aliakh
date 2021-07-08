@@ -151,6 +151,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         udmUsageService.unassignUsages(usageIds);
     }
 
+    @Override
+    public void updateUsage(UdmUsageDto udmUsageDto) {
+        udmUsageService.updateUsage(udmUsageDto);
+    }
+
     public List<UdmActionReason> getActionReasons() {
         return udmUsageService.getActionReasons();
     }

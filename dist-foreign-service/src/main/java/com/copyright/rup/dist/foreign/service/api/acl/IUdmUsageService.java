@@ -33,6 +33,13 @@ public interface IUdmUsageService {
     void insertUdmUsages(UdmBatch udmBatch, List<UdmUsage> udmUsages);
 
     /**
+     * Updates UDM usage.
+     *
+     * @param udmUsageDto {@link UdmUsageDto} to update
+     */
+    void updateUsage(UdmUsageDto udmUsageDto);
+
+    /**
      * Checks whether UDM usage with provided original detail id exists.
      *
      * @param originalDetailId original detail id

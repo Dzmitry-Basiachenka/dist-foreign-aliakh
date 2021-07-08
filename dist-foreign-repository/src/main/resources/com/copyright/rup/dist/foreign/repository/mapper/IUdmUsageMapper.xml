@@ -616,6 +616,29 @@
             </foreach>
     </update>
 
+    <update id="update" parameterType="UdmUsageDto">
+        update ${schema}.df_udm_usage
+        set
+            status_ind = #{status},
+            wr_wrk_inst = #{wrWrkInst},
+            reported_title = #{reportedTitle},
+            reported_standard_number = #{reportedStandardNumber},
+            reported_pub_type = #{reportedPubType},
+            df_udm_action_reason_uid = #{actionReason.id},
+            comment = #{comment},
+            research_url = #{researchUrl},
+            detail_licensee_class_id = #{detailLicenseeClass.id},
+            company_id = #{companyId},
+            company_name = #{companyName},
+            annual_multiplier = #{annualMultiplier},
+            statistical_multiplier= #{statisticalMultiplier},
+            quantity = #{quantity},
+            annualized_copies = #{annualizedCopies},
+            df_udm_ineligible_reason_uid = #{ineligibleReason.id},
+            <include refid="StoredEntityMapper.update"/>
+        where df_udm_usage_uid = #{id}
+    </update>
+
     <select id="findActionReasons" resultMap="udmActionReasonResultMap">
         select
             df_udm_action_reason_uid,
