@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -56,6 +57,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
+    private final String userName = RupContextUtils.getUserName();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
     private DataProvider<UdmUsageDto, Void> dataProvider;
@@ -178,15 +180,22 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         assignItem.setEnabled(false);
         unassignItem = item.addItem(ForeignUi.getMessage("menu.item.unassign"), null,
             selectedItem -> {
-                int usagesCount = udmUsagesGrid.getSelectedItems().size();
-                Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
-                    () -> {
-                        controller.unassignUsages(getSelectedUsageIds());
-                        udmUsagesGrid.deselectAll();
-                        refresh();
-                        Windows.showNotificationWindow(
-                            ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
-                    });
+                boolean isUnassignmentAllowed = udmUsagesGrid.getSelectedItems()
+                    .stream()
+                    .allMatch(udmUsageDto -> userName.equals(udmUsageDto.getAssignee()));
+                if (isUnassignmentAllowed) {
+                    int usagesCount = udmUsagesGrid.getSelectedItems().size();
+                    Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
+                        () -> {
+                            controller.unassignUsages(getSelectedUsageIds());
+                            udmUsagesGrid.deselectAll();
+                            refresh();
+                            Windows.showNotificationWindow(
+                                ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
+                        });
+                } else {
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.unassign"));
+                }
             });
         unassignItem.setEnabled(false);
         VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
