@@ -69,7 +69,7 @@ public class UdmEditUsageWindow extends Window {
     private final UdmUsageDto udmUsage;
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final TextField companyIdField = new TextField(ForeignUi.getMessage("label.company_id"));
-    private final TextField companyNameField = new TextField();
+    private final TextField companyNameField = new TextField(ForeignUi.getMessage("label.company_name"));
     private final TextField reportedTitleField = new TextField(ForeignUi.getMessage("label.reported_title"));
     private final TextField reportedStandardNumberField =
         new TextField(ForeignUi.getMessage("label.reported_standard_number"));
@@ -80,6 +80,7 @@ public class UdmEditUsageWindow extends Window {
     private final TextField statisticalMultiplierField =
         new TextField(ForeignUi.getMessage("label.statistical_multiplier"));
     private final TextField quantityField = new TextField(ForeignUi.getMessage("label.quantity"));
+    private final TextField annualizedCopiesField = new TextField(ForeignUi.getMessage("label.annualized_copies"));
 
     /**
      * Constructor.
@@ -144,7 +145,7 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
             buildEditableIntegerLayout(quantityField, "label.quantity", UdmUsageDto::getQuantity,
                 UdmUsageDto::setQuantity),
-            buildReadOnlyLayout("label.annualized_copies", usage -> Objects.toString(usage.getAnnualizedCopies())),
+            buildAnnualizedCopiesField(),
             initIneligibleReasonLayout(),
             buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser),
@@ -158,8 +159,8 @@ public class UdmEditUsageWindow extends Window {
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        binder.readBean(udmUsage);
         binder.validate();
+        binder.readBean(udmUsage);
         return rootLayout;
     }
 
@@ -190,6 +191,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> new AmountValidator().isValid(value.trim()),
                 "Field value should be positive number and should not exceed 10 digits")
             .withConverter(new StringToBigDecimalConverter("Field should be numeric")).bind(getter, setter);
+        statisticalMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
 
@@ -203,7 +205,16 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
             .withConverter(new StringToIntegerConverter("Field should be numeric"))
             .bind(getter, setter);
+        textField.addValueChangeListener(event -> recalculateAnnualizedCopies());
         return buildCommonLayout(textField, caption);
+    }
+
+    private HorizontalLayout buildAnnualizedCopiesField() {
+        annualizedCopiesField.setSizeFull();
+        binder.forField(annualizedCopiesField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.annualized_copies.empty"))
+            .bind(usage -> Objects.toString(usage.getAnnualizedCopies()), null);
+        return buildCommonLayout(annualizedCopiesField, "label.annualized_copies");
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
@@ -246,7 +257,9 @@ public class UdmEditUsageWindow extends Window {
     private HorizontalLayout buildCompanyNameLayout() {
         companyNameField.setReadOnly(true);
         companyNameField.setSizeFull();
-        binder.forField(companyNameField).bind(UdmUsageDto::getCompanyName, null);
+        binder.forField(companyNameField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.company_name.empty"))
+            .bind(UdmUsageDto::getCompanyName, null);
         return buildCommonLayout(companyNameField, "label.company_name");
     }
 
@@ -310,12 +323,26 @@ public class UdmEditUsageWindow extends Window {
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
                     reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField, companyIdField,
-                    annualMultiplierField, statisticalMultiplierField, quantityField));
+                    companyNameField, annualMultiplierField, statisticalMultiplierField, quantityField,
+                    annualizedCopiesField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> binder.readBean(udmUsage));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private void recalculateAnnualizedCopies() {
+        if (Objects.isNull(quantityField.getErrorMessage())
+            && Objects.isNull(annualMultiplierField.getErrorMessage())
+            && Objects.isNull(statisticalMultiplierField.getErrorMessage())) {
+            annualizedCopiesField.setValue(controller.calculateAnnualizedCopies(udmUsage.getReportedTypeOfUse(),
+                NumberUtils.toInt(quantityField.getValue().trim()),
+                NumberUtils.toInt(annualMultiplierField.getValue().trim()),
+                NumberUtils.createBigDecimal(statisticalMultiplierField.getValue().trim())).toString());
+        } else {
+            annualizedCopiesField.clear();
+        }
     }
 
     //TODO introduce Utils class to convert dates to String for all UI components
