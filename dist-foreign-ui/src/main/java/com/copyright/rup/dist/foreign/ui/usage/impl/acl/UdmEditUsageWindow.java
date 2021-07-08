@@ -284,8 +284,8 @@ public class UdmEditUsageWindow extends Window {
     private HorizontalLayout initIneligibleReasonLayout() {
         ComboBox<UdmIneligibleReason> comboBox = new ComboBox<>();
         comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(UdmIneligibleReason::getText);
-        comboBox.setItems(controller.getIneligibleReasons());
+        comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
+        comboBox.setItems(controller.getAllIneligibleReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         return buildCommonLayout(comboBox, "label.ineligible_reason");
     }
@@ -305,8 +305,8 @@ public class UdmEditUsageWindow extends Window {
     private HorizontalLayout initActionReasonLayout() {
         ComboBox<UdmActionReason> comboBox = new ComboBox<>();
         comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(UdmActionReason::getText);
-        comboBox.setItems(controller.getActionReasons());
+        comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
+        comboBox.setItems(controller.getAllActionReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
         return buildCommonLayout(comboBox, "label.action_reason_udm");
     }

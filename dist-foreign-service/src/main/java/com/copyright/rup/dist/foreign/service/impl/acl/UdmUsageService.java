@@ -14,6 +14,8 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.repository.api.IUdmActionReasonRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUdmIneligibleReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
@@ -55,6 +57,10 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
+    @Autowired
+    private IUdmActionReasonRepository udmActionReasonRepository;
+    @Autowired
+    private IUdmIneligibleReasonRepository udmIneligibleReasonRepository;
     @Autowired
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
     @Autowired
@@ -102,7 +108,7 @@ public class UdmUsageService implements IUdmUsageService {
                 "Uploaded in '" + udmBatch.getName() + "' Batch");
             if (UsageStatusEnum.INELIGIBLE == usage.getStatus()) {
                 udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.INELIGIBLE,
-                    usage.getIneligibleReason().getText());
+                    "No reported use");
             }
         });
         LOGGER.info("Insert UDM usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", udmBatch.getName(),
@@ -184,18 +190,13 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
-    public List<UdmActionReason> getActionReasons() {
-        return udmUsageRepository.findActionReasons();
+    public List<UdmActionReason> getAllActionReasons() {
+        return udmActionReasonRepository.findAll();
     }
 
     @Override
-    public List<UdmIneligibleReason> getIneligibleReasons() {
-        return udmUsageRepository.findIneligibleReasons();
-    }
-
-    @Override
-    public UdmIneligibleReason getIneligibleReasonById(String id) {
-        return udmUsageRepository.findIneligibleReasonById(id);
+    public List<UdmIneligibleReason> getAllIneligibleReasons() {
+        return udmIneligibleReasonRepository.findAll();
     }
 
     @Override

@@ -146,12 +146,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * @return list of {@link UdmActionReason}.
      */
-    List<UdmActionReason> getActionReasons();
+    List<UdmActionReason> getAllActionReasons();
 
     /**
      * @return list of {@link UdmIneligibleReason}.
      */
-    List<UdmIneligibleReason> getIneligibleReasons();
+    List<UdmIneligibleReason> getAllIneligibleReasons();
 
     /**
      * @return list of {@link DetailLicenseeClass}.

@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmIneligibleReasonMapper">
+
+    <resultMap id="udmIneligibleReasonResultMap" type="UdmIneligibleReason" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_ineligible_reason_uid"/>
+        <result property="reason" column="ineligible_reason"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="udmIneligibleReasonResultMap">
+        select
+            df_udm_ineligible_reason_uid,
+            ineligible_reason
+        from ${schema}.df_udm_ineligible_reason
+        order by ineligible_reason
+    </select>
+</mapper>

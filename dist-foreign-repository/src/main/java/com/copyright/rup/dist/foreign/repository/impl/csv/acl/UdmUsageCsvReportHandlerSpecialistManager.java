@@ -63,7 +63,7 @@ public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHand
         beanProperties.add(bean.getArticle());
         beanProperties.add(bean.getLanguage());
         beanProperties.add(Objects.nonNull(bean.getActionReason())
-            ? bean.getActionReason().getText()
+            ? bean.getActionReason().getReason()
             : StringUtils.EMPTY);
         beanProperties.add(bean.getComment());
         beanProperties.add(bean.getResearchUrl());
@@ -84,7 +84,7 @@ public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHand
         beanProperties.add(getBeanPropertyAsString(bean.getQuantity()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(Objects.nonNull(bean.getIneligibleReason())
-            ? bean.getIneligibleReason().getText()
+            ? bean.getIneligibleReason().getReason()
             : StringUtils.EMPTY);
         beanProperties.add(getStringFromDate(bean.getCreateDate()));
         beanProperties.add(bean.getUpdateUser());

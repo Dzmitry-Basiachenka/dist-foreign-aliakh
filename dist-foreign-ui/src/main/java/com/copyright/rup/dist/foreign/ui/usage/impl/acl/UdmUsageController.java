@@ -156,13 +156,13 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         udmUsageService.updateUsage(udmUsageDto);
     }
 
-    public List<UdmActionReason> getActionReasons() {
-        return udmUsageService.getActionReasons();
+    public List<UdmActionReason> getAllActionReasons() {
+        return udmUsageService.getAllActionReasons();
     }
 
     @Override
-    public List<UdmIneligibleReason> getIneligibleReasons() {
-        return udmUsageService.getIneligibleReasons();
+    public List<UdmIneligibleReason> getAllIneligibleReasons() {
+        return udmUsageService.getAllIneligibleReasons();
     }
 
     @Override
