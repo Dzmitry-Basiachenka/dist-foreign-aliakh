@@ -153,6 +153,7 @@ public class UdmUsageControllerTest {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).once();
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
         udmUsageWidget = controller.instantiateWidget();
         assertNotNull(udmUsageWidget);

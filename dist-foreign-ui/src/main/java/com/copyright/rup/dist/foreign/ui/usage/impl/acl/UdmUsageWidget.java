@@ -54,6 +54,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
+    private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
@@ -256,7 +257,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 150,
                 hasResearcherPermission),
-            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100, hasResearcherPermission),
+            addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100,
+                !(hasSpecialistPermission || hasManagerPermission)),
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
@@ -312,7 +314,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private IStreamSource getExportUdmUsagesStreamSourceForSpecificRole() {
-        if (ForeignSecurityUtils.hasSpecialistPermission() || hasManagerPermission) {
+        if (hasSpecialistPermission || hasManagerPermission) {
             return controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles();
         } else if (hasResearcherPermission) {
             return controller.getExportUdmUsagesStreamSourceResearcherRole();

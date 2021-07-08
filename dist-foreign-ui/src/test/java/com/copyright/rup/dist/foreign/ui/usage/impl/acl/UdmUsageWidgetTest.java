@@ -84,9 +84,9 @@ public class UdmUsageWidgetTest {
             "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title", "Reported Standard Number",
             "Standard Number", "Reported Pub Type", "Publication Format", "Article", "Language", "Action Reason",
             "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID", "Company Name", "Survey Respondent",
-            "IP Address", "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date",
-            "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies",
-            "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
+            "Survey Country", "Channel", "Usage Date", "Survey Start Date", "Survey End Date", "Annual Multiplier",
+            "Statistical Multiplier", "Reported TOU", "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date",
+            "Updated By", "Updated Date");
     private static final String SEARCH_PLACEHOLDER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Survey Respondent or Comment";
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
