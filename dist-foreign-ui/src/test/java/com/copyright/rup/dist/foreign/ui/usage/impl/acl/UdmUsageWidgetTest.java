@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -62,7 +63,7 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UdmUsageWidget.class, ForeignSecurityUtils.class, Windows.class})
+@PrepareForTest({UdmUsageWidget.class, ForeignSecurityUtils.class, Windows.class, RupContextUtils.class})
 public class UdmUsageWidgetTest {
 
     private static final List<String> VISIBLE_COLUMNS_FOR_RESEARCHER =
@@ -91,6 +92,7 @@ public class UdmUsageWidgetTest {
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Survey Respondent or Comment";
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment";
+    private static final String USER = "user@copyright.com";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -251,14 +253,15 @@ public class UdmUsageWidgetTest {
     @SuppressWarnings("unchecked")
     public void testSelectUnassignMenuItem() {
         mockStatic(Windows.class);
+        mockStatic(RupContextUtils.class);
         Window confirmWindowMock = createMock(Window.class);
-        UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("afdf6040-d130-4ae4-a6b1-a9a807873a1e");
+        UdmUsageDto udmUsageDto = buildUdmUsageDto("afdf6040-d130-4ae4-a6b1-a9a807873a1e", USER);
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
         expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        expect(RupContextUtils.getUserName()).andReturn(USER).once();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to unassign 1 selected usage(s)?"),
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
@@ -267,7 +270,8 @@ public class UdmUsageWidgetTest {
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully unassigned");
         expectLastCall().once();
-        replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
+        replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
         usagesWidget = new UdmUsageWidget();
         usagesWidget.setController(controller);
         usagesWidget.init();
@@ -281,7 +285,42 @@ public class UdmUsageWidgetTest {
         MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
         menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
         windowListenerCapture.getValue().onActionConfirmed();
-        verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testSelectUnassignMenuItemNotAllowed() {
+        mockStatic(Windows.class);
+        mockStatic(RupContextUtils.class);
+        Window confirmWindowMock = createMock(Window.class);
+        UdmUsageDto udmUsageDto1 = buildUdmUsageDto("351ee998-1b0b-4f29-842f-2efb00cbead8", USER);
+        UdmUsageDto udmUsageDto2 = buildUdmUsageDto("e2468b9e-f89c-480b-8f3c-c13ca1012cdb", "jjohn@copyright.com");
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        expect(RupContextUtils.getUserName()).andReturn(USER).once();
+        Windows.showNotificationWindow("Only usages that are assigned to you can be unassigned");
+        expectLastCall().once();
+        replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto1, udmUsageDto2);
+        grid.select(udmUsageDto1);
+        grid.select(udmUsageDto2);
+        List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
+        assertEquals(2, CollectionUtils.size(menuItems));
+        MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
+        menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
     }
 
     @Test
@@ -389,5 +428,12 @@ public class UdmUsageWidgetTest {
     private HorizontalLayout getButtonsLayout() {
         return (HorizontalLayout) ((HorizontalLayout) ((VerticalLayout)
             usagesWidget.getSecondComponent()).getComponent(0)).getComponent(0);
+    }
+
+    private UdmUsageDto buildUdmUsageDto(String usageId, String user) {
+        UdmUsageDto udmUsage = new UdmUsageDto();
+        udmUsage.setId(usageId);
+        udmUsage.setAssignee(user);
+        return udmUsage;
     }
 }
