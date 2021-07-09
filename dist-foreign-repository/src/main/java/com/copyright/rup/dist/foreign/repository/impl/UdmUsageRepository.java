@@ -46,6 +46,11 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
+    public void update(UdmUsageDto udmUsageDto) {
+        insert("IUdmUsageMapper.update", Objects.requireNonNull(udmUsageDto));
+    }
+
+    @Override
     public boolean isOriginalDetailIdExist(String originalDetailId) {
         return selectOne("IUdmUsageMapper.isOriginalDetailIdExist", Objects.requireNonNull(originalDetailId));
     }

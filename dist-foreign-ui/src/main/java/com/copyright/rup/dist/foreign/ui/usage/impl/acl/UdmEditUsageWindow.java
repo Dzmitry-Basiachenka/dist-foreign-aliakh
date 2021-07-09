@@ -190,7 +190,8 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator().isValid(value.trim()),
                 "Field value should be positive number and should not exceed 10 digits")
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric")).bind(getter, setter);
+            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+            .bind(getter, setter);
         statisticalMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
@@ -210,10 +211,12 @@ public class UdmEditUsageWindow extends Window {
     }
 
     private HorizontalLayout buildAnnualizedCopiesField() {
+        annualizedCopiesField.setReadOnly(true);
         annualizedCopiesField.setSizeFull();
         binder.forField(annualizedCopiesField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.annualized_copies.empty"))
-            .bind(usage -> Objects.toString(usage.getAnnualizedCopies()), null);
+            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+            .bind(UdmUsageDto::getAnnualizedCopies, UdmUsageDto::setAnnualizedCopies);
         return buildCommonLayout(annualizedCopiesField, "label.annualized_copies");
     }
 
@@ -259,7 +262,7 @@ public class UdmEditUsageWindow extends Window {
         companyNameField.setSizeFull();
         binder.forField(companyNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.company_name.empty"))
-            .bind(UdmUsageDto::getCompanyName, null);
+            .bind(UdmUsageDto::getCompanyName, UdmUsageDto::setCompanyName);
         return buildCommonLayout(companyNameField, "label.company_name");
     }
 
@@ -319,6 +322,7 @@ public class UdmEditUsageWindow extends Window {
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmUsage);
+                controller.updateUsage(udmUsage);
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,

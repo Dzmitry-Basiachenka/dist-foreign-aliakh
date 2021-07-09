@@ -110,6 +110,15 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
+    public void updateUsage(UdmUsageDto udmUsageDto) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
+        udmUsageDto.setUpdateUser(userName);
+        udmUsageRepository.update(udmUsageDto);
+        LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
+    }
+
+    @Override
     public boolean isOriginalDetailIdExist(String originalDetailId) {
         return udmUsageRepository.isOriginalDetailIdExist(originalDetailId);
     }

@@ -133,6 +133,35 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdate() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
+        UdmUsageDto originalUsage = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        originalUsage.setStatus(UsageStatusEnum.INELIGIBLE);
+        originalUsage.setWrWrkInst(WR_WRK_INST);
+        originalUsage.setReportedTitle(REPORTED_TITLE);
+        originalUsage.setReportedStandardNumber(STANDARD_NUMBER);
+        originalUsage.setReportedPubType(PUB_TYPE_JOURNAL);
+        originalUsage.setActionReason(
+            new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"));
+        originalUsage.setComment("Specialist should review ineligible usage");
+        originalUsage.setResearchUrl("google.com");
+        DetailLicenseeClass detailLicenseeClass = buildDetailLicenseeClass(2);
+        detailLicenseeClass.setDescription("Textiles, Apparel, etc.");
+        originalUsage.setDetailLicenseeClass(detailLicenseeClass);
+        originalUsage.setCompanyId(COMPANY_ID);
+        originalUsage.setCompanyName(COMPANY_NAME_1);
+        originalUsage.setAnnualMultiplier(1);
+        originalUsage.setStatisticalMultiplier(new BigDecimal("2.00000"));
+        originalUsage.setQuantity(3);
+        originalUsage.setAnnualizedCopies(new BigDecimal("6.00000"));
+        originalUsage.setIneligibleReason(
+            new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"));
+        udmUsageRepository.update(originalUsage);
+        verifyUsageDto(originalUsage, udmUsageRepository.findDtosByFilter(filter, null, null).get(0));
+    }
+
+    @Test
     public void testFindIdsByStatus() {
         List<String> udmUsageIds = udmUsageRepository.findIdsByStatus(UsageStatusEnum.WORK_FOUND);
         assertEquals(2, udmUsageIds.size());
@@ -715,7 +744,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         assertEquals(expectedUsage.getResearchUrl(), actualUsage.getResearchUrl());
-        assertNull(actualUsage.getIneligibleReason());
+        assertEquals(expectedUsage.getIneligibleReason(), actualUsage.getIneligibleReason());
     }
 
     private void verifyUsage(UdmUsage expectedUsage, UdmUsage actualUsage) {

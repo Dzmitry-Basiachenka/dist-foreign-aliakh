@@ -31,6 +31,13 @@ public interface IUdmUsageRepository {
     void insert(UdmUsage udmUsage);
 
     /**
+     * Updates UDM usage.
+     *
+     * @param udmUsageDto instance of {@link UdmUsageDto}
+     */
+    void update(UdmUsageDto udmUsageDto);
+
+    /**
      * Checks whether UDM usage with provided original detail id exists.
      *
      * @param originalDetailId original detail id

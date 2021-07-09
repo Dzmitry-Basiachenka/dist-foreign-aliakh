@@ -158,6 +158,19 @@ public class UdmUsageServiceTest {
     }
 
     @Test
+    public void testUpdateUsage() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageRepository.update(udmUsageDto);
+        expectLastCall().once();
+        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageService.updateUsage(udmUsageDto);
+        assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        verify(udmUsageRepository, RupContextUtils.class);
+    }
+
+    @Test
     public void testIsOriginalDetailIdExist() {
         expect(udmUsageRepository.isOriginalDetailIdExist(UDM_USAGE_ORIGIN_UID_1)).andReturn(true).once();
         replay(udmUsageRepository);

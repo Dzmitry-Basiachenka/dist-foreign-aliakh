@@ -253,9 +253,9 @@ public class UdmUsageControllerTest {
         Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
         udmUsageService.assignUsages(usageIds);
         expectLastCall().once();
-        replay(udmUsageAuditService);
+        replay(udmUsageService);
         controller.assignUsages(usageIds);
-        verify(udmUsageAuditService);
+        verify(udmUsageService);
     }
 
     @Test
@@ -263,9 +263,19 @@ public class UdmUsageControllerTest {
         Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
         udmUsageService.unassignUsages(usageIds);
         expectLastCall().once();
-        replay(udmUsageAuditService);
+        replay(udmUsageService);
         controller.unassignUsages(usageIds);
-        verify(udmUsageAuditService);
+        verify(udmUsageService);
+    }
+
+    @Test
+    public void testUpdateUsage() {
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageService.updateUsage(udmUsageDto);
+        expectLastCall().once();
+        replay(udmUsageService);
+        controller.updateUsage(udmUsageDto);
+        verify(udmUsageService);
     }
 
     @Test

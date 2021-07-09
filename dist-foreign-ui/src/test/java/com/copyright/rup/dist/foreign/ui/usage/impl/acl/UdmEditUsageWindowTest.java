@@ -170,7 +170,7 @@ public class UdmEditUsageWindowTest {
         assertTextFieldValue(verticalLayout.getComponent(31), "1");
         assertTextFieldValue(verticalLayout.getComponent(32), REPORTED_TYPE_OF_USE);
         assertTextFieldValue(verticalLayout.getComponent(33), "10");
-        assertTextFieldValue(verticalLayout.getComponent(34), "10.00000");
+        assertTextFieldValue(verticalLayout.getComponent(34), "10");
         assertComboBoxFieldValue(verticalLayout.getComponent(35), INELIGIBLE_REASON);
         assertTextFieldValue(verticalLayout.getComponent(36), "01/01/2016");
         assertTextFieldValue(verticalLayout.getComponent(37), USER_NAME);
@@ -281,6 +281,8 @@ public class UdmEditUsageWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmUsage);
         expectLastCall().once();
+        controller.updateUsage(udmUsage);
+        expectLastCall().once();
         replay(controller, binder);
         window = new UdmEditUsageWindow(controller, udmUsage);
         Whitebox.setInternalState(window, binder);
@@ -321,7 +323,7 @@ public class UdmEditUsageWindowTest {
         TextField annualizedCopiesField = Whitebox.getInternalState(window, "annualizedCopiesField");
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
-        assertEquals("10.00000", annualizedCopiesField.getValue());
+        assertEquals("10", annualizedCopiesField.getValue());
         annualMultiplierField.setValue(INVALID_NUMBER);
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
         annualMultiplierField.setValue("2");

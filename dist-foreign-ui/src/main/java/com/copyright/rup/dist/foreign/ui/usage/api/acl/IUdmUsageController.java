@@ -137,6 +137,13 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     void unassignUsages(Set<String> usageIds);
 
     /**
+     * Updates UDM usage.
+     *
+     * @param udmUsageDto {@link UdmUsageDto} to update
+     */
+    void updateUsage(UdmUsageDto udmUsageDto);
+
+    /**
      * @return list of {@link UdmActionReason}.
      */
     List<UdmActionReason> getActionReasons();
