@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
@@ -161,13 +162,29 @@ public class UdmUsageServiceTest {
     public void testUpdateUsage() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        UdmUsageDto udmUsageDto = buildUsageDto();
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
+        Capture<List<UdmUsage>> usageCapture = newCapture();
+        chainExecutor.execute(capture(usageCapture), eq(ChainProcessorTypeEnum.MATCHING));
+        expectLastCall().once();
+        replay(udmUsageRepository, chainExecutor, RupContextUtils.class);
         udmUsageService.updateUsage(udmUsageDto);
+        List<UdmUsage> actualUsages = usageCapture.getValue();
+        assertEquals(1, actualUsages.size());
+        UdmUsage actualUsage = actualUsages.get(0);
+        assertEquals(udmUsageDto.getId(), actualUsage.getId());
+        assertEquals(udmUsageDto.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(udmUsageDto.getTypeOfUse(), actualUsage.getTypeOfUse());
+        assertEquals(udmUsageDto.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(udmUsageDto.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(udmUsageDto.getReportedTitle(), actualUsage.getReportedTitle());
+        assertEquals(udmUsageDto.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(udmUsageDto.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(udmUsageDto.getStatus(), actualUsage.getStatus());
+        assertEquals(udmUsageDto.getVersion() + 1, actualUsage.getVersion());
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
-        verify(udmUsageRepository, RupContextUtils.class);
+        verify(udmUsageRepository, chainExecutor, RupContextUtils.class);
     }
 
     @Test
@@ -395,6 +412,21 @@ public class UdmUsageServiceTest {
         udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
         udmUsage.setQuantity(7);
         return udmUsage;
+    }
+
+    private UdmUsageDto buildUsageDto() {
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("a40e5ab4-7591-4e7f-8cab-34a9ff893e15");
+        udmUsageDto.setWrWrkInst(122825347L);
+        udmUsageDto.setTypeOfUse("PRINT");
+        udmUsageDto.setReportedStandardNumber("0927-7765");
+        udmUsageDto.setStandardNumber("0927-7765");
+        udmUsageDto.setReportedTitle("Colloids and surfaces. B, Biointerfaces");
+        udmUsageDto.setSystemTitle("Colloids and surfaces. B, Biointerfaces");
+        udmUsageDto.setPeriodEndDate(LocalDate.of(2021, 12, 31));
+        udmUsageDto.setStatus(UsageStatusEnum.NEW);
+        udmUsageDto.setVersion(2);
+        return udmUsageDto;
     }
 
     private void assertUdmUsage(UdmUsage udmUsage) {

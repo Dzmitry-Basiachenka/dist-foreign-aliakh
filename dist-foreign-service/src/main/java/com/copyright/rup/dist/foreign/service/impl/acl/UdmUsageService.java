@@ -115,6 +115,10 @@ public class UdmUsageService implements IUdmUsageService {
         LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
+        if (UsageStatusEnum.NEW == udmUsageDto.getStatus()) {
+            chainExecutor.execute(Collections.singletonList(convertUdmDtoToUsage(udmUsageDto)),
+                ChainProcessorTypeEnum.MATCHING);
+        }
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
     }
 
@@ -210,6 +214,21 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public void unassignUsages(Set<String> udmUsageIds) {
         udmUsageRepository.updateAssignee(udmUsageIds, null, RupContextUtils.getUserName());
+    }
+
+    private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {
+        UdmUsage udmUsage = new UdmUsage();
+        udmUsage.setId(usageDto.getId());
+        udmUsage.setWrWrkInst(usageDto.getWrWrkInst());
+        udmUsage.setTypeOfUse(usageDto.getTypeOfUse());
+        udmUsage.setReportedStandardNumber(usageDto.getReportedStandardNumber());
+        udmUsage.setStandardNumber(usageDto.getStandardNumber());
+        udmUsage.setReportedTitle(usageDto.getReportedTitle());
+        udmUsage.setSystemTitle(usageDto.getSystemTitle());
+        udmUsage.setPeriodEndDate(usageDto.getPeriodEndDate());
+        udmUsage.setStatus(usageDto.getStatus());
+        udmUsage.setVersion(usageDto.getVersion() + 1);
+        return udmUsage;
     }
 
     private LocalDate createPeriodEndDate(UdmBatch udmBatch) {
