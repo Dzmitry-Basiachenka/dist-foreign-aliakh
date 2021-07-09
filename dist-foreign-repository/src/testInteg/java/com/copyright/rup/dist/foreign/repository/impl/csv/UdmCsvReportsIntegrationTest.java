@@ -41,50 +41,50 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportSpecialistManagerRoles() throws IOException {
+    public void testWriteUdmUsageCsvReportSpecialistManager() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("a23681ae-1cf7-44ee-b09b-6fc06779e05c"));
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportSpecialistManagerRoles(udmUsageFilter, outputStream),
-            "usages_report_udm_specialist_manager_roles.csv");
+                udmReportRepository.writeUdmUsageCsvReportSpecialistManager(udmUsageFilter, outputStream),
+            "usages_report_udm_specialist_manager.csv");
     }
 
     @Test
-    public void testWriteUdmUsageEmptyCsvReportSpecialistManagerRoles() throws IOException {
+    public void testWriteUdmUsageEmptyCsvReportSpecialistManager() throws IOException {
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportSpecialistManagerRoles(new UdmUsageFilter(), outputStream),
-            "usages_report_udm_empty_specialist_manager_roles.csv");
+                udmReportRepository.writeUdmUsageCsvReportSpecialistManager(new UdmUsageFilter(), outputStream),
+            "usages_report_udm_empty_specialist_manager.csv");
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportResearcherRole() throws IOException {
+    public void testWriteUdmUsageCsvReportResearcher() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("94b644cb-ab57-4825-b985-c51734a5aa1e"));
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportResearcherRole(udmUsageFilter, outputStream),
-            "usages_report_udm_researcher_role.csv");
+                udmReportRepository.writeUdmUsageCsvReportResearcher(udmUsageFilter, outputStream),
+            "usages_report_udm_researcher.csv");
     }
 
     @Test
-    public void testWriteUdmUsageEmptyCsvReportResearcherRole() throws IOException {
+    public void testWriteUdmUsageEmptyCsvReportResearcher() throws IOException {
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportResearcherRole(new UdmUsageFilter(), outputStream),
-            "usages_report_udm_empty_researcher_role.csv");
+                udmReportRepository.writeUdmUsageCsvReportResearcher(new UdmUsageFilter(), outputStream),
+            "usages_report_udm_empty_researcher.csv");
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportViewRole() throws IOException {
+    public void testWriteUdmUsageCsvReportView() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("a524f8a9-2c95-43ea-8c25-b9f38b1c758e"));
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportViewRole(udmUsageFilter, outputStream),
-            "usages_report_udm_view_role.csv");
+                udmReportRepository.writeUdmUsageCsvReportView(udmUsageFilter, outputStream),
+            "usages_report_udm_view.csv");
     }
 
     @Test
-    public void testWriteUdmUsageEmptyCsvReportViewRole() throws IOException {
+    public void testWriteUdmUsageEmptyCsvReportView() throws IOException {
         assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmUsageCsvReportViewRole(new UdmUsageFilter(), outputStream),
-            "usages_report_udm_empty_view_role.csv");
+                udmReportRepository.writeUdmUsageCsvReportView(new UdmUsageFilter(), outputStream),
+            "usages_report_udm_empty_view.csv");
     }
 }

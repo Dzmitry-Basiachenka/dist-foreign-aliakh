@@ -22,7 +22,7 @@ public interface IUdmReportRepository {
      * @param filter            instance of {@link UdmUsageFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUdmUsageCsvReportSpecialistManagerRoles(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
+    void writeUdmUsageCsvReportSpecialistManager(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds UDM usages according to given {@link UdmUsageFilter} and writes them to the output stream in CSV format
@@ -31,7 +31,7 @@ public interface IUdmReportRepository {
      * @param filter            instance of {@link UdmUsageFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUdmUsageCsvReportResearcherRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
+    void writeUdmUsageCsvReportResearcher(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds UDM usages according to given {@link UdmUsageFilter} and writes them to the output stream in CSV format
@@ -40,5 +40,5 @@ public interface IUdmReportRepository {
      * @param filter            instance of {@link UdmUsageFilter}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUdmUsageCsvReportViewRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
+    void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
 }

@@ -342,19 +342,19 @@ public class UdmUsageControllerTest {
     @Test
     public void testGetExportUsagesStreamSourceSpecialistManagerRoles() {
         testGetExportUsagesStreamSource(controller::getExportUdmUsagesStreamSourceSpecialistManagerRoles,
-            pos -> udmReportService.writeUdmUsageCsvReportSpecialistManagerRoles(udmUsageFilter, pos));
+            pos -> udmReportService.writeUdmUsageCsvReportSpecialistManager(udmUsageFilter, pos));
     }
 
     @Test
     public void testGetExportUsagesStreamSourceResearcherRole() {
         testGetExportUsagesStreamSource(controller::getExportUdmUsagesStreamSourceResearcherRole,
-            pos -> udmReportService.writeUdmUsageCsvReportResearcherRole(udmUsageFilter, pos));
+            pos -> udmReportService.writeUdmUsageCsvReportResearcher(udmUsageFilter, pos));
     }
 
     @Test
     public void testGetExportUsagesStreamSourceViewRole() {
         testGetExportUsagesStreamSource(controller::getExportUdmUsagesStreamSourceViewRole,
-            pos -> udmReportService.writeUdmUsageCsvReportViewRole(udmUsageFilter, pos));
+            pos -> udmReportService.writeUdmUsageCsvReportView(udmUsageFilter, pos));
     }
 
     private void testGetExportUsagesStreamSource(Supplier<IStreamSource> streamSourceSupplier,

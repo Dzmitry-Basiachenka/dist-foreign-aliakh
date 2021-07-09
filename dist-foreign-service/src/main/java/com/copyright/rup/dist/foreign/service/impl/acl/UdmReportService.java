@@ -25,18 +25,17 @@ public class UdmReportService implements IUdmReportService {
     private IUdmReportRepository udmReportRepository;
 
     @Override
-    public void writeUdmUsageCsvReportSpecialistManagerRoles(UdmUsageFilter filter,
-                                                             PipedOutputStream pipedOutputStream) {
-        udmReportRepository.writeUdmUsageCsvReportSpecialistManagerRoles(filter, pipedOutputStream);
+    public void writeUdmUsageCsvReportSpecialistManager(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
+        udmReportRepository.writeUdmUsageCsvReportSpecialistManager(filter, pipedOutputStream);
     }
 
     @Override
-    public void writeUdmUsageCsvReportResearcherRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
-        udmReportRepository.writeUdmUsageCsvReportResearcherRole(filter, pipedOutputStream);
+    public void writeUdmUsageCsvReportResearcher(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
+        udmReportRepository.writeUdmUsageCsvReportResearcher(filter, pipedOutputStream);
     }
 
     @Override
-    public void writeUdmUsageCsvReportViewRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
-        udmReportRepository.writeUdmUsageCsvReportViewRole(filter, pipedOutputStream);
+    public void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
+        udmReportRepository.writeUdmUsageCsvReportView(filter, pipedOutputStream);
     }
 }

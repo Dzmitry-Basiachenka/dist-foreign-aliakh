@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Writes UDM usages into an {@link OutputStream} for Researcher role.
+ * Writes UDM usages into an {@link OutputStream} for Specialist and Manager roles.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -23,21 +23,22 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler<UdmUsageDto> {
+public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHandler<UdmUsageDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Detail ID",
+    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
         "Detail Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title",
         "Reported Standard Number", "Standard Number", "Reported Pub Type", "Publication Format", "Article",
-        "Language", "Action Reason", "Comment", "Research URL", "Det LC ID", "Det LC Name", "Channel", "Usage Date",
-        "Survey Start Date", "Survey End Date", "Reported TOU", "Ineligible Reason", "Load Date", "Updated By",
-        "Updated Date");
+        "Language", "Action Reason", "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID",
+        "Company Name", "Survey Respondent", "IP Address", "Survey Country", "Channel", "Usage Date",
+        "Survey Start Date", "Survey End Date", "Annual Multiplier", "Statistical Multiplier", "Reported TOU",
+        "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
 
     /**
      * Constructor.
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public UdmUsageCsvReportHandlerResearcherRole(OutputStream outputStream) {
+    public UdmUsageCsvReportHandlerSpecialistManager(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -46,6 +47,7 @@ public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(bean.getId());
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
+        beanProperties.add(bean.getUsageOrigin().name());
         beanProperties.add(bean.getOriginalDetailId());
         beanProperties.add(bean.getStatus().name());
         beanProperties.add(bean.getAssignee());
@@ -67,11 +69,20 @@ public class UdmUsageCsvReportHandlerResearcherRole extends BaseCsvReportHandler
         beanProperties.add(bean.getResearchUrl());
         beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClass().getId()));
         beanProperties.add(bean.getDetailLicenseeClass().getDescription());
+        beanProperties.add(getBeanPropertyAsString(bean.getCompanyId()));
+        beanProperties.add(bean.getCompanyName());
+        beanProperties.add(bean.getSurveyRespondent());
+        beanProperties.add(bean.getIpAddress());
+        beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getChannel().name());
         beanProperties.add(getBeanLocalDate(bean.getUsageDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyEndDate()));
+        beanProperties.add(getBeanPropertyAsString(bean.getAnnualMultiplier()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getStatisticalMultiplier()));
         beanProperties.add(bean.getReportedTypeOfUse());
+        beanProperties.add(getBeanPropertyAsString(bean.getQuantity()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(Objects.nonNull(bean.getIneligibleReason())
             ? bean.getIneligibleReason().getText()
             : StringUtils.EMPTY);
