@@ -130,9 +130,14 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         fileDownloader.extend(exportButton);
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
-            Window editWindow = new UdmEditUsageWindow(controller, udmUsagesGrid.getSelectedItems().iterator().next());
-            editWindow.addCloseListener(closeEvent -> refresh());
-            Windows.showModalWindow(editWindow);
+            UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
+            if (userName.equals(selectedUsage.getAssignee())) {
+                Window editWindow = new UdmEditUsageWindow(controller, selectedUsage);
+                editWindow.addCloseListener(closeEvent -> refresh());
+                Windows.showModalWindow(editWindow);
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
+            }
         });
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));

@@ -11,7 +11,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
@@ -82,7 +81,7 @@ public class UdmEditUsageWindowTest {
     private static final String RH_NAME = "American College of Physicians - Journals";
     private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
-    private static final int DET_LC_ID = 26;
+    private static final Integer DET_LC_ID = 26;
     private static final String DET_LC_NAME = "Law Firms";
     private static final Integer QUANTITY = 10;
     private static final Integer ANNUAL_MULTIPLIER = 1;
@@ -117,6 +116,8 @@ public class UdmEditUsageWindowTest {
         buildUdmUsageDto();
         controller = createMock(IUdmUsageController.class);
         expect(controller.getActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        LICENSEE_CLASS.setId(DET_LC_ID);
+        LICENSEE_CLASS.setDescription(DET_LC_NAME);
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
         expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
@@ -156,9 +157,9 @@ public class UdmEditUsageWindowTest {
         assertComboBoxFieldValue(verticalLayout.getComponent(17), ACTION_REASON);
         assertTextFieldValue(verticalLayout.getComponent(18), COMMENT);
         assertTextFieldValue(verticalLayout.getComponent(19), RESEARCH_URL);
-        assertComboBoxFieldValue(verticalLayout.getComponent(20), LICENSEE_CLASS);
-        assertTextFieldValue(verticalLayout.getComponent(21), "454984566");
-        assertTextFieldValue(verticalLayout.getComponent(22), COMPANY_NAME);
+        assertTextFieldValue(verticalLayout.getComponent(20), "454984566");
+        assertTextFieldValue(verticalLayout.getComponent(21), COMPANY_NAME);
+        assertComboBoxFieldValue(verticalLayout.getComponent(22), LICENSEE_CLASS);
         assertTextFieldValue(verticalLayout.getComponent(23), SURVEY_RESPONDENT);
         assertTextFieldValue(verticalLayout.getComponent(24), IP_ADDRESS);
         assertTextFieldValue(verticalLayout.getComponent(25), SURVEY_COUNTRY);
@@ -196,13 +197,13 @@ public class UdmEditUsageWindowTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
-        companyInformation.setDetailLicenseeClassId(333);
+        companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(anyLong())).andReturn(companyInformation).anyTimes();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
-        Button verifyButton = (Button) ((HorizontalLayout) getPanelContent().getComponent(21)).getComponent(2);
+        Button verifyButton = (Button) ((HorizontalLayout) getPanelContent().getComponent(20)).getComponent(2);
         verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, VALID_INTEGER, StringUtils.EMPTY, true);
         verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, INTEGER_WITH_SPACES_STRING,
             StringUtils.EMPTY, true);
@@ -258,19 +259,23 @@ public class UdmEditUsageWindowTest {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
-        companyInformation.setDetailLicenseeClassId(333);
+        companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         VerticalLayout panelContent = getPanelContent();
-        HorizontalLayout companyLayout = (HorizontalLayout) panelContent.getComponent(21);
+        HorizontalLayout companyLayout = (HorizontalLayout) panelContent.getComponent(20);
         TextField companyIdField = (TextField) companyLayout.getComponent(1);
         Button verifyButton = (Button) companyLayout.getComponent(2);
-        TextField companyNameField = (TextField) ((HorizontalLayout) panelContent.getComponent(22)).getComponent(1);
-        assertEquals(COMPANY_NAME, companyNameField.getValue());
         companyIdField.setValue("1136");
         verifyButton.click();
+        TextField companyNameField = (TextField) ((HorizontalLayout) panelContent.getComponent(21)).getComponent(1);
+        ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
+            (ComboBox) ((HorizontalLayout) panelContent.getComponent(22)).getComponent(1);
+        assertEquals("Albany International Corp.", companyNameField.getValue());
+        assertEquals(DET_LC_ID, detailLicenseeClassComboBox.getValue().getId());
+        assertEquals(DET_LC_NAME, detailLicenseeClassComboBox.getValue().getDescription());
         verify(controller);
     }
 
@@ -379,7 +384,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status");
+        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", false);
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false);
@@ -392,12 +397,12 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(14), "Publication Format", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(15), "Article", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(16), "Language", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason");
+        verifyComboBoxLayout(verticalLayout.getComponent(17), "Action Reason", false);
         verifyTextFieldLayout(verticalLayout.getComponent(18), "Comment", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(19), "Research URL", false, true);
-        verifyComboBoxLayout(verticalLayout.getComponent(20), "Detail Licensee Class");
-        verifyCompanyIdLayout(verticalLayout.getComponent(21));
-        verifyTextFieldLayout(verticalLayout.getComponent(22), "Company Name", true, true);
+        verifyCompanyIdLayout(verticalLayout.getComponent(20));
+        verifyTextFieldLayout(verticalLayout.getComponent(21), "Company Name", true, true);
+        verifyComboBoxLayout(verticalLayout.getComponent(22), "Detail Licensee Class", true);
         verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey Respondent", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(24), "IP Address", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(25), "Survey Country", true, false);
@@ -410,7 +415,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true);
-        verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason");
+        verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason", false);
         verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
@@ -434,12 +439,12 @@ public class UdmEditUsageWindowTest {
         assertEquals(expectedValue, ((ComboBox) layout.getComponent(1)).getValue());
     }
 
-    private void verifyComboBoxLayout(Component component, String caption) {
+    private void verifyComboBoxLayout(Component component, String caption, boolean isValidated) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption);
-        verifyComboBoxField(layout.getComponent(1));
+        verifyComboBoxField(layout.getComponent(1), isValidated ? caption : null);
     }
 
     private void verifyCompanyIdLayout(Component component) {
@@ -466,11 +471,11 @@ public class UdmEditUsageWindowTest {
         assertEquals(isReadOnly, ((TextField) component).isReadOnly());
     }
 
-    private void verifyComboBoxField(Component component) {
+    private void verifyComboBoxField(Component component, String caption) {
         assertTrue(component instanceof ComboBox);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertNull(component.getCaption());
+        assertEquals(caption, component.getCaption());
         assertFalse(((ComboBox) component).isReadOnly());
     }
 

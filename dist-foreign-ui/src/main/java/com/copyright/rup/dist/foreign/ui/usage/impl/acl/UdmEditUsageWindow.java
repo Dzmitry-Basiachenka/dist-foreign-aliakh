@@ -46,7 +46,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Window to edit UDM usage.
@@ -81,6 +84,9 @@ public class UdmEditUsageWindow extends Window {
         new TextField(ForeignUi.getMessage("label.statistical_multiplier"));
     private final TextField quantityField = new TextField(ForeignUi.getMessage("label.quantity"));
     private final TextField annualizedCopiesField = new TextField(ForeignUi.getMessage("label.annualized_copies"));
+    private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
+    private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
 
     /**
      * Constructor.
@@ -91,6 +97,9 @@ public class UdmEditUsageWindow extends Window {
     public UdmEditUsageWindow(IUdmUsageController usageController, UdmUsageDto selectedUdmUsage) {
         controller = usageController;
         udmUsage = selectedUdmUsage;
+        idToLicenseeClassMap = controller.getDetailLicenseeClasses()
+            .stream()
+            .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
         setResizable(false);
@@ -129,9 +138,9 @@ public class UdmEditUsageWindow extends Window {
                 UdmUsageDto::setComment),
             buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
                 UdmUsageDto::setResearchUrl),
-            initDetailLicenseeClassLayout(),
             buildCompanyLayout(),
             buildCompanyNameLayout(),
+            initDetailLicenseeClassLayout(),
             buildReadOnlyLayout("label.survey_respondent", UdmUsageDto::getSurveyRespondent),
             buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress),
             buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry),
@@ -239,7 +248,10 @@ public class UdmEditUsageWindow extends Window {
             .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
                 (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value.trim())));
         companyIdField.setSizeFull();
-        companyIdField.addValueChangeListener(event -> companyNameField.clear());
+        companyIdField.addValueChangeListener(event -> {
+            companyNameField.clear();
+            detailLicenseeClassComboBox.setSelectedItem(null);
+        });
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         verifyButton.addClickListener(event -> {
             if (Objects.isNull(companyIdField.getErrorMessage())) {
@@ -247,8 +259,11 @@ public class UdmEditUsageWindow extends Window {
                     controller.getCompanyInformation(Long.valueOf(companyIdField.getValue().trim()));
                 if (StringUtils.isNotBlank(information.getName())) {
                     companyNameField.setValue(information.getName());
+                    detailLicenseeClassComboBox.setSelectedItem(
+                        idToLicenseeClassMap.get(information.getDetailLicenseeClassId()));
                 } else {
                     companyNameField.clear();
+                    detailLicenseeClassComboBox.setSelectedItem(null);
                 }
             }
         });
@@ -297,13 +312,14 @@ public class UdmEditUsageWindow extends Window {
     }
 
     private HorizontalLayout initDetailLicenseeClassLayout() {
-        ComboBox<DetailLicenseeClass> comboBox = new ComboBox<>();
-        comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(detailLicenseeClass ->
+        detailLicenseeClassComboBox.setSizeFull();
+        detailLicenseeClassComboBox.setItemCaptionGenerator(detailLicenseeClass ->
             String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()));
-        comboBox.setItems(controller.getDetailLicenseeClasses());
-        binder.forField(comboBox).bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
-        return buildCommonLayout(comboBox, "label.det_lc");
+        detailLicenseeClassComboBox.setItems();
+        binder.forField(detailLicenseeClassComboBox)
+            .withValidator(Objects::nonNull, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
+        return buildCommonLayout(detailLicenseeClassComboBox, "label.det_lc");
     }
 
     private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
@@ -327,8 +343,8 @@ public class UdmEditUsageWindow extends Window {
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
                     reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField, companyIdField,
-                    companyNameField, annualMultiplierField, statisticalMultiplierField, quantityField,
-                    annualizedCopiesField));
+                    companyNameField, detailLicenseeClassComboBox, annualMultiplierField, statisticalMultiplierField,
+                    quantityField, annualizedCopiesField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));

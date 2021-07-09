@@ -36,6 +36,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -99,11 +100,13 @@ public class UdmUsageWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
+        mockStatic(RupContextUtils.class);
         controller = createMock(IUdmUsageController.class);
         UdmUsageFilterWidget filterWidget = new UdmUsageFilterWidget(createMock(IUdmUsageFilterController.class));
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
-        mockStatic(ForeignSecurityUtils.class);
         streamSource = createMock(IStreamSource.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER).once();
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
     }
@@ -111,9 +114,9 @@ public class UdmUsageWidgetTest {
     @Test
     public void testWidgetStructureForSpecialist() {
         setSpecialistExpectations();
-        replay(controller, ForeignSecurityUtils.class, streamSource);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, streamSource);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -131,9 +134,9 @@ public class UdmUsageWidgetTest {
     @Test
     public void testWidgetStructureForManager() {
         setManagerExpectations();
-        replay(controller, ForeignSecurityUtils.class, streamSource);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, streamSource);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -151,9 +154,9 @@ public class UdmUsageWidgetTest {
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        replay(controller, ForeignSecurityUtils.class, streamSource);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, streamSource);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -171,9 +174,9 @@ public class UdmUsageWidgetTest {
     @Test
     public void testWidgetStructureForResearcher() {
         setResearcherExpectations();
-        replay(controller, ForeignSecurityUtils.class, streamSource);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, streamSource);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
@@ -205,7 +208,8 @@ public class UdmUsageWidgetTest {
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully assigned to you");
         expectLastCall().once();
-        replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
+        replay(controller, streamSource, confirmWindowMock, Windows.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
         initWidget();
         List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
         assertEquals(2, CollectionUtils.size(menuItems));
@@ -218,24 +222,23 @@ public class UdmUsageWidgetTest {
         assertTrue(menuItemAssign.isEnabled());
         menuItemAssign.getCommand().menuSelected(menuItemAssign);
         windowListenerCapture.getValue().onActionConfirmed();
-        verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testSelectUnassignMenuItem() {
         mockStatic(Windows.class);
-        mockStatic(RupContextUtils.class);
         Window confirmWindowMock = createMock(Window.class);
-        UdmUsageDto udmUsageDto = buildUdmUsageDto("afdf6040-d130-4ae4-a6b1-a9a807873a1e", USER);
+        UdmUsageDto udmUsageDto = buildUdmUsageDto("27bdc476-9cd8-44e0-ac50-597819f93f9a", USER);
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
         setSpecialistExpectations();
-        expect(RupContextUtils.getUserName()).andReturn(USER).once();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to unassign 1 selected usage(s)?"),
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.unassignUsages(Collections.singleton("afdf6040-d130-4ae4-a6b1-a9a807873a1e"));
+        controller.unassignUsages(Collections.singleton("27bdc476-9cd8-44e0-ac50-597819f93f9a"));
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully unassigned");
         expectLastCall().once();
@@ -261,12 +264,10 @@ public class UdmUsageWidgetTest {
     @SuppressWarnings("unchecked")
     public void testSelectUnassignMenuItemNotAllowed() {
         mockStatic(Windows.class);
-        mockStatic(RupContextUtils.class);
         Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto1 = buildUdmUsageDto("351ee998-1b0b-4f29-842f-2efb00cbead8", USER);
         UdmUsageDto udmUsageDto2 = buildUdmUsageDto("e2468b9e-f89c-480b-8f3c-c13ca1012cdb", "jjohn@copyright.com");
         setSpecialistExpectations();
-        expect(RupContextUtils.getUserName()).andReturn(USER).once();
         Windows.showNotificationWindow("Only usages that are assigned to you can be unassigned");
         expectLastCall().once();
         replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
@@ -291,12 +292,14 @@ public class UdmUsageWidgetTest {
         createMock(UdmEditUsageWindow.class);
         setSpecialistExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("afdf6040-d130-4ae4-a6b1-a9a807873a1e");
+        udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
+        udmUsageDto.setAssignee(USER);
         UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
         expectNew(UdmEditUsageWindow.class, controller, udmUsageDto).andReturn(mockWindow);
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -304,7 +307,30 @@ public class UdmUsageWidgetTest {
         grid.select(udmUsageDto);
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testEditButtonClickListenerInvalidAssignee() {
+        mockStatic(Windows.class);
+        createMock(UdmEditUsageWindow.class);
+        setSpecialistExpectations();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
+        Windows.showNotificationWindow("Selected UDM usage cannot be edited. Please assign it to yourself first");
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto);
+        grid.select(udmUsageDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
     }
 
     @Test
