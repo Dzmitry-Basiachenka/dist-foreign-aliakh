@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectNew;
@@ -35,7 +36,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -110,15 +110,9 @@ public class UdmUsageWidgetTest {
 
     @Test
     public void testWidgetStructureForSpecialist() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setSpecialistExpectations();
         replay(controller, ForeignSecurityUtils.class, streamSource);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -136,15 +130,9 @@ public class UdmUsageWidgetTest {
 
     @Test
     public void testWidgetStructureForManager() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(true).times(2);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setManagerExpectations();
         replay(controller, ForeignSecurityUtils.class, streamSource);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -162,15 +150,9 @@ public class UdmUsageWidgetTest {
 
     @Test
     public void testWidgetStructureForViewOnly() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).times(2);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).times(2);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
-        expect(controller.getExportUdmUsagesStreamSourceViewRole()).andReturn(streamSource).once();
+        setViewOnlyExpectations();
         replay(controller, ForeignSecurityUtils.class, streamSource);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -188,15 +170,9 @@ public class UdmUsageWidgetTest {
 
     @Test
     public void testWidgetStructureForResearcher() {
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).times(2);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andReturn(false).times(2);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(false).times(2);
-        expect(controller.getExportUdmUsagesStreamSourceResearcherRole()).andReturn(streamSource).once();
+        setResearcherExpectations();
         replay(controller, ForeignSecurityUtils.class, streamSource);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         verify(controller, ForeignSecurityUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -220,10 +196,7 @@ public class UdmUsageWidgetTest {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("efdf6040-d130-4ae4-a6b1-a9a807873a1e");
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setSpecialistExpectations();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to assign 1 selected usage(s) to yourself?"),
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
@@ -233,17 +206,16 @@ public class UdmUsageWidgetTest {
         Windows.showNotificationWindow("1 usage(s) were successfully assigned to you");
         expectLastCall().once();
         replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
+        List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
+        assertEquals(2, CollectionUtils.size(menuItems));
+        MenuBar.MenuItem menuItemAssign = menuItems.get(0);
+        assertFalse(menuItemAssign.isEnabled());
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         grid.setItems(udmUsageDto);
         grid.select(udmUsageDto);
-        List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
-        assertEquals(2, CollectionUtils.size(menuItems));
-        MenuBar.MenuItem menuItemAssign = menuItems.get(0);
+        assertTrue(menuItemAssign.isEnabled());
         menuItemAssign.getCommand().menuSelected(menuItemAssign);
         windowListenerCapture.getValue().onActionConfirmed();
         verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class);
@@ -257,10 +229,7 @@ public class UdmUsageWidgetTest {
         Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto = buildUdmUsageDto("afdf6040-d130-4ae4-a6b1-a9a807873a1e", USER);
         Capture<ConfirmDialogWindow.IListener> windowListenerCapture = newCapture();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setSpecialistExpectations();
         expect(RupContextUtils.getUserName()).andReturn(USER).once();
         expect(Windows.showConfirmDialog(eq("Are you sure that you want to unassign 1 selected usage(s)?"),
             capture(windowListenerCapture)))
@@ -272,17 +241,16 @@ public class UdmUsageWidgetTest {
         expectLastCall().once();
         replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
             RupContextUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
+        List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
+        assertEquals(2, CollectionUtils.size(menuItems));
+        MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
+        assertFalse(menuItemUnassign.isEnabled());
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         grid.setItems(udmUsageDto);
         grid.select(udmUsageDto);
-        List<MenuBar.MenuItem> menuItems = getMenuBarItems(1);
-        assertEquals(2, CollectionUtils.size(menuItems));
-        MenuBar.MenuItem menuItemUnassign = menuItems.get(1);
+        assertTrue(menuItemUnassign.isEnabled());
         menuItemUnassign.getCommand().menuSelected(menuItemUnassign);
         windowListenerCapture.getValue().onActionConfirmed();
         verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
@@ -297,19 +265,13 @@ public class UdmUsageWidgetTest {
         Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto1 = buildUdmUsageDto("351ee998-1b0b-4f29-842f-2efb00cbead8", USER);
         UdmUsageDto udmUsageDto2 = buildUdmUsageDto("e2468b9e-f89c-480b-8f3c-c13ca1012cdb", "jjohn@copyright.com");
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setSpecialistExpectations();
         expect(RupContextUtils.getUserName()).andReturn(USER).once();
         Windows.showNotificationWindow("Only usages that are assigned to you can be unassigned");
         expectLastCall().once();
         replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
             RupContextUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         grid.setItems(udmUsageDto1, udmUsageDto2);
@@ -327,10 +289,7 @@ public class UdmUsageWidgetTest {
     public void testEditButtonClickListener() throws Exception {
         mockStatic(Windows.class);
         createMock(UdmEditUsageWindow.class);
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(false);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(true);
-        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+        setSpecialistExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("afdf6040-d130-4ae4-a6b1-a9a807873a1e");
         UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
@@ -338,10 +297,7 @@ public class UdmUsageWidgetTest {
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
-        usagesWidget = new UdmUsageWidget();
-        usagesWidget.setController(controller);
-        usagesWidget.init();
-        usagesWidget.initMediator().applyPermissions();
+        initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         grid.setItems(udmUsageDto);
@@ -349,6 +305,152 @@ public class UdmUsageWidgetTest {
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
         verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectSingleUsageSpecialist() {
+        setSpecialistExpectations();
+        testSelectionOfSingleUsage();
+    }
+
+    @Test
+    public void testSelectMultipleUsagesSpecialist() {
+        setSpecialistExpectations();
+        testSelectionOfMultipleUsages();
+    }
+
+    @Test
+    public void testSelectSingleUsageManager() {
+        setManagerExpectations();
+        testSelectionOfSingleUsage();
+    }
+
+    @Test
+    public void testSelectMultipleUsagesManager() {
+        setManagerExpectations();
+        testSelectionOfMultipleUsages();
+    }
+
+    @Test
+    public void testSelectSingleUsageResearcher() {
+        setResearcherExpectations();
+        testSelectionOfSingleUsage();
+    }
+
+    @Test
+    public void testSelectMultipleUsagesResearcher() {
+        setResearcherExpectations();
+        testSelectionOfMultipleUsages();
+    }
+
+    @Test
+    public void testSelectionIsNotAvailableForViewOnly() {
+        setViewOnlyExpectations();
+        replay(controller, streamSource, ForeignSecurityUtils.class);
+        initWidget();
+        verify(controller, streamSource, ForeignSecurityUtils.class);
+        Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
+        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
+        MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
+        MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
+        MenuBar.MenuItem assignItem = Whitebox.getInternalState(usagesWidget, "assignItem");
+        MenuBar.MenuItem unassignItem = Whitebox.getInternalState(usagesWidget, "unassignItem");
+        assertFalse(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
+        assertTrue(assignmentMenuBar.isEnabled());
+        assertTrue(udmBatchMenuBar.isEnabled());
+        assertFalse(editButton.isEnabled());
+        assertFalse(assignItem.isEnabled());
+        assertFalse(unassignItem.isEnabled());
+    }
+
+    private void testSelectionOfMultipleUsages() {
+        replay(controller, streamSource, ForeignSecurityUtils.class);
+        initWidget();
+        verify(controller, streamSource, ForeignSecurityUtils.class);
+        UdmUsageDto udmUsageDto1 =
+            buildUdmUsageDto("3ff90df9-4655-4bc5-838f-77a0e37db88d", "user@copyright.com");
+        UdmUsageDto udmUsageDto2 =
+            buildUdmUsageDto("dd035171-8942-44e3-9eb2-829f1a9c6f76", "user@copyright.com");
+        Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
+        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
+        MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
+        MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
+        MenuBar.MenuItem assignItem = Whitebox.getInternalState(usagesWidget, "assignItem");
+        MenuBar.MenuItem unassignItem = Whitebox.getInternalState(usagesWidget, "unassignItem");
+        assertTrue(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
+        assertTrue(assignmentMenuBar.isEnabled());
+        assertTrue(udmBatchMenuBar.isEnabled());
+        assertFalse(editButton.isEnabled());
+        assertFalse(assignItem.isEnabled());
+        assertFalse(unassignItem.isEnabled());
+        udmUsagesGrid.setItems(udmUsageDto1, udmUsageDto2);
+        udmUsagesGrid.select(udmUsageDto1);
+        udmUsagesGrid.select(udmUsageDto2);
+        assertTrue(assignmentMenuBar.isEnabled());
+        assertTrue(udmBatchMenuBar.isEnabled());
+        assertFalse(editButton.isEnabled());
+        assertTrue(assignItem.isEnabled());
+        assertTrue(unassignItem.isEnabled());
+    }
+
+    private void testSelectionOfSingleUsage() {
+        replay(controller, streamSource, ForeignSecurityUtils.class);
+        initWidget();
+        verify(controller, streamSource, ForeignSecurityUtils.class);
+        UdmUsageDto udmUsageDto =
+            buildUdmUsageDto("3ff90df9-4655-4bc5-838f-77a0e37db88d", "user_specialist@copyright.com");
+        Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
+        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
+        MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
+        MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
+        MenuBar.MenuItem assignItem = Whitebox.getInternalState(usagesWidget, "assignItem");
+        MenuBar.MenuItem unassignItem = Whitebox.getInternalState(usagesWidget, "unassignItem");
+        assertTrue(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
+        assertTrue(assignmentMenuBar.isEnabled());
+        assertTrue(udmBatchMenuBar.isEnabled());
+        assertFalse(editButton.isEnabled());
+        assertFalse(assignItem.isEnabled());
+        assertFalse(unassignItem.isEnabled());
+        udmUsagesGrid.setItems(udmUsageDto);
+        udmUsagesGrid.select(udmUsageDto);
+        assertTrue(assignmentMenuBar.isEnabled());
+        assertTrue(udmBatchMenuBar.isEnabled());
+        assertTrue(editButton.isEnabled());
+        assertTrue(assignItem.isEnabled());
+        assertTrue(unassignItem.isEnabled());
+    }
+
+    private void initWidget() {
+        usagesWidget = new UdmUsageWidget();
+        usagesWidget.setController(controller);
+        usagesWidget.init();
+        usagesWidget.initMediator().applyPermissions();
+    }
+
+    private void setSpecialistExpectations() {
+        setPermissionsExpectations(true, false, false);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+    }
+
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true, false);
+        expect(controller.getExportUdmUsagesStreamSourceSpecialistManagerRoles()).andReturn(streamSource).once();
+    }
+
+    private void setResearcherExpectations() {
+        setPermissionsExpectations(false, false, true);
+        expect(controller.getExportUdmUsagesStreamSourceResearcherRole()).andReturn(streamSource).once();
+    }
+
+    private void setViewOnlyExpectations() {
+        setPermissionsExpectations(false, false, false);
+        expect(controller.getExportUdmUsagesStreamSourceViewRole()).andReturn(streamSource).once();
+    }
+
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher) {
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(isResearcher);
     }
 
     private void verifyToolbarLayout(Component component, String searchPlaceholder, boolean... buttonsVisibility) {

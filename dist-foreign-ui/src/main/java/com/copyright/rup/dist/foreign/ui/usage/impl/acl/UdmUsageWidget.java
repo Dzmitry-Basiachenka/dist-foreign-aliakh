@@ -31,7 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
-
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -54,6 +54,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
+    private static final int EXPECTED_SELECTED_SIZE = 1;
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
@@ -84,15 +85,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         UdmUsageMediator mediator = new UdmUsageMediator();
         mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
-        mediator.setUsageGrid(udmUsagesGrid);
-        mediator.setAssignItem(assignItem);
-        mediator.setUnassignItem(unassignItem);
         mediator.setEditButton(editButton);
         return mediator;
     }
 
     @Override
     public void refresh() {
+        udmUsagesGrid.deselectAll();
         dataProvider.refreshAll();
     }
 
@@ -175,7 +174,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.assign", usagesCount),
                     () -> {
                         controller.assignUsages(getSelectedUsageIds());
-                        udmUsagesGrid.deselectAll();
                         refresh();
                         Windows.showNotificationWindow(
                             ForeignUi.getMessage("message.notification.assignment_completed", usagesCount));
@@ -192,7 +190,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
                         () -> {
                             controller.unassignUsages(getSelectedUsageIds());
-                            udmUsagesGrid.deselectAll();
                             refresh();
                             Windows.showNotificationWindow(
                                 ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
@@ -221,6 +218,18 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
         udmUsagesGrid.setSizeFull();
+        if (hasSpecialistPermission || hasManagerPermission || hasResearcherPermission) {
+            udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            udmUsagesGrid.addSelectionListener(event -> {
+                Set<UdmUsageDto> usageDtos = event.getAllSelectedItems();
+                boolean isAssignmentEnabled = CollectionUtils.isNotEmpty(usageDtos);
+                assignItem.setEnabled(isAssignmentEnabled);
+                unassignItem.setEnabled(isAssignmentEnabled);
+                editButton.setEnabled(EXPECTED_SELECTED_SIZE == usageDtos.size());
+            });
+        } else {
+            udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        }
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
 
