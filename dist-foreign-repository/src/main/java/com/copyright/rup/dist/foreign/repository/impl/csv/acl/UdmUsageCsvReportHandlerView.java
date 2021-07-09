@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Writes UDM usages into an {@link OutputStream} for Specialist and Manager roles.
+ * Writes UDM usages into an {@link OutputStream} for View role.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -23,22 +23,22 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public class UdmUsageCsvReportHandlerSpecialistManagerRoles extends BaseCsvReportHandler<UdmUsageDto> {
+public class UdmUsageCsvReportHandlerView extends BaseCsvReportHandler<UdmUsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID",
         "Detail Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst", "Reported Title", "System Title",
         "Reported Standard Number", "Standard Number", "Reported Pub Type", "Publication Format", "Article",
         "Language", "Action Reason", "Comment", "Research URL", "Det LC ID", "Det LC Name", "Company ID",
-        "Company Name", "Survey Respondent", "IP Address", "Survey Country", "Channel", "Usage Date",
-        "Survey Start Date", "Survey End Date", "Annual Multiplier", "Statistical Multiplier", "Reported TOU",
-        "Quantity", "Annualized Copies", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
+        "Company Name", "Survey Respondent", "Survey Country", "Channel", "Usage Date", "Survey Start Date",
+        "Survey End Date", "Annual Multiplier", "Statistical Multiplier", "Reported TOU", "Quantity",
+        "Annualized Copies", "Ineligible Reason", "Load Date", "Updated By", "Updated Date");
 
     /**
      * Constructor.
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public UdmUsageCsvReportHandlerSpecialistManagerRoles(OutputStream outputStream) {
+    public UdmUsageCsvReportHandlerView(OutputStream outputStream) {
         super(outputStream);
     }
 
@@ -72,7 +72,6 @@ public class UdmUsageCsvReportHandlerSpecialistManagerRoles extends BaseCsvRepor
         beanProperties.add(getBeanPropertyAsString(bean.getCompanyId()));
         beanProperties.add(bean.getCompanyName());
         beanProperties.add(bean.getSurveyRespondent());
-        beanProperties.add(bean.getIpAddress());
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getChannel().name());
         beanProperties.add(getBeanLocalDate(bean.getUsageDate()));

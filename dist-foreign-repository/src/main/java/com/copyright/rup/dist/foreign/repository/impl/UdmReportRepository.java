@@ -5,9 +5,9 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
-import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcherRole;
-import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManagerRoles;
-import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerViewRole;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 
 import org.springframework.stereotype.Repository;
 
@@ -33,21 +33,20 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
     private static final String PAGEABLE_KEY = "pageable";
 
     @Override
-    public void writeUdmUsageCsvReportSpecialistManagerRoles(UdmUsageFilter filter,
-                                                             PipedOutputStream pipedOutputStream) {
+    public void writeUdmUsageCsvReportSpecialistManager(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
         writeUdmUsageCsvReport(filter,
-            new UdmUsageCsvReportHandlerSpecialistManagerRoles(Objects.requireNonNull(pipedOutputStream)));
+            new UdmUsageCsvReportHandlerSpecialistManager(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
-    public void writeUdmUsageCsvReportResearcherRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
+    public void writeUdmUsageCsvReportResearcher(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
         writeUdmUsageCsvReport(filter,
-            new UdmUsageCsvReportHandlerResearcherRole(Objects.requireNonNull(pipedOutputStream)));
+            new UdmUsageCsvReportHandlerResearcher(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
-    public void writeUdmUsageCsvReportViewRole(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
-        writeUdmUsageCsvReport(filter, new UdmUsageCsvReportHandlerViewRole(Objects.requireNonNull(pipedOutputStream)));
+    public void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
+        writeUdmUsageCsvReport(filter, new UdmUsageCsvReportHandlerView(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {

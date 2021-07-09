@@ -189,19 +189,19 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
-            pos -> udmReportService.writeUdmUsageCsvReportSpecialistManagerRoles(getFilter(), pos));
+            pos -> udmReportService.writeUdmUsageCsvReportSpecialistManager(getFilter(), pos));
     }
 
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceResearcherRole() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
-            pos -> udmReportService.writeUdmUsageCsvReportResearcherRole(getFilter(), pos));
+            pos -> udmReportService.writeUdmUsageCsvReportResearcher(getFilter(), pos));
     }
 
     @Override
     public IStreamSource getExportUdmUsagesStreamSourceViewRole() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
-            pos -> udmReportService.writeUdmUsageCsvReportViewRole(getFilter(), pos));
+            pos -> udmReportService.writeUdmUsageCsvReportView(getFilter(), pos));
     }
 
     @Override

@@ -37,35 +37,35 @@ public class UdmReportServiceTest {
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportSpecialistManagerRoles() {
+    public void testWriteUdmUsageCsvReportSpecialistManager() {
         UdmUsageFilter filter = createMock(UdmUsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        udmReportRepository.writeUdmUsageCsvReportSpecialistManagerRoles(filter, outputStream);
+        udmReportRepository.writeUdmUsageCsvReportSpecialistManager(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportService.writeUdmUsageCsvReportSpecialistManagerRoles(filter, outputStream);
+        udmReportService.writeUdmUsageCsvReportSpecialistManager(filter, outputStream);
         verify(udmReportRepository);
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportResearcherRole() {
+    public void testWriteUdmUsageCsvReportResearcher() {
         UdmUsageFilter filter = createMock(UdmUsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        udmReportRepository.writeUdmUsageCsvReportResearcherRole(filter, outputStream);
+        udmReportRepository.writeUdmUsageCsvReportResearcher(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportService.writeUdmUsageCsvReportResearcherRole(filter, outputStream);
+        udmReportService.writeUdmUsageCsvReportResearcher(filter, outputStream);
         verify(udmReportRepository);
     }
 
     @Test
-    public void testWriteUdmUsageCsvReportViewRole() {
+    public void testWriteUdmUsageCsvReportView() {
         UdmUsageFilter filter = createMock(UdmUsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        udmReportRepository.writeUdmUsageCsvReportViewRole(filter, outputStream);
+        udmReportRepository.writeUdmUsageCsvReportView(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportService.writeUdmUsageCsvReportViewRole(filter, outputStream);
+        udmReportService.writeUdmUsageCsvReportView(filter, outputStream);
         verify(udmReportRepository);
     }
 }
