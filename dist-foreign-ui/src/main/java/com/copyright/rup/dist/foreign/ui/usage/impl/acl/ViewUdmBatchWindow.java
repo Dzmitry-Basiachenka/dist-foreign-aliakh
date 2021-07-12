@@ -18,6 +18,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -79,7 +80,8 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
         grid = new Grid<>();
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setItems(controller.getUdmBatches());
-        grid.addSelectionListener(event -> deleteBatchButton.setEnabled(true));
+        grid.addSelectionListener(
+            event -> deleteBatchButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         grid.setSizeFull();
         addGridColumns();
         VaadinUtils.addComponentStyle(grid, "view-batch-grid");

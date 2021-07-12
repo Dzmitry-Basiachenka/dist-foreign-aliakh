@@ -4,7 +4,9 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -70,7 +72,7 @@ public class ViewUdmBatchWindowTest {
         controller = createMock(IUdmUsageController.class);
         udmBatchGrid = createMock(Grid.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
-        expect(controller.getUdmBatches()).andReturn(Collections.EMPTY_LIST);
+        expect(controller.getUdmBatches()).andReturn(Collections.singletonList(buildUdmBatch()));
         replay(controller, ForeignSecurityUtils.class);
         viewUdmBatchWindow = new ViewUdmBatchWindow(controller);
         Whitebox.setInternalState(viewUdmBatchWindow, "grid", udmBatchGrid);
@@ -127,6 +129,18 @@ public class ViewUdmBatchWindowTest {
         replay(controller, confirmWindowCapture, udmBatchGrid, Windows.class);
         listener.buttonClick(null);
         verify(controller, confirmWindowCapture, udmBatchGrid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDeleteButtonEnabled() {
+        VerticalLayout content = (VerticalLayout) viewUdmBatchWindow.getContent();
+        Grid<UdmBatch> grid = (Grid<UdmBatch>) content.getComponent(1);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
+        Button deleteButton = (Button) buttonsLayout.getComponent(0);
+        assertFalse(deleteButton.isEnabled());
+        grid.select(buildUdmBatch());
+        assertTrue(deleteButton.isEnabled());
     }
 
     @Test
