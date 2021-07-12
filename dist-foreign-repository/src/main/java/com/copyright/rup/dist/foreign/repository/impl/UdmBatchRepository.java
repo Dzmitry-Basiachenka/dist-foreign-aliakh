@@ -60,7 +60,7 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     }
 
     @Override
-    public void deleteUdmBatch(String udmBatchId) {
-        delete("IUdmBatchMapper.deleteUdmBatch", Objects.requireNonNull(udmBatchId));
+    public void deleteById(String udmBatchId) {
+        delete("IUdmBatchMapper.deleteById", Objects.requireNonNull(udmBatchId));
     }
 }

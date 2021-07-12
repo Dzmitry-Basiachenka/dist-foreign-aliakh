@@ -117,14 +117,14 @@ public class UdmBatchServiceTest {
     }
 
     @Test
-    public void testDeleteUsageBatch() {
+    public void testDeleteUdmBatch() {
         mockStatic(RupContextUtils.class);
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmUsageService.deleteUdmBatchDetails(udmBatch);
         expectLastCall().once();
-        udmBatchRepository.deleteUdmBatch(udmBatch.getId());
+        udmBatchRepository.deleteById(udmBatch.getId());
         expectLastCall().once();
         replay(udmUsageService, udmBatchRepository, RupContextUtils.class);
         udmBatchService.deleteUdmBatch(udmBatch);
