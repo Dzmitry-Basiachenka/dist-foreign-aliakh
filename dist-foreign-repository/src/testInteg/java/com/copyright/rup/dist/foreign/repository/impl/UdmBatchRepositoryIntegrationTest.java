@@ -98,11 +98,11 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteUsageBatch() {
+    public void testDeleteById() {
         String batchId = UDM_BATCH_UID_2;
         assertEquals(5, udmBatchRepository.findAll().size());
         udmUsageRepository.deleteByBatchId(batchId);
-        udmBatchRepository.deleteUdmBatch(batchId);
+        udmBatchRepository.deleteById(batchId);
         assertEquals(4, udmBatchRepository.findAll().size());
     }
 

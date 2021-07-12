@@ -59,7 +59,7 @@ public interface IUdmBatchRepository {
      *
      * @param udmBatchId batch identifier
      * @param statuses   intermediate statuses
-     * @return true if UDM batch status is completed, false - otherwise
+     * @return {@code true} - if UDM batch status is completed, {@code false} - otherwise
      */
     boolean isUdmBatchProcessingCompleted(String udmBatchId, Set<UsageStatusEnum> statuses);
 
@@ -68,5 +68,5 @@ public interface IUdmBatchRepository {
      *
      * @param udmBatchId id of the {@link UdmBatch} to be deleted
      */
-    void deleteUdmBatch(String udmBatchId);
+    void deleteById(String udmBatchId);
 }

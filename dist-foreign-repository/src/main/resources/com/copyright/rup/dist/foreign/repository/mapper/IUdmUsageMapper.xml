@@ -667,8 +667,8 @@
     </select>
 
     <delete id="deleteByBatchId" parameterType="string">
-        delete from ${schema}.df_udm_usage u
-        where u.df_udm_usage_batch_uid = #{udmBatchId}
+        delete from ${schema}.df_udm_usage
+        where df_udm_usage_batch_uid = #{udmBatchId}
     </delete>
 
     <update id="updateAssignee" parameterType="map">

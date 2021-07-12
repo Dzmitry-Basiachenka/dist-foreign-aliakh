@@ -78,7 +78,7 @@ public class UdmBatchService implements IUdmBatchService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete UDM batch. Started. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
         udmUsageService.deleteUdmBatchDetails(udmBatch);
-        udmBatchRepository.deleteUdmBatch(udmBatch.getId());
+        udmBatchRepository.deleteById(udmBatch.getId());
         LOGGER.info("Delete UDM batch. Finished. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
     }
 }

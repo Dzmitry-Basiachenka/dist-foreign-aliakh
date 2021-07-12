@@ -176,7 +176,7 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * Returns true if selected UDM batch is completed based on intermediate statuses.
      *
      * @param udmBatchId batch identifier
-     * @return true if UDM batch processing is completed, false - otherwise
+     * @return @code true} - if UDM batch processing is completed, {@code false} - otherwise
      */
     boolean isUdmBatchProcessingCompleted(String udmBatchId);
 
