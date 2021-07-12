@@ -21,6 +21,7 @@ import java.time.LocalDate;
 public class UdmUsageDto extends StoredEntity<String> {
 
     private Integer period;
+    private LocalDate periodEndDate;
     private UdmUsageOriginEnum usageOrigin;
     private String originalDetailId;
     private UsageStatusEnum status;
@@ -48,6 +49,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private LocalDate surveyEndDate;
     private Integer annualMultiplier;
     private BigDecimal statisticalMultiplier;
+    private String typeOfUse;
     private String reportedTypeOfUse;
     private Integer quantity;
     private BigDecimal annualizedCopies;
@@ -62,6 +64,14 @@ public class UdmUsageDto extends StoredEntity<String> {
 
     public void setPeriod(Integer period) {
         this.period = period;
+    }
+
+    public LocalDate getPeriodEndDate() {
+        return periodEndDate;
+    }
+
+    public void setPeriodEndDate(LocalDate periodEndDate) {
+        this.periodEndDate = periodEndDate;
     }
 
     public UdmUsageOriginEnum getUsageOrigin() {
@@ -198,6 +208,14 @@ public class UdmUsageDto extends StoredEntity<String> {
 
     public void setPubFormat(String pubFormat) {
         this.pubFormat = pubFormat;
+    }
+
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
     }
 
     public String getReportedTypeOfUse() {
@@ -348,6 +366,7 @@ public class UdmUsageDto extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(period, udmUsage.period)
+            .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageOrigin, udmUsage.usageOrigin)
             .append(channel, udmUsage.channel)
             .append(status, udmUsage.status)
@@ -365,6 +384,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(reportedPubType, udmUsage.reportedPubType)
             .append(language, udmUsage.language)
             .append(pubFormat, udmUsage.pubFormat)
+            .append(typeOfUse, udmUsage.typeOfUse)
             .append(reportedTypeOfUse, udmUsage.reportedTypeOfUse)
             .append(quantity, udmUsage.quantity)
             .append(surveyRespondent, udmUsage.surveyRespondent)
@@ -390,6 +410,7 @@ public class UdmUsageDto extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(period)
+            .append(periodEndDate)
             .append(usageOrigin)
             .append(channel)
             .append(status)
@@ -407,6 +428,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(reportedPubType)
             .append(language)
             .append(pubFormat)
+            .append(typeOfUse)
             .append(reportedTypeOfUse)
             .append(quantity)
             .append(surveyRespondent)
@@ -432,6 +454,7 @@ public class UdmUsageDto extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("period", period)
+            .append("periodEndDate", periodEndDate)
             .append("usageOrigin", usageOrigin)
             .append("channel", channel)
             .append("status", status)
@@ -450,6 +473,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("reportedPubType", reportedPubType)
             .append("language", language)
             .append("pubFormat", pubFormat)
+            .append("typeOfUse", typeOfUse)
             .append("reportedTypeOfUse", reportedTypeOfUse)
             .append("quantity", quantity)
             .append("surveyRespondent", surveyRespondent)
