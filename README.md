@@ -1,3 +1,18 @@
+14.1.1
+-
+* B-577779: FDA& UDM: View and Delete UDM Loaded Batches: fix disable delete button when use unselect  batch
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: apply annualized copies calculation after multipliers or quantity were changed on Edit window
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: apply permissions for Edit UDM usage button
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: apply validation for company ID field using verify button on Edit window
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: enable editing logic only for assigned for user UDM usages
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: implement logic to process NEW usages in PI after edit was applied
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: implement logic to store updated usage to database
+* B-66132 FDA & UDM: Export functionality for UDM: make changes based on comments in CR-DIST-FOREIGN-245
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: make changes based on comments in CR-DIST-FOREIGN-247
+* B-66422 FDA & UDM: Assign/Un-assign usages for research: make unassignment allowed only for usages that are assigned to current user
+* B-67328 Tech Debt: FDA: fix security vulnerability CVE-2021-22118
+* B-68188: FDA&UDM: Enable IP Address visible for Specialist: exclude ip adress column visible for view only role
+
 14.1.0
 -
 * B*57779: FDA& UDM: View and Delete UDM Loaded Batches: implement query to delete UDM usaga batch details
