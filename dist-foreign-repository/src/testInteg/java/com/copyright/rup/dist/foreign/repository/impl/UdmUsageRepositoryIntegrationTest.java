@@ -575,60 +575,6 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindActionReasons() {
-        List<UdmActionReason> expectedActionReasons = Arrays.asList(
-            new UdmActionReason("e27a95b4-2a3a-456c-a39e-5bac4ce2503e",
-                "Accepting reported work based on user location"),
-            new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
-            new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"),
-            new UdmActionReason("dad6911c-3695-419c-96c0-adf8792699e3", "Assigned a Wr Wrk Inst"),
-            new UdmActionReason("8842c02a-a867-42b0-9533-681122e7478f", "Assigned Rights"),
-            new UdmActionReason("04b99a98-56d3-4f59-bfcb-2c72d18ebbbc", "Created new work"),
-            new UdmActionReason("be6ece83-4739-479d-b468-5dcea822e1f8", "Incorrect/inappropriate Det Lic Class"),
-            new UdmActionReason("d7258aa1-801c-408f-8fff-685e5519a8db", "Metadata does not match Wr Wrk Inst"),
-            new UdmActionReason("5c4e5450-f566-4b88-bf40-cfc9cec7e69b", "Misc - See Comments"),
-            new UdmActionReason("4b6b3058-7608-433a-8041-3e5ad2601735", "Multiple works found"),
-            new UdmActionReason("afbe0339-c246-44a9-94ef-499a089aa939",
-                "Replaced deleted work ID with surviving work ID"),
-            new UdmActionReason("89072d4d-ff4c-485b-995f-02f6dea61d61", "RH cannot be determined"),
-            new UdmActionReason("bf3e9fdb-0573-4c4a-8194-741d433c6b56", "RH not participating"),
-            new UdmActionReason("f6ca01a9-b658-4258-86e6-d5ccd21fbe2c", "RH or work type on RRO’s Excluded list"),
-            new UdmActionReason("bcb471ca-47c3-42a9-a4bc-18dc40e22c0f", "Survey length incorrectly documented"),
-            new UdmActionReason("dd47a747-d6f6-4b53-af85-a4eb456d9b2e", "Survey location suggests wrong work chosen"),
-            new UdmActionReason("61c3e557-6f26-491c-879c-b03d91927f73", "Title cannot be determined"),
-            new UdmActionReason("2993db0e-8ac9-46af-a4b0-10deefe4af7d", "Unidentifiable publisher"),
-            new UdmActionReason("401560c0-4e38-4515-b515-d32c6d3dc4f7", "Used existing format"),
-            new UdmActionReason("ccbd22af-32bf-4162-8145-d49eae14c800", "User is not reporting a Mkt Rsch Rpt")
-        );
-        List<UdmActionReason> actualActionReasons = udmUsageRepository.findActionReasons();
-        assertEquals(expectedActionReasons.size(), actualActionReasons.size());
-        IntStream.range(0, expectedActionReasons.size())
-            .forEach(index -> assertEquals(expectedActionReasons.get(index), actualActionReasons.get(index)));
-    }
-
-    @Test
-    public void testFindIneligibleReasons() {
-        List<UdmIneligibleReason> expectedIneligibleReasons = Arrays.asList(
-            new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
-            new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"),
-            new UdmIneligibleReason("b040d59b-72c7-42fc-99d2-d406d5ea60f3", "Multiple works found"),
-            new UdmIneligibleReason("18fbee56-2f5c-450a-999e-54903c0bfb23", "No Reported Use"),
-            new UdmIneligibleReason("fd2f2dea-4018-48ee-a630-b8dfedbe857b", "Public Domain"),
-            new UdmIneligibleReason("53f8661b-bf27-47a4-b30c-7666c0df02c5", "RH cannot be determined"),
-            new UdmIneligibleReason("9a3adbf4-9fdb-41ba-9701-97de34a120c4", "RH Denied/Refused/CRD/Lost"),
-            new UdmIneligibleReason("b901cf15-e836-4b08-9732-191ee4bba14a", "Systematic Copying"),
-            new UdmIneligibleReason("659f48e1-ef67-4d12-b568-436efdf4ec70", "Title cannot be determined"),
-            new UdmIneligibleReason("cf1b711d-8c57-407c-b178-a8a2411c87e5", "Unauthorized use"),
-            new UdmIneligibleReason("e837be16-43ad-4241-b0df-44ecceae2b46", "User-owned content"),
-            new UdmIneligibleReason("a4df53dd-26d9-4a0e-956c-e95543707674", "Work not found")
-        );
-        List<UdmIneligibleReason> actualIneligibleReasons = udmUsageRepository.findIneligibleReasons();
-        assertEquals(expectedIneligibleReasons.size(), actualIneligibleReasons.size());
-        IntStream.range(0, expectedIneligibleReasons.size())
-            .forEach(index -> assertEquals(expectedIneligibleReasons.get(index), actualIneligibleReasons.get(index)));
-    }
-
-    @Test
     public void testDeleteByBatchId() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
@@ -779,7 +725,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
         assertEquals(expectedUsage.getVersion(), actualUsage.getVersion());
-        assertNull(actualUsage.getIneligibleReason());
+        assertNull(actualUsage.getIneligibleReasonId());
     }
 
     private UdmUsage buildUdmUsage() {

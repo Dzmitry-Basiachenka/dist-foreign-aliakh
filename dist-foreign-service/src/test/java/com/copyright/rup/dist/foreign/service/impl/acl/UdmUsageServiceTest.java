@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmIneligibleReasonEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
@@ -31,6 +30,8 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
+import com.copyright.rup.dist.foreign.repository.api.IUdmActionReasonRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUdmIneligibleReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
@@ -80,9 +81,12 @@ public class UdmUsageServiceTest {
     private static final int ANNUAL_MULTIPLIER = 25;
     private static final BigDecimal STATISTICAL_MULTIPLIER = BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal(175).setScale(5, BigDecimal.ROUND_HALF_UP);
+    private static final String NO_REPORTED_USE_UID = "18fbee56-2f5c-450a-999e-54903c0bfb23";
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
+    private IUdmActionReasonRepository udmActionReasonRepository;
+    private IUdmIneligibleReasonRepository udmIneligibleReasonRepository;
     private UdmAnnualMultiplierCalculator udmAnnualMultiplierCalculator;
     private UdmAnnualizedCopiesCalculator udmAnnualizedCopiesCalculator;
     private IUdmTypeOfUseService udmTypeOfUseService;
@@ -93,6 +97,8 @@ public class UdmUsageServiceTest {
     @Before
     public void setUp() {
         udmUsageRepository = createMock(IUdmUsageRepository.class);
+        udmActionReasonRepository = createMock(IUdmActionReasonRepository.class);
+        udmIneligibleReasonRepository = createMock(IUdmIneligibleReasonRepository.class);
         udmAnnualMultiplierCalculator = createMock(UdmAnnualMultiplierCalculator.class);
         udmAnnualizedCopiesCalculator = createMock(UdmAnnualizedCopiesCalculator.class);
         udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
@@ -100,6 +106,8 @@ public class UdmUsageServiceTest {
         udmUsageAuditService = createMock(IUdmUsageAuditService.class);
         chainExecutor = createMock(IChainExecutor.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
+        Whitebox.setInternalState(udmUsageService, udmActionReasonRepository);
+        Whitebox.setInternalState(udmUsageService, udmIneligibleReasonRepository);
         Whitebox.setInternalState(udmUsageService, udmAnnualMultiplierCalculator);
         Whitebox.setInternalState(udmUsageService, udmAnnualizedCopiesCalculator);
         Whitebox.setInternalState(udmUsageService, chainExecutor);
@@ -115,8 +123,7 @@ public class UdmUsageServiceTest {
         UdmUsage udmUsage1 = buildUdmUsage(UDM_USAGE_UID_1, UDM_USAGE_ORIGIN_UID_1);
         UdmUsage udmUsage2 = buildUdmUsage(UDM_USAGE_UID_2, UDM_USAGE_ORIGIN_UID_2);
         udmUsage2.setStatus(UsageStatusEnum.INELIGIBLE);
-        udmUsage2.setIneligibleReason(new UdmIneligibleReason(UdmIneligibleReasonEnum.NO_REPORTED_USE.getId(),
-            "No Reported Use"));
+        udmUsage2.setIneligibleReasonId(NO_REPORTED_USE_UID);
         udmUsage2.setReportedTypeOfUse(null);
         udmUsage2.setReportedTitle("None");
         List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
@@ -142,7 +149,7 @@ public class UdmUsageServiceTest {
         udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.LOADED,
             "Uploaded in 'UDM Batch 2021 June' Batch");
         expectLastCall().once();
-        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.INELIGIBLE, "No Reported Use");
+        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.INELIGIBLE, "No reported use");
         expectLastCall().once();
         replay(udmUsageRepository, udmTypeOfUseService, udmAnnualMultiplierCalculator, udmAnnualizedCopiesCalculator,
             telesalesService, udmUsageAuditService, RupContextUtils.class);
@@ -321,25 +328,25 @@ public class UdmUsageServiceTest {
     }
 
     @Test
-    public void testGetActionReasons() {
+    public void testGetAllActionReasons() {
         List<UdmActionReason> actionReasons = Arrays.asList(
             new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content"),
             new UdmActionReason("97fd8093-7f36-4a09-99f1-1bfe36a5c3f4", "Arbitrary RFA search result order"));
-        expect(udmUsageRepository.findActionReasons()).andReturn(actionReasons).once();
-        replay(udmUsageRepository);
-        assertEquals(actionReasons, udmUsageService.getActionReasons());
-        verify(udmUsageRepository);
+        expect(udmActionReasonRepository.findAll()).andReturn(actionReasons).once();
+        replay(udmActionReasonRepository);
+        assertEquals(actionReasons, udmUsageService.getAllActionReasons());
+        verify(udmActionReasonRepository);
     }
 
     @Test
-    public void testGetIneligibleReasons() {
+    public void testGetAllIneligibleReasons() {
         List<UdmIneligibleReason> ineligibleReasons = Arrays.asList(
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"),
             new UdmIneligibleReason("0d5a129c-0f8f-4e48-98b2-8b980cdb9333", "Misc - See Comments"));
-        expect(udmUsageRepository.findIneligibleReasons()).andReturn(ineligibleReasons).once();
-        replay(udmUsageRepository);
-        assertEquals(ineligibleReasons, udmUsageService.getIneligibleReasons());
-        verify(udmUsageRepository);
+        expect(udmIneligibleReasonRepository.findAll()).andReturn(ineligibleReasons).once();
+        replay(udmIneligibleReasonRepository);
+        assertEquals(ineligibleReasons, udmUsageService.getAllIneligibleReasons());
+        verify(udmIneligibleReasonRepository);
     }
 
     @Test

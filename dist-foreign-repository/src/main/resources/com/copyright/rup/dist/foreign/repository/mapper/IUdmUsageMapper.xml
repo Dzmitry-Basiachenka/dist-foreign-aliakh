@@ -35,10 +35,8 @@
         <result property="reportedTypeOfUse" column="reported_type_of_use"/>
         <result property="quantity" column="quantity"/>
         <result property="annualizedCopies" column="annualized_copies"/>
-        <result property="actionReason.id" column="df_udm_action_reason_uid"/>
-        <result property="actionReason.text" column="action_reason"/>
-        <result property="ineligibleReason.id" column="df_udm_ineligible_reason_uid"/>
-        <result property="ineligibleReason.text" column="ineligible_reason"/>
+        <result property="actionReasonId" column="df_udm_action_reason_uid"/>
+        <result property="ineligibleReasonId" column="df_udm_ineligible_reason_uid"/>
     </resultMap>
 
     <resultMap id="udmUsageDtoResultMap" type="UdmUsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -80,19 +78,9 @@
         <result property="quantity" column="quantity"/>
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="actionReason.id" column="df_udm_action_reason_uid"/>
-        <result property="actionReason.text" column="action_reason"/>
+        <result property="actionReason.reason" column="action_reason"/>
         <result property="ineligibleReason.id" column="df_udm_ineligible_reason_uid"/>
-        <result property="ineligibleReason.text" column="ineligible_reason"/>
-    </resultMap>
-
-    <resultMap id="udmActionReasonResultMap" type="UdmActionReason" extends="StoredEntityMapper.storedEntityResult">
-        <result property="id" column="df_udm_action_reason_uid"/>
-        <result property="text" column="action_reason"/>
-    </resultMap>
-
-    <resultMap id="udmIneligibleReasonResultMap" type="UdmIneligibleReason" extends="StoredEntityMapper.storedEntityResult">
-        <result property="id" column="df_udm_ineligible_reason_uid"/>
-        <result property="text" column="ineligible_reason"/>
+        <result property="ineligibleReason.reason" column="ineligible_reason"/>
     </resultMap>
 
     <sql id="udmUsageFilter">
@@ -369,8 +357,8 @@
             #{typeOfUse},
             #{reportedTypeOfUse},
             #{quantity},
-            #{actionReason.id},
-            #{ineligibleReason.id},
+            #{actionReasonId},
+            #{ineligibleReasonId},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -641,30 +629,6 @@
             <include refid="StoredEntityMapper.update"/>
         where df_udm_usage_uid = #{id}
     </update>
-
-    <select id="findActionReasons" resultMap="udmActionReasonResultMap">
-        select
-            df_udm_action_reason_uid,
-            action_reason
-        from ${schema}.df_udm_action_reason
-        order by action_reason
-    </select>
-
-    <select id="findIneligibleReasons" resultMap="udmIneligibleReasonResultMap">
-        select
-            df_udm_ineligible_reason_uid,
-            ineligible_reason
-        from ${schema}.df_udm_ineligible_reason
-        order by ineligible_reason
-    </select>
-
-    <select id="findIneligibleReasonById" parameterType="string" resultMap="udmIneligibleReasonResultMap">
-        select
-            df_udm_ineligible_reason_uid,
-            ineligible_reason
-        from ${schema}.df_udm_ineligible_reason
-        where df_udm_ineligible_reason_uid = #{id}
-    </select>
 
     <delete id="deleteByBatchId" parameterType="string">
         delete from ${schema}.df_udm_usage

@@ -113,26 +113,18 @@ public interface IUdmUsageService {
     List<String> getPublicationFormats();
 
     /**
-     * Gets list of {@link UdmActionReason}.
+     * Gets list of {@link UdmActionReason}s.
      *
-     * @return list of {@link UdmActionReason}
+     * @return list of {@link UdmActionReason}s
      */
-    List<UdmActionReason> getActionReasons();
+    List<UdmActionReason> getAllActionReasons();
 
     /**
-     * Gets list of {@link UdmIneligibleReason}.
+     * Gets list of {@link UdmIneligibleReason}s.
      *
-     * @return list of {@link UdmIneligibleReason}
+     * @return list of {@link UdmIneligibleReason}s
      */
-    List<UdmIneligibleReason> getIneligibleReasons();
-
-    /**
-     * Gets {@link UdmIneligibleReason} by id.
-     *
-     * @param id ineligible reason id
-     * @return instance of {@link UdmIneligibleReason}
-     */
-    UdmIneligibleReason getIneligibleReasonById(String id);
+    List<UdmIneligibleReason> getAllIneligibleReasons();
 
     /**
      * Deletes all {@link UdmUsage}s associated with the given {@link UdmBatch}.

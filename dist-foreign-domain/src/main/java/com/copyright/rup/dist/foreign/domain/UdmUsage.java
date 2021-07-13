@@ -44,8 +44,8 @@ public class UdmUsage extends StoredEntity<String> {
     private String ipAddress;
     private LocalDate surveyStartDate;
     private LocalDate surveyEndDate;
-    private UdmActionReason actionReason;
-    private UdmIneligibleReason ineligibleReason;
+    private String actionReasonId;
+    private String ineligibleReasonId;
     private Long companyId;
     private String companyName;
     private Integer detailLicenseeClassId;
@@ -247,20 +247,20 @@ public class UdmUsage extends StoredEntity<String> {
         this.surveyEndDate = surveyEndDate;
     }
 
-    public UdmActionReason getActionReason() {
-        return actionReason;
+    public String getActionReasonId() {
+        return actionReasonId;
     }
 
-    public void setActionReason(UdmActionReason actionReason) {
-        this.actionReason = actionReason;
+    public void setActionReasonId(String actionReasonId) {
+        this.actionReasonId = actionReasonId;
     }
 
-    public UdmIneligibleReason getIneligibleReason() {
-        return ineligibleReason;
+    public String getIneligibleReasonId() {
+        return ineligibleReasonId;
     }
 
-    public void setIneligibleReason(UdmIneligibleReason ineligibleReason) {
-        this.ineligibleReason = ineligibleReason;
+    public void setIneligibleReasonId(String ineligibleReasonId) {
+        this.ineligibleReasonId = ineligibleReasonId;
     }
 
     public Integer getDetailLicenseeClassId() {
@@ -354,8 +354,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append(ipAddress, udmUsage.ipAddress)
             .append(surveyStartDate, udmUsage.surveyStartDate)
             .append(surveyEndDate, udmUsage.surveyEndDate)
-            .append(actionReason, udmUsage.actionReason)
-            .append(ineligibleReason, udmUsage.ineligibleReason)
+            .append(actionReasonId, udmUsage.actionReasonId)
+            .append(ineligibleReasonId, udmUsage.ineligibleReasonId)
             .append(detailLicenseeClassId, udmUsage.detailLicenseeClassId)
             .append(detailLicenseeClassName, udmUsage.detailLicenseeClassName)
             .append(companyName, udmUsage.companyName)
@@ -394,8 +394,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append(ipAddress)
             .append(surveyStartDate)
             .append(surveyEndDate)
-            .append(actionReason)
-            .append(ineligibleReason)
+            .append(actionReasonId)
+            .append(ineligibleReasonId)
             .append(detailLicenseeClassId)
             .append(detailLicenseeClassName)
             .append(companyName)
@@ -435,8 +435,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append("ipAddress", ipAddress)
             .append("surveyStartDate", surveyStartDate)
             .append("surveyEndDate", surveyEndDate)
-            .append("actionReason", actionReason)
-            .append("ineligibleReason", ineligibleReason)
+            .append("actionReasonId", actionReasonId)
+            .append("ineligibleReasonId", ineligibleReasonId)
             .append("detailLicenseeClassId", detailLicenseeClassId)
             .append("detailLicenseeClassName", detailLicenseeClassName)
             .append("companyName", companyName)

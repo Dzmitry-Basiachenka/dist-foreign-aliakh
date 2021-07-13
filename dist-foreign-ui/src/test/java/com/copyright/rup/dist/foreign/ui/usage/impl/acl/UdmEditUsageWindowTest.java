@@ -115,11 +115,11 @@ public class UdmEditUsageWindowTest {
     public void setUp() {
         buildUdmUsageDto();
         controller = createMock(IUdmUsageController.class);
-        expect(controller.getActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
+        expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
         LICENSEE_CLASS.setId(DET_LC_ID);
         LICENSEE_CLASS.setDescription(DET_LC_NAME);
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     @Test

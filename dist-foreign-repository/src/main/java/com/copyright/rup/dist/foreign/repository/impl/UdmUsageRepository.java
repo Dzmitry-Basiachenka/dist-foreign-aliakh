@@ -4,8 +4,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -116,21 +114,6 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
                 parameters.put("usageIds", partition);
                 update("IUdmUsageMapper.updateStatusByIds", parameters);
             });
-    }
-
-    @Override
-    public List<UdmActionReason> findActionReasons() {
-        return selectList("IUdmUsageMapper.findActionReasons");
-    }
-
-    @Override
-    public List<UdmIneligibleReason> findIneligibleReasons() {
-        return selectList("IUdmUsageMapper.findIneligibleReasons");
-    }
-
-    @Override
-    public UdmIneligibleReason findIneligibleReasonById(String id) {
-        return selectOne("IUdmUsageMapper.findIneligibleReasonById", Objects.requireNonNull(id));
     }
 
     @Override

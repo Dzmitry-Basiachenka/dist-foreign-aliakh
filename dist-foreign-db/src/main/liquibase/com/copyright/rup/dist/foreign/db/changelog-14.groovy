@@ -295,4 +295,16 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-07-09-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: modify column size of df_udm_action_reason_uid, df_udm_ineligible_reason_uid columns in df_udm_usage table")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_action_reason_uid', newDataType: 'VARCHAR(255)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_ineligible_reason_uid', newDataType: 'VARCHAR(255)')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_action_reason_uid', newDataType: 'VARCHAR(256)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_ineligible_reason_uid', newDataType: 'VARCHAR(256)')
+        }
+    }
 }

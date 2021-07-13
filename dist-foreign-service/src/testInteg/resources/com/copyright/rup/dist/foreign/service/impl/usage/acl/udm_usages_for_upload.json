@@ -22,10 +22,7 @@
     "surveyCountry": "United States",
     "ipAddress": "24.12.119.203",
     "surveyStartDate": "2018-06-15",
-    "ineligibleReason": {
-      "id": "18fbee56-2f5c-450a-999e-54903c0bfb23",
-      "text": "No Reported Use"
-    },
+    "ineligibleReasonId": "18fbee56-2f5c-450a-999e-54903c0bfb23",
     "annualMultiplier": 1,
     "statisticalMultiplier": 1.00000,
     "surveyEndDate": "2020-06-15",

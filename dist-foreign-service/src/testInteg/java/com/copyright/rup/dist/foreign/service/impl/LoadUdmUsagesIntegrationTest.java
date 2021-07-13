@@ -144,7 +144,7 @@ public class LoadUdmUsagesIntegrationTest {
         assertEquals(expectedUsage.getSurveyEndDate(), actualUsage.getSurveyEndDate());
         assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
         assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
-        assertEquals(expectedUsage.getIneligibleReason(), actualUsage.getIneligibleReason());
+        assertEquals(expectedUsage.getIneligibleReasonId(), actualUsage.getIneligibleReasonId());
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
         assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
         assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
@@ -161,7 +161,7 @@ public class LoadUdmUsagesIntegrationTest {
             .collect(Collectors.toMap(UdmUsage::getOriginalDetailId, UdmUsage::getId));
         String udmUsageId1 = originalDetailIdsToIds.get("OGN674GHHSB001");
         assertUdmAudit(udmUsageId1, buildUsageAuditItems(udmUsageId1, ImmutableMap.of(
-            UsageActionTypeEnum.INELIGIBLE, "No Reported Use",
+            UsageActionTypeEnum.INELIGIBLE, "No reported use",
             UsageActionTypeEnum.LOADED, LOADED_REASON)));
         String udmUsageId2 = originalDetailIdsToIds.get("OGN674GHHSB002");
         assertUdmAudit(udmUsageId2, buildUsageAuditItems(udmUsageId2, ImmutableMap.of(

@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -109,28 +107,6 @@ public interface IUdmUsageRepository {
      * @param status      instance of {@link UsageStatusEnum}
      */
     void updateStatusByIds(Set<String> udmUsageIds, UsageStatusEnum status);
-
-    /**
-     * Finds list of {@link UdmActionReason}.
-     *
-     * @return list of {@link UdmActionReason}
-     */
-    List<UdmActionReason> findActionReasons();
-
-    /**
-     * Finds list of {@link UdmIneligibleReason}.
-     *
-     * @return list of {@link UdmIneligibleReason}
-     */
-    List<UdmIneligibleReason> findIneligibleReasons();
-
-    /**
-     * Finds {@link UdmIneligibleReason} by id.
-     *
-     * @param id ineligible reason id
-     * @return instance of {@link UdmIneligibleReason}
-     */
-    UdmIneligibleReason findIneligibleReasonById(String id);
 
     /**
      * Deletes all {@link UdmUsage}s from the batch with given id.
