@@ -96,6 +96,12 @@
         <constructor-arg value="$RUP{dist.foreign.rest.crm.ttl.days}"/>
     </bean>
 
+    <bean id="dist.common.integration.rest.prmCountryService"
+          class="com.copyright.rup.dist.common.integration.rest.prm.PrmCountryCacheService">
+        <property name="prmCountryService" ref="prmCountryService"/>
+        <property name="expirationTime" value="$RUP{dist.foreign.rest.prm.ttl.seconds}"/>
+    </bean>
+
     <util:list id="prmPreferenceProcessors"
                value-type="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessor">
         <bean class="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessorBoolean">
