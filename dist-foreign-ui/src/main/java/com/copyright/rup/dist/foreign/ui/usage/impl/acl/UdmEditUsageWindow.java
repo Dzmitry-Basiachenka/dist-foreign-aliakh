@@ -123,21 +123,22 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName),
             buildWrWrkInstLayout(),
             buildEditableStringLayout(reportedTitleField, "label.reported_title", 1000, UdmUsageDto::getReportedTitle,
-                UdmUsageDto::setReportedTitle),
+                UdmUsageDto::setReportedTitle, "udm-edit-reported-title-field"),
             buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle),
             buildEditableStringLayout(reportedStandardNumberField, "label.reported_standard_number", 100,
-                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber),
+                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
+                "udm-edit-reported-standard-number-field"),
             buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber),
             buildEditableStringLayout(reportedPubTypeField, "label.reported_pub_type", 100,
-                UdmUsageDto::getReportedPubType, UdmUsageDto::setReportedPubType),
+                UdmUsageDto::getReportedPubType, UdmUsageDto::setReportedPubType, "udm-edit-reported-pub-type-field"),
             buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat),
             buildReadOnlyLayout("label.article", UdmUsageDto::getArticle),
             buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage),
             initActionReasonLayout(),
             buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment),
+                UdmUsageDto::setComment, "udm-edit-comment-field"),
             buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
-                UdmUsageDto::setResearchUrl),
+                UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
             buildCompanyLayout(),
             buildCompanyNameLayout(),
             initDetailLicenseeClassLayout(),
@@ -149,11 +150,11 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
             buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
             buildEditableIntegerLayout(annualMultiplierField, "label.annual_multiplier",
-                UdmUsageDto::getAnnualMultiplier, UdmUsageDto::setAnnualMultiplier),
+                UdmUsageDto::getAnnualMultiplier, UdmUsageDto::setAnnualMultiplier, "udm-edit-annual-multiplier-field"),
             buildEditableBigDecimalLayout(UdmUsageDto::getStatisticalMultiplier, UdmUsageDto::setStatisticalMultiplier),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
             buildEditableIntegerLayout(quantityField, "label.quantity", UdmUsageDto::getQuantity,
-                UdmUsageDto::setQuantity),
+                UdmUsageDto::setQuantity, "udm-edit-quantity-field"),
             buildAnnualizedCopiesField(),
             initIneligibleReasonLayout(),
             buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
@@ -183,12 +184,13 @@ public class UdmEditUsageWindow extends Window {
 
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmUsageDto, String> getter,
-                                                       Setter<UdmUsageDto, String> setter) {
+                                                       Setter<UdmUsageDto, String> setter, String styleName) {
         textField.setSizeFull();
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
             .bind(getter, setter);
+        VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, caption);
     }
 
@@ -202,12 +204,13 @@ public class UdmEditUsageWindow extends Window {
             .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
             .bind(getter, setter);
         statisticalMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-edit-statistical-multiplier-field");
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
 
     private HorizontalLayout buildEditableIntegerLayout(TextField textField, String caption,
                                                         ValueProvider<UdmUsageDto, Integer> getter,
-                                                        Setter<UdmUsageDto, Integer> setter) {
+                                                        Setter<UdmUsageDto, Integer> setter, String styleName) {
         textField.setSizeFull();
         binder.forField(textField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -216,6 +219,7 @@ public class UdmEditUsageWindow extends Window {
             .withConverter(new StringToIntegerConverter("Field should be numeric"))
             .bind(getter, setter);
         textField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, caption);
     }
 
@@ -237,6 +241,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
@@ -267,6 +272,7 @@ public class UdmEditUsageWindow extends Window {
                 }
             }
         });
+        VaadinUtils.addComponentStyle(companyIdField, "udm-edit-company-id-field");
         HorizontalLayout layout = buildCommonLayout(companyIdField, "label.company_id");
         layout.addComponent(verifyButton);
         return layout;
@@ -287,6 +293,7 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
         comboBox.setItems(controller.getAllIneligibleReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
+        VaadinUtils.addComponentStyle(comboBox, "udm-edit-ineligible-reason-combo-box");
         return buildCommonLayout(comboBox, "label.ineligible_reason");
     }
 
@@ -299,6 +306,7 @@ public class UdmEditUsageWindow extends Window {
         statuses.addAll(EDIT_AVAILABLE_STATUSES);
         comboBox.setItems(statuses);
         binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
+        VaadinUtils.addComponentStyle(comboBox, "udm-edit-detail-status-combo-box");
         return buildCommonLayout(comboBox, "label.detail_status");
     }
 
@@ -308,6 +316,7 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
         comboBox.setItems(controller.getAllActionReasons());
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
+        VaadinUtils.addComponentStyle(comboBox, "udm-edit-action-reason-combo-box");
         return buildCommonLayout(comboBox, "label.action_reason_udm");
     }
 
@@ -319,6 +328,7 @@ public class UdmEditUsageWindow extends Window {
         binder.forField(detailLicenseeClassComboBox)
             .withValidator(Objects::nonNull, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
+        VaadinUtils.addComponentStyle(detailLicenseeClassComboBox, "udm-edit-detail-licensee-class-combo-box");
         return buildCommonLayout(detailLicenseeClassComboBox, "label.det_lc");
     }
 
