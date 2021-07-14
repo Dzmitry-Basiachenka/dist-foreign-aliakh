@@ -26,6 +26,7 @@ import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
@@ -87,16 +88,21 @@ public class UdmEditUsageWindow extends Window {
     private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
     private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
+    private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+    private final ClickListener saveButtonClickListener;
 
     /**
      * Constructor.
      *
      * @param usageController  instance of {@link IUdmUsageController}
      * @param selectedUdmUsage UDM usage to be displayed on the window
+     * @param clickListener    action that should be performed after Save button was clicked
      */
-    public UdmEditUsageWindow(IUdmUsageController usageController, UdmUsageDto selectedUdmUsage) {
+    public UdmEditUsageWindow(IUdmUsageController usageController, UdmUsageDto selectedUdmUsage,
+                              ClickListener clickListener) {
         controller = usageController;
         udmUsage = selectedUdmUsage;
+        saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getDetailLicenseeClasses()
             .stream()
             .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
@@ -171,6 +177,7 @@ public class UdmEditUsageWindow extends Window {
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
         binder.validate();
         binder.readBean(udmUsage);
+        binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
     }
 
@@ -322,9 +329,10 @@ public class UdmEditUsageWindow extends Window {
 
     private HorizontalLayout initDetailLicenseeClassLayout() {
         detailLicenseeClassComboBox.setSizeFull();
+        detailLicenseeClassComboBox.setEmptySelectionAllowed(false);
         detailLicenseeClassComboBox.setItemCaptionGenerator(detailLicenseeClass ->
             String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()));
-        detailLicenseeClassComboBox.setItems();
+        detailLicenseeClassComboBox.setItems(idToLicenseeClassMap.values());
         binder.forField(detailLicenseeClassComboBox)
             .withValidator(Objects::nonNull, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
@@ -344,11 +352,12 @@ public class UdmEditUsageWindow extends Window {
 
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
-        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmUsage);
                 controller.updateUsage(udmUsage);
+                saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,

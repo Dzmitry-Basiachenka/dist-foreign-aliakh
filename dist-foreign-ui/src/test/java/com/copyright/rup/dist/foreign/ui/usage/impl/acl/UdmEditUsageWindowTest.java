@@ -28,6 +28,8 @@ import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -110,11 +112,13 @@ public class UdmEditUsageWindowTest {
     private Binder<UdmUsageDto> binder;
     private IUdmUsageController controller;
     private UdmUsageDto udmUsage;
+    private ClickListener saveButtonClickListener;
 
     @Before
     public void setUp() {
         buildUdmUsageDto();
         controller = createMock(IUdmUsageController.class);
+        saveButtonClickListener = createMock(ClickListener.class);
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
         LICENSEE_CLASS.setId(DET_LC_ID);
         LICENSEE_CLASS.setDescription(DET_LC_NAME);
@@ -200,7 +204,7 @@ public class UdmEditUsageWindowTest {
         companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(anyLong())).andReturn(companyInformation).anyTimes();
         replay(controller);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
         Button verifyButton = (Button) ((HorizontalLayout) getPanelContent().getComponent(20)).getComponent(2);
@@ -262,7 +266,7 @@ public class UdmEditUsageWindowTest {
         companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         replay(controller);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         VerticalLayout panelContent = getPanelContent();
         HorizontalLayout companyLayout = (HorizontalLayout) panelContent.getComponent(20);
@@ -288,12 +292,15 @@ public class UdmEditUsageWindowTest {
         expectLastCall().once();
         controller.updateUsage(udmUsage);
         expectLastCall().once();
-        replay(controller, binder);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(controller, binder, saveButtonClickListener);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);
-        HorizontalLayout buttonsLayout = getButtonsLayout();
-        ((Button) buttonsLayout.getComponent(0)).click();
-        verify(controller, binder);
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, binder, saveButtonClickListener);
     }
 
     @Test
@@ -304,7 +311,7 @@ public class UdmEditUsageWindowTest {
         binder.readBean(udmUsage);
         expectLastCall().once();
         replay(controller, binder);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);
         HorizontalLayout buttonsLayout = getButtonsLayout();
         ((Button) buttonsLayout.getComponent(1)).click();
@@ -320,7 +327,7 @@ public class UdmEditUsageWindowTest {
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, new BigDecimal("2.2")))
             .andReturn(new BigDecimal("88")).once();
         replay(controller);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         String annualizedCopiesErrorMessage =
             "Field value cannot be calculated. Please specify correct values for calculation";
@@ -581,7 +588,7 @@ public class UdmEditUsageWindowTest {
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller);
-        window = new UdmEditUsageWindow(controller, udmUsage);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         verify(controller);
     }
