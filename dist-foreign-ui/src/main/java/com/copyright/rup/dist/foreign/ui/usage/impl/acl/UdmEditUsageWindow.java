@@ -236,7 +236,7 @@ public class UdmEditUsageWindow extends Window {
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
-                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(value.trim())));
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
