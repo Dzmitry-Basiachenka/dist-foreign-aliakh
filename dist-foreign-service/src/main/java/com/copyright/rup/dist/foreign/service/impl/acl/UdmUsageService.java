@@ -116,15 +116,12 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
+    @Transactional
     public void updateUsage(UdmUsageDto udmUsageDto) {
         String userName = RupContextUtils.getUserName();
         LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
-        if (UsageStatusEnum.NEW == udmUsageDto.getStatus()) {
-            chainExecutor.execute(Collections.singletonList(convertUdmDtoToUsage(udmUsageDto)),
-                ChainProcessorTypeEnum.MATCHING);
-        }
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
     }
 
@@ -143,6 +140,11 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public int getUsagesCount(UdmUsageFilter filter) {
         return !filter.isEmpty() ? udmUsageRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public void sendForMatching(UdmUsageDto udmUsageDto) {
+        sendForMatching(Collections.singletonList(convertUdmDtoToUsage(udmUsageDto)));
     }
 
     @Override

@@ -154,6 +154,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public void updateUsage(UdmUsageDto udmUsageDto) {
         udmUsageService.updateUsage(udmUsageDto);
+        udmUsageService.sendForMatching(udmUsageDto);
     }
 
     public List<UdmActionReason> getAllActionReasons() {

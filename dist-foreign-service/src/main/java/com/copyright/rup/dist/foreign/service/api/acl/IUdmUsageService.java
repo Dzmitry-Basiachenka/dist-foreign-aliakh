@@ -66,6 +66,13 @@ public interface IUdmUsageService {
     int getUsagesCount(UdmUsageFilter filter);
 
     /**
+     * Sends {@link UdmUsageDto} on queue for PI matching process.
+     *
+     * @param udmUsageDto {@link UdmUsageDto} to be sent
+     */
+    void sendForMatching(UdmUsageDto udmUsageDto);
+
+    /**
      * Sends list of UDM usages on queue for PI matching process.
      *
      * @param udmUsages list of {@link UdmUsage} to be sent
