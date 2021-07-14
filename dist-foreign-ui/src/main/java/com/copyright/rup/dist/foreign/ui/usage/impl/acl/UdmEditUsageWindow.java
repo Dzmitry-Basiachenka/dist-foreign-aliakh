@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -16,11 +15,10 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.google.common.collect.Range;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.converter.StringToBigDecimalConverter;
-import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.MarginInfo;
@@ -42,6 +40,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
@@ -63,6 +62,9 @@ import java.util.stream.Collectors;
  */
 public class UdmEditUsageWindow extends Window {
 
+    private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
+        Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
+    private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
@@ -155,12 +157,10 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.usage_date", usage -> getStringFromLocalDate(usage.getUsageDate())),
             buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
             buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
-            buildEditableIntegerLayout(annualMultiplierField, "label.annual_multiplier",
-                UdmUsageDto::getAnnualMultiplier, UdmUsageDto::setAnnualMultiplier, "udm-edit-annual-multiplier-field"),
-            buildEditableBigDecimalLayout(UdmUsageDto::getStatisticalMultiplier, UdmUsageDto::setStatisticalMultiplier),
+            buildAnnualMultiplierLayout(),
+            buildStatisticalMultiplier(),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
-            buildEditableIntegerLayout(quantityField, "label.quantity", UdmUsageDto::getQuantity,
-                UdmUsageDto::setQuantity, "udm-edit-quantity-field"),
+            buildQuantityLayout(),
             buildAnnualizedCopiesField(),
             initIneligibleReasonLayout(),
             buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
@@ -201,33 +201,47 @@ public class UdmEditUsageWindow extends Window {
         return buildCommonLayout(textField, caption);
     }
 
-    private HorizontalLayout buildEditableBigDecimalLayout(ValueProvider<UdmUsageDto, BigDecimal> getter,
-                                                           Setter<UdmUsageDto, BigDecimal> setter) {
+    private HorizontalLayout buildStatisticalMultiplier() {
         statisticalMultiplierField.setSizeFull();
         binder.forField(statisticalMultiplierField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(value -> new AmountValidator().isValid(value.trim()),
-                "Field value should be positive number and should not exceed 10 digits")
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
-            .bind(getter, setter);
+            .withValidator(value -> NumberUtils.isNumber(value.trim()) &&
+                    STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
+                "Field value should be positive number between 0.00001 and 1.00000")
+            .bind(usage -> Objects.toString(usage.getStatisticalMultiplier()),
+                (usage, value) -> usage.setStatisticalMultiplier(NumberUtils.createBigDecimal(value.trim())));
         statisticalMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
         VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-edit-statistical-multiplier-field");
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
 
-    private HorizontalLayout buildEditableIntegerLayout(TextField textField, String caption,
-                                                        ValueProvider<UdmUsageDto, Integer> getter,
-                                                        Setter<UdmUsageDto, Integer> setter, String styleName) {
-        textField.setSizeFull();
-        binder.forField(textField)
+    private HorizontalLayout buildAnnualMultiplierLayout() {
+        annualMultiplierField.setSizeFull();
+        binder.forField(annualMultiplierField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
-            .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToIntegerConverter("Field should be numeric"))
-            .bind(getter, setter);
-        textField.addValueChangeListener(event -> recalculateAnnualizedCopies());
-        VaadinUtils.addComponentStyle(textField, styleName);
-        return buildCommonLayout(textField, caption);
+            .withValidator(value -> StringUtils.isNumeric(value.trim())
+                    && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
+                "Field value should be positive number between 1 and 25")
+            .bind(usage -> usage.getAnnualMultiplier().toString(),
+                (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
+        annualMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        VaadinUtils.addComponentStyle(annualMultiplierField, "udm-edit-annual-multiplier-field");
+        return buildCommonLayout(annualMultiplierField, "label.annual_multiplier");
+    }
+
+    private HorizontalLayout buildQuantityLayout() {
+        quantityField.setSizeFull();
+        binder.forField(quantityField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value))
+                && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
+            .bind(usage -> usage.getQuantity().toString(),
+                (usage, value) -> usage.setQuantity(NumberUtils.toInt(value.trim())));
+        quantityField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        VaadinUtils.addComponentStyle(quantityField, "udm-edit-quantity-field");
+        return buildCommonLayout(quantityField, "label.quantity");
     }
 
     private HorizontalLayout buildAnnualizedCopiesField() {
@@ -235,8 +249,8 @@ public class UdmEditUsageWindow extends Window {
         annualizedCopiesField.setSizeFull();
         binder.forField(annualizedCopiesField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.annualized_copies.empty"))
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
-            .bind(UdmUsageDto::getAnnualizedCopies, UdmUsageDto::setAnnualizedCopies);
+            .bind(usage -> Objects.toString(usage.getAnnualizedCopies()),
+                (usage, value) -> usage.setAnnualizedCopies(NumberUtils.createBigDecimal(value.trim())));
         return buildCommonLayout(annualizedCopiesField, "label.annualized_copies");
     }
 
@@ -378,7 +392,8 @@ public class UdmEditUsageWindow extends Window {
             annualizedCopiesField.setValue(controller.calculateAnnualizedCopies(udmUsage.getReportedTypeOfUse(),
                 NumberUtils.toInt(quantityField.getValue().trim()),
                 NumberUtils.toInt(annualMultiplierField.getValue().trim()),
-                NumberUtils.createBigDecimal(statisticalMultiplierField.getValue().trim())).toString());
+                NumberUtils.createBigDecimal(
+                    statisticalMultiplierField.getValue().trim()).setScale(5, RoundingMode.HALF_UP)).toString());
         } else {
             annualizedCopiesField.clear();
         }

@@ -100,10 +100,10 @@ public class UdmEditUsageWindowTest {
     private static final UdmIneligibleReason INELIGIBLE_REASON =
         new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey");
     private static final String BINDER_NAME = "binder";
-    private static final String VALID_INTEGER = "123456789";
-    private static final String VALID_DECIMAL = "1.2345678";
-    private static final String INVALID_NUMBER = "a12345678";
-    private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
+    private static final String VALID_INTEGER = "25";
+    private static final String VALID_DECIMAL = "0.1";
+    private static final String INVALID_NUMBER = "12a";
+    private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
@@ -172,10 +172,10 @@ public class UdmEditUsageWindowTest {
         assertTextFieldValue(verticalLayout.getComponent(28), "12/12/2019");
         assertTextFieldValue(verticalLayout.getComponent(29), "12/12/2022");
         assertTextFieldValue(verticalLayout.getComponent(30), "1");
-        assertTextFieldValue(verticalLayout.getComponent(31), "1");
+        assertTextFieldValue(verticalLayout.getComponent(31), "1.00000");
         assertTextFieldValue(verticalLayout.getComponent(32), REPORTED_TYPE_OF_USE);
         assertTextFieldValue(verticalLayout.getComponent(33), "10");
-        assertTextFieldValue(verticalLayout.getComponent(34), "10");
+        assertTextFieldValue(verticalLayout.getComponent(34), "10.00000");
         assertComboBoxFieldValue(verticalLayout.getComponent(35), INELIGIBLE_REASON);
         assertTextFieldValue(verticalLayout.getComponent(36), "01/01/2016");
         assertTextFieldValue(verticalLayout.getComponent(37), USER_NAME);
@@ -227,23 +227,32 @@ public class UdmEditUsageWindowTest {
     @Test
     public void testQuantityValidation() {
         initEditWindow();
-        verifyIntegerValidations(Whitebox.getInternalState(window, "quantityField"));
+        TextField quantityField = Whitebox.getInternalState(window, "quantityField");
+        verifyIntegerValidations(quantityField, NUMBER_VALIDATION_MESSAGE);
+        verifyTextFieldValidationMessage(quantityField, "1234567890", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(quantityField, "0", NUMBER_VALIDATION_MESSAGE, false);
     }
 
     @Test
     public void testAnnualMultiplierValidation() {
         initEditWindow();
-        verifyIntegerValidations(Whitebox.getInternalState(window, "annualMultiplierField"));
+        TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
+        String numberValidationMessage = "Field value should be positive number between 1 and 25";
+        verifyIntegerValidations(annualMultiplierField, numberValidationMessage);
+        verifyTextFieldValidationMessage(annualMultiplierField, "1000", numberValidationMessage, false);
+        verifyTextFieldValidationMessage(annualMultiplierField, "26", numberValidationMessage, false);
+        verifyTextFieldValidationMessage(annualMultiplierField, "0", numberValidationMessage, false);
     }
 
     @Test
     public void testStatisticalMultiplierValidation() {
         initEditWindow();
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
-        String decimalValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
         verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, VALID_DECIMAL, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, INVALID_NUMBER, decimalValidationMessage, false);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.00001", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.000001", decimalValidationMessage, false);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "1.00001", decimalValidationMessage, false);
     }
 
     @Test
@@ -320,12 +329,12 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testAnnualizedCopiesCalculation() {
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10, 2, BigDecimal.ONE))
-            .andReturn(new BigDecimal(20)).once();
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, BigDecimal.ONE))
-            .andReturn(new BigDecimal(40)).once();
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, new BigDecimal("2.2")))
-            .andReturn(new BigDecimal("88")).once();
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10, 2, BigDecimal.ONE.setScale(5)))
+            .andReturn(new BigDecimal("20.00000")).once();
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, BigDecimal.ONE.setScale(5)))
+            .andReturn(new BigDecimal("40.00000")).once();
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, new BigDecimal("0.20000")))
+            .andReturn(new BigDecimal("8.00000")).once();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
@@ -335,19 +344,19 @@ public class UdmEditUsageWindowTest {
         TextField annualizedCopiesField = Whitebox.getInternalState(window, "annualizedCopiesField");
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
-        assertEquals("10", annualizedCopiesField.getValue());
+        assertEquals("10.00000", annualizedCopiesField.getValue());
         annualMultiplierField.setValue(INVALID_NUMBER);
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
         annualMultiplierField.setValue("2");
-        assertEquals("20", annualizedCopiesField.getValue());
+        assertEquals("20.00000", annualizedCopiesField.getValue());
         quantityField.setValue(INVALID_NUMBER);
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
         quantityField.setValue("20");
-        assertEquals("40", annualizedCopiesField.getValue());
+        assertEquals("40.00000", annualizedCopiesField.getValue());
         statisticalMultiplierField.setValue(INVALID_NUMBER);
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
-        statisticalMultiplierField.setValue("2.2");
-        assertEquals("88", annualizedCopiesField.getValue());
+        statisticalMultiplierField.setValue("0.20000");
+        assertEquals("8.00000", annualizedCopiesField.getValue());
         verify(controller);
     }
 
@@ -359,11 +368,10 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
     }
 
-    private void verifyIntegerValidations(TextField textField) {
-        verifyCommonNumberValidations(textField, NUMBER_VALIDATION_MESSAGE);
-        verifyTextFieldValidationMessage(textField, "1234567890", "Field value should not exceed 9 digits", false);
+    private void verifyIntegerValidations(TextField textField, String numberValidationMessage) {
+        verifyCommonNumberValidations(textField, numberValidationMessage);
         verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, numberValidationMessage, false);
     }
 
     private void verifyCommonNumberValidations(TextField textField, String numberValidationMessage) {
