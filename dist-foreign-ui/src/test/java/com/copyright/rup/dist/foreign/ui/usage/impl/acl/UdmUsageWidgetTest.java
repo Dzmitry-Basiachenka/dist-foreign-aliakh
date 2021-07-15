@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -27,6 +28,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -295,7 +297,8 @@ public class UdmUsageWidgetTest {
         udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
         udmUsageDto.setAssignee(USER);
         UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, controller, udmUsageDto).andReturn(mockWindow);
+        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
+            .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,

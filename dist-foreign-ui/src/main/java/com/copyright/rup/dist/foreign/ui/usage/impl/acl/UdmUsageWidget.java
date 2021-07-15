@@ -28,9 +28,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -132,9 +132,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         editButton.addClickListener(event -> {
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
             if (userName.equals(selectedUsage.getAssignee())) {
-                Window editWindow = new UdmEditUsageWindow(controller, selectedUsage);
-                editWindow.addCloseListener(closeEvent -> refresh());
-                Windows.showModalWindow(editWindow);
+                Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
             }
