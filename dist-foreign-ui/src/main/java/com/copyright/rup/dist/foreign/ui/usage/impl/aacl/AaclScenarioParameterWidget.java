@@ -4,6 +4,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.event.SerializableEventListener;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -111,7 +112,7 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
      *
      * @param <T> items ids type
      */
-    public interface IParametersSaveListener<T> {
+    public interface IParametersSaveListener<T> extends SerializableEventListener {
         /**
          * Listener method.
          */
