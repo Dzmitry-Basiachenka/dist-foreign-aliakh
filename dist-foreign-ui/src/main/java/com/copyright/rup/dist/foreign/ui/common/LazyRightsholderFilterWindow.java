@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.event.SerializableEventListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -168,7 +169,7 @@ public class LazyRightsholderFilterWindow extends Window {
      *
      * @param <T> items ids type
      */
-    public interface IRightsholderFilterSaveListener<T> {
+    public interface IRightsholderFilterSaveListener<T> extends SerializableEventListener {
 
         /**
          * Listener method.

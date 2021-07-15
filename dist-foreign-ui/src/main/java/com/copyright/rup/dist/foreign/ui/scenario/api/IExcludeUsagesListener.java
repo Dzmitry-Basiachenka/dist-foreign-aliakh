@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
+import com.vaadin.event.SerializableEventListener;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -13,7 +14,7 @@ import java.lang.reflect.Method;
  *
  * @author Pavel Liakh
  */
-public interface IExcludeUsagesListener {
+public interface IExcludeUsagesListener extends SerializableEventListener {
 
     /**
      * {@link #onExcludeDetails(ExcludeUsagesEvent)}.
