@@ -273,7 +273,7 @@ public class UdmUsageRepositoryIntegrationTest {
                 filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 100, 400)),
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 70, 100)),
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
@@ -345,7 +345,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter ->
             filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 2);
         assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 100, 400)), 1);
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 70, 100)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
