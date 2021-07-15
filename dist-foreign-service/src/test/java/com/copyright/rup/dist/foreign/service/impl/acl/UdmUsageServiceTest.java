@@ -172,26 +172,10 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsageDto = buildUsageDto();
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
-        Capture<List<UdmUsage>> usageCapture = newCapture();
-        chainExecutor.execute(capture(usageCapture), eq(ChainProcessorTypeEnum.MATCHING));
-        expectLastCall().once();
-        replay(udmUsageRepository, chainExecutor, RupContextUtils.class);
+        replay(udmUsageRepository, RupContextUtils.class);
         udmUsageService.updateUsage(udmUsageDto);
-        List<UdmUsage> actualUsages = usageCapture.getValue();
-        assertEquals(1, actualUsages.size());
-        UdmUsage actualUsage = actualUsages.get(0);
-        assertEquals(udmUsageDto.getId(), actualUsage.getId());
-        assertEquals(udmUsageDto.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(udmUsageDto.getTypeOfUse(), actualUsage.getTypeOfUse());
-        assertEquals(udmUsageDto.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-        assertEquals(udmUsageDto.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(udmUsageDto.getReportedTitle(), actualUsage.getReportedTitle());
-        assertEquals(udmUsageDto.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(udmUsageDto.getPeriodEndDate(), actualUsage.getPeriodEndDate());
-        assertEquals(udmUsageDto.getStatus(), actualUsage.getStatus());
-        assertEquals(udmUsageDto.getVersion() + 1, actualUsage.getVersion());
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
-        verify(udmUsageRepository, chainExecutor, RupContextUtils.class);
+        verify(udmUsageRepository, RupContextUtils.class);
     }
 
     @Test
@@ -287,6 +271,36 @@ public class UdmUsageServiceTest {
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         runnable.run();
+        verify(chainExecutor);
+    }
+
+    @Test
+    public void testSendForMatchingUsageDto() {
+        Capture<Runnable> captureRunnable = newCapture();
+        chainExecutor.execute(capture(captureRunnable));
+        expectLastCall().once();
+        Capture<List<UdmUsage>> usageCapture = newCapture();
+        chainExecutor.execute(capture(usageCapture), eq(ChainProcessorTypeEnum.MATCHING));
+        expectLastCall().once();
+        replay(chainExecutor);
+        UdmUsageDto udmUsageDto = buildUsageDto();
+        udmUsageService.sendForMatching(udmUsageDto);
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        runnable.run();
+        List<UdmUsage> actualUsages = usageCapture.getValue();
+        assertEquals(1, actualUsages.size());
+        UdmUsage actualUsage = actualUsages.get(0);
+        assertEquals(udmUsageDto.getId(), actualUsage.getId());
+        assertEquals(udmUsageDto.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(udmUsageDto.getTypeOfUse(), actualUsage.getTypeOfUse());
+        assertEquals(udmUsageDto.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(udmUsageDto.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(udmUsageDto.getReportedTitle(), actualUsage.getReportedTitle());
+        assertEquals(udmUsageDto.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(udmUsageDto.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+        assertEquals(udmUsageDto.getStatus(), actualUsage.getStatus());
+        assertEquals(udmUsageDto.getVersion() + 1, actualUsage.getVersion());
         verify(chainExecutor);
     }
 
