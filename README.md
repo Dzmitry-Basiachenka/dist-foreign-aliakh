@@ -1,3 +1,13 @@
+14.1.2
+-
+* CDP-1000 FDA: Edit UDM usages: Usages processing in case of setting NEW status is unstable
+* CDP-999 FDA: Edit UDM usage: Exception occurs if a user makes the Wr Wrk Inst blank and tries to save the changes
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: apply refresh window only after Edited usage was saved
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: add id values for editable fields on Edit Usage Window
+* B-67328 Tech Debt: FDA: fix expiration time equals null in PrmCountryCacheService
+* B-67543 FDA: 'Action Reason' and 'Ineligible Reason' columns in DB: make changes based on comments in CR-DIST-FOREIGN-243
+* B-57779 FDA& UDM: View and Delete UDM Loaded Batches: make changes based on comments in CR-DIST-FOREIGN-246
+
 14.1.1
 -
 * B-577779: FDA& UDM: View and Delete UDM Loaded Batches: fix disable delete button when use unselect  batch
