@@ -1,3 +1,10 @@
+14.1.3
+-
+* CDP-1000 FDA: Edit UDM usage: Usages processing in case of setting NEW status is unstable
+* CDP-1001 FDA: Edit UDM usage: Exception occurs after setting Annual or Statistical multiplier values as 1000 or more
+* B-65865 FDA & UDM: update the usage information - Specialist/Manager role: make changes based on comments in CR-DIST-FOREIGN-249
+* B-67328 Dist - Tech Debt: FDA: fix to avoid using deprecated addListener() method
+
 14.1.2
 -
 * CDP-1000 FDA: Edit UDM usages: Usages processing in case of setting NEW status is unstable
