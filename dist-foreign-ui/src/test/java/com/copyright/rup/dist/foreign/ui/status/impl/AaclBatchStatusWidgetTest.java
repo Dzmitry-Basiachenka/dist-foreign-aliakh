@@ -7,8 +7,11 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatchStatus;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -44,13 +47,27 @@ public class AaclBatchStatusWidgetTest {
 
     @Test
     public void testComponentStructure() {
-        expect(controller.getBatchStatuses()).andReturn(Collections.emptyList()).once();
-        replay(controller);
         batchStatusWidget.init();
         assertEquals(1, batchStatusWidget.getComponentCount());
         Component component = batchStatusWidget.getComponent(0);
         assertTrue(component instanceof Grid);
-        verifyGrid((Grid) component);
+        Grid<?> grid = (Grid<?>) component;
+        verifyGrid(grid);
+        assertEquals(0, grid.getDataProvider().size(new Query<>()));
+    }
+
+    @Test
+    public void testRefresh() {
+        batchStatusWidget.init();
+        expect(controller.getBatchStatuses()).andReturn(Collections.singletonList(new UsageBatchStatus())).once();
+        replay(controller);
+        batchStatusWidget.refresh();
+        assertEquals(1, batchStatusWidget.getComponentCount());
+        Component component = batchStatusWidget.getComponent(0);
+        assertTrue(component instanceof Grid);
+        Grid<?> grid = (Grid<?>) component;
+        verifyGrid(grid);
+        assertEquals(1, ((ListDataProvider<?>) grid.getDataProvider()).getItems().size());
         verify(controller);
     }
 

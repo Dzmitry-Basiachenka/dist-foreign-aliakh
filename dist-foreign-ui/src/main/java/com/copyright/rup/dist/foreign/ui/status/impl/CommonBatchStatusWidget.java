@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 
@@ -30,17 +29,14 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
     private static final String EMPTY_STYLE_NAME = "empty-batch-status-grid";
 
     private ICommonBatchStatusController controller;
-    private ListDataProvider<UsageBatchStatus> dataProvider;
     private Grid<UsageBatchStatus> batchStatusGrid;
 
     @SuppressWarnings("unchecked")
     @Override
     public ICommonBatchStatusWidget init() {
         setSizeFull();
-        List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
-        dataProvider = new ListDataProvider<>(batchStatuses);
-        batchStatusGrid = new Grid<>(dataProvider);
-        updateGridStyle(batchStatuses);
+        // when a user selects the tab, the necessary list of batch statuses is loaded in method {@link this#refresh()}
+        batchStatusGrid = new Grid<>();
         addColumns();
         batchStatusGrid.setSizeFull();
         addComponent(batchStatusGrid);
@@ -62,8 +58,7 @@ public abstract class CommonBatchStatusWidget extends VerticalLayout implements 
     @Override
     public void refresh() {
         List<UsageBatchStatus> batchStatuses = controller.getBatchStatuses();
-        dataProvider = DataProvider.ofCollection(batchStatuses);
-        batchStatusGrid.setDataProvider(dataProvider);
+        batchStatusGrid.setDataProvider(DataProvider.ofCollection(batchStatuses));
         updateGridStyle(batchStatuses);
     }
 
