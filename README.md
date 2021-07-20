@@ -1,3 +1,8 @@
+14.1.4
+-
+* CDP-1006 FDA: Export ACL Usages: data is not exported correctly if at least one usage with null annualized copies value is present in filtered data
+* B-67328 Tech Debt: FDA: decrease user log-in time by skipping a redundant service call
+
 14.1.3
 -
 * CDP-1000 FDA: Edit UDM usage: Usages processing in case of setting NEW status is unstable
