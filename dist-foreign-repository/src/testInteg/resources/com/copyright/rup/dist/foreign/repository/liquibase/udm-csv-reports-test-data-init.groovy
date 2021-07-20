@@ -95,6 +95,36 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2020-02-14 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '7ddeb2ee-0e8d-421a-80ec-200a49bc6d6b')
+            column(name: 'df_udm_usage_batch_uid', value: 'a23681ae-1cf7-44ee-b09b-6fc06779e05c')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB011')
+            column(name: 'period_end_date', value: '2020-06-30')
+            column(name: 'status_ind', value: 'INELIGIBLE')
+            column(name: 'wr_wrk_inst', value: 306985867)
+            column(name: 'reported_title', value: 'None')
+            column(name: 'reported_pub_type', value: 'Book')
+            column(name: 'publication_format', value: 'format')
+            column(name: 'language', value: 'German')
+            column(name: 'company_id', value: 1137)
+            column(name: 'company_name', value: 'Alberto-Culver Company')
+            column(name: 'detail_licensee_class_id', value: 24)
+            column(name: 'survey_respondent', value: 'd1f8e0b0-d214-487e-811b-873311d187a9')
+            column(name: 'ip_address', value: '24.15.200.201')
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'usage_date', value: '2020-05-10')
+            column(name: 'survey_start_date', value: '2020-03-10')
+            column(name: 'survey_end_date', value: '2020-04-10')
+            column(name: 'annual_multiplier', value: 12)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'quantity', value: 0)
+            column(name: 'df_udm_ineligible_reason_uid', value: '18fbee56-2f5c-450a-999e-54903c0bfb23')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2020-02-14 12:00:00+00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
             column(name: 'df_udm_audit_uid', value: '3504a963-e4d7-45bf-969a-f617570110c5')
             column(name: 'df_udm_usage_uid', value: 'f562892a-f03e-4b78-bae2-ab60ec31311c')
@@ -110,6 +140,26 @@ databaseChangeLog {
             column(name: 'df_udm_usage_uid', value: '1e5d8496-9861-4794-be7b-4357004db799')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2020 June\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '6d9af1b5-223d-4afe-88b9-4669a8cd6574')
+            column(name: 'df_udm_usage_uid', value: '7ddeb2ee-0e8d-421a-80ec-200a49bc6d6b')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2020 June\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '54c9aee8-0d24-48e6-9f57-fdfe54025533')
+            column(name: 'df_udm_usage_uid', value: '7ddeb2ee-0e8d-421a-80ec-200a49bc6d6b')
+            column(name: 'action_type_ind', value: 'INELIGIBLE')
+            column(name: 'action_reason', value: 'No reported use')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
@@ -199,6 +249,36 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '628af973-aa5b-43df-90e1-bafac85dcdd2')
+            column(name: 'df_udm_usage_batch_uid', value: '94b644cb-ab57-4825-b985-c51734a5aa1e')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB012')
+            column(name: 'period_end_date', value: '2021-12-31')
+            column(name: 'status_ind', value: 'INELIGIBLE')
+            column(name: 'wr_wrk_inst', value: 254327612)
+            column(name: 'reported_title', value: 'None')
+            column(name: 'reported_pub_type', value: 'Book')
+            column(name: 'publication_format', value: 'format')
+            column(name: 'language', value: 'German')
+            column(name: 'company_id', value: 1137)
+            column(name: 'company_name', value: 'Alberto-Culver Company')
+            column(name: 'detail_licensee_class_id', value: 24)
+            column(name: 'survey_respondent', value: 'e4476fcc-8aa9-461c-9071-92b5cf6d38fa')
+            column(name: 'ip_address', value: '24.15.200.201')
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'usage_date', value: '2021-05-10')
+            column(name: 'survey_start_date', value: '2021-03-10')
+            column(name: 'survey_end_date', value: '2021-03-25')
+            column(name: 'annual_multiplier', value: 25)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'quantity', value: 0)
+            column(name: 'df_udm_ineligible_reason_uid', value: '18fbee56-2f5c-450a-999e-54903c0bfb23')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
             column(name: 'df_udm_audit_uid', value: '1f5f80d9-fe0e-4823-803d-8758ffc7d0b8')
             column(name: 'df_udm_usage_uid', value: 'eb564f79-2430-48a4-901a-e137bafee0ad')
@@ -214,6 +294,26 @@ databaseChangeLog {
             column(name: 'df_udm_usage_uid', value: '680685f8-6a37-4413-8bf2-f877abe4080e')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2021 December\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: 'f62ea5dd-510b-47f8-82bf-6cc751e06036')
+            column(name: 'df_udm_usage_uid', value: '628af973-aa5b-43df-90e1-bafac85dcdd2')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2021 December\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '81ff0c24-8e09-4877-9d51-422a239cdf89')
+            column(name: 'df_udm_usage_uid', value: '628af973-aa5b-43df-90e1-bafac85dcdd2')
+            column(name: 'action_type_ind', value: 'INELIGIBLE')
+            column(name: 'action_reason', value: 'No reported use')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
@@ -264,11 +364,61 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: 'a6ef4b7e-6608-445e-a955-6726030f7fec')
+            column(name: 'df_udm_usage_batch_uid', value: 'a524f8a9-2c95-43ea-8c25-b9f38b1c758e')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB005')
+            column(name: 'period_end_date', value: '2022-06-30')
+            column(name: 'status_ind', value: 'INELIGIBLE')
+            column(name: 'wr_wrk_inst', value: 254327612)
+            column(name: 'reported_title', value: 'None')
+            column(name: 'reported_pub_type', value: 'Book')
+            column(name: 'publication_format', value: 'format')
+            column(name: 'language', value: 'German')
+            column(name: 'company_id', value: 1137)
+            column(name: 'company_name', value: 'Alberto-Culver Company')
+            column(name: 'detail_licensee_class_id', value: 24)
+            column(name: 'survey_respondent', value: 'af8b5dac-b7e6-4ae9-9aef-41403bc19585')
+            column(name: 'ip_address', value: '24.15.200.201')
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'usage_date', value: '2022-05-10')
+            column(name: 'survey_start_date', value: '2022-03-10')
+            column(name: 'survey_end_date', value: '2022-04-25')
+            column(name: 'annual_multiplier', value: 6)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'quantity', value: 0)
+            column(name: 'df_udm_ineligible_reason_uid', value: '18fbee56-2f5c-450a-999e-54903c0bfb23')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
             column(name: 'df_udm_audit_uid', value: 'de47fbb2-bf94-46fc-984a-c2b583d8a68e')
             column(name: 'df_udm_usage_uid', value: '975ed4dc-b560-4e89-bd6d-6a5a18f14fa3')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2022 June\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '291669e9-ded8-4969-9c20-7629335f221e')
+            column(name: 'df_udm_usage_uid', value: 'a6ef4b7e-6608-445e-a955-6726030f7fec')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'UDM Batch 2022 June\' Batch')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '45bb7f12-2369-4254-ade8-878ea035c957')
+            column(name: 'df_udm_usage_uid', value: 'a6ef4b7e-6608-445e-a955-6726030f7fec')
+            column(name: 'action_type_ind', value: 'INELIGIBLE')
+            column(name: 'action_reason', value: 'No reported use')
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
