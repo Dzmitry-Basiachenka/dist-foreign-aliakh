@@ -1,3 +1,8 @@
+14.1.5
+-
+* CDP-1003 Dynamic CAS Service URL (Foreign Distributions)
+* B-67321 Tech Debt: FDA: fix embedded tomcat security vulnerability CVE-2021-33037
+
 14.1.4
 -
 * CDP-1006 FDA: Export ACL Usages: data is not exported correctly if at least one usage with null annualized copies value is present in filtered data
