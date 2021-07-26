@@ -7,11 +7,12 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -22,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
@@ -41,6 +43,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -60,6 +65,8 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class UdmEditUsageWindowTest {
 
     private static final String UDM_USAGE_UID = "75b110ff-c6c9-45e6-baac-34041ff62081";
@@ -310,6 +317,20 @@ public class UdmEditUsageWindowTest {
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, binder, saveButtonClickListener);
+    }
+
+    @Test
+    public void testIsUsageProcessingCompleted() {
+        mockStatic(Windows.class);
+        udmUsage.setStatus(UsageStatusEnum.NEW);
+        Windows.showNotificationWindow("Please wait while usage processing is completed");
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, Windows.class);
     }
 
     @Test
