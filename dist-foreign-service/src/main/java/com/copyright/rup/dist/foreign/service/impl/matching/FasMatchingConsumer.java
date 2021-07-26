@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +47,6 @@ public class FasMatchingConsumer implements IConsumer<List<Usage>> {
 
     @Override
     @Profiled(tag = "FasMatchingConsumer.consume")
-    @Transactional
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume FAS usages for matching processing. Started. UsageIds={}", LogUtils.ids(usages));
