@@ -368,21 +368,30 @@ public class UdmEditUsageWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            try {
-                binder.writeBean(udmUsage);
-                controller.updateUsage(udmUsage);
-                saveButtonClickListener.buttonClick(event);
-                close();
-            } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
-                    reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField, companyIdField,
-                    companyNameField, detailLicenseeClassComboBox, annualMultiplierField, statisticalMultiplierField,
-                    quantityField, annualizedCopiesField));
+            if (isUsageProcessingCompleted()) {
+                try {
+                    binder.writeBean(udmUsage);
+                    controller.updateUsage(udmUsage);
+                    saveButtonClickListener.buttonClick(event);
+                    close();
+                } catch (ValidationException e) {
+                    Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
+                        reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField,
+                        companyIdField, companyNameField, detailLicenseeClassComboBox, annualMultiplierField,
+                        statisticalMultiplierField, quantityField, annualizedCopiesField));
+                }
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.processing_usage_names"));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> binder.readBean(udmUsage));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private boolean isUsageProcessingCompleted() {
+        return !udmUsage.getStatus().equals(UsageStatusEnum.NEW)
+            && !udmUsage.getStatus().equals(UsageStatusEnum.WORK_FOUND);
     }
 
     private void recalculateAnnualizedCopies() {
