@@ -24,7 +24,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class QuantityValidatorTest {
 
-    private final Integer quantity;
+    private final Long quantity;
     private final String reportedTitle;
     private final boolean expectedResult;
 
@@ -35,7 +35,7 @@ public class QuantityValidatorTest {
      * @param reportedTitle  reported title
      * @param expectedResult expected result
      */
-    public QuantityValidatorTest(Integer quantity, String reportedTitle, boolean expectedResult) {
+    public QuantityValidatorTest(Long quantity, String reportedTitle, boolean expectedResult) {
         this.quantity = quantity;
         this.reportedTitle = reportedTitle;
         this.expectedResult = expectedResult;
@@ -44,18 +44,18 @@ public class QuantityValidatorTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {0, "NONE", true},
-            {0, "None", true},
-            {0, "none", true},
-            {0, "Brain surgery", false},
-            {0, "", false},
-            {0, null, false},
-            {1, "NONE", false},
-            {1, "None", false},
-            {1, "none", false},
-            {1, "Brain surgery", true},
-            {1, "", true},
-            {1, null, true},
+            {0L, "NONE", true},
+            {0L, "None", true},
+            {0L, "none", true},
+            {0L, "Brain surgery", false},
+            {0L, "", false},
+            {0L, null, false},
+            {1L, "NONE", false},
+            {1L, "None", false},
+            {1L, "none", false},
+            {1L, "Brain surgery", true},
+            {1L, "", true},
+            {1L, null, true},
         });
     }
 
@@ -68,7 +68,7 @@ public class QuantityValidatorTest {
             validator.getErrorMessage());
     }
 
-    private UdmUsage buildUdmUsage(Integer quantityToSet, String reportedTitleToSet) {
+    private UdmUsage buildUdmUsage(Long quantityToSet, String reportedTitleToSet) {
         UdmUsage udmUsage = new UdmUsage();
         udmUsage.setQuantity(quantityToSet);
         udmUsage.setReportedTitle(reportedTitleToSet);

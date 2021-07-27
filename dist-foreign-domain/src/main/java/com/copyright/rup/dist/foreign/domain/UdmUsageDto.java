@@ -51,7 +51,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private BigDecimal statisticalMultiplier;
     private String typeOfUse;
     private String reportedTypeOfUse;
-    private Integer quantity;
+    private Long quantity;
     private BigDecimal annualizedCopies;
     private UdmActionReason actionReason;
     private UdmIneligibleReason ineligibleReason;
@@ -226,11 +226,11 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 

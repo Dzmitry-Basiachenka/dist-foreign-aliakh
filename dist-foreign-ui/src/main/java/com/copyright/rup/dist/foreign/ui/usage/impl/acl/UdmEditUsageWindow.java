@@ -238,7 +238,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value))
                 && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
             .bind(usage -> usage.getQuantity().toString(),
-                (usage, value) -> usage.setQuantity(NumberUtils.toInt(value.trim())));
+                (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
         quantityField.addValueChangeListener(event -> recalculateAnnualizedCopies());
         VaadinUtils.addComponentStyle(quantityField, "udm-edit-quantity-field");
         return buildCommonLayout(quantityField, "label.quantity");
@@ -399,7 +399,7 @@ public class UdmEditUsageWindow extends Window {
             && Objects.isNull(annualMultiplierField.getErrorMessage())
             && Objects.isNull(statisticalMultiplierField.getErrorMessage())) {
             annualizedCopiesField.setValue(controller.calculateAnnualizedCopies(udmUsage.getReportedTypeOfUse(),
-                NumberUtils.toInt(quantityField.getValue().trim()),
+                NumberUtils.toLong(quantityField.getValue().trim()),
                 NumberUtils.toInt(annualMultiplierField.getValue().trim()),
                 NumberUtils.createBigDecimal(
                     statisticalMultiplierField.getValue().trim()).setScale(5, RoundingMode.HALF_UP)).toString());

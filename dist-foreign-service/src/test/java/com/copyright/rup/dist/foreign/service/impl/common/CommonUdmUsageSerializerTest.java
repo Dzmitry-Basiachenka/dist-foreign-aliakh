@@ -92,7 +92,7 @@ public class CommonUdmUsageSerializerTest {
         udmUsage.setStatisticalMultiplier(BigDecimal.ONE);
         udmUsage.setAnnualMultiplier(25);
         udmUsage.setAnnualizedCopies(new BigDecimal("300.00000"));
-        udmUsage.setQuantity(50);
+        udmUsage.setQuantity(50L);
         udmUsage.setVersion(3);
         return udmUsage;
     }
