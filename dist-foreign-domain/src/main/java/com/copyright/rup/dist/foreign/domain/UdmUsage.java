@@ -38,7 +38,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String pubFormat;
     private String typeOfUse;
     private String reportedTypeOfUse;
-    private Integer quantity;
+    private Long quantity;
     private String surveyRespondent;
     private String surveyCountry;
     private String ipAddress;
@@ -191,11 +191,11 @@ public class UdmUsage extends StoredEntity<String> {
         this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 

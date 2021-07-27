@@ -329,7 +329,7 @@ public class UdmUsageControllerTest {
         UdmAnnualizedCopiesCalculator calculator = createMock(UdmAnnualizedCopiesCalculator.class);
         Whitebox.setInternalState(controller, calculator);
         String reportedTypeOfUse = "COPY_FOR_MYSELF";
-        Integer quantity = 1;
+        Long quantity = 1L;
         Integer annualMultiplier = 1;
         BigDecimal statisticalMultiplier = BigDecimal.TEN;
         BigDecimal annualizedCopies = BigDecimal.TEN;
@@ -410,7 +410,7 @@ public class UdmUsageControllerTest {
         udmUsage.setSurveyStartDate(LocalDate.of(2021, 12, 12));
         udmUsage.setSurveyEndDate(LocalDate.of(2021, 12, 12));
         udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
-        udmUsage.setQuantity(7);
+        udmUsage.setQuantity(7L);
         return udmUsage;
     }
 }

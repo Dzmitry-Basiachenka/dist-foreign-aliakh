@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +41,7 @@ public class UdmAnnualizedCopiesCalculator {
      * @param statisticalMultiplier statistical multiplier
      * @return annualized copies
      */
-    public BigDecimal calculate(String reportedTypeOfUse, Integer quantity, Integer annualMultiplier,
+    public BigDecimal calculate(String reportedTypeOfUse, Long quantity, Integer annualMultiplier,
                                 BigDecimal statisticalMultiplier) {
         if (EMAIL_TOU.contains(reportedTypeOfUse)) {
             BigDecimal statisticalQuantity = new BigDecimal(quantity).multiply(statisticalMultiplier);

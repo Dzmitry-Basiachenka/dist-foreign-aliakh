@@ -197,6 +197,6 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param statisticalMultiplier statistical multiplier
      * @return annualized copies
      */
-    BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Integer quantity, Integer annualMultiplier,
+    BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Long quantity, Integer annualMultiplier,
                                          BigDecimal statisticalMultiplier);
 }

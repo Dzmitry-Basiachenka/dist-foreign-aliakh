@@ -92,7 +92,7 @@ public class UdmEditUsageWindowTest {
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final Integer DET_LC_ID = 26;
     private static final String DET_LC_NAME = "Law Firms";
-    private static final Integer QUANTITY = 10;
+    private static final Long QUANTITY = 10L;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
     private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal("10.00000");
@@ -274,7 +274,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testVerifyButtonClickListener() {
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
@@ -301,7 +301,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
         binder.writeBean(udmUsage);
@@ -335,7 +335,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testDiscardButtonClickListener() {
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
         binder.readBean(udmUsage);
@@ -350,11 +350,11 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testAnnualizedCopiesCalculation() {
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10, 2, BigDecimal.ONE.setScale(5)))
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10L, 2, BigDecimal.ONE.setScale(5)))
             .andReturn(new BigDecimal("20.00000")).once();
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, BigDecimal.ONE.setScale(5)))
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20L, 2, BigDecimal.ONE.setScale(5)))
             .andReturn(new BigDecimal("40.00000")).once();
-        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20, 2, new BigDecimal("0.20000")))
+        expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20L, 2, new BigDecimal("0.20000")))
             .andReturn(new BigDecimal("8.00000")).once();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
@@ -614,7 +614,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private void initEditWindow() {
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyInt(), anyInt(),
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);

@@ -431,7 +431,7 @@ public class UdmUsageServiceTest {
         udmUsage.setSurveyStartDate(LocalDate.of(2021, 12, 12));
         udmUsage.setSurveyEndDate(LocalDate.of(2021, 12, 12));
         udmUsage.setReportedTypeOfUse("COPY_FOR_MYSELF");
-        udmUsage.setQuantity(7);
+        udmUsage.setQuantity(7L);
         return udmUsage;
     }
 

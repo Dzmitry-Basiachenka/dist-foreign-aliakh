@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.junit.Assert.assertEquals;
 
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.reflect.Whitebox;
@@ -50,36 +51,42 @@ public class UdmAnnualizedCopiesCalculatorIntegrationTest {
     @Test
     public void testCalculateTypeOfUseEmailApplyEmailCappedQuantity() {
         assertEquals(new BigDecimal("1505.00000"), udmAnnualizedCopiesCalculator.calculate(
-            EMAIL_COPY, 301, 5, STATISTICAL_MULTIPLIER));
+            EMAIL_COPY, 301L, 5, STATISTICAL_MULTIPLIER));
     }
 
     @Test
     public void testCalculateTypeOfUseEmail() {
         assertEquals(new BigDecimal("1495.00000"), udmAnnualizedCopiesCalculator.calculate(
-            EMAIL_COPY, 299, 5, STATISTICAL_MULTIPLIER));
+            EMAIL_COPY, 299L, 5, STATISTICAL_MULTIPLIER));
     }
 
     @Test
     public void testCalculateTypeOfUseEmailApplyMaxEmailAnnualizedQuantity() {
         assertEquals(new BigDecimal("1500.00000"), udmAnnualizedCopiesCalculator.calculate(
-            EMAIL_COPY, 61, 25, STATISTICAL_MULTIPLIER));
+            EMAIL_COPY, 61L, 25, STATISTICAL_MULTIPLIER));
     }
 
     @Test
     public void testCalculateTypeOfUseIntranet() {
         assertEquals(new BigDecimal("225.00000"), udmAnnualizedCopiesCalculator.calculate(
-            "DISPLAY_IN_POWERPOINT", 9, 25, STATISTICAL_MULTIPLIER));
+            "DISPLAY_IN_POWERPOINT", 9L, 25, STATISTICAL_MULTIPLIER));
     }
 
     @Test
     public void testCalculateTypeOfUseIntranetApplyCappedQuantity() {
         assertEquals(new BigDecimal("250.00000"), udmAnnualizedCopiesCalculator.calculate(
-            "DISPLAY_IN_POWERPOINT", 11, 25, STATISTICAL_MULTIPLIER));
+            "DISPLAY_IN_POWERPOINT", 11L, 25, STATISTICAL_MULTIPLIER));
     }
 
     @Test
     public void testCalculateTypeOfUseOther() {
         assertEquals(new BigDecimal("300.00000"), udmAnnualizedCopiesCalculator.calculate(
-            "COPY_FOR_MYSELF", 12, 25, STATISTICAL_MULTIPLIER));
+            "COPY_FOR_MYSELF", 12L, 25, STATISTICAL_MULTIPLIER));
+    }
+
+    @Test
+    public void testCalculateWithLargeNumbers() {
+        assertEquals(new BigDecimal("24999999975.00000"), udmAnnualizedCopiesCalculator.calculate(
+            "COPY_FOR_MYSELF", 25L, 999999999, STATISTICAL_MULTIPLIER));
     }
 }

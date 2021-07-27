@@ -141,7 +141,7 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
             result.setLanguage(getString(row, Header.LANGUAGE, headers));
             result.setPubFormat(getString(row, Header.PUB_FORMAT, headers));
             result.setReportedTypeOfUse(getString(row, Header.REPORTED_TYPE_OF_USE, headers));
-            result.setQuantity(getInteger(row, Header.QUANTITY, headers));
+            result.setQuantity(getLong(row, Header.QUANTITY, headers));
             result.setSurveyRespondent(getString(row, Header.SURVEY_RESPONDED, headers));
             result.setCompanyId(getLong(row, Header.COMPANY_ID, headers));
             result.setSurveyCountry(StringUtils.trim(getString(row, Header.SURVEY_COUNTRY, headers)));
@@ -159,7 +159,7 @@ public class UdmCsvProcessor extends DistCsvProcessor<UdmUsage> {
 
         private boolean isTitleNoneAndQuantityZero(UdmUsage udmUsage) {
             return "none".equalsIgnoreCase(StringUtils.trim(udmUsage.getReportedTitle()))
-                && NumberUtils.INTEGER_ZERO.equals(udmUsage.getQuantity());
+                && NumberUtils.LONG_ZERO.equals(udmUsage.getQuantity());
         }
     }
 }

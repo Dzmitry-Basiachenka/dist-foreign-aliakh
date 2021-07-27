@@ -211,7 +211,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Integer quantity, Integer annualMultiplier,
+    public BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Long quantity, Integer annualMultiplier,
                                                 BigDecimal statisticalMultiplier) {
         return annualizedCopiesCalculator.calculate(reportedTypeOfUse, quantity, annualMultiplier,
             statisticalMultiplier);

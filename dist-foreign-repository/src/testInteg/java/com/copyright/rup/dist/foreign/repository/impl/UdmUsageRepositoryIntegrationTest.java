@@ -98,7 +98,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME_1 = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String COMPANY_NAME_2 = "Albany International Corp.";
-    private static final Integer QUANTITY = 10;
+    private static final Long QUANTITY = 10L;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
     private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal("10.00000");
@@ -153,7 +153,7 @@ public class UdmUsageRepositoryIntegrationTest {
         originalUsage.setCompanyName(COMPANY_NAME_1);
         originalUsage.setAnnualMultiplier(1);
         originalUsage.setStatisticalMultiplier(new BigDecimal("2.00000"));
-        originalUsage.setQuantity(3);
+        originalUsage.setQuantity(3L);
         originalUsage.setAnnualizedCopies(new BigDecimal("6.00000"));
         originalUsage.setIneligibleReason(
             new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey"));
