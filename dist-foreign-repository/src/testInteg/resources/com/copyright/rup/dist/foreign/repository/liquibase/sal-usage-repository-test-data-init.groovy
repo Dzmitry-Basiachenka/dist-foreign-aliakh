@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-07-29-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testFindCountByFilter, testFindDtosByFilter, testFindDtosByFilterSort")
+        comment('Insert test data for testFindCountByFilter, testFindDtosByFilter, testFindDtosByFilterSort')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05844db0-e0e4-4423-8966-7f1c6160f000')
@@ -208,7 +208,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-09-24-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testUsageDetailsExist")
+        comment('Insert test data for testUsageDetailsExist')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'cb932497-086d-4a7e-9b34-e9a62f17adab4')
@@ -369,7 +369,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-09-25-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testDeleteUsageData")
+        comment('Insert test data for testDeleteUsageData')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '09cc64a7-171a-4921-8d99-500768137cb8')
@@ -475,7 +475,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-09-28-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testDeleteByBatchId")
+        comment('Insert test data for testDeleteByBatchId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'b54293db-bfb9-478a-bc13-d70aef5d3ecb')
@@ -552,7 +552,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-10-01-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Insert test data for testAddToScenario and testUpdatePayeeByAccountNumber")
+        comment('Insert test data for testAddToScenario and testUpdatePayeeByAccountNumber')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
@@ -615,9 +615,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '87a8b327-6fcc-417f-8fd6-bb6615103b53')
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
             column(name: 'comment', value: 'SAL UB usage 1')
@@ -681,9 +681,9 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '6252afe5-e756-42d4-b96a-708afeda9122')
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
         }
@@ -714,7 +714,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-10-07-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testDeleteFromScenario")
+        comment('Insert test data for testDeleteFromScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '462111b6-5d30-4a43-a35b-14796d34d847')
@@ -755,8 +755,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -794,8 +794,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -842,7 +842,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-10-15-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testCalculateAmounts")
+        comment('Insert test data for testCalculateAmounts')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '26d9bd2f-7024-474e-9dbf-c009158d81cd')
@@ -884,8 +884,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -920,8 +920,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -956,8 +956,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -992,8 +992,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -1033,8 +1033,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -1074,8 +1074,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -1153,9 +1153,9 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000026)
             column(name: 'payee_account_number', value: 1000000026)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -1219,9 +1219,9 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '83e26dc4-87af-464d-9edc-bb37611947fa')
             column(name: 'df_usage_batch_uid', value: '33c9b62f-80dc-4583-8504-3757c80b4aec')
             column(name: 'wr_wrk_inst', value: 123456789)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'WORK_NOT_GRANTED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -1257,7 +1257,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-12-18-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for audit")
+        comment('Insert test data for audit')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'f78b7a00-856d-4df6-aee6-0fa07e5a9f17')
@@ -1316,8 +1316,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Leseleiter')
             column(name: 'system_title', value: 'Leseleiter')
-            column(name: "standard_number", value: '978-3-592-10520-9')
-            column(name: "standard_number_type", value: 'VALISBN13')
+            column(name: 'standard_number', value: '978-3-592-10520-9')
+            column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'gross_amount', value: 200.0000)
@@ -1355,8 +1355,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 2000173934)
             column(name: 'work_title', value: 'Rimas')
             column(name: 'system_title', value: 'Rimas')
-            column(name: "standard_number", value: '9788408047827')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '9788408047827')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'SAL')
             column(name: 'gross_amount', value: 800.0000)

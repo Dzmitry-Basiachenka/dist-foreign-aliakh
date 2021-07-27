@@ -1118,7 +1118,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: 2021)
             column(name: 'initial_usages_count', value: 8)
-            column(name: 'baseline_years', value: '0')
+            column(name: 'baseline_years', value: 0)
             column(name: 'created_datetime', value: '2021-02-15 12:00:00+00')
         }
 
@@ -1531,9 +1531,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '2a9ac95c-a44d-436c-b754-d69bb7e63993')
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
         }
@@ -1785,9 +1785,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
         }
@@ -1820,9 +1820,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'b324671c-1ae2-4d1f-9dce-d9b80900df55')
             column(name: 'wr_wrk_inst', value: 123456789)
             column(name: 'rh_account_number', value: 1000000001)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
         }

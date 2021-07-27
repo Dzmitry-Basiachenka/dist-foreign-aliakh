@@ -4,127 +4,127 @@ databaseChangeLog {
     changeSet(id: '2020-01-20-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
         comment('Inserting test data for testWriteUsagesForClassificationAndFindIds')
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_batch") {
-            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
-            column(name: "name", value: "AACL batch")
-            column(name: "rro_account_number", value: "2000017000")
-            column(name: "payment_date", value: "2019-06-30")
-            column(name: "product_family", value: "AACL")
-            column(name: "fiscal_year", value: "2019")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'aed882d5-7625-4039-8781-a6676e11c579')
+            column(name: 'name', value: 'AACL batch')
+            column(name: 'rro_account_number', value: 2000017000)
+            column(name: 'payment_date', value: '2019-06-30')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'fiscal_year', value: 2019)
             column(name: 'initial_usages_count', value: 3)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
-            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
-            column(name: "wr_wrk_inst", value: 122825976)
-            column(name: "system_title", value: "Ecotoxicology")
-            column(name: "standard_number", value: "09639292")
-            column(name: "standard_number_type", value: "VALISSN")
-            column(name: "rh_account_number", value: 1000003578)
-            column(name: "status_ind", value: "RH_FOUND")
-            column(name: "product_family", value: "AACL")
-            column(name: "number_of_copies", value: 10)
-            column(name: "comment", value: "AACL comment")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
+            column(name: 'df_usage_batch_uid', value: 'aed882d5-7625-4039-8781-a6676e11c579')
+            column(name: 'wr_wrk_inst', value: 122825976)
+            column(name: 'system_title', value: 'Ecotoxicology')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'rh_account_number', value: 1000003578)
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: 10)
+            column(name: 'comment', value: 'AACL comment')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_aacl") {
-            column(name: "df_usage_aacl_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
-            column(name: "institution", value: "CORNELL UNIVERSITY")
-            column(name: "usage_period", value: "2019")
-            column(name: "usage_source", value: "Feb 2019 TUR")
-            column(name: "number_of_pages", value: 12)
-            column(name: "right_limitation", value: "ALL")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
+            column(name: 'institution', value: 'CORNELL UNIVERSITY')
+            column(name: 'usage_period', value: 2019)
+            column(name: 'usage_source', value: 'Feb 2019 TUR')
+            column(name: 'number_of_pages', value: 12)
+            column(name: 'right_limitation', value: 'ALL')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
-            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
-            column(name: "wr_wrk_inst", value: 122820420)
-            column(name: "system_title", value: "Castanea")
-            column(name: "standard_number", value: "00087475")
-            column(name: "standard_number_type", value: "VALISSN")
-            column(name: "rh_account_number", value: 7001413934)
-            column(name: "status_ind", value: "RH_FOUND")
-            column(name: "product_family", value: "AACL")
-            column(name: "number_of_copies", value: 20)
-            column(name: "comment", value: "AACL comment")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
+            column(name: 'df_usage_batch_uid', value: 'aed882d5-7625-4039-8781-a6676e11c579')
+            column(name: 'wr_wrk_inst', value: 122820420)
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '00087475')
+            column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'rh_account_number', value: 7001413934)
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: 20)
+            column(name: 'comment', value: 'AACL comment')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_aacl") {
-            column(name: "df_usage_aacl_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
-            column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "2019")
-            column(name: "usage_source", value: "Aug 2018 TUR")
-            column(name: "number_of_pages", value: "6")
-            column(name: "right_limitation", value: "ALL")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'usage_period', value: 2019)
+            column(name: 'usage_source', value: 'Aug 2018 TUR')
+            column(name: 'number_of_pages', value: 6)
+            column(name: 'right_limitation', value: 'ALL')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
-            column(name: "df_usage_batch_uid", value: "aed882d5-7625-4039-8781-a6676e11c579")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '67d36799-5523-474d-91f6-2e12756a4918')
+            column(name: 'df_usage_batch_uid', value: 'aed882d5-7625-4039-8781-a6676e11c579')
             column(name: 'wr_wrk_inst', value: 109713043)
-            column(name: "status_ind", value: "NEW")
-            column(name: "product_family", value: "AACL")
-            column(name: "number_of_copies", value: "20")
-            column(name: "comment", value: "AACL comment")
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: 20)
+            column(name: 'comment', value: 'AACL comment')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_aacl") {
-            column(name: "df_usage_aacl_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
-            column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "2019")
-            column(name: "usage_source", value: "Aug 2018 TUR")
-            column(name: "number_of_pages", value: "6")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '67d36799-5523-474d-91f6-2e12756a4918')
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'usage_period', value: 2019)
+            column(name: 'usage_source', value: 'Aug 2018 TUR')
+            column(name: 'number_of_pages', value: 6)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "945553a2-0200-4e5d-9c5a-a44b57839c42")
-            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
-            column(name: "action_type_ind", value: "LOADED")
-            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '945553a2-0200-4e5d-9c5a-a44b57839c42')
+            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "25f4fa01-02aa-414a-9052-667360be8535")
-            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
-            column(name: "action_type_ind", value: "WORK_FOUND")
-            column(name: "action_reason", value: "Wr Wrk Inst 122825976 was found in PI")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '25f4fa01-02aa-414a-9052-667360be8535')
+            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
+            column(name: 'action_type_ind', value: 'WORK_FOUND')
+            column(name: 'action_reason', value: 'Wr Wrk Inst 122825976 was found in PI')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "3ef7b6e0-8248-4ccf-b8db-ff1e0e3b5837")
-            column(name: "df_usage_uid", value: "1208f434-3d98-49d5-bdc6-baa611d2d006")
-            column(name: "action_type_ind", value: "RH_FOUND")
-            column(name: "action_reason", value: "Rightsholder account 1000003578 was found in RMS")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '3ef7b6e0-8248-4ccf-b8db-ff1e0e3b5837')
+            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
+            column(name: 'action_type_ind', value: 'RH_FOUND')
+            column(name: 'action_reason', value: 'Rightsholder account 1000003578 was found in RMS')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "0dd59537-2266-411b-8171-092544911540")
-            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
-            column(name: "action_type_ind", value: "LOADED")
-            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '0dd59537-2266-411b-8171-092544911540')
+            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "532a2ec3-75de-457b-b8d3-736e3c8e5e5a")
-            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
-            column(name: "action_type_ind", value: "WORK_FOUND")
-            column(name: "action_reason", value: "Wr Wrk Inst 122820420 was found in PI")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '532a2ec3-75de-457b-b8d3-736e3c8e5e5a')
+            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
+            column(name: 'action_type_ind', value: 'WORK_FOUND')
+            column(name: 'action_reason', value: 'Wr Wrk Inst 122820420 was found in PI')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "b1c672ce-30a1-4703-a143-dca797c2b0ea")
-            column(name: "df_usage_uid", value: "0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0")
-            column(name: "action_type_ind", value: "RH_FOUND")
-            column(name: "action_reason", value: "Rightsholder account 7001413934 was found in RMS")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'b1c672ce-30a1-4703-a143-dca797c2b0ea')
+            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
+            column(name: 'action_type_ind', value: 'RH_FOUND')
+            column(name: 'action_reason', value: 'Rightsholder account 7001413934 was found in RMS')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "1fab6d9a-aa40-4ca9-b43e-cc657387c67d")
-            column(name: "df_usage_uid", value: "67d36799-5523-474d-91f6-2e12756a4918")
-            column(name: "action_type_ind", value: "LOADED")
-            column(name: "action_reason", value: "Uploaded in 'AACL batch'")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '1fab6d9a-aa40-4ca9-b43e-cc657387c67d')
+            column(name: 'df_usage_uid', value: '67d36799-5523-474d-91f6-2e12756a4918')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
         }
     }
 
@@ -177,7 +177,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-02-05-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testWriteAaclUsagesCsvReport")
+        comment('Insert test data for testWriteAaclUsagesCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '600ad926-e7dd-4086-b283-87e6579395ce')
@@ -192,9 +192,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '600ad926-e7dd-4086-b283-87e6579395ce')
             column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'rh_account_number', value: 1000011451)
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 20)
@@ -217,9 +217,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '600ad926-e7dd-4086-b283-87e6579395ce')
             column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'rh_account_number', value: 1000011451)
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 20)
@@ -237,32 +237,32 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'ALL')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "abced58b-fff2-470b-99fc-11f2a3ae098a")
-            column(name: "df_usage_batch_uid", value: "600ad926-e7dd-4086-b283-87e6579395ce")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'abced58b-fff2-470b-99fc-11f2a3ae098a')
+            column(name: 'df_usage_batch_uid', value: '600ad926-e7dd-4086-b283-87e6579395ce')
             column(name: 'wr_wrk_inst', value: 122820420)
-            column(name: "system_title", value: "Castanea")
-            column(name: "standard_number", value: "00087475")
-            column(name: "standard_number_type", value: "VALISSN")
-            column(name: "rh_account_number", value: "7001413934")
-            column(name: "status_ind", value: "RH_FOUND")
-            column(name: "product_family", value: "AACL")
-            column(name: "number_of_copies", value: "20")
-            column(name: "comment", value: "AACL comment")
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '00087475')
+            column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'rh_account_number', value: 7001413934)
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: 20)
+            column(name: 'comment', value: 'AACL comment')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_aacl") {
-            column(name: "df_usage_aacl_uid", value: "abced58b-fff2-470b-99fc-11f2a3ae098a")
-            column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "2019")
-            column(name: "usage_source", value: "Aug 2018 TUR")
-            column(name: "number_of_pages", value: "6")
-            column(name: "right_limitation", value: "ALL")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: 'abced58b-fff2-470b-99fc-11f2a3ae098a')
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'usage_period', value: 2019)
+            column(name: 'usage_source', value: 'Aug 2018 TUR')
+            column(name: 'number_of_pages', value: 6)
+            column(name: 'right_limitation', value: 'ALL')
         }
     }
 
     changeSet(id: '2020-03-11-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testWriteAuditAaclUsagesCsvReport")
+        comment('Insert test data for testWriteAuditAaclUsagesCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '2eb52c26-b555-45ae-b8c5-21289dfeeac4')
@@ -293,9 +293,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '29689635-c6ff-483c-972d-09eb2febb9e0')
             column(name: 'wr_wrk_inst', value: 122830308)
             column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'rh_account_number', value: 1000011451)
             column(name: 'gross_amount', value: 500.00)
             column(name: 'net_amount', value: 420.00)
@@ -322,9 +322,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '29689635-c6ff-483c-972d-09eb2febb9e0')
             column(name: 'wr_wrk_inst', value: 123986581)
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'rh_account_number', value: 1000011451)
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 20)
@@ -347,32 +347,32 @@ databaseChangeLog {
             column(name: 'baseline_uid', value: '2eb52c26-b555-45ae-b8c5-21289dfeeac4')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "027aa879-d963-41f1-bacf-db22ebe3584a")
-            column(name: "df_usage_batch_uid", value: "29689635-c6ff-483c-972d-09eb2febb9e0")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '027aa879-d963-41f1-bacf-db22ebe3584a')
+            column(name: 'df_usage_batch_uid', value: '29689635-c6ff-483c-972d-09eb2febb9e0')
             column(name: 'wr_wrk_inst', value: 122820420)
-            column(name: "system_title", value: "Castanea")
-            column(name: "standard_number", value: "00087475")
-            column(name: "standard_number_type", value: "VALISSN")
-            column(name: "rh_account_number", value: "7001413934")
-            column(name: "status_ind", value: "RH_FOUND")
-            column(name: "product_family", value: "AACL")
-            column(name: "number_of_copies", value: "20")
-            column(name: "comment", value: "AACL comment")
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '00087475')
+            column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'rh_account_number', value: 7001413934)
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'product_family', value: 'AACL')
+            column(name: 'number_of_copies', value: 20)
+            column(name: 'comment', value: 'AACL comment')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_aacl") {
-            column(name: "df_usage_aacl_uid", value: "027aa879-d963-41f1-bacf-db22ebe3584a")
-            column(name: "institution", value: "BIOLA UNIVERSITY")
-            column(name: "usage_period", value: "2019")
-            column(name: "usage_source", value: "Aug 2018 TUR")
-            column(name: "number_of_pages", value: "6")
-            column(name: "right_limitation", value: "ALL")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
+            column(name: 'df_usage_aacl_uid', value: '027aa879-d963-41f1-bacf-db22ebe3584a')
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'usage_period', value: 2019)
+            column(name: 'usage_source', value: 'Aug 2018 TUR')
+            column(name: 'number_of_pages', value: 6)
+            column(name: 'right_limitation', value: 'ALL')
         }
     }
 
     changeSet(id: '2020-04-22-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testWriteWorkSharesByAggLcClassSummaryCsvReport")
+        comment('Insert test data for testWriteWorkSharesByAggLcClassSummaryCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '8fb69838-9f62-456f-ad52-58b55d71c305')
@@ -774,7 +774,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-04-23-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testWriteAaclScenarioUsagesCsvReport")
+        comment('Insert test data for testWriteAaclScenarioUsagesCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'ffc1587c-9b05-4681-a3cc-dc02cec7fadc')
@@ -838,7 +838,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '9780262122269')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'gross_amount', value: 200.00)
             column(name: 'net_amount', value: 150.00)
             column(name: 'service_fee_amount', value: 50.00)
@@ -876,7 +876,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '4680262122277')
             column(name: 'standard_number_type', value: 'VALISBN10')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'gross_amount', value: 100.00)
             column(name: 'net_amount', value: 75.00)
             column(name: 'service_fee_amount', value: 25.00)
@@ -1030,7 +1030,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-06-17-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testAaclUndistributedLiabilitiesCsvReport")
+        comment('Insert test data for testAaclUndistributedLiabilitiesCsvReport')
 
         //Should be included into report as it isn't associated with any scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
@@ -1088,7 +1088,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '9780262122269')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'gross_amount', value: 200.00)
             column(name: 'net_amount', value: 150.00)
             column(name: 'service_fee_amount', value: 50.00)
@@ -1157,7 +1157,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '9780262122269')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'gross_amount', value: 200.00)
             column(name: 'net_amount', value: 150.00)
             column(name: 'service_fee_amount', value: 50.00)
@@ -1226,7 +1226,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '9780262122269')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '1008902112317622XX')
@@ -1295,7 +1295,7 @@ databaseChangeLog {
             column(name: 'standard_number', value: '9780262122269')
             column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'rh_account_number', value: 1000002797)
-            column(name: 'payee_account_number', value: "1000002797")
+            column(name: 'payee_account_number', value: 1000002797)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'product_family', value: 'AACL')
             column(name: 'gross_amount', value: 200.00)

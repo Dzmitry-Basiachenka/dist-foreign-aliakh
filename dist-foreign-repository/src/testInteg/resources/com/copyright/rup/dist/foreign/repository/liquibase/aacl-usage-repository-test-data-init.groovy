@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2019-12-27-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testFindDtosByFilter")
+        comment('Insert test data for testFindDtosByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05844db0-e0e4-4423-8966-7f1c6160f000')
@@ -94,7 +94,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-01-27-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testIsValidFilteredUsageStatus")
+        comment('Insert test data for testIsValidFilteredUsageStatus')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'adcc460c-c4ae-4750-99e8-b9fe91787ce1')
@@ -165,7 +165,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-01-28-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testUpdate")
+        comment('Insert test data for testUpdate')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '77cfa2dd-efac-48a9-bd5b-98659ff2265a')
@@ -203,7 +203,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-13-02-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testDeleteByBatchId")
+        comment('Insert test data for testDeleteByBatchId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '940ca71c-fd90-4ffd-aa20-b293c0f49891')
@@ -255,7 +255,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-27-02-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testFindFromBaseline")
+        comment('Insert test data for testFindFromBaseline')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '0085ceb9-6d2a-4a03-87a5-84e369dec6e1')
@@ -319,7 +319,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-11-03-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testFindUsagePeriodsByFilter")
+        comment('Insert test data for testFindUsagePeriodsByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31ac3937-157b-48c2-86b2-db28356fc868')
@@ -419,7 +419,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-12-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testAddToScenarioByFilter")
+        comment('Insert test data for testAddToScenarioByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '5ceb887e-502e-463a-ae94-f925feff35d8')
@@ -511,7 +511,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-17-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testUpdatePublicationTypeWeight")
+        comment('Insert test data for testUpdatePublicationTypeWeight')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: 'b012c81c-2370-458e-a6cb-349b66d08e6e')
@@ -629,7 +629,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-17-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testFindForAudit")
+        comment('Insert test data for testFindForAudit')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'c480ba67-82f3-4aad-a966-4586da4898e6')
@@ -802,7 +802,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-19-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testUsagesExistByDetailLicenseeClassAndFilter")
+        comment('Insert test data for testUsagesExistByDetailLicenseeClassAndFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'd1108958-44cc-4bb4-9bb5-66fcf5b42104')
@@ -881,7 +881,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-23-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testFindInvalidRightsholdersByFilter")
+        comment('Insert test data for testFindInvalidRightsholdersByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '70a96dc1-b0a8-433f-a7f4-c5d94ee75a9e')
@@ -1212,8 +1212,8 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-04-02-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testFindCountByScenarioIdAndRhAccountNumber, testFindByScenarioIdAndRhAccountNumber, " +
-                "testSortingFindByScenarioIdAndRhAccountNumber")
+        comment('Insert test data for testFindCountByScenarioIdAndRhAccountNumber, testFindByScenarioIdAndRhAccountNumber, ' +
+                'testSortingFindByScenarioIdAndRhAccountNumber')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '39548ee4-7929-477e-b9d2-bcb1e76f8037')
@@ -1285,7 +1285,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 108)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
-            column(name: 'original_publication_type', value: "NATL-INTL Newspaper")
+            column(name: 'original_publication_type', value: 'NATL-INTL Newspaper')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1318,7 +1318,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 110)
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
             column(name: 'publication_type_weight', value: 1.50)
-            column(name: 'original_publication_type', value: "Consumer Magazine")
+            column(name: 'original_publication_type', value: 'Consumer Magazine')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -1335,7 +1335,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-04-09-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testDeleteScenario")
+        comment('Insert test data for testDeleteScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '0944cd86-4d4a-4186-ad70-acc088c68816')
@@ -1465,7 +1465,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-05-13-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testAddToBaselineByScenarioId")
+        comment('Insert test data for testAddToBaselineByScenarioId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '7c770933-6d00-4228-964b-0062e5d8d7dd')
@@ -1676,8 +1676,8 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-05-14-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment("Insert test data for testIsValidForClassification, testIsValidForClassificationWithEligibleStatus," +
-                "testIsValidForClassificationWithUsagesFromBaseline, testIsValidForClassificationWithEligibleStatusAndUsagesFromBaseline")
+        comment('Insert test data for testIsValidForClassification, testIsValidForClassificationWithEligibleStatus,' +
+                'testIsValidForClassificationWithUsagesFromBaseline, testIsValidForClassificationWithEligibleStatusAndUsagesFromBaseline')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '38718bfe-08bd-4af7-8481-0fe16dcf2750')
@@ -1796,7 +1796,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-11-06-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Insert test data for testFindPayeeTotalHoldersByFilter")
+        comment('Insert test data for testFindPayeeTotalHoldersByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'fd208784-6963-4c0d-8d36-32398d2361b7')

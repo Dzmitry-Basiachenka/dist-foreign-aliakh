@@ -79,7 +79,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 448824345)
             column(name: 'work_title', value: 'Technical Journal')
             column(name: 'system_title', value: 'Technical Journal')
-            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: 1000002859)
             column(name: 'payee_account_number', value: 1000002859)
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'standard_number', value: '1008902112317555XX')
