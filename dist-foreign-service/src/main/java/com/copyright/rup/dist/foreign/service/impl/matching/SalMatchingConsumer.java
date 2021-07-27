@@ -40,7 +40,6 @@ public class SalMatchingConsumer implements IConsumer<List<Usage>> {
 
     @Override
     @Profiled(tag = "SalMatchingConsumer.consume")
-    @Transactional
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume SAL usages for matching processing. Started. UsageIds={}", LogUtils.ids(usages));
