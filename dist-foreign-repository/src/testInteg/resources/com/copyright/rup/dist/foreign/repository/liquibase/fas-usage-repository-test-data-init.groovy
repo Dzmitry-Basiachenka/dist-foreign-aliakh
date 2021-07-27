@@ -105,7 +105,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-17-00', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testDeleteFromScenarioByPayees")
+        comment('Insert test data for testDeleteFromScenarioByPayees')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '9905f006-a3e1-4061-b3d4-e7ece191103f')
@@ -254,7 +254,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-17-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testRedisignateToNtsWithdrawnByPayees")
+        comment('Insert test data for testRedisignateToNtsWithdrawnByPayees')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '767a2647-7e6e-4479-b381-e642de480863')
@@ -368,7 +368,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-17-02', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testUpdateResearchedUsage")
+        comment('Insert test data for testUpdateResearchedUsage')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
@@ -435,7 +435,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-02-12-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Insert test data for testFindWithAmountsAndRightsholders and ")
+        comment('Insert test data for testFindWithAmountsAndRightsholders and ')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'e726496d-aca1-46d8-b393-999827cc6dda')
@@ -667,9 +667,9 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '23a0041e-50e4-4411-bfec-e991ab102d9e')
             column(name: 'df_usage_batch_uid', value: '368fcde9-15a8-42ad-b89f-175eba86bbf4')
             column(name: 'wr_wrk_inst', value: 122830308)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
         }

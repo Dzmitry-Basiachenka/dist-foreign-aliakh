@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-03-17-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert test data for testCreateAaclScenario")
+        comment('Insert test data for testCreateAaclScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '60080587-a225-439c-81af-f016cb33aeac')

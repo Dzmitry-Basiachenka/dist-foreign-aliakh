@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-10-12-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testCreateSalScenario")
+        comment('Insert test data for testCreateSalScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05844db0-e0e4-4423-8966-7f1c6160f000')
@@ -47,8 +47,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)
@@ -82,8 +82,8 @@ databaseChangeLog {
             column(name: 'payee_account_number', value: 1000011450)
             column(name: 'work_title', value: 'Learning in Your Sleep')
             column(name: 'system_title', value: 'Learning in Your Sleep')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'SAL')
             column(name: 'number_of_copies', value: 10)

@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-07-01-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment("Insert test data for testNtsUndistributedLiabilitiesCsvReport")
+        comment('Insert test data for testNtsUndistributedLiabilitiesCsvReport')
 
         //should be include in the report
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -37,27 +37,27 @@ databaseChangeLog {
             column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6")
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6')
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6")
-            column(name: "df_usage_batch_uid", value: "e558e176-901e-4101-9418-493bbcbd9679")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6')
+            column(name: 'df_usage_batch_uid', value: 'e558e176-901e-4101-9418-493bbcbd9679')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6")
-            column(name: "df_usage_batch_uid", value: "7083ae7d-0079-41fb-aab1-8ae2bd5db8fe")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6')
+            column(name: 'df_usage_batch_uid', value: '7083ae7d-0079-41fb-aab1-8ae2bd5db8fe')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '429b9acd-f137-40c3-806d-dabae2315027')
             column(name: 'df_usage_batch_uid', value: 'e558e176-901e-4101-9418-493bbcbd9679')
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -87,7 +87,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4e059d20-3224-44bb-976a-c8e3b64e4406')
             column(name: 'df_usage_batch_uid', value: 'e558e176-901e-4101-9418-493bbcbd9679')
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -142,7 +142,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c8de604d-eb49-4d8f-9a42-2362fbca3277')
             column(name: 'df_usage_batch_uid', value: '7083ae7d-0079-41fb-aab1-8ae2bd5db8fe')
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -172,7 +172,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ae41625f-be8a-43c1-8310-6c09612181a8')
             column(name: 'df_usage_batch_uid', value: '7083ae7d-0079-41fb-aab1-8ae2bd5db8fe')
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -219,22 +219,22 @@ databaseChangeLog {
             column(name: 'nts_fields', value: '{"rh_minimum_amount":200.00}')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "230c34cf-c109-4ac2-8c4c-153d9dbb591c")
-            column(name: "df_scenario_uid", value: "e3a18e26-dc58-416d-a707-5a7bc843d6a4")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '230c34cf-c109-4ac2-8c4c-153d9dbb591c')
+            column(name: 'df_scenario_uid', value: 'e3a18e26-dc58-416d-a707-5a7bc843d6a4')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "230c34cf-c109-4ac2-8c4c-153d9dbb591c")
-            column(name: "df_usage_batch_uid", value: "edb66e6b-a061-4ef8-bc30-28f00a2edaeb")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '230c34cf-c109-4ac2-8c4c-153d9dbb591c')
+            column(name: 'df_usage_batch_uid', value: 'edb66e6b-a061-4ef8-bc30-28f00a2edaeb')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '43ba1d77-b00f-4ae6-845a-332530ddc2eb')
             column(name: 'df_usage_batch_uid', value: 'edb66e6b-a061-4ef8-bc30-28f00a2edaeb')
-            column(name: "df_scenario_uid", value: "e3a18e26-dc58-416d-a707-5a7bc843d6a4")
+            column(name: 'df_scenario_uid', value: 'e3a18e26-dc58-416d-a707-5a7bc843d6a4')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -729,11 +729,11 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'IN_PROGRESS')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "85ba864e-b1f9-4857-8f9d-17a1de9f5811")
-            column(name: "df_scenario_uid", value: "85ba864e-1939-4a60-9fab-888b84199321")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '85ba864e-b1f9-4857-8f9d-17a1de9f5811')
+            column(name: 'df_scenario_uid', value: '85ba864e-1939-4a60-9fab-888b84199321')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -774,9 +774,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 500)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "85ba864e-b1f9-4857-8f9d-17a1de9f5811")
-            column(name: "df_usage_batch_uid", value: "f17ebc80-e74e-436d-ba6e-acf3d355b7ff")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '85ba864e-b1f9-4857-8f9d-17a1de9f5811')
+            column(name: 'df_usage_batch_uid', value: 'f17ebc80-e74e-436d-ba6e-acf3d355b7ff')
         }
 
         rollback ""
@@ -845,176 +845,176 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2010-01-01 11:41:52.735531+03')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "66649fd0-c094-4a72-979e-00cf462fb3eb")
-            column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "FAS")
-            column(name: "work_title", value: "Wissenschaft & Forschung Japan")
-            column(name: "status_ind", value: "NTS_WITHDRAWN")
-            column(name: "standard_number", value: "2192-3558")
-            column(name: "number_of_copies", value: "100")
-            column(name: "gross_amount", value: "200")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '66649fd0-c094-4a72-979e-00cf462fb3eb')
+            column(name: 'df_usage_batch_uid', value: '99966cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'number_of_copies', value: 100)
+            column(name: 'gross_amount', value: 200)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "66649fd0-c094-4a72-979e-00cf462fb3eb")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '66649fd0-c094-4a72-979e-00cf462fb3eb')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "6666d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "FAS")
-            column(name: "wr_wrk_inst", value: "180382915")
-            column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
-            column(name: "status_ind", value: "NTS_WITHDRAWN")
-            column(name: "standard_number", value: "2192-3566")
-            column(name: "number_of_copies", value: "250232")
-            column(name: "gross_amount", value: "200")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6666d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'df_usage_batch_uid', value: '99966cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: 180382915)
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'standard_number', value: '2192-3566')
+            column(name: 'number_of_copies', value: 250232)
+            column(name: 'gross_amount', value: 200)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "6666d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "10000")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6666d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 10000)
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "666644ba-58d6-4adb-9dc1-602eb09052ce")
-            column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "FAS")
-            column(name: "work_title", value: "Wissenschaft & Forschung Japan")
-            column(name: "status_ind", value: "NTS_WITHDRAWN")
-            column(name: "standard_number", value: "2192-3558")
-            column(name: "number_of_copies", value: "100")
-            column(name: "gross_amount", value: "200")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '666644ba-58d6-4adb-9dc1-602eb09052ce')
+            column(name: 'df_usage_batch_uid', value: '99966cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'number_of_copies', value: 100)
+            column(name: 'gross_amount', value: 200)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "666644ba-58d6-4adb-9dc1-602eb09052ce")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "10000")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '666644ba-58d6-4adb-9dc1-602eb09052ce')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 10000)
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "6666dea5-4acc-4d87-b264-a67ab17a93ae")
-            column(name: "df_usage_batch_uid", value: "99966cac-2468-48d4-b346-93d3458a656a")
-            column(name: "wr_wrk_inst", value: "103658926")
-            column(name: "work_title", value: "Nitrates")
-            column(name: "status_ind", value: "ELIGIBLE")
-            column(name: "product_family", value: "FAS")
-            column(name: "standard_number", value: "5475802112214578XX")
-            column(name: "number_of_copies", value: "250232")
-            column(name: "gross_amount", value: "200")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6666dea5-4acc-4d87-b264-a67ab17a93ae')
+            column(name: 'df_usage_batch_uid', value: '99966cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'wr_wrk_inst', value: 103658926)
+            column(name: 'work_title', value: 'Nitrates')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'number_of_copies', value: 250232)
+            column(name: 'gross_amount', value: 200)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "6666dea5-4acc-4d87-b264-a67ab17a93ae")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "IEEE")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '6666dea5-4acc-4d87-b264-a67ab17a93ae')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "11149fd0-c094-4a72-979e-00cf462fb3eb")
-            column(name: "df_usage_batch_uid", value: "88866cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
-            column(name: "work_title", value: "Wissenschaft & Forschung Japan")
-            column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
-            column(name: "standard_number", value: "2192-3558")
-            column(name: "number_of_copies", value: "100")
-            column(name: "gross_amount", value: "202")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '11149fd0-c094-4a72-979e-00cf462fb3eb')
+            column(name: 'df_usage_batch_uid', value: '88866cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'number_of_copies', value: 100)
+            column(name: 'gross_amount', value: 202)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "11149fd0-c094-4a72-979e-00cf462fb3eb")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '11149fd0-c094-4a72-979e-00cf462fb3eb')
             column(name: 'df_fund_pool_uid', value: '3fef25b0-c0d1-4819-887f-4c6acc01390e')
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "30.86")
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "2226d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "df_usage_batch_uid", value: "88866cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
-            column(name: "wr_wrk_inst", value: "180382915")
-            column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
-            column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
-            column(name: "standard_number", value: "2192-3566")
-            column(name: "number_of_copies", value: "250232")
-            column(name: "gross_amount", value: "202")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '2226d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'df_usage_batch_uid', value: '88866cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'wr_wrk_inst', value: 180382915)
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'standard_number', value: '2192-3566')
+            column(name: 'number_of_copies', value: 250232)
+            column(name: 'gross_amount', value: 202)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "2226d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "df_fund_pool_uid", value: "4fef25b0-c0d1-4819-887f-4c6acc01390e")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "10000")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '2226d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'df_fund_pool_uid', value: '4fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 10000)
+            column(name: 'reported_value', value: 30.86)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage") {
-            column(name: "df_usage_uid", value: "3336d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "df_usage_batch_uid", value: "88866cac-2468-48d4-b346-93d3458a656a")
-            column(name: "product_family", value: "NTS")
-            column(name: "wr_wrk_inst", value: "180382915")
-            column(name: "work_title", value: "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA")
-            column(name: "status_ind", value: "TO_BE_DISTRIBUTED")
-            column(name: "standard_number", value: "2192-3566")
-            column(name: "number_of_copies", value: "250232")
-            column(name: "gross_amount", value: "202")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3336d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'df_usage_batch_uid', value: '88866cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'wr_wrk_inst', value: 180382915)
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'standard_number', value: '2192-3566')
+            column(name: 'number_of_copies', value: 250232)
+            column(name: 'gross_amount', value: 202)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_fas") {
-            column(name: "df_usage_fas_uid", value: "3336d6f8-7ac6-4ae7-9bdc-ba33a58a5bad")
-            column(name: "df_fund_pool_uid", value: "5fef25b0-c0d1-4819-887f-4c6acc01390e")
-            column(name: "article", value: "DIN EN 779:2013")
-            column(name: "publisher", value: "Network for Science")
-            column(name: "publication_date", value: "2013-09-10")
-            column(name: "market", value: "Doc Del")
-            column(name: "market_period_from", value: "2013")
-            column(name: "market_period_to", value: "2017")
-            column(name: "author", value: "Philippe de Mézières")
-            column(name: "reported_value", value: "10000")
-            column(name: "reported_value", value: "30.86")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
+            column(name: 'df_usage_fas_uid', value: '3336d6f8-7ac6-4ae7-9bdc-ba33a58a5bad')
+            column(name: 'df_fund_pool_uid', value: '5fef25b0-c0d1-4819-887f-4c6acc01390e')
+            column(name: 'article', value: 'DIN EN 779:2013')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: 2013)
+            column(name: 'market_period_to', value: 2017)
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: 10000)
+            column(name: 'reported_value', value: 30.86)
         }
 
         rollback ""

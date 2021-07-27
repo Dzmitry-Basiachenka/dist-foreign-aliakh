@@ -275,9 +275,9 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '1e6ab076-691d-4ea6-aa78-b46fecdf3c6d')
             column(name: 'df_usage_batch_uid', value: '61a70133-bf5d-4c53-86c3-248ad9c39905')
             column(name: 'wr_wrk_inst', value: 122830308)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
         }

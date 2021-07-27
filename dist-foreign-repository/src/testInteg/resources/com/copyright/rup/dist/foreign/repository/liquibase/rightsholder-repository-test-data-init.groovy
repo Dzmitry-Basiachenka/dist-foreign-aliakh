@@ -120,8 +120,8 @@ databaseChangeLog {
             column(name: 'df_rightsholder_discrepancy_uid', value: '7b64e8b5-9e12-4424-a4cd-7b647284d515')
             column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'wr_wrk_inst', value: 180382915)
-            column(name: 'old_rh_account_number', value: '2000105646')
-            column(name: 'new_rh_account_number', value: '1000159997')
+            column(name: 'old_rh_account_number', value: 2000105646)
+            column(name: 'new_rh_account_number', value: 1000159997)
             column(name: 'work_title', value: 'High Performance Switching and Routing')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'APPROVED')
@@ -363,22 +363,22 @@ databaseChangeLog {
             column(name: 'description', value: 'NTS Scenario description')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "e23c7078-7be9-4c35-8069-4f84d8744b61")
-            column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'e23c7078-7be9-4c35-8069-4f84d8744b61')
+            column(name: 'df_scenario_uid', value: 'f933e8cb-3795-44bb-bc6a-f59d5c37781d')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "e23c7078-7be9-4c35-8069-4f84d8744b61")
-            column(name: "df_usage_batch_uid", value: "435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'e23c7078-7be9-4c35-8069-4f84d8744b61')
+            column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '88946f05-63d6-492d-8d98-a0d3d66d7a5c')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
-            column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
+            column(name: 'df_scenario_uid', value: 'f933e8cb-3795-44bb-bc6a-f59d5c37781d')
             column(name: 'rh_account_number', value: 7000813806)
             column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: 471137967)
@@ -410,7 +410,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '80898048-649a-47ae-9d16-eff7212a55e4')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
-            column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
+            column(name: 'df_scenario_uid', value: 'f933e8cb-3795-44bb-bc6a-f59d5c37781d')
             column(name: 'rh_account_number', value: 2000017004)
             column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: 471137967)
@@ -442,7 +442,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c80f782c-8824-4101-93b7-9e786fbf8854')
             column(name: 'df_usage_batch_uid', value: '435a1689-8dfd-4a94-8ef5-72e2c4e6f3fa')
-            column(name: "df_scenario_uid", value: "f933e8cb-3795-44bb-bc6a-f59d5c37781d")
+            column(name: 'df_scenario_uid', value: 'f933e8cb-3795-44bb-bc6a-f59d5c37781d')
             column(name: 'rh_account_number', value: 2000017010)
             column(name: 'payee_account_number', value: 7000813806)
             column(name: 'wr_wrk_inst', value: 471137967)

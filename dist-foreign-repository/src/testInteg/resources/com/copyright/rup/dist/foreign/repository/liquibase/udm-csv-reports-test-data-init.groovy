@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2021-07-05-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
-        comment("Insert test data for testWriteUdmUsageCsvReportSpecialistManager, testWriteUdmUsageCsvReportResearcher, testWriteUdmUsageCsvReportView")
+        comment('Insert test data for testWriteUdmUsageCsvReportSpecialistManager, testWriteUdmUsageCsvReportResearcher, testWriteUdmUsageCsvReportView')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '087f523f-182d-4ff3-a890-5377206bbb94')

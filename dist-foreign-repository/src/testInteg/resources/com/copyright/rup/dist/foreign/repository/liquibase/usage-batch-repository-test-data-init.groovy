@@ -460,7 +460,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-04-29-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testFindProcessingBatchesNames")
+        comment('Insert test data for testFindProcessingBatchesNames')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '13027b25-2269-3bec-48ea-5126431eedb0')
@@ -698,9 +698,9 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'ed732280-30d8-4f20-9aaf-1b9231f01654')
             column(name: 'df_usage_batch_uid', value: '1f332dc2-f3c2-453a-aba0-9baa69b803d4')
             column(name: 'wr_wrk_inst', value: 122830308)
-            column(name: "system_title", value: 'Castanea')
-            column(name: "standard_number", value: '09639292')
-            column(name: "standard_number_type", value: 'VALISSN')
+            column(name: 'system_title', value: 'Castanea')
+            column(name: 'standard_number', value: '09639292')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
             column(name: 'product_family', value: 'SAL')
         }

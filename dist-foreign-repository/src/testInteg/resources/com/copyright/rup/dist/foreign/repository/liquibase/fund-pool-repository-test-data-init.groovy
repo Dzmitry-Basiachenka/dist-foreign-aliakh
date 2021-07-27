@@ -2,8 +2,8 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2019-03-27-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("B-48760 FDA: Create NTS Fund Pool from NTS withdrawn details: " +
-                "Inserting test data for testFindById, testDelete, testFindAll")
+        comment('B-48760 FDA: Create NTS Fund Pool from NTS withdrawn details: ' +
+                'Inserting test data for testFindById, testDelete, testFindAll')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'b5b64c3a-55d2-462e-b169-362dca6a4dd7')
@@ -60,7 +60,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Inserting test data for findNtsNotAttachedToScenario")
+        comment('Inserting test data for findNtsNotAttachedToScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '62760b59-40af-461d-b145-5536e6ef481b')
@@ -71,7 +71,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-24-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Inserting test data for testFindNamesByUsageBatchId")
+        comment('Inserting test data for testFindNamesByUsageBatchId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '1a615c47-531a-4a27-a4f3-a5bd3d5a4b1c')

@@ -292,25 +292,25 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "3b663c5a-7a4f-48b5-9b2f-89ce49aa23a3")
-            column(name: "df_usage_uid", value: "8b09419a-89d1-47ca-8c5a-5ee206e0b0e0")
-            column(name: "action_type_ind", value: "LOADED")
-            column(name: "action_reason", value: "Uploaded in 'Archived batch'")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '3b663c5a-7a4f-48b5-9b2f-89ce49aa23a3')
+            column(name: 'df_usage_uid', value: '8b09419a-89d1-47ca-8c5a-5ee206e0b0e0')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Archived batch\'')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "74cdde4e-686b-47b7-b0ba-e1f6d9592755")
-            column(name: "df_usage_uid", value: "8b09419a-89d1-47ca-8c5a-5ee206e0b0e0")
-            column(name: "action_type_ind", value: "PAID")
-            column(name: "action_reason", value: "Usage has been paid according to information from the LM")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '74cdde4e-686b-47b7-b0ba-e1f6d9592755')
+            column(name: 'df_usage_uid', value: '8b09419a-89d1-47ca-8c5a-5ee206e0b0e0')
+            column(name: 'action_type_ind', value: 'PAID')
+            column(name: 'action_reason', value: 'Usage has been paid according to information from the LM')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
-            column(name: "df_usage_audit_uid", value: "06de58a5-eb32-4228-afdc-3cfac70922c3")
-            column(name: "df_usage_uid", value: "8b09419a-89d1-47ca-8c5a-5ee206e0b0e0")
-            column(name: "action_type_ind", value: "ARCHIVED")
-            column(name: "action_reason", value: "Usage was sent to CRM")
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '06de58a5-eb32-4228-afdc-3cfac70922c3')
+            column(name: 'df_usage_uid', value: '8b09419a-89d1-47ca-8c5a-5ee206e0b0e0')
+            column(name: 'action_type_ind', value: 'ARCHIVED')
+            column(name: 'action_reason', value: 'Usage was sent to CRM')
         }
 
         rollback ""

@@ -237,7 +237,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2018-03-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
-        comment("Insert test data for testCreateClaScenario")
+        comment('Insert test data for testCreateClaScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
@@ -409,7 +409,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("Insert test data for testCreateNtsScenario")
+        comment('Insert test data for testCreateNtsScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
@@ -538,7 +538,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-14-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("Insert Pre-Service fee fund for testCreateNtsScenario")
+        comment('Insert Pre-Service fee fund for testCreateNtsScenario')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903')

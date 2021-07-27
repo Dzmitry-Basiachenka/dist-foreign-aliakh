@@ -1283,7 +1283,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-08-05-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment("Insert archived NTS usage for testFindForAuditArchivedNts")
+        comment('Insert archived NTS usage for testFindForAuditArchivedNts')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'ddb556a0-991c-45a7-ade9-32959b676ae0')
@@ -1323,7 +1323,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-10-16-00', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testFindPayeeTotalHoldersByScenarioId")
+        comment('Insert test data for testFindPayeeTotalHoldersByScenarioId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'e13ecc44-6795-4b75-90f0-4a3fc191f1b9')
@@ -1436,7 +1436,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-12-19-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
-        comment("Insert test data for testFindRightsholdersInformation")
+        comment('Insert test data for testFindRightsholdersInformation')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'b4652f21-a1bd-44c5-ab7d-23a287fd1756')
@@ -1542,22 +1542,22 @@ databaseChangeLog {
             column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6")
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6')
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6")
-            column(name: "df_usage_batch_uid", value: "224180f9-0406-4181-9ad2-23e3804298aa")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '5dc4d7f0-2f77-4b3a-9b11-0033c300fdc6')
+            column(name: 'df_usage_batch_uid', value: '224180f9-0406-4181-9ad2-23e3804298aa')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c09aa888-85a5-4377-8c7a-85d84d255b5a')
             column(name: 'df_usage_batch_uid', value: '224180f9-0406-4181-9ad2-23e3804298aa')
-            column(name: "df_scenario_uid", value: "ca163655-8978-4a45-8fe3-c3b5572c6879")
+            column(name: 'df_scenario_uid', value: 'ca163655-8978-4a45-8fe3-c3b5572c6879')
             column(name: 'wr_wrk_inst', value: 122267677)
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
@@ -1607,22 +1607,22 @@ databaseChangeLog {
             column(name: 'nts_fields', value: '{"rh_minimum_amount": 30.00, "post_service_fee_amount": 100}')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter") {
-            column(name: "df_scenario_usage_filter_uid", value: "3c191f12-4314-470a-b11e-a9a65030dddd")
-            column(name: "df_scenario_uid", value: "c4bc09c1-eb9b-41f3-ac93-9cd088dff408")
-            column(name: "product_family", value: "NTS")
-            column(name: "status_ind", value: "ELIGIBLE")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '3c191f12-4314-470a-b11e-a9a65030dddd')
+            column(name: 'df_scenario_uid', value: 'c4bc09c1-eb9b-41f3-ac93-9cd088dff408')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: "df_scenario_usage_filter_to_usage_batches_ids_map") {
-            column(name: "df_scenario_usage_filter_uid", value: "3c191f12-4314-470a-b11e-a9a65030dddd")
-            column(name: "df_usage_batch_uid", value: "fd09c318-75e8-4f4d-b384-8c83e8033e25")
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '3c191f12-4314-470a-b11e-a9a65030dddd')
+            column(name: 'df_usage_batch_uid', value: 'fd09c318-75e8-4f4d-b384-8c83e8033e25')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7778a37d-6184-42c1-8e23-5841837c5411')
             column(name: 'df_usage_batch_uid', value: 'fd09c318-75e8-4f4d-b384-8c83e8033e25')
-            column(name: "df_scenario_uid", value: "c4bc09c1-eb9b-41f3-ac93-9cd088dff408")
+            column(name: 'df_scenario_uid', value: 'c4bc09c1-eb9b-41f3-ac93-9cd088dff408')
             column(name: 'rh_account_number', value: 1000009997)
             column(name: 'wr_wrk_inst', value: 471137967)
             column(name: 'work_title', value: 'Cell Biology')
@@ -1651,7 +1651,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '54247c55-bf6b-4ad6-9369-fb4baea6b19b')
             column(name: 'df_usage_batch_uid', value: 'fd09c318-75e8-4f4d-b384-8c83e8033e25')
-            column(name: "df_scenario_uid", value: "c4bc09c1-eb9b-41f3-ac93-9cd088dff408")
+            column(name: 'df_scenario_uid', value: 'c4bc09c1-eb9b-41f3-ac93-9cd088dff408')
             column(name: 'rh_account_number', value: 2000017004)
             column(name: 'wr_wrk_inst', value: 471137967)
             column(name: 'work_title', value: 'Cell Biology')
