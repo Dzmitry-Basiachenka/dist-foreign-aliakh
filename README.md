@@ -1,3 +1,12 @@
+14.1.6
+-
+* B-67321 Tech Debt: FDA: handle low timeouts during processing FAS usages in status NEW
+* B-67321: FDA: implement logic to check is usage processing completed before edit can be applied
+* B-67321: Dist - Tech Debt: FDA: edit window annualized copies calculation is incorrect for large numbers
+* B-67321 Tech Debt: FDA: handle low timeouts during processing SAL usages in status NEW
+* B-67321 Dist - Tech Debt: FDA: adjust test data initialization in groovy files to avoid quotes for integer values on repository/service layer
+* B-67321 Tech Debt: FDA: fix Checkstyle error
+
 14.1.5
 -
 * CDP-1003 Dynamic CAS Service URL (Foreign Distributions)
