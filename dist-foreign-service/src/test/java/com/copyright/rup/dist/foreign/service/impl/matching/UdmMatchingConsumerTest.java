@@ -77,6 +77,9 @@ public class UdmMatchingConsumerTest {
         consumer.consume(usages);
         verify(matchingProcessor);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getSystemTitle());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getRightsholder().getAccountNumber());
         assertNull(usage.getWrWrkInst());
         assertFalse(predicateCapture.getValue().test(usage));
     }
@@ -107,7 +110,10 @@ public class UdmMatchingConsumerTest {
         consumer.consume(usages);
         verify(matchingProcessor);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getSystemTitle());
+        assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
+        assertNull(usage.getRightsholder().getAccountNumber());
         assertFalse(predicateCapture.getValue().test(usage));
     }
 
@@ -136,6 +142,9 @@ public class UdmMatchingConsumerTest {
         consumer.consume(usages);
         verify(matchingProcessor);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
+        assertNull(usage.getSystemTitle());
+        assertNull(usage.getStandardNumber());
+        assertNull(usage.getRightsholder().getAccountNumber());
         assertFalse(predicateCapture.getValue().test(usage));
     }
 

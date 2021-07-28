@@ -201,6 +201,7 @@ public class WorkMatchingServiceTest {
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
+        assertNull(usage.getRightsholder().getAccountNumber());
         verify(piIntegrationService, udmUsageService, udmAuditService);
     }
 

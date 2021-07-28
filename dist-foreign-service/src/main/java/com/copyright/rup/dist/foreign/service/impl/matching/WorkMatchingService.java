@@ -182,6 +182,9 @@ public class WorkMatchingService implements IWorkMatchingService {
             }
         } else {
             usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+            usage.setSystemTitle(null);
+            usage.setStandardNumber(null);
+            usage.getRightsholder().setAccountNumber(null);
             if (work.isMultipleMatches()) {
                 udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.MULTIPLE_RESULTS,
                     usageGroup.getMultipleMatchesReasonFunction().apply(usage));
