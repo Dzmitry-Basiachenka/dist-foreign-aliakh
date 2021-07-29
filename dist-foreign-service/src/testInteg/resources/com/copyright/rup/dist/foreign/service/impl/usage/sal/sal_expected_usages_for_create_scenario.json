@@ -27,7 +27,7 @@
       "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 7, Issue 2",
       "reportedMediaType": "TEXT",
-      "mediaTypeWeight": "1.0",
+      "mediaTypeWeight": 1.0,
       "coverageYear": "2014-2015"
     },
     "rightsholder": {
@@ -66,12 +66,12 @@
       "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 6, Issue 3",
       "reportedMediaType": "TEXT",
-      "mediaTypeWeight": "1.0",
+      "mediaTypeWeight": 1.0,
       "coverageYear": "2012-2013",
       "scoredAssessmentDate": "2015-10-03",
       "questionIdentifier": "SB7663",
       "states": "SD;VT",
-      "numberOfViews": "42"
+      "numberOfViews": 42
     },
     "rightsholder": {
       "accountNumber": 1000000026

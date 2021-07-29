@@ -9,7 +9,7 @@
     "status": "PAID",
     "productFamily": "AACL",
     "numberOfCopies": 100,
-    "payeeAccountNumber": "1000002859",
+    "payeeAccountNumber": 1000002859,
     "checkNumber": "578945",
     "checkDate": "2016-11-03T00:00-04:00",
     "cccEventId": "53257",

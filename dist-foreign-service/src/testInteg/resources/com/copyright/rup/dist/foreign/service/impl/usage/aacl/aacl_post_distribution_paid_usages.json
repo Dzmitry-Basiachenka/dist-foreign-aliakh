@@ -14,12 +14,12 @@
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
-      "accountNumber": "1000032105",
+      "accountNumber": 1000032105,
       "name": null
     },
     "payee": {
       "id": null,
-      "accountNumber": "1000010022",
+      "accountNumber": 1000010022,
       "name": null
     },
     "aaclUsage": {

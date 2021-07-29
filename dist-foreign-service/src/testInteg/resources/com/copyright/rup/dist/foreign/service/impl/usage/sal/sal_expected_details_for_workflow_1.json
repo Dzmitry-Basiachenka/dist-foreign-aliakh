@@ -11,10 +11,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -29,7 +29,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0001",
       "reportedAuthor": "Linda J. S. Allen",
@@ -52,10 +52,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -69,7 +69,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0002",
       "reportedAuthor": "Linda J. S. Allen",
@@ -92,10 +92,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -110,7 +110,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0003",
       "reportedAuthor": "Linda J. S. Allen",

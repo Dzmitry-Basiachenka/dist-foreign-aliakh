@@ -1,7 +1,7 @@
 [
   {
     "id": "8d3b077a-44be-48b4-ad0e-bf5de1cf97b0",
-    "wrWrkInst": "111111111",
+    "wrWrkInst": 111111111,
     "systemTitle": null,
     "classification": "NON-STM",
     "standardNumber": null,
@@ -13,7 +13,7 @@
   },
   {
     "id": "b7737221-72c3-47b1-b1a2-d25b8f50500b",
-    "wrWrkInst": "122410079",
+    "wrWrkInst": 122410079,
     "systemTitle": null,
     "classification": "STM",
     "standardNumber": null,
@@ -25,36 +25,36 @@
   },
   {
     "id": "06b21198-daaf-40e1-a501-5b97deeecc0d",
-    "wrWrkInst": "123345258",
+    "wrWrkInst": 123345258,
     "systemTitle": "15th International Conference on Environmental Degradation",
     "classification": "NON-STM",
     "standardNumber": "1008902002377655XX",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": "1000002859",
+    "rhAccountNumber": 1000002859,
     "rhName": "John Wiley & Sons - Books",
     "updateUser": "user@copyright.com",
     "updateDate": "2019-02-01"
   },
   {
     "id": "0b3f6bb1-40b7-4d11-ba53-d54e9d67e61f",
-    "wrWrkInst": "180382914",
+    "wrWrkInst": 180382914,
     "systemTitle": "2001 IEEE Workshop on High Performance Switching",
     "classification": "NON-STM",
     "standardNumber": "1008902002377655XX",
     "standardNumberType": "VALISBN13",
-    "rhAccountNumber": "1000002859",
+    "rhAccountNumber": 1000002859,
     "rhName": "John Wiley & Sons - Books",
     "updateUser": "user@copyright.com",
     "updateDate": "2019-02-01"
   },
   {
     "id": "84ba864e-716a-4103-bcd7-180563695f50",
-    "wrWrkInst": "243904752",
+    "wrWrkInst": 243904752,
     "systemTitle": "Corporate identity manuals",
     "classification": "STM",
     "standardNumber": "1008902002377655XX",
     "standardNumberType": null,
-    "rhAccountNumber": "1000000002",
+    "rhAccountNumber": 1000000002,
     "rhName": "Royal Society of Victoria",
     "updateUser": "user@copyright.com",
     "updateDate": "2019-02-01"

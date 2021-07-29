@@ -8,7 +8,7 @@
     "standardNumber": "978-0-7695-2365-2",
     "standardNumberType": "VALISSN",
     "rightsholder": {
-      "accountNumber": "1000000001"
+      "accountNumber": 1000000001
     },
     "status": "ELIGIBLE",
     "productFamily": "SAL",
@@ -34,7 +34,7 @@
       "coverageYear": "2014-2015",
       "scoredAssessmentDate": "2014-09-14",
       "states": "FL;WY",
-      "numberOfViews": "258",
+      "numberOfViews": 258,
       "batchPeriodEndDate": "2019-06-30"
     },
     "createUser": "user@copyright.com",
