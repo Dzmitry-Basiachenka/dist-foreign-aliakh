@@ -1,10 +1,10 @@
 [
   {
-    "rhAccountNumber": "1000002859",
+    "rhAccountNumber": 1000002859,
     "rhName": "John Wiley & Sons - Books",
-    "payeeAccountNumber": "1000005413",
+    "payeeAccountNumber": 1000005413,
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
-    "tboAccountNumber": "1000005413",
+    "tboAccountNumber": 1000005413,
     "tboName": "Kluwer Academic Publishers - Dordrecht",
     "productFamily": "FAS2",
     "taxOnFile": "1",
@@ -24,11 +24,11 @@
     "payGroup": "RIGHTS"
   },
   {
-    "rhAccountNumber": "1000005413",
+    "rhAccountNumber": 1000005413,
     "rhName": "Kluwer Academic Publishers - Dordrecht",
-    "payeeAccountNumber": "1000005413",
+    "payeeAccountNumber": 1000005413,
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
-    "tboAccountNumber": "1000005413",
+    "tboAccountNumber": 1000005413,
     "tboName": "Kluwer Academic Publishers - Dordrecht",
     "productFamily": "FAS",
     "taxOnFile": "1",
@@ -48,11 +48,11 @@
     "payGroup": "RIGHTS"
   },
   {
-    "rhAccountNumber": "1000002859",
+    "rhAccountNumber": 1000002859,
     "rhName": "John Wiley & Sons - Books",
-    "payeeAccountNumber": "1000005413",
+    "payeeAccountNumber": 1000005413,
     "payeeName": "Kluwer Academic Publishers - Dordrecht",
-    "tboAccountNumber": "1000002859",
+    "tboAccountNumber": 1000002859,
     "tboName": "John Wiley & Sons - Books",
     "productFamily": "FAS",
     "taxOnFile": "1",

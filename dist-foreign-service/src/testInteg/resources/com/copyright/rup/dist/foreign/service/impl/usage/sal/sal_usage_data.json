@@ -10,7 +10,7 @@
       "questionIdentifier": "P401A1",
       "grade": "3",
       "states": "FL;WY",
-      "numberOfViews": "258",
+      "numberOfViews": 258,
       "detailType": "UD"
     }
   },
@@ -24,7 +24,7 @@
       "assessmentType": "ELA",
       "questionIdentifier": "P402A1",
       "states": "FL;WY",
-      "numberOfViews": "258",
+      "numberOfViews": 258,
       "detailType": "UD"
     }
   },
@@ -39,7 +39,7 @@
       "questionIdentifier": "P403A2",
       "grade": "4",
       "states": "FL;WY",
-      "numberOfViews": "258",
+      "numberOfViews": 258,
       "detailType": "UD"
     }
   }

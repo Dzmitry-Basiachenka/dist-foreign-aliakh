@@ -2,12 +2,12 @@
   {
     "rightsholder": {
       "id": "e9c9f51b-6048-4474-848a-2db1c410e463",
-      "accountNumber": "1000002797",
+      "accountNumber": 1000002797,
       "name": "British Film Institute (BFI)"
     },
     "payee": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "productFamily": "FAS"
@@ -15,12 +15,12 @@
   {
     "rightsholder": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "payee": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "productFamily": "FAS"
@@ -28,12 +28,12 @@
   {
     "rightsholder": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "payee": {
       "id": "8a0dbf78-d9c9-49d9-a895-05f55cfc8329",
-      "accountNumber": "1000005413",
+      "accountNumber": 1000005413,
       "name": "Kluwer Academic Publishers - Dordrecht"
     },
     "productFamily": "FAS"
@@ -41,12 +41,12 @@
   {
     "rightsholder": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "payee": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "productFamily": "FAS2"
@@ -54,12 +54,12 @@
   {
     "rightsholder": {
       "id": "5bcf2c37-2f32-48e9-90fe-c9d75298eeed",
-      "accountNumber": "1000002859",
+      "accountNumber": 1000002859,
       "name": "John Wiley & Sons - Books"
     },
     "payee": {
       "id": "8a0dbf78-d9c9-49d9-a895-05f55cfc8329",
-      "accountNumber": "1000005413",
+      "accountNumber": 1000005413,
       "name": "Kluwer Academic Publishers - Dordrecht"
     },
     "productFamily": "FAS2"

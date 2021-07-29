@@ -11,10 +11,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -29,7 +29,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0001",
       "reportedAuthor": "Linda J. S. Allen",
@@ -52,10 +52,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -72,7 +72,7 @@
       "gradeGroup": "GRADEK_5",
       "detailType": "UD",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0001",
       "reportedAuthor": "Linda J. S. Allen",
@@ -83,7 +83,7 @@
       "coverageYear": "2014-2016",
       "scoredAssessmentDate": "2014-09-10",
       "states": "FL;WY",
-      "numberOfViews": "258"
+      "numberOfViews": 258
     }
   },
   {
@@ -98,10 +98,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -118,7 +118,7 @@
       "gradeGroup": "GRADEK_5",
       "detailType": "UD",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0001",
       "reportedAuthor": "Linda J. S. Allen",
@@ -129,7 +129,7 @@
       "coverageYear": "2014-2016",
       "scoredAssessmentDate": "2014-09-11",
       "states": "FL;WY",
-      "numberOfViews": "192"
+      "numberOfViews": 192
     }
   },
   {
@@ -144,10 +144,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -164,7 +164,7 @@
       "gradeGroup": "GRADE9_12",
       "detailType": "UD",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0001",
       "reportedAuthor": "Linda J. S. Allen",
@@ -175,7 +175,7 @@
       "coverageYear": "2014-2016",
       "scoredAssessmentDate": "2014-09-12",
       "states": "FL;WY",
-      "numberOfViews": "112"
+      "numberOfViews": 112
     }
   },
   {
@@ -190,10 +190,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -207,7 +207,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0002",
       "reportedAuthor": "Linda J. S. Allen",
@@ -230,10 +230,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -250,7 +250,7 @@
       "gradeGroup": "GRADEK_5",
       "detailType": "UD",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0002",
       "reportedAuthor": "Linda J. S. Allen",
@@ -261,7 +261,7 @@
       "coverageYear": "2015-2016",
       "scoredAssessmentDate": "2015-09-08",
       "states": "FL;WY",
-      "numberOfViews": "87"
+      "numberOfViews": 87
     }
   },
   {
@@ -276,10 +276,10 @@
     "standardNumber": "978-0-7474-0150-6",
     "standardNumberType": "VALISBN13",
     "rightsholder": {
-      "accountNumber": "1000000322"
+      "accountNumber": 1000000322
     },
     "payee": {
-      "accountNumber": "1000024950"
+      "accountNumber": 1000024950
     },
     "status": "LOCKED",
     "productFamily": "SAL",
@@ -294,7 +294,7 @@
       "gradeGroup": "ITEM_BANK",
       "detailType": "IB",
       "reportedMediaType": "Image",
-      "mediaTypeWeight": "0.3",
+      "mediaTypeWeight": 0.3,
       "reportedStandardNumber": "978-0-87664-361-7",
       "reportedWorkPortionId": "2402175IB0003",
       "reportedAuthor": "Linda J. S. Allen",

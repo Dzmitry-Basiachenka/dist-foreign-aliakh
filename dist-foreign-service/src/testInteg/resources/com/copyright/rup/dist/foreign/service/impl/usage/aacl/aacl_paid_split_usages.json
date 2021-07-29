@@ -15,12 +15,12 @@
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
-      "accountNumber": "7000864232",
+      "accountNumber": 7000864232,
       "name": null
     },
     "payee": {
       "id": null,
-      "accountNumber": "1000010022",
+      "accountNumber": 1000010022,
       "name": null
     },
     "aaclUsage": {
@@ -68,12 +68,12 @@
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
-      "accountNumber": "1000010029",
+      "accountNumber": 1000010029,
       "name": null
     },
     "payee": {
       "id": null,
-      "accountNumber": "1000010022",
+      "accountNumber": 1000010022,
       "name": null
     },
     "aaclUsage": {
@@ -122,12 +122,12 @@
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
-      "accountNumber": "7000864232",
+      "accountNumber": 7000864232,
       "name": null
     },
     "payee": {
       "id": null,
-      "accountNumber": "1000010022",
+      "accountNumber": 1000010022,
       "name": null
     },
     "aaclUsage": {
@@ -175,12 +175,12 @@
     "serviceFee": 0.25000,
     "rightsholder": {
       "id": null,
-      "accountNumber": "1000010029",
+      "accountNumber": 1000010029,
       "name": null
     },
     "payee": {
       "id": null,
-      "accountNumber": "1000010022",
+      "accountNumber": 1000010022,
       "name": null
     },
     "aaclUsage": {
