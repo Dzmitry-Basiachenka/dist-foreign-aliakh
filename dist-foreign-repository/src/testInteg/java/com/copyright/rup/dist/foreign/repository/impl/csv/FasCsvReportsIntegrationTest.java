@@ -61,7 +61,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testExportArchivedScenarioRightsholderTotalsCsvReport() throws IOException {
+    public void testWriteArchivedScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport("ff47dee9-327a-4ff6-b170-d89f5190ccd8",
                 outputStream), "archive_scenario_rightsholder_totals_report_fas.csv");
@@ -192,7 +192,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void tesFastWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void testWriteFasExcludeDetailsByPayeeCsvReportNoData() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("d13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
@@ -200,13 +200,13 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testFasWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
+    public void testWriteFasExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(
             new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "fas_exclude_by_payee_report_empty.csv");
     }
 
     @Test
-    public void testFasWriteExcludeDetailsByPayeeCsvReport() throws IOException {
+    public void testWriteFasExcludeDetailsByPayeeCsvReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("e13ecc44-6795-4b75-90f0-4a3fc191f1b9"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter,
@@ -230,7 +230,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
+    public void testWriteScenarioRightsholderTotalsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
                 outputStream), "scenario_rightsholder_totals_report.csv");
