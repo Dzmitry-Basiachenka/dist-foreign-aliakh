@@ -418,7 +418,6 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL Usage Batch')
             column(name: 'payment_date', value: '2021-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: 2021)
             column(name: 'initial_usages_count', value: 4)
         }
 
@@ -593,7 +592,6 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL Usage Batch 1 for testSendToLmSal')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: 2019)
             column(name: 'initial_usages_count', value: 4)
             column(name: 'sal_fields', value: '{"licensee_account_number": 7001293454, "licensee_name": "Synergy Publishers"}')
         }
