@@ -233,7 +233,6 @@ databaseChangeLog {
             column(name: 'name', value: 'SAL Batch With New and RH Not Found usages')
             column(name: 'payment_date', value: '2015-06-30')
             column(name: 'product_family', value: 'SAL')
-            column(name: 'fiscal_year', value: 2015)
             column(name: 'initial_usages_count', value: 2)
             column(name: 'sal_fields', value: '{"licensee_account_number": 5588, "licensee_name": "RGS Energy Group"}')
         }

@@ -56,7 +56,6 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL batch')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'fiscal_year', value: 2019)
             column(name: 'initial_usages_count', value: 5)
         }
 
