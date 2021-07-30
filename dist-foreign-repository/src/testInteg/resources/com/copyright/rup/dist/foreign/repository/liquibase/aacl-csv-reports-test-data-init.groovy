@@ -77,55 +77,6 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2018 TUR')
             column(name: 'number_of_pages', value: 6)
         }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '945553a2-0200-4e5d-9c5a-a44b57839c42')
-            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '25f4fa01-02aa-414a-9052-667360be8535')
-            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
-            column(name: 'action_type_ind', value: 'WORK_FOUND')
-            column(name: 'action_reason', value: 'Wr Wrk Inst 122825976 was found in PI')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '3ef7b6e0-8248-4ccf-b8db-ff1e0e3b5837')
-            column(name: 'df_usage_uid', value: '1208f434-3d98-49d5-bdc6-baa611d2d006')
-            column(name: 'action_type_ind', value: 'RH_FOUND')
-            column(name: 'action_reason', value: 'Rightsholder account 1000003578 was found in RMS')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '0dd59537-2266-411b-8171-092544911540')
-            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '532a2ec3-75de-457b-b8d3-736e3c8e5e5a')
-            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
-            column(name: 'action_type_ind', value: 'WORK_FOUND')
-            column(name: 'action_reason', value: 'Wr Wrk Inst 122820420 was found in PI')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: 'b1c672ce-30a1-4703-a143-dca797c2b0ea')
-            column(name: 'df_usage_uid', value: '0ac10a6f-1cf3-45b5-8d3b-0b4b0777a8e0')
-            column(name: 'action_type_ind', value: 'RH_FOUND')
-            column(name: 'action_reason', value: 'Rightsholder account 7001413934 was found in RMS')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '1fab6d9a-aa40-4ca9-b43e-cc657387c67d')
-            column(name: 'df_usage_uid', value: '67d36799-5523-474d-91f6-2e12756a4918')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: 'Uploaded in \'AACL batch\'')
-        }
     }
 
     changeSet(id: '2020-01-28-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
@@ -262,7 +213,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-03-11-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment('Insert test data for testWriteAuditAaclUsagesCsvReport')
+        comment('Insert test data for testWriteAuditAaclCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '2eb52c26-b555-45ae-b8c5-21289dfeeac4')
@@ -303,7 +254,7 @@ databaseChangeLog {
             column(name: 'service_fee', value: 0.16000)
             column(name: 'product_family', value: 'AACL')
             column(name: 'number_of_copies', value: 20)
-            column(name: 'comment', value: 'AACL  usage 1')
+            column(name: 'comment', value: 'AACL usage 1')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_aacl') {
@@ -389,7 +340,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '3a8eed5d-a2f2-47d2-9cba-b047d9947706')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool Test')
+            column(name: 'name', value: 'AACL Fund Pool 1 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'total_amount', value: 1000.00)
         }
 
@@ -402,7 +353,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31e3e4c5-83cb-4989-a82e-d9f80a8b893c')
-            column(name: 'name', value: 'AACL Usage Batch Test')
+            column(name: 'name', value: 'AACL Usage Batch 1 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: 2019)
@@ -411,7 +362,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b')
-            column(name: 'name', value: 'AACL Scenario Test')
+            column(name: 'name', value: 'AACL Scenario 1 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "fund_pool_uid": "3a8eed5d-a2f2-47d2-9cba-b047d9947706", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
             column(name: 'description', value: 'AACL Scenario Description')
@@ -572,7 +523,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '149ab28f-c795-4e29-9418-815c87dec127')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool Test 2')
+            column(name: 'name', value: 'AACL Fund Pool 2 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'total_amount', value: 1000.00)
         }
 
@@ -585,7 +536,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '96842167-5444-4064-b84a-800e626cbb71')
-            column(name: 'name', value: 'AACL Usage Batch Test 2')
+            column(name: 'name', value: 'AACL Usage Batch 2 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'fiscal_year', value: 2019)
@@ -594,7 +545,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '3704ecc3-927b-4b30-a860-6c58e7654c5e')
-            column(name: 'name', value: 'AACL Scenario Test 2')
+            column(name: 'name', value: 'AACL Scenario 2 for Work Shares by Aggregate Licensee Class Summary Report test')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "fund_pool_uid": "149ab28f-c795-4e29-9418-815c87dec127", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
             column(name: 'description', value: 'AACL Scenario Description')
@@ -779,7 +730,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: 'ffc1587c-9b05-4681-a3cc-dc02cec7fadc')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool For Export Detail Scenario Test')
+            column(name: 'name', value: 'AACL Fund Pool for Export Detail Scenario test')
             column(name: 'total_amount', value: 1000.00)
         }
 
@@ -798,7 +749,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '354f8342-0bf0-4a89-aa9a-6f4428a29e9d')
-            column(name: 'name', value: 'AACL Usage Batch For Export Details Scenario Test')
+            column(name: 'name', value: 'AACL Usage Batch for Export Details Scenario test')
             column(name: 'payment_date', value: '2019-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'initial_usages_count', value: 2)
@@ -806,7 +757,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '153b80ba-85e6-48ee-b5c3-c81664827e8a')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario for Export Details Scenario test')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
             column(name: 'description', value: 'AACL Scenario Description 2')
@@ -922,7 +873,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '0b28a1ff-ee07-4087-8980-ad7e7ea493f8')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool For Export Detail Archived Scenario Test')
+            column(name: 'name', value: 'AACL Fund Pool for Export Detail Archived Scenario test')
             column(name: 'total_amount', value: 1000.00)
         }
 
@@ -949,7 +900,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '5429c31b-ffd1-4a7f-9b24-8c7809417fce')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario For Export Details Archived Scenario Test')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}, {"period": 2019, "weight": 0.75}], "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 108, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 113, "aggregateLicenseeClassId": 141}, {"detailLicenseeClassId": 110, "aggregateLicenseeClassId": 143}]}')
             column(name: 'description', value: 'AACL Scenario Description')
@@ -1030,13 +981,13 @@ databaseChangeLog {
     }
 
     changeSet(id: '2020-06-17-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment('Insert test data for testAaclUndistributedLiabilitiesCsvReport')
+        comment('Insert test data for Undistributed Liabilities Report test')
 
         //Should be included into report as it isn't associated with any scenario
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '2a3aac29-6694-48fe-8c5d-c6709614ae73')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 1 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Fund Pool 1 for Undistributed Liabilities Report test')
             column(name: 'total_amount', value: 100.00)
         }
 
@@ -1051,7 +1002,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '6b2ba3de-f2a7-4d9b-8da1-d84118ddba30')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 2 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Fund Pool 2 for Undistributed Liabilities Report test')
             column(name: 'total_amount', value: 200.00)
         }
 
@@ -1064,7 +1015,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '4d6adcc5-9852-4322-b946-88e0ba977620')
-            column(name: 'name', value: 'AACL Usage Batch 1 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Usage Batch 2 for Undistributed Liabilities Report test')
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'initial_usages_count', value: 1)
@@ -1072,7 +1023,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '43242b46-1a85-4938-9865-b9b354b6ae44')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario 2 for Undistributed Liabilities Report test')
             column(name: 'status_ind', value: 'SUBMITTED')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}], "fund_pool_uid": "6b2ba3de-f2a7-4d9b-8da1-d84118ddba30", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}]}')
             column(name: 'description', value: 'AACL Scenario Description 2')
@@ -1120,7 +1071,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '404ba914-3c57-4551-867b-8bd4a1fdd8f2')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 6 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Fund Pool 3 for Undistributed Liabilities Report test')
             column(name: 'total_amount', value: 200.00)
         }
 
@@ -1133,7 +1084,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '1225cfc8-6b5e-48f2-b1a3-e4a887446532')
-            column(name: 'name', value: 'AACL Usage Batch 5 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Usage Batch 3 for Undistributed Liabilities Report test')
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'initial_usages_count', value: 1)
@@ -1141,10 +1092,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '50fcaabc-b12f-421d-aaf1-0b4e147d7540')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario 3 for Undistributed Liabilities Report test')
             column(name: 'status_ind', value: 'APPROVED')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}], "fund_pool_uid": "404ba914-3c57-4551-867b-8bd4a1fdd8f2", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}]}')
-            column(name: 'description', value: 'AACL Scenario Description 2')
+            column(name: 'description', value: 'AACL Scenario Description 3')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -1189,7 +1140,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '66bbea66-84e7-41cd-a5aa-9fd43f03dd5a')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 3 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Fund Pool 4 for Undistributed Liabilities Report test')
             column(name: 'total_amount', value: 200.00)
         }
 
@@ -1202,7 +1153,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '6fcdd8f0-bb76-4dfa-9afe-00352cdef0d3')
-            column(name: 'name', value: 'AACL Usage Batch 2 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Usage Batch 4 for Undistributed Liabilities Report test')
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'initial_usages_count', value: 1)
@@ -1210,10 +1161,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'c5524e13-49a7-4057-8842-e8c3a8ad78cf')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario 4 for Undistributed Liabilities Report test')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}], "fund_pool_uid": "66bbea66-84e7-41cd-a5aa-9fd43f03dd5a", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}]}')
-            column(name: 'description', value: 'AACL Scenario Description 2')
+            column(name: 'description', value: 'AACL Scenario Description 4')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -1258,7 +1209,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
             column(name: 'df_fund_pool_uid', value: '3c79d8ee-42ef-4973-bdad-0a27d75504c9')
             column(name: 'product_family', value: 'AACL')
-            column(name: 'name', value: 'AACL Fund Pool 5 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Fund Pool 5 for Undistributed Liabilities Report test')
             column(name: 'total_amount', value: 200.00)
         }
 
@@ -1271,7 +1222,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '3bf8b930-a2cb-4af0-99e2-e69edd176450')
-            column(name: 'name', value: 'AACL Usage Batch 4 for testAaclUndistributedLiabilitiesCsvReport')
+            column(name: 'name', value: 'AACL Usage Batch 5 for Undistributed Liabilities Report test')
             column(name: 'payment_date', value: '2020-06-30')
             column(name: 'product_family', value: 'AACL')
             column(name: 'initial_usages_count', value: 1)
@@ -1279,10 +1230,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '75fe53a0-ccf4-404c-a4b5-143c88599fa0')
-            column(name: 'name', value: 'AACL Scenario For Delete Scenario Test')
+            column(name: 'name', value: 'AACL Scenario 5 for Undistributed Liabilities Report test')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'aacl_fields', value: '{"usageAges": [{"period": 2020, "weight": 1.00}], "fund_pool_uid": "3c79d8ee-42ef-4973-bdad-0a27d75504c9", "publicationTypes": [{"name": "Book", "weight": 1.00},{"name": "Business or Trade Journal", "weight": 1.50},{"name": "Consumer Magazine", "weight": 1.00},{"name": "News Source", "weight": 4.00},{"name": "STMA Journal", "weight": 1.10}],"detailLicenseeClasses": [{"detailLicenseeClassId": 171, "aggregateLicenseeClassId": 141}]}')
-            column(name: 'description', value: 'AACL Scenario Description 2')
+            column(name: 'description', value: 'AACL Scenario Description 5')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

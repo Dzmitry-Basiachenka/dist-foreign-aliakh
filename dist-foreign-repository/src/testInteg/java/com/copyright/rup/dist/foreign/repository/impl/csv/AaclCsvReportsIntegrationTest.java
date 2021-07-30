@@ -190,7 +190,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testAaclWriteExcludeDetailsByPayeeCsvReportNoData() throws IOException {
+    public void testWriteAaclExcludeDetailsByPayeeCsvReportNoData() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("2373ef30-1952-4e78-890d-d6b3087de59c"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,
@@ -198,13 +198,13 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testAaclWriteExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
+    public void testWriteAaclExcludeDetailsByPayeeCsvReportEmptyFilter() throws IOException {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(
             new ExcludePayeeFilter(), Collections.emptySet(), outputStream), "aacl_exclude_by_payee_report_empty.csv");
     }
 
     @Test
-    public void testAaclWriteExcludeDetailsByPayeeCsvReport() throws IOException {
+    public void testWriteAaclExcludeDetailsByPayeeCsvReport() throws IOException {
         ExcludePayeeFilter filter = new ExcludePayeeFilter();
         filter.setScenarioIds(Collections.singleton("42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter,

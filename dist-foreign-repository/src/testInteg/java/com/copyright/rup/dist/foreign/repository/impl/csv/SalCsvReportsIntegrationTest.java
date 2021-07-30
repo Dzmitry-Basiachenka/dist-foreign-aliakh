@@ -67,14 +67,14 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testSalUndistributedLiabilitiesCsvReport() throws IOException {
+    public void testWriteSalUndistributedLiabilitiesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
                 reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream),
             "sal_undistributed_liabilities_report.csv");
     }
 
     @Test
-    public void testSalFundPoolsCsvReport() throws IOException {
+    public void testWriteSalFundPoolsCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeSalFundPoolsCsvReport(2018, outputStream), "sal_fund_pools_report.csv");
     }
