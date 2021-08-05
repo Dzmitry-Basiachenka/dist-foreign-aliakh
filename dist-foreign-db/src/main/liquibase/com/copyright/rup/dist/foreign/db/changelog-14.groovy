@@ -307,4 +307,16 @@ databaseChangeLog {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'df_udm_ineligible_reason_uid', newDataType: 'VARCHAR(256)')
         }
     }
+
+    changeSet(id: '2021-08-05-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-67321 Tech Debt: FDA: Increase column size of df_usage_audit.action_reason, df_udm_audit.action_reason columns")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_audit', columnName: 'action_reason', newDataType: 'VARCHAR(3000)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(2000)')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_audit', columnName: 'action_reason', newDataType: 'VARCHAR(1024)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(1024)')
+        }
+    }
 }
