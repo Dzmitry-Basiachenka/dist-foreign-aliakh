@@ -10,7 +10,6 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -317,20 +316,6 @@ public class UdmEditUsageWindowTest {
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, binder, saveButtonClickListener);
-    }
-
-    @Test
-    public void testIsUsageProcessingCompleted() {
-        mockStatic(Windows.class);
-        udmUsage.setStatus(UsageStatusEnum.NEW);
-        Windows.showNotificationWindow("Please wait while usage processing is completed");
-        expectLastCall().once();
-        replay(controller, Windows.class);
-        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
-        Button saveButton = Whitebox.getInternalState(window, "saveButton");
-        saveButton.setEnabled(true);
-        saveButton.click();
-        verify(controller, Windows.class);
     }
 
     @Test

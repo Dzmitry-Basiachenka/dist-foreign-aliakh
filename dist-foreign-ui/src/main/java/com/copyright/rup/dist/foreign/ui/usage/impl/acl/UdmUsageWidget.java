@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -131,10 +132,14 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
-            if (userName.equals(selectedUsage.getAssignee())) {
-                Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
+            if (isUsageProcessingCompleted(selectedUsage)) {
+                if (userName.equals(selectedUsage.getAssignee())) {
+                    Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
+                } else {
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
+                }
             } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.processing_usages"));
             }
         });
         searchWidget = new SearchWidget(this::refresh);
@@ -150,6 +155,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         toolbar.setMargin(true);
         VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");
         return toolbar;
+    }
+
+    private boolean isUsageProcessingCompleted(UdmUsageDto udmUsage) {
+        return !udmUsage.getStatus().equals(UsageStatusEnum.NEW)
+            && !udmUsage.getStatus().equals(UsageStatusEnum.WORK_FOUND);
     }
 
     private String getSearchMessage() {
