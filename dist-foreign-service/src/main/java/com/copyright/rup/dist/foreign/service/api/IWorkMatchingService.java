@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import java.util.List;
+
 /**
  * Interface for service to match usages with works.
  * <p>
@@ -15,51 +17,30 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 public interface IWorkMatchingService {
 
     /**
-     * Finds Wr Wrk Inst for given usage and matches result by standard number.
+     * Finds Wr Wrk Inst for all usages for FAS product family.
      *
-     * @param usage {@link Usage} to be matched
+     * @param usages list of {@link Usage}'s
      */
-    void matchByStandardNumber(Usage usage);
+    void matchingFasUsages(List<Usage> usages);
 
     /**
-     * Finds Wr Wrk Inst for given UDM usage and matches result by standard number.
+     * Finds Wr Wrk Inst for all usages for AACL product family.
      *
-     * @param usage {@link UdmUsage} to be matched
+     * @param usages list of {@link Usage}'s
      */
-    void matchByStandardNumber(UdmUsage usage);
+    void matchingAaclUsages(List<Usage> usages);
 
     /**
-     * Finds Wr Wrk Inst for given usage and matches result by work title.
+     * Finds Wr Wrk Inst for all usages for SAL product family.
      *
-     * @param usage {@link Usage} to be matched
+     * @param usages list of {@link Usage}'s
      */
-    void matchByTitle(Usage usage);
+    void matchingSalUsages(List<Usage> usages);
 
     /**
-     * Finds Wr Wrk Inst for given UDM usage and matches result by reported title.
+     * Finds Wr Wrk Inst for all usages for ACL product family.
      *
-     * @param usage {@link Usage} to be matched
+     * @param usages list of {@link UdmUsage}'s
      */
-    void matchByTitle(UdmUsage usage);
-
-    /**
-     * Matches usage by Wr Wrk Inst.
-     *
-     * @param usage {@link Usage} to be matched
-     */
-    void matchByWrWrkInst(Usage usage);
-
-    /**
-     * Matches UDM usage by Wr Wrk Inst.
-     *
-     * @param usage {@link UdmUsage} to be matched
-     */
-    void matchByWrWrkInst(UdmUsage usage);
-
-    /**
-     * Updates {@link Usage} status and Wr Wrk Inst.
-     *
-     * @param usage {@link Usage} to update
-     */
-    void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage);
+    void matchingUdmUsages(List<UdmUsage> usages);
 }

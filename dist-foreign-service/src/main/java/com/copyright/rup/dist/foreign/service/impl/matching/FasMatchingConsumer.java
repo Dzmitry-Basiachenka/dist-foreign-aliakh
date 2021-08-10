@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
-import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,6 @@ import java.util.Objects;
 @Component("df.service.fasMatchingConsumer")
 public class FasMatchingConsumer implements IConsumer<List<Usage>> {
 
-    private static final String MATCHING_BY_IDNO_FINISHED_LOG = "Consume FAS usages for matching processing. " +
-        "Finished. UsageId={}, StandardNumber={}, WorkTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
-    private static final String MATCHING_BY_TITLE_FINISHED_LOG = "Consume FAS usages for matching processing. " +
-        "Finished. UsageId={}, WorkTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
-    private static final String NOT_MATCHED_FINISHED_LOG = "Consume FAS usages for matching processing. " +
-        "Finished. UsageId={}, ProductFamily={}, WorkTitle={}, WrWrkInst={}, UsageStatus={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -50,21 +43,7 @@ public class FasMatchingConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume FAS usages for matching processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
-                    workMatchingService.matchByStandardNumber(usage);
-                    LOGGER.trace(MATCHING_BY_IDNO_FINISHED_LOG, usage.getId(), usage.getStandardNumber(),
-                        usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
-                } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {
-                    workMatchingService.matchByTitle(usage);
-                    LOGGER.trace(MATCHING_BY_TITLE_FINISHED_LOG, usage.getId(),
-                        usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
-                } else {
-                    workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
-                    LOGGER.trace(NOT_MATCHED_FINISHED_LOG, usage.getId(), usage.getProductFamily(),
-                        usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
-                }
-            });
+            workMatchingService.matchingFasUsages(usages);
             matchingProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus());
             LOGGER.trace("Consume FAS usages for matching processing. Finished. UsageIds={}", LogUtils.ids(usages));

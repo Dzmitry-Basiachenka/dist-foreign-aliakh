@@ -42,12 +42,7 @@ public class SalMatchingConsumer implements IConsumer<List<Usage>> {
     public void consume(List<Usage> usages) {
         if (Objects.nonNull(usages)) {
             LOGGER.trace("Consume SAL usages for matching processing. Started. UsageIds={}", LogUtils.ids(usages));
-            usages.forEach(usage -> {
-                workMatchingService.matchByWrWrkInst(usage);
-                LOGGER.trace(
-                    "Consume SAL usages for matching processing. Processed. UsageId={}, WrWrkInst={}, UsageStatus={}",
-                    usage.getId(), usage.getWrWrkInst(), usage.getStatus());
-            });
+            workMatchingService.matchingSalUsages(usages);
             matchingProcessor.executeNextChainProcessor(usages,
                 usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus());
             LOGGER.trace("Consume SAL usages for matching processing. Finished. UsageIds={}", LogUtils.ids(usages));

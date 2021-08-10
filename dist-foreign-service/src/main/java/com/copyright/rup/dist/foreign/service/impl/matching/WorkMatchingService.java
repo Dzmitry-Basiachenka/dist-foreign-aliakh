@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -15,12 +16,14 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -39,6 +42,20 @@ public class WorkMatchingService implements IWorkMatchingService {
     private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
     private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
     private static final String UNIDENTIFIED_TITLE = "Unidentified";
+    private static final String MATCHING_BY_IDNO_FINISHED_LOG = "Consume FAS usages for matching processing. " +
+        "Finished. UsageId={}, StandardNumber={}, WorkTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
+    private static final String MATCHING_BY_TITLE_FINISHED_LOG = "Consume FAS usages for matching processing. " +
+        "Finished. UsageId={}, WorkTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
+    private static final String NOT_MATCHED_FINISHED_LOG = "Consume FAS usages for matching processing. " +
+        "Finished. UsageId={}, ProductFamily={}, WorkTitle={}, WrWrkInst={}, UsageStatus={}";
+    private static final String UDM_MATCHING_BY_WR_WRK_INST_FINISHED_LOG =
+        "Consume UDM usages for matching processing. " +
+            "Finished. UsageId={}, WrWrkInst={}, MatchBy=WrWrkInst, UsageStatus={}";
+    private static final String UDM_MATCHING_BY_IDNO_FINISHED_LOG = "Consume UDM usages for matching processing. " +
+        "Finished. UsageId={}, ReportedStandardNumber={}, ReportedTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
+    private static final String UDM_MATCHING_BY_TITLE_FINISHED_LOG = "Consume UDM usages for matching processing. " +
+        "Finished. UsageId={}, ReportedTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     @Qualifier("df.integration.piIntegrationCacheService")
@@ -56,7 +73,71 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     @Transactional
-    public void matchByStandardNumber(Usage usage) {
+    public void matchingFasUsages(List<Usage> usages) {
+        usages.forEach(usage -> {
+            if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
+                matchByStandardNumber(usage);
+                LOGGER.trace(MATCHING_BY_IDNO_FINISHED_LOG, usage.getId(), usage.getStandardNumber(),
+                    usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
+            } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {
+                matchByTitle(usage);
+                LOGGER.trace(MATCHING_BY_TITLE_FINISHED_LOG, usage.getId(),
+                    usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
+            } else {
+                updateUsagesStatusAndWriteAudit(usage, new Work(), UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
+                LOGGER.trace(NOT_MATCHED_FINISHED_LOG, usage.getId(), usage.getProductFamily(),
+                    usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
+            }
+        });
+    }
+
+    @Override
+    @Transactional
+    public void matchingAaclUsages(List<Usage> usages) {
+        usages.forEach(usage -> {
+            matchByWrWrkInst(usage);
+            LOGGER.trace(
+                "Consume AACL usages for matching processing. Processed. UsageId={}, WrWrkInst={}, UsageStatus={}",
+                usage.getId(), usage.getWrWrkInst(), usage.getStatus());
+        });
+    }
+
+    @Override
+    @Transactional
+    public void matchingSalUsages(List<Usage> usages) {
+        usages.forEach(usage -> {
+            matchByWrWrkInst(usage);
+            LOGGER.trace(
+                "Consume SAL usages for matching processing. Processed. UsageId={}, WrWrkInst={}, UsageStatus={}",
+                usage.getId(), usage.getWrWrkInst(), usage.getStatus());
+        });
+    }
+
+    @Override
+    @Transactional
+    public void matchingUdmUsages(List<UdmUsage> usages) {
+        usages.forEach(usage -> {
+            if (Objects.nonNull(usage.getWrWrkInst())) {
+                updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst()),
+                    UdmUsageGroupEnum.WR_WRK_INST);
+                LOGGER.trace(UDM_MATCHING_BY_WR_WRK_INST_FINISHED_LOG, usage.getId(), usage.getWrWrkInst(),
+                    usage.getStatus());
+            } else if (StringUtils.isNoneEmpty(usage.getReportedStandardNumber())) {
+                updateUdmUsageWorkInfo(usage,
+                    piIntegrationService.findWorkByStandardNumber(usage.getReportedStandardNumber()),
+                    UdmUsageGroupEnum.STANDARD_NUMBER);
+                LOGGER.trace(UDM_MATCHING_BY_IDNO_FINISHED_LOG, usage.getId(), usage.getReportedStandardNumber(),
+                    usage.getReportedTitle(), usage.getWrWrkInst(), usage.getStatus());
+            } else if (StringUtils.isNoneEmpty(usage.getReportedTitle())) {
+                updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByTitle(usage.getReportedTitle()),
+                    UdmUsageGroupEnum.TITLE);
+                LOGGER.trace(UDM_MATCHING_BY_TITLE_FINISHED_LOG, usage.getId(),
+                    usage.getReportedTitle(), usage.getWrWrkInst(), usage.getStatus());
+            }
+        });
+    }
+
+    private void matchByStandardNumber(Usage usage) {
         Work work = doMatchByStandardNumber(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
@@ -71,9 +152,7 @@ public class WorkMatchingService implements IWorkMatchingService {
         }
     }
 
-    @Override
-    @Transactional
-    public void matchByTitle(Usage usage) {
+    private void matchByTitle(Usage usage) {
         Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageService.updateProcessedUsage(usage);
@@ -92,9 +171,7 @@ public class WorkMatchingService implements IWorkMatchingService {
         }
     }
 
-    @Override
-    @Transactional
-    public void matchByWrWrkInst(Usage usage) {
+    private void matchByWrWrkInst(Usage usage) {
         Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setSystemTitle(work.getMainTitle());
@@ -109,34 +186,6 @@ public class WorkMatchingService implements IWorkMatchingService {
                 String.format("Wr Wrk Inst %s was not found in PI", usage.getWrWrkInst()));
         }
         usageService.updateProcessedUsage(usage);
-    }
-
-    @Override
-    @Transactional
-    public void matchByStandardNumber(UdmUsage usage) {
-        updateUdmUsageWorkInfo(usage,
-            piIntegrationService.findWorkByStandardNumber(usage.getReportedStandardNumber()),
-            UdmUsageGroupEnum.STANDARD_NUMBER);
-    }
-
-    @Override
-    @Transactional
-    public void matchByTitle(UdmUsage usage) {
-        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByTitle(usage.getReportedTitle()),
-            UdmUsageGroupEnum.TITLE);
-    }
-
-    @Override
-    @Transactional
-    public void matchByWrWrkInst(UdmUsage usage) {
-        updateUdmUsageWorkInfo(usage, piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst()),
-            UdmUsageGroupEnum.WR_WRK_INST);
-    }
-
-    @Override
-    @Transactional
-    public void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage) {
-        updateUsagesStatusAndWriteAudit(usage, new Work(), UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
     }
 
     private Work doMatchByTitle(Usage usage) {
