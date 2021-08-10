@@ -189,7 +189,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, true);
         verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -313,30 +313,108 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListener() throws Exception {
-        mockStatic(Windows.class);
-        createMock(UdmEditUsageWindow.class);
-        setSpecialistExpectations();
-        UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
-        udmUsageDto.setAssignee(USER);
-        udmUsageDto.setStatus(UsageStatusEnum.RH_FOUND);
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
-        Windows.showModalWindow(mockWindow);
-        expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
-        initWidget();
-        Grid<UdmUsageDto> grid =
-            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
-        grid.setItems(udmUsageDto);
-        grid.select(udmUsageDto);
-        Button editButton = (Button) getButtonsLayout().getComponent(2);
-        editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+    public void testEditButtonClickListenerSpecialistAllowedWorkNotFound() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedRhNotFound() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedRhFound() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedEligible() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.ELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedIneligible() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.INELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedOpsReview() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.OPS_REVIEW);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedSpecialistReview() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.SPECIALIST_REVIEW);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedWorkNotFound() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedRhNotFound() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedRhFound() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedEligible() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.ELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedIneligible() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.INELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedOpsReview() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.OPS_REVIEW);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedManagerReview() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.SPECIALIST_REVIEW);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherAllowedWorkNotFound() throws Exception {
+        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.WORK_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherAllowedRhNotFound() throws Exception {
+        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.RH_NOT_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherForbiddenRhFound() {
+        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.RH_FOUND);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherForbiddenEligible() {
+        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.ELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherForbiddenIneligible() {
+        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.INELIGIBLE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherForbiddenOpsReview() {
+        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.OPS_REVIEW);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherForbiddenResearcherReview() {
+        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.SPECIALIST_REVIEW);
     }
 
     @Test
@@ -592,5 +670,68 @@ public class UdmUsageWidgetTest {
         udmUsage.setId(usageId);
         udmUsage.setAssignee(user);
         return udmUsage;
+    }
+
+    private void testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum status) throws Exception {
+        setSpecialistExpectations();
+        testEditButtonClickListenerAllowed(status);
+    }
+
+    private void testEditButtonClickListenerManagerAllowed(UsageStatusEnum status) throws Exception {
+        setManagerExpectations();
+        testEditButtonClickListenerAllowed(status);
+    }
+
+    private void testEditButtonClickListenerResearcherAllowed(UsageStatusEnum status) throws Exception {
+        setResearcherExpectations();
+        testEditButtonClickListenerAllowed(status);
+    }
+
+    private void testEditButtonClickListenerAllowed(UsageStatusEnum status) throws Exception {
+        mockStatic(Windows.class);
+        createMock(UdmEditUsageWindow.class);
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
+        udmUsageDto.setAssignee(USER);
+        udmUsageDto.setStatus(status);
+        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
+        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto);
+        grid.select(udmUsageDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+    }
+
+    private void testEditButtonClickListenerResearcherForbidden(UsageStatusEnum status) {
+        mockStatic(Windows.class);
+        createMock(UdmEditUsageWindow.class);
+        setResearcherExpectations();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
+        udmUsageDto.setAssignee(USER);
+        udmUsageDto.setStatus(status);
+        Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND");
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto);
+        grid.select(udmUsageDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
     }
 }

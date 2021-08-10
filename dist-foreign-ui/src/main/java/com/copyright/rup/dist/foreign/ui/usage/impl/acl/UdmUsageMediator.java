@@ -25,9 +25,10 @@ public class UdmUsageMediator implements IMediator {
     public void applyPermissions() {
         boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
         boolean isManager = ForeignSecurityUtils.hasManagerPermission();
+        boolean isResearcher = ForeignSecurityUtils.hasResearcherPermission();
         batchMenuBar.setVisible(isSpecialist);
-        assignmentMenuBar.setVisible(isSpecialist || isManager || ForeignSecurityUtils.hasResearcherPermission());
-        editButton.setVisible(isSpecialist || isManager);
+        assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
+        editButton.setVisible(isSpecialist || isManager || isResearcher);
     }
 
     public void setBatchMenuBar(MenuBar batchMenuBar) {

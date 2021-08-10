@@ -87,7 +87,7 @@ public class UdmUsageMediatorTest {
         mediator.applyPermissions();
         assertFalse(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertFalse(editButton.isVisible());
+        assertTrue(editButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -109,11 +109,13 @@ public class UdmUsageMediatorTest {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
     }
 
     private void mockSpecialistPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
     }
 }

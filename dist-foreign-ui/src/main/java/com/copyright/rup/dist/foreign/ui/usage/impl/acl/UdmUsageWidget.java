@@ -37,7 +37,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,6 +58,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private static final int EXPECTED_SELECTED_SIZE = 1;
+    private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = Arrays.asList(
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND);
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
@@ -134,7 +138,17 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
             if (isUsageProcessingCompleted(selectedUsage)) {
                 if (userName.equals(selectedUsage.getAssignee())) {
-                    Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
+                    if (isEditForbiddenForResearcher(selectedUsage)) {
+                        Windows.showNotificationWindow(
+                            ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
+                                USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER
+                                    .stream()
+                                    .map(UsageStatusEnum::name)
+                                    .collect(Collectors.joining(", "))));
+                    } else {
+                        Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage,
+                            saveEvent -> refresh()));
+                    }
                 } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
                 }
@@ -160,6 +174,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private boolean isUsageProcessingCompleted(UdmUsageDto udmUsage) {
         return !udmUsage.getStatus().equals(UsageStatusEnum.NEW)
             && !udmUsage.getStatus().equals(UsageStatusEnum.WORK_FOUND);
+    }
+
+    private boolean isEditForbiddenForResearcher(UdmUsageDto udmUsage) {
+        return ForeignSecurityUtils.hasResearcherPermission()
+            && !USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(udmUsage.getStatus());
     }
 
     private String getSearchMessage() {
