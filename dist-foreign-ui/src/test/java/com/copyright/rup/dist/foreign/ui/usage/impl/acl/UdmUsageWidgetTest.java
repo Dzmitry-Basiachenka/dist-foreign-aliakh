@@ -408,8 +408,8 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListenerResearcherForbiddenOpsReview() {
-        testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.OPS_REVIEW);
+    public void testEditButtonClickListenerResearcherAllowedOpsReview() throws Exception {
+        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.OPS_REVIEW);
     }
 
     @Test
@@ -720,7 +720,8 @@ public class UdmUsageWidgetTest {
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
         udmUsageDto.setAssignee(USER);
         udmUsageDto.setStatus(status);
-        Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND");
+        Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND, " +
+            "OPS_REVIEW");
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
             ForeignSecurityUtils.class);

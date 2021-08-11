@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -21,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -65,7 +67,7 @@ import java.util.stream.Collectors;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class})
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class UdmEditUsageWindowTest {
 
     private static final String UDM_USAGE_UID = "75b110ff-c6c9-45e6-baac-34041ff62081";
@@ -128,23 +130,61 @@ public class UdmEditUsageWindowTest {
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
         LICENSEE_CLASS.setId(DET_LC_ID);
         LICENSEE_CLASS.setDescription(DET_LC_NAME);
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructorSpecialist() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         assertEquals("Edit UDM Usage", window.getCaption());
         assertEquals(650, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
-        verifyRootLayout(window.getContent());
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorManager() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setManagerExpectations();
+        initEditWindow();
+        assertEquals("Edit UDM Usage", window.getCaption());
+        assertEquals(650, window.getWidth(), 0);
+        assertEquals(Unit.PIXELS, window.getWidthUnits());
+        assertEquals(700, window.getHeight(), 0);
+        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorResearcher() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setResearcherExpectations();
+        initEditWindow();
+        assertEquals("Edit UDM Usage", window.getCaption());
+        assertEquals(650, window.getWidth(), 0);
+        assertEquals(Unit.PIXELS, window.getWidthUnits());
+        assertEquals(700, window.getHeight(), 0);
+        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyPanelResearcher(verticalLayout.getComponent(0));
     }
 
     @Test
     public void testUdmUsageDataBinding() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         VerticalLayout verticalLayout = getPanelContent();
         assertTextFieldValue(verticalLayout.getComponent(0), UDM_USAGE_UID);
@@ -190,6 +230,10 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testWrWrkInstValidation() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
@@ -204,12 +248,16 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testCompanyIdValidation() {
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
         companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(anyLong())).andReturn(companyInformation).anyTimes();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
@@ -227,11 +275,15 @@ public class UdmEditUsageWindowTest {
             EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE,
             false);
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testQuantityValidation() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         TextField quantityField = Whitebox.getInternalState(window, "quantityField");
         verifyIntegerValidations(quantityField, NUMBER_VALIDATION_MESSAGE);
@@ -241,6 +293,10 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testAnnualMultiplierValidation() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
         String numberValidationMessage = "Field value should be positive number between 1 and 25";
@@ -252,6 +308,10 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testStatisticalMultiplierValidation() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
         String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
@@ -263,6 +323,10 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testTextFieldsLengthValidation() {
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedStandardNumberField"), 100);
@@ -273,6 +337,10 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testVerifyButtonClickListener() {
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         CompanyInformation companyInformation = new CompanyInformation();
@@ -280,7 +348,7 @@ public class UdmEditUsageWindowTest {
         companyInformation.setName("Albany International Corp.");
         companyInformation.setDetailLicenseeClassId(DET_LC_ID);
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         VerticalLayout panelContent = getPanelContent();
@@ -295,11 +363,15 @@ public class UdmEditUsageWindowTest {
         assertEquals("Albany International Corp.", companyNameField.getValue());
         assertEquals(DET_LC_ID, detailLicenseeClassComboBox.getValue().getId());
         assertEquals(DET_LC_NAME, detailLicenseeClassComboBox.getValue().getDescription());
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
@@ -309,39 +381,47 @@ public class UdmEditUsageWindowTest {
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
-        replay(controller, binder, saveButtonClickListener);
+        replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
-        verify(controller, binder, saveButtonClickListener);
+        verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testDiscardButtonClickListener() {
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
         binder.readBean(udmUsage);
         expectLastCall().once();
-        replay(controller, binder);
+        replay(controller, binder, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);
         HorizontalLayout buttonsLayout = getButtonsLayout();
         ((Button) buttonsLayout.getComponent(1)).click();
-        verify(controller, binder);
+        verify(controller, binder, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testAnnualizedCopiesCalculation() {
+        mockStatic(ForeignSecurityUtils.class);
+        setSpecialistExpectations();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10L, 2, BigDecimal.ONE.setScale(5)))
             .andReturn(new BigDecimal("20.00000")).once();
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20L, 2, BigDecimal.ONE.setScale(5)))
             .andReturn(new BigDecimal("40.00000")).once();
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20L, 2, new BigDecimal("0.20000")))
             .andReturn(new BigDecimal("8.00000")).once();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         String annualizedCopiesErrorMessage =
@@ -363,7 +443,7 @@ public class UdmEditUsageWindowTest {
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
         statisticalMultiplierField.setValue("0.20000");
         assertEquals("8.00000", annualizedCopiesField.getValue());
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
@@ -387,15 +467,15 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(textField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
     }
 
-    private void verifyRootLayout(Component component) {
+    private VerticalLayout verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyPanel(verticalLayout.getComponent(0));
         verifyButtonsLayout(verticalLayout.getComponent(1));
+        return verticalLayout;
     }
 
-    private void verifyPanel(Component component) {
+    private void verifyPanelSpecialistAndManager(Component component) {
         assertTrue(component instanceof Panel);
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
@@ -440,6 +520,43 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
+    }
+
+    private void verifyPanelResearcher(Component component) {
+        assertTrue(component instanceof Panel);
+        Component panelContent = ((Panel) component).getContent();
+        assertTrue(panelContent instanceof VerticalLayout);
+        VerticalLayout verticalLayout = (VerticalLayout) panelContent;
+        assertEquals(29, verticalLayout.getComponentCount());
+        verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false);
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", false);
+        verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(5), "RH Account #", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Name", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(7), "Wr Wrk Inst", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(8), "Reported Title", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(9), "System Title", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(10), "Reported Standard Number", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(11), "Standard Number", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(12), "Reported Pub Type", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(13), "Publication Format", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(14), "Article", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(15), "Language", true, false);
+        verifyComboBoxLayout(verticalLayout.getComponent(16), "Action Reason", false);
+        verifyTextFieldLayout(verticalLayout.getComponent(17), "Comment", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(18), "Research URL", false, true);
+        verifyTextFieldLayout(verticalLayout.getComponent(19), "Detail Licensee Class", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(20), "Channel", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(21), "Usage Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(22), "Survey Start Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(23), "Survey End Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(24), "Reported TOU", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(25), "Ineligible Reason", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(26), "Load Date", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(27), "Updated By", true, false);
+        verifyTextFieldLayout(verticalLayout.getComponent(28), "Updated Date", true, false);
     }
 
     private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
@@ -601,9 +718,27 @@ public class UdmEditUsageWindowTest {
     private void initEditWindow() {
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        replay(controller);
+        replay(controller, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher) {
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(isResearcher);
+    }
+
+    private void setSpecialistExpectations() {
+        setPermissionsExpectations(true, false, false);
+    }
+
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true, false);
+    }
+
+    private void setResearcherExpectations() {
+        setPermissionsExpectations(false, false, true);
     }
 }
