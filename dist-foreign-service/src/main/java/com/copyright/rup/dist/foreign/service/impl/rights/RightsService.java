@@ -189,7 +189,7 @@ public class RightsService implements IRightsService {
                 .collect(Collectors.toList());
             Set<String> licenseTypes = getLicenseTypes(productFamily);
             Map<Long, Long> wrWrkInstToRhAccountNumberMap =
-                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, productFamily,
+                rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(wrWrkInsts, LocalDate.now(), productFamily,
                     productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(), licenseTypes);
             usages.forEach(usage -> {
                 Long wrWrkInst = usage.getWrWrkInst();
@@ -402,8 +402,8 @@ public class RightsService implements IRightsService {
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
-                productFamily, productFamilyToRightStatusesMap.get(productFamily), Collections.emptySet(),
-                getLicenseTypes(productFamily));
+                LocalDate.now(), productFamily, productFamilyToRightStatusesMap.get(productFamily),
+                Collections.emptySet(), getLicenseTypes(productFamily));
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
