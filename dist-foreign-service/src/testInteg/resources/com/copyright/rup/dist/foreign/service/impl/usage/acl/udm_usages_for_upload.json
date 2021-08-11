@@ -26,7 +26,8 @@
     "annualMultiplier": 1,
     "statisticalMultiplier": 1.00000,
     "surveyEndDate": "2020-06-15",
-    "periodEndDate": "2020-06-30"
+    "periodEndDate": "2020-06-30",
+    "period": "202006"
   },
   {
     "id": "8a5316e7-29bf-469e-8363-038a56abdea5",
@@ -56,7 +57,8 @@
     "statisticalMultiplier": 1.00000,
     "annualizedCopies": 1.00000,
     "surveyEndDate": "2020-06-15",
-    "periodEndDate": "2020-06-30"
+    "periodEndDate": "2020-06-30",
+    "period": "202006"
   },
   {
     "id": "ee2b530f-dbad-48b1-b490-fdebdd4267ca",
@@ -89,6 +91,7 @@
     "annualizedCopies": 1.00000,
     "surveyEndDate": "2020-06-15",
     "periodEndDate": "2020-06-30",
+    "period": "202006",
     "rightsholder": {
       "accountNumber": 1000024950
     }
@@ -123,6 +126,7 @@
     "statisticalMultiplier": 1.00000,
     "annualizedCopies": 1.00000,
     "surveyEndDate": "2020-06-15",
-    "periodEndDate": "2020-06-30"
+    "periodEndDate": "2020-06-30",
+    "period": "202006"
   }
 ]

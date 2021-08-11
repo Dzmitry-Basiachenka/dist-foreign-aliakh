@@ -452,6 +452,7 @@ public class UdmUsageServiceTest {
 
     private void assertUdmUsage(UdmUsage udmUsage) {
         assertEquals(UDM_BATCH_UID, udmUsage.getBatchId());
+        assertEquals(202006, udmUsage.getPeriod(), 0);
         assertEquals(LocalDate.of(2020, 6, 30), udmUsage.getPeriodEndDate());
         assertEquals(ANNUAL_MULTIPLIER, udmUsage.getAnnualMultiplier().intValue());
         assertEquals(STATISTICAL_MULTIPLIER, udmUsage.getStatisticalMultiplier());

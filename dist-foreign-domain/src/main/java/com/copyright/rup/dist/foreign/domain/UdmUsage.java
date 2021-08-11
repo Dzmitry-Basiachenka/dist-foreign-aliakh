@@ -24,6 +24,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String originalDetailId;
     private String batchId;
     private UsageStatusEnum status;
+    private Integer period;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
     private Rightsholder rightsholder = new Rightsholder();
@@ -77,6 +78,14 @@ public class UdmUsage extends StoredEntity<String> {
 
     public void setStatus(UsageStatusEnum status) {
         this.status = status;
+    }
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
     }
 
     public LocalDate getPeriodEndDate() {
@@ -333,6 +342,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(originalDetailId, udmUsage.originalDetailId)
             .append(batchId, udmUsage.batchId)
             .append(status, udmUsage.status)
+            .append(period, udmUsage.period)
             .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
             .append(standardNumber, udmUsage.standardNumber)
@@ -373,6 +383,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(originalDetailId)
             .append(batchId)
             .append(status)
+            .append(period)
             .append(periodEndDate)
             .append(usageDate)
             .append(standardNumber)
@@ -413,6 +424,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append("originalDetailId", originalDetailId)
             .append("batchId", batchId)
             .append("status", status)
+            .append("period", period)
             .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
             .append("standardNumber", standardNumber)

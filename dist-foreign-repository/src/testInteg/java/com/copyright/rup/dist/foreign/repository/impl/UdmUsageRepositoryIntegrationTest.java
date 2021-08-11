@@ -90,7 +90,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String ARTICLE = "Green chemistry";
     private static final String LANGUAGE = "English";
     private static final String SURVEY_COUNTRY = "United States";
-    private static final LocalDate PERIOD_END_DATE = LocalDate.of(2021, 12, 12);
+    private static final LocalDate PERIOD_END_DATE = LocalDate.of(2021, 12, 31);
     private static final LocalDate USAGE_DATE = LocalDate.of(2020, 12, 12);
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
     private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
@@ -734,6 +734,7 @@ public class UdmUsageRepositoryIntegrationTest {
         udmUsage.setBatchId(UDM_BATCH_UID_1);
         udmUsage.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
         udmUsage.setStatus(UsageStatusEnum.NEW);
+        udmUsage.setPeriod(202112);
         udmUsage.setPeriodEndDate(PERIOD_END_DATE);
         udmUsage.setUsageDate(USAGE_DATE);
         udmUsage.setWrWrkInst(WR_WRK_INST);

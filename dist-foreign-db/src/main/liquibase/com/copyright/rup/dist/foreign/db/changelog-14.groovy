@@ -319,4 +319,23 @@ databaseChangeLog {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(1024)')
         }
     }
+
+    changeSet(id: '2021-08-11-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-67678 FDA & UDM: Usage Period update - tech story: add period column to df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The UDM period in YYYYMM format')
+        }
+
+        sql("""update ${dbAppsSchema}.df_udm_usage u 
+                set period = b.period
+                from ${dbAppsSchema}.df_udm_usage_batch b
+                where u.df_udm_usage_batch_uid = b.df_udm_usage_batch_uid""")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'period', columnDataType: 'NUMERIC(6)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'period')
+        }
+    }
 }

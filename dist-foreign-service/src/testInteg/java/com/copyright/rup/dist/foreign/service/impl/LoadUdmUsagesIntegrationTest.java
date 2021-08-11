@@ -123,6 +123,7 @@ public class LoadUdmUsagesIntegrationTest {
     private void verifyUdmUsage(UdmUsage expectedUsage, UdmUsage actualUsage) {
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
+        assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
         assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getReportedTitle(), actualUsage.getReportedTitle());
