@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -119,7 +120,64 @@ public class UdmEditUsageWindow extends Window {
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
-        editFieldsLayout.addComponents(
+        editFieldsLayout.addComponents(ForeignSecurityUtils.hasResearcherPermission()
+            ? getComponentsForResearcher() : getComponentsForSpecialistAndManager());
+        Panel panel = new Panel(editFieldsLayout);
+        panel.setSizeFull();
+        editFieldsLayout.setMargin(new MarginInfo(true));
+        HorizontalLayout buttonsLayout = initButtonsLayout();
+        rootLayout.addComponents(panel, buttonsLayout);
+        rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        rootLayout.setExpandRatio(panel, 1f);
+        rootLayout.setSizeFull();
+        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        binder.validate();
+        binder.readBean(udmUsage);
+        binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
+        return rootLayout;
+    }
+
+    private Component[] getComponentsForResearcher() {
+        return new Component[]{
+            buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId),
+            buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod())),
+            buildReadOnlyLayout("label.usage_detail_id", UdmUsageDto::getOriginalDetailId),
+            initDetailStatusLayout(),
+            buildReadOnlyLayout("label.assignee", UdmUsageDto::getAssignee),
+            buildReadOnlyLayout("label.rh_account_number",
+                usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY)),
+            buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName),
+            buildWrWrkInstLayout(),
+            buildReadOnlyLayout("label.reported_title", UdmUsageDto::getReportedTitle),
+            buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle),
+            buildReadOnlyLayout("label.reported_standard_number", UdmUsageDto::getReportedStandardNumber),
+            buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber),
+            buildReadOnlyLayout("label.reported_pub_type", UdmUsageDto::getReportedPubType),
+            buildReadOnlyLayout("label.publication_format", UdmUsageDto::getPubFormat),
+            buildReadOnlyLayout("label.article", UdmUsageDto::getArticle),
+            buildReadOnlyLayout("label.language", UdmUsageDto::getLanguage),
+            initActionReasonLayout(),
+            buildEditableStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
+                UdmUsageDto::setComment, "udm-edit-comment-field"),
+            buildEditableStringLayout(researchUrlField, "label.research_url", 1000, UdmUsageDto::getResearchUrl,
+                UdmUsageDto::setResearchUrl, "udm-edit-research-url-field"),
+            buildReadOnlyLayout("label.det_lc", usage -> String.format("%s - %s",
+                usage.getDetailLicenseeClass().getId(), usage.getDetailLicenseeClass().getDescription())),
+            buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name()),
+            buildReadOnlyLayout("label.usage_date", usage -> getStringFromLocalDate(usage.getUsageDate())),
+            buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
+            buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
+            buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
+            buildReadOnlyLayout("label.ineligible_reason", usage -> Objects.nonNull(usage.getIneligibleReason())
+                ? usage.getIneligibleReason().getReason() : StringUtils.EMPTY),
+            buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
+            buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser),
+            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
+        };
+    }
+
+    private Component[] getComponentsForSpecialistAndManager() {
+        return new Component[]{
             buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId),
             buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod())),
             buildReadOnlyLayout("label.usage_origin", usage -> usage.getUsageOrigin().name()),
@@ -165,20 +223,8 @@ public class UdmEditUsageWindow extends Window {
             initIneligibleReasonLayout(),
             buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate())));
-        Panel panel = new Panel(editFieldsLayout);
-        panel.setSizeFull();
-        editFieldsLayout.setMargin(new MarginInfo(true));
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        rootLayout.addComponents(panel, buttonsLayout);
-        rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        rootLayout.setExpandRatio(panel, 1f);
-        rootLayout.setSizeFull();
-        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        binder.validate();
-        binder.readBean(udmUsage);
-        binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
-        return rootLayout;
+            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
+        };
     }
 
     private HorizontalLayout buildReadOnlyLayout(String caption, ValueProvider<UdmUsageDto, String> getter) {

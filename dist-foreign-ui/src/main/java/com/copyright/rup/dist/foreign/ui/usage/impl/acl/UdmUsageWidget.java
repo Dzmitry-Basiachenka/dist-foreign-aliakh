@@ -59,7 +59,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private static final int EXPECTED_SELECTED_SIZE = 1;
     private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = Arrays.asList(
-        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND);
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW);
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
@@ -177,7 +177,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private boolean isEditForbiddenForResearcher(UdmUsageDto udmUsage) {
-        return ForeignSecurityUtils.hasResearcherPermission()
+        return hasResearcherPermission
             && !USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(udmUsage.getStatus());
     }
 
