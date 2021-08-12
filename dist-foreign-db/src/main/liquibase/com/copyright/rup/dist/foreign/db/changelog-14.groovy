@@ -338,4 +338,32 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage', columnName: 'period')
         }
     }
+
+    changeSet(id: '2021-08-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-68059 FDA & UDM: Change rules for getting ACL rights from RH's: add records to df_grant_priority table for ACL (UDM)")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '6cfc3939-90a7-47aa-b624-537a6c8ee406')
+            column(name: 'product_family', value: 'ACL (UDM)')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '0')
+            column(name: 'license_type', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '1f9376b4-0063-4b4a-b9b9-4c0c4100e38c')
+            column(name: 'product_family', value: 'ACL (UDM)')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '1')
+            column(name: 'license_type', value: 'ACL')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                where "df_grant_priority_uid in ('6cfc3939-90a7-47aa-b624-537a6c8ee406','1f9376b4-0063-4b4a-b9b9-4c0c4100e38c')"
+            }
+        }
+    }
 }

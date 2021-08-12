@@ -167,12 +167,15 @@ public class UpdateRightsIntegrationTest {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rms_grants_udm_122769421_request.json", "rms_grants_udm_122769421_response.json");
+        expectRmsCall("rms_grants_udm_210001133_request.json", "rms_grants_udm_210001133_response.json");
         expectRmsCall("rms_grants_udm_210001899_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
         expectPrmCall();
         rightsService.updateUdmRights(Arrays.asList(
-            buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "PRINT"),
+            buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "DIGITAL"),
+            buildUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", 210001133, "PRINT"),
             buildUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", 210001899, "DIGITAL")));
-        assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000000322L);
+        assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000023401L);
+        assertUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", UsageStatusEnum.RH_FOUND, 1000000322L);
         assertUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", UsageStatusEnum.RH_NOT_FOUND, null);
         mockServer.verify();
         asyncMockServer.verify();
