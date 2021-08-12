@@ -8,6 +8,7 @@
         <result property="id" column="df_udm_usage_uid"/>
         <result property="batchId" column="df_udm_usage_batch_uid"/>
         <result property="originalDetailId" column="original_detail_id"/>
+        <result property="period" column="period"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="status" column="status_ind"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
@@ -92,7 +93,7 @@
                 </foreach>
             </if>
             <if test="null != filter.period">
-                and <![CDATA[ub.period = #{filter.period}]]>
+                and <![CDATA[u.period = #{filter.period}]]>
             </if>
             <if test="null != filter.usageStatus">
                 and u.status_ind = #{filter.usageStatus}
@@ -223,7 +224,7 @@
     <sql id="selectDtosByFilterSql">
         select
             df_udm_usage_uid,
-            ub.period,
+            u.period,
             period_end_date,
             ub.usage_origin,
             ub.channel,
@@ -383,7 +384,7 @@
                 df_udm_usage_uid <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'period'">
-                ub.period <include refid="IUsageMapper.direction"/>
+                u.period <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'usageOrigin'">
                 ub.usage_origin <include refid="IUsageMapper.direction"/>
