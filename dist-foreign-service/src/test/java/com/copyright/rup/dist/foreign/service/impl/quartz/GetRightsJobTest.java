@@ -49,10 +49,10 @@ public class GetRightsJobTest {
     public void testExecuteInternal() {
         JobInfo usageJobInfo = new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages");
         expect(chainExecutor.execute(ChainProcessorTypeEnum.RIGHTS)).andReturn(usageJobInfo).once();
-        JobInfo udmJobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL (UDM), UsagesCount=5");
+        JobInfo udmJobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL_UDM, UsagesCount=5");
         expect(udmChainExecutor.execute(ChainProcessorTypeEnum.RIGHTS)).andReturn(udmJobInfo).once();
         JobInfo result = new JobInfo(JobStatusEnum.FINISHED,
-            "ProductFamily=FAS, Reason=There are no usages; ProductFamily=ACL (UDM), UsagesCount=5");
+            "ProductFamily=FAS, Reason=There are no usages; ProductFamily=ACL_UDM, UsagesCount=5");
         jobExecutionContext.setResult(result);
         expectLastCall().once();
         replay(chainExecutor, udmChainExecutor, jobExecutionContext);

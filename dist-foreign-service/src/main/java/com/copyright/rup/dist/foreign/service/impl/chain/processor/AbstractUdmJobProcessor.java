@@ -46,16 +46,16 @@ abstract class AbstractUdmJobProcessor extends AbstractChainProcessor<UdmUsage>
         List<String> usageIds = udmUsageService.getUdmUsageIdsByStatus(usageStatus);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             LogUtils.ILogWrapper usagesCount = LogUtils.size(usageIds);
-            LOGGER.info("Send {} usages for processing. Started. ProductFamily=ACL (UDM), UsagesCount={}", usageStatus,
+            LOGGER.info("Send {} usages for processing. Started. ProductFamily=ACL_UDM, UsagesCount={}", usageStatus,
                 usagesCount);
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> udmUsageService.getUdmUsagesByIds(partition)
                     .forEach(usage -> process(Collections.singletonList(usage))));
-            String message = "ProductFamily=ACL (UDM), UsagesCount=" + usagesCount;
+            String message = "ProductFamily=ACL_UDM, UsagesCount=" + usagesCount;
             LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);
         } else {
-            String message = "ProductFamily=ACL (UDM), Reason=There are no usages";
+            String message = "ProductFamily=ACL_UDM, Reason=There are no usages";
             LOGGER.info("Send {} usages for processing. Skipped. {}", usageStatus, message);
             jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }
