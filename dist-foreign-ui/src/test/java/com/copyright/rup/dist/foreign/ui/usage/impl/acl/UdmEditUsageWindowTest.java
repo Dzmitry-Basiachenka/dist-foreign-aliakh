@@ -29,6 +29,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -52,8 +53,11 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -485,7 +489,9 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", false);
+        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", false,
+            Arrays.asList(udmUsage.getStatus(), UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE,
+                UsageStatusEnum.INELIGIBLE, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false);
@@ -531,7 +537,9 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", false);
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", false,
+            Arrays.asList(udmUsage.getStatus(), UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW,
+                UsageStatusEnum.NEW));
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(5), "RH Account #", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Name", true, false);
@@ -577,12 +585,22 @@ public class UdmEditUsageWindowTest {
         assertEquals(expectedValue, ((ComboBox) layout.getComponent(1)).getValue());
     }
 
-    private void verifyComboBoxLayout(Component component, String caption, boolean isValidated) {
+    private ComboBox<?> verifyComboBoxLayout(Component component, String caption, boolean isValidated) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption);
-        verifyComboBoxField(layout.getComponent(1), isValidated ? caption : null);
+        return verifyComboBoxField(layout.getComponent(1), isValidated ? caption : null);
+    }
+
+    private void verifyComboBoxLayout(Component component, String caption, boolean isValidated,
+                                      Collection<UsageStatusEnum> expectedItems) {
+        ComboBox<?> comboBox = verifyComboBoxLayout(component, caption, isValidated);
+        ListDataProvider<UsageStatusEnum> listDataProvider = (ListDataProvider<UsageStatusEnum>)
+            comboBox.getDataProvider();
+        Collection<?> actualItems = listDataProvider.getItems();
+        assertEquals(expectedItems.size(), actualItems.size());
+        assertEquals(new LinkedHashSet<>(expectedItems), actualItems);
     }
 
     private void verifyCompanyIdLayout(Component component) {
@@ -609,12 +627,14 @@ public class UdmEditUsageWindowTest {
         assertEquals(isReadOnly, ((TextField) component).isReadOnly());
     }
 
-    private void verifyComboBoxField(Component component, String caption) {
+    private ComboBox<?> verifyComboBoxField(Component component, String caption) {
         assertTrue(component instanceof ComboBox);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(caption, component.getCaption());
-        assertFalse(((ComboBox) component).isReadOnly());
+        ComboBox<?> comboBox = (ComboBox<?>) component;
+        assertFalse(comboBox.isReadOnly());
+        return comboBox;
     }
 
     private void verifyButtonsLayout(Component component) {

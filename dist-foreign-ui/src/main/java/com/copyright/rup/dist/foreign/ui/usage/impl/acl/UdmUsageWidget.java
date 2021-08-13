@@ -58,7 +58,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private static final int EXPECTED_SELECTED_SIZE = 1;
-    private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = Arrays.asList(
+    private static final List<UsageStatusEnum> EDIT_ALLOWED_STATUSES_RESEARCHER = Arrays.asList(
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW);
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
@@ -141,7 +141,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     if (isEditForbiddenForResearcher(selectedUsage)) {
                         Windows.showNotificationWindow(
                             ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
-                                USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER
+                                EDIT_ALLOWED_STATUSES_RESEARCHER
                                     .stream()
                                     .map(UsageStatusEnum::name)
                                     .collect(Collectors.joining(", "))));
@@ -178,7 +178,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private boolean isEditForbiddenForResearcher(UdmUsageDto udmUsage) {
         return hasResearcherPermission
-            && !USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(udmUsage.getStatus());
+            && !EDIT_ALLOWED_STATUSES_RESEARCHER.contains(udmUsage.getStatus());
     }
 
     private String getSearchMessage() {
