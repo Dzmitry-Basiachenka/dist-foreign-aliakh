@@ -1,8 +1,11 @@
 {
   "works": [
     {
-      "status": ["GRANT"],
-      "type_of_use": ["DIGITAL"],
+      "status": [
+        "GRANT",
+        "DENY",
+        "SPECIAL_REQUEST"
+      ],
       "wr_wrk_inst": 123059057,
       "period_end_date": "06/30/2020",
       "license_type": ["ACL"]

@@ -11,7 +11,7 @@
       "foundWorkCount": "2",
       "rights": [
         {
-          "wr_wrk_inst": "122769421",
+          "wr_wrk_inst": "210001133",
           "status": "GRANT",
           "type_of_use": "PRINT",
           "market": "CORPORATE",
@@ -24,15 +24,15 @@
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000000322",
-          "right_id": "a02af8f9-2ee4-4045-8bb5-79529fc087a6",
+          "right_id": "a07af8f9-bc67-4045-4599-79529fc087ac",
           "license_type": "ACL",
           "product_family": "ACL",
           "rh_account_number": "1000000322"
         },
         {
-          "wr_wrk_inst": "122769421",
-          "status": "GRANT",
-          "type_of_use": "DIGITAL",
+          "wr_wrk_inst": "210001133",
+          "status": "DENY",
+          "type_of_use": "PRINT",
           "market": "CORPORATE",
           "distribution": "EXTERNAL",
           "region": "WORLDWIDE",
@@ -43,7 +43,7 @@
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000023401",
-          "right_id": "b02af8f9-cc56-4045-8bb5-79529fc087a5",
+          "right_id": "b07af8f9-d675-4045-45ff-79529fc08733",
           "license_type": "ACL",
           "product_family": "ACL",
           "rh_account_number": "1000023401"

@@ -64,7 +64,6 @@ import java.util.stream.Collectors;
 public class RightsService implements IRightsService {
 
     private static final int PRODUCT_FAMILIES_COUNT = 1;
-    private static final String ACL_LICENSE_TYPE = "ACL";
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
     private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
@@ -214,39 +213,32 @@ public class RightsService implements IRightsService {
     @Transactional
     public void updateUdmRights(List<UdmUsage> udmUsages) {
         if (CollectionUtils.isNotEmpty(udmUsages)) {
-            Map<LocalDate, Map<String, List<UdmUsage>>> periodEndDatesToTypeOfUseToUdmUsagesMap = udmUsages.stream()
-                .collect(Collectors.groupingBy(UdmUsage::getPeriodEndDate,
-                    Collectors.groupingBy(UdmUsage::getTypeOfUse)));
-            periodEndDatesToTypeOfUseToUdmUsagesMap.forEach((periodEndDate, typeOfUseToUdmUsagesMap) -> {
-                typeOfUseToUdmUsagesMap.forEach((typeOfUse, groupedUdmUsages) -> {
-                    List<Long> wrWrkInsts = groupedUdmUsages.stream()
-                        .map(UdmUsage::getWrWrkInst)
-                        .collect(Collectors.toList());
-                    Map<Long, List<RmsGrant>> wrWrkInstToGrants = rmsRightsService.getGrants(wrWrkInsts, periodEndDate,
-                        productFamilyToRightStatusesMap.get(FdaConstants.ACL_PRODUCT_FAMILY),
-                        ImmutableSet.of(typeOfUse), ImmutableSet.of(ACL_LICENSE_TYPE)).stream()
-                        .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst));
-                    groupedUdmUsages.forEach(udmUsage -> {
-                        Long wrWrkInst = udmUsage.getWrWrkInst();
-                        Set<RmsGrant> eligibleGrants = wrWrkInstToGrants
-                            .getOrDefault(wrWrkInst, Collections.emptyList())
-                            .stream()
-                            .filter(grant -> FdaConstants.ACL_PRODUCT_FAMILY.equals(grant.getProductFamily()))
-                            .collect(Collectors.toSet());
-                        RmsGrant grant = findGrantByStatus(eligibleGrants, FdaConstants.RIGHT_STATUS_GRANT);
-                        if (Objects.nonNull(grant)) {
-                            Long rhAccountNumber = grant.getWorkGroupOwnerOrgNumber().longValueExact();
-                            udmUsage.setRightsholder(buildRightsholder(rhAccountNumber));
-                            udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
-                            udmAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.RH_FOUND,
-                                String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber));
-                        } else {
-                            udmUsage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-                            udmAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.RH_NOT_FOUND,
-                                String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
-                        }
-                        udmUsageService.updateProcessedUsage(udmUsage);
-                    });
+            Set<String> licenseTypes = getLicenseTypes(FdaConstants.ACL_UDM_PRODUCT_FAMILY);
+            Map<LocalDate, List<UdmUsage>> periodEndDatesToUdmUsagesMap = udmUsages
+                .stream()
+                .collect(Collectors.groupingBy(UdmUsage::getPeriodEndDate));
+            periodEndDatesToUdmUsagesMap.forEach((periodEndDate, groupedUdmUsages) -> {
+                List<Long> wrWrkInsts = groupedUdmUsages.stream()
+                    .map(UdmUsage::getWrWrkInst)
+                    .collect(Collectors.toList());
+                Map<Long, Long> wrWrkInstToRhAccountNumberMap = rmsGrantProcessorService
+                    .getAccountNumbersByWrWrkInsts(wrWrkInsts, periodEndDate, FdaConstants.ACL_UDM_PRODUCT_FAMILY,
+                        productFamilyToRightStatusesMap.get(FdaConstants.ACL_UDM_PRODUCT_FAMILY),
+                        Collections.emptySet(), licenseTypes);
+                groupedUdmUsages.forEach(usage -> {
+                    Long wrWrkInst = usage.getWrWrkInst();
+                    Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
+                    if (Objects.nonNull(rhAccountNumber)) {
+                        usage.setRightsholder(buildRightsholder(rhAccountNumber));
+                        usage.setStatus(UsageStatusEnum.RH_FOUND);
+                        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_FOUND,
+                            String.format(RH_FOUND_REASON_FORMAT, rhAccountNumber));
+                    } else {
+                        usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+                        udmAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_NOT_FOUND,
+                            String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
+                    }
+                    udmUsageService.updateProcessedUsage(usage);
                 });
             });
         }
