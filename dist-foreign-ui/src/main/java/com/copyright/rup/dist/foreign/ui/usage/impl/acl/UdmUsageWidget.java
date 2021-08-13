@@ -29,6 +29,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -38,6 +39,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -58,12 +60,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
     private static final int EXPECTED_SELECTED_SIZE = 1;
-    private static final List<UsageStatusEnum> EDIT_ALLOWED_STATUSES_RESEARCHER = Arrays.asList(
+    private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = Arrays.asList(
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW);
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
+    private final Button multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
     private final String userName = RupContextUtils.getUserName();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
@@ -91,6 +94,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setMultipleEditButton(multipleEditButton);
         return mediator;
     }
 
@@ -136,31 +140,23 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
-            if (isUsageProcessingCompleted(selectedUsage)) {
-                if (userName.equals(selectedUsage.getAssignee())) {
-                    if (isEditForbiddenForResearcher(selectedUsage)) {
-                        Windows.showNotificationWindow(
-                            ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
-                                EDIT_ALLOWED_STATUSES_RESEARCHER
-                                    .stream()
-                                    .map(UsageStatusEnum::name)
-                                    .collect(Collectors.joining(", "))));
-                    } else {
-                        Windows.showModalWindow(new UdmEditUsageWindow(controller, selectedUsage,
-                            saveEvent -> refresh()));
-                    }
-                } else {
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
-                }
-            } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.processing_usages"));
-            }
+            UdmEditUsageWindow udmEditUsageWindow =
+                new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh());
+            initModalWindow(Collections.singleton(selectedUsage), udmEditUsageWindow);
+        });
+        multipleEditButton.setEnabled(false);
+        multipleEditButton.addClickListener(event -> {
+            Set<UdmUsageDto> selectedUsages = udmUsagesGrid.getSelectedItems();
+            initModalWindow(selectedUsages,
+                hasResearcherPermission
+                    ? new UdmEditMultipleUsagesResearcherWindow(controller)
+                    : new UdmEditMultipleUsagesWindow(controller));
         });
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
         HorizontalLayout buttonsLayout =
-            new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, exportButton);
+            new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
         toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
@@ -171,14 +167,55 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return toolbar;
     }
 
-    private boolean isUsageProcessingCompleted(UdmUsageDto udmUsage) {
-        return !udmUsage.getStatus().equals(UsageStatusEnum.NEW)
-            && !udmUsage.getStatus().equals(UsageStatusEnum.WORK_FOUND);
+    private void initModalWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+        if (hasResearcherPermission) {
+            initEditResearcherWindow(selectedUsages, window);
+        } else {
+            initEditWindow(selectedUsages, window);
+        }
     }
 
-    private boolean isEditForbiddenForResearcher(UdmUsageDto udmUsage) {
-        return hasResearcherPermission
-            && !EDIT_ALLOWED_STATUSES_RESEARCHER.contains(udmUsage.getStatus());
+    private void initEditWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+        if (isUsagesProcessingCompleted(selectedUsages)) {
+            openEditWindow(selectedUsages, window);
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.processing_usages"));
+        }
+    }
+
+    private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+        if (isEditForbiddenForResearcher(selectedUsages)) {
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
+                    USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER
+                        .stream()
+                        .map(UsageStatusEnum::name)
+                        .collect(Collectors.joining(", "))));
+        } else {
+            openEditWindow(selectedUsages, window);
+        }
+    }
+
+    private void openEditWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+        if (checkHasUsagesAssignee(selectedUsages)) {
+            Windows.showModalWindow(window);
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
+        }
+    }
+
+    private boolean checkHasUsagesAssignee(Set<UdmUsageDto> usages) {
+        return usages.stream().allMatch(usage -> userName.equals(usage.getAssignee()));
+    }
+
+    private boolean isUsagesProcessingCompleted(Set<UdmUsageDto> udmUsages) {
+        return udmUsages.stream().noneMatch(usageDto -> usageDto.getStatus().equals(UsageStatusEnum.NEW)
+            || usageDto.getStatus().equals(UsageStatusEnum.WORK_FOUND));
+    }
+
+    private boolean isEditForbiddenForResearcher(Set<UdmUsageDto> udmUsages) {
+        return udmUsages.stream()
+            .noneMatch(usageDto -> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(usageDto.getStatus()));
     }
 
     private String getSearchMessage() {
@@ -254,10 +291,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
             udmUsagesGrid.addSelectionListener(event -> {
                 Set<UdmUsageDto> usageDtos = event.getAllSelectedItems();
-                boolean isAssignmentEnabled = CollectionUtils.isNotEmpty(usageDtos);
-                assignItem.setEnabled(isAssignmentEnabled);
-                unassignItem.setEnabled(isAssignmentEnabled);
+                boolean isSelected = CollectionUtils.isNotEmpty(usageDtos);
+                assignItem.setEnabled(isSelected);
+                unassignItem.setEnabled(isSelected);
                 editButton.setEnabled(EXPECTED_SELECTED_SIZE == usageDtos.size());
+                multipleEditButton.setEnabled(isSelected);
             });
         } else {
             udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);

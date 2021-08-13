@@ -18,6 +18,7 @@ import com.vaadin.ui.MenuBar;
 public class UdmUsageMediator implements IMediator {
 
     private Button editButton;
+    private Button multipleEditButton;
     private MenuBar batchMenuBar;
     private MenuBar assignmentMenuBar;
 
@@ -29,6 +30,7 @@ public class UdmUsageMediator implements IMediator {
         batchMenuBar.setVisible(isSpecialist);
         assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
         editButton.setVisible(isSpecialist || isManager || isResearcher);
+        multipleEditButton.setVisible(isSpecialist || isManager || isResearcher);
     }
 
     public void setBatchMenuBar(MenuBar batchMenuBar) {
@@ -41,5 +43,9 @@ public class UdmUsageMediator implements IMediator {
 
     public void setEditButton(Button editButton) {
         this.editButton = editButton;
+    }
+
+    public void setMultipleEditButton(Button multipleEditButton) {
+        this.multipleEditButton = multipleEditButton;
     }
 }
