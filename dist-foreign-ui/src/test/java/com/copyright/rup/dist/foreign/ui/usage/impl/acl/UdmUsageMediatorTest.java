@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +36,7 @@ public class UdmUsageMediatorTest {
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
 
     private final Button editButton = new Button("Edit Usage");
+    private final Button multipleEditButton = new Button("Multiple Edit");
     private final MenuBar udmBatchMenuBar = new MenuBar();
     private final MenuBar assignmentMenuBar = new MenuBar();
     private UdmUsageMediator mediator;
@@ -45,6 +47,7 @@ public class UdmUsageMediatorTest {
         mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setMultipleEditButton(multipleEditButton);
     }
 
     @Test
@@ -55,6 +58,7 @@ public class UdmUsageMediatorTest {
         assertFalse(udmBatchMenuBar.isVisible());
         assertFalse(assignmentMenuBar.isVisible());
         assertFalse(editButton.isVisible());
+        assertFalse(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -66,6 +70,7 @@ public class UdmUsageMediatorTest {
         assertFalse(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertTrue(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -77,6 +82,7 @@ public class UdmUsageMediatorTest {
         assertTrue(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertTrue(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -88,6 +94,7 @@ public class UdmUsageMediatorTest {
         assertFalse(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertTrue(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
 
