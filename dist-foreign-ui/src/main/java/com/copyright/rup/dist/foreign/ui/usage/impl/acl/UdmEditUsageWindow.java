@@ -45,6 +45,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,9 @@ public class UdmEditUsageWindow extends Window {
     private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
         Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
     private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
-    private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
+    private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES_RESEARCHER =
+        Arrays.asList(UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.NEW);
+    private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
@@ -93,6 +96,7 @@ public class UdmEditUsageWindow extends Window {
     private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final ClickListener saveButtonClickListener;
+    private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
 
     /**
      * Constructor.
@@ -120,7 +124,7 @@ public class UdmEditUsageWindow extends Window {
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
-        editFieldsLayout.addComponents(ForeignSecurityUtils.hasResearcherPermission()
+        editFieldsLayout.addComponents(hasResearcherPermission
             ? getComponentsForResearcher() : getComponentsForSpecialistAndManager());
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
@@ -368,9 +372,10 @@ public class UdmEditUsageWindow extends Window {
         ComboBox<UsageStatusEnum> comboBox = new ComboBox<>();
         comboBox.setSizeFull();
         comboBox.setEmptySelectionAllowed(false);
-        LinkedHashSet<UsageStatusEnum> statuses = new LinkedHashSet<>();
+        HashSet<UsageStatusEnum> statuses = new LinkedHashSet<>();
         statuses.add(udmUsage.getStatus());
-        statuses.addAll(EDIT_AVAILABLE_STATUSES);
+        statuses.addAll(hasResearcherPermission
+            ? EDIT_AVAILABLE_STATUSES_RESEARCHER : EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER);
         comboBox.setItems(statuses);
         binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-detail-status-combo-box");
