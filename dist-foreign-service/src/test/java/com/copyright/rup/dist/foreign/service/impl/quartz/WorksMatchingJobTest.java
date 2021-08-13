@@ -49,10 +49,10 @@ public class WorksMatchingJobTest {
     public void testExecuteInternal() {
         JobInfo usageJobInfo = new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages");
         expect(usageChainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(usageJobInfo).once();
-        JobInfo udmJobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL (UDM), UsagesCount=5");
+        JobInfo udmJobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=ACL_UDM, UsagesCount=5");
         expect(udmChainExecutor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(udmJobInfo).once();
         JobInfo result = new JobInfo(JobStatusEnum.FINISHED,
-            "ProductFamily=FAS, Reason=There are no usages; ProductFamily=ACL (UDM), UsagesCount=5");
+            "ProductFamily=FAS, Reason=There are no usages; ProductFamily=ACL_UDM, UsagesCount=5");
         jobExecutionContext.setResult(result);
         expectLastCall().once();
         replay(usageChainExecutor, udmChainExecutor, jobExecutionContext);
