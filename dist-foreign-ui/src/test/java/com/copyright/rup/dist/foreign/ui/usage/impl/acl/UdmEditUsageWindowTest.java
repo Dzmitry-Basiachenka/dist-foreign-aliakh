@@ -381,7 +381,7 @@ public class UdmEditUsageWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmUsage);
         expectLastCall().once();
-        controller.updateUsage(udmUsage);
+        controller.updateUsage(udmUsage, false);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

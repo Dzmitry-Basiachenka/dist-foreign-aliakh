@@ -615,6 +615,7 @@
         update ${schema}.df_udm_usage
         set
             status_ind = #{status},
+            assignee = #{assignee},
             wr_wrk_inst = #{wrWrkInst},
             reported_title = #{reportedTitle},
             reported_standard_number = #{reportedStandardNumber},
