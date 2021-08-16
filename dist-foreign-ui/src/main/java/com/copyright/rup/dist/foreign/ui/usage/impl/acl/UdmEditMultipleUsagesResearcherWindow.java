@@ -1,13 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
+import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -18,9 +24,13 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Window to edit multiple UDM usages for Researcher role.
@@ -43,14 +53,15 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         new ComboBox<>(ForeignUi.getMessage("label.action_reason_udm"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+    private final Binder<UdmUsageDto> binder = new Binder<>();
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUdmUsageController}
+     * @param usageController instance of {@link IUdmUsageController}
      */
-    public UdmEditMultipleUsagesResearcherWindow(IUdmUsageController controller) {
-        this.controller = controller;
+    public UdmEditMultipleUsagesResearcherWindow(IUdmUsageController usageController) {
+        this.controller = usageController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -66,11 +77,14 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             buildDetailStatusLayout(),
             buildWrWrkInstLayout(),
             buildActionReasonLayout(),
-            buildCommonStringLayout(commentField, "label.comment", "udm-edit-comment-field"),
+            buildCommonStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
+                UdmUsageDto::setComment, "udm-edit-comment-field"),
             buttonsLayout
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setSizeFull();
+        binder.validate();
+        binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
     }
 
@@ -78,6 +92,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         statusComboBox.setSizeFull();
         statusComboBox.setItems(new LinkedHashSet<>(EDIT_AVAILABLE_STATUSES));
         statusComboBox.setEmptySelectionAllowed(false);
+        binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
         return buildCommonLayout(statusComboBox, "label.detail_status");
     }
@@ -86,18 +101,32 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         actionReasonComboBox.setSizeFull();
         actionReasonComboBox.setItemCaptionGenerator(UdmActionReason::getReason);
         actionReasonComboBox.setItems(controller.getAllActionReasons());
+        binder.forField(actionReasonComboBox)
+            .bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
         VaadinUtils.addComponentStyle(actionReasonComboBox, "udm-multiple-edit-action-reason-combo-box");
         return buildCommonLayout(actionReasonComboBox, "label.action_reason_udm");
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
         wrWrkInstField.setSizeFull();
+        binder.forField(wrWrkInstField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
+                "Field value should contain numeric values only")
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
-    private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, String styleName) {
+    private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, int maxLength,
+                                                     ValueProvider<UdmUsageDto, String> getter,
+                                                     Setter<UdmUsageDto, String> setter, String styleName) {
         textField.setSizeFull();
+        binder.forField(textField)
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
+            .bind(getter, setter);
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, caption);
     }
@@ -115,6 +144,19 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
-        return new HorizontalLayout(saveButton, closeButton);
+        saveButton.addClickListener(event -> {
+            if (binder.isValid()) {
+                updateUsages();
+            } else {
+                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, commentField));
+            }
+        });
+        Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
+        discardButton.addClickListener(event -> binder.readBean(null));
+        return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private void updateUsages() {
+        //todo {aazarenka} will implement later
     }
 }
