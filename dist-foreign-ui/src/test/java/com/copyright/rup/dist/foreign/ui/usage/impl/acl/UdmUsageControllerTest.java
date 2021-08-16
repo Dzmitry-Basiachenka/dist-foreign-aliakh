@@ -271,12 +271,12 @@ public class UdmUsageControllerTest {
     @Test
     public void testUpdateUsage() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageService.updateUsage(udmUsageDto);
+        udmUsageService.updateUsage(udmUsageDto, false);
         expectLastCall().once();
         udmUsageService.sendForMatching(udmUsageDto);
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsage(udmUsageDto);
+        controller.updateUsage(udmUsageDto, false);
         verify(udmUsageService);
     }
 

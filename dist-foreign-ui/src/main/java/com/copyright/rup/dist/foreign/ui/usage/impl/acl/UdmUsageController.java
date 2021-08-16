@@ -152,8 +152,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsage(UdmUsageDto udmUsageDto) {
-        udmUsageService.updateUsage(udmUsageDto);
+    public void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher) {
+        udmUsageService.updateUsage(udmUsageDto, isResearcher);
         udmUsageService.sendForMatching(udmUsageDto);
     }
 

@@ -118,9 +118,12 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsage(UdmUsageDto udmUsageDto) {
+    public void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher) {
         String userName = RupContextUtils.getUserName();
         LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
+        if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
+            udmUsageDto.setAssignee(null);
+        }
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);

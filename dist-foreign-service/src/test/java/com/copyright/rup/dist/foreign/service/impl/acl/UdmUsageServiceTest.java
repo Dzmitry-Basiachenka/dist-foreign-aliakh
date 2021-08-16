@@ -69,6 +69,7 @@ import java.util.Set;
 public class UdmUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String UDM_BATCH_UID = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_USAGE_UID_1 = "85c8a2a6-1e9d-453b-947c-14dbd92c5e15";
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
@@ -166,15 +167,52 @@ public class UdmUsageServiceTest {
     }
 
     @Test
-    public void testUpdateUsage() {
+    public void testUpdateUsageSpecialistOrManager() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto();
+        udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
         replay(udmUsageRepository, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto);
+        udmUsageService.updateUsage(udmUsageDto, false);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
+        assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
+        verify(udmUsageRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateUsageResearcherStatusNew() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        UdmUsageDto udmUsageDto = buildUsageDto();
+        udmUsageDto.setAssignee(null);
+        udmUsageRepository.update(udmUsageDto);
+        expectLastCall().once();
+        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageDto.setAssignee(ASSIGNEE);
+        udmUsageService.updateUsage(udmUsageDto, true);
+        assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        assertNull(udmUsageDto.getAssignee());
+        assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
+        verify(udmUsageRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateUsageResearcherStatusOpsReview() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        UdmUsageDto udmUsageDto = buildUsageDto();
+        udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
+        udmUsageDto.setAssignee(ASSIGNEE);
+        udmUsageRepository.update(udmUsageDto);
+        expectLastCall().once();
+        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageService.updateUsage(udmUsageDto, true);
+        assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
+        assertEquals(UsageStatusEnum.OPS_REVIEW, udmUsageDto.getStatus());
         verify(udmUsageRepository, RupContextUtils.class);
     }
 

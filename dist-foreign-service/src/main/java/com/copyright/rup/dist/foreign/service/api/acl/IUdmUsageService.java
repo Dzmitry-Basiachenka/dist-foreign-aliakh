@@ -36,8 +36,9 @@ public interface IUdmUsageService {
      * Updates UDM usage.
      *
      * @param udmUsageDto {@link UdmUsageDto} to update
+     * @param isResearcher {@code true} if the user has Researcher role, {@code false} otherwise
      */
-    void updateUsage(UdmUsageDto udmUsageDto);
+    void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher);
 
     /**
      * Checks whether UDM usage with provided original detail id exists.

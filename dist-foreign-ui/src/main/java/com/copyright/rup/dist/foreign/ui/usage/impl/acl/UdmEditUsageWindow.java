@@ -421,7 +421,7 @@ public class UdmEditUsageWindow extends Window {
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmUsage);
-                controller.updateUsage(udmUsage);
+                controller.updateUsage(udmUsage, hasResearcherPermission);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
