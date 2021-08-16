@@ -1,3 +1,25 @@
+14.1.7
+-
+* B-65870: FDA & UDM: Bulk update: add Multiple Edit button to UDM tab
+* B-65870: FDA & UDM: Bulk update: implement Multiple Edit UDM Usages window for researcher role
+* B-65870: FDA & UDM: Bulk update: implement Multiple Edit UDM Usages window for manager/specialist roles
+* B-65864: FDA: Update the usage information for Researcher role: implement opening for edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND
+* B-65864: FDA: Update the usage information for Researcher role: implements saving UDM usages only in statuses <original status>, OPS_REVIEW, SPECIALIST_REVIEW, NEW
+* B-65864: FDA: Update the usage information for Researcher role: implement Edit UDM usage dialog
+* B-67678: FDA & UDM: Usage Period update - tech story: update backend logic to display and filter by period using df_udm_usage table
+* B-67678: FDA & UDM: Usage Period update - tech story: introduce and populate period column in df_udm_usage table
+* B-68059: FDA & UDM: Change rules for getting ACL rights from RH's: change name of ACL (UDM) product family to ACL_UDM in order to have ability use it in placeholders in qa-fda
+* B-68059: FDA & UDM: Change rules for getting ACL rights from RH's: modify logic for getting grants
+* B-68059: FDA & UDM: Change rules for getting ACL rights from RH's: apply 54.1.+ version of dist-common
+* B-67321: Tech Debt: FDA: fix issue related to inconsistent state exception
+* B-67321: Tech Debt: FDA: update rup-vaadin version
+* B-67321: Tech Debt: FDA: move logic to check processed usages from Edit UDM Window to UDM Usage Window
+* B-67321: Tech Debt: FDA: Increase column size of df_usage_audit.action_reason, df_udm_audit.action_reason columns
+* B-67321: Tech Debt: FDA: remove redundant fiscal_year populating in test data
+* B-67321: Tech Debt: FDA: clean-up test data for CSV reports integration tests
+* B-67321: Tech Debt: FDA: adjust test data initialization in json files to avoid quotes for integer values on repository/service layer
+* B-67321: Tech Debt: FDA: clear standard_number, system_title if work was not found after Edit on UDM tab
+
 14.1.6
 -
 * B-67321 Tech Debt: FDA: handle low timeouts during processing FAS usages in status NEW
