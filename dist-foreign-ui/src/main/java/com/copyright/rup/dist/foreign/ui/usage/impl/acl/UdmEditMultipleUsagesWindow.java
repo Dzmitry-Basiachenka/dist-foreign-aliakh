@@ -4,13 +4,20 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.google.common.collect.Range;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
+import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -22,7 +29,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -42,16 +51,25 @@ import java.util.stream.Collectors;
  */
 public class UdmEditMultipleUsagesWindow extends Window {
 
+    private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
+        Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
+    private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String MAX_LENGTH_FIELD_MESSAGE = "field.error.number_length";
+    private static final int MIN_YEAR = 1950;
+    private static final int MAX_YEAR = 2099;
     private final IUdmUsageController controller;
     private final ComboBox<UsageStatusEnum> statusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.detail_status"));
     private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
-    private final TextField periodField = new TextField(ForeignUi.getMessage("label.period"));
+    private final ComboBox<UdmActionReason> actionReasonComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.action_reason_udm"));
+    private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
     private final TextField annualMultiplierField = new TextField(ForeignUi.getMessage("label.annual_multiplier"));
     private final TextField statisticalMultiplierField =
         new TextField(ForeignUi.getMessage("label.statistical_multiplier"));
@@ -64,6 +82,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private final TextField companyNameField = new TextField(ForeignUi.getMessage("label.company_name"));
     private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+    private final Binder<UdmUsageDto> binder = new Binder<>();
 
     /**
      * Constructor.
@@ -93,21 +112,26 @@ public class UdmEditMultipleUsagesWindow extends Window {
             buildCompanyLayout(),
             buildCompanyNameLayout(),
             buildWrWrkInstLayout(),
-            buildCommonStringLayout(reportedStandardNumberField, "label.reported_standard_number",
+            buildCommonStringLayout(reportedStandardNumberField, "label.reported_standard_number", 100,
+                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
                 "udm-edit-reported-standard-number-field"),
-            buildCommonStringLayout(reportedTitleField, "label.reported_title", "udm-edit-reported-title-field"),
+            buildCommonStringLayout(reportedTitleField, "label.reported_title", 1000, UdmUsageDto::getReportedTitle,
+                UdmUsageDto::setReportedTitle, "udm-edit-reported-title-field"),
             buildAnnualMultiplierLayout(),
             buildStatisticalMultiplier(),
             buildQuantityLayout(),
             buildActionReasonLayout(),
             buildIneligibleReasonLayout(),
-            buildCommonStringLayout(commentField, "label.comment", "udm-edit-comment-field")
+            buildCommonStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
+                UdmUsageDto::setComment, "udm-edit-comment-field")
         );
         HorizontalLayout buttonsLayout = initButtonsLayout();
         rootLayout.addComponents(editFieldsLayout, buttonsLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setExpandRatio(editFieldsLayout, 1f);
         rootLayout.setSizeFull();
+        binder.validate();
+        binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
     }
 
@@ -115,14 +139,26 @@ public class UdmEditMultipleUsagesWindow extends Window {
         statusComboBox.setSizeFull();
         statusComboBox.setItems(new LinkedHashSet<>(EDIT_AVAILABLE_STATUSES));
         statusComboBox.setEmptySelectionAllowed(false);
+        binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
         return buildCommonLayout(statusComboBox, "label.detail_status");
     }
 
     private HorizontalLayout buildPeriodLayout() {
         periodField.setSizeFull();
+        binder.forField(periodField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(value -> StringUtils.isEmpty(value) || value.trim().length() == 6,
+                "Period value should contain 6 digits")
+            .withValidator(value -> StringUtils.isEmpty(value) || periodYearValidator(value),
+                "Year value should be in range from 1950 to 2099")
+            .withValidator(value -> StringUtils.isEmpty(value) || periodMonthValidator(value),
+                "Month value should be 06 or 12")
+            .bind(usage -> Objects.toString(usage.getPeriod(), StringUtils.EMPTY),
+                (usage, value) -> usage.setPeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-period-field");
-        return buildCommonLayout(periodField, "label.period");
+        return buildCommonLayout(periodField, "label.edit.period");
     }
 
     private HorizontalLayout buildDetailLicenseeClassLayout() {
@@ -131,11 +167,20 @@ public class UdmEditMultipleUsagesWindow extends Window {
         detailLicenseeClassComboBox.setItemCaptionGenerator(detailLicenseeClass ->
             String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()));
         detailLicenseeClassComboBox.setItems(idToLicenseeClassMap.values());
+        binder.forField(detailLicenseeClassComboBox)
+            .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
         VaadinUtils.addComponentStyle(detailLicenseeClassComboBox, "udm-multiple-edit-detail-licensee-class-combo-box");
         return buildCommonLayout(detailLicenseeClassComboBox, "label.det_lc");
     }
 
     private HorizontalLayout buildCompanyLayout() {
+        binder.forField(companyIdField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 10), 0, 10))
+            .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
+                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value.trim())));
         companyIdField.setSizeFull();
         companyIdField.addValueChangeListener(event -> {
             companyNameField.clear();
@@ -143,7 +188,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         });
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         verifyButton.addClickListener(event -> {
-            if (Objects.isNull(companyIdField.getErrorMessage())) {
+            if (StringUtils.isNotEmpty(companyIdField.getValue()) && Objects.isNull(companyIdField.getErrorMessage())) {
                 CompanyInformation information =
                     controller.getCompanyInformation(Long.valueOf(companyIdField.getValue().trim()));
                 if (StringUtils.isNotBlank(information.getName())) {
@@ -165,40 +210,67 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private HorizontalLayout buildCompanyNameLayout() {
         companyNameField.setReadOnly(true);
         companyNameField.setSizeFull();
+        binder.forField(companyNameField).bind(UdmUsageDto::getCompanyName, UdmUsageDto::setCompanyName);
         return buildCommonLayout(companyNameField, "label.company_name");
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
         wrWrkInstField.setSizeFull();
+        binder.forField(wrWrkInstField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 9), 0, 9))
+            .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
     private HorizontalLayout buildAnnualMultiplierLayout() {
         annualMultiplierField.setSizeFull();
+        binder.forField(annualMultiplierField)
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim())
+                    && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
+                "Field value should be positive number between 1 and 25")
+            .bind(usage -> usage.getAnnualMultiplier().toString(),
+                (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-multiple-edit-annual-multiplier-field");
         return buildCommonLayout(annualMultiplierField, "label.annual_multiplier");
     }
 
     private HorizontalLayout buildStatisticalMultiplier() {
         statisticalMultiplierField.setSizeFull();
+        binder.forField(statisticalMultiplierField)
+            .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim())
+                    && STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
+                "Field value should be positive number between 0.00001 and 1.00000")
+            .bind(usage -> Objects.toString(usage.getStatisticalMultiplier()),
+                (usage, value) -> usage.setStatisticalMultiplier(NumberUtils.createBigDecimal(value.trim())));
         VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-multiple-edit-statistical-multiplier-field");
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
 
     private HorizontalLayout buildQuantityLayout() {
         quantityField.setSizeFull();
+        binder.forField(quantityField)
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 9), 0, 9))
+            .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(StringUtils.trim(value))
+                && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
+            .bind(usage -> usage.getQuantity().toString(),
+                (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
         VaadinUtils.addComponentStyle(quantityField, "udm-multiple-edit-quantity-field");
         return buildCommonLayout(quantityField, "label.quantity");
     }
 
     private HorizontalLayout buildActionReasonLayout() {
-        ComboBox<UdmActionReason> comboBox = new ComboBox<>(ForeignUi.getMessage("label.action_reason_udm"));
-        comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
-        comboBox.setItems(controller.getAllActionReasons());
-        VaadinUtils.addComponentStyle(comboBox, "udm-multiple-edit-action-reason-combo-box");
-        return buildCommonLayout(comboBox, "label.action_reason_udm");
+        actionReasonComboBox.setSizeFull();
+        actionReasonComboBox.setItemCaptionGenerator(UdmActionReason::getReason);
+        actionReasonComboBox.setItems(controller.getAllActionReasons());
+        binder.forField(actionReasonComboBox)
+            .bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
+        VaadinUtils.addComponentStyle(actionReasonComboBox, "udm-multiple-edit-action-reason-combo-box");
+        return buildCommonLayout(actionReasonComboBox, "label.action_reason_udm");
     }
 
     private HorizontalLayout buildIneligibleReasonLayout() {
@@ -206,12 +278,19 @@ public class UdmEditMultipleUsagesWindow extends Window {
         comboBox.setSizeFull();
         comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
         comboBox.setItems(controller.getAllIneligibleReasons());
+        binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-multiple-edit-ineligible-reason-combo-box");
         return buildCommonLayout(comboBox, "label.ineligible_reason");
     }
 
-    private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, String styleName) {
+    private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, int maxLength,
+                                                     ValueProvider<UdmUsageDto, String> getter,
+                                                     Setter<UdmUsageDto, String> setter, String styleName) {
         textField.setSizeFull();
+        binder.forField(textField)
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
+            .bind(getter, setter);
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, caption);
     }
@@ -229,6 +308,32 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
-        return new HorizontalLayout(saveButton, closeButton);
+        saveButton.addClickListener(event -> {
+            if (binder.isValid()) {
+                updateUsages();
+            } else {
+                Windows.showValidationErrorWindow(
+                    Arrays.asList(periodField, wrWrkInstField, reportedTitleField,
+                        reportedStandardNumberField, commentField, companyIdField, companyNameField,
+                        detailLicenseeClassComboBox, annualMultiplierField, statisticalMultiplierField, quantityField));
+            }
+        });
+        Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
+        discardButton.addClickListener(event -> binder.readBean(null));
+        return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private void updateUsages() {
+        //todo {aazarenka} will implement later
+    }
+
+    private boolean periodYearValidator(String value) {
+        int year = Integer.parseInt(value.trim().substring(0, 4));
+        return year >= MIN_YEAR && year <= MAX_YEAR;
+    }
+
+    private boolean periodMonthValidator(String value) {
+        int month = Integer.parseInt(value.trim().substring(4, 6));
+        return month == 6 || month == 12;
     }
 }
