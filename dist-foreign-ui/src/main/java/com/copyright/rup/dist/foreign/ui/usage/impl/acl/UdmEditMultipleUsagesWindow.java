@@ -15,11 +15,13 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Range;
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,11 +34,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -69,6 +74,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final ComboBox<UdmActionReason> actionReasonComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.action_reason_udm"));
+    private final ComboBox<UdmIneligibleReason> ineligibleReasonComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.ineligible_reason"));
     private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
     private final TextField annualMultiplierField = new TextField(ForeignUi.getMessage("label.annual_multiplier"));
     private final TextField statisticalMultiplierField =
@@ -83,17 +90,26 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final Binder<UdmUsageDto> binder = new Binder<>();
+    private final Set<UdmUsageDto> selectedUdmUsages;
+    private final ClickListener saveButtonClickListener;
+    private final UdmUsageDto udmUsageDto;
 
     /**
      * Constructor.
      *
-     * @param usageController instance of {@link IUdmUsageController}
+     * @param usageController   instance of {@link IUdmUsageController}
+     * @param selectedUdmUsages UDM usage to be displayed on the window
+     * @param clickListener     action that should be performed after Save button was clicked
      */
-    public UdmEditMultipleUsagesWindow(IUdmUsageController usageController) {
+    public UdmEditMultipleUsagesWindow(IUdmUsageController usageController, Set<UdmUsageDto> selectedUdmUsages,
+                                       ClickListener clickListener) {
         this.controller = usageController;
+        this.selectedUdmUsages = selectedUdmUsages;
+        saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getDetailLicenseeClasses()
             .stream()
             .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
+        udmUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -157,7 +173,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
                 "Month value should be 06 or 12")
             .bind(usage -> Objects.toString(usage.getPeriod(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
-        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-period-field");
+        VaadinUtils.addComponentStyle(periodField, "udm-multiple-edit-period-field");
         return buildCommonLayout(periodField, "label.edit.period");
     }
 
@@ -274,13 +290,13 @@ public class UdmEditMultipleUsagesWindow extends Window {
     }
 
     private HorizontalLayout buildIneligibleReasonLayout() {
-        ComboBox<UdmIneligibleReason> comboBox = new ComboBox<>(ForeignUi.getMessage("label.ineligible_reason"));
-        comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
-        comboBox.setItems(controller.getAllIneligibleReasons());
-        binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
-        VaadinUtils.addComponentStyle(comboBox, "udm-multiple-edit-ineligible-reason-combo-box");
-        return buildCommonLayout(comboBox, "label.ineligible_reason");
+        ineligibleReasonComboBox.setSizeFull();
+        ineligibleReasonComboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
+        ineligibleReasonComboBox.setItems(controller.getAllIneligibleReasons());
+        binder.forField(ineligibleReasonComboBox)
+            .bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
+        VaadinUtils.addComponentStyle(ineligibleReasonComboBox, "udm-multiple-edit-ineligible-reason-combo-box");
+        return buildCommonLayout(ineligibleReasonComboBox, "label.ineligible_reason");
     }
 
     private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, int maxLength,
@@ -309,9 +325,13 @@ public class UdmEditMultipleUsagesWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            if (binder.isValid()) {
-                updateUsages();
-            } else {
+            try {
+                binder.writeBean(udmUsageDto);
+                updateUsagesFields();
+                controller.updateUsages(selectedUdmUsages, false);
+                saveButtonClickListener.buttonClick(event);
+                close();
+            } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
                     Arrays.asList(periodField, wrWrkInstField, reportedTitleField,
                         reportedStandardNumberField, commentField, companyIdField, companyNameField,
@@ -323,8 +343,40 @@ public class UdmEditMultipleUsagesWindow extends Window {
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
-    private void updateUsages() {
-        //todo {aazarenka} will implement later
+    private void recalculateAnnualizedCopies(UdmUsageDto usageDto) {
+        if (StringUtils.isNotEmpty(quantityField.getValue()) || StringUtils.isNotEmpty(annualMultiplierField.getValue())
+            || StringUtils.isNotEmpty(statisticalMultiplierField.getValue())) {
+            usageDto.setAnnualizedCopies(
+                controller.calculateAnnualizedCopies(usageDto.getReportedTypeOfUse(), usageDto.getQuantity(),
+                    usageDto.getAnnualMultiplier(), usageDto.getStatisticalMultiplier()));
+        }
+    }
+
+    private <T> void setField(Consumer<T> usageDtoConsumer, T value) {
+        if (Objects.nonNull(value)) {
+            usageDtoConsumer.accept(value);
+        }
+    }
+
+    private void updateUsagesFields() {
+        selectedUdmUsages.forEach(usageDto -> {
+            setField(usageDto::setPeriod, udmUsageDto.getPeriod());
+            setField(usageDto::setStatus, udmUsageDto.getStatus());
+            setPeriodEndDate(usageDto);
+            setField(usageDto::setQuantity, udmUsageDto.getQuantity());
+            setField(usageDto::setStatisticalMultiplier, udmUsageDto.getStatisticalMultiplier());
+            setField(usageDto::setAnnualMultiplier, udmUsageDto.getAnnualMultiplier());
+            recalculateAnnualizedCopies(usageDto);
+            setField(usageDto::setCompanyId, udmUsageDto.getCompanyId());
+            setField(usageDto::setDetailLicenseeClass, udmUsageDto.getDetailLicenseeClass());
+            setField(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst());
+            setField(usageDto::setCompanyName, udmUsageDto.getCompanyName());
+            setField(usageDto::setReportedTitle, udmUsageDto.getReportedTitle());
+            setField(usageDto::setReportedStandardNumber, udmUsageDto.getReportedStandardNumber());
+            setField(usageDto::setComment, udmUsageDto.getComment());
+            setField(usageDto::setActionReason, udmUsageDto.getActionReason());
+            setField(usageDto::setIneligibleReason, udmUsageDto.getIneligibleReason());
+        });
     }
 
     private boolean periodYearValidator(String value) {
@@ -335,5 +387,14 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private boolean periodMonthValidator(String value) {
         int month = Integer.parseInt(value.trim().substring(4, 6));
         return month == 6 || month == 12;
+    }
+
+    private void setPeriodEndDate(UdmUsageDto usageDto) {
+        String period = periodField.getValue();
+        if (StringUtils.isNotEmpty(period)) {
+            int year = Integer.parseInt(period.substring(0, 4));
+            int month = Integer.parseInt(period.substring(4, 6));
+            usageDto.setPeriodEndDate(6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31));
+        }
     }
 }

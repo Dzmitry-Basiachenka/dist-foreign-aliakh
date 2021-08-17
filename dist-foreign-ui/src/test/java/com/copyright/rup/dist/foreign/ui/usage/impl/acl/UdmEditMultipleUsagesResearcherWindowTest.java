@@ -20,6 +20,7 @@ import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -37,6 +38,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -64,10 +66,14 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private UdmEditMultipleUsagesResearcherWindow window;
     private IUdmUsageController controller;
     private Binder<UdmUsageDto> binder;
+    private Set<UdmUsageDto> udmUsages;
+    private ClickListener saveButtonClickListener;
 
     @Before
     public void setUp() {
         controller = createMock(IUdmUsageController.class);
+        saveButtonClickListener = createMock(ClickListener.class);
+        udmUsages = Collections.EMPTY_SET;
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
     }
 
@@ -108,7 +114,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         binder.readBean(null);
         expectLastCall().once();
         replay(controller, binder, ForeignSecurityUtils.class);
-        window = new UdmEditMultipleUsagesResearcherWindow(controller);
+        window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);
         HorizontalLayout buttonsLayout = getButtonsLayout();
         ((Button) buttonsLayout.getComponent(1)).click();
@@ -211,7 +217,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
 
     private void initEditWindow() {
         replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditMultipleUsagesResearcherWindow(controller);
+        window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, "binder");
         verify(controller, ForeignSecurityUtils.class);
     }
