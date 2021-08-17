@@ -1,3 +1,9 @@
+14.1.8
+-
+* B-65870: FDA & UDM: Bulk update: implement validation for fields on UDM multiple edit windows
+* B-65864 FDA: Update the usage information for Researcher role: unassign the usage from a user when the user updates usage to NEW status
+* B-68820 Tech Debt: FDA: apply new pattern for local SNS/SQS properties
+
 14.1.7
 -
 * B-65870: FDA & UDM: Bulk update: add Multiple Edit button to UDM tab
