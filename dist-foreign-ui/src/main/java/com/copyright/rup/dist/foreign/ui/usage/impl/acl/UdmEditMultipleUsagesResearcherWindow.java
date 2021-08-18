@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -12,6 +11,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
@@ -34,6 +34,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Window to edit multiple UDM usages for Researcher role.
@@ -59,6 +60,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
+    private final UdmUsageDto udmUsageDto;
 
     /**
      * Constructor.
@@ -72,6 +74,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         this.controller = usageController;
         this.selectedUdmUsages = selectedUdmUsages;
         saveButtonClickListener = clickListener;
+        udmUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -155,12 +158,13 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            if (binder.isValid()) {
+            try {
+                binder.writeBean(udmUsageDto);
                 updateUsagesFields();
-                controller.updateUsages(selectedUdmUsages, ForeignSecurityUtils.hasResearcherPermission());
+                controller.updateUsages(selectedUdmUsages, true);
                 saveButtonClickListener.buttonClick(event);
                 close();
-            } else {
+            } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, commentField));
             }
         });
@@ -170,6 +174,17 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     }
 
     private void updateUsagesFields() {
-        //todo {aazarenka} will implement later
+        selectedUdmUsages.forEach(usageDto -> {
+            setField(usageDto::setStatus, udmUsageDto.getStatus());
+            setField(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst());
+            setField(usageDto::setActionReason, udmUsageDto.getActionReason());
+            setField(usageDto::setComment, udmUsageDto.getComment());
+        });
+    }
+
+    private <T> void setField(Consumer<T> usageDtoConsumer, T value) {
+        if (Objects.nonNull(value)) {
+            usageDtoConsumer.accept(value);
+        }
     }
 }
