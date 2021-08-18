@@ -52,7 +52,9 @@ import org.powermock.reflect.Whitebox;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -421,6 +423,71 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    public void testMultipleEditButtonClickListenerResearcherForbidden() throws Exception {
+        mockStatic(Windows.class);
+        setResearcherExpectations();
+        UdmUsageDto udmUsageDtoFirst = new UdmUsageDto();
+        udmUsageDtoFirst.setId("188fead4-e929-4d68-bf05-113188f48a95");
+        udmUsageDtoFirst.setAssignee(USER);
+        udmUsageDtoFirst.setStatus(UsageStatusEnum.RH_FOUND);
+        UdmUsageDto udmUsageDtoSecond = new UdmUsageDto();
+        udmUsageDtoSecond.setId("cdda8071-c84c-497e-9b30-4ba447c86373");
+        udmUsageDtoSecond.setAssignee(USER);
+        udmUsageDtoSecond.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        UdmEditMultipleUsagesResearcherWindow mockWindow = createMock(UdmEditMultipleUsagesResearcherWindow.class);
+        Set<UdmUsageDto> udmUsages = new HashSet<>(Arrays.asList(udmUsageDtoFirst, udmUsageDtoSecond));
+        expectNew(UdmEditMultipleUsagesResearcherWindow.class, eq(controller), eq(udmUsages),
+            anyObject(ClickListener.class)).andReturn(mockWindow).once();
+        Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND, " +
+            "OPS_REVIEW");
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsages);
+        grid.select(udmUsageDtoFirst);
+        grid.select(udmUsageDtoSecond);
+        Button editButton = (Button) getButtonsLayout().getComponent(3);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testMultipleEditButtonClickListenerResearcherAllowed() throws Exception {
+        mockStatic(Windows.class);
+        setResearcherExpectations();
+        UdmUsageDto udmUsageDtoFirst = new UdmUsageDto();
+        udmUsageDtoFirst.setId("121e005a-3fc0-4f65-bc91-1ec3932a86c8");
+        udmUsageDtoFirst.setAssignee(USER);
+        udmUsageDtoFirst.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        UdmUsageDto udmUsageDtoSecond = new UdmUsageDto();
+        udmUsageDtoSecond.setId("7a0df3f5-78c9-47ef-b027-9b19b88a7221");
+        udmUsageDtoSecond.setAssignee(USER);
+        udmUsageDtoSecond.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        UdmEditMultipleUsagesResearcherWindow mockWindow = createMock(UdmEditMultipleUsagesResearcherWindow.class);
+        Set<UdmUsageDto> udmUsages = new HashSet<>(Arrays.asList(udmUsageDtoFirst, udmUsageDtoSecond));
+        expectNew(UdmEditMultipleUsagesResearcherWindow.class, eq(controller), eq(udmUsages),
+            anyObject(ClickListener.class)).andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsages);
+        grid.select(udmUsageDtoFirst);
+        grid.select(udmUsageDtoSecond);
+        Button editButton = (Button) getButtonsLayout().getComponent(3);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
     public void testEditButtonClickListenerInvalidAssignee() throws Exception {
         mockStatic(Windows.class);
         setSpecialistExpectations();
@@ -703,7 +770,6 @@ public class UdmUsageWidgetTest {
 
     private void testEditButtonClickListenerAllowed(UsageStatusEnum status) throws Exception {
         mockStatic(Windows.class);
-        createMock(UdmEditUsageWindow.class);
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
         udmUsageDto.setAssignee(USER);

@@ -184,15 +184,15 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Window window) {
-        if (isEditForbiddenForResearcher(selectedUsages)) {
+        if (isEditAllowedForResearcher(selectedUsages)) {
+            openEditWindow(selectedUsages, window);
+        } else {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
                     USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER
                         .stream()
                         .map(UsageStatusEnum::name)
                         .collect(Collectors.joining(", "))));
-        } else {
-            openEditWindow(selectedUsages, window);
         }
     }
 
@@ -213,9 +213,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             || usageDto.getStatus().equals(UsageStatusEnum.WORK_FOUND));
     }
 
-    private boolean isEditForbiddenForResearcher(Set<UdmUsageDto> udmUsages) {
+    private boolean isEditAllowedForResearcher(Set<UdmUsageDto> udmUsages) {
         return udmUsages.stream()
-            .noneMatch(usageDto -> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(usageDto.getStatus()));
+            .allMatch(usageDto -> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(usageDto.getStatus()));
     }
 
     private String getSearchMessage() {
