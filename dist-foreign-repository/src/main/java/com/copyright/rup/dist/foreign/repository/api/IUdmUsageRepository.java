@@ -86,6 +86,13 @@ public interface IUdmUsageRepository {
     List<String> findIdsByStatus(UsageStatusEnum status);
 
     /**
+     * Finds list of periods from UDM usages.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
+
+    /**
      * @return list of assignees from UDM usages.
      */
     List<String> findAssignees();

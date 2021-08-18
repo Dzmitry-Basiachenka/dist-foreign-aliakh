@@ -37,11 +37,6 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     }
 
     @Override
-    public List<Integer> findPeriods() {
-        return selectList("IUdmBatchMapper.findPeriods");
-    }
-
-    @Override
     public List<UdmBatch> findAll() {
         return selectList("IUdmBatchMapper.findAll");
     }

@@ -22,7 +22,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,14 +60,6 @@ public class UdmBatchRepositoryIntegrationTest {
         assertEquals(Integer.valueOf(202006), udmBatch.getPeriod());
         assertEquals(UdmChannelEnum.CCC, udmBatch.getChannel());
         assertEquals(UdmUsageOriginEnum.SS, udmBatch.getUsageOrigin());
-    }
-
-    @Test
-    public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202006, 202012, 202106, 202112);
-        List<Integer> actualPeriods = udmBatchRepository.findPeriods();
-        assertFalse(actualPeriods.isEmpty());
-        assertEquals(expectedPeriods, actualPeriods);
     }
 
     @Test

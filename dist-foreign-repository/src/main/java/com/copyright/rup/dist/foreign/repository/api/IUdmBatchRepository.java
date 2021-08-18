@@ -33,13 +33,6 @@ public interface IUdmBatchRepository {
     UdmBatch findById(String udmBatchId);
 
     /**
-     * Finds periods.
-     *
-     * @return list of periods
-     */
-    List<Integer> findPeriods();
-
-    /**
      * Finds list of {@link UdmBatch}es.
      *
      * @return list of {@link UdmBatch}es

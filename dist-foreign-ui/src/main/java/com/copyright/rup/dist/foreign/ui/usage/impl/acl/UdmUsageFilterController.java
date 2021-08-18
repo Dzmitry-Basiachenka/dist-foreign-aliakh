@@ -43,7 +43,7 @@ public class UdmUsageFilterController extends CommonController<IUdmUsageFilterWi
 
     @Override
     public List<Integer> getPeriods() {
-        return udmBatchService.getPeriods();
+        return udmUsageService.getPeriods();
     }
 
     @Override

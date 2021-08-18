@@ -52,11 +52,6 @@ public class UdmBatchService implements IUdmBatchService {
     }
 
     @Override
-    public List<Integer> getPeriods() {
-        return udmBatchRepository.findPeriods();
-    }
-
-    @Override
     public List<UdmBatch> getUdmBatches() {
         return udmBatchRepository.findAll();
     }

@@ -353,6 +353,15 @@ public class UdmUsageServiceTest {
     }
 
     @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Arrays.asList(202006, 202112);
+        expect(udmUsageRepository.findPeriods()).andReturn(periods).once();
+        replay(udmUsageRepository);
+        assertEquals(periods, udmUsageService.getPeriods());
+        verify(udmUsageRepository);
+    }
+
+    @Test
     public void testGetAssignees() {
         List<String> assignees = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
         expect(udmUsageRepository.findAssignees()).andReturn(assignees).once();

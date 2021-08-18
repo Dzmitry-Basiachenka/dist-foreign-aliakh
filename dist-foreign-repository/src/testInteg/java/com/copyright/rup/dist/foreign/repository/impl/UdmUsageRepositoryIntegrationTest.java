@@ -462,6 +462,14 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindPeriods() {
+        List<Integer> expectedPeriods = Arrays.asList(202006, 202106, 202206, 202406, 202506);
+        List<Integer> actualPeriods = udmUsageRepository.findPeriods();
+        assertFalse(actualPeriods.isEmpty());
+        assertEquals(expectedPeriods, actualPeriods);
+    }
+
+    @Test
     public void testFindAssignees() {
         assertEquals(Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com"),
             udmUsageRepository.findAssignees());

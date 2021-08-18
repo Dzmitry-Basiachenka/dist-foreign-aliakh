@@ -90,15 +90,6 @@ public class UdmBatchServiceTest {
     }
 
     @Test
-    public void testGetPeriods() {
-        List<Integer> periods = Arrays.asList(202006, 202112);
-        expect(udmBatchRepository.findPeriods()).andReturn(periods).once();
-        replay(udmBatchRepository);
-        assertEquals(periods, udmBatchService.getPeriods());
-        verify(udmBatchRepository);
-    }
-
-    @Test
     public void testGetUdmBathes() {
         List<UdmBatch> udmBatches = Collections.singletonList(new UdmBatch());
         expect(udmBatchRepository.findAll()).andReturn(udmBatches).once();
