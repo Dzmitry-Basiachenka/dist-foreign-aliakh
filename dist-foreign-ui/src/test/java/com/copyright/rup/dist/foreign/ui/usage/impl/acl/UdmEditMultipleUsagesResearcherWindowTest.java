@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -11,6 +12,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -20,6 +23,7 @@ import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -62,6 +66,12 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final Long WR_WRK_INST = 122825347L;
+    private static final Long NEW_WR_WRK_INST = 1234567L;
+    private static final String COMMENT = "Should be reviewed by Specialist";
+    private static final String NEW_COMMENT = "Should be reviewed by Manager";
+    private static final String REASON = "Should be improverd";
 
     private UdmEditMultipleUsagesResearcherWindow window;
     private IUdmUsageController controller;
@@ -119,6 +129,53 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         HorizontalLayout buttonsLayout = getButtonsLayout();
         ((Button) buttonsLayout.getComponent(1)).click();
         verify(controller, binder, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testSaveButtonClickListener() throws Exception {
+        udmUsages = Collections.singleton(buildUdmUsageDto());
+        binder = createMock(Binder.class);
+        binder.writeBean(buildExpectedUdmUsageDto());
+        expectLastCall();
+        controller.updateUsages(udmUsages, true);
+        expectLastCall().once();
+        saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
+        UdmUsageDto udmUsageDto = buildExpectedUdmUsageDto();
+        Whitebox.setInternalState(window, udmUsageDto);
+        updateFields();
+        Whitebox.setInternalState(window, binder);
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        udmUsages.forEach(this::verifyUpdatedUdmUsages);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateFields() {
+        ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
+        statusEnumComboBox.setValue(UsageStatusEnum.NEW);
+        TextField wrWrkInstField = (TextField) getComponent(1).getComponent(1);
+        wrWrkInstField.setValue("1234567");
+        ComboBox<UdmActionReason> actionReasonComboBox = (ComboBox<UdmActionReason>) getComponent(2).getComponent(1);
+        actionReasonComboBox.setValue(buildActionReason());
+        TextField commentField = (TextField) getComponent(3).getComponent(1);
+        commentField.setValue(NEW_COMMENT);
+    }
+
+    private HorizontalLayout getComponent(int number) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        return (HorizontalLayout) verticalLayout.getComponent(number);
+    }
+
+    private void verifyUpdatedUdmUsages(UdmUsageDto actualUdmUsageDto) {
+        assertEquals(UsageStatusEnum.NEW, actualUdmUsageDto.getStatus());
+        assertEquals(NEW_WR_WRK_INST, actualUdmUsageDto.getWrWrkInst());
+        assertEquals(buildActionReason(), actualUdmUsageDto.getActionReason());
+        assertEquals(NEW_COMMENT, actualUdmUsageDto.getComment());
     }
 
     private HorizontalLayout getButtonsLayout() {
@@ -225,5 +282,32 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
+    }
+
+    private UdmUsageDto buildUdmUsageDto() {
+        UdmUsageDto udmUsage = new UdmUsageDto();
+        udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+        udmUsage.setAssignee(ASSIGNEE);
+        udmUsage.setWrWrkInst(WR_WRK_INST);
+        udmUsage.setActionReason(ACTION_REASON);
+        udmUsage.setComment(COMMENT);
+        return udmUsage;
+    }
+
+    private UdmUsageDto buildExpectedUdmUsageDto() {
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setStatus(UsageStatusEnum.NEW);
+        udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
+        udmUsageDto.setComment(NEW_COMMENT);
+        udmUsageDto.setActionReason(buildActionReason());
+        return udmUsageDto;
+    }
+
+    private UdmActionReason buildActionReason() {
+        UdmActionReason actionReason = new UdmActionReason();
+        actionReason.setId("d658136a-1e6b-4c45-9d6e-d93ccedd36f7");
+        actionReason.setReason(REASON);
+        return actionReason;
     }
 }
