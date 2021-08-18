@@ -84,6 +84,11 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
+    public List<Integer> findPeriods() {
+        return selectList("IUdmUsageMapper.findPeriods");
+    }
+
+    @Override
     public List<String> findAssignees() {
         return selectList("IUdmUsageMapper.findAssignees");
     }

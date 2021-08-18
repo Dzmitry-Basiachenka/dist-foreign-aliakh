@@ -53,10 +53,10 @@ public class UdmUsageFilterControllerTest {
     @Test
     public void testGetPeriods() {
         List<Integer> periods = Collections.singletonList(202006);
-        expect(udmBatchService.getPeriods()).andReturn(periods).once();
-        replay(udmBatchService);
+        expect(udmUsageService.getPeriods()).andReturn(periods).once();
+        replay(udmUsageService);
         assertEquals(periods, controller.getPeriods());
-        verify(udmBatchService);
+        verify(udmUsageService);
     }
 
     @Test

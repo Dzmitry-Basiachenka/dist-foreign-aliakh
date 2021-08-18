@@ -181,6 +181,11 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
+    public List<Integer> getPeriods() {
+        return udmUsageRepository.findPeriods();
+    }
+
+    @Override
     public List<String> getAssignees() {
         return udmUsageRepository.findAssignees();
     }
