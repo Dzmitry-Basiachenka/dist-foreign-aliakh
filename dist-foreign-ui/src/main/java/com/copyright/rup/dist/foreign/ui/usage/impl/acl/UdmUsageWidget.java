@@ -149,8 +149,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             Set<UdmUsageDto> selectedUsages = udmUsagesGrid.getSelectedItems();
             initModalWindow(selectedUsages,
                 hasResearcherPermission
-                    ? new UdmEditMultipleUsagesResearcherWindow(controller)
-                    : new UdmEditMultipleUsagesWindow(controller));
+                    ? new UdmEditMultipleUsagesResearcherWindow(controller, selectedUsages, saveEvent -> refresh())
+                    : new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));

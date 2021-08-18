@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -16,6 +17,7 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -31,6 +33,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Window to edit multiple UDM usages for Researcher role.
@@ -54,14 +57,21 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final Binder<UdmUsageDto> binder = new Binder<>();
+    private final Set<UdmUsageDto> selectedUdmUsages;
+    private final ClickListener saveButtonClickListener;
 
     /**
      * Constructor.
      *
-     * @param usageController instance of {@link IUdmUsageController}
+     * @param usageController   instance of {@link IUdmUsageController}
+     * @param selectedUdmUsages UDM usage to be displayed on the window
+     * @param clickListener     action that should be performed after Save button was clicked
      */
-    public UdmEditMultipleUsagesResearcherWindow(IUdmUsageController usageController) {
+    public UdmEditMultipleUsagesResearcherWindow(IUdmUsageController usageController,
+                                                 Set<UdmUsageDto> selectedUdmUsages, ClickListener clickListener) {
         this.controller = usageController;
+        this.selectedUdmUsages = selectedUdmUsages;
+        saveButtonClickListener = clickListener;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -146,7 +156,10 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
             if (binder.isValid()) {
-                updateUsages();
+                updateUsagesFields();
+                controller.updateUsages(selectedUdmUsages, ForeignSecurityUtils.hasResearcherPermission());
+                saveButtonClickListener.buttonClick(event);
+                close();
             } else {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, commentField));
             }
@@ -156,7 +169,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
-    private void updateUsages() {
+    private void updateUsagesFields() {
         //todo {aazarenka} will implement later
     }
 }

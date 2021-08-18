@@ -139,7 +139,7 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Updates UDM usage.
      *
-     * @param udmUsageDto   {@link UdmUsageDto} to update
+     * @param udmUsageDto  {@link UdmUsageDto} to update
      * @param isResearcher {@code true} if the user has Researcher role, {@code false} otherwise
      */
     void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher);
@@ -200,4 +200,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      */
     BigDecimal calculateAnnualizedCopies(String reportedTypeOfUse, Long quantity, Integer annualMultiplier,
                                          BigDecimal statisticalMultiplier);
+
+    /**
+     * Updates UDM usages.
+     *
+     * @param selectedUdmUsages {@link UdmUsageDto} to update
+     * @param isResearcher      {@code true} if the user has Researcher role, {@code false} otherwise
+     */
+    void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher);
 }

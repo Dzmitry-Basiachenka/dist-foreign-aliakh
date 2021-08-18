@@ -218,6 +218,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
+    public void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher) {
+        //TODO {aazarenka} will implement later
+    }
+
+    @Override
     protected IUdmUsageWidget instantiateWidget() {
         return new UdmUsageWidget();
     }
