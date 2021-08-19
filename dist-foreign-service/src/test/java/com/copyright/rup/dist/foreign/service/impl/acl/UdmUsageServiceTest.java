@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
@@ -39,7 +40,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,6 +83,7 @@ public class UdmUsageServiceTest {
     private static final BigDecimal STATISTICAL_MULTIPLIER = BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal(175).setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final String NO_REPORTED_USE_UID = "18fbee56-2f5c-450a-999e-54903c0bfb23";
+    private static final String USAGE_UID = "a40e5ab4-7591-4e7f-8cab-34a9ff893e15";
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
@@ -170,50 +171,75 @@ public class UdmUsageServiceTest {
     public void testUpdateUsageSpecialistOrManager() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        UdmUsageDto udmUsageDto = buildUsageDto();
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
+        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        fieldToValueChangesMap.updateFieldValue("Action Reason", "Misc - see comments");
+        fieldToValueChangesMap.updateFieldValue("Reported Standard Number", null);
+        fieldToValueChangesMap.updateFieldValue("Reported Title", "Technical Journal");
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto, false);
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Reported Title' was edited. Old Value is 'Colloids and surfaces. B, Biointerfaces'. " +
+                "New Value is 'Technical Journal'");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Action Reason' was edited. Old Value is not specified. New Value is 'Misc - see comments'");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Reported Standard Number' was edited. Old Value is '0927-7765'. New Value is not specified");
+        expectLastCall().once();
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
-        assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
-        verify(udmUsageRepository, RupContextUtils.class);
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, udmUsageDto.getStatus());
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     @Test
     public void testUpdateUsageResearcherStatusNew() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        UdmUsageDto udmUsageDto = buildUsageDto();
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(null);
+        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        fieldToValueChangesMap.updateFieldValue("Detail Status", "NEW");
+        udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'NEW'");
+        expectLastCall().once();
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
         udmUsageDto.setAssignee(ASSIGNEE);
-        udmUsageService.updateUsage(udmUsageDto, true);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertNull(udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
-        verify(udmUsageRepository, RupContextUtils.class);
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     @Test
     public void testUpdateUsageResearcherStatusOpsReview() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        UdmUsageDto udmUsageDto = buildUsageDto();
-        udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
+        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        fieldToValueChangesMap.updateFieldValue("Detail Status", "OPS_REVIEW");
+        udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
         udmUsageRepository.update(udmUsageDto);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto, true);
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'OPS_REVIEW'");
+        expectLastCall().once();
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.OPS_REVIEW, udmUsageDto.getStatus());
-        verify(udmUsageRepository, RupContextUtils.class);
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     @Test
@@ -321,7 +347,7 @@ public class UdmUsageServiceTest {
         chainExecutor.execute(capture(usageCapture), eq(ChainProcessorTypeEnum.MATCHING));
         expectLastCall().once();
         replay(chainExecutor);
-        UdmUsageDto udmUsageDto = buildUsageDto();
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.NEW);
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
@@ -482,9 +508,9 @@ public class UdmUsageServiceTest {
         return udmUsage;
     }
 
-    private UdmUsageDto buildUsageDto() {
+    private UdmUsageDto buildUsageDto(UsageStatusEnum statusEnum) {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("a40e5ab4-7591-4e7f-8cab-34a9ff893e15");
+        udmUsageDto.setId(USAGE_UID);
         udmUsageDto.setWrWrkInst(122825347L);
         udmUsageDto.setTypeOfUse("PRINT");
         udmUsageDto.setReportedStandardNumber("0927-7765");
@@ -492,7 +518,7 @@ public class UdmUsageServiceTest {
         udmUsageDto.setReportedTitle("Colloids and surfaces. B, Biointerfaces");
         udmUsageDto.setSystemTitle("Colloids and surfaces. B, Biointerfaces");
         udmUsageDto.setPeriodEndDate(LocalDate.of(2021, 12, 31));
-        udmUsageDto.setStatus(UsageStatusEnum.NEW);
+        udmUsageDto.setStatus(statusEnum);
         udmUsageDto.setVersion(2);
         return udmUsageDto;
     }

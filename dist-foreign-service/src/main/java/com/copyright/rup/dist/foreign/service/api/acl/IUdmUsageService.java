@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -35,10 +36,11 @@ public interface IUdmUsageService {
     /**
      * Updates UDM usage.
      *
-     * @param udmUsageDto  {@link UdmUsageDto} to update
-     * @param isResearcher {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param udmUsageDto            {@link UdmUsageDto} to update
+     * @param fieldToValueChangesMap map of field name to its values (old and new)
+     * @param isResearcher           {@code true} if the user has Researcher role, {@code false} otherwise
      */
-    void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher);
+    void updateUsage(UdmUsageDto udmUsageDto, UdmAuditFieldToValuesMap fieldToValueChangesMap, boolean isResearcher);
 
     /**
      * Checks whether UDM usage with provided original detail id exists.
