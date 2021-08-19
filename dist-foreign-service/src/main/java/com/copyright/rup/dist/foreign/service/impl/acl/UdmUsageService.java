@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -24,6 +25,8 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +58,8 @@ public class UdmUsageService implements IUdmUsageService {
     private static final BigDecimal DEFAULT_STATISTICAL_MULTIPLIER =
         BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String USAGE_EDIT_REASON = "The field '%s' was edited. Old Value is %s. New Value is %s";
+    private static final String NOT_SPECIFIED = "not specified";
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
@@ -118,7 +124,8 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher) {
+    public void updateUsage(UdmUsageDto udmUsageDto, UdmAuditFieldToValuesMap fieldToValueChangesMap,
+                            boolean isResearcher) {
         String userName = RupContextUtils.getUserName();
         LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
         if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
@@ -126,6 +133,8 @@ public class UdmUsageService implements IUdmUsageService {
         }
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
+        getUdmUsageEditAuditReasons(fieldToValueChangesMap).forEach(reason ->
+            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, reason));
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
     }
 
@@ -229,8 +238,10 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
+    //TODO: adjust method signature to pass FieldToValueChangesMap
     public void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher) {
-        selectedUdmUsages.forEach(usageDto -> updateUsage(usageDto, isResearcher));
+        selectedUdmUsages
+            .forEach(usageDto -> updateUsage(usageDto, new UdmAuditFieldToValuesMap(usageDto), isResearcher));
     }
 
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {
@@ -253,5 +264,24 @@ public class UdmUsageService implements IUdmUsageService {
         int year = Integer.parseInt(stringPeriod.substring(0, 4));
         int month = Integer.parseInt(stringPeriod.substring(4, 6));
         return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
+    }
+
+    private List<String> getUdmUsageEditAuditReasons(UdmAuditFieldToValuesMap fieldToValueChangesMap) {
+        List<String> result = new ArrayList<>();
+        fieldToValueChangesMap.entrySet().forEach(fieldToValueChangesMapEntry -> {
+            Pair<Object, Object> valuePair = fieldToValueChangesMapEntry.getValue();
+            Object oldValue = Objects.isNull(valuePair.getLeft()) || isEmptyString(valuePair.getLeft())
+                ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
+            Object newValue = Objects.isNull(valuePair.getRight()) || isEmptyString(valuePair.getRight())
+                ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
+            if (!Objects.equals(Objects.toString(valuePair.getLeft()), Objects.toString(valuePair.getRight()))) {
+                result.add(String.format(USAGE_EDIT_REASON, fieldToValueChangesMapEntry.getKey(), oldValue, newValue));
+            }
+        });
+        return result;
+    }
+
+    private boolean isEmptyString(Object value) {
+        return value instanceof String && StringUtils.isBlank((String) value);
     }
 }

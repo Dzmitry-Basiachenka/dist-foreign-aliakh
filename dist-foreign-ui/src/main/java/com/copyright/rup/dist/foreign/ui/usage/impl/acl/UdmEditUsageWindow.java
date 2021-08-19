@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -35,7 +36,6 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -97,6 +97,7 @@ public class UdmEditUsageWindow extends Window {
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final ClickListener saveButtonClickListener;
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
+    private final UdmAuditFieldToValuesMap fieldToValueChangesMap;
 
     /**
      * Constructor.
@@ -109,6 +110,7 @@ public class UdmEditUsageWindow extends Window {
                               ClickListener clickListener) {
         controller = usageController;
         udmUsage = selectedUdmUsage;
+        fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getDetailLicenseeClasses()
             .stream()
@@ -236,22 +238,25 @@ public class UdmEditUsageWindow extends Window {
         textField.setReadOnly(true);
         textField.setSizeFull();
         binder.forField(textField).bind(getter, null);
-        return buildCommonLayout(textField, caption);
+        return buildCommonLayout(textField, ForeignUi.getMessage(caption));
     }
 
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmUsageDto, String> getter,
                                                        Setter<UdmUsageDto, String> setter, String styleName) {
         textField.setSizeFull();
+        String fieldName = ForeignUi.getMessage(caption);
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
             .bind(getter, setter);
+        textField.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         VaadinUtils.addComponentStyle(textField, styleName);
-        return buildCommonLayout(textField, caption);
+        return buildCommonLayout(textField, fieldName);
     }
 
     private HorizontalLayout buildStatisticalMultiplier() {
+        String fieldName = ForeignUi.getMessage("label.statistical_multiplier");
         statisticalMultiplierField.setSizeFull();
         binder.forField(statisticalMultiplierField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -260,12 +265,21 @@ public class UdmEditUsageWindow extends Window {
                 "Field value should be positive number between 0.00001 and 1.00000")
             .bind(usage -> Objects.toString(usage.getStatisticalMultiplier()),
                 (usage, value) -> usage.setStatisticalMultiplier(NumberUtils.createBigDecimal(value.trim())));
-        statisticalMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        statisticalMultiplierField.addValueChangeListener(event -> {
+            // A workaround for format exceptions that occur when we pass invalid messages directly to the field
+            // in tests to verify validation
+            if (Objects.isNull(statisticalMultiplierField.getErrorMessage())) {
+                fieldToValueChangesMap.updateFieldValue(fieldName,
+                    NumberUtils.createBigDecimal(event.getValue().trim()));
+            }
+            recalculateAnnualizedCopies();
+        });
         VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-edit-statistical-multiplier-field");
-        return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
+        return buildCommonLayout(statisticalMultiplierField, fieldName);
     }
 
     private HorizontalLayout buildAnnualMultiplierLayout() {
+        String fieldName = ForeignUi.getMessage("label.annual_multiplier");
         annualMultiplierField.setSizeFull();
         binder.forField(annualMultiplierField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -274,12 +288,18 @@ public class UdmEditUsageWindow extends Window {
                 "Field value should be positive number between 1 and 25")
             .bind(usage -> usage.getAnnualMultiplier().toString(),
                 (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
-        annualMultiplierField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        annualMultiplierField.addValueChangeListener(event -> {
+            if (Objects.isNull(annualMultiplierField.getErrorMessage())) {
+                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.toInt(event.getValue().trim()));
+            }
+            recalculateAnnualizedCopies();
+        });
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-edit-annual-multiplier-field");
-        return buildCommonLayout(annualMultiplierField, "label.annual_multiplier");
+        return buildCommonLayout(annualMultiplierField, fieldName);
     }
 
     private HorizontalLayout buildQuantityLayout() {
+        String fieldName = ForeignUi.getMessage("label.quantity");
         quantityField.setSizeFull();
         binder.forField(quantityField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
@@ -289,23 +309,43 @@ public class UdmEditUsageWindow extends Window {
                 && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
             .bind(usage -> usage.getQuantity().toString(),
                 (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
-        quantityField.addValueChangeListener(event -> recalculateAnnualizedCopies());
+        quantityField.addValueChangeListener(event -> {
+            if (Objects.isNull(quantityField.getErrorMessage())) {
+                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.toLong(event.getValue().trim()));
+            }
+            recalculateAnnualizedCopies();
+        });
         VaadinUtils.addComponentStyle(quantityField, "udm-edit-quantity-field");
-        return buildCommonLayout(quantityField, "label.quantity");
+        return buildCommonLayout(quantityField, fieldName);
     }
 
     private HorizontalLayout buildAnnualizedCopiesField() {
+        String fieldName = ForeignUi.getMessage("label.annualized_copies");
         annualizedCopiesField.setReadOnly(true);
         annualizedCopiesField.setSizeFull();
         binder.forField(annualizedCopiesField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.annualized_copies.empty"))
             .bind(usage -> Objects.toString(usage.getAnnualizedCopies()),
                 (usage, value) -> usage.setAnnualizedCopies(NumberUtils.createBigDecimal(value.trim())));
-        return buildCommonLayout(annualizedCopiesField, "label.annualized_copies");
+        annualizedCopiesField.addValueChangeListener(event -> {
+            if (Objects.isNull(annualizedCopiesField.getErrorMessage())) {
+                fieldToValueChangesMap.updateFieldValue(fieldName,
+                    NumberUtils.createBigDecimal(event.getValue().trim()));
+            }
+        });
+        return buildCommonLayout(annualizedCopiesField, fieldName);
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
+        String fieldName = ForeignUi.getMessage("label.wr_wrk_inst");
         wrWrkInstField.setSizeFull();
+        wrWrkInstField.addValueChangeListener(event -> {
+            if (Objects.isNull(wrWrkInstField.getErrorMessage())) {
+                    fieldToValueChangesMap.updateFieldValue(fieldName,
+                        NumberUtils.createLong(StringUtils.trimToNull(event.getValue())));
+                }
+            }
+        );
         binder.forField(wrWrkInstField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
@@ -313,10 +353,11 @@ public class UdmEditUsageWindow extends Window {
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-edit-wr-wrk-inst-field");
-        return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
+        return buildCommonLayout(wrWrkInstField, fieldName);
     }
 
     private HorizontalLayout buildCompanyLayout() {
+        String fieldName = ForeignUi.getMessage("label.company_id");
         binder.forField(companyIdField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
@@ -327,6 +368,9 @@ public class UdmEditUsageWindow extends Window {
         companyIdField.addValueChangeListener(event -> {
             companyNameField.clear();
             detailLicenseeClassComboBox.setSelectedItem(null);
+            if (Objects.isNull(companyIdField.getErrorMessage())) {
+                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.createLong(event.getValue().trim()));
+            }
         });
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         verifyButton.addClickListener(event -> {
@@ -344,28 +388,34 @@ public class UdmEditUsageWindow extends Window {
             }
         });
         VaadinUtils.addComponentStyle(companyIdField, "udm-edit-company-id-field");
-        HorizontalLayout layout = buildCommonLayout(companyIdField, "label.company_id");
+        HorizontalLayout layout = buildCommonLayout(companyIdField, fieldName);
         layout.addComponent(verifyButton);
         return layout;
     }
 
     private HorizontalLayout buildCompanyNameLayout() {
+        String fieldName = ForeignUi.getMessage("label.company_name");
         companyNameField.setReadOnly(true);
         companyNameField.setSizeFull();
+        companyNameField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         binder.forField(companyNameField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.company_name.empty"))
             .bind(UdmUsageDto::getCompanyName, UdmUsageDto::setCompanyName);
-        return buildCommonLayout(companyNameField, "label.company_name");
+        return buildCommonLayout(companyNameField, fieldName);
     }
 
     private HorizontalLayout initIneligibleReasonLayout() {
+        String fieldName = ForeignUi.getMessage("label.ineligible_reason");
         ComboBox<UdmIneligibleReason> comboBox = new ComboBox<>();
         comboBox.setSizeFull();
         comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
         comboBox.setItems(controller.getAllIneligibleReasons());
+        comboBox.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().getReason()));
         binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-ineligible-reason-combo-box");
-        return buildCommonLayout(comboBox, "label.ineligible_reason");
+        return buildCommonLayout(comboBox, fieldName);
     }
 
     private HorizontalLayout initDetailStatusLayout() {
@@ -377,36 +427,43 @@ public class UdmEditUsageWindow extends Window {
         statuses.addAll(hasResearcherPermission
             ? EDIT_AVAILABLE_STATUSES_RESEARCHER : EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER);
         comboBox.setItems(statuses);
+        String fieldName = ForeignUi.getMessage("label.detail_status");
+        comboBox.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-detail-status-combo-box");
-        return buildCommonLayout(comboBox, "label.detail_status");
+        return buildCommonLayout(comboBox, fieldName);
     }
 
     private HorizontalLayout initActionReasonLayout() {
+        String fieldName = ForeignUi.getMessage("label.action_reason_udm");
         ComboBox<UdmActionReason> comboBox = new ComboBox<>();
         comboBox.setSizeFull();
         comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
         comboBox.setItems(controller.getAllActionReasons());
+        comboBox.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().getReason()));
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-action-reason-combo-box");
-        return buildCommonLayout(comboBox, "label.action_reason_udm");
+        return buildCommonLayout(comboBox, fieldName);
     }
 
     private HorizontalLayout initDetailLicenseeClassLayout() {
+        String fieldName = ForeignUi.getMessage("label.det_lc");
         detailLicenseeClassComboBox.setSizeFull();
         detailLicenseeClassComboBox.setEmptySelectionAllowed(false);
-        detailLicenseeClassComboBox.setItemCaptionGenerator(detailLicenseeClass ->
-            String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()));
+        detailLicenseeClassComboBox.setItemCaptionGenerator(this::buildDetailLicenseeClassString);
         detailLicenseeClassComboBox.setItems(idToLicenseeClassMap.values());
+        detailLicenseeClassComboBox.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, buildDetailLicenseeClassString(event.getValue())));
         binder.forField(detailLicenseeClassComboBox)
             .withValidator(Objects::nonNull, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
         VaadinUtils.addComponentStyle(detailLicenseeClassComboBox, "udm-edit-detail-licensee-class-combo-box");
-        return buildCommonLayout(detailLicenseeClassComboBox, "label.det_lc");
+        return buildCommonLayout(detailLicenseeClassComboBox, fieldName);
     }
 
     private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
-        Label label = new Label(ForeignUi.getMessage(labelCaption));
+        Label label = new Label(labelCaption);
         label.addStyleName(Cornerstone.LABEL_BOLD);
         label.setWidth(165, Unit.PIXELS);
         HorizontalLayout layout = new HorizontalLayout(label, component);
@@ -421,7 +478,7 @@ public class UdmEditUsageWindow extends Window {
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmUsage);
-                controller.updateUsage(udmUsage, hasResearcherPermission);
+                controller.updateUsage(udmUsage, fieldToValueChangesMap, hasResearcherPermission);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
@@ -459,5 +516,10 @@ public class UdmEditUsageWindow extends Window {
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private String buildDetailLicenseeClassString(DetailLicenseeClass detailLicenseeClass) {
+        return Objects.nonNull(detailLicenseeClass)
+            ? String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()) : null;
     }
 }

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -36,7 +37,6 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -153,9 +153,10 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher) {
-        udmUsageService.updateUsage(udmUsageDto, isResearcher);
-        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
+    public void updateUsage(UdmUsageDto newUsageDto, UdmAuditFieldToValuesMap fieldToValueChangesMap,
+                            boolean isResearcher) {
+        udmUsageService.updateUsage(newUsageDto, fieldToValueChangesMap, isResearcher);
+        udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
     }
 
     public List<UdmActionReason> getAllActionReasons() {

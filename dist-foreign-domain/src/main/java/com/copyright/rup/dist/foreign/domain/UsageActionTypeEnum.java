@@ -73,6 +73,11 @@ public enum UsageActionTypeEnum {
     US_TAX_COUNTRY,
 
     /**
+     * Action type for ACL UDM usage edit.
+     */
+    USAGE_EDIT,
+
+    /**
      * Action type for eligible usages.
      */
     ELIGIBLE,

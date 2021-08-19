@@ -22,6 +22,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -271,12 +272,13 @@ public class UdmUsageControllerTest {
     @Test
     public void testUpdateUsage() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageService.updateUsage(udmUsageDto, false);
+        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsage(udmUsageDto, false);
+        controller.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
         verify(udmUsageService);
     }
 
