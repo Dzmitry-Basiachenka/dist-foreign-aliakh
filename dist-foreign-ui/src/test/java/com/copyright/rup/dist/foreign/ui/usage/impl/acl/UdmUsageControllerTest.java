@@ -273,10 +273,22 @@ public class UdmUsageControllerTest {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageService.updateUsage(udmUsageDto, false);
         expectLastCall().once();
-        udmUsageService.sendForMatching(udmUsageDto);
+        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
         controller.updateUsage(udmUsageDto, false);
+        verify(udmUsageService);
+    }
+
+    @Test
+    public void testUpdateUsages() {
+        Set<UdmUsageDto> udmUsageDtos = Collections.singleton(new UdmUsageDto());
+        udmUsageService.updateUsages(udmUsageDtos, false);
+        expectLastCall().once();
+        udmUsageService.sendForMatching(udmUsageDtos);
+        expectLastCall().once();
+        replay(udmUsageService);
+        controller.updateUsages(udmUsageDtos, false);
         verify(udmUsageService);
     }
 

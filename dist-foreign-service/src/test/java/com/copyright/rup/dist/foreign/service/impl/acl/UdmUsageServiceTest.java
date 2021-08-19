@@ -322,7 +322,7 @@ public class UdmUsageServiceTest {
         expectLastCall().once();
         replay(chainExecutor);
         UdmUsageDto udmUsageDto = buildUsageDto();
-        udmUsageService.sendForMatching(udmUsageDto);
+        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         runnable.run();

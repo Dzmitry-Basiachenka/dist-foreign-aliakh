@@ -621,6 +621,8 @@
         update ${schema}.df_udm_usage
         set
             status_ind = #{status},
+            period_end_date = #{periodEndDate},
+            period = #{period},
             assignee = #{assignee},
             wr_wrk_inst = #{wrWrkInst},
             reported_title = #{reportedTitle},

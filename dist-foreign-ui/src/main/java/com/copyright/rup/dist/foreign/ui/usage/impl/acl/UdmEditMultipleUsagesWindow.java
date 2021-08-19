@@ -120,8 +120,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
 
     private Component initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
-        VerticalLayout editFieldsLayout = new VerticalLayout();
-        editFieldsLayout.addComponents(
+        HorizontalLayout buttonsLayout = initButtonsLayout();
+        rootLayout.addComponents(
             buildDetailStatusLayout(),
             buildPeriodLayout(),
             buildDetailLicenseeClassLayout(),
@@ -139,12 +139,10 @@ public class UdmEditMultipleUsagesWindow extends Window {
             buildActionReasonLayout(),
             buildIneligibleReasonLayout(),
             buildCommonStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment, "udm-edit-comment-field")
+                UdmUsageDto::setComment, "udm-edit-comment-field"),
+            buttonsLayout
         );
-        HorizontalLayout buttonsLayout = initButtonsLayout();
-        rootLayout.addComponents(editFieldsLayout, buttonsLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        rootLayout.setExpandRatio(editFieldsLayout, 1f);
         rootLayout.setSizeFull();
         binder.validate();
         binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
@@ -195,8 +193,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 10), 0, 10))
-            .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
-                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(value.trim())));
+            .bind(usage -> Objects.toString(usage.getCompanyId()),
+                (usage, value) -> usage.setCompanyId(NumberUtils.createLong(StringUtils.trimToNull(value))));
         companyIdField.setSizeFull();
         companyIdField.addValueChangeListener(event -> {
             companyNameField.clear();
@@ -248,7 +246,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim())
                     && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
                 "Field value should be positive number between 1 and 25")
-            .bind(usage -> usage.getAnnualMultiplier().toString(),
+            .bind(usage -> Objects.toString(usage.getAnnualMultiplier(), StringUtils.EMPTY),
                 (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-multiple-edit-annual-multiplier-field");
         return buildCommonLayout(annualMultiplierField, "label.annual_multiplier");
@@ -260,8 +258,9 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim())
                     && STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
                 "Field value should be positive number between 0.00001 and 1.00000")
-            .bind(usage -> Objects.toString(usage.getStatisticalMultiplier()),
-                (usage, value) -> usage.setStatisticalMultiplier(NumberUtils.createBigDecimal(value.trim())));
+            .bind(usage -> Objects.toString(usage.getStatisticalMultiplier(), StringUtils.EMPTY),
+                (usage, value) -> usage.setStatisticalMultiplier(
+                    NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-multiple-edit-statistical-multiplier-field");
         return buildCommonLayout(statisticalMultiplierField, "label.statistical_multiplier");
     }
@@ -273,7 +272,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
                 new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 9), 0, 9))
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(StringUtils.trim(value))
                 && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
-            .bind(usage -> usage.getQuantity().toString(),
+            .bind(usage -> Objects.toString(usage.getQuantity(), StringUtils.EMPTY),
                 (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
         VaadinUtils.addComponentStyle(quantityField, "udm-multiple-edit-quantity-field");
         return buildCommonLayout(quantityField, "label.quantity");

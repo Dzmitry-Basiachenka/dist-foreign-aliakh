@@ -45,6 +45,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -154,7 +155,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     @Override
     public void updateUsage(UdmUsageDto udmUsageDto, boolean isResearcher) {
         udmUsageService.updateUsage(udmUsageDto, isResearcher);
-        udmUsageService.sendForMatching(udmUsageDto);
+        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
     }
 
     public List<UdmActionReason> getAllActionReasons() {
@@ -218,8 +219,9 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher) {
-        //TODO {aazarenka} will implement later
+    public void updateUsages(Set<UdmUsageDto> udmUsageDtos, boolean isResearcher) {
+        udmUsageService.updateUsages(udmUsageDtos, isResearcher);
+        udmUsageService.sendForMatching(udmUsageDtos);
     }
 
     @Override
