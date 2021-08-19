@@ -198,7 +198,7 @@ public class UdmEditMultipleUsagesWindowTest {
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         TextField companyIdField = Whitebox.getInternalState(window, "companyIdField");
-        VerticalLayout verticalLayout = (VerticalLayout) ((VerticalLayout) window.getContent()).getComponent(0);
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         Button verifyButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(3)).getComponent(2);
         verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, VALID_INTEGER, StringUtils.EMPTY, true);
         verifyCompanyTextFieldValidationMessage(companyIdField, verifyButton, INTEGER_WITH_SPACES_STRING,
@@ -252,7 +252,7 @@ public class UdmEditMultipleUsagesWindowTest {
         replay(controller);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
-        VerticalLayout verticalLayout = (VerticalLayout) ((VerticalLayout) window.getContent()).getComponent(0);
+        VerticalLayout verticalLayout = (VerticalLayout)  window.getContent();
         HorizontalLayout companyLayout = (HorizontalLayout) verticalLayout.getComponent(3);
         TextField companyIdField = (TextField) companyLayout.getComponent(1);
         Button verifyButton = (Button) companyLayout.getComponent(2);
@@ -364,7 +364,7 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     private HorizontalLayout getComponent(int number) {
-        VerticalLayout verticalLayout = (VerticalLayout) ((VerticalLayout) window.getContent()).getComponent(0);
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         return (HorizontalLayout) verticalLayout.getComponent(number);
     }
 
@@ -400,16 +400,8 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     private void verifyRootLayout(Component component) {
-        assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(2, verticalLayout.getComponentCount());
-        verifyFields(verticalLayout.getComponent(0));
-        verifyButtonsLayout(verticalLayout.getComponent(1));
-    }
-
-    private void verifyFields(Component component) {
-        VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(14, verticalLayout.getComponentCount());
+        assertEquals(15, verticalLayout.getComponentCount());
         verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status");
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)");
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class");
@@ -424,6 +416,7 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason");
         verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason");
         verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment");
+        verifyButtonsLayout(verticalLayout.getComponent(14));
     }
 
     private void verifyComboBoxLayout(Component component, String caption) {
@@ -499,7 +492,7 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     private HorizontalLayout getButtonsLayout() {
-        return (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
+        return (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(14);
     }
 
     private void verifyUpdatedUdmUsages(UdmUsageDto actualUdmUsageDto) {

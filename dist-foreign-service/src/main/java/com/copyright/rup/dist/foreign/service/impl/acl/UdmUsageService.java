@@ -147,8 +147,8 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
-    public void sendForMatching(UdmUsageDto udmUsageDto) {
-        sendForMatching(Collections.singletonList(convertUdmDtoToUsage(udmUsageDto)));
+    public void sendForMatching(Set<UdmUsageDto> udmUsageDtos) {
+        sendForMatching(udmUsageDtos.stream().map(this::convertUdmDtoToUsage).collect(Collectors.toList()));
     }
 
     @Override
@@ -226,6 +226,11 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     public void unassignUsages(Set<String> udmUsageIds) {
         udmUsageRepository.updateAssignee(udmUsageIds, null, RupContextUtils.getUserName());
+    }
+
+    @Override
+    public void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher) {
+        selectedUdmUsages.forEach(usageDto -> updateUsage(usageDto, isResearcher));
     }
 
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {

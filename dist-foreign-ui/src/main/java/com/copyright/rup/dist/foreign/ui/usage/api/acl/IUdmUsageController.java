@@ -204,8 +204,8 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Updates UDM usages.
      *
-     * @param selectedUdmUsages {@link UdmUsageDto} to update
+     * @param udmUsageDtos {@link UdmUsageDto} to update
      * @param isResearcher      {@code true} if the user has Researcher role, {@code false} otherwise
      */
-    void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher);
+    void updateUsages(Set<UdmUsageDto> udmUsageDtos, boolean isResearcher);
 }

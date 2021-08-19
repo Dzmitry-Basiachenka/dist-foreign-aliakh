@@ -67,11 +67,11 @@ public interface IUdmUsageService {
     int getUsagesCount(UdmUsageFilter filter);
 
     /**
-     * Sends {@link UdmUsageDto} on queue for PI matching process.
+     * Sends list of {@link UdmUsageDto} on queue for PI matching process.
      *
-     * @param udmUsageDto {@link UdmUsageDto} to be sent
+     * @param udmUsageDtos list of {@link UdmUsageDto} to be sent
      */
-    void sendForMatching(UdmUsageDto udmUsageDto);
+    void sendForMatching(Set<UdmUsageDto> udmUsageDtos);
 
     /**
      * Sends list of UDM usages on queue for PI matching process.
@@ -161,4 +161,12 @@ public interface IUdmUsageService {
      * @param udmUsageIds set of usage ids to un-assign
      */
     void unassignUsages(Set<String> udmUsageIds);
+
+    /**
+     * Updates UDM usages.
+     *
+     * @param selectedUdmUsages list of {@link UdmUsageDto} to update
+     * @param isResearcher      {@code true} if the user has Researcher role, {@code false} otherwise
+     */
+    void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher);
 }

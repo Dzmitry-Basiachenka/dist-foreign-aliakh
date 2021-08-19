@@ -138,6 +138,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
         UdmUsageDto originalUsage = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         originalUsage.setStatus(UsageStatusEnum.INELIGIBLE);
+        originalUsage.setPeriod(202512);
+        originalUsage.setPeriodEndDate(LocalDate.of(2025, 12, 31));
         originalUsage.setAssignee(ASSIGNEE_2);
         originalUsage.setWrWrkInst(WR_WRK_INST);
         originalUsage.setReportedTitle(REPORTED_TITLE);
