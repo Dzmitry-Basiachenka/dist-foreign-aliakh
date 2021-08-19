@@ -1,8 +1,17 @@
+14.1.9
+-
+* B-68058: FDA & UDM: Log and display single usage edits in the UDM Audit: implement logic to log single usage edit
+* CDP-1008: FDA: ACL: Multiple Edit: Researcher is able to edit usages in forbidden statuses if at least one usage in allowed status is selected additionally
+* B-65870: FDA & UDM: Bulk update: implement service logic to update usages
+* B-65870: FDA & UDM: Bulk update: implement update usages logic for researcher role
+* B-65870: FDA & UDM: Bulk update: implement update usages logic for specialist/manager roles
+* B-67678: FDA & UDM: Usage Period update: retrieve periods from usages to display on UDM period filter
+
 14.1.8
 -
 * B-65870: FDA & UDM: Bulk update: implement validation for fields on UDM multiple edit windows
-* B-65864 FDA: Update the usage information for Researcher role: unassign the usage from a user when the user updates usage to NEW status
-* B-68820 Tech Debt: FDA: apply new pattern for local SNS/SQS properties
+* B-65864: FDA: Update the usage information for Researcher role: unassign the usage from a user when the user updates usage to NEW status
+* B-68820: Tech Debt: FDA: apply new pattern for local SNS/SQS properties
 
 14.1.7
 -
