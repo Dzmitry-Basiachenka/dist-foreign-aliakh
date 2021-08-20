@@ -266,12 +266,7 @@ public class UdmEditUsageWindow extends Window {
             .bind(usage -> Objects.toString(usage.getStatisticalMultiplier()),
                 (usage, value) -> usage.setStatisticalMultiplier(NumberUtils.createBigDecimal(value.trim())));
         statisticalMultiplierField.addValueChangeListener(event -> {
-            // A workaround for format exceptions that occur when we pass invalid messages directly to the field
-            // in tests to verify validation
-            if (Objects.isNull(statisticalMultiplierField.getErrorMessage())) {
-                fieldToValueChangesMap.updateFieldValue(fieldName,
-                    NumberUtils.createBigDecimal(event.getValue().trim()));
-            }
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             recalculateAnnualizedCopies();
         });
         VaadinUtils.addComponentStyle(statisticalMultiplierField, "udm-edit-statistical-multiplier-field");
@@ -289,9 +284,7 @@ public class UdmEditUsageWindow extends Window {
             .bind(usage -> usage.getAnnualMultiplier().toString(),
                 (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
         annualMultiplierField.addValueChangeListener(event -> {
-            if (Objects.isNull(annualMultiplierField.getErrorMessage())) {
-                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.toInt(event.getValue().trim()));
-            }
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             recalculateAnnualizedCopies();
         });
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-edit-annual-multiplier-field");
@@ -310,9 +303,7 @@ public class UdmEditUsageWindow extends Window {
             .bind(usage -> usage.getQuantity().toString(),
                 (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
         quantityField.addValueChangeListener(event -> {
-            if (Objects.isNull(quantityField.getErrorMessage())) {
-                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.toLong(event.getValue().trim()));
-            }
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             recalculateAnnualizedCopies();
         });
         VaadinUtils.addComponentStyle(quantityField, "udm-edit-quantity-field");
@@ -327,25 +318,16 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.annualized_copies.empty"))
             .bind(usage -> Objects.toString(usage.getAnnualizedCopies()),
                 (usage, value) -> usage.setAnnualizedCopies(NumberUtils.createBigDecimal(value.trim())));
-        annualizedCopiesField.addValueChangeListener(event -> {
-            if (Objects.isNull(annualizedCopiesField.getErrorMessage())) {
-                fieldToValueChangesMap.updateFieldValue(fieldName,
-                    NumberUtils.createBigDecimal(event.getValue().trim()));
-            }
-        });
+        annualizedCopiesField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         return buildCommonLayout(annualizedCopiesField, fieldName);
     }
 
     private HorizontalLayout buildWrWrkInstLayout() {
         String fieldName = ForeignUi.getMessage("label.wr_wrk_inst");
         wrWrkInstField.setSizeFull();
-        wrWrkInstField.addValueChangeListener(event -> {
-            if (Objects.isNull(wrWrkInstField.getErrorMessage())) {
-                    fieldToValueChangesMap.updateFieldValue(fieldName,
-                        NumberUtils.createLong(StringUtils.trimToNull(event.getValue())));
-                }
-            }
-        );
+        wrWrkInstField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, StringUtils.trimToNull(event.getValue())));
         binder.forField(wrWrkInstField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
@@ -368,9 +350,7 @@ public class UdmEditUsageWindow extends Window {
         companyIdField.addValueChangeListener(event -> {
             companyNameField.clear();
             detailLicenseeClassComboBox.setSelectedItem(null);
-            if (Objects.isNull(companyIdField.getErrorMessage())) {
-                fieldToValueChangesMap.updateFieldValue(fieldName, NumberUtils.createLong(event.getValue().trim()));
-            }
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
         });
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         verifyButton.addClickListener(event -> {
@@ -428,7 +408,8 @@ public class UdmEditUsageWindow extends Window {
             ? EDIT_AVAILABLE_STATUSES_RESEARCHER : EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER);
         comboBox.setItems(statuses);
         String fieldName = ForeignUi.getMessage("label.detail_status");
-        comboBox.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
+        comboBox.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name()));
         binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-detail-status-combo-box");
         return buildCommonLayout(comboBox, fieldName);
