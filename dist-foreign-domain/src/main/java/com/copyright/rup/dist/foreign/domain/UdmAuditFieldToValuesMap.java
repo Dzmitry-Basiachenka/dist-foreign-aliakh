@@ -52,7 +52,8 @@ public class UdmAuditFieldToValuesMap {
             usage.getDetailLicenseeClass().getId() + " - " + usage.getDetailLicenseeClass().getDescription())
             : EMPTY_PAIR);
         fieldToValueChangesMap.put("Annual Multiplier", buildPair(usageDto, UdmUsageDto::getAnnualMultiplier));
-        fieldToValueChangesMap.put("Statistical Multiplier", buildPair(usageDto, UdmUsageDto::getStatisticalMultiplier));
+        fieldToValueChangesMap.put("Statistical Multiplier",
+            buildPair(usageDto, UdmUsageDto::getStatisticalMultiplier));
         fieldToValueChangesMap.put("Quantity", buildPair(usageDto, UdmUsageDto::getQuantity));
         fieldToValueChangesMap.put("Annualized Copies", buildPair(usageDto, UdmUsageDto::getAnnualizedCopies));
         fieldToValueChangesMap.put("Ineligible Reason", Objects.nonNull(usageDto.getIneligibleReason())

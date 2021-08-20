@@ -270,11 +270,11 @@ public class UdmUsageService implements IUdmUsageService {
         List<String> result = new ArrayList<>();
         fieldToValueChangesMap.entrySet().forEach(fieldToValueChangesMapEntry -> {
             Pair<String, String> valuePair = fieldToValueChangesMapEntry.getValue();
-            String oldValue = StringUtils.isBlank(valuePair.getLeft())
-                ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
-            String newValue = StringUtils.isBlank(valuePair.getRight())
-                ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
             if (!Objects.equals(valuePair.getLeft(), valuePair.getRight())) {
+                String oldValue = StringUtils.isBlank(valuePair.getLeft())
+                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
+                String newValue = StringUtils.isBlank(valuePair.getRight())
+                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
                 result.add(String.format(USAGE_EDIT_REASON, fieldToValueChangesMapEntry.getKey(), oldValue, newValue));
             }
         });
