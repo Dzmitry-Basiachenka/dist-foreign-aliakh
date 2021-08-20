@@ -269,19 +269,15 @@ public class UdmUsageService implements IUdmUsageService {
     private List<String> getUdmUsageEditAuditReasons(UdmAuditFieldToValuesMap fieldToValueChangesMap) {
         List<String> result = new ArrayList<>();
         fieldToValueChangesMap.entrySet().forEach(fieldToValueChangesMapEntry -> {
-            Pair<Object, Object> valuePair = fieldToValueChangesMapEntry.getValue();
-            Object oldValue = Objects.isNull(valuePair.getLeft()) || isEmptyString(valuePair.getLeft())
+            Pair<String, String> valuePair = fieldToValueChangesMapEntry.getValue();
+            String oldValue = StringUtils.isBlank(valuePair.getLeft())
                 ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
-            Object newValue = Objects.isNull(valuePair.getRight()) || isEmptyString(valuePair.getRight())
+            String newValue = StringUtils.isBlank(valuePair.getRight())
                 ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
-            if (!Objects.equals(Objects.toString(valuePair.getLeft()), Objects.toString(valuePair.getRight()))) {
+            if (!Objects.equals(valuePair.getLeft(), valuePair.getRight())) {
                 result.add(String.format(USAGE_EDIT_REASON, fieldToValueChangesMapEntry.getKey(), oldValue, newValue));
             }
         });
         return result;
-    }
-
-    private boolean isEmptyString(Object value) {
-        return value instanceof String && StringUtils.isBlank((String) value);
     }
 }

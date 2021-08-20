@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Domain object for holding map of field names and its old and new values.
@@ -21,42 +23,41 @@ import java.util.Set;
  */
 public class UdmAuditFieldToValuesMap {
 
-    private final Map<String, Pair<Object, Object>> fieldToValueChangesMap = new HashMap<>();
+    private static final Pair<String, String> EMPTY_PAIR = Pair.of(null, null);
+    private final Map<String, Pair<String, String>> fieldToValueChangesMap = new HashMap<>();
 
     /**
      * Constructor.
      *
-     * @param usage instance of {@link UdmUsageDto}
+     * @param usageDto instance of {@link UdmUsageDto}
      */
-    public UdmAuditFieldToValuesMap(UdmUsageDto usage) {
-        fieldToValueChangesMap.put("Detail Status", Pair.of(usage.getStatus(), usage.getStatus()));
-        fieldToValueChangesMap.put("Wr Wrk Inst", Pair.of(usage.getWrWrkInst(), usage.getWrWrkInst()));
-        fieldToValueChangesMap.put("Reported Title", Pair.of(usage.getReportedTitle(), usage.getReportedTitle()));
+    public UdmAuditFieldToValuesMap(UdmUsageDto usageDto) {
+        fieldToValueChangesMap.put("Detail Status", Objects.nonNull(usageDto.getStatus())
+            ? buildPair(usageDto, usage -> usage.getStatus().name())
+            : EMPTY_PAIR);
+        fieldToValueChangesMap.put("Wr Wrk Inst", buildPair(usageDto, UdmUsageDto::getWrWrkInst));
+        fieldToValueChangesMap.put("Reported Title", buildPair(usageDto, UdmUsageDto::getReportedTitle));
         fieldToValueChangesMap.put("Reported Standard Number",
-            Pair.of(usage.getReportedStandardNumber(), usage.getReportedStandardNumber()));
-        fieldToValueChangesMap.put("Reported Pub Type",
-            Pair.of(usage.getReportedPubType(), usage.getReportedPubType()));
-        fieldToValueChangesMap.put("Action Reason", Objects.nonNull(usage.getActionReason())
-            ? Pair.of(usage.getActionReason().getReason(), usage.getActionReason().getReason())
-            : Pair.of(null, null));
-        fieldToValueChangesMap.put("Comment", Pair.of(usage.getComment(), usage.getComment()));
-        fieldToValueChangesMap.put("Research URL", Pair.of(usage.getResearchUrl(), usage.getResearchUrl()));
-        fieldToValueChangesMap.put("Company ID", Pair.of(usage.getCompanyId(), usage.getCompanyId()));
-        fieldToValueChangesMap.put("Company Name", Pair.of(usage.getCompanyName(), usage.getCompanyName()));
-        fieldToValueChangesMap.put("Detail Licensee Class", Objects.nonNull(usage.getDetailLicenseeClass())
-            ? Pair.of(usage.getDetailLicenseeClass().getId() + " - " + usage.getDetailLicenseeClass().getDescription(),
+            buildPair(usageDto, UdmUsageDto::getReportedStandardNumber));
+        fieldToValueChangesMap.put("Reported Pub Type", buildPair(usageDto, UdmUsageDto::getReportedPubType));
+        fieldToValueChangesMap.put("Action Reason", Objects.nonNull(usageDto.getActionReason())
+            ? buildPair(usageDto, usage -> usage.getActionReason().getReason())
+            : EMPTY_PAIR);
+        fieldToValueChangesMap.put("Comment", buildPair(usageDto, UdmUsageDto::getComment));
+        fieldToValueChangesMap.put("Research URL", buildPair(usageDto, UdmUsageDto::getResearchUrl));
+        fieldToValueChangesMap.put("Company ID", buildPair(usageDto, UdmUsageDto::getCompanyId));
+        fieldToValueChangesMap.put("Company Name", buildPair(usageDto, UdmUsageDto::getCompanyName));
+        fieldToValueChangesMap.put("Detail Licensee Class", Objects.nonNull(usageDto.getDetailLicenseeClass())
+            ? buildPair(usageDto, usage ->
             usage.getDetailLicenseeClass().getId() + " - " + usage.getDetailLicenseeClass().getDescription())
-            : Pair.of(null, null));
-        fieldToValueChangesMap.put("Annual Multiplier",
-            Pair.of(usage.getAnnualMultiplier(), usage.getAnnualMultiplier()));
-        fieldToValueChangesMap.put("Statistical Multiplier",
-            Pair.of(usage.getStatisticalMultiplier(), usage.getStatisticalMultiplier()));
-        fieldToValueChangesMap.put("Quantity", Pair.of(usage.getQuantity(), usage.getQuantity()));
-        fieldToValueChangesMap.put("Annualized Copies",
-            Pair.of(usage.getAnnualizedCopies(), usage.getAnnualizedCopies()));
-        fieldToValueChangesMap.put("Ineligible Reason", Objects.nonNull(usage.getIneligibleReason())
-            ? Pair.of(usage.getIneligibleReason().getReason(), usage.getIneligibleReason().getReason())
-            : Pair.of(null, null));
+            : EMPTY_PAIR);
+        fieldToValueChangesMap.put("Annual Multiplier", buildPair(usageDto, UdmUsageDto::getAnnualMultiplier));
+        fieldToValueChangesMap.put("Statistical Multiplier", buildPair(usageDto, UdmUsageDto::getStatisticalMultiplier));
+        fieldToValueChangesMap.put("Quantity", buildPair(usageDto, UdmUsageDto::getQuantity));
+        fieldToValueChangesMap.put("Annualized Copies", buildPair(usageDto, UdmUsageDto::getAnnualizedCopies));
+        fieldToValueChangesMap.put("Ineligible Reason", Objects.nonNull(usageDto.getIneligibleReason())
+            ? buildPair(usageDto, usage -> usage.getIneligibleReason().getReason())
+            : EMPTY_PAIR);
     }
 
     /**
@@ -65,15 +66,20 @@ public class UdmAuditFieldToValuesMap {
      * @param fieldValue filed value
      * @param newValue   new value
      */
-    public void updateFieldValue(String fieldValue, Object newValue) {
+    public void updateFieldValue(String fieldValue, String newValue) {
         fieldToValueChangesMap.put(fieldValue, Pair.of(fieldToValueChangesMap.get(fieldValue).getLeft(), newValue));
     }
 
     /**
      * @return a {@link Set} view of the mappings contained in this map.
      */
-    public Set<Map.Entry<String, Pair<Object, Object>>> entrySet() {
+    public Set<Map.Entry<String, Pair<String, String>>> entrySet() {
         return fieldToValueChangesMap.entrySet();
+    }
+
+    private Pair<String, String> buildPair(UdmUsageDto udmUsageDto, Function<UdmUsageDto, Object> function) {
+        String stringRepresentation = Objects.toString(function.apply(udmUsageDto), StringUtils.EMPTY);
+        return Pair.of(stringRepresentation, stringRepresentation);
     }
 
     @Override
