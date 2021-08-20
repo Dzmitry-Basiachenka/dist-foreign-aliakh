@@ -209,7 +209,7 @@ public class UdmUsageWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.assignUsages(Collections.singleton("efdf6040-d130-4ae4-a6b1-a9a807873a1e"));
+        controller.assignUsages(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully assigned to you");
         expectLastCall().once();

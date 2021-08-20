@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -227,8 +228,22 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
-    public void assignUsages(Set<String> udmUsageIds) {
+    @Transactional
+    public void assignUsages(Set<UdmUsageDto> udmUsages) {
         String userName = RupContextUtils.getUserName();
+        udmUsages.forEach(usage -> {
+            if (Objects.isNull(usage.getAssignee())) {
+                udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                    String.format("Assignment was changed. Usage was assigned to ‘%s’", userName));
+            } else {
+                udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                    String.format("Assignment was changed. Old assignee is '%s'. " +
+                        "New assignee is '%s'", usage.getAssignee(), userName));
+            }
+        });
+        Set<String> udmUsageIds = udmUsages.stream()
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
         udmUsageRepository.updateAssignee(udmUsageIds, userName, userName);
     }
 

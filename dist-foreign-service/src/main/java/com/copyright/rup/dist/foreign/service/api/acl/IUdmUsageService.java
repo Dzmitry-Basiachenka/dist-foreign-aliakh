@@ -153,9 +153,9 @@ public interface IUdmUsageService {
     /**
      * Assigns provided usages to logged in user.
      *
-     * @param udmUsageIds set of usage ids to assign
+     * @param udmUsages set of usages to assign to logged in user
      */
-    void assignUsages(Set<String> udmUsageIds);
+    void assignUsages(Set<UdmUsageDto> udmUsages);
 
     /**
      * Un-assigns provided usages.

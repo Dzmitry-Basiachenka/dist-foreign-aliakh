@@ -251,11 +251,11 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testAssignUsages() {
-        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
-        udmUsageService.assignUsages(usageIds);
+        Set<UdmUsageDto> udmUsages = Collections.singleton(new UdmUsageDto());
+        udmUsageService.assignUsages(udmUsages);
         expectLastCall().once();
         replay(udmUsageService);
-        controller.assignUsages(usageIds);
+        controller.assignUsages(udmUsages);
         verify(udmUsageService);
     }
 

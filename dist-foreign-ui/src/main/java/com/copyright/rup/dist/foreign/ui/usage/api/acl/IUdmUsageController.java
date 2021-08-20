@@ -126,9 +126,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Assigns provided usages to logged in user.
      *
-     * @param usageIds set of usage ids to assign to logged in user
+     * @param udmUsages set of usages to assign to logged in user
      */
-    void assignUsages(Set<String> usageIds);
+    void assignUsages(Set<UdmUsageDto> udmUsages);
 
     /**
      * Un-assigns provided usages.

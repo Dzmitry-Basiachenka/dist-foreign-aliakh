@@ -52,6 +52,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -452,13 +454,26 @@ public class UdmUsageServiceTest {
     @Test
     public void testAssignUsages() {
         mockStatic(RupContextUtils.class);
-        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        UdmUsageDto udmUsage1 = new UdmUsageDto();
+        udmUsage1.setId(UDM_USAGE_UID_1);
+        UdmUsageDto udmUsage2 = new UdmUsageDto();
+        udmUsage2.setId(UDM_USAGE_UID_2);
+        udmUsage2.setAssignee(ASSIGNEE);
+        Set<UdmUsageDto> udmUsages = new LinkedHashSet<>(Arrays.asList(udmUsage1, udmUsage2));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmUsageRepository.updateAssignee(usageIds, USER_NAME, USER_NAME);
+        udmUsageRepository.updateAssignee(new HashSet<>(Arrays.asList(udmUsage1.getId(), udmUsage2.getId())),
+            USER_NAME, USER_NAME);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
-        udmUsageService.assignUsages(usageIds);
-        verify(udmUsageRepository, RupContextUtils.class);
+        udmUsageAuditService.logAction(udmUsage1.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Usage was assigned to ‘user@copyright.com’");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(udmUsage2.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. " +
+                "New assignee is 'user@copyright.com'");
+        expectLastCall().once();
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
+        udmUsageService.assignUsages(udmUsages);
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     @Test
