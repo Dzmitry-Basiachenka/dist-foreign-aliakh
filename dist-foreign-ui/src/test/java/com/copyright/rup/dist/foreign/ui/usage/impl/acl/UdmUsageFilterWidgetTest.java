@@ -66,7 +66,8 @@ public class UdmUsageFilterWidgetTest {
 
     private static final Set<UsageStatusEnum> ACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
-        UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND);
+        UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW,
+        UsageStatusEnum.SPECIALIST_REVIEW);
 
     private IUdmUsageFilterController udmUsageFilterController;
     private UdmUsageFilterWidget widget;
@@ -248,9 +249,7 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(6, actualStatuses.size());
-        assertEquals(ACL_STATUSES, actualStatuses);
+        assertEquals(ACL_STATUSES, listDataProvider.getItems());
     }
 
     private void verifyMoreFiltersButton(Component component) {
