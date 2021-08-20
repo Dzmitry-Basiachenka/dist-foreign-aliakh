@@ -133,6 +133,21 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private HorizontalLayout initToolbarLayout() {
         initUsageBatchMenuBar();
         initAssignmentMenuBar();
+        searchWidget = new SearchWidget(this::refresh);
+        searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
+        searchWidget.setWidth(65, Unit.PERCENTAGE);
+        HorizontalLayout buttonsLayout = initButtonsLayout();
+        HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
+        VaadinUtils.setMaxComponentsWidth(toolbar);
+        toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_RIGHT);
+        toolbar.setExpandRatio(searchWidget, 1f);
+        toolbar.setMargin(true);
+        VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");
+        return toolbar;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
@@ -152,19 +167,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     ? new UdmEditMultipleUsagesResearcherWindow(controller, selectedUsages, saveEvent -> refresh())
                     : new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
-        searchWidget = new SearchWidget(this::refresh);
-        searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
-        searchWidget.setWidth(65, Unit.PERCENTAGE);
-        HorizontalLayout buttonsLayout =
-            new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, exportButton);
-        HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
-        VaadinUtils.setMaxComponentsWidth(toolbar);
-        toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
-        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_RIGHT);
-        toolbar.setExpandRatio(searchWidget, 1f);
-        toolbar.setMargin(true);
-        VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");
-        return toolbar;
+        VaadinUtils.setButtonsAutoDisabled(editButton, multipleEditButton);
+        return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, exportButton);
     }
 
     private void initModalWindow(Set<UdmUsageDto> selectedUsages, Window window) {
