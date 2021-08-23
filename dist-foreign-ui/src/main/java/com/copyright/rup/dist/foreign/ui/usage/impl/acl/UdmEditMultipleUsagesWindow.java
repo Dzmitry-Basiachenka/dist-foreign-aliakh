@@ -129,17 +129,18 @@ public class UdmEditMultipleUsagesWindow extends Window {
             buildCompanyNameLayout(),
             buildWrWrkInstLayout(),
             buildCommonStringLayout(reportedStandardNumberField, "label.reported_standard_number", 100,
-                UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
-                "udm-edit-reported-standard-number-field"),
+                UdmUsageDto::getReportedStandardNumber, (usage, value) -> usage.setReportedStandardNumber(
+                    StringUtils.trimToNull(value)), "udm-edit-reported-standard-number-field"),
             buildCommonStringLayout(reportedTitleField, "label.reported_title", 1000, UdmUsageDto::getReportedTitle,
-                UdmUsageDto::setReportedTitle, "udm-edit-reported-title-field"),
+                (usage, value) -> usage.setReportedTitle(StringUtils.trimToNull(value)),
+                "udm-edit-reported-title-field"),
             buildAnnualMultiplierLayout(),
             buildStatisticalMultiplier(),
             buildQuantityLayout(),
             buildActionReasonLayout(),
             buildIneligibleReasonLayout(),
             buildCommonStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment, "udm-edit-comment-field"),
+                (usage, value) -> usage.setComment(StringUtils.trimToNull(value)), "udm-edit-comment-field"),
             buttonsLayout
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -224,7 +225,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private HorizontalLayout buildCompanyNameLayout() {
         companyNameField.setReadOnly(true);
         companyNameField.setSizeFull();
-        binder.forField(companyNameField).bind(UdmUsageDto::getCompanyName, UdmUsageDto::setCompanyName);
+        binder.forField(companyNameField)
+            .bind(UdmUsageDto::getCompanyName, (usage, value) -> usage.setCompanyName(StringUtils.trimToNull(value)));
         return buildCommonLayout(companyNameField, "label.company_name");
     }
 
@@ -247,7 +249,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
                     && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
                 "Field value should be positive number between 1 and 25")
             .bind(usage -> Objects.toString(usage.getAnnualMultiplier(), StringUtils.EMPTY),
-                (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
+                (usage, value) -> usage.setAnnualMultiplier(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-multiple-edit-annual-multiplier-field");
         return buildCommonLayout(annualMultiplierField, "label.annual_multiplier");
     }
@@ -273,7 +275,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(StringUtils.trim(value))
                 && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
             .bind(usage -> Objects.toString(usage.getQuantity(), StringUtils.EMPTY),
-                (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
+                (usage, value) -> usage.setQuantity(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(quantityField, "udm-multiple-edit-quantity-field");
         return buildCommonLayout(quantityField, "label.quantity");
     }
