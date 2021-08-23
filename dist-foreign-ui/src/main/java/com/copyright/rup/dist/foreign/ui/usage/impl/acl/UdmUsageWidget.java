@@ -243,10 +243,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
         assignItem = item.addItem(ForeignUi.getMessage("menu.item.assign"), null,
             selectedItem -> {
-                int usagesCount = udmUsagesGrid.getSelectedItems().size();
+                Set<UdmUsageDto> udmUsages = udmUsagesGrid.getSelectedItems();
+                int usagesCount = udmUsages.size();
                 Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.assign", usagesCount),
                     () -> {
-                        controller.assignUsages(getSelectedUsageIds());
+                        controller.assignUsages(udmUsages);
                         refresh();
                         Windows.showNotificationWindow(
                             ForeignUi.getMessage("message.notification.assignment_completed", usagesCount));

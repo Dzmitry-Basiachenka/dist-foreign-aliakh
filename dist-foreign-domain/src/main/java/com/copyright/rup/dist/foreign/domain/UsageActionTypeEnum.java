@@ -78,6 +78,11 @@ public enum UsageActionTypeEnum {
     USAGE_EDIT,
 
     /**
+     * Action type for ACL UDM usage assignment.
+     */
+    ASSIGNEE_CHANGE,
+
+    /**
      * Action type for eligible usages.
      */
     ELIGIBLE,
