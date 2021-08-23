@@ -392,7 +392,8 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
         comboBox.setItems(controller.getAllIneligibleReasons());
         comboBox.addValueChangeListener(event ->
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().getReason()));
+            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
+                ? event.getValue().getReason() : null));
         binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-ineligible-reason-combo-box");
         return buildCommonLayout(comboBox, fieldName);
@@ -422,7 +423,8 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
         comboBox.setItems(controller.getAllActionReasons());
         comboBox.addValueChangeListener(event ->
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().getReason()));
+            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
+                ? event.getValue().getReason() : null));
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-action-reason-combo-box");
         return buildCommonLayout(comboBox, fieldName);
