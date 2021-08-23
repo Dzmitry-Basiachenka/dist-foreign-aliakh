@@ -319,9 +319,16 @@ public class UdmEditUsageWindowTest {
         initEditWindow();
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
         String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
+        String scaleValidationMessage = "Field value should not exceed 5 digits after the decimal point";
         verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.00001", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(statisticalMultiplierField, "0.000001", decimalValidationMessage, false);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.00001", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.9", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.99", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.999", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.9999", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.99999", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.999999", scaleValidationMessage, false);
         verifyTextFieldValidationMessage(statisticalMultiplierField, "1.00001", decimalValidationMessage, false);
     }
 

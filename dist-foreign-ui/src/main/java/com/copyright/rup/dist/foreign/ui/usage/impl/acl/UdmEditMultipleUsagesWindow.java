@@ -58,6 +58,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
 
     private static final Range<BigDecimal> STATISTICAL_MULTIPLIER_RANGE =
         Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
+    private static final Range<Integer> STATISTICAL_MULTIPLIER_SCALE_RANGE = Range.closed(0, 5);
     private static final Range<Integer> ANNUAL_MULTIPLIER_RANGE = Range.closed(1, 25);
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
@@ -260,6 +261,9 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim())
                     && STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
                 "Field value should be positive number between 0.00001 and 1.00000")
+            .withValidator(value -> StringUtils.isEmpty(value) ||
+                    STATISTICAL_MULTIPLIER_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
+                ForeignUi.getMessage("field.error.number_scale", 5))
             .bind(usage -> Objects.toString(usage.getStatisticalMultiplier(), StringUtils.EMPTY),
                 (usage, value) -> usage.setStatisticalMultiplier(
                     NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
