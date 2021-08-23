@@ -395,6 +395,17 @@ public class UdmEditUsageWindowTest {
     }
 
     @Test
+    public void testActionAndIneligibleReasonsEmptySelection() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
+        setSpecialistExpectations();
+        initEditWindow();
+        verifyComboBoxEmptySelection(17, ACTION_REASON);
+        verifyComboBoxEmptySelection(35, INELIGIBLE_REASON);
+    }
+
+    @Test
     public void testDiscardButtonClickListener() {
         mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
@@ -717,6 +728,16 @@ public class UdmEditUsageWindowTest {
                 errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
             assertTrue(errorMessages.contains(message));
         }
+    }
+
+    private void verifyComboBoxEmptySelection(int componentNumber, Object selectedValue) {
+        VerticalLayout verticalLayout = getPanelContent();
+        HorizontalLayout actionReasonLayout = (HorizontalLayout) verticalLayout.getComponent(componentNumber);
+        ComboBox<?> actionReasonComboBox = (ComboBox<?>) actionReasonLayout.getComponent(1);
+        assertTrue(actionReasonComboBox.getSelectedItem().isPresent());
+        assertEquals(selectedValue, actionReasonComboBox.getSelectedItem().get());
+        actionReasonComboBox.setSelectedItem(null);
+        assertFalse(actionReasonComboBox.getSelectedItem().isPresent());
     }
 
     private HorizontalLayout getButtonsLayout() {
