@@ -1,3 +1,12 @@
+14.1.10
+-
+* CDP-1010: FDA: ACL: Multiple Edit: Reported Standard Number and Reported Title are cleared for edited usages
+* CDP-1009 FDA: EDIT UDM Usage: Exception occurs when changing populated Action reason and Ineligible reason fields to empty value
+* B-68058: FDA: Log and display single usage edits in the UDM Audit: implement logic to log usage assignment
+* B-68820: FDA: Tech Debt: FDA: add OPS_REVIEW and SPECIALIST_REVIEW statuses to UDM filters
+* B-68820: FDA: Tech Debt: FDA: disable UDM Edit buttons on click to avoid message duplication
+* B-68058: FDA & UDM: Log and display single usage edits in the UDM Audit: adjust UdmAuditFieldsToValueMap to store strings
+
 14.1.9
 -
 * B-68058: FDA & UDM: Log and display single usage edits in the UDM Audit: implement logic to log single usage edit
