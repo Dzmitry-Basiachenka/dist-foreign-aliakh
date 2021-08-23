@@ -42,6 +42,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,6 +130,7 @@ public class UdmEditUsageWindowTest {
     @Before
     public void setUp() {
         buildUdmUsageDto();
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
@@ -138,9 +140,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testConstructorSpecialist() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         assertEquals("Edit UDM Usage", window.getCaption());
@@ -154,9 +153,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testConstructorManager() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setManagerExpectations();
         initEditWindow();
         assertEquals("Edit UDM Usage", window.getCaption());
@@ -170,7 +166,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testConstructorResearcher() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
         mockStatic(ForeignSecurityUtils.class);
         setResearcherExpectations();
         initEditWindow();
@@ -185,9 +180,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testUdmUsageDataBinding() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         VerticalLayout verticalLayout = getPanelContent();
@@ -195,7 +187,7 @@ public class UdmEditUsageWindowTest {
         assertTextFieldValue(verticalLayout.getComponent(1), "202012");
         assertTextFieldValue(verticalLayout.getComponent(2), "SS");
         assertTextFieldValue(verticalLayout.getComponent(3), UDM_USAGE_ORIGINAL_DETAIL_UID);
-        assertComboBoxFieldValue(verticalLayout.getComponent(4), UsageStatusEnum.RH_FOUND);
+        assertComboBoxFieldValue(verticalLayout.getComponent(4), UsageStatusEnum.INELIGIBLE);
         assertTextFieldValue(verticalLayout.getComponent(5), ASSIGNEE);
         assertTextFieldValue(verticalLayout.getComponent(6), "1000023041");
         assertTextFieldValue(verticalLayout.getComponent(7), RH_NAME);
@@ -234,9 +226,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testWrWrkInstValidation() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
@@ -252,10 +241,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testCompanyIdValidation() {
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(1136L);
         companyInformation.setName("Albany International Corp.");
@@ -284,9 +270,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testQuantityValidation() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         TextField quantityField = Whitebox.getInternalState(window, "quantityField");
@@ -297,9 +280,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testAnnualMultiplierValidation() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
@@ -312,9 +292,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testStatisticalMultiplierValidation() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         TextField statisticalMultiplierField = Whitebox.getInternalState(window, "statisticalMultiplierField");
@@ -334,9 +311,6 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testTextFieldsLengthValidation() {
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
@@ -348,10 +322,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testVerifyButtonClickListener() {
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         CompanyInformation companyInformation = new CompanyInformation();
@@ -379,10 +350,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
@@ -404,8 +372,6 @@ public class UdmEditUsageWindowTest {
     @Test
     public void testActionAndIneligibleReasonsEmptySelection() {
         mockStatic(ForeignSecurityUtils.class);
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         setSpecialistExpectations();
         initEditWindow();
         verifyComboBoxEmptySelection(17, ACTION_REASON);
@@ -414,10 +380,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testDiscardButtonClickListener() {
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         binder = createMock(Binder.class);
@@ -433,10 +396,7 @@ public class UdmEditUsageWindowTest {
 
     @Test
     public void testAnnualizedCopiesCalculation() {
-        mockStatic(ForeignSecurityUtils.class);
         setSpecialistExpectations();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
-        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 10L, 2, BigDecimal.ONE.setScale(5)))
             .andReturn(new BigDecimal("20.00000")).once();
         expect(controller.calculateAnnualizedCopies(REPORTED_TYPE_OF_USE, 20L, 2, BigDecimal.ONE.setScale(5)))
@@ -465,6 +425,27 @@ public class UdmEditUsageWindowTest {
         verifyBinderStatusAndValidationMessage(annualizedCopiesErrorMessage, false);
         statisticalMultiplierField.setValue("0.20000");
         assertEquals("8.00000", annualizedCopiesField.getValue());
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testIneligibleReasonStatusValidation() {
+        setSpecialistExpectations();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        ComboBox<UsageStatusEnum> usageStatusComboBox = Whitebox.getInternalState(window, "usageStatusComboBox");
+        ComboBox<UdmIneligibleReason> ineligibleReasonComboBox =
+            Whitebox.getInternalState(window, "ineligibleReasonComboBox");
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+        usageStatusComboBox.setValue(UsageStatusEnum.ELIGIBLE);
+        verifyBinderStatusAndValidationMessage("Field value can be populated only if usage status is INELIGIBLE",
+            false);
+        ineligibleReasonComboBox.setValue(null);
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+        usageStatusComboBox.setValue(UsageStatusEnum.INELIGIBLE);
+        verifyBinderStatusAndValidationMessage("Field value can be INELIGIBLE only if Ineligible Reason is populated",
+            false);
         verify(controller, ForeignSecurityUtils.class);
     }
 
@@ -507,9 +488,9 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Origin", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", false,
-            Arrays.asList(udmUsage.getStatus(), UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE,
-                UsageStatusEnum.INELIGIBLE, UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
+        verifyComboBoxLayout(verticalLayout.getComponent(4), "Detail Status", true,
+            Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+                UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Assignee", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(6), "RH Account #", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(7), "RH Name", true, false);
@@ -540,7 +521,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(32), "Reported TOU", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(33), "Quantity", false, true);
         verifyTextFieldLayout(verticalLayout.getComponent(34), "Annualized Copies", true, true);
-        verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason", false);
+        verifyComboBoxLayout(verticalLayout.getComponent(35), "Ineligible Reason", true);
         verifyTextFieldLayout(verticalLayout.getComponent(36), "Load Date", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(37), "Updated By", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(38), "Updated Date", true, false);
@@ -555,7 +536,7 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(0), "Detail ID", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period", true, false);
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Usage Detail ID", true, false);
-        verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", false,
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Detail Status", true,
             Arrays.asList(udmUsage.getStatus(), UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW,
                 UsageStatusEnum.NEW));
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Assignee", true, false);
@@ -675,7 +656,7 @@ public class UdmEditUsageWindowTest {
         udmUsage.setPeriod(202012);
         udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
         udmUsage.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
-        udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
+        udmUsage.setStatus(UsageStatusEnum.INELIGIBLE);
         udmUsage.setAssignee(ASSIGNEE);
         udmUsage.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         udmUsage.setRhName(RH_NAME);
@@ -780,13 +761,18 @@ public class UdmEditUsageWindowTest {
 
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     private void setManagerExpectations() {
         setPermissionsExpectations(false, true, false);
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     private void setResearcherExpectations() {
         setPermissionsExpectations(false, false, true);
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
     }
 }
