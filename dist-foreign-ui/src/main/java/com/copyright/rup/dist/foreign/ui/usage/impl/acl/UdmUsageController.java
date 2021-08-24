@@ -47,6 +47,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -220,9 +221,10 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsages(Set<UdmUsageDto> udmUsageDtos, boolean isResearcher) {
-        udmUsageService.updateUsages(udmUsageDtos, isResearcher);
-        udmUsageService.sendForMatching(udmUsageDtos);
+    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
+                             boolean isResearcher) {
+        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher);
+        udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
     }
 
     @Override

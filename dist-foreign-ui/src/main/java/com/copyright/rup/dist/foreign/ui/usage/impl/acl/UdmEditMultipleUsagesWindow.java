@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
     private final UdmUsageDto udmUsageDto;
+    private Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
 
     /**
      * Constructor.
@@ -333,7 +336,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             try {
                 binder.writeBean(udmUsageDto);
                 updateUsagesFields();
-                controller.updateUsages(selectedUdmUsages, false);
+                controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
@@ -348,39 +351,49 @@ public class UdmEditMultipleUsagesWindow extends Window {
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
-    private void recalculateAnnualizedCopies(UdmUsageDto usageDto) {
-        if (StringUtils.isNotEmpty(quantityField.getValue()) || StringUtils.isNotEmpty(annualMultiplierField.getValue())
-            || StringUtils.isNotEmpty(statisticalMultiplierField.getValue())) {
-            usageDto.setAnnualizedCopies(
-                controller.calculateAnnualizedCopies(usageDto.getReportedTypeOfUse(), usageDto.getQuantity(),
-                    usageDto.getAnnualMultiplier(), usageDto.getStatisticalMultiplier()));
-        }
-    }
-
-    private <T> void setField(Consumer<T> usageDtoConsumer, T value) {
-        if (Objects.nonNull(value)) {
-            usageDtoConsumer.accept(value);
-        }
-    }
-
     private void updateUsagesFields() {
+        udmUsageDtoToFieldValuesMap = new HashMap<>();
         selectedUdmUsages.forEach(usageDto -> {
-            setField(usageDto::setPeriod, udmUsageDto.getPeriod());
-            setField(usageDto::setStatus, udmUsageDto.getStatus());
+            UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
+            setFieldAndAddAudit(usageDto::setStatus, udmUsageDto.getStatus(), usageDto.getStatus(),
+                udmUsageDto.getStatus(), "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setPeriod, udmUsageDto.getPeriod(), usageDto.getPeriod(),
+                udmUsageDto.getPeriod(), "label.period", valuesMap);
+            setFieldAndAddAudit(usageDto::setDetailLicenseeClass, udmUsageDto.getDetailLicenseeClass(),
+                buildDetailLicenseClassString(usageDto), buildDetailLicenseClassString(udmUsageDto), "label.det_lc",
+                valuesMap);
+            setFieldAndAddAudit(usageDto::setCompanyId, udmUsageDto.getCompanyId(), usageDto.getCompanyId(),
+                udmUsageDto.getCompanyId(), "label.company_id", valuesMap);
+            setFieldAndAddAudit(usageDto::setCompanyName, udmUsageDto.getCompanyName(), usageDto.getCompanyName(),
+                udmUsageDto.getCompanyName(), "label.company_name", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
+                udmUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedTitle, udmUsageDto.getReportedTitle(), usageDto.getReportedTitle(),
+                udmUsageDto.getReportedTitle(), "label.reported_title", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedStandardNumber, udmUsageDto.getReportedStandardNumber(),
+                usageDto.getReportedStandardNumber(), udmUsageDto.getReportedStandardNumber(),
+                "label.reported_standard_number", valuesMap);
+            setFieldAndAddAudit(usageDto::setAnnualMultiplier, udmUsageDto.getAnnualMultiplier(),
+                usageDto.getAnnualMultiplier(), udmUsageDto.getAnnualMultiplier(), "label.annual_multiplier",
+                valuesMap);
+            setFieldAndAddAudit(usageDto::setStatisticalMultiplier, udmUsageDto.getStatisticalMultiplier(),
+                usageDto.getStatisticalMultiplier(), udmUsageDto.getStatisticalMultiplier(),
+                "label.statistical_multiplier", valuesMap);
+            setFieldAndAddAudit(usageDto::setQuantity, udmUsageDto.getQuantity(), usageDto.getQuantity(),
+                udmUsageDto.getQuantity(), "label.quantity", valuesMap);
+            recalculateAnnualizedCopies(usageDto, valuesMap);
+            setFieldAndAddAudit(usageDto::setActionReason, udmUsageDto.getActionReason(),
+                Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
+                Objects.nonNull(udmUsageDto.getActionReason()) ? udmUsageDto.getActionReason().getReason() : null,
+                "label.action_reason_udm", valuesMap);
+            setFieldAndAddAudit(usageDto::setIneligibleReason, udmUsageDto.getIneligibleReason(),
+                Objects.nonNull(usageDto.getIneligibleReason()) ? usageDto.getIneligibleReason().getReason() : null,
+                Objects.nonNull(udmUsageDto.getIneligibleReason()) ? udmUsageDto.getIneligibleReason().getReason()
+                    : null, "label.ineligible_reason", valuesMap);
+            setFieldAndAddAudit(usageDto::setComment, udmUsageDto.getComment(), usageDto.getComment(),
+                udmUsageDto.getComment(), "label.comment", valuesMap);
             setPeriodEndDate(usageDto);
-            setField(usageDto::setQuantity, udmUsageDto.getQuantity());
-            setField(usageDto::setStatisticalMultiplier, udmUsageDto.getStatisticalMultiplier());
-            setField(usageDto::setAnnualMultiplier, udmUsageDto.getAnnualMultiplier());
-            recalculateAnnualizedCopies(usageDto);
-            setField(usageDto::setCompanyId, udmUsageDto.getCompanyId());
-            setField(usageDto::setDetailLicenseeClass, udmUsageDto.getDetailLicenseeClass());
-            setField(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst());
-            setField(usageDto::setCompanyName, udmUsageDto.getCompanyName());
-            setField(usageDto::setReportedTitle, udmUsageDto.getReportedTitle());
-            setField(usageDto::setReportedStandardNumber, udmUsageDto.getReportedStandardNumber());
-            setField(usageDto::setComment, udmUsageDto.getComment());
-            setField(usageDto::setActionReason, udmUsageDto.getActionReason());
-            setField(usageDto::setIneligibleReason, udmUsageDto.getIneligibleReason());
+            udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
     }
 
@@ -401,5 +414,34 @@ public class UdmEditMultipleUsagesWindow extends Window {
             int month = Integer.parseInt(period.substring(4, 6));
             usageDto.setPeriodEndDate(6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31));
         }
+    }
+
+    private <T, K> void setFieldAndAddAudit(Consumer<T> usageDtoConsumer, T newUsageValue, K oldAuditValue,
+                                            K newAuditValue, String fieldName,
+                                            UdmAuditFieldToValuesMap fieldToValuesMap) {
+        if (Objects.nonNull(newUsageValue) && !Objects.equals(oldAuditValue, newAuditValue)) {
+            usageDtoConsumer.accept(newUsageValue);
+            fieldToValuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
+                Objects.toString(oldAuditValue, StringUtils.EMPTY),
+                Objects.toString(newAuditValue, StringUtils.EMPTY));
+        }
+    }
+
+    private void recalculateAnnualizedCopies(UdmUsageDto usageDto, UdmAuditFieldToValuesMap fieldToValuesMap) {
+        if (StringUtils.isNotEmpty(quantityField.getValue()) || StringUtils.isNotEmpty(annualMultiplierField.getValue())
+            || StringUtils.isNotEmpty(statisticalMultiplierField.getValue())) {
+            BigDecimal annualizedCopies = controller.calculateAnnualizedCopies(usageDto.getReportedTypeOfUse(),
+                usageDto.getQuantity(), usageDto.getAnnualMultiplier(), usageDto.getStatisticalMultiplier());
+            fieldToValuesMap.putFieldWithValues(ForeignUi.getMessage("label.annualized_copies"),
+                usageDto.getAnnualizedCopies().toString(), annualizedCopies.toString());
+            usageDto.setAnnualizedCopies(controller.calculateAnnualizedCopies(usageDto.getReportedTypeOfUse(),
+                usageDto.getQuantity(), usageDto.getAnnualMultiplier(), usageDto.getStatisticalMultiplier()));
+        }
+    }
+
+    private String buildDetailLicenseClassString(UdmUsageDto usageDto) {
+        return Objects.nonNull(usageDto.getDetailLicenseeClass())
+            ? String.format("%s - %s", usageDto.getDetailLicenseeClass().getId(),
+            usageDto.getDetailLicenseeClass().getDescription()) : null;
     }
 }

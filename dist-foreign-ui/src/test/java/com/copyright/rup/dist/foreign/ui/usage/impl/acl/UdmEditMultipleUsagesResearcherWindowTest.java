@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
@@ -31,7 +33,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +43,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -66,12 +68,11 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
-    private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final Long WR_WRK_INST = 122825347L;
     private static final Long NEW_WR_WRK_INST = 1234567L;
     private static final String COMMENT = "Should be reviewed by Specialist";
     private static final String NEW_COMMENT = "Should be reviewed by Manager";
-    private static final String REASON = "Should be improverd";
+    private static final String NEW_REASON = "Should be improved";
 
     private UdmEditMultipleUsagesResearcherWindow window;
     private IUdmUsageController controller;
@@ -133,17 +134,25 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
+            UsageStatusEnum.NEW.name());
+        fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", "122825347", "1234567");
+        fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_REASON);
+        fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
+        UdmUsageDto udmUsageDto = buildExpectedUdmUsageDto();
+        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+            ImmutableMap.of(udmUsageDto, fieldToValuesMap);
         udmUsages = Collections.singleton(buildUdmUsageDto());
         binder = createMock(Binder.class);
-        binder.writeBean(buildExpectedUdmUsageDto());
+        binder.writeBean(udmUsageDto);
         expectLastCall();
-        controller.updateUsages(udmUsages, true);
+        controller.updateUsages(udmUsageDtoToFieldValuesMap, true);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
-        UdmUsageDto udmUsageDto = buildExpectedUdmUsageDto();
         Whitebox.setInternalState(window, udmUsageDto);
         updateFields();
         Whitebox.setInternalState(window, binder);
@@ -288,7 +297,6 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         UdmUsageDto udmUsage = new UdmUsageDto();
         udmUsage.setUsageOrigin(UdmUsageOriginEnum.SS);
         udmUsage.setStatus(UsageStatusEnum.RH_FOUND);
-        udmUsage.setAssignee(ASSIGNEE);
         udmUsage.setWrWrkInst(WR_WRK_INST);
         udmUsage.setActionReason(ACTION_REASON);
         udmUsage.setComment(COMMENT);
@@ -297,6 +305,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
 
     private UdmUsageDto buildExpectedUdmUsageDto() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setUsageOrigin(UdmUsageOriginEnum.SS);
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
         udmUsageDto.setComment(NEW_COMMENT);
@@ -307,7 +316,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private UdmActionReason buildActionReason() {
         UdmActionReason actionReason = new UdmActionReason();
         actionReason.setId("d658136a-1e6b-4c45-9d6e-d93ccedd36f7");
-        actionReason.setReason(REASON);
+        actionReason.setReason(NEW_REASON);
         return actionReason;
     }
 }

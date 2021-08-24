@@ -46,6 +46,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -66,6 +67,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -284,13 +286,15 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testUpdateUsages() {
-        Set<UdmUsageDto> udmUsageDtos = Collections.singleton(new UdmUsageDto());
-        udmUsageService.updateUsages(udmUsageDtos, false);
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+            ImmutableMap.of(udmUsageDto, new UdmAuditFieldToValuesMap());
+        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, false);
         expectLastCall().once();
-        udmUsageService.sendForMatching(udmUsageDtos);
+        udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsages(udmUsageDtos, false);
+        controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
         verify(udmUsageService);
     }
 

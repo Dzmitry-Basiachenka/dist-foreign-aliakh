@@ -20,6 +20,7 @@ import com.vaadin.util.ReflectTools;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -206,8 +207,8 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Updates UDM usages.
      *
-     * @param udmUsageDtos {@link UdmUsageDto} to update
-     * @param isResearcher      {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param udmUsageDtoToFieldValuesMap {@link UdmUsageDto} map of usages to update with audit changes
+     * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
      */
-    void updateUsages(Set<UdmUsageDto> udmUsageDtos, boolean isResearcher);
+    void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap, boolean isResearcher);
 }

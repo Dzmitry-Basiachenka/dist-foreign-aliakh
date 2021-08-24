@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -25,13 +26,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -61,6 +63,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
     private final UdmUsageDto udmUsageDto;
+    private Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
 
     /**
      * Constructor.
@@ -161,7 +164,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             try {
                 binder.writeBean(udmUsageDto);
                 updateUsagesFields();
-                controller.updateUsages(selectedUdmUsages, true);
+                controller.updateUsages(udmUsageDtoToFieldValuesMap, true);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
@@ -174,17 +177,31 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     }
 
     private void updateUsagesFields() {
+        udmUsageDtoToFieldValuesMap = new HashMap<>();
         selectedUdmUsages.forEach(usageDto -> {
-            setField(usageDto::setStatus, udmUsageDto.getStatus());
-            setField(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst());
-            setField(usageDto::setActionReason, udmUsageDto.getActionReason());
-            setField(usageDto::setComment, udmUsageDto.getComment());
+            UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
+            setFieldAndAddAudit(usageDto::setStatus, udmUsageDto.getStatus(), usageDto.getStatus(),
+                udmUsageDto.getStatus(), "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
+                udmUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setActionReason, udmUsageDto.getActionReason(),
+                Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
+                Objects.nonNull(udmUsageDto.getActionReason()) ? udmUsageDto.getActionReason().getReason() : null,
+                "label.action_reason_udm", valuesMap);
+            setFieldAndAddAudit(usageDto::setComment, udmUsageDto.getComment(), usageDto.getComment(),
+                udmUsageDto.getComment(), "label.comment", valuesMap);
+            udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
     }
 
-    private <T> void setField(Consumer<T> usageDtoConsumer, T value) {
-        if (Objects.nonNull(value)) {
-            usageDtoConsumer.accept(value);
+    private <T, K> void setFieldAndAddAudit(Consumer<T> usageDtoConsumer, T newUsageValue, K oldAuditValue,
+                                            K newAuditValue, String fieldName,
+                                            UdmAuditFieldToValuesMap fieldToValuesMap) {
+        if (Objects.nonNull(newUsageValue) && !Objects.equals(oldAuditValue, newAuditValue)) {
+            usageDtoConsumer.accept(newUsageValue);
+            fieldToValuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
+                Objects.toString(oldAuditValue, StringUtils.EMPTY),
+                Objects.toString(newAuditValue, StringUtils.EMPTY));
         }
     }
 }
