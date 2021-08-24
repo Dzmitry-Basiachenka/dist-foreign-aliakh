@@ -366,4 +366,14 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-08-24-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-68058 FDA & UDM: Log and display single usage edits in the UDM Audit: increase column size of df_udm_audit.action_reason column")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(9000)')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(2000)')
+        }
+    }
 }
