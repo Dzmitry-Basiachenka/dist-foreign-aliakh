@@ -28,6 +28,12 @@ public class UdmAuditFieldToValuesMap {
 
     /**
      * Constructor.
+     */
+    public UdmAuditFieldToValuesMap() {
+    }
+
+    /**
+     * Constructor.
      *
      * @param usageDto instance of {@link UdmUsageDto}
      */
@@ -35,6 +41,7 @@ public class UdmAuditFieldToValuesMap {
         fieldToValueChangesMap.put("Detail Status", Objects.nonNull(usageDto.getStatus())
             ? buildPair(usageDto, usage -> usage.getStatus().name())
             : EMPTY_PAIR);
+        fieldToValueChangesMap.put("Period", buildPair(usageDto, UdmUsageDto::getPeriod));
         fieldToValueChangesMap.put("Wr Wrk Inst", buildPair(usageDto, UdmUsageDto::getWrWrkInst));
         fieldToValueChangesMap.put("Reported Title", buildPair(usageDto, UdmUsageDto::getReportedTitle));
         fieldToValueChangesMap.put("Reported Standard Number",
@@ -69,6 +76,17 @@ public class UdmAuditFieldToValuesMap {
      */
     public void updateFieldValue(String fieldValue, String newValue) {
         fieldToValueChangesMap.put(fieldValue, Pair.of(fieldToValueChangesMap.get(fieldValue).getLeft(), newValue));
+    }
+
+    /**
+     * Puts field value as a key, old and new field values as a value into map.
+     *
+     * @param fieldValue field value as a key in map
+     * @param oldValue   old value as a left pair value of value in map
+     * @param newValue   new value as a right pair value of value in map
+     */
+    public void putFieldWithValues(String fieldValue, String oldValue, String newValue) {
+        fieldToValueChangesMap.put(fieldValue, Pair.of(oldValue, newValue));
     }
 
     /**

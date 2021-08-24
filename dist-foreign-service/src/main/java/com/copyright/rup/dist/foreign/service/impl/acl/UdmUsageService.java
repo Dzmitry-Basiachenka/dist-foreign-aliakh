@@ -253,10 +253,11 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
-    //TODO: adjust method signature to pass FieldToValueChangesMap
-    public void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher) {
-        selectedUdmUsages
-            .forEach(usageDto -> updateUsage(usageDto, new UdmAuditFieldToValuesMap(usageDto), isResearcher));
+    @Transactional
+    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
+                             boolean isResearcher) {
+        udmUsageDtoToFieldValuesMap.forEach((udmUsageDto, udmAuditFieldToValuesMap) ->
+            updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher));
     }
 
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {

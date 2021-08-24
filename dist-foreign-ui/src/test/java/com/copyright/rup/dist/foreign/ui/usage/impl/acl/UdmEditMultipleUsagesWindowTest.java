@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
+import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationException;
@@ -40,7 +42,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +56,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -75,9 +77,11 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final String UDM_USAGE_UID = "75b110ff-c6c9-45e6-baac-34041ff62081";
     private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "OGN674GHHSB0025";
     private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
+    private static final String NEW_REPORTED_STANDARD_NUMBER = "3465-7765";
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
     private static final String REPORTED_TITLE = "Colloids and surfaces. B, Biointerfaces";
+    private static final String NEW_REPORTED_TITLE = "Medical Journal";
     private static final String SYSTEM_TITLE = "Brain surgery";
     private static final String PUB_TYPE = "Journal";
     private static final String PUBLICATION_FORMAT = "Digital";
@@ -106,6 +110,7 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String USER_NAME = "user@copyright.com";
     private static final String COMMENT = "Should be reviewed by Specialist";
+    private static final String NEW_COMMENT = "Should be reviewed by Manager";
     private static final String RESEARCH_URL = "google.com";
     private static final Integer DET_LC_ID = 26;
     private static final String DET_LC_NAME = "Law Firms";
@@ -114,8 +119,12 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass();
     private static final UdmActionReason ACTION_REASON =
         new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
+    private static final UdmActionReason NEW_ACTION_REASON =
+        new UdmActionReason("d658136a-1e6b-4c45-9d6e-d93ccedd36f7", "Misc - See Comments");
     private static final UdmIneligibleReason INELIGIBLE_REASON =
         new UdmIneligibleReason("b60a726a-39e8-4303-abe1-6816da05b858", "Invalid survey");
+    private static final UdmIneligibleReason NEW_INELIGIBLE_REASON =
+        new UdmIneligibleReason("99efdf2d-8260-45df-a063-e3f455f9ec5e", "Systematic copying");
     private static final String VALID_INTEGER = "25";
     private static final String VALID_DECIMAL = "0.1";
     private static final String INVALID_NUMBER = "12a";
@@ -292,6 +301,28 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
+            UsageStatusEnum.NEW.name());
+        fieldToValuesMap.putFieldWithValues("Company ID", COMPANY_ID.toString(), NEW_COMPANY_ID.toString());
+        fieldToValuesMap.putFieldWithValues("Company Name", COMPANY_NAME, NEW_COMPANY_NAME);
+        fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", WR_WRK_INST.toString(), NEW_WR_WRK_INST.toString());
+        fieldToValuesMap.putFieldWithValues("Reported Title", REPORTED_TITLE, NEW_REPORTED_TITLE);
+        fieldToValuesMap.putFieldWithValues("Reported Standard Number", REPORTED_STANDARD_NUMBER,
+            NEW_REPORTED_STANDARD_NUMBER);
+        fieldToValuesMap.putFieldWithValues("Annual Multiplier", ANNUAL_MULTIPLIER.toString(),
+            NEW_ANNUAL_MULTIPLIER.toString());
+        fieldToValuesMap.putFieldWithValues("Statistical Multiplier", STATISTICAL_MULTIPLIER.toString(),
+            NEW_STATISTICAL_MULTIPLIER.toString());
+        fieldToValuesMap.putFieldWithValues("Quantity", QUANTITY.toString(), NEW_QUANTITY.toString());
+        fieldToValuesMap.putFieldWithValues("Annualized Copies", ANNUALIZED_COPIES.toString(), "1");
+        fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_ACTION_REASON.getReason());
+        fieldToValuesMap.putFieldWithValues("Ineligible Reason", INELIGIBLE_REASON.getReason(),
+            NEW_INELIGIBLE_REASON.getReason());
+        fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
+        UdmUsageDto udmUsageDto = buildActualUdmUsageDto();
+        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+            ImmutableMap.of(udmUsageDto, fieldToValuesMap);
         CompanyInformation companyInformation = buildCompanyInformation();
         udmUsages = Collections.singleton(buildUdmUsageDto());
         mockStatic(ForeignSecurityUtils.class);
@@ -302,13 +333,12 @@ public class UdmEditMultipleUsagesWindowTest {
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        controller.updateUsages(udmUsages, false);
+        controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        UdmUsageDto udmUsageDto = buildActualUdmUsageDto();
         Whitebox.setInternalState(window, udmUsageDto);
         updateFields();
         Whitebox.setInternalState(window, binder);
@@ -322,104 +352,147 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdatePeriod() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Period", PERIOD.toString(), "206812");
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setPeriod(206812);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setPeriod(206812);
         udmUsageDto.setPeriodEndDate(LocalDate.of(2068, 12, 31));
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setPeriod(206812);
+        udmUsageDto.setPeriod(206812);
         udmUsageDto.setPeriodEndDate(LocalDate.of(2068, 12, 31));
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     @Test
     public void testUpdateQuantity() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Quantity", QUANTITY.toString(), NEW_QUANTITY.toString());
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setQuantity(NEW_QUANTITY);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setQuantity(5L);
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setQuantity(5L);
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        udmUsageDto.setQuantity(NEW_QUANTITY);
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     @Test
     public void testUpdateAnnualMultiplier() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Annual Multiplier", ANNUAL_MULTIPLIER.toString(),
+            NEW_ANNUAL_MULTIPLIER.toString());
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setAnnualMultiplier(NEW_ANNUAL_MULTIPLIER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setAnnualMultiplier(3);
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setAnnualMultiplier(3);
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        udmUsageDto.setAnnualMultiplier(NEW_ANNUAL_MULTIPLIER);
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     @Test
     public void testUpdateStatisticalMultiplier() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Statistical Multiplier", STATISTICAL_MULTIPLIER.toString(),
+            NEW_STATISTICAL_MULTIPLIER.toString());
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setStatisticalMultiplier(NEW_STATISTICAL_MULTIPLIER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setStatisticalMultiplier(new BigDecimal("20"));
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setStatisticalMultiplier(new BigDecimal("20"));
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        udmUsageDto.setStatisticalMultiplier(NEW_STATISTICAL_MULTIPLIER);
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     @Test
     public void testUpdateReportedTitle() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Reported Title", REPORTED_TITLE, NEW_REPORTED_TITLE);
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setReportedTitle(NEW_REPORTED_TITLE);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setReportedTitle("ReportedTitle");
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setReportedTitle("ReportedTitle");
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        udmUsageDto.setReportedTitle(NEW_REPORTED_TITLE);
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     @Test
     public void testUpdateReportedStandardNumber() throws Exception {
+        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Reported Standard Number", REPORTED_STANDARD_NUMBER,
+            NEW_REPORTED_STANDARD_NUMBER);
+        UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
+        usageToCaptureChanges.setReportedStandardNumber(NEW_REPORTED_STANDARD_NUMBER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
-        udmUsageDto.setReportedStandardNumber("Standard Number");
-        setExpectedData(udmUsageDto);
+        setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        clickSaveButton(udmUsageDto);
+        clickSaveButton(usageToCaptureChanges);
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         Set<UdmUsageDto> usages = Whitebox.getInternalState(window, SELECTED_USAGES);
-        UdmUsageDto expectedUsages = buildUdmUsageDto();
-        expectedUsages.setReportedStandardNumber("Standard Number");
-        usages.forEach(usage -> verifyUpdatedUdmUsages(expectedUsages, usage));
+        udmUsageDto.setReportedStandardNumber(NEW_REPORTED_STANDARD_NUMBER);
+        usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
     private UdmUsageDto buildActualUdmUsageDto() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId(UDM_USAGE_UID);
+        udmUsageDto.setAssignee(ASSIGNEE);
+        udmUsageDto.setUsageOrigin(UdmUsageOriginEnum.SS);
+        udmUsageDto.setPeriodEndDate(LocalDate.of(2020, 12, 31));
+        udmUsageDto.setOriginalDetailId(UDM_USAGE_ORIGINAL_DETAIL_UID);
+        udmUsageDto.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        udmUsageDto.setRhName(RH_NAME);
+        udmUsageDto.setSystemTitle(SYSTEM_TITLE);
+        udmUsageDto.setStandardNumber(STANDARD_NUMBER);
+        udmUsageDto.setReportedPubType(PUB_TYPE);
+        udmUsageDto.setPubFormat(PUBLICATION_FORMAT);
+        udmUsageDto.setArticle(ARTICLE);
+        udmUsageDto.setLanguage(LANGUAGE);
+        udmUsageDto.setResearchUrl(RESEARCH_URL);
+        udmUsageDto.setSurveyRespondent(SURVEY_RESPONDENT);
+        udmUsageDto.setIpAddress(IP_ADDRESS);
+        udmUsageDto.setSurveyCountry(SURVEY_COUNTRY);
+        udmUsageDto.setChannel(UdmChannelEnum.CCC);
+        udmUsageDto.setUsageDate(USAGE_DATE);
+        udmUsageDto.setSurveyStartDate(SURVEY_START_DATE);
+        udmUsageDto.setSurveyEndDate(SURVEY_END_DATE);
+        udmUsageDto.setReportedTypeOfUse(REPORTED_TYPE_OF_USE);
+        udmUsageDto.setQuantity(QUANTITY);
+        udmUsageDto.setAnnualizedCopies(BigDecimal.ONE);
+        udmUsageDto.setCreateDate(Date.from(LocalDate.of(2016, 1, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        udmUsageDto.setUpdateUser(USER_NAME);
+        udmUsageDto.setUpdateDate(
+            Date.from(LocalDate.of(2020, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageDto.setPeriod(PERIOD);
         udmUsageDto.setCompanyId(NEW_COMPANY_ID);
@@ -432,11 +505,11 @@ public class UdmEditMultipleUsagesWindowTest {
         udmUsageDto.setQuantity(NEW_QUANTITY);
         udmUsageDto.setAnnualMultiplier(NEW_ANNUAL_MULTIPLIER);
         udmUsageDto.setStatisticalMultiplier(NEW_STATISTICAL_MULTIPLIER);
-        udmUsageDto.setReportedTitle("new title");
-        udmUsageDto.setReportedStandardNumber("new reported standard number");
-        udmUsageDto.setComment("comment");
-        udmUsageDto.setIneligibleReason(buildIneligibleReason());
-        udmUsageDto.setActionReason(buildActionReason());
+        udmUsageDto.setReportedTitle(NEW_REPORTED_TITLE);
+        udmUsageDto.setReportedStandardNumber(NEW_REPORTED_STANDARD_NUMBER);
+        udmUsageDto.setComment(NEW_COMMENT);
+        udmUsageDto.setIneligibleReason(NEW_INELIGIBLE_REASON);
+        udmUsageDto.setActionReason(NEW_ACTION_REASON);
         return udmUsageDto;
     }
 
@@ -464,10 +537,10 @@ public class UdmEditMultipleUsagesWindowTest {
         TextField quantityField = (TextField) getComponent(10).getComponent(1);
         quantityField.setValue("1");
         ComboBox<UdmActionReason> actionReasonComboBox = (ComboBox<UdmActionReason>) getComponent(11).getComponent(1);
-        actionReasonComboBox.setValue(buildActionReason());
+        actionReasonComboBox.setValue(NEW_ACTION_REASON);
         ComboBox<UdmIneligibleReason> ineligibleReasonComboBox =
             (ComboBox<UdmIneligibleReason>) getComponent(12).getComponent(1);
-        ineligibleReasonComboBox.setValue(buildIneligibleReason());
+        ineligibleReasonComboBox.setValue(NEW_INELIGIBLE_REASON);
         TextField commentField = (TextField) getComponent(13).getComponent(1);
         commentField.setValue("comment");
     }
@@ -642,20 +715,6 @@ public class UdmEditMultipleUsagesWindowTest {
         verify(controller);
     }
 
-    private UdmIneligibleReason buildIneligibleReason() {
-        UdmIneligibleReason ineligibleReason = new UdmIneligibleReason();
-        ineligibleReason.setId("99efdf2d-8260-45df-a063-e3f455f9ec5e");
-        ineligibleReason.setReason("ineligible reason");
-        return ineligibleReason;
-    }
-
-    private UdmActionReason buildActionReason() {
-        UdmActionReason actionReason = new UdmActionReason();
-        actionReason.setId("d658136a-1e6b-4c45-9d6e-d93ccedd36f7");
-        actionReason.setReason("reason");
-        return actionReason;
-    }
-
     private CompanyInformation buildCompanyInformation() {
         CompanyInformation companyInformation = new CompanyInformation();
         companyInformation.setId(NEW_COMPANY_ID);
@@ -711,14 +770,16 @@ public class UdmEditMultipleUsagesWindowTest {
         return udmUsage;
     }
 
-    private void setExpectedData(UdmUsageDto actualUsage) throws ValidationException {
+    private void setExpectedData(UdmUsageDto actualUsage, UdmUsageDto newUsage,
+                                 UdmAuditFieldToValuesMap fieldToValuesMap)
+        throws ValidationException {
         udmUsages = Collections.singleton(actualUsage);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         binder = createMock(Binder.class);
-        binder.writeBean(actualUsage);
+        binder.writeBean(newUsage);
         expectLastCall();
-        controller.updateUsages(udmUsages, false);
+        controller.updateUsages(ImmutableMap.of(actualUsage, fieldToValuesMap), false);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

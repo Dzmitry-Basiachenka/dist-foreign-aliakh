@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -167,8 +168,8 @@ public interface IUdmUsageService {
     /**
      * Updates UDM usages.
      *
-     * @param selectedUdmUsages list of {@link UdmUsageDto} to update
-     * @param isResearcher      {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param udmUsageDtoToFieldValuesMap {@link UdmUsageDto} map of usages to update with audit changes
+     * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
      */
-    void updateUsages(Set<UdmUsageDto> selectedUdmUsages, boolean isResearcher);
+    void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap, boolean isResearcher);
 }
