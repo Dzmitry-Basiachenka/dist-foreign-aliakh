@@ -36,6 +36,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -94,6 +95,10 @@ public class UdmEditUsageWindow extends Window {
     private final TextField annualizedCopiesField = new TextField(ForeignUi.getMessage("label.annualized_copies"));
     private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
+    private final ComboBox<UsageStatusEnum> usageStatusComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.detail_status"));
+    private final ComboBox<UdmIneligibleReason> ineligibleReasonComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.ineligible_reason"));
     private final Map<Integer, DetailLicenseeClass> idToLicenseeClassMap;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final ClickListener saveButtonClickListener;
@@ -391,33 +396,43 @@ public class UdmEditUsageWindow extends Window {
 
     private HorizontalLayout initIneligibleReasonLayout() {
         String fieldName = ForeignUi.getMessage("label.ineligible_reason");
-        ComboBox<UdmIneligibleReason> comboBox = new ComboBox<>();
-        comboBox.setSizeFull();
-        comboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
-        comboBox.setItems(controller.getAllIneligibleReasons());
-        comboBox.addValueChangeListener(event ->
+        ineligibleReasonComboBox.setSizeFull();
+        ineligibleReasonComboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
+        ineligibleReasonComboBox.setItems(controller.getAllIneligibleReasons());
+        ineligibleReasonComboBox.addValueChangeListener(event -> {
             fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
-                ? event.getValue().getReason() : null));
-        binder.forField(comboBox).bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
-        VaadinUtils.addComponentStyle(comboBox, "udm-edit-ineligible-reason-combo-box");
-        return buildCommonLayout(comboBox, fieldName);
+                ? event.getValue().getReason() : null);
+            binder.validate();
+        });
+        binder.forField(ineligibleReasonComboBox)
+            .withValidator(
+                value -> Objects.isNull(value) || UsageStatusEnum.INELIGIBLE == usageStatusComboBox.getValue(),
+                "Field value can be populated only if usage status is INELIGIBLE")
+            .bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
+        VaadinUtils.addComponentStyle(ineligibleReasonComboBox, "udm-edit-ineligible-reason-combo-box");
+        return buildCommonLayout(ineligibleReasonComboBox, fieldName);
     }
 
     private HorizontalLayout initDetailStatusLayout() {
-        ComboBox<UsageStatusEnum> comboBox = new ComboBox<>();
-        comboBox.setSizeFull();
-        comboBox.setEmptySelectionAllowed(false);
+        usageStatusComboBox.setSizeFull();
+        usageStatusComboBox.setEmptySelectionAllowed(false);
         HashSet<UsageStatusEnum> statuses = new LinkedHashSet<>();
         statuses.add(udmUsage.getStatus());
         statuses.addAll(hasResearcherPermission
             ? EDIT_AVAILABLE_STATUSES_RESEARCHER : EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER);
-        comboBox.setItems(statuses);
+        usageStatusComboBox.setItems(statuses);
         String fieldName = ForeignUi.getMessage("label.detail_status");
-        comboBox.addValueChangeListener(event ->
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name()));
-        binder.forField(comboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
-        VaadinUtils.addComponentStyle(comboBox, "udm-edit-detail-status-combo-box");
-        return buildCommonLayout(comboBox, fieldName);
+        usageStatusComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name());
+            binder.validate();
+        });
+        binder.forField(usageStatusComboBox)
+            .withValidator(
+                value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
+                "Field value can be INELIGIBLE only if Ineligible Reason is populated")
+            .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
+        VaadinUtils.addComponentStyle(usageStatusComboBox, "udm-edit-detail-status-combo-box");
+        return buildCommonLayout(usageStatusComboBox, fieldName);
     }
 
     private HorizontalLayout initActionReasonLayout() {
@@ -426,9 +441,11 @@ public class UdmEditUsageWindow extends Window {
         comboBox.setSizeFull();
         comboBox.setItemCaptionGenerator(UdmActionReason::getReason);
         comboBox.setItems(controller.getAllActionReasons());
-        comboBox.addValueChangeListener(event ->
+        comboBox.addValueChangeListener(event -> {
             fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
-                ? event.getValue().getReason() : null));
+                ? event.getValue().getReason() : null);
+            binder.validate();
+        });
         binder.forField(comboBox).bind(UdmUsageDto::getActionReason, UdmUsageDto::setActionReason);
         VaadinUtils.addComponentStyle(comboBox, "udm-edit-action-reason-combo-box");
         return buildCommonLayout(comboBox, fieldName);
@@ -469,10 +486,10 @@ public class UdmEditUsageWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, reportedTitleField,
+                Windows.showValidationErrorWindow(Arrays.asList(usageStatusComboBox, wrWrkInstField, reportedTitleField,
                     reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField,
                     companyIdField, companyNameField, detailLicenseeClassComboBox, annualMultiplierField,
-                    statisticalMultiplierField, quantityField, annualizedCopiesField));
+                    statisticalMultiplierField, quantityField, annualizedCopiesField, ineligibleReasonComboBox));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
