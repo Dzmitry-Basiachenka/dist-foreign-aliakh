@@ -38,7 +38,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -95,7 +94,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
-    private final UdmUsageDto udmUsageDto;
+    private final UdmUsageDto bindedUsageDto;
     private Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
 
     /**
@@ -113,7 +112,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         idToLicenseeClassMap = controller.getDetailLicenseeClasses()
             .stream()
             .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
-        udmUsageDto = new UdmUsageDto();
+        bindedUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -156,7 +155,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
 
     private HorizontalLayout buildDetailStatusLayout() {
         statusComboBox.setSizeFull();
-        statusComboBox.setItems(new LinkedHashSet<>(EDIT_AVAILABLE_STATUSES));
+        statusComboBox.setItems(EDIT_AVAILABLE_STATUSES);
         statusComboBox.setEmptySelectionAllowed(false);
         binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
@@ -230,6 +229,10 @@ public class UdmEditMultipleUsagesWindow extends Window {
         companyNameField.setReadOnly(true);
         companyNameField.setSizeFull();
         binder.forField(companyNameField)
+            .withValidator(
+                value -> StringUtils.isNotEmpty(value.trim()) && StringUtils.isNotEmpty(companyIdField.getValue())
+                    || StringUtils.isEmpty(companyIdField.getValue()),
+                ForeignUi.getMessage("field.error.company_name.empty"))
             .bind(UdmUsageDto::getCompanyName, (usage, value) -> usage.setCompanyName(StringUtils.trimToNull(value)));
         return buildCommonLayout(companyNameField, "label.company_name");
     }
@@ -334,7 +337,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
             try {
-                binder.writeBean(udmUsageDto);
+                binder.writeBean(bindedUsageDto);
+                setPeriodEndDate(bindedUsageDto);
                 updateUsagesFields();
                 controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
                 saveButtonClickListener.buttonClick(event);
@@ -351,48 +355,59 @@ public class UdmEditMultipleUsagesWindow extends Window {
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
+    private void checkStatusAndUpdateIneligibleReason() {
+        if (Objects.nonNull(bindedUsageDto.getStatus())
+            && !bindedUsageDto.getStatus().equals(UsageStatusEnum.INELIGIBLE)) {
+            bindedUsageDto.setIneligibleReason(new UdmIneligibleReason());
+        }
+    }
+
     private void updateUsagesFields() {
         udmUsageDtoToFieldValuesMap = new HashMap<>();
+        checkStatusAndUpdateIneligibleReason();
         selectedUdmUsages.forEach(usageDto -> {
             UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
-            setFieldAndAddAudit(usageDto::setStatus, udmUsageDto.getStatus(), usageDto.getStatus(),
-                udmUsageDto.getStatus(), "label.detail_status", valuesMap);
-            setFieldAndAddAudit(usageDto::setPeriod, udmUsageDto.getPeriod(), usageDto.getPeriod(),
-                udmUsageDto.getPeriod(), "label.period", valuesMap);
-            setFieldAndAddAudit(usageDto::setDetailLicenseeClass, udmUsageDto.getDetailLicenseeClass(),
-                buildDetailLicenseClassString(usageDto), buildDetailLicenseClassString(udmUsageDto), "label.det_lc",
+            setFieldAndAddAudit(usageDto::setStatus, bindedUsageDto.getStatus(), usageDto.getStatus(),
+                bindedUsageDto.getStatus(), "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setPeriod, bindedUsageDto.getPeriod(), usageDto.getPeriod(),
+                bindedUsageDto.getPeriod(), "label.period", valuesMap);
+            setFieldAndAddAudit(usageDto::setDetailLicenseeClass, bindedUsageDto.getDetailLicenseeClass(),
+                buildDetailLicenseClassString(usageDto), buildDetailLicenseClassString(bindedUsageDto), "label.det_lc",
                 valuesMap);
-            setFieldAndAddAudit(usageDto::setCompanyId, udmUsageDto.getCompanyId(), usageDto.getCompanyId(),
-                udmUsageDto.getCompanyId(), "label.company_id", valuesMap);
-            setFieldAndAddAudit(usageDto::setCompanyName, udmUsageDto.getCompanyName(), usageDto.getCompanyName(),
-                udmUsageDto.getCompanyName(), "label.company_name", valuesMap);
-            setFieldAndAddAudit(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
-                udmUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
-            setFieldAndAddAudit(usageDto::setReportedTitle, udmUsageDto.getReportedTitle(), usageDto.getReportedTitle(),
-                udmUsageDto.getReportedTitle(), "label.reported_title", valuesMap);
-            setFieldAndAddAudit(usageDto::setReportedStandardNumber, udmUsageDto.getReportedStandardNumber(),
-                usageDto.getReportedStandardNumber(), udmUsageDto.getReportedStandardNumber(),
+            setFieldAndAddAudit(usageDto::setCompanyId, bindedUsageDto.getCompanyId(), usageDto.getCompanyId(),
+                bindedUsageDto.getCompanyId(), "label.company_id", valuesMap);
+            setFieldAndAddAudit(usageDto::setCompanyName, bindedUsageDto.getCompanyName(), usageDto.getCompanyName(),
+                bindedUsageDto.getCompanyName(), "label.company_name", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, bindedUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
+                bindedUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedTitle, bindedUsageDto.getReportedTitle(),
+                usageDto.getReportedTitle(),
+                bindedUsageDto.getReportedTitle(), "label.reported_title", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedStandardNumber, bindedUsageDto.getReportedStandardNumber(),
+                usageDto.getReportedStandardNumber(), bindedUsageDto.getReportedStandardNumber(),
                 "label.reported_standard_number", valuesMap);
-            setFieldAndAddAudit(usageDto::setAnnualMultiplier, udmUsageDto.getAnnualMultiplier(),
-                usageDto.getAnnualMultiplier(), udmUsageDto.getAnnualMultiplier(), "label.annual_multiplier",
+            setFieldAndAddAudit(usageDto::setAnnualMultiplier, bindedUsageDto.getAnnualMultiplier(),
+                usageDto.getAnnualMultiplier(), bindedUsageDto.getAnnualMultiplier(), "label.annual_multiplier",
                 valuesMap);
-            setFieldAndAddAudit(usageDto::setStatisticalMultiplier, udmUsageDto.getStatisticalMultiplier(),
-                usageDto.getStatisticalMultiplier(), udmUsageDto.getStatisticalMultiplier(),
+            setFieldAndAddAudit(usageDto::setStatisticalMultiplier, bindedUsageDto.getStatisticalMultiplier(),
+                usageDto.getStatisticalMultiplier(), bindedUsageDto.getStatisticalMultiplier(),
                 "label.statistical_multiplier", valuesMap);
-            setFieldAndAddAudit(usageDto::setQuantity, udmUsageDto.getQuantity(), usageDto.getQuantity(),
-                udmUsageDto.getQuantity(), "label.quantity", valuesMap);
+            setFieldAndAddAudit(usageDto::setQuantity, bindedUsageDto.getQuantity(), usageDto.getQuantity(),
+                bindedUsageDto.getQuantity(), "label.quantity", valuesMap);
             recalculateAnnualizedCopies(usageDto, valuesMap);
-            setFieldAndAddAudit(usageDto::setActionReason, udmUsageDto.getActionReason(),
+            setFieldAndAddAudit(usageDto::setActionReason, bindedUsageDto.getActionReason(),
                 Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
-                Objects.nonNull(udmUsageDto.getActionReason()) ? udmUsageDto.getActionReason().getReason() : null,
+                Objects.nonNull(bindedUsageDto.getActionReason()) ? bindedUsageDto.getActionReason().getReason() : null,
                 "label.action_reason_udm", valuesMap);
-            setFieldAndAddAudit(usageDto::setIneligibleReason, udmUsageDto.getIneligibleReason(),
+            setFieldAndAddAudit(usageDto::setIneligibleReason, bindedUsageDto.getIneligibleReason(),
                 Objects.nonNull(usageDto.getIneligibleReason()) ? usageDto.getIneligibleReason().getReason() : null,
-                Objects.nonNull(udmUsageDto.getIneligibleReason()) ? udmUsageDto.getIneligibleReason().getReason()
+                Objects.nonNull(bindedUsageDto.getIneligibleReason()) ? bindedUsageDto.getIneligibleReason().getReason()
                     : null, "label.ineligible_reason", valuesMap);
-            setFieldAndAddAudit(usageDto::setComment, udmUsageDto.getComment(), usageDto.getComment(),
-                udmUsageDto.getComment(), "label.comment", valuesMap);
-            setPeriodEndDate(usageDto);
+            setFieldAndAddAudit(usageDto::setComment, bindedUsageDto.getComment(), usageDto.getComment(),
+                bindedUsageDto.getComment(), "label.comment", valuesMap);
+            usageDto.setPeriodEndDate(
+                Objects.nonNull(bindedUsageDto.getPeriodEndDate()) ? bindedUsageDto.getPeriodEndDate() :
+                    usageDto.getPeriodEndDate());
             udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
     }
@@ -408,7 +423,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     }
 
     private void setPeriodEndDate(UdmUsageDto usageDto) {
-        String period = periodField.getValue();
+        String period = Objects.toString(usageDto.getPeriod(), StringUtils.EMPTY);
         if (StringUtils.isNotEmpty(period)) {
             int year = Integer.parseInt(period.substring(0, 4));
             int month = Integer.parseInt(period.substring(4, 6));

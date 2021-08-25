@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
+import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -26,12 +27,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
-    private final UdmUsageDto udmUsageDto;
+    private final UdmUsageDto bindedUsageDto;
     private Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
 
     /**
@@ -77,7 +78,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         this.controller = usageController;
         this.selectedUdmUsages = selectedUdmUsages;
         saveButtonClickListener = clickListener;
-        udmUsageDto = new UdmUsageDto();
+        bindedUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));
         setResizable(false);
@@ -106,7 +107,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private HorizontalLayout buildDetailStatusLayout() {
         statusComboBox.setSizeFull();
-        statusComboBox.setItems(new LinkedHashSet<>(EDIT_AVAILABLE_STATUSES));
+        statusComboBox.setItems(EDIT_AVAILABLE_STATUSES);
         statusComboBox.setEmptySelectionAllowed(false);
         binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
@@ -162,7 +163,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
             try {
-                binder.writeBean(udmUsageDto);
+                binder.writeBean(bindedUsageDto);
                 updateUsagesFields();
                 controller.updateUsages(udmUsageDtoToFieldValuesMap, true);
                 saveButtonClickListener.buttonClick(event);
@@ -178,20 +179,28 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private void updateUsagesFields() {
         udmUsageDtoToFieldValuesMap = new HashMap<>();
+        checkStatusAndUpdateIneligibleReason();
         selectedUdmUsages.forEach(usageDto -> {
             UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
-            setFieldAndAddAudit(usageDto::setStatus, udmUsageDto.getStatus(), usageDto.getStatus(),
-                udmUsageDto.getStatus(), "label.detail_status", valuesMap);
-            setFieldAndAddAudit(usageDto::setWrWrkInst, udmUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
-                udmUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
-            setFieldAndAddAudit(usageDto::setActionReason, udmUsageDto.getActionReason(),
+            setFieldAndAddAudit(usageDto::setStatus, bindedUsageDto.getStatus(), usageDto.getStatus(),
+                bindedUsageDto.getStatus(), "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, bindedUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
+                bindedUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setActionReason, bindedUsageDto.getActionReason(),
                 Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
-                Objects.nonNull(udmUsageDto.getActionReason()) ? udmUsageDto.getActionReason().getReason() : null,
+                Objects.nonNull(bindedUsageDto.getActionReason()) ? bindedUsageDto.getActionReason().getReason() : null,
                 "label.action_reason_udm", valuesMap);
-            setFieldAndAddAudit(usageDto::setComment, udmUsageDto.getComment(), usageDto.getComment(),
-                udmUsageDto.getComment(), "label.comment", valuesMap);
+            setFieldAndAddAudit(usageDto::setComment, bindedUsageDto.getComment(), usageDto.getComment(),
+                bindedUsageDto.getComment(), "label.comment", valuesMap);
             udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
+    }
+
+    private void checkStatusAndUpdateIneligibleReason() {
+        if (Objects.nonNull(bindedUsageDto.getStatus())
+            && !bindedUsageDto.getStatus().equals(UsageStatusEnum.INELIGIBLE)) {
+            bindedUsageDto.setIneligibleReason(new UdmIneligibleReason());
+        }
     }
 
     private <T, K> void setFieldAndAddAudit(Consumer<T> usageDtoConsumer, T newUsageValue, K oldAuditValue,
