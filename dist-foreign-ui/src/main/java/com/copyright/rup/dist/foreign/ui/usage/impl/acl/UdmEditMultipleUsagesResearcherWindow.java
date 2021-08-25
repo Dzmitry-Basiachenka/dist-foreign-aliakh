@@ -27,7 +27,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -38,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Window to edit multiple UDM usages for Researcher role.
@@ -182,16 +182,15 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         checkStatusAndUpdateIneligibleReason();
         selectedUdmUsages.forEach(usageDto -> {
             UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
-            setFieldAndAddAudit(usageDto::setStatus, bindedUsageDto.getStatus(), usageDto.getStatus(),
-                bindedUsageDto.getStatus(), "label.detail_status", valuesMap);
-            setFieldAndAddAudit(usageDto::setWrWrkInst, bindedUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
-                bindedUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
-            setFieldAndAddAudit(usageDto::setActionReason, bindedUsageDto.getActionReason(),
-                Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
-                Objects.nonNull(bindedUsageDto.getActionReason()) ? bindedUsageDto.getActionReason().getReason() : null,
-                "label.action_reason_udm", valuesMap);
-            setFieldAndAddAudit(usageDto::setComment, bindedUsageDto.getComment(), usageDto.getComment(),
-                bindedUsageDto.getComment(), "label.comment", valuesMap);
+            setFieldAndAddAudit(usageDto::setStatus, UdmUsageDto::getStatus, bindedUsageDto, usageDto,
+                "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, UdmUsageDto::getWrWrkInst, bindedUsageDto, usageDto,
+                "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setActionReason, UdmUsageDto::getActionReason,
+                (usage) -> Objects.nonNull(usage.getActionReason()) ? usage.getActionReason().getReason() : null,
+                bindedUsageDto, usageDto, "label.action_reason_udm", valuesMap);
+            setFieldAndAddAudit(usageDto::setComment, UdmUsageDto::getComment, bindedUsageDto, usageDto,
+                "label.comment", valuesMap);
             udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
     }
@@ -203,12 +202,22 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         }
     }
 
-    private <T, K> void setFieldAndAddAudit(Consumer<T> usageDtoConsumer, T newUsageValue, K oldAuditValue,
-                                            K newAuditValue, String fieldName,
-                                            UdmAuditFieldToValuesMap fieldToValuesMap) {
+    private <T> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
+                                         UdmUsageDto newUsage, UdmUsageDto oldUsage, String fieldName,
+                                         UdmAuditFieldToValuesMap valuesMap) {
+        setFieldAndAddAudit(usageConsumer, usageFunction, usageFunction, newUsage, oldUsage, fieldName, valuesMap);
+    }
+
+    private <T, K> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
+                                            Function<UdmUsageDto, K> auditFunction, UdmUsageDto newUsage,
+                                            UdmUsageDto oldUsage, String fieldName,
+                                            UdmAuditFieldToValuesMap valuesMap) {
+        T newUsageValue = usageFunction.apply(newUsage);
+        K oldAuditValue = auditFunction.apply(oldUsage);
+        K newAuditValue = auditFunction.apply(newUsage);
         if (Objects.nonNull(newUsageValue) && !Objects.equals(oldAuditValue, newAuditValue)) {
-            usageDtoConsumer.accept(newUsageValue);
-            fieldToValuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
+            usageConsumer.accept(newUsageValue);
+            valuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
                 Objects.toString(oldAuditValue, StringUtils.EMPTY),
                 Objects.toString(newAuditValue, StringUtils.EMPTY));
         }

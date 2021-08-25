@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -106,8 +107,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * Shows modal window with UDM usage history.
      *
      * @param udmUsageId {@link UdmUsage} id
+     * @param closeListener listener to handle window close event
      */
-    void showUdmUsageHistory(String udmUsageId);
+    void showUdmUsageHistory(String udmUsageId, Window.CloseListener closeListener);
 
     /**
      * @return instance of {@link IStreamSource} for export for specialist and manager roles.
