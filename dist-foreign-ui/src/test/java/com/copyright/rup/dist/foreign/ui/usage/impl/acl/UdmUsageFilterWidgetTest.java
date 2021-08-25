@@ -67,7 +67,7 @@ public class UdmUsageFilterWidgetTest {
     private static final Set<UsageStatusEnum> ACL_STATUSES = ImmutableSet.of(UsageStatusEnum.NEW,
         UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW,
-        UsageStatusEnum.SPECIALIST_REVIEW);
+        UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.ELIGIBLE);
 
     private IUdmUsageFilterController udmUsageFilterController;
     private UdmUsageFilterWidget widget;

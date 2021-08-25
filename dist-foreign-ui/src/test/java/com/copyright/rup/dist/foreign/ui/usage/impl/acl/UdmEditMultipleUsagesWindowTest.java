@@ -464,6 +464,24 @@ public class UdmEditMultipleUsagesWindowTest {
         usages.forEach(usage -> verifyUpdatedUdmUsages(udmUsageDto, usage));
     }
 
+    @Test
+    public void testIneligibleReasonStatusValidation() {
+        initEditWindow();
+        ComboBox<UsageStatusEnum> statusComboBox = Whitebox.getInternalState(window, "statusComboBox");
+        ComboBox<UdmIneligibleReason> ineligibleReasonComboBox =
+            Whitebox.getInternalState(window, "ineligibleReasonComboBox");
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+        statusComboBox.setValue(UsageStatusEnum.ELIGIBLE);
+        ineligibleReasonComboBox.setValue(NEW_INELIGIBLE_REASON);
+        verifyBinderStatusAndValidationMessage("Field value can be populated only if usage status is INELIGIBLE",
+            false);
+        statusComboBox.setValue(UsageStatusEnum.INELIGIBLE);
+        ineligibleReasonComboBox.setValue(null);
+        verifyBinderStatusAndValidationMessage("Field value can be INELIGIBLE only if Ineligible Reason is populated",
+            false);
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
     private UdmUsageDto buildActualUdmUsageDto() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId(UDM_USAGE_UID);

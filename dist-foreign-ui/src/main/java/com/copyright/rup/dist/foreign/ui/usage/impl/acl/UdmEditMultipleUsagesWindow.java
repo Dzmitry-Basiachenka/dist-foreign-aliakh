@@ -156,7 +156,12 @@ public class UdmEditMultipleUsagesWindow extends Window {
         statusComboBox.setSizeFull();
         statusComboBox.setItems(EDIT_AVAILABLE_STATUSES);
         statusComboBox.setEmptySelectionAllowed(false);
-        binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
+        binder.forField(statusComboBox)
+            .withValidator(
+                value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
+                "Field value can be INELIGIBLE only if Ineligible Reason is populated")
+            .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
+        statusComboBox.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
         return buildCommonLayout(statusComboBox, "label.detail_status");
     }
@@ -304,7 +309,11 @@ public class UdmEditMultipleUsagesWindow extends Window {
         ineligibleReasonComboBox.setItemCaptionGenerator(UdmIneligibleReason::getReason);
         ineligibleReasonComboBox.setItems(controller.getAllIneligibleReasons());
         binder.forField(ineligibleReasonComboBox)
+            .withValidator(
+                value -> Objects.isNull(value) || UsageStatusEnum.INELIGIBLE == statusComboBox.getValue(),
+                "Field value can be populated only if usage status is INELIGIBLE")
             .bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
+        ineligibleReasonComboBox.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(ineligibleReasonComboBox, "udm-multiple-edit-ineligible-reason-combo-box");
         return buildCommonLayout(ineligibleReasonComboBox, "label.ineligible_reason");
     }
@@ -344,9 +353,10 @@ public class UdmEditMultipleUsagesWindow extends Window {
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(periodField, wrWrkInstField, reportedTitleField,
-                        reportedStandardNumberField, commentField, companyIdField, companyNameField,
-                        detailLicenseeClassComboBox, annualMultiplierField, statisticalMultiplierField, quantityField));
+                    Arrays.asList(statusComboBox, periodField, detailLicenseeClassComboBox, companyIdField,
+                        companyNameField, wrWrkInstField, reportedStandardNumberField, reportedTitleField,
+                        annualMultiplierField, statisticalMultiplierField, quantityField, ineligibleReasonComboBox,
+                        commentField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
