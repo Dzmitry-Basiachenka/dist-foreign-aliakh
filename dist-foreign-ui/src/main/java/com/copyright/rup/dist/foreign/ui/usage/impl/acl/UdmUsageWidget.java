@@ -32,7 +32,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -76,6 +75,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
     private SearchWidget searchWidget;
+    private Set<UdmUsageDto> selectedUdmUsages;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -315,7 +315,10 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             String udmUsageId = usage.getId();
             Button button = Buttons.createButton(udmUsageId);
             button.addStyleName(ValoTheme.BUTTON_LINK);
-            button.addClickListener(event -> controller.showUdmUsageHistory(udmUsageId));
+            button.addClickListener(event -> {
+                controller.showUdmUsageHistory(udmUsageId, closeEvent -> restoreSelection(selectedUdmUsages));
+                selectUsageForAudit(usage);
+            });
             return button;
         })
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
@@ -418,5 +421,27 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         } else {
             return controller.getExportUdmUsagesStreamSourceViewRole();
         }
+    }
+
+    /**
+     * Hides current usage selection and selects usage for which the history window was opened.
+     *
+     * @param usageToSeeAudit usage to select
+     */
+    private void selectUsageForAudit(UdmUsageDto usageToSeeAudit) {
+        selectedUdmUsages = udmUsagesGrid.getSelectedItems();
+        udmUsagesGrid.deselectAll();
+        udmUsagesGrid.select(usageToSeeAudit);
+    }
+
+    /**
+     * Restores previous usage selection. Removes selection of usage for which the history window was opened.
+     *
+     * @param usagesToSelect set of usages to select
+     */
+    private void restoreSelection(Set<UdmUsageDto> usagesToSelect) {
+        selectedUdmUsages = null;
+        udmUsagesGrid.deselectAll();
+        usagesToSelect.forEach(udmUsageDto -> udmUsagesGrid.select(udmUsageDto));
     }
 }

@@ -37,7 +37,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
-
+import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -140,8 +140,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void showUdmUsageHistory(String udmUsageId) {
-        Windows.showModalWindow(new UsageHistoryWindow(udmUsageId, udmUsageAuditService.getUdmUsageAudit(udmUsageId)));
+    public void showUdmUsageHistory(String udmUsageId, Window.CloseListener closeListener) {
+        UsageHistoryWindow historyWindow =
+            new UsageHistoryWindow(udmUsageId, udmUsageAuditService.getUdmUsageAudit(udmUsageId));
+        historyWindow.addCloseListener(closeListener);
+        Windows.showModalWindow(historyWindow);
     }
 
     @Override

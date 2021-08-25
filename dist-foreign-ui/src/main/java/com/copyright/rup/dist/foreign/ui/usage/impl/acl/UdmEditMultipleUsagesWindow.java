@@ -30,7 +30,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -367,44 +366,37 @@ public class UdmEditMultipleUsagesWindow extends Window {
         checkStatusAndUpdateIneligibleReason();
         selectedUdmUsages.forEach(usageDto -> {
             UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
-            setFieldAndAddAudit(usageDto::setStatus, bindedUsageDto.getStatus(), usageDto.getStatus(),
-                bindedUsageDto.getStatus(), "label.detail_status", valuesMap);
-            setFieldAndAddAudit(usageDto::setPeriod, bindedUsageDto.getPeriod(), usageDto.getPeriod(),
-                bindedUsageDto.getPeriod(), "label.period", valuesMap);
-            setFieldAndAddAudit(usageDto::setDetailLicenseeClass, bindedUsageDto.getDetailLicenseeClass(),
-                buildDetailLicenseClassString(usageDto), buildDetailLicenseClassString(bindedUsageDto), "label.det_lc",
+            setFieldAndAddAudit(usageDto::setStatus, UdmUsageDto::getStatus, bindedUsageDto, usageDto,
+                "label.detail_status", valuesMap);
+            setFieldAndAddAudit(usageDto::setPeriod, UdmUsageDto::getPeriod, bindedUsageDto, usageDto, "label.period",
                 valuesMap);
-            setFieldAndAddAudit(usageDto::setCompanyId, bindedUsageDto.getCompanyId(), usageDto.getCompanyId(),
-                bindedUsageDto.getCompanyId(), "label.company_id", valuesMap);
-            setFieldAndAddAudit(usageDto::setCompanyName, bindedUsageDto.getCompanyName(), usageDto.getCompanyName(),
-                bindedUsageDto.getCompanyName(), "label.company_name", valuesMap);
-            setFieldAndAddAudit(usageDto::setWrWrkInst, bindedUsageDto.getWrWrkInst(), usageDto.getWrWrkInst(),
-                bindedUsageDto.getWrWrkInst(), "label.wr_wrk_inst", valuesMap);
-            setFieldAndAddAudit(usageDto::setReportedTitle, bindedUsageDto.getReportedTitle(),
-                usageDto.getReportedTitle(),
-                bindedUsageDto.getReportedTitle(), "label.reported_title", valuesMap);
-            setFieldAndAddAudit(usageDto::setReportedStandardNumber, bindedUsageDto.getReportedStandardNumber(),
-                usageDto.getReportedStandardNumber(), bindedUsageDto.getReportedStandardNumber(),
-                "label.reported_standard_number", valuesMap);
-            setFieldAndAddAudit(usageDto::setAnnualMultiplier, bindedUsageDto.getAnnualMultiplier(),
-                usageDto.getAnnualMultiplier(), bindedUsageDto.getAnnualMultiplier(), "label.annual_multiplier",
-                valuesMap);
-            setFieldAndAddAudit(usageDto::setStatisticalMultiplier, bindedUsageDto.getStatisticalMultiplier(),
-                usageDto.getStatisticalMultiplier(), bindedUsageDto.getStatisticalMultiplier(),
-                "label.statistical_multiplier", valuesMap);
-            setFieldAndAddAudit(usageDto::setQuantity, bindedUsageDto.getQuantity(), usageDto.getQuantity(),
-                bindedUsageDto.getQuantity(), "label.quantity", valuesMap);
+            setFieldAndAddAudit(usageDto::setDetailLicenseeClass, UdmUsageDto::getDetailLicenseeClass,
+                this::buildDetailLicenseClassString, bindedUsageDto, usageDto, "label.det_lc", valuesMap);
+            setFieldAndAddAudit(usageDto::setCompanyId, UdmUsageDto::getCompanyId, bindedUsageDto, usageDto,
+                "label.company_id", valuesMap);
+            setFieldAndAddAudit(usageDto::setCompanyName, UdmUsageDto::getCompanyName, bindedUsageDto, usageDto,
+                "label.company_name", valuesMap);
+            setFieldAndAddAudit(usageDto::setWrWrkInst, UdmUsageDto::getWrWrkInst, bindedUsageDto, usageDto,
+                "label.wr_wrk_inst", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedTitle, UdmUsageDto::getReportedTitle, bindedUsageDto, usageDto,
+                "label.reported_title", valuesMap);
+            setFieldAndAddAudit(usageDto::setReportedStandardNumber, UdmUsageDto::getReportedStandardNumber,
+                bindedUsageDto, usageDto, "label.reported_standard_number", valuesMap);
+            setFieldAndAddAudit(usageDto::setAnnualMultiplier, UdmUsageDto::getAnnualMultiplier, bindedUsageDto,
+                usageDto, "label.annual_multiplier", valuesMap);
+            setFieldAndAddAudit(usageDto::setStatisticalMultiplier, UdmUsageDto::getStatisticalMultiplier,
+                bindedUsageDto, usageDto, "label.statistical_multiplier", valuesMap);
+            setFieldAndAddAudit(usageDto::setQuantity, UdmUsageDto::getQuantity, bindedUsageDto, usageDto,
+                "label.quantity", valuesMap);
+            setFieldAndAddAudit(usageDto::setActionReason, UdmUsageDto::getActionReason, (usage) ->
+                    Objects.nonNull(usage.getActionReason()) ? usage.getActionReason().getReason() : null,
+                bindedUsageDto, usageDto, "label.action_reason_udm", valuesMap);
+            setFieldAndAddAudit(usageDto::setIneligibleReason, UdmUsageDto::getIneligibleReason, (usage) ->
+                    Objects.nonNull(usage.getIneligibleReason()) ? usage.getIneligibleReason().getReason() : null,
+                bindedUsageDto, usageDto, "label.ineligible_reason", valuesMap);
+            setFieldAndAddAudit(usageDto::setComment, UdmUsageDto::getComment, bindedUsageDto, usageDto,
+                "label.comment", valuesMap);
             recalculateAnnualizedCopies(usageDto, valuesMap);
-            setFieldAndAddAudit(usageDto::setActionReason, bindedUsageDto.getActionReason(),
-                Objects.nonNull(usageDto.getActionReason()) ? usageDto.getActionReason().getReason() : null,
-                Objects.nonNull(bindedUsageDto.getActionReason()) ? bindedUsageDto.getActionReason().getReason() : null,
-                "label.action_reason_udm", valuesMap);
-            setFieldAndAddAudit(usageDto::setIneligibleReason, bindedUsageDto.getIneligibleReason(),
-                Objects.nonNull(usageDto.getIneligibleReason()) ? usageDto.getIneligibleReason().getReason() : null,
-                Objects.nonNull(bindedUsageDto.getIneligibleReason()) ? bindedUsageDto.getIneligibleReason().getReason()
-                    : null, "label.ineligible_reason", valuesMap);
-            setFieldAndAddAudit(usageDto::setComment, bindedUsageDto.getComment(), usageDto.getComment(),
-                bindedUsageDto.getComment(), "label.comment", valuesMap);
             usageDto.setPeriodEndDate(
                 Objects.nonNull(bindedUsageDto.getPeriodEndDate()) ? bindedUsageDto.getPeriodEndDate() :
                     usageDto.getPeriodEndDate());
@@ -431,12 +423,22 @@ public class UdmEditMultipleUsagesWindow extends Window {
         }
     }
 
-    private <T, K> void setFieldAndAddAudit(Consumer<T> usageDtoConsumer, T newUsageValue, K oldAuditValue,
-                                            K newAuditValue, String fieldName,
-                                            UdmAuditFieldToValuesMap fieldToValuesMap) {
+    private <T> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
+                                         UdmUsageDto newUsage, UdmUsageDto oldUsage, String fieldName,
+                                         UdmAuditFieldToValuesMap valuesMap) {
+        setFieldAndAddAudit(usageConsumer, usageFunction, usageFunction, newUsage, oldUsage, fieldName, valuesMap);
+    }
+
+    private <T, K> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
+                                            Function<UdmUsageDto, K> auditFunction, UdmUsageDto newUsage,
+                                            UdmUsageDto oldUsage, String fieldName,
+                                            UdmAuditFieldToValuesMap valuesMap) {
+        T newUsageValue = usageFunction.apply(newUsage);
+        K oldAuditValue = auditFunction.apply(oldUsage);
+        K newAuditValue = auditFunction.apply(newUsage);
         if (Objects.nonNull(newUsageValue) && !Objects.equals(oldAuditValue, newAuditValue)) {
-            usageDtoConsumer.accept(newUsageValue);
-            fieldToValuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
+            usageConsumer.accept(newUsageValue);
+            valuesMap.putFieldWithValues(ForeignUi.getMessage(fieldName),
                 Objects.toString(oldAuditValue, StringUtils.EMPTY),
                 Objects.toString(newAuditValue, StringUtils.EMPTY));
         }

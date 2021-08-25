@@ -47,6 +47,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableMap;
+import com.vaadin.ui.Window;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -239,16 +240,17 @@ public class UdmUsageControllerTest {
     @Test
     public void testShowUdmUsageHistory() {
         mockStatic(Windows.class);
+        Window.CloseListener closeListener = createMock(Window.CloseListener.class);
         Capture<UsageHistoryWindow> windowCapture = newCapture();
         String udmUsageId = "432320b8-5029-47dd-8137-99007cb69bf1";
         List<UsageAuditItem> auditItems = Collections.emptyList();
         expect(udmUsageAuditService.getUdmUsageAudit(udmUsageId)).andReturn(auditItems).once();
         Windows.showModalWindow(capture(windowCapture));
         expectLastCall().once();
-        replay(Windows.class, udmUsageAuditService);
-        controller.showUdmUsageHistory(udmUsageId);
+        replay(Windows.class, closeListener, udmUsageAuditService);
+        controller.showUdmUsageHistory(udmUsageId, closeListener);
         assertNotNull(windowCapture.getValue());
-        verify(Windows.class, udmUsageAuditService);
+        verify(Windows.class, closeListener, udmUsageAuditService);
     }
 
     @Test
