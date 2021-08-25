@@ -1,3 +1,10 @@
+14.1.12
+-
+* B-69243: FDA&UDM Improvements: Editing usage details: implement validation for Ineligible reason and Status fields for multiple Usage Edit
+* B-68058: FDA&UDM: Log and display single usage edits in the UDM Audit: increase column size of df_udm_audit.action_reason column
+* B-68058: FDA&UDM: Log and display single usage edits in the UDM Audit: implement logic to select usage for which the history window was opened and adjust logic for generating audit records in widgets
+* B-65870: FDA&UDM: Bulk update: make changes based on comments in CR-DIST-FOREIGN-253
+
 14.1.11
 -
 * B-69243: FDA&UDM Improvements: Editing usage details: implement validation for Ineligible reason and Status fields for single Usage Edit
