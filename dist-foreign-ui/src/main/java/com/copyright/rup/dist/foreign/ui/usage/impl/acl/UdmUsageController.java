@@ -37,6 +37,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -160,6 +161,13 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
     }
 
+    @Override
+    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
+                             boolean isResearcher) {
+        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher);
+        udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
+    }
+
     public List<UdmActionReason> getAllActionReasons() {
         return udmUsageService.getAllActionReasons();
     }
@@ -218,13 +226,6 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
                                                 BigDecimal statisticalMultiplier) {
         return annualizedCopiesCalculator.calculate(reportedTypeOfUse, quantity, annualMultiplier,
             statisticalMultiplier);
-    }
-
-    @Override
-    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                             boolean isResearcher) {
-        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher);
-        udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
     }
 
     @Override

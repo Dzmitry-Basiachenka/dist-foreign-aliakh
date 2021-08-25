@@ -33,6 +33,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,7 +137,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     public void testSaveButtonClickListener() throws Exception {
         UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
-            UsageStatusEnum.NEW.name());
+            UsageStatusEnum.INELIGIBLE.name());
         fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", "122825347", "1234567");
         fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_REASON);
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
@@ -166,7 +167,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     @SuppressWarnings("unchecked")
     private void updateFields() {
         ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
-        statusEnumComboBox.setValue(UsageStatusEnum.NEW);
+        statusEnumComboBox.setValue(UsageStatusEnum.INELIGIBLE);
         TextField wrWrkInstField = (TextField) getComponent(1).getComponent(1);
         wrWrkInstField.setValue("1234567");
         ComboBox<UdmActionReason> actionReasonComboBox = (ComboBox<UdmActionReason>) getComponent(2).getComponent(1);
@@ -181,7 +182,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     }
 
     private void verifyUpdatedUdmUsages(UdmUsageDto actualUdmUsageDto) {
-        assertEquals(UsageStatusEnum.NEW, actualUdmUsageDto.getStatus());
+        assertEquals(UsageStatusEnum.INELIGIBLE, actualUdmUsageDto.getStatus());
         assertEquals(NEW_WR_WRK_INST, actualUdmUsageDto.getWrWrkInst());
         assertEquals(buildActionReason(), actualUdmUsageDto.getActionReason());
         assertEquals(NEW_COMMENT, actualUdmUsageDto.getComment());
@@ -306,7 +307,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private UdmUsageDto buildExpectedUdmUsageDto() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setUsageOrigin(UdmUsageOriginEnum.SS);
-        udmUsageDto.setStatus(UsageStatusEnum.NEW);
+        udmUsageDto.setStatus(UsageStatusEnum.INELIGIBLE);
         udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
         udmUsageDto.setComment(NEW_COMMENT);
         udmUsageDto.setActionReason(buildActionReason());

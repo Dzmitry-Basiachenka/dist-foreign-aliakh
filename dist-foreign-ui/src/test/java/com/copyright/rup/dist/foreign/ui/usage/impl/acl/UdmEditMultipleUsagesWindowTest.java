@@ -42,6 +42,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -303,7 +304,7 @@ public class UdmEditMultipleUsagesWindowTest {
     public void testSaveButtonClickListener() throws Exception {
         UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
-            UsageStatusEnum.NEW.name());
+            UsageStatusEnum.INELIGIBLE.name());
         fieldToValuesMap.putFieldWithValues("Company ID", COMPANY_ID.toString(), NEW_COMPANY_ID.toString());
         fieldToValuesMap.putFieldWithValues("Company Name", COMPANY_NAME, NEW_COMPANY_NAME);
         fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", WR_WRK_INST.toString(), NEW_WR_WRK_INST.toString());
@@ -339,7 +340,7 @@ public class UdmEditMultipleUsagesWindowTest {
         expectLastCall().once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
-        Whitebox.setInternalState(window, udmUsageDto);
+        Whitebox.setInternalState(window, "bindedUsageDto", udmUsageDto);
         updateFields();
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
@@ -493,7 +494,7 @@ public class UdmEditMultipleUsagesWindowTest {
         udmUsageDto.setUpdateUser(USER_NAME);
         udmUsageDto.setUpdateDate(
             Date.from(LocalDate.of(2020, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        udmUsageDto.setStatus(UsageStatusEnum.NEW);
+        udmUsageDto.setStatus(UsageStatusEnum.INELIGIBLE);
         udmUsageDto.setPeriod(PERIOD);
         udmUsageDto.setCompanyId(NEW_COMPANY_ID);
         udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
@@ -516,7 +517,7 @@ public class UdmEditMultipleUsagesWindowTest {
     @SuppressWarnings("unchecked")
     private void updateFields() {
         ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
-        statusEnumComboBox.setValue(UsageStatusEnum.NEW);
+        statusEnumComboBox.setValue(UsageStatusEnum.INELIGIBLE);
         TextField periodField = (TextField) getComponent(1).getComponent(1);
         periodField.setValue("202012");
         HorizontalLayout companyLayout = getComponent(3);
