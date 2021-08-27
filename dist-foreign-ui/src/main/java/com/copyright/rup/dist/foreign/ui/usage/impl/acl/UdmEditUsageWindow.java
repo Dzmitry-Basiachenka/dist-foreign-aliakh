@@ -200,10 +200,11 @@ public class UdmEditUsageWindow extends Window {
                 usage -> Objects.toString(usage.getRhAccountNumber(), StringUtils.EMPTY)),
             buildReadOnlyLayout("label.rh_name", UdmUsageDto::getRhName),
             buildWrWrkInstLayout(),
-            buildEditableStringLayout(reportedTitleField, "label.reported_title", 1000, UdmUsageDto::getReportedTitle,
+            buildEditableStringLayoutWithValidation(reportedTitleField, "label.reported_title", 1000,
+                UdmUsageDto::getReportedTitle,
                 UdmUsageDto::setReportedTitle, "udm-edit-reported-title-field"),
             buildReadOnlyLayout("label.system_title", UdmUsageDto::getSystemTitle),
-            buildEditableStringLayout(reportedStandardNumberField, "label.reported_standard_number", 100,
+            buildEditableStringLayoutWithValidation(reportedStandardNumberField, "label.reported_standard_number", 100,
                 UdmUsageDto::getReportedStandardNumber, UdmUsageDto::setReportedStandardNumber,
                 "udm-edit-reported-standard-number-field"),
             buildReadOnlyLayout("label.standard_number", UdmUsageDto::getStandardNumber),
@@ -259,6 +260,14 @@ public class UdmEditUsageWindow extends Window {
         textField.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, fieldName);
+    }
+
+    private HorizontalLayout buildEditableStringLayoutWithValidation(TextField textField, String caption, int maxLength,
+                                                                     ValueProvider<UdmUsageDto, String> getter,
+                                                                     Setter<UdmUsageDto, String> setter,
+                                                                     String styleName) {
+        textField.addValueChangeListener(event -> binder.validate());
+        return buildEditableStringLayout(textField, caption, maxLength, getter, setter, styleName);
     }
 
     private HorizontalLayout buildStatisticalMultiplier() {
@@ -341,6 +350,11 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .withValidator(value -> StringUtils.isNotEmpty(value.trim())
+                    || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
+                    || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
+                "No work information found, please specify at least one of the following: " +
+                    "Wr Wrk Inst, Reported Standard Number or Reported Title")
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-edit-wr-wrk-inst-field");
