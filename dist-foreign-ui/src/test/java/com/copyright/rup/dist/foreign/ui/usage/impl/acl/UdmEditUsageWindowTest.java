@@ -237,6 +237,18 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        TextField reportedTitleField = Whitebox.getInternalState(window, "reportedTitleField");
+        TextField reportedStandardNumberField = Whitebox.getInternalState(window, "reportedStandardNumberField");
+        reportedTitleField.setValue(StringUtils.EMPTY);
+        reportedStandardNumberField.setValue(StringUtils.EMPTY);
+        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, "No work information found, " +
+                "please specify at least one of the following: Wr Wrk Inst, Reported Standard Number or Reported Title",
+            false);
+        reportedStandardNumberField.setValue(REPORTED_STANDARD_NUMBER);
+        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        reportedTitleField.setValue(REPORTED_TITLE);
+        reportedStandardNumberField.setValue(StringUtils.EMPTY);
+        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
     }
 
     @Test
