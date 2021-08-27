@@ -148,7 +148,7 @@ definitions:
         example: ERROR_CODE
       message:
         type: string
-        example: Field value is not valid. Field=name, Value=null, Reason=may not be null
+        example: Field value is not valid. Field=name, Value=null, Reason=must not be null
       stackTrace:
         type: string
         example: java.lang.NullPointerException\n\tat java.lang.Thread.run(Thread.java:748)
