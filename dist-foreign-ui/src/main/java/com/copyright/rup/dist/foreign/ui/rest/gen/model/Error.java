@@ -77,7 +77,7 @@ public class Error   {
      * Get message
      * @return message
     **/
-    @ApiModelProperty(example = "Field value is not valid. Field&#x3D;name, Value&#x3D;null, Reason&#x3D;may not be null", value = "")
+    @ApiModelProperty(example = "Field value is not valid. Field&#x3D;name, Value&#x3D;null, Reason&#x3D;must not be null", value = "")
     public String getMessage() {
         return message;
     }
