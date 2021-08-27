@@ -55,8 +55,8 @@ public class UdmAuditFieldToValuesMap {
         fieldToValueChangesMap.put("Company ID", buildPair(usageDto, UdmUsageDto::getCompanyId));
         fieldToValueChangesMap.put("Company Name", buildPair(usageDto, UdmUsageDto::getCompanyName));
         fieldToValueChangesMap.put("Detail Licensee Class", Objects.nonNull(usageDto.getDetailLicenseeClass())
-            ? buildPair(usageDto, usage ->
-            usage.getDetailLicenseeClass().getId() + " - " + usage.getDetailLicenseeClass().getDescription())
+            ? buildPair(usageDto, usage -> String.format("%s - %s", usage.getDetailLicenseeClass().getId(),
+            usage.getDetailLicenseeClass().getDescription()))
             : EMPTY_PAIR);
         fieldToValueChangesMap.put("Annual Multiplier", buildPair(usageDto, UdmUsageDto::getAnnualMultiplier));
         fieldToValueChangesMap.put("Statistical Multiplier",
