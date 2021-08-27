@@ -1,3 +1,9 @@
+14.1.13
+-
+* B-68058: FDA&UDM: Log and display single usage edits in the UDM Audit: make changes based on comments in CR-DIST-FOREIGN-254
+* B-69243: FDA&UDM Improvements: Editing usage details: introduce validation for work information on UDM single edit window
+* B-68820: Tech Debt: FDA: fix vulnerability CVE-2019-10219 associated with dependency org.hibernate:hibernate-validator:5.2.4.Final
+
 14.1.12
 -
 * B-69243: FDA&UDM Improvements: Editing usage details: implement validation for Ineligible reason and Status fields for multiple Usage Edit
