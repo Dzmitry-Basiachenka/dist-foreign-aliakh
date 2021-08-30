@@ -200,7 +200,7 @@ public class UdmUsageControllerTest {
         String batchName = "Name";
         expect(udmBatchService.udmBatchExists(batchName)).andReturn(true).once();
         replay(udmBatchService);
-        assertTrue(udmBatchService.udmBatchExists(batchName));
+        assertTrue(controller.udmBatchExists(batchName));
         verify(udmBatchService);
     }
 
