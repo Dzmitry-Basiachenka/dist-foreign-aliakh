@@ -213,4 +213,11 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
      */
     void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap, boolean isResearcher);
+
+    /**
+     * Gets all available periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }
