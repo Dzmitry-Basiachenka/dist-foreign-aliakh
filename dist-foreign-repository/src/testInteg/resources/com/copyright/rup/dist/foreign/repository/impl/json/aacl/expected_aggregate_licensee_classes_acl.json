@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "description": "Food and Tobacco"
+  },
+  {
+    "id": 12,
+    "description": "Machinery"
+  },
+  {
+    "id": 13,
+    "description": "Computers"
+  },
+  {
+    "id": 18,
+    "description": "Aircraft and Aerospace"
+  },
+  {
+    "id": 23,
+    "description": "Electric and Gas Utilities"
+  },
+  {
+    "id": 25,
+    "description": "Business Services"
+  },
+  {
+    "id": 26,
+    "description": "Law Firms"
+  },
+  {
+    "id": 28,
+    "description": "Wholesale & Retail Trade"
+  },
+  {
+    "id": 29,
+    "description": "Consumer Services"
+  },
+  {
+    "id": 39,
+    "description": "Government"
+  },
+  {
+    "id": 51,
+    "description": "Materials"
+  },
+  {
+    "id": 52,
+    "description": "Medical"
+  },
+  {
+    "id": 53,
+    "description": "Metals"
+  },
+  {
+    "id": 54,
+    "description": "Electronics"
+  },
+  {
+    "id": 55,
+    "description": "Transportation"
+  },
+  {
+    "id": 56,
+    "description": "Financial"
+  },
+  {
+    "id": 57,
+    "description": "Communications"
+  }
+]

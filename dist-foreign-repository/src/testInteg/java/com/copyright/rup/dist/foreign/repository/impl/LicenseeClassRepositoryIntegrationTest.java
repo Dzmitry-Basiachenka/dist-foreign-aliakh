@@ -64,11 +64,22 @@ public class LicenseeClassRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindAggregateLicenseeClassesByProductFamily() throws IOException {
+    public void testFindAggregateLicenseeClassesByProductFamilyAacl() throws IOException {
         List<AggregateLicenseeClass> expectedClasses =
-            loadExpectedAggregateClasses("expected_aggregate_licensee_classes.json");
+            loadExpectedAggregateClasses("expected_aggregate_licensee_classes_aacl.json");
         List<AggregateLicenseeClass> actualClasses =
             licenseeClassRepository.findAggregateLicenseeClassesByProductFamily("AACL");
+        assertEquals(expectedClasses.size(), actualClasses.size());
+        IntStream.range(0, expectedClasses.size())
+            .forEach(i -> verifyAggregateLicenseeClass(expectedClasses.get(i), actualClasses.get(i)));
+    }
+
+    @Test
+    public void testFindAggregateLicenseeClassesByProductFamilyAcl() throws IOException {
+        List<AggregateLicenseeClass> expectedClasses =
+            loadExpectedAggregateClasses("expected_aggregate_licensee_classes_acl.json");
+        List<AggregateLicenseeClass> actualClasses =
+            licenseeClassRepository.findAggregateLicenseeClassesByProductFamily("ACL");
         assertEquals(expectedClasses.size(), actualClasses.size());
         IntStream.range(0, expectedClasses.size())
             .forEach(i -> verifyAggregateLicenseeClass(expectedClasses.get(i), actualClasses.get(i)));
@@ -132,5 +143,6 @@ public class LicenseeClassRepositoryIntegrationTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getEnrollmentProfile(), actual.getEnrollmentProfile());
         assertEquals(expected.getDiscipline(), actual.getDiscipline());
+        assertEquals(expected.getDescription(), actual.getDescription());
     }
 }

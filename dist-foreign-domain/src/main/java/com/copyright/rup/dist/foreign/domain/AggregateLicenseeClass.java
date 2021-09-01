@@ -19,6 +19,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
 
     private String enrollmentProfile;
     private String discipline;
+    private String description;
 
     /**
      * Default constructor.
@@ -35,6 +36,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
         this.setId(aggregateLicenseeClass.getId());
         enrollmentProfile = aggregateLicenseeClass.getEnrollmentProfile();
         discipline = aggregateLicenseeClass.getDiscipline();
+        description = aggregateLicenseeClass.getDescription();
     }
 
     public String getEnrollmentProfile() {
@@ -53,6 +55,14 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
         this.discipline = discipline;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -66,6 +76,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.equals(obj))
             .append(enrollmentProfile, that.enrollmentProfile)
             .append(discipline, that.discipline)
+            .append(description, that.description)
             .isEquals();
     }
 
@@ -75,6 +86,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.hashCode())
             .append(enrollmentProfile)
             .append(discipline)
+            .append(description)
             .toHashCode();
     }
 
@@ -84,6 +96,7 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
             .appendSuper(super.toString())
             .append("enrollmentProfile", enrollmentProfile)
             .append("discipline", discipline)
+            .append("description", description)
             .toString();
     }
 }
