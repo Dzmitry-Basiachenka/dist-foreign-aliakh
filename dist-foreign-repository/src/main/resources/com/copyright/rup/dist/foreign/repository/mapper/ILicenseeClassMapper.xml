@@ -7,6 +7,7 @@
     <resultMap id="aggregateLicenseeClassResultMap" type="AggregateLicenseeClass" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="aggregate_licensee_class_id"/>
         <result property="discipline" column="discipline"/>
+        <result property="description" column="description"/>
         <result property="enrollmentProfile" column="enrollment_profile"/>
     </resultMap>
 
@@ -41,6 +42,7 @@
         select
             aggregate_licensee_class_id,
             discipline,
+            description,
             enrollment_profile,
             <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_aggregate_licensee_class
