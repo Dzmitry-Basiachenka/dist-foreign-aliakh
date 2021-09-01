@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,17 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     @Autowired
     private IUdmUsageController udmUsageController;
 
+    @Autowired
+    private IUdmValueController udmValueController;
+
     @Override
     public IUdmUsageController getUdmUsageController() {
         return udmUsageController;
+    }
+
+    @Override
+    public IUdmValueController getUdmValueController() {
+        return udmValueController;
     }
 
     @Override

@@ -90,7 +90,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         FooterRow footer = udmValuesGrid.appendFooterRow();
         udmValuesGrid.setFooterVisible(true);
         Column<UdmValueDto, ?> column = addColumn(UdmValueDto::getValuePeriod, "table.column.value_period",
-            "valuePeriod", 100);
+            "valuePeriod", 150);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmValueDto::getStatus, "table.column.status", "status", 100),
