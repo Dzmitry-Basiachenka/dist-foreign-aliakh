@@ -92,9 +92,9 @@
         background-position: center center;
     }
 
-    /*=== Styles for empty Audit grid ===*/
-    .empty-audit-grid .v-grid-tablewrapper {
-        background-image: url("img/empty_audit_table.png");
+    /*=== Styles for empty Baseline and Audit grids ===*/
+    .empty-baseline-grid .v-grid-tablewrapper, .empty-audit-grid .v-grid-tablewrapper {
+        background-image: url("img/empty_table.png");
         background-repeat: no-repeat;
         background-position: center center;
     }
