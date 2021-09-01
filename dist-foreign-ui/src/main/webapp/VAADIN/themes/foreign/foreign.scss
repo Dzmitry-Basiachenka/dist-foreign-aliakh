@@ -78,21 +78,28 @@
         width: 0px;
     }
 
-    /*=== Styles for Usages grid ===*/
+    /*=== Styles for empty Usages grid ===*/
     .empty-usages-grid .v-grid-tablewrapper {
         background-image: url("img/empty_usages_table.png");
         background-repeat: no-repeat;
         background-position: center center;
     }
 
-    /*=== Styles for Audit grid ===*/
+    /*=== Styles for empty Values grid ===*/
+    .empty-values-grid .v-grid-tablewrapper {
+        background-image: url("img/empty_values_table.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    /*=== Styles for empty Audit grid ===*/
     .empty-audit-grid .v-grid-tablewrapper {
         background-image: url("img/empty_audit_table.png");
         background-repeat: no-repeat;
         background-position: center center;
     }
 
-    /*=== Styles for Batch Status grid ===*/
+    /*=== Styles for empty Batch Status grid ===*/
     .empty-batch-status-grid .v-grid-tablewrapper {
         background-image: url("img/empty_batch_status_table.png");
         background-repeat: no-repeat;
