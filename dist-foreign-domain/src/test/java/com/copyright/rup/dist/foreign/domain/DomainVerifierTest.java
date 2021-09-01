@@ -112,7 +112,8 @@ public class DomainVerifierTest {
             {FilterLessThanExpression.class},
             {UdmActionReason.class},
             {UdmIneligibleReason.class},
-            {UdmValueDto.class}
+            {UdmValueDto.class},
+            {UdmBaselineDto.class}
         };
         return Arrays.asList(testData);
     }
