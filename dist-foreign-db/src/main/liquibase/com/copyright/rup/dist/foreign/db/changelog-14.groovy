@@ -376,4 +376,27 @@ databaseChangeLog {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_udm_audit', columnName: 'action_reason', newDataType: 'VARCHAR(2000)')
         }
     }
+
+    changeSet(id: '2021-09-01-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-65866 FDA & UDM: publish usages to baseline: add is_baseline_flag, baseline_created_by_user and " +
+                "baseline_created_datetime column to df_udm_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'is_baseline_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Baseline Flag') {
+                constraints(nullable: false)
+            }
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'baseline_created_by_user', type: 'varchar(320)', remarks: 'The user name who created this record')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'baseline_created_datetime', type: 'TIMESTAMPTZ', remarks: 'The date and time this record was created')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
