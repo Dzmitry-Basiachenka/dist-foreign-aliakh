@@ -4,6 +4,8 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -32,7 +34,11 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         udmUsageWidget.setController(udmUsageController);
         udmUsageWidget.init();
         addTab(udmUsageWidget, ForeignUi.getMessage("tab.usages"));
-        addTab(new Panel(), ForeignUi.getMessage("tab.values")); //TODO implement the Values tab
+        IUdmValueController udmValueController = controller.getUdmValueController();
+        IUdmValueWidget udmValueWidget = udmValueController.initWidget();
+        udmValueWidget.setController(udmValueController);
+        udmValueWidget.init();
+        addTab(udmValueWidget, ForeignUi.getMessage("tab.values"));
         addTab(new Panel(), ForeignUi.getMessage("tab.baseline")); //TODO implement the Baseline tab
         setSizeFull();
         return this;
