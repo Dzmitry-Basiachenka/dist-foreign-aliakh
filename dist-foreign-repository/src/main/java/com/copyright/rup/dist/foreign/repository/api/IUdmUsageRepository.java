@@ -130,4 +130,13 @@ public interface IUdmUsageRepository {
      * @param updateUser  user who updates assignee
      */
     void updateAssignee(Set<String> udmUsageIds, String assignee, String updateUser);
+
+    /**
+     * Publishes UDM usages to baseline. Sets is_baseline_flag {@code true}.
+     *
+     * @param period   usage period
+     * @param userName name of user
+     * @return set of UDM usage ids
+     */
+    Set<String> publishUdmUsagesToBaseline(Integer period, String userName);
 }

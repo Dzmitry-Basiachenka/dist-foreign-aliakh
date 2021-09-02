@@ -118,5 +118,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmReportMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmActionReasonMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmIneligibleReasonMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBaselineMapper.xml"/>
     </mappers>
 </configuration>
