@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -18,9 +19,12 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Implementation of {@link IUdmValueWidget}.
@@ -35,6 +39,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
+    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00########",
+        CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private IUdmValueController controller;
     private Grid<UdmValueDto> udmValuesGrid;
@@ -53,6 +59,16 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     @Override
     public void setController(IUdmValueController controller) {
         this.controller = controller;
+    }
+
+    /**
+     * Formats decimal amount without trailing zeros after the second digit after the decimal point.
+     *
+     * @param amount instance of {@link BigDecimal}
+     * @return formatted string or empty string in case if amount is null
+     */
+    String formatAmount(BigDecimal amount) {
+        return CurrencyUtils.format(amount, AMOUNT_FORMATTER);
     }
 
     private VerticalLayout initValuesLayout() {
@@ -106,19 +122,19 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getLastValuePeriod, "table.column.last_value_period", "lastValuePeriod", 100),
             addColumn(UdmValueDto::getLastPubType, "table.column.last_pub_type", "lastPubType", 150),
             addColumn(UdmValueDto::getPublicationType, "table.column.publication_type", "publicationType", 150),
-            addColumn(UdmValueDto::getLastPriceInUsd, "table.column.last_price_in_usd", "lastPriceInUsd", 120),
+            addAmountColumn(UdmValueDto::getLastPriceInUsd, "table.column.last_price_in_usd", "lastPriceInUsd", 120),
             addColumn(UdmValueDto::getLastPriceFlag, "table.column.last_price_flag", "lastPriceFlag", 100),
             addColumn(UdmValueDto::getLastPriceSource, "table.column.last_price_source", "lastPriceSource", 100),
             addColumn(UdmValueDto::getLastPriceComment, "table.column.last_price_comment", "lastPriceComment", 100),
-            addColumn(UdmValueDto::getPrice, "table.column.price", "price", 120),
+            addAmountColumn(UdmValueDto::getPrice, "table.column.price", "price", 120),
             addColumn(UdmValueDto::getCurrency, "table.column.currency", "currency", 100),
             addColumn(UdmValueDto::getPriceType, "table.column.price_type", "priceType", 100),
             addColumn(UdmValueDto::getPriceAccessType, "table.column.price_access_type", "priceAccessType", 100),
             addColumn(UdmValueDto::getPriceYear, "table.column.price_year", "priceYear", 100),
             addColumn(UdmValueDto::getPriceComment, "table.column.price_comment", "priceComment", 100),
-            addColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
+            addAmountColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
             addColumn(UdmValueDto::getPriceFlag, "table.column.price_flag", "priceFlag", 100),
-            addColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
+            addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 120),
             addColumn(value -> getStringFromLocalDate(value.getCurrencyExchangeRateDate()),
                 "table.column.currency_exchange_rate_date", "currencyExchangeRateDate", 100),
@@ -130,7 +146,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
             addColumn(UdmValueDto::getContentComment, "table.column.content_comment", "contentComment", 100),
             addColumn(UdmValueDto::getContentFlag, "table.column.content_flag", "contentFlag", 100),
-            addColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice", 120),
+            addAmountColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
+                120),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
             addColumn(UdmValueDto::getUpdateUser, "table.column.updated_by", "updateUser", 100),
             addColumn(value -> getStringFromDate(value.getUpdateDate()), "table.column.updated_date", "updateDate",
@@ -140,6 +157,18 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private Column<UdmValueDto, ?> addColumn(ValueProvider<UdmValueDto, ?> valueProvider, String captionProperty,
                                              String columnId, double width) {
         return udmValuesGrid.addColumn(valueProvider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true)
+            .setSortProperty(columnId)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private Column<UdmValueDto, ?> addAmountColumn(Function<UdmValueDto, BigDecimal> function, String captionProperty,
+                                                   String columnId, double width) {
+        return udmValuesGrid.addColumn(value -> formatAmount(function.apply(value)))
+            .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)
