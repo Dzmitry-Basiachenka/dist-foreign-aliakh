@@ -18,6 +18,7 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,9 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Liakh
  */
 public class UdmValueWidgetTest {
+
+    private static final String FORMATTED_PLUS_THOUSAND = "1,000.00";
+    private static final String FORMATTED_MINUS_THOUSAND = "-1,000.00";
 
     private IUdmValueController controller;
 
@@ -60,6 +64,41 @@ public class UdmValueWidgetTest {
         assertEquals(1, layout.getComponentCount());
         verifyGrid((Grid) layout.getComponent(0));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);
+    }
+
+    @Test
+    public void testFormatAmount() {
+        UdmValueWidget widget = new UdmValueWidget();
+        assertEquals(FORMATTED_PLUS_THOUSAND, widget.formatAmount(new BigDecimal("1000")));
+        assertEquals(FORMATTED_PLUS_THOUSAND, widget.formatAmount(new BigDecimal("1000.")));
+        assertEquals(FORMATTED_PLUS_THOUSAND, widget.formatAmount(new BigDecimal("1000.0")));
+        assertEquals(FORMATTED_PLUS_THOUSAND, widget.formatAmount(new BigDecimal("1000.00")));
+        assertEquals(FORMATTED_PLUS_THOUSAND, widget.formatAmount(new BigDecimal("1000.000")));
+        assertEquals("1,000.10", widget.formatAmount(new BigDecimal("1000.100")));
+        assertEquals("1,000.01", widget.formatAmount(new BigDecimal("1000.010")));
+        assertEquals("1,000.001", widget.formatAmount(new BigDecimal("1000.001")));
+        assertEquals("1,000.0001", widget.formatAmount(new BigDecimal("1000.0001")));
+        assertEquals("1,000.00001", widget.formatAmount(new BigDecimal("1000.00001")));
+        assertEquals("1,000.000001", widget.formatAmount(new BigDecimal("1000.000001")));
+        assertEquals("1,000.0000001", widget.formatAmount(new BigDecimal("1000.0000001")));
+        assertEquals("1,000.00000001", widget.formatAmount(new BigDecimal("1000.00000001")));
+        assertEquals("1,000.000000001", widget.formatAmount(new BigDecimal("1000.000000001")));
+        assertEquals("1,000.0000000001", widget.formatAmount(new BigDecimal("1000.0000000001")));
+        assertEquals(FORMATTED_MINUS_THOUSAND, widget.formatAmount(new BigDecimal("-1000")));
+        assertEquals(FORMATTED_MINUS_THOUSAND, widget.formatAmount(new BigDecimal("-1000.")));
+        assertEquals(FORMATTED_MINUS_THOUSAND, widget.formatAmount(new BigDecimal("-1000.0")));
+        assertEquals(FORMATTED_MINUS_THOUSAND, widget.formatAmount(new BigDecimal("-1000.00")));
+        assertEquals(FORMATTED_MINUS_THOUSAND, widget.formatAmount(new BigDecimal("-1000.000")));
+        assertEquals("-1,000.10", widget.formatAmount(new BigDecimal("-1000.100")));
+        assertEquals("-1,000.01", widget.formatAmount(new BigDecimal("-1000.010")));
+        assertEquals("-1,000.001", widget.formatAmount(new BigDecimal("-1000.001")));
+        assertEquals("-1,000.0001", widget.formatAmount(new BigDecimal("-1000.0001")));
+        assertEquals("-1,000.00001", widget.formatAmount(new BigDecimal("-1000.00001")));
+        assertEquals("-1,000.000001", widget.formatAmount(new BigDecimal("-1000.000001")));
+        assertEquals("-1,000.0000001", widget.formatAmount(new BigDecimal("-1000.0000001")));
+        assertEquals("-1,000.00000001", widget.formatAmount(new BigDecimal("-1000.00000001")));
+        assertEquals("-1,000.000000001", widget.formatAmount(new BigDecimal("-1000.000000001")));
+        assertEquals("-1,000.0000000001", widget.formatAmount(new BigDecimal("-1000.0000000001")));
     }
 
     private void verifyGrid(Grid grid) {
