@@ -22,4 +22,9 @@ public interface IUdmController extends IController<IUdmWidget> {
      * @return instance of {@link IUdmValueController}.
      */
     IUdmValueController getUdmValueController();
+
+    /**
+     * @return instance of {@link IUdmBaselineController}
+     */
+    IUdmBaselineController getUdmBaselineController();
 }

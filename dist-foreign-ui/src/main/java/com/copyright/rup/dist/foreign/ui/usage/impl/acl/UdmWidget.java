@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageWidget;
@@ -9,7 +12,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.vaadin.ui.Panel;
+
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -39,7 +42,13 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         udmValueWidget.setController(udmValueController);
         udmValueWidget.init();
         addTab(udmValueWidget, ForeignUi.getMessage("tab.values"));
-        addTab(new Panel(), ForeignUi.getMessage("tab.baseline")); //TODO implement the Baseline tab
+        if (!ForeignSecurityUtils.hasResearcherPermission()) {
+            IUdmBaselineController udmBaselineController = controller.getUdmBaselineController();
+            IUdmBaselineWidget udmBaselineWidget = udmBaselineController.initWidget();
+            udmBaselineWidget.setController(udmBaselineController);
+            udmBaselineWidget.init();
+            addTab(udmBaselineWidget, ForeignUi.getMessage("tab.baseline"));
+        }
         setSizeFull();
         return this;
     }

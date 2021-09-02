@@ -5,9 +5,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -27,13 +29,16 @@ public class UdmControllerTest {
 
     private IUdmUsageController udmUsageController;
     private IUdmValueController udmValueController;
+    private IUdmBaselineController udmBaselineController;
 
     @Before
     public void setUp() {
         udmUsageController = createMock(IUdmUsageController.class);
         udmValueController = createMock(IUdmValueController.class);
+        udmBaselineController = createMock(IUdmBaselineController.class);
         Whitebox.setInternalState(controller, udmUsageController);
         Whitebox.setInternalState(controller, udmValueController);
+        Whitebox.setInternalState(controller, udmBaselineController);
     }
 
     @Test
@@ -44,6 +49,11 @@ public class UdmControllerTest {
     @Test
     public void testGetUdmValueController() {
         assertSame(udmValueController, controller.getUdmValueController());
+    }
+
+    @Test
+    public void testGetUdmBaselineController() {
+        assertSame(udmBaselineController, controller.getUdmBaselineController());
     }
 
     @Test
