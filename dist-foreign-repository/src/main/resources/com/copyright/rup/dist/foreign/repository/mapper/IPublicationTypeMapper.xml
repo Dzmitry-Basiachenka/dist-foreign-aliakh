@@ -7,23 +7,29 @@
     <resultMap id="pubTypeMap" type="PubType" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_publication_type_uid"/>
         <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="productFamily" column="product_family"/>
         <result property="weight" column="weight"/>
     </resultMap>
 
-    <select id="isPublicationTypeExist" parameterType="string" resultType="boolean">
+    <select id="isExistForProductFamily" parameterType="map" resultType="boolean">
         select exists (
             select
             from ${schema}.df_publication_type
             where name ilike #{pubTypeName}
+                and product_family = #{productFamily}
         )
     </select>
 
-    <select id="findPublicationTypes" resultMap="pubTypeMap">
+    <select id="findByProductFamily" parameterType="string" resultMap="pubTypeMap">
         select
             df_publication_type_uid,
             name,
+            description,
+            product_family,
             weight
         from ${schema}.df_publication_type
+        where product_family = #{productFamily}
         order by name
     </select>
 </mapper>

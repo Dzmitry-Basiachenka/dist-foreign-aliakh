@@ -399,4 +399,116 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2021-09-02-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-66785 [Value] FDA & UDM: Create Publication Types table: add description and product_family columns into df_publication_type table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'description', type: 'VARCHAR(256)', remarks: 'The description')
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'The product family')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'product_family', value: 'AACL')
+            where "product_family is null"
+        }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_publication_type', columnName: 'product_family',
+                columnDataType: 'VARCHAR(128)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_publication_type', columnName: 'description')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_publication_type', columnName: 'product_family')
+        }
+    }
+
+    changeSet(id: '2021-09-02-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-66785 [Value] FDA & UDM: Create Publication Types table: add ACL publication types into df_publication_type table")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'name', value: 'BK')
+            column(name: 'description', value: 'Book')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: 'f1f523ca-1b46-4d3a-842d-99252785187c')
+            column(name: 'name', value: 'BK2')
+            column(name: 'description', value: 'Book series')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
+            column(name: 'name', value: 'NL')
+            column(name: 'description', value: 'Newsletter')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'name', value: 'NP')
+            column(name: 'description', value: 'Newspaper')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '3.5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
+            column(name: 'name', value: 'OT')
+            column(name: 'description', value: 'Other')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '34574f62-7922-48b9-b798-73bf5c3163da')
+            column(name: 'name', value: 'SJ')
+            column(name: 'description', value: 'Scholarly Journal')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1.3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '9c5c6797-a861-44ae-ada9-438acb20334d')
+            column(name: 'name', value: 'STND')
+            column(name: 'description', value: 'Standards')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: 'c0db0a37-9854-495f-99b7-1e3486c232cb')
+            column(name: 'name', value: 'TG')
+            column(name: 'description', value: 'Trade Magazine/Journal')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '0a4bcf78-95cb-445e-928b-e48ad12acfd2')
+            column(name: 'name', value: 'TGB')
+            column(name: 'description', value: 'Trade and Business News')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+            column(name: 'df_publication_type_uid', value: '56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe')
+            column(name: 'name', value: 'TGC')
+            column(name: 'description', value: 'Consumer magazine')
+            column(name: 'product_family', value: 'ACL')
+            column(name: 'weight', value: '2.7')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_publication_type') {
+                where "product_family = 'ACL'"
+            }
+        }
+    }
 }

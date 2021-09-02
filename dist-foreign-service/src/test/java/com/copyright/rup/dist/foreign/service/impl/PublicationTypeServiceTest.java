@@ -11,7 +11,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
-import com.copyright.rup.dist.foreign.service.impl.aacl.PublicationTypeService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +31,7 @@ import java.util.List;
  */
 public class PublicationTypeServiceTest {
 
+    private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String PUB_TYPE = "Book";
     private IPublicationTypeService publicationTypeService;
     private IPublicationTypeRepository publicationTypeRepository;
@@ -45,27 +45,26 @@ public class PublicationTypeServiceTest {
 
     @Test
     public void testIsPublicationTypeExist() {
-        expect(publicationTypeRepository.isPublicationTypeExist(PUB_TYPE)).andReturn(true)
-            .once();
+        expect(publicationTypeRepository.isExistForProductFamily(PUB_TYPE, AACL_PRODUCT_FAMILY)).andReturn(true).once();
         replay(publicationTypeRepository);
-        assertTrue(publicationTypeService.publicationTypeExist(PUB_TYPE));
+        assertTrue(publicationTypeService.publicationTypeExist(PUB_TYPE, AACL_PRODUCT_FAMILY));
         verify(publicationTypeRepository);
     }
 
     @Test
     public void testIsPublicationTypeExistNameNull() {
-        expect(publicationTypeRepository.isPublicationTypeExist(null)).andReturn(false).once();
+        expect(publicationTypeRepository.isExistForProductFamily(null, AACL_PRODUCT_FAMILY)).andReturn(false).once();
         replay(publicationTypeRepository);
-        assertFalse(publicationTypeService.publicationTypeExist(null));
+        assertFalse(publicationTypeService.publicationTypeExist(null, AACL_PRODUCT_FAMILY));
         verify(publicationTypeRepository);
     }
 
     @Test
     public void testGetPublicationTypes() {
         List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
-        expect(publicationTypeRepository.findPublicationTypes()).andReturn(pubTypes).once();
+        expect(publicationTypeRepository.findByProductFamily(AACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeRepository);
-        assertEquals(pubTypes, publicationTypeService.getPublicationTypes());
+        assertEquals(pubTypes, publicationTypeService.getPublicationTypes(AACL_PRODUCT_FAMILY));
         verify(publicationTypeRepository);
     }
 

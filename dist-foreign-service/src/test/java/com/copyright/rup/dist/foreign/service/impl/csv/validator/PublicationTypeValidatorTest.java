@@ -38,7 +38,7 @@ public class PublicationTypeValidatorTest {
     @Test
     public void testIsValid() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(PUB_TYPE);
-        expect(publicationTypeService.publicationTypeExist(PUB_TYPE)).andReturn(true).once();
+        expect(publicationTypeService.publicationTypeExist(PUB_TYPE, "AACL")).andReturn(true).once();
         replay(publicationTypeService);
         assertTrue(validator.isValid(usage));
         verify(publicationTypeService);
@@ -55,7 +55,7 @@ public class PublicationTypeValidatorTest {
     @Test
     public void testIsValidPubTypeNotExist() {
         AaclClassifiedUsage usage = buildClassifiedAaclUsage(null);
-        expect(publicationTypeService.publicationTypeExist(null)).andReturn(false).once();
+        expect(publicationTypeService.publicationTypeExist(null, "AACL")).andReturn(false).once();
         replay(publicationTypeService);
         assertFalse(validator.isValid(usage));
         verify(publicationTypeService);

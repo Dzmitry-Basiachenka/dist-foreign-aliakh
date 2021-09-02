@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.aacl;
+package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
@@ -25,12 +25,12 @@ public class PublicationTypeService implements IPublicationTypeService {
     private IPublicationTypeRepository pubTypeRepository;
 
     @Override
-    public boolean publicationTypeExist(String pubTypeName) {
-        return pubTypeRepository.isPublicationTypeExist(pubTypeName);
+    public boolean publicationTypeExist(String pubTypeName, String productFamily) {
+        return pubTypeRepository.isExistForProductFamily(pubTypeName, productFamily);
     }
 
     @Override
-    public List<PublicationType> getPublicationTypes() {
-        return pubTypeRepository.findPublicationTypes();
+    public List<PublicationType> getPublicationTypes(String productFamily) {
+        return pubTypeRepository.findByProductFamily(productFamily);
     }
 }

@@ -4,9 +4,13 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IPublicationTypeRepository}.
@@ -21,12 +25,15 @@ import java.util.List;
 public class PublicationTypeRepository extends BaseRepository implements IPublicationTypeRepository {
 
     @Override
-    public boolean isPublicationTypeExist(String pubTypeName) {
-        return selectOne("IPublicationTypeMapper.isPublicationTypeExist", escapeSqlLikePattern(pubTypeName));
+    public boolean isExistForProductFamily(String pubTypeName, String productFamily) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("pubTypeName", escapeSqlLikePattern(Objects.requireNonNull(pubTypeName)));
+        params.put("productFamily", Objects.requireNonNull(productFamily));
+        return selectOne("IPublicationTypeMapper.isExistForProductFamily", params);
     }
 
     @Override
-    public List<PublicationType> findPublicationTypes() {
-        return selectList("IPublicationTypeMapper.findPublicationTypes");
+    public List<PublicationType> findByProductFamily(String productFamily) {
+        return selectList("IPublicationTypeMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }
 }

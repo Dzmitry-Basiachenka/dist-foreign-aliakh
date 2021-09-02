@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 
 /**
@@ -33,7 +34,8 @@ public class PublicationTypeValidator implements DistCsvProcessor.IValidator<Aac
     public boolean isValid(AaclClassifiedUsage aaclClassifiedUsage) {
         checkNotNull(aaclClassifiedUsage);
         return "disqualified".equalsIgnoreCase(aaclClassifiedUsage.getPublicationType())
-            || pubTypeService.publicationTypeExist(aaclClassifiedUsage.getPublicationType());
+            || pubTypeService.publicationTypeExist(aaclClassifiedUsage.getPublicationType(),
+            FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override

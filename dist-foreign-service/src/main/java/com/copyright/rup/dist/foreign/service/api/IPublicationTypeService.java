@@ -16,17 +16,19 @@ import java.util.List;
 public interface IPublicationTypeService {
 
     /**
-     * Checks whether publication type id exist with provided name ignoring case in database.
+     * Checks whether publication type id exists with provided name ignoring case for specified product family.
      *
-     * @param pubTypeName name of publication type
+     * @param pubTypeName   name of publication type
+     * @param productFamily product family
      * @return {@code true} if publication type name is present, {@code false} otherwise
      */
-    boolean publicationTypeExist(String pubTypeName);
+    boolean publicationTypeExist(String pubTypeName, String productFamily);
 
     /**
-     * Gets list of all {@link PublicationType}s.
+     * Gets list of all {@link PublicationType}s for specific product family.
      *
-     * @return list of {@link PublicationType}.
+     * @param productFamily product family
+     * @return list of {@link PublicationType}
      */
-    List<PublicationType> getPublicationTypes();
+    List<PublicationType> getPublicationTypes(String productFamily);
 }
