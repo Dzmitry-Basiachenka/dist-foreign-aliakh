@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -29,6 +30,9 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     @Autowired
     private IUdmValueController udmValueController;
 
+    @Autowired
+    private IUdmBaselineController udmBaselineController;
+
     @Override
     public IUdmUsageController getUdmUsageController() {
         return udmUsageController;
@@ -37,6 +41,11 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     @Override
     public IUdmValueController getUdmValueController() {
         return udmValueController;
+    }
+
+    @Override
+    public IUdmBaselineController getUdmBaselineController() {
+        return udmBaselineController;
     }
 
     @Override
