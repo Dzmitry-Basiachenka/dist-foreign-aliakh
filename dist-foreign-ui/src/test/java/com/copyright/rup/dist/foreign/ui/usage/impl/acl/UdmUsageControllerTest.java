@@ -176,6 +176,14 @@ public class UdmUsageControllerTest {
     }
 
     @Test
+    public void testGetPeriods() {
+        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.EMPTY_LIST);
+        replay(udmUsageFilterController);
+        controller.getPeriods();
+        verify(udmUsageFilterController);
+    }
+
+    @Test
     public void testLoadUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         List<UdmUsage> udmUsages = Arrays.asList(

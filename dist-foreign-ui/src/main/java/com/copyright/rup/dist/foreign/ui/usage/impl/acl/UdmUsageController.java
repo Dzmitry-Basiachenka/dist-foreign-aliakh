@@ -202,6 +202,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
+    public List<Integer> getPeriods() {
+        return udmUsageFilterController.getPeriods();
+    }
+
+    @Override
     public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
             pos -> udmReportService.writeUdmUsageCsvReportSpecialistManager(getFilter(), pos));
