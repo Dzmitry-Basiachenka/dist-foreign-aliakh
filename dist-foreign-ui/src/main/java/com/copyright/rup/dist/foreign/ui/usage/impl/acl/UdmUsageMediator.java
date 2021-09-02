@@ -19,6 +19,7 @@ public class UdmUsageMediator implements IMediator {
 
     private Button editButton;
     private Button multipleEditButton;
+    private Button publishButton;
     private MenuBar batchMenuBar;
     private MenuBar assignmentMenuBar;
 
@@ -31,6 +32,11 @@ public class UdmUsageMediator implements IMediator {
         assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
         editButton.setVisible(isSpecialist || isManager || isResearcher);
         multipleEditButton.setVisible(isSpecialist || isManager || isResearcher);
+        publishButton.setVisible(isSpecialist);
+    }
+
+    public void setPublishButton(Button publishButton) {
+        this.publishButton = publishButton;
     }
 
     public void setBatchMenuBar(MenuBar batchMenuBar) {

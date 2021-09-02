@@ -32,6 +32,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.themes.ValoTheme;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -66,6 +67,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
     private final Button multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
+    private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish_usage"));
     private final String userName = RupContextUtils.getUserName();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
@@ -95,6 +97,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
         mediator.setMultipleEditButton(multipleEditButton);
+        mediator.setPublishButton(publishButton);
         return mediator;
     }
 
@@ -167,8 +170,10 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     ? new UdmEditMultipleUsagesResearcherWindow(controller, selectedUsages, saveEvent -> refresh())
                     : new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
+        publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(editButton, multipleEditButton);
-        return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, exportButton);
+        return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, publishButton,
+            exportButton);
     }
 
     private void initModalWindow(Set<UdmUsageDto> selectedUsages, Window window) {

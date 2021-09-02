@@ -37,6 +37,7 @@ public class UdmUsageMediatorTest {
 
     private final Button editButton = new Button("Edit Usage");
     private final Button multipleEditButton = new Button("Multiple Edit");
+    private final Button publishButton = new Button("Publish");
     private final MenuBar udmBatchMenuBar = new MenuBar();
     private final MenuBar assignmentMenuBar = new MenuBar();
     private UdmUsageMediator mediator;
@@ -48,6 +49,7 @@ public class UdmUsageMediatorTest {
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
         mediator.setMultipleEditButton(multipleEditButton);
+        mediator.setPublishButton(publishButton);
     }
 
     @Test
@@ -59,6 +61,7 @@ public class UdmUsageMediatorTest {
         assertFalse(assignmentMenuBar.isVisible());
         assertFalse(editButton.isVisible());
         assertFalse(multipleEditButton.isVisible());
+        assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -68,6 +71,7 @@ public class UdmUsageMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(udmBatchMenuBar.isVisible());
+        assertFalse(publishButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
@@ -83,6 +87,7 @@ public class UdmUsageMediatorTest {
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
+        assertTrue(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -92,6 +97,7 @@ public class UdmUsageMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(udmBatchMenuBar.isVisible());
+        assertFalse(publishButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
