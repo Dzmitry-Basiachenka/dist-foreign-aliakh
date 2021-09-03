@@ -34,12 +34,15 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 import com.copyright.rup.dist.foreign.repository.api.IUdmActionReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmIneligibleReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,6 +100,7 @@ public class UdmUsageServiceTest {
     private ITelesalesService telesalesService;
     private IUdmUsageAuditService udmUsageAuditService;
     private IChainExecutor<UdmUsage> chainExecutor;
+    private IUdmBaselineService baselineService;
 
     @Before
     public void setUp() {
@@ -109,6 +113,7 @@ public class UdmUsageServiceTest {
         telesalesService = createMock(ITelesalesService.class);
         udmUsageAuditService = createMock(IUdmUsageAuditService.class);
         chainExecutor = createMock(IChainExecutor.class);
+        baselineService = createMock(IUdmBaselineService.class);
         Whitebox.setInternalState(udmUsageService, udmUsageRepository);
         Whitebox.setInternalState(udmUsageService, udmActionReasonRepository);
         Whitebox.setInternalState(udmUsageService, udmIneligibleReasonRepository);
@@ -118,6 +123,24 @@ public class UdmUsageServiceTest {
         Whitebox.setInternalState(udmUsageService, udmTypeOfUseService);
         Whitebox.setInternalState(udmUsageService, telesalesService);
         Whitebox.setInternalState(udmUsageService, udmUsageAuditService);
+        Whitebox.setInternalState(udmUsageService, baselineService);
+    }
+
+    @Test
+    public void testPublishUdmUsageToBaseline() {
+        mockStatic(RupContextUtils.class);
+        Set<String> usageIds = Collections.singleton("367233a7-702f-4a88-82b4-b95a5508ab52");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME)).andReturn(usageIds).once();
+        udmUsageAuditService.logAction("367233a7-702f-4a88-82b4-b95a5508ab52", UsageActionTypeEnum.PUBLISH_TO_BASELINE,
+            "Publish have been completed. UDM usage was published by user@copyright.com");
+        expectLastCall();
+        expect(baselineService.removeFromBaseline(202106)).andReturn(5).once();
+        replay(udmUsageRepository, baselineService, RupContextUtils.class);
+        Pair<Integer, Integer> publishedRemovedUsagesPair = udmUsageService.publishUdmUsagesToBaseline(202106);
+        verify(udmUsageRepository, baselineService, RupContextUtils.class);
+        assertEquals(Integer.valueOf(1), publishedRemovedUsagesPair.getLeft());
+        assertEquals(Integer.valueOf(5), publishedRemovedUsagesPair.getRight());
     }
 
     @Test

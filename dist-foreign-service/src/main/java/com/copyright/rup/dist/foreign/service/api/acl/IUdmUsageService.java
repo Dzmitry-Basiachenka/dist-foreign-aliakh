@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -172,4 +174,12 @@ public interface IUdmUsageService {
      * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
      */
     void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap, boolean isResearcher);
+
+    /**
+     * Publishes UDM usages to baseline.
+     *
+     * @param period period of usage
+     * @return pair of count of published to baseline and count of removed from baseline
+     */
+    Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
 }

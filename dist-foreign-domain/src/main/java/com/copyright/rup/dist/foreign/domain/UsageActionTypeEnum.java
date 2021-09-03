@@ -83,6 +83,11 @@ public enum UsageActionTypeEnum {
     ASSIGNEE_CHANGE,
 
     /**
+     * Action type for UDM usage publish.
+     */
+    PUBLISH_TO_BASELINE,
+
+    /**
      * Action type for eligible usages.
      */
     ELIGIBLE,

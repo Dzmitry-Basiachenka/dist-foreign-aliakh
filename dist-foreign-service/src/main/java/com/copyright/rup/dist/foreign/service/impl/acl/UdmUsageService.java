@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 import com.copyright.rup.dist.foreign.repository.api.IUdmActionReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmIneligibleReasonRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -74,6 +75,8 @@ public class UdmUsageService implements IUdmUsageService {
     private UdmAnnualizedCopiesCalculator udmAnnualizedCopiesCalculator;
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    private IUdmBaselineService baselineService;
     @Autowired
     @Qualifier("df.integration.telesalesCacheService")
     private ITelesalesService telesalesService;
@@ -258,6 +261,22 @@ public class UdmUsageService implements IUdmUsageService {
                              boolean isResearcher) {
         udmUsageDtoToFieldValuesMap.forEach((udmUsageDto, udmAuditFieldToValuesMap) ->
             updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher));
+    }
+
+    @Override
+    @Transactional
+    public Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Publish to baseline UDM usages. Started. Period={}. UserName={}", period, userName);
+        Set<String> publishedUsageIds = udmUsageRepository.publishUdmUsagesToBaseline(period, userName);
+        int publishedCount = publishedUsageIds.size();
+        publishedUsageIds.forEach(usageId ->
+            udmUsageAuditService.logAction(usageId, UsageActionTypeEnum.PUBLISH_TO_BASELINE,
+                String.format("Publish have been completed. UDM usage was published by %s", userName)));
+        int removedCount = baselineService.removeFromBaseline(period);
+        LOGGER.info("Publish to baseline UDM usages. Finished. PublishedCount={}, RemovedCount={}",
+            publishedCount, removedCount);
+        return Pair.of(publishedCount, removedCount);
     }
 
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {
