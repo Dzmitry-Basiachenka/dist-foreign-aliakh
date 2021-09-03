@@ -57,6 +57,7 @@ public class UdmUsageDto extends StoredEntity<String> {
     private UdmIneligibleReason ineligibleReason;
     private String comment;
     private String researchUrl;
+    private boolean baselineFlag;
 
     public Integer getPeriod() {
         return period;
@@ -354,6 +355,14 @@ public class UdmUsageDto extends StoredEntity<String> {
         this.researchUrl = researchUrl;
     }
 
+    public boolean isBaselineFlag() {
+        return baselineFlag;
+    }
+
+    public void setBaselineFlag(boolean baselineFlag) {
+        this.baselineFlag = baselineFlag;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -402,6 +411,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(annualizedCopies, udmUsage.annualizedCopies)
             .append(comment, udmUsage.comment)
             .append(researchUrl, udmUsage.researchUrl)
+            .append(baselineFlag, udmUsage.baselineFlag)
             .isEquals();
     }
 
@@ -446,6 +456,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append(annualizedCopies)
             .append(comment)
             .append(researchUrl)
+            .append(baselineFlag)
             .toHashCode();
     }
 
@@ -491,6 +502,7 @@ public class UdmUsageDto extends StoredEntity<String> {
             .append("annualizedCopies", annualizedCopies)
             .append("comment", comment)
             .append("researchUrl", researchUrl)
+            .append("baselineFlag", baselineFlag)
             .toString();
     }
 }

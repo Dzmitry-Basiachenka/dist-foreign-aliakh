@@ -16,6 +16,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -133,5 +134,13 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
         parameters.put("updateUser", Objects.requireNonNull(updateUser));
         parameters.put("assignee", assignee);
         update("IUdmUsageMapper.updateAssignee", parameters);
+    }
+
+    @Override
+    public Set<String> publishUdmUsagesToBaseline(Integer period, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("createUser", Objects.requireNonNull(userName));
+        return new HashSet<>(selectList("IUdmUsageMapper.publishToBaseline", parameters));
     }
 }

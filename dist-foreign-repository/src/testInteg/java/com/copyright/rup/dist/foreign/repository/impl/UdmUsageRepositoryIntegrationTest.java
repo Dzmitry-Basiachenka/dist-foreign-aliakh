@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -616,6 +617,22 @@ public class UdmUsageRepositoryIntegrationTest {
             .updateAssignee(Collections.singleton("d247235f-3595-4b74-b091-f6f91fba2e7d"), null, USER_NAME);
         udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertNull(udmUsagedto.getAssignee());
+    }
+
+    @Test
+    public void testPublishUdmUsageToBaseline() {
+        UdmUsageFilter filter = new UdmUsageFilter();
+        filter.setUdmBatchesIds(Collections.singleton("9608ee69-ea5d-4a80-b31d-399514a4f51e"));
+        List<UdmUsageDto> usageDtos = udmUsageRepository.findDtosByFilter(filter, null, null);
+        assertEquals(3, usageDtos.size());
+        usageDtos.forEach(usageDto -> assertFalse(usageDto.isBaselineFlag()));
+        Set<String> udmUsageIds = udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME);
+        assertEquals(1, udmUsageIds.size());
+        filter.setPeriod(202106);
+        assertEquals(1, udmUsageRepository.findDtosByFilter(filter, null, null)
+            .stream()
+            .filter(UdmUsageDto::isBaselineFlag)
+            .count());
     }
 
     private void verifyFindBySearchValue(String searchValue, String... udmUsageIds) {

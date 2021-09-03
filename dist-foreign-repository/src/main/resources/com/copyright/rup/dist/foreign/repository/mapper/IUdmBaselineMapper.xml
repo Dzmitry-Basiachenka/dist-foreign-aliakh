@@ -1,0 +1,18 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmBaselineMapper">
+
+    <select id="removeFromBaseline" parameterType="map" resultType="string">
+        update ${schema}.df_udm_usage
+        set
+            is_baseline_flag = false,
+            baseline_created_by_user = null,
+            baseline_created_datetime = null
+        where status_ind != 'ELIGIBLE'
+            and period = #{period}
+            and is_baseline_flag = true
+        returning df_udm_usage_uid
+    </select>
+</mapper>

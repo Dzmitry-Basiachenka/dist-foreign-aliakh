@@ -82,6 +82,7 @@
         <result property="actionReason.reason" column="action_reason"/>
         <result property="ineligibleReason.id" column="df_udm_ineligible_reason_uid"/>
         <result property="ineligibleReason.reason" column="ineligible_reason"/>
+        <result property="baselineFlag" column="is_baseline_flag"/>
     </resultMap>
 
     <sql id="udmUsageFilter">
@@ -264,6 +265,7 @@
             ar.action_reason,
             ir.df_udm_ineligible_reason_uid,
             ir.ineligible_reason,
+            is_baseline_flag,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -658,4 +660,16 @@
                 #{udmUsageId}
             </foreach>
     </update>
+
+    <select id="publishToBaseline" parameterType="map" resultType="string">
+        update ${schema}.df_udm_usage
+        set
+            is_baseline_flag = true,
+            baseline_created_by_user = #{createUser},
+            baseline_created_datetime = now()
+        where status_ind = 'ELIGIBLE'
+            and period = #{period}
+            and is_baseline_flag = false
+        returning df_udm_usage_uid
+    </select>
 </mapper>
