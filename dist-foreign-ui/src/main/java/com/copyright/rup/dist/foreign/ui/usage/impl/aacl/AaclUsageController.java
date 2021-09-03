@@ -222,7 +222,7 @@ public class AaclUsageController extends CommonUsageController implements IAaclU
 
     @Override
     public List<PublicationType> getPublicationTypes() {
-        return publicationTypeService.getPublicationTypes();
+        return publicationTypeService.getPublicationTypes(FdaConstants.AACL_PRODUCT_FAMILY);
     }
 
     @Override

@@ -488,7 +488,7 @@ public class AaclUsageControllerTest {
     @Test
     public void testGetPublicationTypes() {
         List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
-        expect(publicationTypeService.getPublicationTypes()).andReturn(pubTypes).once();
+        expect(publicationTypeService.getPublicationTypes(AACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
         assertEquals(pubTypes, controller.getPublicationTypes());
         verify(publicationTypeService);

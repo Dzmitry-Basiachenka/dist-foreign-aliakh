@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents publication type for AACL product family.
+ * Represents publication type domain object.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 public class PublicationType extends StoredEntity<String> {
 
     private String name;
+    private String description;
+    private String productFamily;
     private BigDecimal weight;
 
     /**
@@ -36,6 +38,8 @@ public class PublicationType extends StoredEntity<String> {
     public PublicationType(PublicationType pubType) {
         setId(pubType.getId());
         this.name = pubType.getName();
+        this.description = pubType.getDescription();
+        this.productFamily = pubType.getProductFamily();
         this.weight = pubType.getWeight();
     }
 
@@ -45,6 +49,22 @@ public class PublicationType extends StoredEntity<String> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
     public BigDecimal getWeight() {
@@ -70,6 +90,8 @@ public class PublicationType extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(name, that.name)
+            .append(description, that.description)
+            .append(productFamily, that.productFamily)
             .append(weight, that.weight)
             .isEquals();
     }
@@ -79,6 +101,8 @@ public class PublicationType extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
+            .append(description)
+            .append(productFamily)
             .append(weight)
             .toHashCode();
     }
@@ -88,6 +112,8 @@ public class PublicationType extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("name", name)
+            .append("description", description)
+            .append("productFamily", productFamily)
             .append("weight", weight)
             .toString();
     }
