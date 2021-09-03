@@ -53,24 +53,21 @@ public class UdmWidgetTest {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
         IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
-        expect(udmUsageWidget.init()).andReturn(udmUsageWidget).once();
+        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
         udmUsageWidget.setController(udmUsageController);
         expectLastCall().once();
-        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
         expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
         IUdmValueController udmValueController = createMock(IUdmValueController.class);
         IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
-        expect(udmValueWidget.init()).andReturn(udmValueWidget).once();
+        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
         udmValueWidget.setController(udmValueController);
         expectLastCall().once();
-        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
         expect(controller.getUdmValueController()).andReturn(udmValueController).once();
         IUdmBaselineController udmBaselineController = createMock(IUdmBaselineController.class);
         IUdmBaselineWidget udmBaselineWidget = createNiceMock(IUdmBaselineWidget.class);
-        expect(udmBaselineWidget.init()).andReturn(udmBaselineWidget).once();
+        expect(udmBaselineController.initWidget()).andReturn(udmBaselineWidget).once();
         udmBaselineWidget.setController(udmBaselineController);
         expectLastCall().once();
-        expect(udmBaselineController.initWidget()).andReturn(udmBaselineWidget).once();
         expect(controller.getUdmBaselineController()).andReturn(udmBaselineController).once();
         replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
             udmValueWidget, udmBaselineController, udmBaselineWidget);
@@ -96,17 +93,15 @@ public class UdmWidgetTest {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
         IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
-        expect(udmUsageWidget.init()).andReturn(udmUsageWidget).once();
+        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
         udmUsageWidget.setController(udmUsageController);
         expectLastCall().once();
-        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
         expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
         IUdmValueController udmValueController = createMock(IUdmValueController.class);
         IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
-        expect(udmValueWidget.init()).andReturn(udmValueWidget).once();
+        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
         udmValueWidget.setController(udmValueController);
         expectLastCall().once();
-        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
         expect(controller.getUdmValueController()).andReturn(udmValueController).once();
         replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
             udmValueWidget);
