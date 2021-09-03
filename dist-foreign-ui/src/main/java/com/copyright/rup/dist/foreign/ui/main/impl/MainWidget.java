@@ -57,6 +57,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
         auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
         batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
         udmTab = addTab(udmWidget, ForeignUi.getMessage("tab.udm"));
+        udmTab.getComponent().addStyleName("sub-tab");
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));

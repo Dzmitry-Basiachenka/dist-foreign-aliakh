@@ -359,4 +359,21 @@
         visibility: hidden;
         height: 0px;
     }
+
+    /**==== Styles for nested tabs ====*/
+    .main-tabsheet > .v-tabsheet-content {
+        border: none;
+    }
+
+    .sub-tabsheet > .v-tabsheet-tabcontainer {
+        background: $v-button-color !important;
+    }
+
+    .sub-tabsheet > .v-tabsheet-deco {
+        display: none;
+    }
+
+    .sub-tab > .v-panel-content {
+      border-left-width: 0px;
+    }
 }

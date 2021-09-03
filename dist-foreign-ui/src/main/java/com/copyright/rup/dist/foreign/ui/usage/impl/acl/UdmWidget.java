@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
-import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.TabSheet;
 
@@ -31,7 +30,8 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
     @Override
     @SuppressWarnings("unchecked")
     public IUdmWidget init() {
-        VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
+        this.addStyleName(Cornerstone.MAIN_TABSHEET);
+        this.addStyleName("sub-tabsheet");
         IUdmUsageController udmUsageController = controller.getUdmUsageController();
         IUdmUsageWidget udmUsageWidget = udmUsageController.initWidget();
         udmUsageWidget.setController(udmUsageController);
