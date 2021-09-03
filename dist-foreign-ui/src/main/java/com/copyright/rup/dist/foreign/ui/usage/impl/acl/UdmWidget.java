@@ -35,18 +35,15 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         IUdmUsageController udmUsageController = controller.getUdmUsageController();
         IUdmUsageWidget udmUsageWidget = udmUsageController.initWidget();
         udmUsageWidget.setController(udmUsageController);
-        udmUsageWidget.init();
         addTab(udmUsageWidget, ForeignUi.getMessage("tab.usages"));
         IUdmValueController udmValueController = controller.getUdmValueController();
         IUdmValueWidget udmValueWidget = udmValueController.initWidget();
         udmValueWidget.setController(udmValueController);
-        udmValueWidget.init();
         addTab(udmValueWidget, ForeignUi.getMessage("tab.values"));
         if (!ForeignSecurityUtils.hasResearcherPermission()) {
             IUdmBaselineController udmBaselineController = controller.getUdmBaselineController();
             IUdmBaselineWidget udmBaselineWidget = udmBaselineController.initWidget();
             udmBaselineWidget.setController(udmBaselineController);
-            udmBaselineWidget.init();
             addTab(udmBaselineWidget, ForeignUi.getMessage("tab.baseline"));
         }
         setSizeFull();
