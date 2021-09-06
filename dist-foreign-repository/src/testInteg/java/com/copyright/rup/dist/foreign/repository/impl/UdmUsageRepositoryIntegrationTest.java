@@ -466,7 +466,7 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202006, 202106, 202206, 202406, 202506);
+        List<Integer> expectedPeriods = Arrays.asList(202506, 202406, 202206, 202106, 202006);
         List<Integer> actualPeriods = udmUsageRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
