@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
@@ -60,6 +61,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -107,7 +109,9 @@ public class UdmEditUsageWindowTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String COMMENT = "Should be reviewed by Specialist";
     private static final String RESEARCH_URL = "google.com";
-    private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass();
+    private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass(DET_LC_ID, DET_LC_NAME);
+    private static final Map<Integer, DetailLicenseeClass> ID_TO_LICENSEE_CLASS = ImmutableMap.of(DET_LC_ID,
+        LICENSEE_CLASS);
     private static final UdmActionReason ACTION_REASON =
         new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
     private static final UdmIneligibleReason INELIGIBLE_REASON =
@@ -134,8 +138,6 @@ public class UdmEditUsageWindowTest {
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
-        LICENSEE_CLASS.setId(DET_LC_ID);
-        LICENSEE_CLASS.setDescription(DET_LC_NAME);
     }
 
     @Test
@@ -773,18 +775,18 @@ public class UdmEditUsageWindowTest {
 
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ID_TO_LICENSEE_CLASS).once();
         expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     private void setManagerExpectations() {
         setPermissionsExpectations(false, true, false);
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ID_TO_LICENSEE_CLASS).once();
         expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
     }
 
     private void setResearcherExpectations() {
         setPermissionsExpectations(false, false, true);
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ID_TO_LICENSEE_CLASS).once();
     }
 }

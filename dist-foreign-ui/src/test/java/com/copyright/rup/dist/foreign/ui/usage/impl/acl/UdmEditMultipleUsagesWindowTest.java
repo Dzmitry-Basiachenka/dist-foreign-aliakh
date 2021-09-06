@@ -117,7 +117,7 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final String DET_LC_NAME = "Law Firms";
     private static final String NEW_COMPANY_NAME = "Albany International Corp.";
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
-    private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass();
+    private static final DetailLicenseeClass LICENSEE_CLASS = new DetailLicenseeClass(DET_LC_ID, DET_LC_NAME);
     private static final UdmActionReason ACTION_REASON =
         new UdmActionReason("1c8f6e43-2ca8-468d-8700-ce855e6cd8c0", "Aggregated Content");
     private static final UdmActionReason NEW_ACTION_REASON =
@@ -146,10 +146,8 @@ public class UdmEditMultipleUsagesWindowTest {
         controller = createMock(IUdmUsageController.class);
         saveButtonClickListener = createMock(ClickListener.class);
         expect(controller.getAllActionReasons()).andReturn(Collections.singletonList(ACTION_REASON)).once();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(LICENSEE_CLASS)).once();
+        expect(controller.getIdsToDetailLicenseeClasses()).andReturn(ImmutableMap.of(DET_LC_ID, LICENSEE_CLASS)).once();
         expect(controller.getAllIneligibleReasons()).andReturn(Collections.singletonList(INELIGIBLE_REASON)).once();
-        LICENSEE_CLASS.setId(DET_LC_ID);
-        LICENSEE_CLASS.setDescription(DET_LC_NAME);
     }
 
     @Test
@@ -517,10 +515,7 @@ public class UdmEditMultipleUsagesWindowTest {
         udmUsageDto.setCompanyId(NEW_COMPANY_ID);
         udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
         udmUsageDto.setCompanyName(NEW_COMPANY_NAME);
-        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        detailLicenseeClass.setId(DET_LC_ID);
-        detailLicenseeClass.setDescription(DET_LC_NAME);
-        udmUsageDto.setDetailLicenseeClass(detailLicenseeClass);
+        udmUsageDto.setDetailLicenseeClass(new DetailLicenseeClass(DET_LC_ID, DET_LC_NAME));
         udmUsageDto.setQuantity(NEW_QUANTITY);
         udmUsageDto.setAnnualMultiplier(NEW_ANNUAL_MULTIPLIER);
         udmUsageDto.setStatisticalMultiplier(NEW_STATISTICAL_MULTIPLIER);
@@ -765,9 +760,7 @@ public class UdmEditMultipleUsagesWindowTest {
         udmUsage.setActionReason(ACTION_REASON);
         udmUsage.setComment(COMMENT);
         udmUsage.setResearchUrl(RESEARCH_URL);
-        LICENSEE_CLASS.setId(DET_LC_ID);
-        LICENSEE_CLASS.setDescription(DET_LC_NAME);
-        udmUsage.setDetailLicenseeClass(LICENSEE_CLASS);
+        udmUsage.setDetailLicenseeClass(new DetailLicenseeClass(DET_LC_ID, DET_LC_NAME));
         udmUsage.setCompanyId(COMPANY_ID);
         udmUsage.setCompanyName(COMPANY_NAME);
         udmUsage.setSurveyRespondent(SURVEY_RESPONDENT);

@@ -245,13 +245,20 @@ public class UdmUsageControllerTest {
     }
 
     @Test
-    public void testGetDetailLicenseeClasses() {
+    public void testGetIdsToDetailLicenseeClasses() {
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
         Whitebox.setInternalState(controller, licenseeClassService);
-        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
-        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        DetailLicenseeClass licenseeClass1 = new DetailLicenseeClass();
+        licenseeClass1.setId(1);
+        DetailLicenseeClass licenseeClass2 = new DetailLicenseeClass();
+        licenseeClass2.setId(2);
+        expect(licenseeClassService.getDetailLicenseeClasses("ACL"))
+            .andReturn(Arrays.asList(licenseeClass1, licenseeClass2)).once();
         replay(licenseeClassService);
-        assertEquals(licenseeClasses, controller.getDetailLicenseeClasses());
+        Map<Integer, DetailLicenseeClass> idsToDetailLicenseeClasses = controller.getIdsToDetailLicenseeClasses();
+        assertEquals(2, idsToDetailLicenseeClasses.size());
+        assertEquals(licenseeClass1, idsToDetailLicenseeClasses.get(1));
+        assertEquals(licenseeClass2, idsToDetailLicenseeClasses.get(2));
         verify(licenseeClassService);
     }
 

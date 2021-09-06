@@ -49,9 +49,12 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmUsageController}.
@@ -183,8 +186,14 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+    public Map<Integer, DetailLicenseeClass> getIdsToDetailLicenseeClasses() {
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY)
+            .stream()
+            .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity(),
+                (v1, v2) -> {
+                    throw new IllegalStateException(String.format("Duplicate key for values %s and %s", v1, v2));
+                },
+                LinkedHashMap::new));
     }
 
     @Override

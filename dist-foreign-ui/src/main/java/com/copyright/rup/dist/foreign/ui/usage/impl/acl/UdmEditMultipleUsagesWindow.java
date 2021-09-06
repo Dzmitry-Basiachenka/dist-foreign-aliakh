@@ -43,7 +43,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Window to edit multiple UDM usages.
@@ -108,9 +107,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         this.controller = usageController;
         this.selectedUdmUsages = selectedUdmUsages;
         saveButtonClickListener = clickListener;
-        idToLicenseeClassMap = controller.getDetailLicenseeClasses()
-            .stream()
-            .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
+        idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
         bindedUsageDto = new UdmUsageDto();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.multiple.edit_udm_usage"));

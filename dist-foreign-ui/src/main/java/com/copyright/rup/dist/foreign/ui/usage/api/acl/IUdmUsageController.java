@@ -162,9 +162,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     List<UdmIneligibleReason> getAllIneligibleReasons();
 
     /**
-     * @return list of {@link DetailLicenseeClass}.
+     * @return map of {@link DetailLicenseeClass#getId()} to {@link DetailLicenseeClass}.
      */
-    List<DetailLicenseeClass> getDetailLicenseeClasses();
+    Map<Integer, DetailLicenseeClass> getIdsToDetailLicenseeClasses();
 
     /**
      * Gets list of {@link UdmBatch}es.

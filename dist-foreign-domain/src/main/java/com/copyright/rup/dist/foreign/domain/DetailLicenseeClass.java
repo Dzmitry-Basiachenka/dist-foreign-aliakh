@@ -46,6 +46,17 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
             : null;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param id          id
+     * @param description description
+     */
+    public DetailLicenseeClass(Integer id, String description) {
+        this.setId(id);
+        this.description = description;
+    }
+
     public String getEnrollmentProfile() {
         return enrollmentProfile;
     }
