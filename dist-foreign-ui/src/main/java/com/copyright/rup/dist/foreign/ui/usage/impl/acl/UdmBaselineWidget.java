@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -14,7 +13,6 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -41,10 +39,15 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     private Grid<UdmBaselineDto> udmBaselineGrid;
 
     @Override
+    public void refresh() {
+        //TODO: add refresh logic here
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public UdmBaselineWidget init() {
         setSplitPosition(200, Unit.PIXELS);
-        setFirstComponent(initFiltersLayout());
+        setFirstComponent(controller.initBaselineFilterWidget());
         setSecondComponent(initBaselineLayout());
         setLocked(true);
         setSizeFull();
@@ -54,19 +57,6 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     @Override
     public void setController(IUdmBaselineController controller) {
         this.controller = controller;
-    }
-
-    private VerticalLayout initFiltersLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel());
-        verticalLayout.setMargin(true);
-        return verticalLayout;
-    }
-
-    //TODO {ushalamitski} implement filter widget and move this label there
-    private Label buildFiltersHeaderLabel() {
-        Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
-        filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
-        return filterHeaderLabel;
     }
 
     private VerticalLayout initBaselineLayout() {
