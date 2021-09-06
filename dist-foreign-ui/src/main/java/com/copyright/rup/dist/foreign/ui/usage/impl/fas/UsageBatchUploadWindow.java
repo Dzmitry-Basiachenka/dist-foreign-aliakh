@@ -101,7 +101,7 @@ public class UsageBatchUploadWindow extends Window {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
                         usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
-                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+                        e.getMessage() + ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
@@ -228,7 +228,7 @@ public class UsageBatchUploadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
+                ForeignUi.getMessage("field.error.not_numeric"))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber().toString(),
                 (usageBatch, s) -> usageBatch.getRro().setAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
@@ -278,8 +278,8 @@ public class UsageBatchUploadWindow extends Window {
         binder.forField(grossAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
-                "Field value should be positive number and not exceed 10 digits")
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");

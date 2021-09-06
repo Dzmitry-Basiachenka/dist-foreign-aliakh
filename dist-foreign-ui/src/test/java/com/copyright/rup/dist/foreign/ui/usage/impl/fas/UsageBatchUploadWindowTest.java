@@ -69,12 +69,15 @@ import java.util.stream.Collectors;
 public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1000001863";
+    private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
-        "Field value should be positive number and not exceed 10 digits";
+        "Field value should be positive number and should not exceed 10 digits";
+    private static final String INVALID_NUMERIC_VALUE_MESSAGE = "Field value should contain numeric values only";
+    private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
@@ -120,7 +123,7 @@ public class UsageBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
+        ((TextField) Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD)).setValue(ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField rhNameField = Whitebox.getInternalState(window, "accountNameField");
         rhNameField.setReadOnly(false);
@@ -142,11 +145,26 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        validateField(grossAmountField, "123.5684", binder, true);
-        validateField(grossAmountField, "0.00", binder, false);
-        validateField(grossAmountField, "value", binder, false);
-        validateField(grossAmountField, "10000000000.00", binder, false);
-        validateField(grossAmountField, "9999999999.99", binder, true);
+        validateField(grossAmountField, "123.5684", binder, true, StringUtils.EMPTY);
+        validateField(grossAmountField, "0.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
+        validateField(grossAmountField, "value", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
+        validateField(grossAmountField, "10000000000.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
+        validateField(grossAmountField, "9999999999.99", binder, true, StringUtils.EMPTY);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testIsValidAccountNumberField() {
+        replay(usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
+        TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        validateField(accountNumberField, "10000018631", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
+        validateField(accountNumberField, "9999999999.99", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
+        validateField(accountNumberField, "0.00", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
+        validateField(accountNumberField, "value", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
+        validateField(accountNumberField, "0", binder, true, StringUtils.EMPTY);
+        validateField(accountNumberField, "1000001863", binder, true, StringUtils.EMPTY);
         verify(usagesController);
     }
 
@@ -166,7 +184,7 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, "usageBatchNameField", new TextField("Usage Batch Name", USAGE_BATCH_NAME));
-        Whitebox.setInternalState(window, "accountNumberField", new TextField("RRO Account #", ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, ACCOUNT_NUMBER_FIELD, new TextField("RRO Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "fiscalYearField", new TextField("FY2017"));
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
@@ -235,7 +253,7 @@ public class UsageBatchUploadWindowTest {
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, "usageBatchNameField"),
             Whitebox.getInternalState(window, "uploadField"),
-            Whitebox.getInternalState(window, "accountNumberField"),
+            Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, "paymentDateWidget"),
             Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD));
@@ -338,12 +356,12 @@ public class UsageBatchUploadWindowTest {
         verifyGrossAmountComponent(horizontalLayout.getComponent(0));
     }
 
-    private void validateField(TextField field, String value, Binder binder, boolean isValid) {
+    private void validateField(TextField field, String value, Binder binder, boolean isValid, String errorMessage) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();
         List<String> errorMessages =
             errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(INVALID_GROSS_AMOUNT_ERROR_MESSAGE));
+        assertEquals(!isValid, errorMessages.contains(errorMessage));
     }
 
     private TextField verifyTextField(Component component, String caption) {
