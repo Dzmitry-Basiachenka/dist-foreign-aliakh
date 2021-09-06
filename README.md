@@ -1,3 +1,29 @@
+14.1.14
+-
+* B-66785: Value FDA & UDM: Create Publication Types table: add description and product_family columns into df_publication_type table
+* B-68830: FDA & UDM - Baseline view filters: implement baseline filter controller and widget
+* B-68830: FDA & UDM - Baseline view filters: implement main filters
+* B-68830: FDA & UDM - Baseline view filters: implement widget for aggregate licensee classes and update logic for retrieval aggregate licensee classes
+* B-68830: FDA & UDM - Baseline view filters: implement additional filters window
+* B-65866: FDA & UDM: publish usages to baseline: implement repository logic related to publish and remove to baseline
+* B-65866: FDA & UDM: publish usages to baseline: implement controller logic to publish to baseline
+* B-65866: FDA & UDM: publish usages to baseline: implement repository logic related to publish and remove to baseline
+* B-65866: FDA & UDM: publish usages to baseline: implement service logic to publish to baseline and remove from baseline UDM usages
+* B-65866: FDA & UDM: publish usages to baseline: implement Publish button
+* B-65866: FDA & UDM: publish usages to baseline: add new columns to df_udm_usage table
+* B-65866: FDA & UDM: publish usages to baseline: implement modal window to publish to baseline
+* B-65866: FDA & UDM: publish usages to baseline: implement controller logic to publish to baseline
+* B-65963: FDA: UI view for values: implement decimal formatting
+* B-65963: FDA: UI view for values: add Values subtab to UDM tab
+* B-65963: FDA: UI view for values: implement widget and controller
+* B-65963: FDA: UI view for values: implement empty filters panel
+* B-68367: FDA & UDM: view baseline usages: implement baseline domain object
+* B-68367: FDA & UDM: view baseline usages: add Baseline sub-tab to UDM tab
+* B-68367: FDA & UDM: view baseline usages: implement Baseline sub-tab 
+* B-68367: FDA & UDM: view baseline usages: fix double initialization of UDM widgets
+* B-68821: FDA: Tech Debt: implement nested tabs inside UDM tab
+* B-68821: FDA: Tech Debt: update CSS for nested tabs
+
 14.1.13
 -
 * B-68058: FDA&UDM: Log and display single usage edits in the UDM Audit: make changes based on comments in CR-DIST-FOREIGN-254
