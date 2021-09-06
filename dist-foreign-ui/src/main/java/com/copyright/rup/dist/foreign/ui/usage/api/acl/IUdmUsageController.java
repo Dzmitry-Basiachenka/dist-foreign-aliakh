@@ -18,6 +18,8 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.List;
@@ -106,7 +108,7 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Shows modal window with UDM usage history.
      *
-     * @param udmUsageId {@link UdmUsage} id
+     * @param udmUsageId    {@link UdmUsage} id
      * @param closeListener listener to handle window close event
      */
     void showUdmUsageHistory(String udmUsageId, Window.CloseListener closeListener);
@@ -220,4 +222,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return list of periods
      */
     List<Integer> getPeriods();
+
+    /**
+     * Publishes UDM usages to baseline.
+     *
+     * @param period period of usage
+     * @return pair of count of published to baseline and count of removed from baseline
+     */
+    Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
 }
