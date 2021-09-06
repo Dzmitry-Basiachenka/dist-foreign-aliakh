@@ -51,8 +51,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Window to edit UDM usage.
@@ -118,9 +116,7 @@ public class UdmEditUsageWindow extends Window {
         udmUsage = selectedUdmUsage;
         fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
-        idToLicenseeClassMap = controller.getDetailLicenseeClasses()
-            .stream()
-            .collect(Collectors.toMap(DetailLicenseeClass::getId, Function.identity()));
+        idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
         setResizable(false);
