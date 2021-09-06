@@ -272,7 +272,7 @@ public class UdmUsageService implements IUdmUsageService {
         int publishedCount = publishedUsageIds.size();
         publishedUsageIds.forEach(usageId ->
             udmUsageAuditService.logAction(usageId, UsageActionTypeEnum.PUBLISH_TO_BASELINE,
-                String.format("Publish have been completed. UDM usage was published by %s", userName)));
+                String.format("UDM usage was published to baseline by '%s'", userName)));
         int removedCount = baselineService.removeFromBaseline(period);
         LOGGER.info("Publish to baseline UDM usages. Finished. PublishedCount={}, RemovedCount={}",
             publishedCount, removedCount);

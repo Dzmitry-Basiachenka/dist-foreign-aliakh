@@ -300,13 +300,10 @@ public class UdmUsageWidgetTest {
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageDto.setAssignee(USER);
         setSpecialistExpectations();
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
         Windows.showNotificationWindow("Please wait while usage processing is completed");
         expectLastCall().once();
-        replay(controller, streamSource, confirmWindowMock, UdmEditUsageWindow.class, Windows.class,
-            ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -314,8 +311,8 @@ public class UdmUsageWidgetTest {
         grid.select(udmUsageDto);
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
-        verify(controller, streamSource, confirmWindowMock, UdmEditUsageWindow.class, Windows.class,
-            ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
+            RupContextUtils.class);
     }
 
     @Test
@@ -435,15 +432,11 @@ public class UdmUsageWidgetTest {
         udmUsageDtoSecond.setId("cdda8071-c84c-497e-9b30-4ba447c86373");
         udmUsageDtoSecond.setAssignee(USER);
         udmUsageDtoSecond.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-        UdmEditMultipleUsagesResearcherWindow mockWindow = createMock(UdmEditMultipleUsagesResearcherWindow.class);
         Set<UdmUsageDto> udmUsages = new HashSet<>(Arrays.asList(udmUsageDtoFirst, udmUsageDtoSecond));
-        expectNew(UdmEditMultipleUsagesResearcherWindow.class, eq(controller), eq(udmUsages),
-            anyObject(ClickListener.class)).andReturn(mockWindow).once();
         Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND, " +
             "OPS_REVIEW");
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
-            RupContextUtils.class, ForeignSecurityUtils.class);
+        replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -452,8 +445,7 @@ public class UdmUsageWidgetTest {
         grid.select(udmUsageDtoSecond);
         Button editButton = (Button) getButtonsLayout().getComponent(3);
         editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
-            RupContextUtils.class, ForeignSecurityUtils.class);
+        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -489,19 +481,16 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListenerInvalidAssignee() throws Exception {
+    public void testEditButtonClickListenerBaselineResearcher() throws Exception {
         mockStatic(Windows.class);
-        setSpecialistExpectations();
+        setResearcherExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
-        udmUsageDto.setStatus(UsageStatusEnum.RH_FOUND);
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
-        Windows.showNotificationWindow("Selected UDM usage cannot be edited. Please assign it to yourself first");
+        udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
+        udmUsageDto.setBaselineFlag(true);
+        Windows.showNotificationWindow("Only non baseline usages can be edited");
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+        replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -509,8 +498,27 @@ public class UdmUsageWidgetTest {
         grid.select(udmUsageDto);
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testEditButtonClickListenerInvalidAssignee() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
+        udmUsageDto.setStatus(UsageStatusEnum.RH_FOUND);
+        Windows.showNotificationWindow("Selected UDM usage cannot be edited. Please assign it to yourself first");
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmUsageDto);
+        grid.select(udmUsageDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -801,14 +809,10 @@ public class UdmUsageWidgetTest {
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
         udmUsageDto.setAssignee(USER);
         udmUsageDto.setStatus(status);
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
         Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND, " +
             "OPS_REVIEW");
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+        replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -816,7 +820,6 @@ public class UdmUsageWidgetTest {
         grid.select(udmUsageDto);
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
     }
 }

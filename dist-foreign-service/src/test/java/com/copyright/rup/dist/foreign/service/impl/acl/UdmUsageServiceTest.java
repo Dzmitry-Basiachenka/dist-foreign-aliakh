@@ -133,7 +133,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME)).andReturn(usageIds).once();
         udmUsageAuditService.logAction("367233a7-702f-4a88-82b4-b95a5508ab52", UsageActionTypeEnum.PUBLISH_TO_BASELINE,
-            "Publish have been completed. UDM usage was published by user@copyright.com");
+            "UDM usage was published to baseline by 'user@copyright.com'");
         expectLastCall();
         expect(baselineService.removeFromBaseline(202106)).andReturn(5).once();
         replay(udmUsageRepository, baselineService, RupContextUtils.class);
