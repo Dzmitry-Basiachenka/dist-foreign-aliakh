@@ -48,8 +48,10 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -181,6 +183,14 @@ public class UdmUsageControllerTest {
         replay(udmUsageFilterController);
         controller.getPeriods();
         verify(udmUsageFilterController);
+    }
+
+    @Test
+    public void testPublishUdmUsagesToBaseline() {
+        expect(udmUsageService.publishUdmUsagesToBaseline(202106)).andReturn(Pair.of(1, 1));
+        replay(udmUsageService);
+        controller.publishUdmUsagesToBaseline(202106);
+        verify(udmUsageService);
     }
 
     @Test

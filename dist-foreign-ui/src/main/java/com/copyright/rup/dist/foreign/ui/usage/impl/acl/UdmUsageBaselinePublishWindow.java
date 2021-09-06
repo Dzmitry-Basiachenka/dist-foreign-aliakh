@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
@@ -12,6 +13,8 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Window for publish to baseline.
@@ -26,7 +29,7 @@ public class UdmUsageBaselinePublishWindow extends Window {
 
     private final IUdmUsageController controller;
     private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish_usage"));
-    private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));;
+    private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
 
     /**
      * Constructor.
@@ -56,6 +59,13 @@ public class UdmUsageBaselinePublishWindow extends Window {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         Button closeButton = Buttons.createCloseButton(this);
         publishButton.setEnabled(false);
+        publishButton.addClickListener(event -> {
+            Pair<Integer, Integer> publishedRemovedUdmUsages =
+                controller.publishUdmUsagesToBaseline(periodComboBox.getValue());
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.udm_usage.publish", publishedRemovedUdmUsages.getLeft(),
+                    publishedRemovedUdmUsages.getRight()));
+        });
         horizontalLayout.addComponents(publishButton, closeButton);
         return horizontalLayout;
     }
