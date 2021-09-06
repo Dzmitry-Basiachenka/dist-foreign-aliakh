@@ -374,6 +374,7 @@
     }
 
     .sub-tab > .v-panel-content {
-      border-left-width: 0px;
+      border-left: none;
+      border-right: none;
     }
 }
