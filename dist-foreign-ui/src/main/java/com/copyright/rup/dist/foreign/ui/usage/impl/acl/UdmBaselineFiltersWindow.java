@@ -87,7 +87,7 @@ public class UdmBaselineFiltersWindow extends Window {
     }
 
     /**
-     * @return applied UDM usage filter.
+     * @return applied UDM baseline filter.
      */
     public UdmBaselineFilter getAppliedBaselineFilter() {
         return appliedBaselineFilter;

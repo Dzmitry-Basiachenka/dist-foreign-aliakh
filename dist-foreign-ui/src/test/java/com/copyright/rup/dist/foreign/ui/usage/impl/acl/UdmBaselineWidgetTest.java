@@ -1,7 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
@@ -9,9 +16,9 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +39,15 @@ public class UdmBaselineWidgetTest {
 
     @Before
     public void setUp() {
+        IUdmBaselineController controller = createMock(IUdmBaselineController.class);
+        UdmBaselineFilterWidget filterWidget =
+            new UdmBaselineFilterWidget(createMock(IUdmBaselineFilterController.class));
         udmBaselineWidget = new UdmBaselineWidget();
+        Whitebox.setInternalState(udmBaselineWidget, controller);
+        expect(controller.initBaselineFilterWidget()).andReturn(filterWidget).once();
+        replay(controller);
         udmBaselineWidget.init();
+        verify(controller);
     }
 
     @Test

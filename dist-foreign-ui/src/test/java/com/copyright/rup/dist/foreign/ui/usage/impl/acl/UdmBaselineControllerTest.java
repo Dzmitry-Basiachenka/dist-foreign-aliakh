@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -27,5 +28,10 @@ public class UdmBaselineControllerTest {
     @Test
     public void testGetBeansCount() {
         assertEquals(new ArrayList<>(), udmBaselineController.loadBeans(0, 1, null));
+    }
+
+    @Test
+    public void testInstantiateWidget() {
+        assertNotNull(udmBaselineController.instantiateWidget());
     }
 }

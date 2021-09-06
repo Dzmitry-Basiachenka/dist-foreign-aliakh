@@ -14,6 +14,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,6 +35,11 @@ public class UdmBaselineFilterController extends CommonController<IUdmBaselineFi
     private IUdmTypeOfUseService udmTypeOfUseService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
+
+    @Override
+    public List<Integer> getPeriods() {
+        return Collections.emptyList();
+    }
 
     @Override
     public List<String> getTypeOfUses() {

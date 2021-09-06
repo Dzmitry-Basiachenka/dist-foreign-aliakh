@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.util.ReflectTools;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -17,6 +20,19 @@ import java.util.List;
  * @author Dzmitry Basiachenka
  */
 public interface IUdmBaselineController extends IController<IUdmBaselineWidget> {
+
+    /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IUdmBaselineController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 
     /**
      * @return number of items.
@@ -32,4 +48,11 @@ public interface IUdmBaselineController extends IController<IUdmBaselineWidget> 
      * @return list of items to be displayed on UI
      */
     List<UdmBaselineDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+
+    /**
+     * Initializes {@link IUdmBaselineFilterWidget}.
+     *
+     * @return initialized {@link IUdmBaselineFilterWidget}
+     */
+    IUdmBaselineFilterWidget initBaselineFilterWidget();
 }

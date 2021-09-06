@@ -1,13 +1,23 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Implementation of {@link IUdmBaselineFilterWidget}.
@@ -20,8 +30,14 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBaselineFilterWidget {
 
-    @SuppressWarnings("unused") // TODO remove when the filter is implemented
     private IUdmBaselineFilterController controller;
+    private Button applyButton;
+    private Button moreFiltersButton;
+    private ComboBox<Integer> periodComboBox;
+    private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
+    private ComboBox<UdmChannelEnum> channelComboBox;
+    private UdmBaselineFilter baselineFilter = new UdmBaselineFilter();
+    private UdmBaselineFilter appliedBaselineFilter = new UdmBaselineFilter();
 
     /**
      * Constructor.
@@ -40,7 +56,8 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
     @Override
     @SuppressWarnings("unchecked")
     public IUdmBaselineFilterWidget init() {
-        addComponents(initFiltersLayout());
+        addComponents(initFiltersLayout(), initButtonsLayout());
+        refreshFilter();
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-baseline-filter-widget");
         return this;
@@ -48,18 +65,113 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
 
     @Override
     public void applyFilter() {
-        //TODO add implementation
+        appliedBaselineFilter = new UdmBaselineFilter(baselineFilter);
+        filterChanged();
+        fireEvent(new FilterChangedEvent(this));
     }
 
     @Override
     public void clearFilter() {
-        //TODO add implementation
+        clearFilterValues();
+        refreshFilter();
+        applyFilter();
+    }
+
+    @Override
+    public UdmBaselineFilter getFilter() {
+        return baselineFilter;
+    }
+
+    @Override
+    public UdmBaselineFilter getAppliedFilter() {
+        return appliedBaselineFilter;
+    }
+
+    private void filterChanged() {
+        applyButton.setEnabled(!baselineFilter.equals(appliedBaselineFilter));
+    }
+
+    private void refreshFilter() {
+        refreshFilterValues();
+        baselineFilter = new UdmBaselineFilter();
+    }
+
+    private void refreshFilterValues() {
+        periodComboBox.setItems(controller.getPeriods());
+        usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
+        channelComboBox.setItems(UdmChannelEnum.values());
+    }
+
+    private void clearFilterValues() {
+        periodComboBox.clear();
+        usageOriginComboBox.clear();
+        channelComboBox.clear();
     }
 
     private VerticalLayout initFiltersLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel());
+        initPeriodFilter();
+        initUsageOriginFilter();
+        initChannelFilter();
+        initMoreFiltersButton();
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), periodComboBox,
+            usageOriginComboBox, channelComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
+        applyButton.setEnabled(false);
+        applyButton.addClickListener(event -> applyFilter());
+        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
+        clearButton.addClickListener(event -> clearFilter());
+        HorizontalLayout horizontalLayout = new HorizontalLayout(applyButton, clearButton);
+        VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
+        VaadinUtils.addComponentStyle(horizontalLayout, "udm-baseline-filter-buttons");
+        return horizontalLayout;
+    }
+
+    private void initPeriodFilter() {
+        periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
+        VaadinUtils.setMaxComponentsWidth(periodComboBox);
+        periodComboBox.addValueChangeListener(event -> {
+            baselineFilter.setPeriod(periodComboBox.getValue());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(periodComboBox, "udm-baseline-period-filter");
+    }
+
+    private void initUsageOriginFilter() {
+        usageOriginComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
+        VaadinUtils.setMaxComponentsWidth(usageOriginComboBox);
+        usageOriginComboBox.addValueChangeListener(event -> {
+            baselineFilter.setUdmUsageOrigin(usageOriginComboBox.getValue());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(usageOriginComboBox, "udm-baseline-usage-origin-filter");
+    }
+
+    private void initChannelFilter() {
+        channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
+        VaadinUtils.setMaxComponentsWidth(channelComboBox);
+        channelComboBox.addValueChangeListener(event -> {
+            baselineFilter.setChannel(channelComboBox.getValue());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(channelComboBox, "udm-baseline-channel-filter");
+    }
+
+    private void initMoreFiltersButton() {
+        moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
+        moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
+        moreFiltersButton.addClickListener(event -> {
+            UdmBaselineFiltersWindow udmFiltersWindow = new UdmBaselineFiltersWindow(controller, baselineFilter);
+            Windows.showModalWindow(udmFiltersWindow);
+            udmFiltersWindow.addCloseListener(closeEvent -> {
+                baselineFilter = udmFiltersWindow.getAppliedBaselineFilter();
+                filterChanged();
+            });
+        });
     }
 
     private Label buildFiltersHeaderLabel() {

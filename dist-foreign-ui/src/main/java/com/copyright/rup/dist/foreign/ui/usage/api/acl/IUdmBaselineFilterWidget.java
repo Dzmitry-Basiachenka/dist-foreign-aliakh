@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,4 +13,14 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  * @author Uladzislau Shalamitski
  */
 public interface IUdmBaselineFilterWidget extends IFilterWidget<IUdmBaselineFilterController> {
+
+    /**
+     * @return {@link UdmBaselineFilter}.
+     */
+    UdmBaselineFilter getFilter();
+
+    /**
+     * @return applied {@link UdmBaselineFilter}.
+     */
+    UdmBaselineFilter getAppliedFilter();
 }

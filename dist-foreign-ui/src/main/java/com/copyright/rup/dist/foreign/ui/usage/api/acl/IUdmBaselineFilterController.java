@@ -18,6 +18,13 @@ import java.util.List;
 public interface IUdmBaselineFilterController extends IFilterController<IUdmBaselineFilterWidget> {
 
     /**
+     * Gets all available periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
+
+    /**
      * @return list of type of uses.
      */
     List<String> getTypeOfUses();
