@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -158,17 +159,17 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
-            UdmEditUsageWindow udmEditUsageWindow =
-                new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh());
-            initModalWindow(Collections.singleton(selectedUsage), udmEditUsageWindow);
+            initModalWindow(Collections.singleton(selectedUsage),
+                () -> new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
         });
         multipleEditButton.setEnabled(false);
         multipleEditButton.addClickListener(event -> {
             Set<UdmUsageDto> selectedUsages = udmUsagesGrid.getSelectedItems();
             initModalWindow(selectedUsages,
                 hasResearcherPermission
-                    ? new UdmEditMultipleUsagesResearcherWindow(controller, selectedUsages, saveEvent -> refresh())
-                    : new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
+                    ? () -> new UdmEditMultipleUsagesResearcherWindow(controller, selectedUsages,
+                    saveEvent -> refresh())
+                    : () -> new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(editButton, multipleEditButton);
@@ -176,25 +177,29 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             exportButton);
     }
 
-    private void initModalWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+    private void initModalWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (hasResearcherPermission) {
-            initEditResearcherWindow(selectedUsages, window);
+            initEditResearcherWindow(selectedUsages, createWindow);
         } else {
-            initEditWindow(selectedUsages, window);
+            initEditWindow(selectedUsages, createWindow);
         }
     }
 
-    private void initEditWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+    private void initEditWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (isUsagesProcessingCompleted(selectedUsages)) {
-            openEditWindow(selectedUsages, window);
+            openEditWindow(selectedUsages, createWindow);
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.processing_usages"));
         }
     }
 
-    private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+    private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (isEditAllowedForResearcher(selectedUsages)) {
-            openEditWindow(selectedUsages, window);
+            if (isUsagesInBaseline(selectedUsages)) {
+                openEditWindow(selectedUsages, createWindow);
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_baseline_usage"));
+            }
         } else {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
@@ -205,9 +210,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         }
     }
 
-    private void openEditWindow(Set<UdmUsageDto> selectedUsages, Window window) {
+    private void openEditWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (checkHasUsagesAssignee(selectedUsages)) {
-            Windows.showModalWindow(window);
+            Windows.showModalWindow(createWindow.get());
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
         }
@@ -215,6 +220,10 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private boolean checkHasUsagesAssignee(Set<UdmUsageDto> usages) {
         return usages.stream().allMatch(usage -> userName.equals(usage.getAssignee()));
+    }
+
+    private boolean isUsagesInBaseline(Set<UdmUsageDto> udmUsages) {
+        return udmUsages.stream().noneMatch(UdmUsageDto::isBaselineFlag);
     }
 
     private boolean isUsagesProcessingCompleted(Set<UdmUsageDto> udmUsages) {
