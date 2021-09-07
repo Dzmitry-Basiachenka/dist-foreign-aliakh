@@ -117,12 +117,30 @@ public class ViewUdmBatchWindowTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
+    public void testDeleteClickListenerBatchHasBaselineUsages() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(udmBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildUdmBatch())).once();
+        expect(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(true).once();
+        expect(controller.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(true).once();
+        Windows.showNotificationWindow(
+            "'UDM Batch 2021 June' batch cannot be deleted because the batch contains usage(s) published to baseline");
+        expectLastCall().once();
+        replay(controller, confirmWindowCapture, udmBatchGrid, Windows.class);
+        listener.buttonClick(null);
+        verify(controller, confirmWindowCapture, udmBatchGrid, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
     public void testDeleteClickListener() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(udmBatchGrid.getSelectedItems()).andReturn(Collections.singleton(buildUdmBatch())).once();
         expect(controller.isUdmBatchProcessingCompleted(UDM_BATCH_UID)).andReturn(true).once();
+        expect(controller.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(false).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'UDM Batch 2021 June'</b></i> UDM batch?"),
             anyObject())).andReturn(confirmWindowCapture).once();

@@ -128,13 +128,19 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
     }
 
     private void deleteUdmBatch(UdmBatch udmBatch) {
-        if (controller.isUdmBatchProcessingCompleted(udmBatch.getId())) {
-            Windows.showConfirmDialog(
-                ForeignUi.getMessage("message.confirm.delete_action", udmBatch.getName(), "UDM batch"),
-                () -> {
-                    controller.deleteUdmBatch(udmBatch);
-                    grid.setItems(controller.getUdmBatches());
-                });
+        String udmBatchId = udmBatch.getId();
+        if (controller.isUdmBatchProcessingCompleted(udmBatchId)) {
+            if(!controller.isUdmBatchContainsBaselineUsages(udmBatchId)) {
+                Windows.showConfirmDialog(
+                    ForeignUi.getMessage("message.confirm.delete_action", udmBatch.getName(), "UDM batch"),
+                    () -> {
+                        controller.deleteUdmBatch(udmBatch);
+                        grid.setItems(controller.getUdmBatches());
+                    });
+            } else {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.delete_batch_with_baseline", udmBatch.getName()));
+            }
         } else {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.delete_in_progress_batch", udmBatch.getName()));

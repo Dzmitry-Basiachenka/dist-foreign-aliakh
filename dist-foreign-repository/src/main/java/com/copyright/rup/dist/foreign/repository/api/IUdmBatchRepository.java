@@ -62,4 +62,12 @@ public interface IUdmBatchRepository {
      * @param udmBatchId id of the {@link UdmBatch} to be deleted
      */
     void deleteById(String udmBatchId);
+
+    /**
+     * Returns true if selected UDM batch doesn't have usages in baseline.
+     *
+     * @param udmBatchId batch identifier
+     * @return @code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
+     */
+    boolean isUdmBatchContainsBaselineUsages(String udmBatchId);
 }

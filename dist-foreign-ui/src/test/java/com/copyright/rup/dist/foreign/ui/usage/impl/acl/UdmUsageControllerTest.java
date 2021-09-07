@@ -356,6 +356,14 @@ public class UdmUsageControllerTest {
     }
 
     @Test
+    public void testIsUdmBatchContainsBaselineUsages() {
+        expect(udmBatchService.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(true).once();
+        replay(udmBatchService);
+        assertTrue(controller.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID));
+        verify(udmBatchService);
+    }
+
+    @Test
     public void testGetCompanyInformation() {
         ITelesalesService telesalesService = createMock(ITelesalesService.class);
         Whitebox.setInternalState(controller, telesalesService);

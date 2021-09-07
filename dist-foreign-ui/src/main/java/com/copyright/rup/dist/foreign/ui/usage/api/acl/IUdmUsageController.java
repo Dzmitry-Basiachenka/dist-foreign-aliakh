@@ -230,4 +230,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return pair of count of published to baseline and count of removed from baseline
      */
     Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
+
+    /**
+     * Returns true if selected UDM batch doesn't have usages in baseline.
+     *
+     * @param udmBatchId batch identifier
+     * @return @code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
+     */
+    boolean isUdmBatchContainsBaselineUsages(String udmBatchId);
 }

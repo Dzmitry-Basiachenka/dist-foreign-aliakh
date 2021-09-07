@@ -132,6 +132,14 @@ public class UdmBatchServiceTest {
         verify(udmBatchRepository);
     }
 
+    @Test
+    public void testIsUdmBatchContainsBaselineUsages() {
+        expect(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID)).andReturn(true).once();
+        replay(udmBatchRepository);
+        assertTrue(udmBatchService.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID));
+        verify(udmBatchRepository);
+    }
+
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
         udmBatch.setId(UDM_BATCH_UID);

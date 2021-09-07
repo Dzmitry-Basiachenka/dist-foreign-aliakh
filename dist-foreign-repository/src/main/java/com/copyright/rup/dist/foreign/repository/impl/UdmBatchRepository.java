@@ -58,4 +58,9 @@ public class UdmBatchRepository extends BaseRepository implements IUdmBatchRepos
     public void deleteById(String udmBatchId) {
         delete("IUdmBatchMapper.deleteById", Objects.requireNonNull(udmBatchId));
     }
+
+    @Override
+    public boolean isUdmBatchContainsBaselineUsages(String udmBatchId) {
+        return selectOne("IUdmBatchMapper.isUdmBatchContainsBaselineUsages", udmBatchId);
+    }
 }
