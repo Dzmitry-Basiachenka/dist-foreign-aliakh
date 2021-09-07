@@ -93,8 +93,12 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     private void addColumns() {
         FooterRow footer = udmBaselineGrid.appendFooterRow();
         udmBaselineGrid.setFooterVisible(true);
-        footer.getCell(addColumn(UdmBaselineDto::getId, "table.column.detail_id", "detailId", 200))
-            .setText(String.format(FOOTER_LABEL, 0));
+        Column<UdmBaselineDto, ?> column = udmBaselineGrid.addColumn(UdmBaselineDto::getId)
+            .setCaption(ForeignUi.getMessage("table.column.detail_id"))
+            .setId("detailId")
+            .setSortProperty("detailId")
+            .setWidth(200);
+        footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmBaselineDto::getPeriod, "table.column.period", "period", 100),
             addColumn(UdmBaselineDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100),
