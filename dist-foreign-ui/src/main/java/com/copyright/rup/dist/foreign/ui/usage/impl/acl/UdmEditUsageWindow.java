@@ -313,7 +313,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value))
-                && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
+                && Integer.parseInt(StringUtils.trim(value)) > 0, ForeignUi.getMessage("field.error.positive_number"))
             .bind(usage -> usage.getQuantity().toString(),
                 (usage, value) -> usage.setQuantity(NumberUtils.toLong(value.trim())));
         quantityField.addValueChangeListener(event -> {
