@@ -84,7 +84,12 @@ public class FundPoolLoadWindowTest {
     private static final String NON_STM_FIELD = "nonStmAmountField";
     private static final String STM_MIN_FIELD = "stmMinAmountField";
     private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
+    private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
+    private static final String MARKET_VALIDATION_FIELD = "marketValidationField";
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
+    private static final String INVALID_MARKET_MESSAGE = "Please select at least one market";
+    private static final String INVALID_NUMERIC_VALUE_MESSAGE = "Field value should contain numeric values only";
+    private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
     private static final LocalDate PAYMENT_DATA_WIDGET = LocalDate.of(2019, 6, 20);
     private FundPoolLoadWindow window;
     private INtsUsageController usagesController;
@@ -127,7 +132,7 @@ public class FundPoolLoadWindowTest {
         assertFalse(window.isValid());
         setTextFieldValue("usageBatchNameField", USAGE_BATCH_NAME);
         assertFalse(window.isValid());
-        setTextFieldValue("accountNumberField", ACCOUNT_NUMBER);
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField rhNameField = Whitebox.getInternalState(window, "accountNameField");
         rhNameField.setReadOnly(false);
@@ -144,7 +149,7 @@ public class FundPoolLoadWindowTest {
         setTextFieldValue(STM_MIN_FIELD, MIN_AMOUNT);
         setTextFieldValue(NON_STM_MIN_FIELD, MIN_AMOUNT);
         assertFalse(window.isValid());
-        setTextFieldValue("marketValidationField", "2");
+        setTextFieldValue(MARKET_VALIDATION_FIELD, "2");
         assertTrue(window.isValid());
         setTextFieldValue(STM_FIELD, AMOUNT);
         setTextFieldValue(NON_STM_FIELD, ZERO_AMOUNT);
@@ -176,6 +181,10 @@ public class FundPoolLoadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
         TextField periodFrom = Whitebox.getInternalState(window, PERIOD_FROM_FIELD);
         TextField periodTo = Whitebox.getInternalState(window, PERIOD_TO_FIELD);
+        verifyFieldValidationMessage(periodFrom, "invalidDateFrom", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyFieldValidationMessage(periodFrom, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyFieldValidationMessage(periodTo, "invalidDateTo", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyFieldValidationMessage(periodTo, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodTo, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
@@ -189,6 +198,36 @@ public class FundPoolLoadWindowTest {
             "Field value should be greater or equal to Fund pool period from", false);
         verifyFieldValidationMessage(periodTo, "2005", binder,
             "Field value should be greater or equal to Fund pool period from", true);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testMarketValidationFieldValidation() {
+        replay(usagesController);
+        window = new FundPoolLoadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "stringBinder");
+        TextField marketValidationField = Whitebox.getInternalState(window, MARKET_VALIDATION_FIELD);
+        verifyFieldValidationMessage(marketValidationField, "1000", binder, StringUtils.EMPTY, true);
+        verifyFieldValidationMessage(marketValidationField, "99999999", binder, StringUtils.EMPTY, true);
+        verifyFieldValidationMessage(marketValidationField, StringUtils.EMPTY, binder, INVALID_MARKET_MESSAGE, false);
+        verifyFieldValidationMessage(marketValidationField, "A", binder, INVALID_MARKET_MESSAGE, false);
+        verifyFieldValidationMessage(marketValidationField, "0", binder, INVALID_MARKET_MESSAGE, false);
+        verifyFieldValidationMessage(marketValidationField, "-1000", binder, INVALID_MARKET_MESSAGE, false);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testRightsholderAccountNumberFieldValidation() {
+        replay(usagesController);
+        window = new FundPoolLoadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
+        verifyFieldValidationMessage(accountNumberField, "0", binder, StringUtils.EMPTY, true);
+        verifyFieldValidationMessage(accountNumberField, "1000024950", binder, StringUtils.EMPTY, true);
+        verifyFieldValidationMessage(accountNumberField, "10000249500", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        verifyFieldValidationMessage(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        verifyFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyFieldValidationMessage(accountNumberField, "-1000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verify(usagesController);
     }
 
@@ -252,14 +291,14 @@ public class FundPoolLoadWindowTest {
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "rro", rro);
         setTextField("usageBatchNameField", USAGE_BATCH_NAME);
-        setTextField("accountNumberField", ACCOUNT_NUMBER);
+        setTextField(ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         setTextField(PERIOD_TO_FIELD, PERIOD_TO);
         setTextField(PERIOD_FROM_FIELD, PERIOD_FROM);
         setTextField(STM_FIELD, AMOUNT);
         setTextField(NON_STM_FIELD, AMOUNT);
         setTextField(STM_MIN_FIELD, MIN_AMOUNT);
         setTextField(NON_STM_MIN_FIELD, MIN_AMOUNT);
-        setTextField("marketValidationField", "2");
+        setTextField(MARKET_VALIDATION_FIELD, "2");
         Whitebox.setInternalState(window, "excludeStmCheckBox", new CheckBox("Exclude STM RHs", true));
     }
 
@@ -308,12 +347,12 @@ public class FundPoolLoadWindowTest {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, "usageBatchNameField"),
-            Whitebox.getInternalState(window, "accountNumberField"),
+            Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, "paymentDateWidget"),
             Whitebox.getInternalState(window, PERIOD_TO_FIELD),
             Whitebox.getInternalState(window, PERIOD_FROM_FIELD),
-            Whitebox.getInternalState(window, "marketValidationField"),
+            Whitebox.getInternalState(window, MARKET_VALIDATION_FIELD),
             Whitebox.getInternalState(window, STM_FIELD),
             Whitebox.getInternalState(window, NON_STM_FIELD),
             Whitebox.getInternalState(window, STM_MIN_FIELD),
