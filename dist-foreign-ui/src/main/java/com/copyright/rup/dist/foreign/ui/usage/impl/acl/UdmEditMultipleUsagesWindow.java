@@ -284,7 +284,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 9), 0, 9))
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(StringUtils.trim(value))
-                && Integer.parseInt(StringUtils.trim(value)) > 0, NUMBER_VALIDATION_MESSAGE)
+                && Integer.parseInt(StringUtils.trim(value)) > 0, ForeignUi.getMessage("field.error.positive_number"))
             .bind(usage -> Objects.toString(usage.getQuantity(), StringUtils.EMPTY),
                 (usage, value) -> usage.setQuantity(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(quantityField, "udm-multiple-edit-quantity-field");

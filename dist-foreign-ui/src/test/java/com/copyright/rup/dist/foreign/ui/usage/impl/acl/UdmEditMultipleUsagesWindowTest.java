@@ -258,9 +258,14 @@ public class UdmEditMultipleUsagesWindowTest {
     public void testQuantityValidation() {
         initEditWindow();
         TextField quantityField = Whitebox.getInternalState(window, "quantityField");
-        verifyIntegerValidations(quantityField, NUMBER_VALIDATION_MESSAGE);
+        String positiveNumberValidationMessage = "Field value should be positive number";
+        verifyTextFieldValidationMessage(quantityField, INVALID_NUMBER, positiveNumberValidationMessage, false);
+        verifyTextFieldValidationMessage(quantityField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(quantityField, VALID_INTEGER, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(quantityField, VALID_DECIMAL, positiveNumberValidationMessage, false);
         verifyTextFieldValidationMessage(quantityField, "1234567890", "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(quantityField, "0", NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(quantityField, "-1", positiveNumberValidationMessage, false);
+        verifyTextFieldValidationMessage(quantityField, "0", positiveNumberValidationMessage, false);
     }
 
     @Test
