@@ -68,6 +68,15 @@
         )
     </select>
 
+    <select id="isUdmBatchContainsBaselineUsages" resultType="boolean" parameterType="string">
+        select exists (
+            select 1
+            from ${schema}.df_udm_usage
+            where df_udm_usage_batch_uid = #{udmBatchId}
+                and is_baseline_flag = true
+        )
+    </select>
+
     <delete id="deleteById">
         delete from ${schema}.df_udm_usage_batch
         where df_udm_usage_batch_uid = #{udmBatchId}

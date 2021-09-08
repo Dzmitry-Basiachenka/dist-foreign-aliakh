@@ -195,7 +195,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (isEditAllowedForResearcher(selectedUsages)) {
-            if (isUsagesInBaseline(selectedUsages)) {
+            if (areUsagesNonBaseline(selectedUsages)) {
                 openEditWindow(selectedUsages, createWindow);
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_baseline_usage"));
@@ -222,7 +222,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return usages.stream().allMatch(usage -> userName.equals(usage.getAssignee()));
     }
 
-    private boolean isUsagesInBaseline(Set<UdmUsageDto> udmUsages) {
+    private boolean areUsagesNonBaseline(Set<UdmUsageDto> udmUsages) {
         return udmUsages.stream().noneMatch(UdmUsageDto::isBaselineFlag);
     }
 

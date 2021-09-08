@@ -223,6 +223,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
+    public boolean isUdmBatchContainsBaselineUsages(String udmBatchId) {
+        return udmBatchService.isUdmBatchContainsBaselineUsages(udmBatchId);
+    }
+
+    @Override
     public IStreamSource getExportUdmUsagesStreamSourceSpecialistManagerRoles() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_usage_",
             pos -> udmReportService.writeUdmUsageCsvReportSpecialistManager(getFilter(), pos));

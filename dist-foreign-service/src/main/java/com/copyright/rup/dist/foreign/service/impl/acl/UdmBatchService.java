@@ -76,4 +76,9 @@ public class UdmBatchService implements IUdmBatchService {
         udmBatchRepository.deleteById(udmBatch.getId());
         LOGGER.info("Delete UDM batch. Finished. UsageBatchName={}, UserName={}", udmBatch.getName(), userName);
     }
+
+    @Override
+    public boolean isUdmBatchContainsBaselineUsages(String udmBatchId) {
+        return udmBatchRepository.isUdmBatchContainsBaselineUsages(udmBatchId);
+    }
 }
