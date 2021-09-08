@@ -1,12 +1,15 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.easymock.EasyMock.expect;
+import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 
 import org.junit.Before;
@@ -17,6 +20,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UdmBaselineService}.
@@ -50,5 +54,41 @@ public class UdmBaselineServeTest {
         replay(baselineRepository, RupContextUtils.class);
         udmBaselineService.removeFromBaseline(202106);
         verify(baselineRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testGetBaselineUsageDtos() {
+        UdmBaselineFilter filter = new UdmBaselineFilter();
+        filter.setPeriod(202012);
+        List<UdmBaselineDto> udmBaselineDtos = Collections.singletonList(new UdmBaselineDto());
+        expect(baselineRepository.findDtosByFilter(filter, null, null)).andReturn(udmBaselineDtos).once();
+        replay(baselineRepository);
+        assertEquals(udmBaselineDtos, udmBaselineService.getBaselineUsageDtos(filter, null, null));
+        verify(baselineRepository);
+    }
+
+    @Test
+    public void testGetBaselineUsageDtosEmptyFilter() {
+        replay(baselineRepository);
+        assertEquals(Collections.EMPTY_LIST,
+            udmBaselineService.getBaselineUsageDtos(new UdmBaselineFilter(), null, null));
+        verify(baselineRepository);
+    }
+
+    @Test
+    public void testGetBaselineUsagesCount() {
+        UdmBaselineFilter filter = new UdmBaselineFilter();
+        filter.setPeriod(202012);
+        expect(baselineRepository.findCountByFilter(filter)).andReturn(10).once();
+        replay(baselineRepository);
+        assertEquals(10, udmBaselineService.getBaselineUsagesCount(filter));
+        verify(baselineRepository);
+    }
+
+    @Test
+    public void testGetBaselineUsagesCountEmptyFilter() {
+        replay(baselineRepository);
+        assertEquals(0, udmBaselineService.getBaselineUsagesCount(new UdmBaselineFilter()));
+        verify(baselineRepository);
     }
 }
