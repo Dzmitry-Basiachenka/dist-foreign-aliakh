@@ -40,7 +40,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
 
     @Override
     public void refresh() {
-        //TODO: add refresh logic here
+        udmBaselineGrid.getDataProvider().refreshAll();
     }
 
     @Override
@@ -108,12 +108,12 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             addColumn(UdmBaselineDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", 100),
             addColumn(UdmBaselineDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 100),
             addColumn(UdmBaselineDto::getAggregateLicenseeClassId, "table.column.aggregate_licensee_class_id",
-                "aggregateLicenseeClassId", 100),
+                "aggLcId", 100),
             addColumn(UdmBaselineDto::getAggregateLicenseeClassName, "table.column.aggregate_licensee_class_name",
-                "aggregateLicenseeClassName", 100),
+                "aggLcName", 100),
             addColumn(UdmBaselineDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120),
             addColumn(UdmBaselineDto::getChannel, "table.column.channel", "channel", 100),
-            addColumn(UdmBaselineDto::getTypeOfUse, "table.column.tou", "typeOfUse", 100),
+            addColumn(UdmBaselineDto::getTypeOfUse, "table.column.tou", "reportedTypeOfUse", 100),
             addColumn(UdmBaselineDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.created_date", "createDate", 110),
             addColumn(UdmBaselineDto::getCreateUser, "table.column.created_by", "createUser", 100),

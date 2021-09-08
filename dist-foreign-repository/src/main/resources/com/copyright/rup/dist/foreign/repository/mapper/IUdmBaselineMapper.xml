@@ -4,6 +4,185 @@
 
 <mapper namespace="IUdmBaselineMapper">
 
+    <resultMap id="udmBaselineDtoResultMap" type="UdmBaselineDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_usage_uid"/>
+        <result property="period" column="period"/>
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="originalDetailId" column="original_detail_id"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
+        <result property="surveyCountry" column="survey_country"/>
+        <result property="channel" column="channel"/>
+        <result property="typeOfUse" column="reported_type_of_use"/>
+        <result property="annualizedCopies" column="annualized_copies"/>
+    </resultMap>
+
+    <sql id="udmBaselineFilter">
+        <if test="null != filter.period">
+            and <![CDATA[u.period = #{filter.period}]]>
+        </if>
+        <if test="null != filter.channel">
+            and ub.channel = #{filter.channel}
+        </if>
+        <if test="null != filter.udmUsageOrigin">
+            and ub.usage_origin = #{filter.udmUsageOrigin}
+        </if>
+        <if test="null != filter.detailLicenseeClasses and filter.detailLicenseeClasses.size() > 0">
+            and
+            <foreach collection="filter.detailLicenseeClasses" item="detailLicenseeClass" open="(" separator=" or " close=")">
+                u.detail_licensee_class_id = #{detailLicenseeClass.id}
+            </foreach>
+        </if>
+        <if test="null != filter.aggregateLicenseeClasses and filter.aggregateLicenseeClasses.size() > 0">
+            and
+            <foreach collection="filter.aggregateLicenseeClasses" item="aggregateLicenseeClass" open="(" separator=" or " close=")">
+                dlc.aggregate_licensee_class_id = #{aggregateLicenseeClass.id}
+            </foreach>
+        </if>
+        <if test="null != filter.reportedTypeOfUses and filter.reportedTypeOfUses.size() > 0">
+            and
+            <foreach collection="filter.reportedTypeOfUses" item="reportedTypeOfUse" open="(" separator=" or " close=")">
+                u.reported_type_of_use = #{reportedTypeOfUse}
+            </foreach>
+        </if>
+        <if test="null != filter.surveyCountry">
+            and u.survey_country = #{filter.surveyCountry}
+        </if>
+        <if test="null != filter.wrWrkInst">
+            and u.wr_wrk_inst = #{filter.wrWrkInst}
+        </if>
+        <if test="null != filter.systemTitle">
+            and u.system_title = #{filter.systemTitle}
+        </if>
+        <if test="null != filter.surveyCountry">
+            and u.survey_country = #{filter.surveyCountry}
+        </if>
+        <if test="null != filter.usageDetailId">
+            and u.original_detail_id = #{filter.usageDetailId}
+        </if>
+        <if test="!filter.annualizedCopiesExpression.isEmpty()">
+            <include refid="IUdmUsageMapper.filterExpression">
+                <property name="column" value="u.annualized_copies"/>
+                <property name="operator" value="filter.annualizedCopiesExpression.operator"/>
+                <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>
+                <property name="fieldSecondValue" value="${filter.annualizedCopiesExpression.fieldSecondValue}"/>
+            </include>
+        </if>
+    </sql>
+
+    <sql id="udmChooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                u.df_udm_usage_uid <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'period'">
+                u.period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageOrigin'">
+                ub.usage_origin <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageDetailId'">
+                u.original_detail_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                u.system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detLcId'">
+                u.detail_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detLcName'">
+                dlc.description <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggLcId'">
+                alc.aggregate_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggLcName'">
+                alc.description <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'surveyCountry'">
+                u.survey_country <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'channel'">
+                ub.channel <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'reportedTypeOfUse'">
+                u.reported_type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'annualizedCopies'">
+                u.annualized_copies <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'createDate'">
+                u.baseline_created_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'createUser'">
+                u.baseline_created_by_user <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateDate'">
+                u.updated_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateUser'">
+                u.updated_by_user <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
+    <select id="findDtosByFilter" resultMap="udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        select
+            df_udm_usage_uid,
+            u.period,
+            ub.usage_origin,
+            u.original_detail_id,
+            u.wr_wrk_inst,
+            u.system_title,
+            u.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            alc.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name,
+            survey_country,
+            ub.channel,
+            u.reported_type_of_use,
+            u.annualized_copies,
+            u.baseline_created_datetime as created_datetime,
+            u.baseline_created_by_user as created_by_user,
+            u.updated_datetime,
+            u.updated_by_user,
+            u.record_version
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
+        where is_baseline_flag = true
+            <include refid="IUdmBaselineMapper.udmBaselineFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUdmBaselineMapper.udmChooseSortProperty"/>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>,
+        df_udm_usage_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
+        where is_baseline_flag = true
+            <include refid="IUdmBaselineMapper.udmBaselineFilter"/>
+    </select>
+
     <select id="removeFromBaseline" parameterType="map" resultType="string">
         update ${schema}.df_udm_usage
         set

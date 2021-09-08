@@ -1,6 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
@@ -9,12 +13,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,15 +37,23 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
 
     @Autowired
     private IUdmBaselineFilterController udmBaselineFilterController;
+    @Autowired
+    private IUdmBaselineService udmBaselineService;
 
     @Override
     public int getBeansCount() {
-        return 0; //TODO add implementation
+        return udmBaselineService.getBaselineUsagesCount(getFilter());
     }
 
     @Override
     public List<UdmBaselineDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
-        return new ArrayList<>(); //TODO add implementation
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(),
+                Sort.Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return udmBaselineService.getBaselineUsageDtos(getFilter(), new Pageable(startIndex, count), sort);
     }
 
     @Override
@@ -58,5 +71,9 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
         IUdmBaselineFilterWidget result = udmBaselineFilterController.initWidget();
         result.addListener(FilterChangedEvent.class, this, IUdmBaselineController.ON_FILTER_CHANGED);
         return result;
+    }
+
+    private UdmBaselineFilter getFilter() {
+        return udmBaselineFilterController.getWidget().getAppliedFilter();
     }
 }
