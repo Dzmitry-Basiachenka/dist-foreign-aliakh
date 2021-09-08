@@ -1,3 +1,16 @@
+14.1.15
+-
+* B-68821 Tech Debt: FDA: update CSS for nested tabs
+* B-68821 Tech Debt: FDA: fix order of Detail Licensee Classes in UDM single edit, UDM multiple edit dropdowns
+* B-68821 Tech Debt: FDA: apply desc order for periods filter on UDM tabs
+* B-68821 Tech Debt: FDA: move all validation error messages to properties for FAS/FAS2
+* B-68821 Tech Debt: FDA: fix Quantity validation message for case of 0 or negative value to “Field value should be positive number” in UDM single edit, UDM multiple edit
+* B-68821 Tech Debt: FDA: move all validation error messages to properties for NTS
+* B-68367 FDA & UDM: view baseline usages: disable hidden feature for DETAIL ID on UDM Baseline sub-tab
+* B-65866: FDA & UDM: publish usages to baseline: add validation to avoid update udm usages in baseline  for researcher role and fix audit message
+* B-65866: FDA & UDM: publish usages to baseline: add validation to avoid delete batch if the batch has once usage in baseline
+* B-68830 FDA & UDM - Baseline view filters: implement backend logic to retrieve baseline usages using filters from db
+
 14.1.14
 -
 * B-66785: Value FDA & UDM: Create Publication Types table: add description and product_family columns into df_publication_type table
