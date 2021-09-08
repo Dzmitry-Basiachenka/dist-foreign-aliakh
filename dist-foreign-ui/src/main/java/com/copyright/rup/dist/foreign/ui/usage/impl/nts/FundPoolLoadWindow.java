@@ -46,6 +46,7 @@ class FundPoolLoadWindow extends Window {
 
     private static final String EMPTY_MARKET_STYLE = "empty-selected-markets";
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
@@ -149,7 +150,7 @@ class FundPoolLoadWindow extends Window {
     private MarketFilterWidget initMarketFilterWidget() {
         marketValidationField = new TextField(ForeignUi.getMessage("label.markets"));
         stringBinder.forField(marketValidationField)
-            .withValidator(value -> Integer.parseInt(value) > 0, "Please select at least one market")
+            .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.market.empty"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
         MarketFilterWidget marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
@@ -227,8 +228,9 @@ class FundPoolLoadWindow extends Window {
         VaadinUtils.addComponentStyle(fundPoolPeriodFromField, "fund-pool-period-from-field");
         stringBinder.forField(fundPoolPeriodFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(getNumericValidator(), "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
+            .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
@@ -240,15 +242,16 @@ class FundPoolLoadWindow extends Window {
         VaadinUtils.addComponentStyle(fundPoolPeriodToField, "fund-pool-period-to-field");
         stringBinder.forField(fundPoolPeriodToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(getNumericValidator(), "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
+            .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
             .withValidator(value -> {
                 String periodFrom = fundPoolPeriodFromField.getValue();
                 return StringUtils.isEmpty(periodFrom)
                     || !getNumericValidator().test(periodFrom)
                     || !getYearValidator().test(periodFrom)
                     || 0 <= fundPoolPeriodToField.getValue().compareTo(periodFrom);
-            }, "Field value should be greater or equal to Fund pool period from")
+            }, ForeignUi.getMessage("field.error.greater_or_equal_to_fund_pool_period_from"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
@@ -281,7 +284,7 @@ class FundPoolLoadWindow extends Window {
         binder.forField(accountNumberField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(getNumericValidator(), "Field value should contain numeric values only")
+            .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber().toString(),
                 (usageBatch, s) -> usageBatch.getRro().setAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
@@ -319,7 +322,7 @@ class FundPoolLoadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(textField);
         return textField;
@@ -333,8 +336,8 @@ class FundPoolLoadWindow extends Window {
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withValidator(getFundPoolAmountValidator(),
-                "At least one of STM Amount or NON-STM Amount should be greater than 0")
-            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+                ForeignUi.getMessage("message.error.invalid_stm_or_non_stm_amount"))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         binder.addValueChangeListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(textField);
