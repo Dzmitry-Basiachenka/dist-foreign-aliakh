@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -202,6 +203,11 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "createUser");
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "updateDate");
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "updateUser");
+    }
+
+    @Test
+    public void testGetPeriods() {
+        assertEquals(Arrays.asList(202106, 202012, 201906), baselineRepository.findPeriods());
     }
 
     private void verifyFilteringFindCountByFilter(Consumer<UdmBaselineFilter> consumer, int count) {

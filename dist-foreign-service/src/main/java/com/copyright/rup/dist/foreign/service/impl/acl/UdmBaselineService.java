@@ -45,4 +45,9 @@ public class UdmBaselineService implements IUdmBaselineService {
     public int removeFromBaseline(Integer period) {
         return baselineRepository.removeUmdUsagesFromBaseline(period, RupContextUtils.getUserName()).size();
     }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return baselineRepository.findPeriods();
+    }
 }

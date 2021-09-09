@@ -45,4 +45,11 @@ public interface IUdmBaselineRepository {
      * @return set of UDM usage ids
      */
     Set<String> removeUmdUsagesFromBaseline(Integer period, String userName);
+
+    /**
+     * Finds list of periods from UDM baseline usages.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 }

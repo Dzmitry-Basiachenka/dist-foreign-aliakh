@@ -10,12 +10,14 @@ import static org.junit.Assert.assertNotNull;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,13 +34,16 @@ public class UdmBaselineFilterControllerTest {
 
     private final UdmBaselineFilterController controller = new UdmBaselineFilterController();
 
+    private IUdmBaselineService udmBaselineService;
     private IUdmTypeOfUseService udmTypeOfUseService;
     private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
+        udmBaselineService = createMock(IUdmBaselineService.class);
         udmTypeOfUseService = createMock(IUdmTypeOfUseService.class);
         licenseeClassService = createMock(ILicenseeClassService.class);
+        Whitebox.setInternalState(controller, udmBaselineService);
         Whitebox.setInternalState(controller, udmTypeOfUseService);
         Whitebox.setInternalState(controller, licenseeClassService);
     }
@@ -73,5 +78,14 @@ public class UdmBaselineFilterControllerTest {
         replay(udmTypeOfUseService);
         assertEquals(typeOfUses, controller.getTypeOfUses());
         verify(udmTypeOfUseService);
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Arrays.asList(202012, 201906);
+        expect(udmBaselineService.getPeriods()).andReturn(periods).once();
+        replay(udmBaselineService);
+        assertEquals(periods, controller.getPeriods());
+        verify(udmBaselineService);
     }
 }
