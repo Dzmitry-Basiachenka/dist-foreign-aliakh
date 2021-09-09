@@ -117,8 +117,8 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             addColumn(UdmBaselineDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.created_date", "createDate", 110),
             addColumn(UdmBaselineDto::getCreateUser, "table.column.created_by", "createUser", 100),
-            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 100),
-            addColumn(UdmBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 110));
+            addColumn(UdmBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
+            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 100));
     }
 
     private Column<UdmBaselineDto, ?> addColumn(ValueProvider<UdmBaselineDto, ?> valueProvider, String captionProperty,

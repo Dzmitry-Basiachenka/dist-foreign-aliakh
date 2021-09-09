@@ -393,7 +393,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(u -> null != u.getIneligibleReason() ? u.getIneligibleReason().getReason() : StringUtils.EMPTY,
                 "table.column.ineligible_reason", "ineligibleReason", 200, false),
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
-            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 100, false),
+            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 150, false),
             addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
                 false));
     }
