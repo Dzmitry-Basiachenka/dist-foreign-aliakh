@@ -55,4 +55,9 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
         parameters.put("createUser", Objects.requireNonNull(userName));
         return new HashSet<>(selectList("IUdmBaselineMapper.removeFromBaseline", parameters));
     }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IUdmBaselineMapper.findPeriods");
+    }
 }

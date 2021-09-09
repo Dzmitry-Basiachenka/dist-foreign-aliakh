@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,13 +32,15 @@ public class UdmBaselineFilterController extends CommonController<IUdmBaselineFi
     implements IUdmBaselineFilterController {
 
     @Autowired
+    private IUdmBaselineService udmBaselineService;
+    @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
     @Autowired
     private ILicenseeClassService licenseeClassService;
 
     @Override
     public List<Integer> getPeriods() {
-        return Collections.emptyList();
+        return udmBaselineService.getPeriods();
     }
 
     @Override
