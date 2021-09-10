@@ -103,7 +103,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 1)
             column(name: 'survey_respondent', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'ip_address', value: '24.12.119.203')
-            column(name: 'survey_country', value: 'Unated States')
+            column(name: 'survey_country', value: 'United States')
             column(name: 'usage_date', value: '2020-09-10')
             column(name: 'survey_start_date', value: '2020-09-10')
             column(name: 'survey_end_date', value: '2021-09-10')

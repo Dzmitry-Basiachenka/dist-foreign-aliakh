@@ -43,7 +43,7 @@ public class UdmUsageBaselinePublishWindow extends Window {
         setResizable(false);
         setWidth(280, Unit.PIXELS);
         setHeight(120, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(this, "publish_baseline-udm-usage-window");
+        VaadinUtils.addComponentStyle(this, "publish-baseline-udm-usage-window");
     }
 
     private ComponentContainer initRootLayout() {

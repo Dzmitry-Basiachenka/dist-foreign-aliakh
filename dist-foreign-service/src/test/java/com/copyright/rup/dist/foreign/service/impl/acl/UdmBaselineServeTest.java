@@ -50,7 +50,7 @@ public class UdmBaselineServeTest {
     public void testRemoveFromBaseline() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(baselineRepository.removeUmdUsagesFromBaseline(202106, USER_NAME)).andReturn(Collections.EMPTY_SET)
+        expect(baselineRepository.removeUdmUsagesFromBaseline(202106, USER_NAME)).andReturn(Collections.EMPTY_SET)
             .once();
         replay(baselineRepository, RupContextUtils.class);
         udmBaselineService.removeFromBaseline(202106);
