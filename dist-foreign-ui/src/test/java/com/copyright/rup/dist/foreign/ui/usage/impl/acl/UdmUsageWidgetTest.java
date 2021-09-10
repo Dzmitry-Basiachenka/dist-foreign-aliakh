@@ -676,8 +676,8 @@ public class UdmUsageWidgetTest {
     }
 
     private void verifyToolbarLayout(Component component, String searchPlaceholder, boolean... buttonsVisibility) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(component instanceof VerticalLayout);
+        VerticalLayout layout = (VerticalLayout) component;
         assertTrue(layout.isSpacing());
         verifySize(layout, 100, -1, Unit.PIXELS);
         assertEquals(new MarginInfo(true), layout.getMargin());
@@ -752,7 +752,7 @@ public class UdmUsageWidgetTest {
     }
 
     private HorizontalLayout getButtonsLayout() {
-        return (HorizontalLayout) ((HorizontalLayout) ((VerticalLayout)
+        return (HorizontalLayout) ((VerticalLayout) ((VerticalLayout)
             usagesWidget.getSecondComponent()).getComponent(0)).getComponent(0);
     }
 

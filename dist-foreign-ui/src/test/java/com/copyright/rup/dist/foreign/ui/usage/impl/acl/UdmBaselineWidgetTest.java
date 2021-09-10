@@ -70,7 +70,7 @@ public class UdmBaselineWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Wr Wrk Inst",
             "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Survey Country", "Channel",
-            "TOU", "Annualized Copies", "Created Date", "Created By", "Updated By", "Updated Date"),
+            "TOU", "Annualized Copies", "Created By", "Created Date", "Updated By", "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
         assertTrue(grid.isFooterVisible());

@@ -134,17 +134,17 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return layout;
     }
 
-    private HorizontalLayout initToolbarLayout() {
+    private VerticalLayout initToolbarLayout() {
         initUsageBatchMenuBar();
         initAssignmentMenuBar();
         searchWidget = new SearchWidget(this::refresh);
         searchWidget.setPrompt(ForeignUi.getMessage(getSearchMessage()));
         searchWidget.setWidth(65, Unit.PERCENTAGE);
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        HorizontalLayout toolbar = new HorizontalLayout(buttonsLayout, searchWidget);
+        VerticalLayout toolbar = new VerticalLayout(buttonsLayout, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);
         toolbar.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_LEFT);
-        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_RIGHT);
+        toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
         toolbar.setExpandRatio(searchWidget, 1f);
         toolbar.setMargin(true);
         VaadinUtils.addComponentStyle(toolbar, "udm-usages-toolbar");
