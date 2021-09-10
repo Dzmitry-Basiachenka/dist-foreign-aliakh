@@ -1,3 +1,9 @@
+14.1.16
+-
+* B-68367 FDA & UDM: view baseline usages: resize columns on Baseline and Values tab, swap Updated By/Date columns on Baseline view
+* B-68830 FDA & UDM - Baseline view filters: implement backend logic to retrieve baseline periods
+* B-68821 Tech Debt: FDA: apply desc order for periods filter on UDM tabs
+
 14.1.15
 -
 * B-68821 Tech Debt: FDA: update CSS for nested tabs
