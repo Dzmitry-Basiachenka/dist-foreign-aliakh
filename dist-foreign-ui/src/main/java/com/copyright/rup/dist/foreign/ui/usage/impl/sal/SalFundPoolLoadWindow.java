@@ -360,7 +360,7 @@ class SalFundPoolLoadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
+                ForeignUi.getMessage("field.error.not_numeric"))
             .bind(fundPool -> fundPool.getSalFields().getLicenseeAccountNumber().toString(),
                 (fundPool, string) -> fundPool.getSalFields().setLicenseeAccountNumber(Long.valueOf(string)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);

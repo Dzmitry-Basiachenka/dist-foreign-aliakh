@@ -70,6 +70,7 @@ public class ItemBankUploadWindowTest {
     private static final String LICENSEE_NAME = "RGS Energy Group, Inc.";
     private static final String PERIOD_END_DATE = "2000";
     private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
+    private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
     private ItemBankUploadWindow window;
     private ISalUsageController usagesController;
 
@@ -121,7 +122,7 @@ public class ItemBankUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
+        ((TextField) Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD)).setValue(ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField licenseeName = Whitebox.getInternalState(window, "licenseeNameField");
         licenseeName.setReadOnly(false);
@@ -145,7 +146,7 @@ public class ItemBankUploadWindowTest {
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, "itemBankNameField", new TextField("Item Bank Name", ITEM_BANK_NAME));
-        Whitebox.setInternalState(window, "accountNumberField", new TextField("Licensee Account #", ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, ACCOUNT_NUMBER_FIELD, new TextField("Licensee Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "licenseeNameField", new TextField("Licensee Name", LICENSEE_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", PERIOD_END_DATE));
         expect(window.isValid()).andReturn(true).once();
@@ -172,6 +173,20 @@ public class ItemBankUploadWindowTest {
         verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodEndDate, "2020", binder, null, true);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testLicenseeAccountNumberValidation() {
+        replay(usagesController);
+        window = new ItemBankUploadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
+        verifyField(accountNumberField, "null", binder, "Field value should be specified", false);
+        verifyField(accountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
+        verifyField(accountNumberField, "a", binder, "Field value should contain numeric values only", false);
+        verifyField(accountNumberField, "1", binder, StringUtils.EMPTY, true);
+        verifyField(accountNumberField, "1000000000", binder, StringUtils.EMPTY, true);
         verify(usagesController);
     }
 
@@ -236,7 +251,7 @@ public class ItemBankUploadWindowTest {
         Collection<? extends AbstractField<?>> fields = Arrays.asList(
             Whitebox.getInternalState(window, "itemBankNameField"),
             Whitebox.getInternalState(window, "uploadField"),
-            Whitebox.getInternalState(window, "accountNumberField"),
+            Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "licenseeNameField"),
             Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD));
         Windows.showValidationErrorWindow(fields);

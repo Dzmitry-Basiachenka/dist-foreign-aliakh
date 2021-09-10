@@ -98,7 +98,8 @@ public class ItemBankUploadWindow extends Window {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
                         usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
-                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+                        String.format("%s%s", e.getMessage(),
+                            ForeignUi.getMessage("message.error.upload.threshold.exceeded"))));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
@@ -193,7 +194,7 @@ public class ItemBankUploadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
+                ForeignUi.getMessage("field.error.not_numeric"))
             .bind(usageBatch -> usageBatch.getSalFields().getLicenseeAccountNumber().toString(),
                 (usageBatch, s) -> usageBatch.getSalFields().setLicenseeAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
@@ -208,8 +209,9 @@ public class ItemBankUploadWindow extends Window {
         binder.forField(periodEndDateField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
+                ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
             .withConverter(new LocalDateConverter())
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(periodEndDateField, "distribution-period-field");

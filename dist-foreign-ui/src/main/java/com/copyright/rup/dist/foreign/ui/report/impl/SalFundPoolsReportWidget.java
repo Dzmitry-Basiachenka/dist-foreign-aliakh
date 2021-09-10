@@ -84,9 +84,10 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
         binder.forField(distributionYear)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
-            .withConverter(new StringToIntegerConverter("Field value can not be converted"))
+                ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
+            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(distributionYear, "distribution-year-field");

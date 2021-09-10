@@ -97,7 +97,7 @@ class SalUpdateRighstholderWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
+                ForeignUi.getMessage("field.error.not_numeric"))
             .bind(usage -> usage.getRightsholder().getAccountNumber().toString(),
                 (usage, s) -> usage.getRightsholder().setAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(rhAccountNumberField);
