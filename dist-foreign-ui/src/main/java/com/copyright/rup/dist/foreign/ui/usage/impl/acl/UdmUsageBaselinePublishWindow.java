@@ -62,6 +62,7 @@ public class UdmUsageBaselinePublishWindow extends Window {
         publishButton.addClickListener(event -> {
             Pair<Integer, Integer> publishedRemovedUdmUsages =
                 controller.publishUdmUsagesToBaseline(periodComboBox.getValue());
+            close();
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.udm_usage.publish", publishedRemovedUdmUsages.getLeft(),
                     publishedRemovedUdmUsages.getRight()));
