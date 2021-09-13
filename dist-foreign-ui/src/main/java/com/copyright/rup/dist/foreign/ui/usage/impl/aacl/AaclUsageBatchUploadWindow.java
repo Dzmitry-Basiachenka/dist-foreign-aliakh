@@ -105,7 +105,8 @@ public class AaclUsageBatchUploadWindow extends Window {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
                         usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
-                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+                        String.format("%s%s", e.getMessage(),
+                            ForeignUi.getMessage("message.error.upload.threshold.exceeded"))));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
@@ -186,8 +187,9 @@ public class AaclUsageBatchUploadWindow extends Window {
         binder.forField(periodEndDateField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
+                ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
             .withConverter(new LocalDateConverter())
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(periodEndDateField, "distribution-period-field");
@@ -200,8 +202,8 @@ public class AaclUsageBatchUploadWindow extends Window {
         binder.forField(numberOfBaselineYears)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
-                StringUtils.trim(value)) >= 0, "Field value should contain positive numeric values only")
-            .withConverter(new StringToIntegerConverter("Field value can not be converted"))
+                StringUtils.trim(value)) >= 0, ForeignUi.getMessage("field.error.positive_number"))
+            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))
             .bind(UsageBatch::getNumberOfBaselineYears, UsageBatch::setNumberOfBaselineYears);
         VaadinUtils.addComponentStyle(numberOfBaselineYears, "number-of-baseline-years-field");
         numberOfBaselineYears.setWidth(100, Unit.PERCENTAGE);

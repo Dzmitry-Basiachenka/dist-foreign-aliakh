@@ -79,7 +79,7 @@ public class AaclFundPoolUploadWindow extends Window {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
                             aaclUsageController.getErrorResultStreamSource(uploadField.getValue(), result),
-                            "<br>Press Download button to see detailed list of errors"));
+                            ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
                 }
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());

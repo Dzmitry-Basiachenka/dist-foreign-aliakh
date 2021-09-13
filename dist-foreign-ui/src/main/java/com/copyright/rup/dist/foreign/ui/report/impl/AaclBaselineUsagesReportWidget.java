@@ -66,8 +66,8 @@ public class AaclBaselineUsagesReportWidget extends Window implements IAaclBasel
         binder.forField(numberOfBaselineYearsField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
-                StringUtils.trim(value)) >= 0, "Field value should contain positive numeric values only")
-            .withConverter(new StringToIntegerConverter("Field value can not be converted"))
+                StringUtils.trim(value)) >= 0, ForeignUi.getMessage("field.error.positive_number"))
+            .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
         VaadinUtils.addComponentStyle(numberOfBaselineYearsField, "number-of-baseline-years-field");

@@ -71,13 +71,13 @@ public class AaclBaselineUsagesReportWidgetTest {
         Button exportButton = Whitebox.getInternalState(widget, "exportButton");
         verifyField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, "two", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number",
             false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, "-1", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
             false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should be positive number",
             false);
         assertFalse(exportButton.isEnabled());
         verifyField(numberOfBaselineYears, " 1 ", binder, null, true);
