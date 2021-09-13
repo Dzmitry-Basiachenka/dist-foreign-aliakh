@@ -86,6 +86,16 @@ public class SalFundPoolsReportWidgetTest {
         assertTrue(exportButton.isEnabled());
     }
 
+    @Test
+    public void testValidationMessageForConverter() {
+        Binder binder = Whitebox.getInternalState(widget, "binder");
+        TextField distributionYear = Whitebox.getInternalState(widget, "distributionYear");
+        Button exportButton = Whitebox.getInternalState(widget, "exportButton");
+        binder.setValidatorsDisabled(true);
+        verifyField(distributionYear, "invalidValue", binder, "Field value can not be converted", false);
+        assertFalse(exportButton.isEnabled());
+    }
+
     private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();

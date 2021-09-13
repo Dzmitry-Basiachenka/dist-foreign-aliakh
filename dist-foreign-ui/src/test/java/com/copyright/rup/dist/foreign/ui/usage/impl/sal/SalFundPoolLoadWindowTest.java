@@ -261,6 +261,21 @@ public class SalFundPoolLoadWindowTest {
     }
 
     @Test
+    public void testIsValidLicenseeAccountNumber() {
+        replay(usagesController);
+        Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, StringUtils.EMPTY);
+        verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "10000000000");
+        verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, "Field value should not exceed 10 digits");
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "value");
+        verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only");
+        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "1000000000");
+        verifyFieldIsValid(binder, ACCOUNT_NUMBER_FIELD);
+        verify(usagesController);
+    }
+
+    @Test
     public void testOnLoadButtonClick() {
         mockStatic(Windows.class);
         FundPool fundPool = buildFundPool();
