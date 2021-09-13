@@ -127,14 +127,15 @@ public class AaclUsageBatchUploadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
         verifyField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
-        verifyField(numberOfBaselineYears, "two", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number",
             false);
-        verifyField(numberOfBaselineYears, "-1", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
             false);
-        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should contain positive numeric values only",
+        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should be positive number",
             false);
         verifyField(numberOfBaselineYears, " 1 ", binder, null, true);
         verifyField(numberOfBaselineYears, "1", binder, null, true);
+        verify(usagesController);
     }
 
     @Test
