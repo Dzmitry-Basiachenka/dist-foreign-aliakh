@@ -49,7 +49,7 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     }
 
     @Override
-    public Set<String> removeUmdUsagesFromBaseline(Integer period, String userName) {
+    public Set<String> removeUdmUsagesFromBaseline(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("period", Objects.requireNonNull(period));
         parameters.put("createUser", Objects.requireNonNull(userName));

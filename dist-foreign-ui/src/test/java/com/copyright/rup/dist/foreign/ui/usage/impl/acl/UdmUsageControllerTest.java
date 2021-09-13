@@ -179,17 +179,21 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testGetPeriods() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.EMPTY_LIST);
-        replay(udmUsageFilterController);
-        controller.getPeriods();
-        verify(udmUsageFilterController);
+        List<Integer> expectedPeriods = Collections.singletonList(202106);
+        expect(udmUsageService.getPeriods()).andReturn(expectedPeriods).once();
+        replay(udmUsageService);
+        List<Integer> periods = controller.getPeriods();
+        assertEquals(expectedPeriods.get(0), periods.get(0));
+        verify(udmUsageService);
     }
 
     @Test
     public void testPublishUdmUsagesToBaseline() {
-        expect(udmUsageService.publishUdmUsagesToBaseline(202106)).andReturn(Pair.of(1, 1));
+        expect(udmUsageService.publishUdmUsagesToBaseline(202106)).andReturn(Pair.of(5, 3)).once();
         replay(udmUsageService);
-        controller.publishUdmUsagesToBaseline(202106);
+        Pair<Integer, Integer> integerIntegerPair = controller.publishUdmUsagesToBaseline(202106);
+        assertEquals(Integer.valueOf(5), integerIntegerPair.getLeft());
+        assertEquals(Integer.valueOf(3), integerIntegerPair.getRight());
         verify(udmUsageService);
     }
 

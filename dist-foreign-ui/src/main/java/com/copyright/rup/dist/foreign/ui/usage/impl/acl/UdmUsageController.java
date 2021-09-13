@@ -214,7 +214,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public List<Integer> getPeriods() {
-        return udmUsageFilterController.getPeriods();
+        return udmUsageService.getPeriods();
     }
 
     @Override

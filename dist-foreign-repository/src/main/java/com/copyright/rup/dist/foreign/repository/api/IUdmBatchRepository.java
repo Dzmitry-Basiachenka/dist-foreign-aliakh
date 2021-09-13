@@ -67,7 +67,7 @@ public interface IUdmBatchRepository {
      * Returns true if selected UDM batch doesn't have usages in baseline.
      *
      * @param udmBatchId batch identifier
-     * @return @code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
+     * @return {@code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
      */
     boolean isUdmBatchContainsBaselineUsages(String udmBatchId);
 }
