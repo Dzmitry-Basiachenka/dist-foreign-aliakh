@@ -1,3 +1,12 @@
+14.1.17
+-
+* B-68367: FDA & UDM: view baseline usages: implement refresh functionality for UDM sub-tabs
+* B-68367: FDA & UDM: view baseline usages: move search widget to separate layout on UDM usages window
+* B-68821: Tech Debt: FDA: move all validation error messages to properties for AACL
+* B-68821: Tech Debt: FDA: move all validation error messages to properties for SAL
+* B-65866: FDA & UDM: publish usages to baseline: make changes based on CR-DIST-FOREIGN-259
+* B-65866: FDA & UDM: publish usages to baseline: add logic to close Publish to Baseline window after click button Publish
+
 14.1.16
 -
 * B-68367 FDA & UDM: view baseline usages: resize columns on Baseline and Values tab, swap Updated By/Date columns on Baseline view
