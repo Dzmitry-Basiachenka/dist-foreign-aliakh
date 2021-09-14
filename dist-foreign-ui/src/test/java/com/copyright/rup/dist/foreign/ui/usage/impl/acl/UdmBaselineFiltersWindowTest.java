@@ -263,6 +263,8 @@ public class UdmBaselineFiltersWindowTest {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox);
         verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(toField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, "1.2345677",
+            "Field value should be greater or equal to Annualized Copies From", false);
         verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
     }

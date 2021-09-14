@@ -195,9 +195,9 @@ public class FundPoolLoadWindowTest {
         verifyFieldValidationMessage(periodTo, "2018", binder, INVALID_PERIOD_ERROR_MESSAGE, true);
         periodFrom.setValue("2005");
         verifyFieldValidationMessage(periodTo, "2004", binder,
-            "Field value should be greater or equal to Fund pool period from", false);
+            "Field value should be greater or equal to Fund Pool Period From", false);
         verifyFieldValidationMessage(periodTo, "2005", binder,
-            "Field value should be greater or equal to Fund pool period from", true);
+            "Field value should be greater or equal to Fund Pool Period From", true);
         verify(usagesController);
     }
 

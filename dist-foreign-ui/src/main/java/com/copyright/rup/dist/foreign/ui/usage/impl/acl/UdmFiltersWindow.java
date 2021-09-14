@@ -52,9 +52,10 @@ public class UdmFiltersWindow extends Window {
 
     private static final String AMOUNT_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.positive_number_and_length", 10);
-    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
-        "Field value should be populated for Between Operator";
+        ForeignUi.getMessage("field.error.populated_for_between_operator");
+    private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
     private final TextField annualMultiplierFromField =
@@ -199,7 +200,7 @@ public class UdmFiltersWindow extends Window {
         filterBinder.forField(wrWrkInstField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter("Field should be numeric"))
+            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
             .bind(UdmUsageFilter::getWrWrkInst, UdmUsageFilter::setWrWrkInst);
         channelComboBox.setItems(UdmChannelEnum.values());
         channelComboBox.setSelectedItem(usageFilter.getChannel());
@@ -224,7 +225,8 @@ public class UdmFiltersWindow extends Window {
                 return Objects.isNull(usageDateFrom)
                     || Objects.isNull(usageDateTo)
                     || 0 <= usageDateTo.compareTo(usageDateFrom);
-            }, "Field value should be greater or equal to Usage Date From")
+            }, ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                ForeignUi.getMessage("label.usage_date_from")))
             .bind(UdmUsageFilter::getUsageDateTo, UdmUsageFilter::setUsageDateTo);
         usageDateLayout.setSizeFull();
         usageDateLayout.setSpacing(true);
@@ -245,7 +247,8 @@ public class UdmFiltersWindow extends Window {
                 return Objects.isNull(surveyStartDateFrom)
                     || Objects.isNull(surveyStartDateTo)
                     || 0 <= surveyStartDateTo.compareTo(surveyStartDateFrom);
-            }, "Field value should be greater or equal to Survey Start Date From")
+            }, ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                ForeignUi.getMessage("label.survey_start_date_from")))
             .bind(UdmUsageFilter::getSurveyStartDateTo, UdmUsageFilter::setSurveyStartDateTo);
         surveyDateLayout.setSizeFull();
         surveyDateLayout.setSpacing(true);
@@ -275,7 +278,8 @@ public class UdmFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(annualMultiplierToField, annualMultiplierOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(annualMultiplierFromField, annualMultiplierToField),
-                "Field value should be greater or equal to Annual Multiplier From")
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.annual_multiplier_from")))
             .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Integer.valueOf(value)));
         annualMultiplierFromField.setSizeFull();
@@ -305,7 +309,8 @@ public class UdmFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(annualizedCopiesToField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFromField, annualizedCopiesToField),
-                "Field value should be greater or equal to Annualized Copies From")
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.annualized_copies_from")))
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(
@@ -339,7 +344,8 @@ public class UdmFiltersWindow extends Window {
             .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
             .withValidator(
                 value -> validateBigDecimalFromToValues(statisticalMultiplierFromField, statisticalMultiplierToField),
-                "Field value should be greater or equal to Statistical Multiplier From")
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.statistical_multiplier_from")))
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierToField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getStatisticalMultiplierExpression().getFieldSecondValue().toString(),
@@ -377,7 +383,8 @@ public class UdmFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(quantityToField, quantityOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(quantityFromField, quantityToField),
-                "Field value should be greater or equal to Quantity From")
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.quantity_from")))
             .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Integer.valueOf(value)));
         quantityFromField.setSizeFull();
@@ -398,7 +405,7 @@ public class UdmFiltersWindow extends Window {
         filterBinder.forField(companyIdField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter("Field should be numeric"))
+            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
             .bind(UdmUsageFilter::getCompanyId, UdmUsageFilter::setCompanyId);
         filterBinder.forField(companyNameField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 200), 0, 200))

@@ -251,7 +251,8 @@ class FundPoolLoadWindow extends Window {
                     || !getNumericValidator().test(periodFrom)
                     || !getYearValidator().test(periodFrom)
                     || 0 <= fundPoolPeriodToField.getValue().compareTo(periodFrom);
-            }, ForeignUi.getMessage("field.error.greater_or_equal_to_fund_pool_period_from"))
+            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
+                ForeignUi.getMessage("label.fund.pool.period.from")))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }

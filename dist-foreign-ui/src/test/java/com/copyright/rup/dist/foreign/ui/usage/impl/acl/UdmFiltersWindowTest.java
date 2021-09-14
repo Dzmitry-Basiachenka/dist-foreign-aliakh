@@ -222,7 +222,7 @@ public class UdmFiltersWindowTest {
         ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "annualMultiplierOperatorComboBox");
         verifyIntegerOperationValidations(annualMultiplierFromField, annualMultiplierToField,
-            annualMultiplierOperatorComboBox);
+            annualMultiplierOperatorComboBox, "Field value should be greater or equal to Annual Multiplier From");
     }
 
     @Test
@@ -232,7 +232,7 @@ public class UdmFiltersWindowTest {
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
-            annualizedCopiesOperatorComboBox);
+            annualizedCopiesOperatorComboBox, "Field value should be greater or equal to Annualized Copies From");
     }
 
     @Test
@@ -242,7 +242,8 @@ public class UdmFiltersWindowTest {
         ComboBox<FilterOperatorEnum> statisticalMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "statisticalMultiplierOperatorComboBox");
         verifyBigDecimalOperationValidations(statisticalMultiplierFromField, statisticalMultiplierToField,
-            statisticalMultiplierOperatorComboBox);
+            statisticalMultiplierOperatorComboBox,
+            "Field value should be greater or equal to Statistical Multiplier From");
     }
 
     @Test
@@ -251,7 +252,8 @@ public class UdmFiltersWindowTest {
         TextField quantityToField = Whitebox.getInternalState(window, "quantityToField");
         ComboBox<FilterOperatorEnum> quantityOperatorComboBox =
             Whitebox.getInternalState(window, "quantityOperatorComboBox");
-        verifyIntegerOperationValidations(quantityFromField, quantityToField, quantityOperatorComboBox);
+        verifyIntegerOperationValidations(quantityFromField, quantityToField, quantityOperatorComboBox,
+            "Field value should be greater or equal to Quantity From");
     }
 
     @Test
@@ -422,8 +424,11 @@ public class UdmFiltersWindowTest {
     }
 
     private void verifyIntegerOperationValidations(TextField fromField, TextField toField,
-                                                   ComboBox<FilterOperatorEnum> operatorComboBox) {
+                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                   String fieldSpecificErrorMessage) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
+        verifyTextFieldValidationMessage(fromField, "12345679", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, "12345678", fieldSpecificErrorMessage, false);
         verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
@@ -433,10 +438,13 @@ public class UdmFiltersWindowTest {
     }
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
-                                                      ComboBox<FilterOperatorEnum> operatorComboBox) {
+                                                      ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                      String fieldSpecificErrorMessage) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, DECIMAL_VALIDATION_MESSAGE);
         verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(toField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
         verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
     }

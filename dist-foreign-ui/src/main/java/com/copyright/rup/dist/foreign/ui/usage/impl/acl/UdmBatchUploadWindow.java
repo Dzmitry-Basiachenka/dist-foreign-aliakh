@@ -86,7 +86,7 @@ public class UdmBatchUploadWindow extends Window {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
                             udmUsageController.getErrorResultStreamSource(uploadField.getValue(), result),
-                            "<br>Press Download button to see detailed list of errors"));
+                            ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
                 }
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
@@ -158,8 +158,9 @@ public class UdmBatchUploadWindow extends Window {
         binder.forField(periodYearField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
-                "Field value should contain numeric values only")
-            .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
+                ForeignUi.getMessage("field.error.not_numeric"))
+            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                MIN_YEAR, MAX_YEAR))
             .bind(s -> s, (s, v) -> s = v).validate();
         VaadinUtils.addComponentStyle(periodYearField, "period-year-field");
         return periodYearField;
