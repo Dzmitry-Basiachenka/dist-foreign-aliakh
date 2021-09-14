@@ -118,4 +118,37 @@ public class UdmWidgetTest {
         assertEquals("Values", tab2.getCaption());
         assertTrue(tab2.getComponent() instanceof IUdmValueWidget);
     }
+
+    @Test
+    public void testRefresh() {
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        IUdmUsageController udmUsageController = createMock(IUdmUsageController.class);
+        IUdmUsageWidget udmUsageWidget = createNiceMock(IUdmUsageWidget.class);
+        expect(udmUsageController.initWidget()).andReturn(udmUsageWidget).once();
+        udmUsageWidget.setController(udmUsageController);
+        expectLastCall().once();
+        udmUsageWidget.refresh();
+        expectLastCall().once();
+        expect(controller.getUdmUsageController()).andReturn(udmUsageController).once();
+        IUdmValueController udmValueController = createMock(IUdmValueController.class);
+        IUdmValueWidget udmValueWidget = createNiceMock(IUdmValueWidget.class);
+        expect(udmValueController.initWidget()).andReturn(udmValueWidget).once();
+        udmValueWidget.setController(udmValueController);
+        expectLastCall().once();
+        expect(controller.getUdmValueController()).andReturn(udmValueController).once();
+        IUdmBaselineController udmBaselineController = createMock(IUdmBaselineController.class);
+        IUdmBaselineWidget udmBaselineWidget = createNiceMock(IUdmBaselineWidget.class);
+        expect(udmBaselineController.initWidget()).andReturn(udmBaselineWidget).once();
+        udmBaselineWidget.setController(udmBaselineController);
+        expectLastCall().once();
+        expect(controller.getUdmBaselineController()).andReturn(udmBaselineController).once();
+        replay(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
+            udmValueWidget, udmBaselineController, udmBaselineWidget);
+        UdmWidget widget = new UdmWidget();
+        widget.setController(controller);
+        widget.init();
+        widget.refresh();
+        verify(controller, ForeignSecurityUtils.class, udmUsageController, udmUsageWidget, udmValueController,
+            udmValueWidget, udmBaselineController, udmBaselineWidget);
+    }
 }
