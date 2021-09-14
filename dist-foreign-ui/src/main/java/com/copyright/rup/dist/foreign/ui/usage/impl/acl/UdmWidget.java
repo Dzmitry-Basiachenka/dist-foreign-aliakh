@@ -11,7 +11,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 
+import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -48,6 +50,14 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         }
         setSizeFull();
         return this;
+    }
+
+    @Override
+    public void refresh() {
+        Component selectedTab = getSelectedTab();
+        if (selectedTab instanceof IRefreshable) {
+            ((IRefreshable) selectedTab).refresh();
+        }
     }
 
     @Override
