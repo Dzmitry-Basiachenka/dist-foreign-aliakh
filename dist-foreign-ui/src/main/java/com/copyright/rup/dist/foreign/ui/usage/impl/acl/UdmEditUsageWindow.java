@@ -73,7 +73,7 @@ public class UdmEditUsageWindow extends Window {
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
-    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final IUdmUsageController controller;
     private final UdmUsageDto udmUsage;
@@ -273,7 +273,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> NumberUtils.isNumber(value.trim()) &&
                     STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
-                "Field value should be positive number between 0.00001 and 1.00000")
+                ForeignUi.getMessage("field.error.positive_number_between", "0.00001", "1.00000"))
             .withValidator(value ->
                     STATISTICAL_MULTIPLIER_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", 5))
@@ -294,7 +294,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(value.trim())
                     && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
-                "Field value should be positive number between 1 and 25")
+                ForeignUi.getMessage("field.error.positive_number_between", "1", "25"))
             .bind(usage -> usage.getAnnualMultiplier().toString(),
                 (usage, value) -> usage.setAnnualMultiplier(NumberUtils.toInt(value.trim())));
         annualMultiplierField.addValueChangeListener(event -> {
@@ -349,8 +349,7 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isNotEmpty(value.trim())
                     || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
                     || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
-                "No work information found, please specify at least one of the following: " +
-                    "Wr Wrk Inst, Reported Standard Number or Reported Title")
+                ForeignUi.getMessage("field.error.work_information_not_found"))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-edit-wr-wrk-inst-field");
@@ -417,7 +416,7 @@ public class UdmEditUsageWindow extends Window {
         binder.forField(ineligibleReasonComboBox)
             .withValidator(
                 value -> Objects.isNull(value) || UsageStatusEnum.INELIGIBLE == usageStatusComboBox.getValue(),
-                "Field value can be populated only if usage status is INELIGIBLE")
+                ForeignUi.getMessage("field.error.usage_status_not_ineligible"))
             .bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         VaadinUtils.addComponentStyle(ineligibleReasonComboBox, "udm-edit-ineligible-reason-combo-box");
         return buildCommonLayout(ineligibleReasonComboBox, fieldName);
@@ -439,7 +438,7 @@ public class UdmEditUsageWindow extends Window {
         binder.forField(usageStatusComboBox)
             .withValidator(
                 value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
-                "Field value can be INELIGIBLE only if Ineligible Reason is populated")
+                ForeignUi.getMessage("field.error.ineligible_only_if_ineligible_reason_populated"))
             .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(usageStatusComboBox, "udm-edit-detail-status-combo-box");
         return buildCommonLayout(usageStatusComboBox, fieldName);

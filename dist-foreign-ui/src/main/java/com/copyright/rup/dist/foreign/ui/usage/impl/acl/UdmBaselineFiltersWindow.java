@@ -49,7 +49,8 @@ public class UdmBaselineFiltersWindow extends Window {
     private static final String AMOUNT_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.positive_number_and_length", 10);
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
-        "Field value should be populated for Between Operator";
+        ForeignUi.getMessage("field.error.populated_for_between_operator");
+    private static final String NOT_NUMERIC_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
@@ -148,8 +149,8 @@ public class UdmBaselineFiltersWindow extends Window {
         systemTitle.setValue(ObjectUtils.defaultIfNull(baselineFilter.getSystemTitle(), StringUtils.EMPTY));
         filterBinder.forField(wrWrkInst)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), "Field value should contain numeric values only")
-            .withConverter(new StringToLongConverter("Field should be numeric"))
+            .withValidator(getNumberValidator(), NOT_NUMERIC_VALIDATION_MESSAGE)
+            .withConverter(new StringToLongConverter(NOT_NUMERIC_VALIDATION_MESSAGE))
             .bind(UdmBaselineFilter::getWrWrkInst, UdmBaselineFilter::setWrWrkInst);
         filterBinder.forField(systemTitle)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
@@ -180,7 +181,8 @@ public class UdmBaselineFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(annualizedCopiesTo, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFrom, annualizedCopiesTo),
-                "Field value should be greater or equal to Annualized Copies From")
+                ForeignUi.getMessage("field.error.greater_or_equal_to",
+                    ForeignUi.getMessage("label.annualized_copies_from")))
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(

@@ -23,6 +23,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -32,6 +34,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +43,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmBatchUploadWindow}.
@@ -128,6 +133,24 @@ public class UdmBatchUploadWindowTest {
         assertTrue(window.isValid());
     }
 
+    @Test
+    public void testPeriodYearFieldValidation() {
+        replay(controller);
+        window = new UdmBatchUploadWindow(controller);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField periodYearField = Whitebox.getInternalState(window, "periodYearField");
+        verifyField(periodYearField, StringUtils.EMPTY, binder, "Field value should be specified", false);
+        verifyField(periodYearField, "null", binder, "Field value should be specified", false);
+        verifyField(periodYearField, "a", binder, "Field value should contain numeric values only", false);
+        verifyField(periodYearField, "a955", binder, "Field value should contain numeric values only", false);
+        verifyField(periodYearField, "1949", binder, "Field value should be in range from 1950 to 2099", false);
+        verifyField(periodYearField, "2100", binder, "Field value should be in range from 1950 to 2099", false);
+        verifyField(periodYearField, "1950", binder, StringUtils.EMPTY, true);
+        verifyField(periodYearField, "1999", binder, StringUtils.EMPTY, true);
+        verifyField(periodYearField, "2099", binder, StringUtils.EMPTY, true);
+        verify(controller);
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -209,5 +232,13 @@ public class UdmBatchUploadWindowTest {
         udmBatch.setPeriod(202012);
         udmBatch.setUsageOrigin(UdmUsageOriginEnum.RFA);
         return udmBatch;
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

@@ -119,8 +119,8 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
                     || !getNumericValidator().test(periodFrom)
                     || !getYearValidator().test(periodFrom)
                     || 0 <= periodEndDateToField.getValue().compareTo(periodFrom);
-            }, "Field value should be greater or equal to " +
-                ForeignUi.getMessage("field.period_end_date_from"))
+            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
+                ForeignUi.getMessage("field.period_end_date_from")))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }

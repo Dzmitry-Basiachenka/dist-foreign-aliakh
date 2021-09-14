@@ -62,7 +62,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
-    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String MAX_LENGTH_FIELD_MESSAGE = "field.error.number_length";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
@@ -156,7 +156,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         binder.forField(statusComboBox)
             .withValidator(
                 value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
-                "Field value can be INELIGIBLE only if Ineligible Reason is populated")
+                ForeignUi.getMessage("field.error.ineligible_only_if_ineligible_reason_populated"))
             .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         statusComboBox.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
@@ -169,11 +169,11 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(value -> StringUtils.isEmpty(value) || value.trim().length() == 6,
-                "Period value should contain 6 digits")
+                ForeignUi.getMessage("field.error.period_length", 6))
             .withValidator(value -> StringUtils.isEmpty(value) || periodYearValidator(value),
-                "Year value should be in range from 1950 to 2099")
+                ForeignUi.getMessage("field.error.year_not_in_range", MIN_YEAR, MAX_YEAR))
             .withValidator(value -> StringUtils.isEmpty(value) || periodMonthValidator(value),
-                "Month value should be 06 or 12")
+                ForeignUi.getMessage("field.error.month_invalid", 6, 12))
             .bind(usage -> Objects.toString(usage.getPeriod(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(periodField, "udm-multiple-edit-period-field");
@@ -255,7 +255,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         binder.forField(annualMultiplierField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim())
                     && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
-                "Field value should be positive number between 1 and 25")
+                ForeignUi.getMessage("field.error.positive_number_between", "1", "25"))
             .bind(usage -> Objects.toString(usage.getAnnualMultiplier(), StringUtils.EMPTY),
                 (usage, value) -> usage.setAnnualMultiplier(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(annualMultiplierField, "udm-multiple-edit-annual-multiplier-field");
@@ -267,7 +267,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         binder.forField(statisticalMultiplierField)
             .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim())
                     && STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
-                "Field value should be positive number between 0.00001 and 1.00000")
+                ForeignUi.getMessage("field.error.positive_number_between", "0.00001", "1.00000"))
             .withValidator(value -> StringUtils.isEmpty(value) ||
                     STATISTICAL_MULTIPLIER_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", 5))
@@ -308,7 +308,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         binder.forField(ineligibleReasonComboBox)
             .withValidator(
                 value -> Objects.isNull(value) || UsageStatusEnum.INELIGIBLE == statusComboBox.getValue(),
-                "Field value can be populated only if usage status is INELIGIBLE")
+                ForeignUi.getMessage("field.error.usage_status_not_ineligible"))
             .bind(UdmUsageDto::getIneligibleReason, UdmUsageDto::setIneligibleReason);
         ineligibleReasonComboBox.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(ineligibleReasonComboBox, "udm-multiple-edit-ineligible-reason-combo-box");

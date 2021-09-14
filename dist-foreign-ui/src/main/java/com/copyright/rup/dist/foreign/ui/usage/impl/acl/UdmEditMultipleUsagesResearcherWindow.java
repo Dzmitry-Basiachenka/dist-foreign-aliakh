@@ -128,7 +128,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         wrWrkInstField.setSizeFull();
         binder.forField(wrWrkInstField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
-                "Field value should contain numeric values only")
+                ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
