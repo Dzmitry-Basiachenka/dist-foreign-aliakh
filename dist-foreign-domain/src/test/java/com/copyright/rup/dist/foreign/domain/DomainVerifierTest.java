@@ -113,7 +113,8 @@ public class DomainVerifierTest {
             {UdmActionReason.class},
             {UdmIneligibleReason.class},
             {UdmValueDto.class},
-            {UdmBaselineDto.class}
+            {UdmBaselineDto.class},
+            {ExchangeRate.class}
         };
         return Arrays.asList(testData);
     }
