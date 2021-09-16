@@ -199,7 +199,7 @@ public class ViewFundPoolWindowTest {
         List<Grid.Column> columns = usagesGrid.getColumns();
         assertEquals(Arrays.asList("Fund Pool Name", "RRO Account #", "RRO Name", "Payment Date", "Fiscal Year",
             "STM Amount", "Non-STM Amount", "STM Minimum Amount", "Non-STM Minimum Amount", "Market(s)",
-            "Market Period From", "Market Period To", "Create User", "Create Date"),
+            "Market Period From", "Market Period To", "Create User", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 100.0, 115.0, 140.0, 160.0, 140.0, 140.0, 125.0,
             170.0, -1.0), columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));

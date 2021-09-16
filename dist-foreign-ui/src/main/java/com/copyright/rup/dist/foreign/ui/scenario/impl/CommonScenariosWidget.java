@@ -192,7 +192,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
             .setComparator((scenario1, scenario2) -> scenario1.getName().compareToIgnoreCase(scenario2.getName()))
             .setExpandRatio(1);
         scenarioGrid.addColumn(scenario -> getStringFromDate(scenario.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.create_date"))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((SerializableComparator<Scenario>) (scenario1, scenario2) ->
                 scenario1.getCreateDate().compareTo(scenario2.getCreateDate()))
             .setWidth(100);

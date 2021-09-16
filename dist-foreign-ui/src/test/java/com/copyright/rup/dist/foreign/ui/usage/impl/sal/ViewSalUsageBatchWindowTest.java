@@ -275,7 +275,7 @@ public class ViewSalUsageBatchWindowTest {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Usage Batch Name", "Licensee Account #", "Licensee Name", "Period End Date",
-            "Create User", "Create Date"),
+            "Create User", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(-1.0, 180.0, 180.0, 120.0, 170.0, 170.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));

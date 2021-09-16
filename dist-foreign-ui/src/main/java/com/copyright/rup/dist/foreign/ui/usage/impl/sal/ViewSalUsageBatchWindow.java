@@ -196,7 +196,7 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.create_date"))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()))
             .setWidth(170);
     }
