@@ -148,7 +148,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(fundPool -> getStringFromDate(fundPool.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.create_date"))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateDate().compareTo(fundPool2.getCreateDate()))
             .setExpandRatio(0);
     }

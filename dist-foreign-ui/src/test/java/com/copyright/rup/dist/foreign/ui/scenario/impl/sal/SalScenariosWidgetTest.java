@@ -182,7 +182,7 @@ public class SalScenariosWidgetTest {
         verifySize(grid);
         assertEquals("scenarios-table", grid.getId());
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Name", "Create Date", "Status"),
+        assertEquals(Arrays.asList("Name", "Created Date", "Status"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         Column createDateColumn = columns.get(2);
         assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));

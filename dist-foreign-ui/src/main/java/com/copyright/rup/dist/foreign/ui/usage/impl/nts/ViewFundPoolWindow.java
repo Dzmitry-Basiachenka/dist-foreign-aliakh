@@ -97,7 +97,7 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
         addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170,
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.create_date"))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
                 batch1.getCreateDate().compareTo(batch2.getCreateDate()));
     }
