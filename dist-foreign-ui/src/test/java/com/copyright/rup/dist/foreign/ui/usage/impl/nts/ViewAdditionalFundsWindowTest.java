@@ -166,7 +166,7 @@ public class ViewAdditionalFundsWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Create User", "Comment", StringUtils.EMPTY),
+        assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Created By", "Comment", StringUtils.EMPTY),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(1).getWidth(), 0);
         assertEquals(140, columns.get(2).getWidth(), 0);

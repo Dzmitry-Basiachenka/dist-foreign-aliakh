@@ -78,7 +78,7 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
                 (batch1, batch2) -> batch1.getNumberOfBaselineYears().compareTo(batch2.getNumberOfBaselineYears()))
             .setWidth(180);
         grid.addColumn(UsageBatch::getCreateUser)
-            .setCaption(ForeignUi.getMessage("table.column.create_user"))
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))

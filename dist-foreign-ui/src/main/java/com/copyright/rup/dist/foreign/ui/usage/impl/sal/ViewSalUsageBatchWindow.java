@@ -192,7 +192,7 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             .setRenderer(new LocalDateRenderer(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
             .setWidth(120);
         grid.addColumn(UsageBatch::getCreateUser)
-            .setCaption(ForeignUi.getMessage("table.column.create_user"))
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))

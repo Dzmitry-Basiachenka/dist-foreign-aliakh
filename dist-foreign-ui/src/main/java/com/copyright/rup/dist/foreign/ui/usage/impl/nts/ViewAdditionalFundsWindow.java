@@ -79,7 +79,7 @@ class ViewAdditionalFundsWindow extends Window {
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(100);
         grid.addColumn(FundPool::getCreateUser)
-            .setCaption(ForeignUi.getMessage("table.column.create_user"))
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setSortProperty("createUser")
             .setWidth(140);
         grid.addColumn(FundPool::getComment)
