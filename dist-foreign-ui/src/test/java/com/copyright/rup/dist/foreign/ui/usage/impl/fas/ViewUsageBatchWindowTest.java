@@ -197,7 +197,7 @@ public class ViewUsageBatchWindowTest {
         assertNull(usagesGrid.getCaption());
         List<Grid.Column> columns = usagesGrid.getColumns();
         assertEquals(Arrays.asList("Usage Batch Name", "RRO Account #", "RRO Name", "Payment Date", "Fiscal Year",
-            "Batch Amt in USD", "Create User", "Created Date"),
+            "Batch Amt in USD", "Created By", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 130.0, 170.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));

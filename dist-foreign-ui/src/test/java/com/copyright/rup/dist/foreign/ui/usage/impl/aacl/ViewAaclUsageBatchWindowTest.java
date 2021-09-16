@@ -183,7 +183,7 @@ public class ViewAaclUsageBatchWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Period End Date", "Number of Baseline Years", "Create User",
+        assertEquals(Arrays.asList("Usage Batch Name", "Period End Date", "Number of Baseline Years", "Created By",
             "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(-1.0, 120.0, 180.0, 170.0, 170.0),

@@ -106,7 +106,7 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
             .setComparator((batch1, batch2) -> batch1.getChannel().compareTo(batch2.getChannel()))
             .setWidth(120);
         grid.addColumn(UdmBatch::getCreateUser)
-            .setCaption(ForeignUi.getMessage("table.column.create_user"))
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
         grid.addColumn(udmBatch -> getStringFromDate(udmBatch.getCreateDate()))

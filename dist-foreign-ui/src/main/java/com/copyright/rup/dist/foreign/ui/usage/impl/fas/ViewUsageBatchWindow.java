@@ -82,7 +82,7 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
         addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()), "table.column.fiscal_year", 90);
         addAmountColumn(UsageBatch::getGrossAmount, "table.column.batch_gross_amount", 130,
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
-        addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170,
+        addColumn(UsageBatch::getCreateUser, "table.column.created_by", 170,
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))

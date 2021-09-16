@@ -143,7 +143,7 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
                 fundPool1.getTotalAmount().compareTo(fundPool2.getTotalAmount()))
             .setWidth(170);
         grid.addColumn(FundPool::getCreateUser)
-            .setCaption(ForeignUi.getMessage("table.column.create_user"))
+            .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator(
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))
             .setWidth(170);

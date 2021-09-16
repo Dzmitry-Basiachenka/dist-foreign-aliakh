@@ -203,7 +203,7 @@ public class ViewAaclFundPoolWindowTest {
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Pool Name", "Gross Fund Pool Total", "Create User", "Created Date"),
+        assertEquals(Arrays.asList("Fund Pool Name", "Gross Fund Pool Total", "Created By", "Created Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(-1.0, 170.0, 170.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
