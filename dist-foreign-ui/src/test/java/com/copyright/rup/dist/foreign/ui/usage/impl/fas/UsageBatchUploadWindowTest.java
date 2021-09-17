@@ -78,7 +78,9 @@ public class UsageBatchUploadWindowTest {
         "Field value should be positive number and should not exceed 10 digits";
     private static final String INVALID_NUMERIC_VALUE_MESSAGE = "Field value should contain numeric values only";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
+    private static final String EMPTY_ERROR_MESSAGE = "Field value should be specified";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
+    private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
     private IFasUsageController usagesController;
@@ -134,7 +136,7 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD)).setValue("100.00");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
+        ((TextField) Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD)).setValue(USAGE_BATCH_NAME);
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -145,6 +147,8 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
+        validateField(grossAmountField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
+        validateField(grossAmountField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
         validateField(grossAmountField, "123.5684", binder, true, StringUtils.EMPTY);
         validateField(grossAmountField, "0.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
         validateField(grossAmountField, "value", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
@@ -159,12 +163,33 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
+        validateField(accountNumberField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
+        validateField(accountNumberField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
         validateField(accountNumberField, "10000018631", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
         validateField(accountNumberField, "9999999999.99", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
         validateField(accountNumberField, "0.00", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
         validateField(accountNumberField, "value", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
         validateField(accountNumberField, "0", binder, true, StringUtils.EMPTY);
         validateField(accountNumberField, "1000001863", binder, true, StringUtils.EMPTY);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testIsValidUsageBatchNameField() {
+        String existingBatchName = "Existing Batch Name";
+        expect(usagesController.usageBatchExists(existingBatchName)).andReturn(true).times(2);
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
+        replay(usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
+        TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        validateField(usageBatchNameField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
+        validateField(usageBatchNameField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
+        validateField(usageBatchNameField, StringUtils.repeat('a', 51), binder, false,
+            "Field value should not exceed 50 characters");
+        validateField(usageBatchNameField, existingBatchName, binder, false,
+            "Usage Batch with such name already exists");
+        validateField(usageBatchNameField, USAGE_BATCH_NAME, binder, true, StringUtils.EMPTY);
         verify(usagesController);
     }
 
@@ -183,7 +208,7 @@ public class UsageBatchUploadWindowTest {
         window = createPartialMock(UsageBatchUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, "usageBatchNameField", new TextField("Usage Batch Name", USAGE_BATCH_NAME));
+        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, ACCOUNT_NUMBER_FIELD, new TextField("RRO Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "fiscalYearField", new TextField("FY2017"));
@@ -251,7 +276,7 @@ public class UsageBatchUploadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "usageBatchNameField"),
+            Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),

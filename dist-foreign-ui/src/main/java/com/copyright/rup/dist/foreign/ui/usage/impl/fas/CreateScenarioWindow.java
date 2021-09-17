@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -88,7 +89,7 @@ class CreateScenarioWindow extends Window {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setRequiredIndicatorVisible(true);
         binder.forField(scenarioNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))

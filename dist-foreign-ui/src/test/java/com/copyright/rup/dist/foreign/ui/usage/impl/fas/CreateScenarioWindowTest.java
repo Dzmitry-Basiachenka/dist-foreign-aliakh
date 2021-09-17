@@ -14,8 +14,8 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.ui.Button;
@@ -27,6 +27,8 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -52,10 +54,15 @@ public class CreateScenarioWindowTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     private CreateScenarioWindow createScenarioWindow;
+    private IFasUsageController controller;
+
+    @Before
+    public void setUp() {
+        controller = createMock(IFasUsageController.class);
+    }
 
     @Test
     public void testComponentStructure() {
-        IFasUsageController controller = createMock(IFasUsageController.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         replay(controller);
@@ -75,7 +82,6 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testButtonConfirmClick() {
-        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         Scenario scenario = new Scenario();
@@ -100,7 +106,6 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testButtonCloseClick() {
-        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
@@ -119,7 +124,6 @@ public class CreateScenarioWindowTest {
 
     @Test
     public void testScenarioNameExists() {
-        IFasUsageController controller = createMock(IFasUsageController.class);
         IScenarioService scenarioService = createMock(IScenarioService.class);
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
@@ -130,6 +134,25 @@ public class CreateScenarioWindowTest {
         validateScenarioNameExistence(scenarioNameField, binder, SCENARIO_NAME);
         validateScenarioNameExistence(scenarioNameField, binder, ' ' + SCENARIO_NAME + ' ');
         verify(controller, scenarioService);
+    }
+
+    @Test
+    public void testScenarioNameFieldValidation() {
+        String existingScenarioName = "Scenario 09/17/2021";
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
+        expect(controller.scenarioExists(existingScenarioName)).andReturn(true).times(2);
+        replay(controller);
+        createScenarioWindow = new CreateScenarioWindow(controller);
+        Binder binder = Whitebox.getInternalState(createScenarioWindow, "binder");
+        TextField scenarioNameField = Whitebox.getInternalState(createScenarioWindow, "scenarioNameField");
+        verifyField(scenarioNameField, StringUtils.EMPTY, binder, "Field value should be specified", false);
+        verifyField(scenarioNameField, "    ", binder, "Field value should be specified", false);
+        verifyField(scenarioNameField, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        verifyField(scenarioNameField, existingScenarioName, binder, "Scenario with such name already exists", false);
+        verifyField(scenarioNameField, SCENARIO_NAME, binder, StringUtils.EMPTY, true);
+        verify(controller);
     }
 
     private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
@@ -197,5 +220,13 @@ public class CreateScenarioWindowTest {
         public void close() {
             this.closed = true;
         }
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }
