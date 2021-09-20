@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -54,6 +55,7 @@ public class UsageBatchUploadWindow extends Window {
     private final IFasUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
+    private final RequiredValidator requiredValidator = new RequiredValidator();
     private TextField accountNumberField;
     private TextField accountNameField;
     private TextField productFamilyField;
@@ -150,7 +152,7 @@ public class UsageBatchUploadWindow extends Window {
         uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(requiredValidator)
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(s -> s, (s, v) -> s = v).validate();
@@ -173,7 +175,7 @@ public class UsageBatchUploadWindow extends Window {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
         binder.forField(usageBatchNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(requiredValidator)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
@@ -225,7 +227,7 @@ public class UsageBatchUploadWindow extends Window {
         accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
         accountNumberField.setRequiredIndicatorVisible(true);
         binder.forField(accountNumberField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(requiredValidator)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
@@ -276,7 +278,7 @@ public class UsageBatchUploadWindow extends Window {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(requiredValidator)
             .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_and_length", 10))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
