@@ -444,7 +444,8 @@ public class UdmFiltersWindow extends Window {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.values());
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
@@ -477,6 +478,7 @@ public class UdmFiltersWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
+            // TODO {aliakh} rewrite using binder.writeBean
             if (filterBinder.isValid()) {
                 populateUsageFilter();
                 appliedUsageFilter = usageFilter;
