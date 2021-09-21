@@ -5,13 +5,16 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -61,7 +64,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
 
     private VerticalLayout initBaselineLayout() {
         initBaselineGrid();
-        VerticalLayout layout = new VerticalLayout(udmBaselineGrid);
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), udmBaselineGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -136,5 +139,13 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        HorizontalLayout layout = new HorizontalLayout(exportButton);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "baseline-buttons");
+        return layout;
     }
 }

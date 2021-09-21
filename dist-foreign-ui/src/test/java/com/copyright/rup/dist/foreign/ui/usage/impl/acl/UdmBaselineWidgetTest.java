@@ -11,9 +11,11 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -61,9 +63,10 @@ public class UdmBaselineWidgetTest {
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
-        assertEquals(1, layout.getComponentCount());
-        verifyGrid((Grid) layout.getComponent(0));
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);
+        assertEquals(2, layout.getComponentCount());
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        verifyGrid((Grid) layout.getComponent(1));
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
     private void verifyGrid(Grid grid) {
@@ -83,5 +86,13 @@ public class UdmBaselineWidgetTest {
         assertEquals(100, component.getHeight(), 0);
         assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertTrue(layout.isSpacing());
+        assertEquals(new MarginInfo(true), layout.getMargin());
+        assertEquals(1, layout.getComponentCount());
+        Component component = layout.getComponent(0);
+        assertEquals("Export", component.getCaption());
     }
 }
