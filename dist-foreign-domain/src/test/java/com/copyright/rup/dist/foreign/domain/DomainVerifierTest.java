@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterEqualsExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterGreaterThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterLessThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
@@ -113,6 +114,7 @@ public class DomainVerifierTest {
             {UdmActionReason.class},
             {UdmIneligibleReason.class},
             {UdmValueDto.class},
+            {UdmValueFilter.class},
             {UdmBaselineDto.class},
             {ExchangeRate.class}
         };
