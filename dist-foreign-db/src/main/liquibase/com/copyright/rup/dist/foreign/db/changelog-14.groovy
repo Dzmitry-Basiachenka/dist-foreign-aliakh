@@ -511,4 +511,73 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-09-22-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-65962 [Value] FDA&UDM: Create and Populate Value batch: Implement db table for work values")
+
+        createTable(tableName: 'df_udm_value', schemaName: dbAppsSchema, tablespace: dbDataTablespace, remarks: 'Table for storing UDM values') {
+
+            column(name: 'df_udm_value_uid', type: 'VARCHAR(255)', remarks: 'The identifier of UDM value') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The UDM value period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'status_ind', type: 'VARCHAR(32)', remarks: 'The status of UDM value') {
+                constraints(nullable: false)
+            }
+            column(name: 'rh_account_number', type: 'NUMERIC(22)', remarks: 'Rightsholder account number') {
+                constraints(nullable: false)
+            }
+            column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'Wr Wrk Inst') {
+                constraints(nullable: false)
+            }
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'System title')
+            column(name: 'standard_number', type: 'VARCHAR(1000)', remarks: 'Standard number')
+            column(name: 'standard_number_type', type: 'VARCHAR(50)', remarks: 'Standard number type')
+            column(name: 'reported_pub_type', type: 'VARCHAR(100)', remarks: 'Reported publication type')
+            column(name: 'assignee', type: 'VARCHAR(320)', remarks: 'The assignee')
+            column(name: 'price', type: 'NUMERIC(38,10)', remarks: 'Price')
+            column(name: 'price_in_usd', type: 'NUMERIC(38,10)', remarks: 'Price in USD')
+            column(name: 'price_type', type: 'VARCHAR(100)', remarks: 'Price type')
+            column(name: 'price_access_type', type: 'VARCHAR(100)', remarks: 'Price access type')
+            column(name: 'price_year', type: 'INTEGER', remarks: 'Price year')
+            column(name: 'price_comment', type: 'VARCHAR(1024)', remarks: 'Price comment')
+            column(name: 'price_source', type: 'VARCHAR(1000)', remarks: 'Price source')
+            column(name: 'price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Price Flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'comment', type: 'VARCHAR(1024)', remarks: 'Comment')
+            column(name: 'currency', type: 'VARCHAR(3)', remarks: 'The currency')
+            column(name: 'currency_exchange_rate', type: 'NUMERIC(38,10)', remarks: 'Currency exchange rate')
+            column(name: 'currency_exchange_rate_date', type: 'TIMESTAMPTZ', remarks: 'Currency exchange rate date')
+            column(name: 'content', type: 'NUMERIC (38, 10)', remarks: 'Content')
+            column(name: 'content_unit_price', type: 'NUMERIC (38, 10)', remarks: 'Content unit price')
+            column(name: 'content_comment', type: 'VARCHAR(1024)', remarks: 'Content comment')
+            column(name: 'content_source', type: 'VARCHAR(1000)', remarks: 'Content source')
+            column(name: 'content_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+    }
 }
