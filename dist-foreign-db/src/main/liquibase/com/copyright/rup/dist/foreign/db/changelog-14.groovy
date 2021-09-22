@@ -580,4 +580,107 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-09-22-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-65962 [Value] FDA&UDM: Create and Populate Value batch: Implement db table for UDM age weights")
+
+        createTable(tableName: 'df_udm_age_weight', schemaName: dbAppsSchema, tablespace: dbDataTablespace, remarks: 'Table for storing UDM age weights') {
+
+            column(name: 'period_prior', type: 'INTEGER', remarks: 'Prior period') {
+                constraints(nullable: false)
+            }
+            column(name: 'weight', type: 'NUMERIC (10, 5)', remarks: 'Value of age weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 1)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 1)
+            column(name: 'weight', value: 1)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 2)
+            column(name: 'weight', value: 0.8)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 3)
+            column(name: 'weight', value: 0.8)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 4)
+            column(name: 'weight', value: 0.6)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 5)
+            column(name: 'weight', value: 0.6)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 6)
+            column(name: 'weight', value: 0.4)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 7)
+            column(name: 'weight', value: 0.4)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 8)
+            column(name: 'weight', value: 0.2)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 9)
+            column(name: 'weight', value: 0.2)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 10)
+            column(name: 'weight', value: 0.1)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 11)
+            column(name: 'weight', value: 0.05)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 12)
+            column(name: 'weight', value: 0)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 13)
+            column(name: 'weight', value: 0)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 14)
+            column(name: 'weight', value: 0)
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_age_weight') {
+            column(name: 'period_prior', value: 15)
+            column(name: 'weight', value: 0)
+        }
+
+        rollback {
+            dropTable(tableName: 'df_udm_age_weight', schemaName: dbAppsSchema)
+        }
+    }
 }
