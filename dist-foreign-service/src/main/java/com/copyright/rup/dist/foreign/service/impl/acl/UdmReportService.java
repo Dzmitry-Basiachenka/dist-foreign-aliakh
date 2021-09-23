@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
@@ -37,5 +38,10 @@ public class UdmReportService implements IUdmReportService {
     @Override
     public void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
         udmReportRepository.writeUdmUsageCsvReportView(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
+        udmReportRepository.writeUdmBaselineUsageCsvReport(filter, pipedOutputStream);
     }
 }

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -55,4 +56,9 @@ public interface IUdmBaselineController extends IController<IUdmBaselineWidget> 
      * @return initialized {@link IUdmBaselineFilterWidget}
      */
     IUdmBaselineFilterWidget initBaselineFilterWidget();
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportUdmBaselineUsagesStreamSource();
 }

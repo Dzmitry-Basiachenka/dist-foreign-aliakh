@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
@@ -39,6 +42,10 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
     private IUdmBaselineFilterController udmBaselineFilterController;
     @Autowired
     private IUdmBaselineService udmBaselineService;
+    @Autowired
+    private IUdmReportService udmReportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public int getBeansCount() {
@@ -71,6 +78,12 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
         IUdmBaselineFilterWidget result = udmBaselineFilterController.initWidget();
         result.addListener(FilterChangedEvent.class, this, IUdmBaselineController.ON_FILTER_CHANGED);
         return result;
+    }
+
+    @Override
+    public IStreamSource getExportUdmBaselineUsagesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_baseline_usage_",
+            pos -> udmReportService.writeUdmBaselineUsageCsvReport(getFilter(), pos));
     }
 
     private UdmBaselineFilter getFilter() {

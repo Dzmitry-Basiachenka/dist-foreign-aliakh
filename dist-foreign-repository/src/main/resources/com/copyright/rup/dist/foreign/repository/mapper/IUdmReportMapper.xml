@@ -10,4 +10,12 @@
     <select id="findUdmUsageDtosByFilter" resultMap="IUdmUsageMapper.udmUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IUdmUsageMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="findUdmBaselineUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmBaselineMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findUdmBaselineUsageDtosByFilter" resultMap="IUdmBaselineMapper.udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmBaselineMapper.selectDtosByFilterSql"/>
+    </select>
 </mapper>

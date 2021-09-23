@@ -133,7 +133,7 @@
         </choose>
     </sql>
 
-    <select id="findDtosByFilter" resultMap="udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+    <sql id="selectDtosByFilterSql">
         select
             df_udm_usage_uid,
             u.period,
@@ -171,9 +171,9 @@
         </choose>,
         df_udm_usage_uid
         <include refid="IUsageMapper.ifPageable"/>
-    </select>
+    </sql>
 
-    <select id="findCountByFilter" parameterType="map" resultType="int">
+    <sql id="selectCountByFilterSql">
         select count(1)
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
@@ -181,6 +181,14 @@
         join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
         where is_baseline_flag = true
             <include refid="IUdmBaselineMapper.udmBaselineFilter"/>
+    </sql>
+
+    <select id="findDtosByFilter" resultMap="udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmBaselineMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmBaselineMapper.selectCountByFilterSql"/>
     </select>
 
     <select id="removeFromBaseline" parameterType="map" resultType="string">

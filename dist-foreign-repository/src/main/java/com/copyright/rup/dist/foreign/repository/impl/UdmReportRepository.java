@@ -3,8 +3,10 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
@@ -47,6 +49,16 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
     @Override
     public void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {
         writeUdmUsageCsvReport(filter, new UdmUsageCsvReportHandlerView(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("filter", Objects.requireNonNull(filter));
+        writeCsvReportByParts("IUdmReportMapper.findUdmBaselineUsagesCountByFilter",
+            "IUdmReportMapper.findUdmBaselineUsageDtosByFilter",
+            parameters, !filter.isEmpty(),
+            () -> new UdmBaselineUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
