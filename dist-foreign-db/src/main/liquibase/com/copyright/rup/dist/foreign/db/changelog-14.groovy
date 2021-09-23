@@ -535,7 +535,7 @@ databaseChangeLog {
             column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'System title')
             column(name: 'standard_number', type: 'VARCHAR(1000)', remarks: 'Standard number')
             column(name: 'standard_number_type', type: 'VARCHAR(50)', remarks: 'Standard number type')
-            column(name: 'reported_pub_type', type: 'VARCHAR(100)', remarks: 'Reported publication type')
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication type uid')
             column(name: 'assignee', type: 'VARCHAR(320)', remarks: 'The assignee')
             column(name: 'price', type: 'NUMERIC(38,10)', remarks: 'Price')
             column(name: 'price_in_usd', type: 'NUMERIC(38,10)', remarks: 'Price in USD')
@@ -579,6 +579,14 @@ databaseChangeLog {
                 constraints(nullable: false)
             }
         }
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_value',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_udm_value_2_df_publication_type_uid')
     }
 
     changeSet(id: '2021-09-22-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {

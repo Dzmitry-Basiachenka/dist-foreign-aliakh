@@ -11,9 +11,12 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -63,9 +66,10 @@ public class UdmValueWidgetTest {
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
-        assertEquals(1, layout.getComponentCount());
-        verifyGrid((Grid) layout.getComponent(0));
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);
+        assertEquals(2, layout.getComponentCount());
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        verifyGrid((Grid) layout.getComponent(1));
+        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
     @Test
@@ -124,5 +128,19 @@ public class UdmValueWidgetTest {
         assertEquals(height, component.getHeight(), 0);
         assertEquals(heightUnit, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertTrue(layout.isSpacing());
+        assertEquals(new MarginInfo(true), layout.getMargin());
+        assertEquals(1, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "Populate Value Batch");
+    }
+
+    private void verifyButton(Component component, String name) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(name, button.getCaption());
+        assertTrue(button.isVisible());
     }
 }
