@@ -7,6 +7,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implementation of {@link IUdmValueFilterController}.
  * <p/>
@@ -24,5 +27,10 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
     @Override
     protected IUdmValueFilterWidget instantiateWidget() {
         return new UdmValueFilterWidget(this);
+    }
+
+    @Override
+    public List<String> getAssignees() {
+        return new ArrayList<>(); // TODO implement udmValueService.getAssignees();
     }
 }

@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.ValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -29,6 +31,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private ComboBox<ValueStatusEnum> statusComboBox;
     private ComboBox<Integer> currency;
     private Button moreFiltersButton;
+    private UdmValueFilter udmValueFilter = new UdmValueFilter();
     @SuppressWarnings("unused") // TODO remove when the filter is implemented
     private IUdmValueFilterController controller;
 
@@ -65,6 +68,13 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
         //TODO add implementation
     }
 
+    /**
+     * Handles filter change event.
+     */
+    protected void filterChanged() {
+        //TODO add implementation
+    }
+
     private VerticalLayout initFiltersLayout() {
         initStatusFilter();
         initCurrencyFilter();
@@ -91,6 +101,14 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private void initMoreFiltersButton() {
         moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
+        moreFiltersButton.addClickListener(event -> {
+            UdmValueFiltersWindow udmValueFiltersWindow = new UdmValueFiltersWindow(controller, udmValueFilter);
+            Windows.showModalWindow(udmValueFiltersWindow);
+            udmValueFiltersWindow.addCloseListener(closeEvent -> {
+                udmValueFilter = udmValueFiltersWindow.getAppliedValueFilter();
+                filterChanged();
+            });
+        });
     }
 
     private HorizontalLayout initButtonsLayout() {

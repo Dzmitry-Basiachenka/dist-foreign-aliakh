@@ -25,4 +25,9 @@ public class UdmValueFilterControllerTest {
         assertNotNull(widget);
         assertEquals(UdmValueFilterWidget.class, widget.getClass());
     }
+
+    @Test
+    public void testGetAssignees() {
+        // TODO add implementation
+    }
 }

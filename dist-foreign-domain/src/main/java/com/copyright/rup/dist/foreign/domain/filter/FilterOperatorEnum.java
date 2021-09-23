@@ -12,19 +12,35 @@ package com.copyright.rup.dist.foreign.domain.filter;
 public enum FilterOperatorEnum {
 
     /**
-     * Equals filter operator.
+     * 'Equals' filter operator.
      */
     EQUALS,
     /**
-     * Greater than filter operator.
+     * 'Greater than' filter operator.
      */
     GREATER_THAN,
     /**
-     * Less than filter operator.
+     * 'Greater than or equals to' filter operator.
+     */
+    GREATER_THAN_OR_EQUALS_TO,
+    /**
+     * 'Less than' filter operator.
      */
     LESS_THAN,
     /**
-     * Between filter operator.
+     * 'Less than or equals to' filter operator.
      */
-    BETWEEN
+    LESS_THAN_OR_EQUALS_TO,
+    /**
+     * 'Between' filter operator.
+     */
+    BETWEEN,
+    /**
+     * 'Is NULL' filter operator.
+     */
+    IS_NULL,
+    /**
+     * 'Is not NULL' filter operator.
+     */
+    IS_NOT_NULL
 }
