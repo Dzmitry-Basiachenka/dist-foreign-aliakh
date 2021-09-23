@@ -27,15 +27,15 @@ public class UdmValueFilter {
     private Set<String> assignees = new HashSet<>();
     private Set<String> lastValuePeriods = new HashSet<>();
     private Long wrWrkInst;
-    private FilterExpression<Number> systemTitleExpression = new FilterExpression<>();
-    private FilterExpression<Number> systemStandardNumberExpression = new FilterExpression<>();
+    private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
+    private FilterExpression<String> systemStandardNumberExpression = new FilterExpression<>();
     private Long rhAccountNumber;
-    private FilterExpression<Number> rhNameExpression = new FilterExpression<>();
+    private FilterExpression<String> rhNameExpression = new FilterExpression<>();
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
     private String lastPriceFlag;
     private String lastPriceComment;
-    private FilterExpression<Number> contentExpression = new FilterExpression<>();
+    private FilterExpression<String> contentExpression = new FilterExpression<>();
     private String lastContentFlag;
     private String lastContentComment;
     private String pubType;
@@ -126,19 +126,19 @@ public class UdmValueFilter {
         this.wrWrkInst = wrWrkInst;
     }
 
-    public FilterExpression<Number> getSystemTitleExpression() {
+    public FilterExpression<String> getSystemTitleExpression() {
         return systemTitleExpression;
     }
 
-    public void setSystemTitleExpression(FilterExpression<Number> systemTitleExpression) {
+    public void setSystemTitleExpression(FilterExpression<String> systemTitleExpression) {
         this.systemTitleExpression = systemTitleExpression;
     }
 
-    public FilterExpression<Number> getSystemStandardNumberExpression() {
+    public FilterExpression<String> getSystemStandardNumberExpression() {
         return systemStandardNumberExpression;
     }
 
-    public void setSystemStandardNumberExpression(FilterExpression<Number> systemStandardNumberExpression) {
+    public void setSystemStandardNumberExpression(FilterExpression<String> systemStandardNumberExpression) {
         this.systemStandardNumberExpression = systemStandardNumberExpression;
     }
 
@@ -150,11 +150,11 @@ public class UdmValueFilter {
         this.rhAccountNumber = rhAccountNumber;
     }
 
-    public FilterExpression<Number> getRhNameExpression() {
+    public FilterExpression<String> getRhNameExpression() {
         return rhNameExpression;
     }
 
-    public void setRhNameExpression(FilterExpression<Number> rhNameExpression) {
+    public void setRhNameExpression(FilterExpression<String> rhNameExpression) {
         this.rhNameExpression = rhNameExpression;
     }
 
@@ -190,11 +190,11 @@ public class UdmValueFilter {
         this.lastPriceComment = lastPriceComment;
     }
 
-    public FilterExpression<Number> getContentExpression() {
+    public FilterExpression<String> getContentExpression() {
         return contentExpression;
     }
 
-    public void setContentExpression(FilterExpression<Number> contentExpression) {
+    public void setContentExpression(FilterExpression<String> contentExpression) {
         this.contentExpression = contentExpression;
     }
 

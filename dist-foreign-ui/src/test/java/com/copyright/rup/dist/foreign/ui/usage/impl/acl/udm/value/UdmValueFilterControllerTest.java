@@ -31,4 +31,9 @@ public class UdmValueFilterControllerTest {
     public void testGetAssignees() {
         // TODO add implementation
     }
+
+    @Test
+    public void testGetLastValuePeriods() {
+        // TODO add implementation
+    }
 }

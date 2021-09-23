@@ -25,6 +25,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,7 @@ public class UdmValueFiltersWindow extends Window {
     private static final List<String> YES_NO = Arrays.asList("Y", "N");
     private final Binder<UdmValueFilter> filterBinder = new Binder<>();
     private AssigneeFilterWidget assigneeFilterWidget;
+    private LastValuePeriodFilterWidget lastValuePeriodFilterWidget;
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
     private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildOperatorComboBox();
@@ -100,7 +102,6 @@ public class UdmValueFiltersWindow extends Window {
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        initAssigneeFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initAssigneeLastValuePeriodLayout(), initWrWrkInstLayout(), initSystemTitleLayout(),
             initSystemStandardNumberLayout(), initRhAccountNumberLayout(), initRhNameLayout(), initPriceLayout(),
@@ -114,15 +115,15 @@ public class UdmValueFiltersWindow extends Window {
         return rootLayout;
     }
 
-    private void initAssigneeFilterWidget() {
+    private HorizontalLayout initAssigneeLastValuePeriodLayout() {
         assigneeFilterWidget = new AssigneeFilterWidget(controller::getAssignees, valueFilter.getAssignees());
         assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
             valueFilter.setAssignees(saveEvent.getSelectedItemsIds()));
-    }
-
-    private HorizontalLayout initAssigneeLastValuePeriodLayout() {
-        // TODO add LastValuePeriodFilterWidget
-        HorizontalLayout horizontalLayout = new HorizontalLayout(assigneeFilterWidget);
+        lastValuePeriodFilterWidget = new LastValuePeriodFilterWidget(controller::getLastValuePeriods,
+            valueFilter.getLastValuePeriods());
+        lastValuePeriodFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
+            valueFilter.setLastValuePeriods(saveEvent.getSelectedItemsIds()));
+        HorizontalLayout horizontalLayout = new HorizontalLayout(assigneeFilterWidget, lastValuePeriodFilterWidget);
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
         return horizontalLayout;
@@ -131,6 +132,7 @@ public class UdmValueFiltersWindow extends Window {
     private TextField initWrWrkInstLayout() {
         wrWrkInstField.setValue(
             Objects.nonNull(valueFilter.getWrWrkInst()) ? valueFilter.getWrWrkInst().toString() : StringUtils.EMPTY);
+        wrWrkInstField.setWidth(257, Unit.PIXELS);
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-value-wr-wrk-inst-filter");
         return wrWrkInstField;
     }
@@ -162,6 +164,7 @@ public class UdmValueFiltersWindow extends Window {
     private TextField initRhAccountNumberLayout() {
         rhAccountNumberField.setValue(Objects.nonNull(valueFilter.getRhAccountNumber())
             ? valueFilter.getRhAccountNumber().toString() : StringUtils.EMPTY);
+        rhAccountNumberField.setWidth(257, Unit.PIXELS);
         VaadinUtils.addComponentStyle(rhAccountNumberField, "udm-value-rh-account-number-filter");
         return rhAccountNumberField;
     }
@@ -263,14 +266,15 @@ public class UdmValueFiltersWindow extends Window {
 
     private TextField initCommentLayout() {
         commentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getComment(), StringUtils.EMPTY));
+        commentField.setWidth(257, Unit.PIXELS);
         VaadinUtils.addComponentStyle(commentField, "udm-value-comment-filter");
         return commentField;
     }
 
     private void populateOperatorFilters(TextField fromField, ComboBox<FilterOperatorEnum> comboBox,
-                                         Function<UdmValueFilter, FilterExpression<Number>> expressionFunction) {
-        FilterExpression<Number> filterExpression = expressionFunction.apply(valueFilter);
-        Number fieldValue = filterExpression.getFieldFirstValue();
+                                         Function<UdmValueFilter, FilterExpression<?>> expressionFunction) {
+        FilterExpression<?> filterExpression = expressionFunction.apply(valueFilter);
+        Object fieldValue = filterExpression.getFieldFirstValue();
         if (Objects.nonNull(fieldValue)) {
             FilterOperatorEnum filterOperator = filterExpression.getOperator();
             fromField.setValue(fieldValue.toString());
@@ -302,6 +306,7 @@ public class UdmValueFiltersWindow extends Window {
     private void clearFilters() {
         clearValueFilter();
         assigneeFilterWidget.reset();
+        lastValuePeriodFilterWidget.reset();
         wrWrkInstField.clear();
         clearOperatorLayout(systemTitleField, systemTitleOperatorComboBox);
         clearOperatorLayout(systemStandardNumberField, systemStandardNumberOperatorComboBox);
@@ -347,20 +352,20 @@ public class UdmValueFiltersWindow extends Window {
     private void populateValueFilter() {
         valueFilter.setWrWrkInst(getLongFromTextField(wrWrkInstField));
         valueFilter.setSystemTitleExpression(buildNumberFilterExpression(systemTitleField, systemTitleOperatorComboBox,
-            Integer::valueOf));
+            Function.identity()));
         valueFilter.setSystemStandardNumberExpression(buildNumberFilterExpression(systemStandardNumberField,
-            systemStandardNumberOperatorComboBox, Integer::valueOf));
+            systemStandardNumberOperatorComboBox, Function.identity()));
         valueFilter.setRhAccountNumber(getLongFromTextField(rhAccountNumberField));
         valueFilter.setRhNameExpression(buildNumberFilterExpression(rhNameField, rhNameOperatorComboBox,
-            Integer::valueOf));
+            Function.identity()));
         valueFilter.setPriceExpression(buildNumberFilterExpression(priceField, priceOperatorComboBox,
-            Integer::valueOf));
+            BigDecimal::new));
         valueFilter.setPriceInUsdExpression(buildNumberFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
-            Integer::valueOf));
+            BigDecimal::new));
         valueFilter.setLastPriceFlag(lastPriceFlagComboBox.getValue());
         valueFilter.setLastPriceComment(getStringFromTextField(lastPriceCommentField));
         valueFilter.setContentExpression(buildNumberFilterExpression(contentField, contentOperatorComboBox,
-            Integer::valueOf));
+            Function.identity()));
         valueFilter.setLastContentFlag(lastContentFlagComboBox.getValue());
         valueFilter.setLastContentComment(getStringFromTextField(lastContentCommentField));
         valueFilter.setPubType(pubTypeComboBox.getValue());
@@ -376,10 +381,10 @@ public class UdmValueFiltersWindow extends Window {
         return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
     }
 
-    private FilterExpression<Number> buildNumberFilterExpression(TextField textField,
-                                                                 ComboBox<FilterOperatorEnum> comboBox,
-                                                                 Function<String, Number> valueConverter) {
-        FilterExpression<Number> filterExpression = new FilterExpression<>();
+    private <T> FilterExpression<T> buildNumberFilterExpression(TextField textField,
+                                                                ComboBox<FilterOperatorEnum> comboBox,
+                                                                Function<String, T> valueConverter) {
+        FilterExpression<T> filterExpression = new FilterExpression<>();
         if (StringUtils.isNotEmpty(textField.getValue())) {
             filterExpression.setFieldFirstValue(valueConverter.apply(textField.getValue().trim()));
             filterExpression.setOperator(comboBox.getValue());

@@ -314,9 +314,7 @@ public class UdmBaselineFiltersWindowTest {
         assertTextFieldValue("usageDetailId", USAGE_DETAIL_ID);
         assertTextFieldValue("surveyCountry", SURVEY_COUNTRY);
         assertTextFieldValue("annualizedCopiesFrom", "5.5");
-        assertEquals(FilterOperatorEnum.EQUALS,
-            ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox"))
-                .getValue());
+        assertComboBoxValue("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
 
     private void assertFilterWidgetLabelValue(String filterName, String value) {
@@ -326,6 +324,11 @@ public class UdmBaselineFiltersWindowTest {
 
     private void assertTextFieldValue(String fieldName, String value) {
         assertEquals(value, ((TextField) Whitebox.getInternalState(window, fieldName)).getValue());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private <T> void assertComboBoxValue(String fieldName, T value) {
+        assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -345,12 +348,16 @@ public class UdmBaselineFiltersWindowTest {
         populateTextField("usageDetailId", USAGE_DETAIL_ID);
         populateTextField("surveyCountry", SURVEY_COUNTRY);
         populateTextField("annualizedCopiesFrom", "5.5");
-        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox"))
-            .setValue(FilterOperatorEnum.EQUALS);
+        populateComboBox("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
 
     private void populateTextField(String fieldName, String value) {
         ((TextField) Whitebox.getInternalState(window, fieldName)).setValue(value);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private <T> void populateComboBox(String fieldName, T value) {
+        ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 
     private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {

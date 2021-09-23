@@ -496,8 +496,7 @@ public class UdmFiltersWindowTest {
         assertLocalDateFieldValue("usageDateToWidget", DATE_TO);
         assertLocalDateFieldValue("surveyStartDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("surveyStartDateToWidget", DATE_TO);
-        assertEquals(UdmChannelEnum.CCC,
-            ((ComboBox<UdmChannelEnum>) Whitebox.getInternalState(window, "channelComboBox")).getValue());
+        assertComboBoxValue("channelComboBox", UdmChannelEnum.CCC);
         assertTextFieldValue("wrWrkInstField", "243904752");
         assertTextFieldValue("companyIdField", "454984566");
         assertTextFieldValue("companyNameField", COMPANY_NAME);
@@ -505,13 +504,13 @@ public class UdmFiltersWindowTest {
         assertTextFieldValue("languageField", LANGUAGE);
         assertTextFieldValue("annualMultiplierFromField", "1");
         assertTextFieldValue("annualMultiplierToField", "10");
-        assertComboBoxFieldValue("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);
+        assertComboBoxValue("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);
         assertTextFieldValue("annualizedCopiesFromField", "5.5");
-        assertComboBoxFieldValue("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertComboBoxValue("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("statisticalMultiplierFromField", "2.2");
-        assertComboBoxFieldValue("statisticalMultiplierOperatorComboBox", FilterOperatorEnum.GREATER_THAN);
+        assertComboBoxValue("statisticalMultiplierOperatorComboBox", FilterOperatorEnum.GREATER_THAN);
         assertTextFieldValue("quantityFromField", "3");
-        assertComboBoxFieldValue("quantityOperatorComboBox", FilterOperatorEnum.LESS_THAN);
+        assertComboBoxValue("quantityOperatorComboBox", FilterOperatorEnum.LESS_THAN);
     }
 
     private void assertFilterWidgetLabelValue(String filterName, String value) {
@@ -528,8 +527,8 @@ public class UdmFiltersWindowTest {
     }
 
     @SuppressWarnings(UNCHECKED)
-    private void assertComboBoxFieldValue(String fieldName, FilterOperatorEnum value) {
-        assertEquals(value, ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, fieldName)).getValue());
+    private <T> void assertComboBoxValue(String fieldName, T value) {
+        assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -538,7 +537,7 @@ public class UdmFiltersWindowTest {
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
         populateLocalDateWidget("surveyStartDateFromWidget", DATE_FROM);
         populateLocalDateWidget("surveyStartDateToWidget", DATE_TO);
-        ((ComboBox<UdmChannelEnum>) Whitebox.getInternalState(window, "channelComboBox")).setValue(UdmChannelEnum.CCC);
+        populateComboBox("channelComboBox", UdmChannelEnum.CCC);
         populateTextField("wrWrkInstField", "243904752");
         populateTextField("companyIdField", "454984566");
         populateTextField("companyNameField", COMPANY_NAME);
@@ -546,13 +545,13 @@ public class UdmFiltersWindowTest {
         populateTextField("languageField", LANGUAGE);
         populateTextField("annualMultiplierFromField", "1");
         populateTextField("annualMultiplierToField", "10");
-        populateComboBoxOperatorField("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);
+        populateComboBox("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);
         populateTextField("annualizedCopiesFromField", "5.5");
-        populateComboBoxOperatorField("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateComboBox("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("statisticalMultiplierFromField", "2.2");
-        populateComboBoxOperatorField("statisticalMultiplierOperatorComboBox", FilterOperatorEnum.GREATER_THAN);
+        populateComboBox("statisticalMultiplierOperatorComboBox", FilterOperatorEnum.GREATER_THAN);
         populateTextField("quantityFromField", "3");
-        populateComboBoxOperatorField("quantityOperatorComboBox", FilterOperatorEnum.LESS_THAN);
+        populateComboBox("quantityOperatorComboBox", FilterOperatorEnum.LESS_THAN);
     }
 
     private void populateLocalDateWidget(String fieldName, LocalDate value) {
@@ -564,8 +563,8 @@ public class UdmFiltersWindowTest {
     }
 
     @SuppressWarnings(UNCHECKED)
-    private void populateComboBoxOperatorField(String fieldName, FilterOperatorEnum value) {
-        ((ComboBox<FilterOperatorEnum>) Whitebox.getInternalState(window, fieldName)).setValue(value);
+    private <T> void populateComboBox(String fieldName, T value) {
+        ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 
     private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
