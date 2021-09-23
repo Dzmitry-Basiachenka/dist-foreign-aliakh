@@ -6,13 +6,19 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -44,6 +50,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private IUdmValueController controller;
     private Grid<UdmValueDto> udmValuesGrid;
+    private Button populateButton;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -61,6 +68,13 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         this.controller = controller;
     }
 
+    @Override
+    public IMediator initMediator() {
+        UdmValueMediator mediator = new UdmValueMediator();
+        mediator.setPopulateButton(populateButton);
+        return mediator;
+    }
+
     /**
      * Formats decimal amount without trailing zeros after the second digit after the decimal point.
      *
@@ -73,12 +87,21 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private VerticalLayout initValuesLayout() {
         initValuesGrid();
-        VerticalLayout layout = new VerticalLayout(udmValuesGrid);
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), udmValuesGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
         layout.setExpandRatio(udmValuesGrid, 1);
-        VaadinUtils.addComponentStyle(layout, "udm-values-layout");
+        VaadinUtils.addComponentStyle(layout, "udm-value-layout");
+        return layout;
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        populateButton = Buttons.createButton(ForeignUi.getMessage("button.populate_value_batch"));
+        populateButton.addClickListener(event -> Windows.showModalWindow(new UdmPopulateValueBatchWindow(controller)));
+        HorizontalLayout layout = new HorizontalLayout(populateButton);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
     }
 
@@ -99,7 +122,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         addColumns();
         udmValuesGrid.setSizeFull();
         udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
-        VaadinUtils.addComponentStyle(udmValuesGrid, "udm-values-grid");
+        VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
     }
 
     private void addColumns() {

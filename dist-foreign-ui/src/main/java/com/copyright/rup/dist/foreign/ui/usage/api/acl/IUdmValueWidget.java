@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -11,5 +12,5 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Aliaksandr Liakh
  */
-public interface IUdmValueWidget extends IWidget<IUdmValueController> {
+public interface IUdmValueWidget extends IWidget<IUdmValueController>, IMediatorProvider {
 }

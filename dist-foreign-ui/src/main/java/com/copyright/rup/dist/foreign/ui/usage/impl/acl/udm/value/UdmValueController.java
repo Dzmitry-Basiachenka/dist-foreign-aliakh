@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
@@ -30,6 +31,19 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
 
     @Autowired
     private IUdmValueFilterController udmValueFilterController;
+    @Autowired
+    private IUdmBaselineService baselineService;
+
+    @Override
+    public List<Integer> getBaselinePeriods() {
+        return baselineService.getPeriods();
+    }
+
+    @Override
+    public int populatesValueBatch(Integer period) {
+        //TODO: use service logic
+        return 0;
+    }
 
     @Override
     public int getBeansCount() {
