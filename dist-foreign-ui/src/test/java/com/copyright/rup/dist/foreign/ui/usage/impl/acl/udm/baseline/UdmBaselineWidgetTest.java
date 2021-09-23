@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 
@@ -23,8 +24,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -48,9 +51,13 @@ public class UdmBaselineWidgetTest {
         udmBaselineWidget = new UdmBaselineWidget();
         Whitebox.setInternalState(udmBaselineWidget, controller);
         expect(controller.initBaselineFilterWidget()).andReturn(filterWidget).once();
-        replay(controller);
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getExportUdmBaselineUsagesStreamSource()).andReturn(streamSource).once();
+        replay(controller, streamSource);
         udmBaselineWidget.init();
-        verify(controller);
+        verify(controller, streamSource);
     }
 
     @Test

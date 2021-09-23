@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 
@@ -86,5 +89,24 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportView(new UdmUsageFilter(), outputStream),
             "usages_report_udm_empty_view.csv");
+    }
+
+    @Test
+    public void testWriteUdmBaselineUsageCsvReport() throws IOException {
+        UdmBaselineFilter udmBaselineFilter = new UdmBaselineFilter();
+        udmBaselineFilter.setPeriod(202106);
+        udmBaselineFilter.setChannel(UdmChannelEnum.CCC);
+        udmBaselineFilter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
+        udmBaselineFilter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
+        assertFilesWithExecutor(outputStream ->
+                udmReportRepository.writeUdmBaselineUsageCsvReport(udmBaselineFilter, outputStream),
+            "baseline_usages_report_udm.csv");
+    }
+
+    @Test
+    public void testWriteUdmBaselineUsageEmptyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+                udmReportRepository.writeUdmBaselineUsageCsvReport(new UdmBaselineFilter(), outputStream),
+            "baseline_usages_report_udm_empty.csv");
     }
 }

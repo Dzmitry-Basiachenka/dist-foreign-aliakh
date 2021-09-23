@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
+package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;

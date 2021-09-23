@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -143,6 +144,9 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
 
     private HorizontalLayout initButtonsLayout() {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUdmBaselineUsagesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "baseline-buttons");

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.io.PipedOutputStream;
@@ -41,4 +42,13 @@ public interface IUdmReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeUdmUsageCsvReportView(UdmUsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds UDM baseline usages according to given {@link UdmBaselineFilter} and writes them to the output stream
+     * in CSV format.
+     *
+     * @param filter            instance of {@link UdmBaselineFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream);
 }

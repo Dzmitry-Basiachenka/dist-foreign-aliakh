@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
+package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
