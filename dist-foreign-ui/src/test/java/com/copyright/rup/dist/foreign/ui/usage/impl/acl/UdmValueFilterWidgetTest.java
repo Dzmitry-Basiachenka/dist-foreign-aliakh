@@ -2,11 +2,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.ValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -28,7 +29,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmValueFilterWidget}.
@@ -41,9 +44,10 @@ import java.util.List;
  */
 public class UdmValueFilterWidgetTest {
 
-    private static final List<ValueStatusEnum> VALUE_STATUSES = Arrays.asList(ValueStatusEnum.NEW,
-        ValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, ValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
-        ValueStatusEnum.NEEDS_FURTHER_REVIEW, ValueStatusEnum.RESEARCH_COMPLETE);
+    private static final Set<UdmValueStatusEnum> VALUE_STATUSES =
+        new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
+            UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
+            UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE));
     private UdmValueFilterWidget widget;
 
     @Before
@@ -65,11 +69,26 @@ public class UdmValueFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(4, verticalLayout.getComponentCount());
+        assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyValuesStatusComboBox(verticalLayout.getComponent(1));
-        verifyCurrencyComboBox(verticalLayout.getComponent(2));
-        verifyMoreFiltersButton(verticalLayout.getComponent(3));
+        verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
+        verifyValuesStatusComboBox(verticalLayout.getComponent(2));
+        verifyCurrencyComboBox(verticalLayout.getComponent(3));
+        verifyMoreFiltersButton(verticalLayout.getComponent(4));
+    }
+
+    private void verifyPeriodsFilterLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals("Periods", button.getCaption());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private void verifyCurrencyComboBox(Component component) {
@@ -93,8 +112,8 @@ public class UdmValueFilterWidgetTest {
         assertEquals("Status", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<ValueStatusEnum> listDataProvider =
-            (ListDataProvider<ValueStatusEnum>) comboBox.getDataProvider();
+        ListDataProvider<UdmValueStatusEnum> listDataProvider =
+            (ListDataProvider<UdmValueStatusEnum>) comboBox.getDataProvider();
         assertEquals(VALUE_STATUSES, listDataProvider.getItems());
     }
 
