@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
-import com.copyright.rup.dist.foreign.domain.ValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -16,6 +18,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 
 /**
  * Implementation of {@link IUdmValueFilterWidget}.
@@ -28,10 +33,12 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFilterWidget {
 
-    private ComboBox<ValueStatusEnum> statusComboBox;
-    private ComboBox<Integer> currency;
+    private ComboBox<UdmValueStatusEnum> statusComboBox;
+    private ComboBox<Integer> currencyComboBox;
     private Button moreFiltersButton;
+    private Button applyButton;
     private UdmValueFilter udmValueFilter = new UdmValueFilter();
+    private UdmValueFilter appliedUdmValueFilter = new UdmValueFilter();
     @SuppressWarnings("unused") // TODO remove when the filter is implemented
     private IUdmValueFilterController controller;
 
@@ -60,19 +67,32 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     @Override
     public void applyFilter() {
-        //TODO add implementation
+        appliedUdmValueFilter = new UdmValueFilter(appliedUdmValueFilter);
+        filterChanged();
+        fireEvent(new FilterChangedEvent(this));
     }
 
     @Override
     public void clearFilter() {
-        //TODO add implementation
+        clearFilterValues();
+        refreshFilter();
+        applyFilter();
     }
 
     /**
      * Handles filter change event.
      */
     protected void filterChanged() {
-        //TODO add implementation
+        applyButton.setEnabled(!udmValueFilter.equals(appliedUdmValueFilter));
+    }
+
+    private void clearFilterValues() {
+        statusComboBox.clear();
+        currencyComboBox.clear();
+    }
+
+    private void refreshFilter() {
+        udmValueFilter = new UdmValueFilter();
     }
 
     private VerticalLayout initFiltersLayout() {
@@ -80,20 +100,33 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
         initCurrencyFilter();
         initMoreFiltersButton();
         VerticalLayout verticalLayout =
-            new VerticalLayout(buildFiltersHeaderLabel(), statusComboBox, currency, moreFiltersButton);
+            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), statusComboBox, currencyComboBox,
+                moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
 
+    private UdmValuePeriodFilterWidget buildPeriodFilter() {
+        UdmValuePeriodFilterWidget periodFilterWidget = new UdmValuePeriodFilterWidget(() -> controller.getPeriods());
+        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
+            udmValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(periodFilterWidget, "udm-value-periods-filter");
+        return periodFilterWidget;
+    }
+
     private void initCurrencyFilter() {
-        currency = new ComboBox<>(ForeignUi.getMessage("label.currency"));
-        VaadinUtils.setMaxComponentsWidth(currency);
-        VaadinUtils.addComponentStyle(currency, "udm-value-currency-filter");
+        currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
+        VaadinUtils.setMaxComponentsWidth(currencyComboBox);
+        VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-currency-filter");
     }
 
     private void initStatusFilter() {
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"));
-        statusComboBox.setItems(ValueStatusEnum.values());
+        statusComboBox.setItems(new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
+            UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
+            UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE)));
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-value-status-filter");
     }
@@ -112,7 +145,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
+        applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.setEnabled(false);
         applyButton.addClickListener(event -> applyFilter());
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -32,5 +33,11 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
     @Override
     public List<String> getAssignees() {
         return new ArrayList<>(); // TODO implement udmValueService.getAssignees();
+    }
+
+    @Override
+    public List<Integer> getPeriods() {
+        //todo {aazarenka} will implement later
+        return new ArrayList<>();
     }
 }

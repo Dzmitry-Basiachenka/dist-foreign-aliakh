@@ -19,4 +19,11 @@ public interface IUdmValueFilterController extends IFilterController<IUdmValueFi
      * @return list of assignees.
      */
     List<String> getAssignees();
+
+    /**
+     * Gets all available periods for value.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }

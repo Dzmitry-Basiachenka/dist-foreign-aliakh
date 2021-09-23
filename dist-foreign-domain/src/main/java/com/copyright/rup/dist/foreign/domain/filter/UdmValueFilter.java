@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
-import com.copyright.rup.dist.foreign.domain.ValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -23,7 +23,7 @@ public class UdmValueFilter {
 
     private Set<Integer> periods;
     private String currency;
-    private ValueStatusEnum valueStatus;
+    private UdmValueStatusEnum status;
     private Set<String> assignees = new HashSet<>();
     private Set<String> lastValuePeriods = new HashSet<>();
     private Long wrWrkInst;
@@ -57,7 +57,7 @@ public class UdmValueFilter {
         if (null != filter) {
             setPeriods(filter.getPeriods());
             setCurrency(filter.getCurrency());
-            setValueStatus(filter.getValueStatus());
+            setStatus(filter.getStatus());
             setAssignees(filter.getAssignees());
             setLastValuePeriods(filter.getLastValuePeriods());
             setWrWrkInst(filter.getWrWrkInst());
@@ -94,12 +94,12 @@ public class UdmValueFilter {
         this.currency = currency;
     }
 
-    public ValueStatusEnum getValueStatus() {
-        return valueStatus;
+    public UdmValueStatusEnum getStatus() {
+        return status;
     }
 
-    public void setValueStatus(ValueStatusEnum valueStatus) {
-        this.valueStatus = valueStatus;
+    public void setStatus(UdmValueStatusEnum status) {
+        this.status = status;
     }
 
     public Set<String> getAssignees() {
@@ -244,7 +244,7 @@ public class UdmValueFilter {
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(periods)
             && null == currency
-            && null == valueStatus
+            && null == status
             && CollectionUtils.isEmpty(assignees)
             && CollectionUtils.isEmpty(lastValuePeriods)
             && null == wrWrkInst
@@ -276,7 +276,7 @@ public class UdmValueFilter {
         return new EqualsBuilder()
             .append(periods, that.periods)
             .append(currency, that.currency)
-            .append(valueStatus, that.valueStatus)
+            .append(status, that.status)
             .append(assignees, that.assignees)
             .append(lastValuePeriods, that.lastValuePeriods)
             .append(wrWrkInst, that.wrWrkInst)
@@ -302,7 +302,7 @@ public class UdmValueFilter {
         return new HashCodeBuilder()
             .append(periods)
             .append(currency)
-            .append(valueStatus)
+            .append(status)
             .append(assignees)
             .append(lastValuePeriods)
             .append(wrWrkInst)
@@ -328,7 +328,7 @@ public class UdmValueFilter {
         return new ToStringBuilder(this)
             .append("periods", periods)
             .append("currency", currency)
-            .append("valueStatus", valueStatus)
+            .append("status", status)
             .append("assignees", assignees)
             .append("lastValuePeriods", lastValuePeriods)
             .append("wrWrkInst", wrWrkInst)
