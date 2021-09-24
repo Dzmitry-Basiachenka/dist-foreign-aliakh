@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
@@ -12,6 +13,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -44,6 +46,9 @@ import java.util.function.Function;
 public class UdmValueFiltersWindow extends Window {
 
     private static final List<String> YES_NO = Arrays.asList("Y", "N");
+    private static final String AMOUNT_VALIDATION_MESSAGE =
+        ForeignUi.getMessage("field.error.positive_number_and_length", 10);
+
     private final Binder<UdmValueFilter> filterBinder = new Binder<>();
     private AssigneeFilterWidget assigneeFilterWidget;
     private LastValuePeriodFilterWidget lastValuePeriodFilterWidget;
@@ -141,6 +146,9 @@ public class UdmValueFiltersWindow extends Window {
         HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
         populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
             UdmValueFilter::getSystemTitleExpression);
+        systemTitleField.addValueChangeListener(event -> filterBinder.validate());
+        systemTitleOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(systemTitleField, event.getValue()));
         systemTitleField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(systemTitleField, "udm-value-system-title-filter");
@@ -153,6 +161,9 @@ public class UdmValueFiltersWindow extends Window {
             systemStandardNumberOperatorComboBox);
         populateOperatorFilters(systemStandardNumberField, systemStandardNumberOperatorComboBox,
             UdmValueFilter::getSystemStandardNumberExpression);
+        systemStandardNumberField.addValueChangeListener(event -> filterBinder.validate());
+        systemStandardNumberOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(systemStandardNumberField, event.getValue()));
         systemStandardNumberField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(systemStandardNumberField, "udm-value-system-standard-number-filter");
@@ -172,6 +183,9 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initRhNameLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(rhNameField, rhNameOperatorComboBox);
         populateOperatorFilters(rhNameField, rhNameOperatorComboBox, UdmValueFilter::getRhNameExpression);
+        rhNameField.addValueChangeListener(event -> filterBinder.validate());
+        rhNameOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(rhNameField, event.getValue()));
         rhNameField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(rhNameField, "udm-value-rh-name-filter");
@@ -182,6 +196,13 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initPriceLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceField, priceOperatorComboBox);
         populateOperatorFilters(priceField, priceOperatorComboBox, UdmValueFilter::getPriceExpression);
+        priceField.addValueChangeListener(event -> filterBinder.validate());
+        priceOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(priceField, event.getValue()));
+        filterBinder.forField(priceField)
+            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getPriceExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getPriceExpression().setFieldFirstValue(new BigDecimal(value)));
         priceField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(priceField, "udm-value-price-filter");
@@ -192,6 +213,13 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initPriceInUsdLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceInUsdField, priceInUsdOperatorComboBox);
         populateOperatorFilters(priceInUsdField, priceInUsdOperatorComboBox, UdmValueFilter::getPriceInUsdExpression);
+        priceInUsdField.addValueChangeListener(event -> filterBinder.validate());
+        priceInUsdOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(priceInUsdField, event.getValue()));
+        filterBinder.forField(priceInUsdField)
+            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getPriceInUsdExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getPriceInUsdExpression().setFieldFirstValue(new BigDecimal(value)));
         priceInUsdField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(priceInUsdField, "udm-value-price-in-usd-filter");
@@ -213,20 +241,12 @@ public class UdmValueFiltersWindow extends Window {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox =
-            new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.IS_NULL);
-        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return filterOperatorComboBox;
-    }
-
     private HorizontalLayout initContentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(contentField, contentOperatorComboBox);
         populateOperatorFilters(contentField, contentOperatorComboBox, UdmValueFilter::getContentExpression);
+        contentField.addValueChangeListener(event -> filterBinder.validate());
+        contentOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(contentField, event.getValue()));
         contentField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(contentField, "udm-value-content-filter");
@@ -271,15 +291,36 @@ public class UdmValueFiltersWindow extends Window {
         return commentField;
     }
 
-    private void populateOperatorFilters(TextField fromField, ComboBox<FilterOperatorEnum> comboBox,
+    private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox =
+            new ComboBox<>(ForeignUi.getMessage("label.operator"));
+        filterOperatorComboBox.setEmptySelectionAllowed(false);
+        filterOperatorComboBox.setSizeFull();
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.IS_NULL);
+        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
+        return filterOperatorComboBox;
+    }
+
+    private void populateOperatorFilters(TextField textField, ComboBox<FilterOperatorEnum> comboBox,
                                          Function<UdmValueFilter, FilterExpression<?>> expressionFunction) {
         FilterExpression<?> filterExpression = expressionFunction.apply(valueFilter);
         Object fieldValue = filterExpression.getFieldFirstValue();
         if (Objects.nonNull(fieldValue)) {
             FilterOperatorEnum filterOperator = filterExpression.getOperator();
-            fromField.setValue(fieldValue.toString());
+            textField.setValue(fieldValue.toString());
             comboBox.setSelectedItem(filterOperator);
         }
+    }
+
+    private void updateOperatorField(TextField textField, FilterOperatorEnum value) {
+        if (FilterOperatorEnum.IS_NULL == value) {
+            textField.clear();
+            textField.setEnabled(false);
+        } else {
+            textField.setEnabled(true);
+        }
+        filterBinder.validate();
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -344,8 +385,8 @@ public class UdmValueFiltersWindow extends Window {
         valueFilter.setComment(null);
     }
 
-    private void clearOperatorLayout(TextField fromField, ComboBox<FilterOperatorEnum> comboBox) {
-        fromField.clear();
+    private void clearOperatorLayout(TextField textField, ComboBox<FilterOperatorEnum> comboBox) {
+        textField.clear();
         comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
     }
 
@@ -390,5 +431,11 @@ public class UdmValueFiltersWindow extends Window {
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
+    }
+
+    private SerializablePredicate<String> getAmountValidator() {
+        return value -> null == value
+            || StringUtils.isEmpty(value)
+            || StringUtils.isNotBlank(value) && new AmountValidator(false).isValid(value.trim());
     }
 }

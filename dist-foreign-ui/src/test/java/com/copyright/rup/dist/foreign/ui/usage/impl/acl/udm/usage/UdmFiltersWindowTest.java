@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -44,6 +45,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -222,6 +225,7 @@ public class UdmFiltersWindowTest {
         TextField annualMultiplierToField = Whitebox.getInternalState(window, "annualMultiplierToField");
         ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "annualMultiplierOperatorComboBox");
+        assertOperatorCombobox(annualMultiplierOperatorComboBox);
         verifyIntegerOperationValidations(annualMultiplierFromField, annualMultiplierToField,
             annualMultiplierOperatorComboBox, "Field value should be greater or equal to Annual Multiplier From");
     }
@@ -232,6 +236,7 @@ public class UdmFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesToField");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
+        assertOperatorCombobox(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox, "Field value should be greater or equal to Annualized Copies From");
     }
@@ -242,6 +247,7 @@ public class UdmFiltersWindowTest {
         TextField statisticalMultiplierToField = Whitebox.getInternalState(window, "statisticalMultiplierToField");
         ComboBox<FilterOperatorEnum> statisticalMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "statisticalMultiplierOperatorComboBox");
+        assertOperatorCombobox(statisticalMultiplierOperatorComboBox);
         verifyBigDecimalOperationValidations(statisticalMultiplierFromField, statisticalMultiplierToField,
             statisticalMultiplierOperatorComboBox,
             "Field value should be greater or equal to Statistical Multiplier From");
@@ -253,6 +259,7 @@ public class UdmFiltersWindowTest {
         TextField quantityToField = Whitebox.getInternalState(window, "quantityToField");
         ComboBox<FilterOperatorEnum> quantityOperatorComboBox =
             Whitebox.getInternalState(window, "quantityOperatorComboBox");
+        assertOperatorCombobox(quantityOperatorComboBox);
         verifyIntegerOperationValidations(quantityFromField, quantityToField, quantityOperatorComboBox,
             "Field value should be greater or equal to Quantity From");
     }
@@ -529,6 +536,15 @@ public class UdmFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
+    }
+
+    private void assertOperatorCombobox(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        ListDataProvider<FilterOperatorEnum> listDataProvider =
+            (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
+        Collection<?> actualOperators = listDataProvider.getItems();
+        assertEquals(4, actualOperators.size());
+        assertEquals(Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN), actualOperators);
     }
 
     @SuppressWarnings(UNCHECKED)
