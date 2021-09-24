@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,4 +20,11 @@ public interface IUdmValueService {
      * @return map of currency codes to currency names
      */
     Map<String, String> getCurrencyCodesToCurrencyNamesMap();
+
+    /**
+     * Gets all available periods for value.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }
