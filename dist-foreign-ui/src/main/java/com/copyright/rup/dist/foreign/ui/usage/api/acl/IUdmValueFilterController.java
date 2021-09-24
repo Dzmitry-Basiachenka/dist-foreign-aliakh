@@ -21,6 +21,11 @@ public interface IUdmValueFilterController extends IFilterController<IUdmValueFi
     List<String> getAssignees();
 
     /**
+     * @return list of last value periods.
+     */
+    List<String> getLastValuePeriods();
+
+    /**
      * Gets all available periods for value.
      *
      * @return list of periods

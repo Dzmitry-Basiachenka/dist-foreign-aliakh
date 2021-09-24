@@ -36,6 +36,11 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
     }
 
     @Override
+    public List<String> getLastValuePeriods() {
+        return new ArrayList<>(); // TODO implement udmValueService.getLastValuePeriods();
+    }
+
+    @Override
     public List<Integer> getPeriods() {
         //todo {aazarenka} will implement later
         return new ArrayList<>();
