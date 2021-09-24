@@ -1,3 +1,25 @@
+14.1.18
+-
+* B-67687 [Value] FDA & UDM: Value filters (basic filters): implement query and service logic to get value periods
+* B-67687 [Value] FDA & UDM: Value filters (basic filters): implement Periods filter window
+* B-67687 [Value] FDA & UDM: Value filters (basic filters): add filter fields to main filter panel
+* B-67687 [Value] FDA & UDM: Value filters (basic filters): create domain model to Values filter
+* B-65962 [Value] FDA & UDM: Create and Populate Value batch: Implement db table for work values
+* B-65962 [Value] FDA & UDM: Create and Populate Value batch: implement window to populate value batch
+* B-65962 [Value] FDA & UDM: Create and Populate Value batch: Implement db table for UDM age weights
+* B-68616 FDA & UDM: export baseline data: implement backend logic to export baseline data
+* B-68616 FDA & UDM: export baseline data: introduce Export button for baseline usages tab
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI to filter Last Value Period by dates
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI for 'More Filters' window
+* B-67691 [BONUS] [Value] FDA & UDM: Connect with foreign Exchange rest service: implement RFEX service to get exchange rate
+* B-67685 [BONUS] [Value] FDA & UDM: Populate the list of currencies: implement service logic to get list of available currencies
+* B-67685 [BONUS] [Value] FDA & UDM: Populate the list of currencies: introduce property with list of currencies
+* B-68822 Tech Debt: FDA: introduce separate packages for UDM subtabs in UI module
+* B-68821 Tech Debt: FDA: change name of Create User column to Created By on UI for all product families
+* B-68821 Tech Debt: FDA: move all validation error messages to properties for ACL
+* B-68821 Tech Debt: FDA: implement required validator and apply it for FAS
+* B-68821 Tech Debt: FDA: change name of Create User column to Created By on UI for all product families
+
 14.1.17
 -
 * B-68367: FDA & UDM: view baseline usages: implement refresh functionality for UDM sub-tabs
