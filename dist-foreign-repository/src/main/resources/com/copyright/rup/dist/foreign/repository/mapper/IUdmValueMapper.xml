@@ -1,0 +1,12 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmValueMapper">
+
+    <select id="findPeriods" resultType="int">
+        select distinct period
+        from ${schema}.df_udm_value
+        order by period desc
+    </select>
+</mapper>
