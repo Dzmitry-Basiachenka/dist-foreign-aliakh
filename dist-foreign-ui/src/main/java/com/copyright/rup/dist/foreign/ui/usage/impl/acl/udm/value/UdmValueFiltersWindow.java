@@ -13,6 +13,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -233,6 +234,9 @@ public class UdmValueFiltersWindow extends Window {
         lastPriceFlagComboBox.setSelectedItem(valueFilter.getLastPriceFlag());
         lastPriceFlagComboBox.setSizeFull();
         lastPriceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getLastPriceComment(), StringUtils.EMPTY));
+        filterBinder.forField(lastPriceCommentField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024))
+            .bind(UdmValueFilter::getLastPriceComment, UdmValueFilter::setLastPriceComment);
         lastPriceCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
@@ -261,6 +265,9 @@ public class UdmValueFiltersWindow extends Window {
         lastContentFlagComboBox.setSizeFull();
         lastContentCommentField.setValue(
             ObjectUtils.defaultIfNull(valueFilter.getLastContentComment(), StringUtils.EMPTY));
+        filterBinder.forField(lastContentCommentField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024))
+            .bind(UdmValueFilter::getLastContentComment, UdmValueFilter::setLastContentComment);
         lastContentCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
         horizontalLayout.setSpacing(true);
@@ -286,6 +293,9 @@ public class UdmValueFiltersWindow extends Window {
 
     private TextField initCommentLayout() {
         commentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getComment(), StringUtils.EMPTY));
+        filterBinder.forField(commentField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024))
+            .bind(UdmValueFilter::getComment, UdmValueFilter::setComment);
         commentField.setSizeFull();
         VaadinUtils.addComponentStyle(commentField, "udm-value-comment-filter");
         return commentField;

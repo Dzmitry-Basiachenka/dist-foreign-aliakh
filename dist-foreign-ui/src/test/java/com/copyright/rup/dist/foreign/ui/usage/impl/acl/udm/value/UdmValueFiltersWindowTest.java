@@ -188,6 +188,36 @@ public class UdmValueFiltersWindowTest {
         verifyBigDecimalOperationValidations(priceInUsdField);
     }
 
+    @Test
+    public void testLastPriceCommentValidation() {
+        TextField lastPriceCommentField = Whitebox.getInternalState(window, "lastPriceCommentField");
+        verifyTextFieldValidationMessage(lastPriceCommentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(lastPriceCommentField, buildStringWithExpectedLength(1024),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(lastPriceCommentField, buildStringWithExpectedLength(1025),
+            "Field value should not exceed 1024 characters", false);
+    }
+
+    @Test
+    public void testLastContentCommentValidation() {
+        TextField lastContentCommentField = Whitebox.getInternalState(window, "lastContentCommentField");
+        verifyTextFieldValidationMessage(lastContentCommentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(lastContentCommentField, buildStringWithExpectedLength(1024),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(lastContentCommentField, buildStringWithExpectedLength(1025),
+            "Field value should not exceed 1024 characters", false);
+    }
+
+    @Test
+    public void testCommentValidation() {
+        TextField commentField = Whitebox.getInternalState(window, "commentField");
+        verifyTextFieldValidationMessage(commentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(commentField, buildStringWithExpectedLength(1024),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(commentField, buildStringWithExpectedLength(1025),
+            "Field value should not exceed 1024 characters", false);
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -446,5 +476,13 @@ public class UdmValueFiltersWindowTest {
                 errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
             assertTrue(errorMessages.contains(message));
         }
+    }
+
+    private String buildStringWithExpectedLength(int length) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            result.append('a');
+        }
+        return result.toString();
     }
 }
