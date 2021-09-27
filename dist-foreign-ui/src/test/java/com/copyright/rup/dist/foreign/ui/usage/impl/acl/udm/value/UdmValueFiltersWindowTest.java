@@ -7,10 +7,15 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -26,8 +31,12 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmValueFiltersWindow}.
@@ -58,11 +67,21 @@ public class UdmValueFiltersWindowTest {
     private static final String PUB_TYPE = "BK";
     private static final String LAST_PUB_TYPE = "BK2";
     private static final String COMMENT = "comment";
+    private static final String VALID_INTEGER = "123456789";
+    private static final String VALID_DECIMAL = "1.2345678";
+    private static final String INVALID_NUMBER = "a12345678";
+    private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
+    private static final String SPACES_STRING = "   ";
+    private static final String DECIMAL_VALIDATION_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
+
     private UdmValueFiltersWindow window;
+    private Binder<UdmUsageFilter> binder;
 
     @Before
     public void setUp() {
         window = new UdmValueFiltersWindow(createMock(IUdmValueFilterController.class), new UdmValueFilter());
+        binder = Whitebox.getInternalState(window, "filterBinder");
     }
 
     @Test
@@ -101,6 +120,36 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testSystemTitleFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(2);
+    }
+
+    @Test
+    public void testSystemStandardNumberFilterOperatorChangeListener3() {
+        testFilterOperatorChangeListener(3);
+    }
+
+    @Test
+    public void testRhNameFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(5);
+    }
+
+    @Test
+    public void testPriceFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(6);
+    }
+
+    @Test
+    public void testPriceInUsdFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(7);
+    }
+
+    @Test
+    public void testContentFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(9);
+    }
+
+    @Test
     public void testSaveButtonClickListener() {
         UdmValueFilter appliedValueFilter = window.getAppliedValueFilter();
         assertTrue(appliedValueFilter.isEmpty());
@@ -118,6 +167,41 @@ public class UdmValueFiltersWindowTest {
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         assertTrue(window.getAppliedValueFilter().isEmpty());
+    }
+
+    @Test
+    public void testPriceValidation() {
+        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        ComboBox<FilterOperatorEnum> priceOperatorComboBox =
+            Whitebox.getInternalState(window, "priceOperatorComboBox");
+        assertOperatorCombobox(priceOperatorComboBox);
+        verifyBigDecimalOperationValidations(priceField);
+    }
+
+    @Test
+    public void testPriceInUsdValidation() {
+        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
+        ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
+            Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
+        assertOperatorCombobox(priceInUsdOperatorComboBox);
+        verifyBigDecimalOperationValidations(priceInUsdField);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
     }
 
     private void verifyRootLayout(Component component) {
@@ -214,6 +298,20 @@ public class UdmValueFiltersWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
+    private void verifyBigDecimalOperationValidations(TextField textField) {
+        verifyCommonOperationValidations(textField, DECIMAL_VALIDATION_MESSAGE);
+        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+    }
+
+    private void verifyCommonOperationValidations(TextField textField, String numberValidationMessage) {
+        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
+    }
+
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
         valueFilter.setWrWrkInst(WR_WRK_INST);
@@ -276,6 +374,15 @@ public class UdmValueFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
+    private void assertOperatorCombobox(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        ListDataProvider<FilterOperatorEnum> listDataProvider =
+            (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
+        Collection<?> actualOperators = listDataProvider.getItems();
+        assertEquals(4, actualOperators.size());
+        assertEquals(Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.IS_NULL), actualOperators);
+    }
+
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
         populateTextField("wrWrkInstField", String.valueOf(WR_WRK_INST));
@@ -308,5 +415,17 @@ public class UdmValueFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private <T> void populateComboBox(String fieldName, T value) {
         ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
+    }
+
+    private void verifyTextFieldValidationMessage(TextField textField, String value, String message, boolean isValid) {
+        textField.setValue(value);
+        BinderValidationStatus<UdmUsageFilter> binderStatus = binder.validate();
+        assertEquals(isValid, binderStatus.isOk());
+        if (!isValid) {
+            List<ValidationResult> errors = binderStatus.getValidationErrors();
+            List<String> errorMessages =
+                errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+            assertTrue(errorMessages.contains(message));
+        }
     }
 }

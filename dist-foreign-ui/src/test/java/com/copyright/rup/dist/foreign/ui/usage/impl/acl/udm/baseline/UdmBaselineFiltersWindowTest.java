@@ -20,6 +20,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -36,6 +37,8 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -98,23 +101,23 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testFilterOperatorChangeListener() {
+    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         HorizontalLayout annualizedCopiesLayout = (HorizontalLayout) verticalLayout.getComponent(4);
         TextField annualizedCopiesFromField = (TextField) annualizedCopiesLayout.getComponent(0);
         TextField annualizedCopiesToField = (TextField) annualizedCopiesLayout.getComponent(1);
-        ComboBox<FilterOperatorEnum> annualizedCopiesFilterOperatorComboBox =
+        ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             (ComboBox<FilterOperatorEnum>) annualizedCopiesLayout.getComponent(2);
-        assertEquals(FilterOperatorEnum.EQUALS, annualizedCopiesFilterOperatorComboBox.getValue());
+        assertEquals(FilterOperatorEnum.EQUALS, annualizedCopiesOperatorComboBox.getValue());
         assertTrue(annualizedCopiesFromField.isEnabled());
         assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesFilterOperatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
+        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
         assertTrue(annualizedCopiesFromField.isEnabled());
         assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesFilterOperatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
+        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
         assertTrue(annualizedCopiesFromField.isEnabled());
         assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesFilterOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
         assertTrue(annualizedCopiesFromField.isEnabled());
         assertTrue(annualizedCopiesToField.isEnabled());
     }
@@ -145,6 +148,7 @@ public class UdmBaselineFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesTo");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
+        assertOperatorCombobox(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox);
     }
@@ -329,6 +333,15 @@ public class UdmBaselineFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
+    }
+
+    private void assertOperatorCombobox(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        ListDataProvider<FilterOperatorEnum> listDataProvider =
+            (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
+        Collection<?> actualOperators = listDataProvider.getItems();
+        assertEquals(4, actualOperators.size());
+        assertEquals(Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN), actualOperators);
     }
 
     @SuppressWarnings(UNCHECKED)
