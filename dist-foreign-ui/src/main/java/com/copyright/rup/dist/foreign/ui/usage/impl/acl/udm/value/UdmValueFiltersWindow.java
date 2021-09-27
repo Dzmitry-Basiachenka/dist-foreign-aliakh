@@ -45,7 +45,7 @@ import java.util.function.Function;
  */
 public class UdmValueFiltersWindow extends Window {
 
-    private static final List<String> YES_NO = Arrays.asList("Y", "N");
+    private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String AMOUNT_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.positive_number_and_length", 10);
 
@@ -229,7 +229,7 @@ public class UdmValueFiltersWindow extends Window {
 
     private HorizontalLayout initLastPriceFlagLastPriceCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastPriceFlagComboBox, lastPriceCommentField);
-        lastPriceFlagComboBox.setItems(YES_NO);
+        lastPriceFlagComboBox.setItems(Y_N_ITEMS);
         lastPriceFlagComboBox.setSelectedItem(valueFilter.getLastPriceFlag());
         lastPriceFlagComboBox.setSizeFull();
         lastPriceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getLastPriceComment(), StringUtils.EMPTY));
@@ -256,7 +256,7 @@ public class UdmValueFiltersWindow extends Window {
 
     private HorizontalLayout initLastContentFlagLastContentCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastContentFlagComboBox, lastContentCommentField);
-        lastContentFlagComboBox.setItems(YES_NO);
+        lastContentFlagComboBox.setItems(Y_N_ITEMS);
         lastContentFlagComboBox.setSelectedItem(valueFilter.getLastContentFlag());
         lastContentFlagComboBox.setSizeFull();
         lastContentCommentField.setValue(
@@ -286,7 +286,7 @@ public class UdmValueFiltersWindow extends Window {
 
     private TextField initCommentLayout() {
         commentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getComment(), StringUtils.EMPTY));
-        commentField.setWidth(257, Unit.PIXELS);
+        commentField.setSizeFull();
         VaadinUtils.addComponentStyle(commentField, "udm-value-comment-filter");
         return commentField;
     }

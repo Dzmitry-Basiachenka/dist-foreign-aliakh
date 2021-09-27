@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 public class UdmValueFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
+    private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String LAST_VALUE_PERIOD = "062021";
     private static final Long WR_WRK_INST = 243904752L;
@@ -174,7 +175,7 @@ public class UdmValueFiltersWindowTest {
         TextField priceField = Whitebox.getInternalState(window, "priceField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
-        assertOperatorCombobox(priceOperatorComboBox);
+        assertOperatorComboboxItems(priceOperatorComboBox);
         verifyBigDecimalOperationValidations(priceField);
     }
 
@@ -183,25 +184,8 @@ public class UdmValueFiltersWindowTest {
         TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
         ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
             Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
-        assertOperatorCombobox(priceInUsdOperatorComboBox);
+        assertOperatorComboboxItems(priceInUsdOperatorComboBox);
         verifyBigDecimalOperationValidations(priceInUsdField);
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void testFilterOperatorChangeListener(int index) {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
-        TextField textField = (TextField) horizontalLayout.getComponent(0);
-        ComboBox<FilterOperatorEnum> operatorComboBox =
-            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
-        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
-        assertFalse(textField.isEnabled());
     }
 
     private void verifyRootLayout(Component component) {
@@ -209,18 +193,20 @@ public class UdmValueFiltersWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(14, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
-        verifyTextField(verticalLayout.getComponent(1), "Wr Wrk Inst");
+        verifySizedTextField(verticalLayout.getComponent(1), "Wr Wrk Inst");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(2), "System Title");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(3), "System Standard Number");
-        verifyTextField(verticalLayout.getComponent(4), "RH Account #");
+        verifySizedTextField(verticalLayout.getComponent(4), "RH Account #");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(5), "RH Name");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(6), "Price");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Price in USD");
         verifyTextFieldLayout(verticalLayout.getComponent(8), ComboBox.class, "Last Price Flag",
             TextField.class, "Last Price Comment");
+        assertComboboxItems("lastPriceFlagComboBox", Y_N_ITEMS);
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(9), "Content");
         verifyTextFieldLayout(verticalLayout.getComponent(10), ComboBox.class, "Last Content Flag",
             TextField.class, "Last Content Comment");
+        assertComboboxItems("lastContentFlagComboBox", Y_N_ITEMS);
         verifyTextFieldLayout(verticalLayout.getComponent(11), ComboBox.class, "Pub Type",
             ComboBox.class, "Last Pub Type");
         verifyTextField(verticalLayout.getComponent(12), "Comment");
@@ -277,10 +263,17 @@ public class UdmValueFiltersWindowTest {
         assertEquals(isEnabled, component.isEnabled());
     }
 
-    private void verifyTextField(Component component, String caption) {
+    private void verifySizedTextField(Component component, String caption) {
         assertTrue(component instanceof TextField);
         assertEquals(257, component.getWidth(), 0);
         assertEquals(Unit.PIXELS, component.getWidthUnits());
+        assertEquals(component.getCaption(), caption);
+    }
+
+    private void verifyTextField(Component component, String caption) {
+        assertTrue(component instanceof TextField);
+        assertEquals(100, component.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
     }
 
@@ -296,6 +289,23 @@ public class UdmValueFiltersWindowTest {
     private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
     }
 
     private void verifyBigDecimalOperationValidations(TextField textField) {
@@ -374,13 +384,22 @@ public class UdmValueFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    private void assertOperatorCombobox(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        ListDataProvider<FilterOperatorEnum> listDataProvider =
-            (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
-        Collection<?> actualOperators = listDataProvider.getItems();
-        assertEquals(4, actualOperators.size());
-        assertEquals(Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.IS_NULL), actualOperators);
+    @SuppressWarnings(UNCHECKED)
+    private <T> void assertComboboxItems(String fieldName, List<T> expectedItems) {
+        assertComboboxItems((ComboBox<T>) Whitebox.getInternalState(window, fieldName), expectedItems);
+    }
+
+    private <T> void assertComboboxItems(ComboBox<T> comboBox, List<T> expectedItems) {
+        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
+        Collection<?> actualItems = listDataProvider.getItems();
+        assertEquals(expectedItems.size(), actualItems.size());
+        assertEquals(expectedItems, actualItems);
+    }
+
+    private void assertOperatorComboboxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        assertComboboxItems(operatorComboBox, Arrays.asList(FilterOperatorEnum.EQUALS,
+            FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.IS_NULL));
     }
 
     @SuppressWarnings(UNCHECKED)
