@@ -148,7 +148,7 @@ public class UdmBaselineFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesTo");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
-        assertOperatorCombobox(annualizedCopiesOperatorComboBox);
+        assertOperatorComboboxItems(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox);
     }
@@ -335,7 +335,7 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    private void assertOperatorCombobox(ComboBox<FilterOperatorEnum> operatorComboBox) {
+    private void assertOperatorComboboxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         ListDataProvider<FilterOperatorEnum> listDataProvider =
             (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
         Collection<?> actualOperators = listDataProvider.getItems();
