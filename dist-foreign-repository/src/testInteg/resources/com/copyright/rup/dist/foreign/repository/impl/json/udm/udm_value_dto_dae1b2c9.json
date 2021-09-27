@@ -1,0 +1,26 @@
+[
+  {
+    "id": "dae1b2c9-7266-4b11-8373-eea9504a9819",
+    "valuePeriod": 201506,
+    "status": "NEW",
+    "rhAccountNumber": 1000002859,
+    "rhName": "John Wiley & Sons - Books",
+    "wrWrkInst": 306985899,
+    "systemTitle": "Tenside, surfactants, detergents",
+    "systemStandardNumber": "1873-7773",
+    "standardNumberType": "VALISSN",
+    "assignee": "jjohn@copyright.com",
+    "price": 5.0000000000,
+    "priceInUsd": 2.5000000000,
+    "priceType": "price type",
+    "publicationType": "NP",
+    "priceYear": 2021,
+    "content": 60.0000000000,
+    "currency": "USD",
+    "currencyExchangeRate": 2.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": false,
+    "contentComment": "Content comment",
+    "comment": "Comment"
+  }
+]

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -51,7 +52,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private String lastContentComment;
     private String content;
     private String contentComment;
-    private String contentFlag;
+    private boolean contentFlag;
     private BigDecimal contentUnitPrice;
     private String comment;
 
@@ -311,11 +312,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.contentComment = contentComment;
     }
 
-    public String getContentFlag() {
+    public boolean isContentFlag() {
         return contentFlag;
     }
 
-    public void setContentFlag(String contentFlag) {
+    public void setContentFlag(boolean contentFlag) {
         this.contentFlag = contentFlag;
     }
 

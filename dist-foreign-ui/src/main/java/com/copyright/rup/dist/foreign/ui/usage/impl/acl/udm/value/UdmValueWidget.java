@@ -180,7 +180,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 200),
             addColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
             addColumn(UdmValueDto::getContentComment, "table.column.content_comment", "contentComment", 200),
-            addColumn(UdmValueDto::getContentFlag, "table.column.content_flag", "contentFlag", 100),
+            addColumn(UdmValueDto::isContentFlag, "table.column.content_flag", "contentFlag", 100),
             addAmountColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),

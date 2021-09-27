@@ -4,6 +4,297 @@
 
 <mapper namespace="IUdmValueMapper">
 
+    <resultMap id="udmValueDtoResultMap" type="UdmValueDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_value_uid"/>
+        <result property="valuePeriod" column="period"/>
+        <result property="status" column="status_ind"/>
+        <result property="assignee" column="assignee"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="systemStandardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+        <result property="publicationType" column="pub_type"/>
+        <result property="price" column="price"/>
+        <result property="currency" column="currency"/>
+        <result property="priceType" column="price_type"/>
+        <result property="priceAccessType" column="price_access_type"/>
+        <result property="priceYear" column="price_year"/>
+        <result property="priceComment" column="price_comment"/>
+        <result property="priceInUsd" column="price_in_usd"/>
+        <result property="priceFlag" column="price_flag"/>
+        <result property="currencyExchangeRate" column="currency_exchange_rate"/>
+        <result property="currencyExchangeRateDate" column="currency_exchange_rate_date"/>
+        <result property="content" column="content"/>
+        <result property="contentComment" column="content_comment"/>
+        <result property="contentFlag" column="content_flag"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            df_udm_value_uid,
+            period,
+            assignee,
+            v.rh_account_number,
+            r.name rh_name,
+            wr_wrk_inst,
+            system_title,
+            standard_number,
+            standard_number_type,
+            pt.name pub_type,
+            price,
+            currency,
+            price_in_usd,
+            price_type,
+            status_ind,
+            price_access_type,
+            price_year,
+            price_comment,
+            price_flag,
+            currency,
+            currency_exchange_rate,
+            currency_exchange_rate_date,
+            content,
+            content_unit_price,
+            content_comment,
+            content_flag,
+            comment
+        from ${schema}.df_udm_value v
+        left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
+        left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmValueMapper.udmValueFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUdmValueMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                v.updated_datetime desc
+            </otherwise>
+        </choose>,
+        v.df_udm_value_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_udm_value v
+        left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
+        left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmValueMapper.udmValueFilter"/>
+    </sql>
+
+    <sql id="udmValueFilter">
+        <where>
+            <if test="filter.periods.size() > 0">
+                and
+                <foreach collection="filter.periods" item="period" open="(" separator=" or " close=")">
+                    v.period = #{period}
+                </foreach>
+            </if>
+            <if test="null != filter.status">
+                and v.status_ind = #{filter.status}
+            </if>
+            <if test="null != filter.currency">
+                and v.currency = #{filter.currency}
+            </if>
+            <if test="filter.assignees.size() > 0">
+                and
+                <foreach collection="filter.assignees" item="assignee" open="(" separator=" or " close=")">
+                    v.assignee = #{assignee}
+                </foreach>
+            </if>
+            <if test="null != filter.wrWrkInst">
+                and v.wr_wrk_inst = #{filter.wrWrkInst}
+            </if>
+            <if test="null != filter.rhAccountNumber">
+                and v.rh_account_number = #{filter.rhAccountNumber}
+            </if>
+            <if test="null != filter.pubType">
+                and pt.name = #{filter.pubType}
+            </if>
+            <if test="null != filter.comment">
+                and v.comment ilike '%' || #{filter.comment} || '%'
+            </if>
+            <if test="!filter.systemTitleExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="v.system_title"/>
+                    <property name="operator" value="filter.systemTitleExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.systemTitleExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.systemStandardNumberExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="v.standard_number"/>
+                    <property name="operator" value="filter.systemStandardNumberExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.systemStandardNumberExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.systemStandardNumberExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.rhNameExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="r.name"/>
+                    <property name="operator" value="filter.rhNameExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.rhNameExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.rhNameExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.priceExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="v.price"/>
+                    <property name="operator" value="filter.priceExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.priceExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.priceExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.priceInUsdExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="v.price_in_usd"/>
+                    <property name="operator" value="filter.priceInUsdExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.priceInUsdExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.priceInUsdExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.contentExpression.isEmpty()">
+                <include refid="IUdmValueMapper.filterExpression">
+                    <property name="column" value="content"/>
+                    <property name="operator" value="filter.contentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.contentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.contentExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="filterExpression">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
+            and ${column} &lt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN_OR_EQUALS_TO == ${operator}">
+            and ${column} &lt;= ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
+            and ${column} &gt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN_OR_EQUALS_TO == ${operator}">
+            and ${column} &gt;= ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
+            and ${column} = '${fieldFirstValue}'
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
+            and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
+            and ${column} is null
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NOT_NULL == ${operator}">
+            and ${column} is not null
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@CONTAINS == ${operator}">
+            and ${column} ilike '%' || '${fieldFirstValue}' || '%'
+        </if>
+    </sql>
+
+    <sql id="chooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                df_udm_value_uid <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'valuePeriod'">
+                period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'status'">
+                status_ind <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'assignee'">
+                assignee <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhAccountNumber'">
+                v.rh_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                r.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemStandardNumber'">
+                standard_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'standardNumberType'">
+                standard_number_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'publicationType'">
+                pt.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'price'">
+                price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'currency'">
+                currency <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceType'">
+                price_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceAccessType'">
+                price_access_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceYear'">
+                price_year <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceComment'">
+                price_comment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceFlag'">
+                price_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceInUsd'">
+                price_in_usd <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'currencyExchangeRate'">
+                currency_exchange_rate <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'currencyExchangeRateDate'">
+                currency_exchange_rate_date <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'content'">
+                content <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentComment'">
+                content_comment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentFlag'">
+                content_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'comment'">
+                comment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateDate'">
+                v.updated_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateUser'">
+                v.updated_by_user <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
+    <select id="findDtosByFilter" resultMap="udmValueDtoResultMap" parameterType="map"
+            fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmValueMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmValueMapper.selectCountByFilterSql"/>
+    </select>
+
     <select id="findPeriods" resultType="int">
         select distinct period
         from ${schema}.df_udm_value

@@ -62,7 +62,7 @@ public class UdmValueFiltersWindowTest {
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("200.00");
     private static final String LAST_PRICE_FLAG = "Y";
     private static final String LAST_PRICE_COMMENT = "last price comment";
-    private static final String CONTENT = "content";
+    private static final BigDecimal CONTENT = new BigDecimal("70");
     private static final String LAST_CONTENT_FLAG = "N";
     private static final String LAST_CONTENT_COMMENT = "last content comment";
     private static final String PUB_TYPE = "BK";
@@ -361,7 +361,7 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastPriceFlagComboBox", LAST_PRICE_FLAG);
         assertTextFieldValue("lastPriceCommentField", LAST_PRICE_COMMENT);
-        assertTextFieldValue("contentField", CONTENT);
+        assertTextFieldValue("contentField", CONTENT.toString());
         assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastContentFlagComboBox", LAST_CONTENT_FLAG);
         assertTextFieldValue("lastContentCommentField", LAST_CONTENT_COMMENT);
@@ -418,7 +418,7 @@ public class UdmValueFiltersWindowTest {
         populateComboBox("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("lastPriceFlagComboBox", LAST_PRICE_FLAG);
         populateTextField("lastPriceCommentField", LAST_PRICE_COMMENT);
-        populateTextField("contentField", CONTENT);
+        populateTextField("contentField", String.valueOf(CONTENT));
         populateComboBox("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("lastContentFlagComboBox", LAST_CONTENT_FLAG);
         populateTextField("lastContentCommentField", LAST_CONTENT_COMMENT);

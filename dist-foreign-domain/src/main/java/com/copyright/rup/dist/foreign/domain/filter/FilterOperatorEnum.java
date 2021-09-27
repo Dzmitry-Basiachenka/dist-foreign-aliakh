@@ -42,5 +42,9 @@ public enum FilterOperatorEnum {
     /**
      * 'Is not NULL' filter operator.
      */
-    IS_NOT_NULL
+    IS_NOT_NULL,
+    /**
+     * Contains filter operator.
+     */
+    CONTAINS
 }
