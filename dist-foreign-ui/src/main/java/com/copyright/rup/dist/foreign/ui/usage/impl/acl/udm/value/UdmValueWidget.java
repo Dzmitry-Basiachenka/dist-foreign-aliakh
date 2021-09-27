@@ -20,6 +20,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private IUdmValueController controller;
     private Grid<UdmValueDto> udmValuesGrid;
     private Button populateButton;
+    private MenuBar assignmentMenuBar;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -72,6 +74,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     public IMediator initMediator() {
         UdmValueMediator mediator = new UdmValueMediator();
         mediator.setPopulateButton(populateButton);
+        mediator.setAssignmentMenuBar(assignmentMenuBar);
         return mediator;
     }
 
@@ -87,6 +90,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private VerticalLayout initValuesLayout() {
         initValuesGrid();
+        initAssignmentMenuBar();
         VerticalLayout layout = new VerticalLayout(initButtonsLayout(), udmValuesGrid);
         layout.setSizeFull();
         layout.setMargin(false);
@@ -99,10 +103,18 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private HorizontalLayout initButtonsLayout() {
         populateButton = Buttons.createButton(ForeignUi.getMessage("button.populate_value_batch"));
         populateButton.addClickListener(event -> Windows.showModalWindow(new UdmPopulateValueBatchWindow(controller)));
-        HorizontalLayout layout = new HorizontalLayout(populateButton);
+        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
+    }
+
+    private void initAssignmentMenuBar() {
+        assignmentMenuBar = new MenuBar();
+        MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
+        item.addItem(ForeignUi.getMessage("menu.item.assign"), null, null);
+        item.addItem(ForeignUi.getMessage("menu.item.unassign"), null, null);
+        VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
     }
 
     private void initValuesGrid() {

@@ -17,9 +17,11 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmValueWidget}.
@@ -133,8 +136,9 @@ public class UdmValueWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
+        assertEquals(2, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
+        verifyMenuBar(layout.getComponent(1), "Assignment", Arrays.asList("Assign", "Unassign"));
     }
 
     private void verifyButton(Component component, String name) {
@@ -142,5 +146,19 @@ public class UdmValueWidgetTest {
         Button button = (Button) component;
         assertEquals(name, button.getCaption());
         assertTrue(button.isVisible());
+    }
+
+    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        assertTrue(menuBar.isVisible());
+        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuBar.MenuItem item = parentItems.get(0);
+        assertEquals(menuBarName, item.getText());
+        List<MenuBar.MenuItem> childItems = item.getChildren();
+        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
+        IntStream.range(0, menuItems.size())
+            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 }

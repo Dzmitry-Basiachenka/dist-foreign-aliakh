@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.MenuBar;
 
 /**
  * Mediator for the UDM values widget.
@@ -17,13 +18,22 @@ import com.vaadin.ui.Button;
 public class UdmValueMediator implements IMediator {
 
     private Button populateButton;
+    private MenuBar assignmentMenuBar;
 
     @Override
     public void applyPermissions() {
-        populateButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
+        boolean isManager = ForeignSecurityUtils.hasManagerPermission();
+        boolean isResearcher = ForeignSecurityUtils.hasResearcherPermission();
+        populateButton.setVisible(isSpecialist);
+        assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
     }
 
     public void setPopulateButton(Button populateButton) {
         this.populateButton = populateButton;
+    }
+
+    public void setAssignmentMenuBar(MenuBar assignmentMenuBar) {
+        this.assignmentMenuBar = assignmentMenuBar;
     }
 }

@@ -10,6 +10,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.MenuBar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,54 +32,85 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class UdmValueMediatorTest {
 
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
+    private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
+    private static final String FDA_RESEARCHER_PERMISSION = "FDA_RESEARCHER_PERMISSION";
 
     private final Button populateButton = new Button("Populate Value Batch");
+    private final MenuBar assignmentMenuBar = new MenuBar();
     private UdmValueMediator mediator;
 
     @Before
     public void setUp() {
         mediator = new UdmValueMediator();
         mediator.setPopulateButton(populateButton);
+        mediator.setAssignmentMenuBar(assignmentMenuBar);
     }
 
     @Test
     public void testApplyViewOnlyPermissions() {
-        mockPermissions(false);
+        mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
+        assertFalse(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyManagerPermissions() {
-        mockPermissions(false);
+        mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
+        assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
-        mockPermissions(true);
+        mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(populateButton.isVisible());
+        assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyResearcherPermissions() {
-        mockPermissions(false);
+        mockResearcherPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
+        assertTrue(assignmentMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
-    private void mockPermissions(boolean isSpecialist) {
+    private void mockViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(isSpecialist).once();
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
+    }
+
+    private void mockManagerPermissions() {
+        mockStatic(SecurityUtils.class);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
+    }
+
+    private void mockSpecialistPermissions() {
+        mockStatic(SecurityUtils.class);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(false).once();
+    }
+
+    private void mockResearcherPermissions() {
+        mockStatic(SecurityUtils.class);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_RESEARCHER_PERMISSION)).andReturn(true).once();
     }
 }
