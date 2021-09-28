@@ -6,6 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.vaadin.data.provider.QuerySortOrder;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for UDM value controller.
@@ -54,4 +55,18 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return initialized {@link IUdmValueFilterWidget}
      */
     IUdmValueFilterWidget initValuesFilterWidget();
+
+    /**
+     * Assigns provided values to logged in user.
+     *
+     * @param valueIds set of value ids to assign to logged in user
+     */
+    void assignValues(Set<String> valueIds);
+
+    /**
+     * Un-assigns provided values.
+     *
+     * @param valueIds set of value ids to un-assign
+     */
+    void unassignValues(Set<String> valueIds);
 }

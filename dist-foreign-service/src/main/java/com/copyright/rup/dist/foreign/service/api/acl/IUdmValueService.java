@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents interface of service for UDM value logic.
@@ -50,4 +51,18 @@ public interface IUdmValueService {
      * @return count of values
      */
     int getValueCount(UdmValueFilter filter);
+
+    /**
+     * Assigns provided values to logged in user.
+     *
+     * @param valueIds set of value ids to assign to logged in user
+     */
+    void assignValues(Set<String> valueIds);
+
+    /**
+     * Un-assigns provided values.
+     *
+     * @param valueIds set of value ids to un-assign
+     */
+    void unassignValues(Set<String> valueIds);
 }

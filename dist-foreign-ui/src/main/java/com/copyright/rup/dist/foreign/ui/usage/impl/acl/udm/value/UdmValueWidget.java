@@ -1,9 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -13,6 +17,7 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
+import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
@@ -23,6 +28,8 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -31,7 +38,9 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmValueWidget}.
@@ -48,11 +57,21 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private static final String FOOTER_LABEL = "Values Count: %s";
     private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00########",
         CurrencyUtils.getParameterizedDecimalFormatSymbols());
+    private static final Set<UdmValueStatusEnum> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER =
+        ImmutableSet.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD);
+
+    private final String userName = RupContextUtils.getUserName();
+    private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
+    private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
+    private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
 
     private IUdmValueController controller;
     private Grid<UdmValueDto> udmValuesGrid;
     private Button populateButton;
     private MenuBar assignmentMenuBar;
+    private MenuBar.MenuItem assignItem;
+    private MenuBar.MenuItem unassignItem;
+    private DataProvider<UdmValueDto, Void> dataProvider;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -78,6 +97,12 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         return mediator;
     }
 
+    @Override
+    public void refresh() {
+        udmValuesGrid.deselectAll();
+        dataProvider.refreshAll();
+    }
+
     /**
      * Formats decimal amount without trailing zeros after the second digit after the decimal point.
      *
@@ -100,6 +125,60 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         return layout;
     }
 
+    private void initAssignmentMenuBar() {
+        assignmentMenuBar = new MenuBar();
+        MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
+        initAssignMenuItem(item);
+        initUnassignMenuItem(item);
+        VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
+    }
+
+    private void initAssignMenuItem(MenuBar.MenuItem item) {
+        assignItem = item.addItem(ForeignUi.getMessage("menu.item.assign"), null,
+            selectedItem -> {
+                if (hasResearcherPermission && !isAssignmentAllowedForResearcher(udmValuesGrid.getSelectedItems())) {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.value.assignment_forbidden_for_researcher",
+                            VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER
+                                .stream()
+                                .map(UdmValueStatusEnum::name)
+                                .collect(Collectors.joining(", "))));
+                } else {
+                    int valuesCount = udmValuesGrid.getSelectedItems().size();
+                    Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.value.assign", valuesCount),
+                        () -> {
+                            controller.assignValues(getSelectedValueIds());
+                            refresh();
+                            Windows.showNotificationWindow(
+                                ForeignUi.getMessage("message.notification.value.assignment_completed", valuesCount));
+                        });
+                }
+            });
+        assignItem.setEnabled(false);
+    }
+
+    private void initUnassignMenuItem(MenuBar.MenuItem item) {
+        unassignItem = item.addItem(ForeignUi.getMessage("menu.item.unassign"), null,
+            selectedItem -> {
+                boolean isUnassignmentAllowed = udmValuesGrid.getSelectedItems()
+                    .stream()
+                    .allMatch(udmValueDto -> userName.equals(udmValueDto.getAssignee()));
+                if (isUnassignmentAllowed) {
+                    int valuesCount = udmValuesGrid.getSelectedItems().size();
+                    Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.value.unassign", valuesCount),
+                        () -> {
+                            controller.unassignValues(getSelectedValueIds());
+                            refresh();
+                            Windows.showNotificationWindow(
+                                ForeignUi.getMessage("message.notification.value.unassignment_completed", valuesCount));
+                        });
+                } else {
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.value.unassign"));
+                }
+            });
+        unassignItem.setEnabled(false);
+    }
+
     private HorizontalLayout initButtonsLayout() {
         populateButton = Buttons.createButton(ForeignUi.getMessage("button.populate_value_batch"));
         populateButton.addClickListener(event -> Windows.showModalWindow(new UdmPopulateValueBatchWindow(controller)));
@@ -109,16 +188,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         return layout;
     }
 
-    private void initAssignmentMenuBar() {
-        assignmentMenuBar = new MenuBar();
-        MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
-        item.addItem(ForeignUi.getMessage("menu.item.assign"), null, null);
-        item.addItem(ForeignUi.getMessage("menu.item.unassign"), null, null);
-        VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
-    }
-
     private void initValuesGrid() {
-        DataProvider<UdmValueDto, Void> dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> {
                 int size = controller.getBeansCount();
@@ -133,7 +204,17 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         udmValuesGrid = new Grid<>(dataProvider);
         addColumns();
         udmValuesGrid.setSizeFull();
-        udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        if (hasSpecialistPermission || hasManagerPermission || hasResearcherPermission) {
+            udmValuesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            udmValuesGrid.addSelectionListener(event -> {
+                Set<UdmValueDto> valueDtos = event.getAllSelectedItems();
+                boolean isSelected = CollectionUtils.isNotEmpty(valueDtos);
+                assignItem.setEnabled(isSelected);
+                unassignItem.setEnabled(isSelected);
+            });
+        } else {
+            udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        }
         VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
     }
 
@@ -220,5 +301,17 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
             : StringUtils.EMPTY;
+    }
+
+    private Set<String> getSelectedValueIds() {
+        return udmValuesGrid.getSelectedItems()
+            .stream()
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
+    }
+
+    private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
+        return udmValueDtos.stream()
+            .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
     }
 }

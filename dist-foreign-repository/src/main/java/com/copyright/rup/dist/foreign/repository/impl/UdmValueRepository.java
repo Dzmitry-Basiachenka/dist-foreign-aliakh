@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmValueRepository}.
@@ -46,6 +47,15 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
     @Override
     public List<Integer> findPeriods() {
         return selectList("IUdmValueMapper.findPeriods");
+    }
+
+    @Override
+    public void updateAssignee(Set<String> valueIds, String assignee, String updateUser) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("valueIds", Objects.requireNonNull(valueIds));
+        parameters.put("updateUser", Objects.requireNonNull(updateUser));
+        parameters.put("assignee", assignee);
+        update("IUdmValueMapper.updateAssignee", parameters);
     }
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {

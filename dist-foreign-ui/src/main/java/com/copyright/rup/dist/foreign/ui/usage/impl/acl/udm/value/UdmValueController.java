@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmValueController}.
@@ -33,6 +35,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IUdmValueFilterController udmValueFilterController;
     @Autowired
     private IUdmBaselineService baselineService;
+    @Autowired
+    private IUdmValueService valueService;
 
     @Override
     public List<Integer> getBaselinePeriods() {
@@ -63,5 +67,15 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Override
     protected IUdmValueWidget instantiateWidget() {
         return new UdmValueWidget();
+    }
+
+    @Override
+    public void assignValues(Set<String> valueIds) {
+        valueService.assignValues(valueIds);
+    }
+
+    @Override
+    public void unassignValues(Set<String> valueIds) {
+        valueService.unassignValues(valueIds);
     }
 }
