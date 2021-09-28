@@ -111,7 +111,7 @@
             <if test="null != filter.currency">
                 and v.currency = #{filter.currency}
             </if>
-            <if test="filter.assignees.size() > 0">
+            <if test="null != filter.assignees and filter.assignees.size() > 0">
                 and
                 <foreach collection="filter.assignees" item="assignee" open="(" separator=" or " close=")">
                     v.assignee = #{assignee}
@@ -321,4 +321,11 @@
                 #{valueId}
             </foreach>
     </update>
+
+    <select id="findAssignees" resultType="string">
+        select distinct assignee
+        from ${schema}.df_udm_value
+        where assignee is not null
+        order by assignee
+    </select>
 </mapper>

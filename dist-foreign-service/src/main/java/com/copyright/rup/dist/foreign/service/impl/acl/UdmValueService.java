@@ -66,4 +66,9 @@ public class UdmValueService implements IUdmValueService {
     public void unassignValues(Set<String> valueIds) {
         udmValueRepository.updateAssignee(valueIds, null, RupContextUtils.getUserName());
     }
+
+    @Override
+    public List<String> getAssignees() {
+        return udmValueRepository.findAssignees();
+    }
 }

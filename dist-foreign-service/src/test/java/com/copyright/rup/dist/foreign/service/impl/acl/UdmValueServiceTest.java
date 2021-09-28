@@ -103,4 +103,13 @@ public class UdmValueServiceTest {
         udmValueService.unassignValues(valueIds);
         verify(udmValueRepository, RupContextUtils.class);
     }
+
+    @Test
+    public void testGetAssignees() {
+        List<String> assignees = Collections.singletonList("wjohn@copyright.com");
+        expect(udmValueRepository.findAssignees()).andReturn(assignees).once();
+        replay(udmValueRepository);
+        assertEquals(assignees, udmValueService.getAssignees());
+        verify(udmValueRepository);
+    }
 }

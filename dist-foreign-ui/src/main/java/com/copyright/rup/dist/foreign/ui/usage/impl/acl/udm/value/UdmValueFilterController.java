@@ -43,7 +43,7 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
 
     @Override
     public List<String> getAssignees() {
-        return new ArrayList<>(); // TODO implement udmValueService.getAssignees();
+        return udmValueService.getAssignees();
     }
 
     @Override

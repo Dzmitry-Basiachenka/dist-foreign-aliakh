@@ -57,7 +57,11 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetAssignees() {
-        // TODO add implementation
+        List<String> assignees = Collections.singletonList("wjohn@copyright.com");
+        expect(udmValueService.getAssignees()).andReturn(assignees).once();
+        replay(udmValueService);
+        assertEquals(assignees, controller.getAssignees());
+        verify(udmValueService);
     }
 
     @Test

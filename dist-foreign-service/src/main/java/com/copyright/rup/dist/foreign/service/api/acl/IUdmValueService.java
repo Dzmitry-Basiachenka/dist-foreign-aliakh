@@ -65,4 +65,11 @@ public interface IUdmValueService {
      * @param valueIds set of value ids to un-assign
      */
     void unassignValues(Set<String> valueIds);
+
+    /**
+     * Gets list of assignees from UDM values.
+     *
+     * @return list of assignees
+     */
+    List<String> getAssignees();
 }
