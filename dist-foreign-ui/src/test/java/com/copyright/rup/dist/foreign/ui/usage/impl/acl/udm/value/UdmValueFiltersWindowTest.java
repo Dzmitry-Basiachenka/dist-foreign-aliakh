@@ -189,6 +189,15 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testContentValidation() {
+        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        ComboBox<FilterOperatorEnum> contentOperatorComboBox =
+            Whitebox.getInternalState(window, "contentOperatorComboBox");
+        assertOperatorComboboxItems(contentOperatorComboBox);
+        verifyBigDecimalOperationValidations(contentField);
+    }
+
+    @Test
     public void testLastPriceCommentValidation() {
         TextField lastPriceCommentField = Whitebox.getInternalState(window, "lastPriceCommentField");
         verifyTextFieldValidationMessage(lastPriceCommentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
@@ -479,10 +488,6 @@ public class UdmValueFiltersWindowTest {
     }
 
     private String buildStringWithExpectedLength(int length) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            result.append('a');
-        }
-        return result.toString();
+        return StringUtils.repeat('a', length);
     }
 }
