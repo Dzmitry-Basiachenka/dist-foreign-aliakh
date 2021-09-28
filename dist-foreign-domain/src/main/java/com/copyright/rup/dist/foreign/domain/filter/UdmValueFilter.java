@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public class UdmValueFilter {
 
-    private Set<Integer> periods;
+    private Set<Integer> periods = new HashSet<>();
     private UdmValueStatusEnum status;
     private String currency;
     private Set<String> assignees = new HashSet<>();
@@ -35,7 +35,7 @@ public class UdmValueFilter {
     private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
     private String lastPriceFlag;
     private String lastPriceComment;
-    private FilterExpression<String> contentExpression = new FilterExpression<>();
+    private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private String lastContentFlag;
     private String lastContentComment;
     private String pubType;
@@ -190,11 +190,11 @@ public class UdmValueFilter {
         this.lastPriceComment = lastPriceComment;
     }
 
-    public FilterExpression<String> getContentExpression() {
+    public FilterExpression<Number> getContentExpression() {
         return contentExpression;
     }
 
-    public void setContentExpression(FilterExpression<String> contentExpression) {
+    public void setContentExpression(FilterExpression<Number> contentExpression) {
         this.contentExpression = contentExpression;
     }
 

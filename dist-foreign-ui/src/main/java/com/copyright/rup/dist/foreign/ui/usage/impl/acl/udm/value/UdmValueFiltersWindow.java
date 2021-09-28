@@ -416,7 +416,7 @@ public class UdmValueFiltersWindow extends Window {
         valueFilter.setLastPriceFlag(lastPriceFlagComboBox.getValue());
         valueFilter.setLastPriceComment(getStringFromTextField(lastPriceCommentField));
         valueFilter.setContentExpression(buildNumberFilterExpression(contentField, contentOperatorComboBox,
-            Function.identity()));
+            BigDecimal::new));
         valueFilter.setLastContentFlag(lastContentFlagComboBox.getValue());
         valueFilter.setLastContentComment(getStringFromTextField(lastContentCommentField));
         valueFilter.setPubType(pubTypeComboBox.getValue());
