@@ -251,6 +251,10 @@ public class UdmValueFiltersWindow extends Window {
         contentField.addValueChangeListener(event -> filterBinder.validate());
         contentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(contentField, event.getValue()));
+        filterBinder.forField(contentField)
+            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getContentExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getContentExpression().setFieldFirstValue(new BigDecimal(value)));
         contentField.setSizeFull();
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(contentField, "udm-value-content-filter");

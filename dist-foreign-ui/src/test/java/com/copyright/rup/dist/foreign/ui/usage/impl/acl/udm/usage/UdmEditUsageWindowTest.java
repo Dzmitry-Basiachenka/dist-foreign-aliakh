@@ -758,11 +758,7 @@ public class UdmEditUsageWindowTest {
     }
 
     private String buildStringWithExpectedLength(int length) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            result.append('a');
-        }
-        return result.toString();
+        return StringUtils.repeat('a', length);
     }
 
     private void initEditWindow() {
