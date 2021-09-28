@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
@@ -7,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,5 +40,17 @@ public class UdmValueService implements IUdmValueService {
     @Override
     public List<Integer> getPeriods() {
         return udmValueRepository.findPeriods();
+    }
+
+    @Override
+    public List<UdmValueDto> getValueDtos(UdmValueFilter filter, Pageable pageable, Sort sort) {
+        return !filter.isEmpty()
+            ? udmValueRepository.findDtosByFilter(filter, pageable, sort)
+            : Collections.emptyList();
+    }
+
+    @Override
+    public int getValueCount(UdmValueFilter filter) {
+        return !filter.isEmpty() ? udmValueRepository.findCountByFilter(filter) : 0;
     }
 }
