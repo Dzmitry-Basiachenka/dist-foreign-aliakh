@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
@@ -52,4 +53,18 @@ public interface IUdmBaselineRepository {
      * @return list of periods
      */
     List<Integer> findPeriods();
+
+    /**
+     * Finds list of {@link UdmValue}s from usages baseline for given period that are candidates for populating into
+     * value batch. The following unique works are included into result list:
+     * <ul>
+     *     <li>1. works that were not populated into value batch for given period</li>
+     *     <li>2. works from previous periods with age weight greater than zero,
+     *            that were not populated into value batch for any period</li>
+     * </ul>
+     *
+     * @param period period for value batch populating
+     * @return list of {@link UdmValue}s
+     */
+    List<UdmValue> findNotPopulatedValuesFromBaseline(Integer period);
 }

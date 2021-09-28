@@ -209,4 +209,31 @@
         where is_baseline_flag = true
         order by period desc
     </select>
+
+    <select id="findNotPopulatedValuesFromBaseline" resultMap="IUdmValueMapper.udmValueResultMap">
+        <!-- Selects periods with age weight greater than zero -->
+        with prior_periods as (
+            select periods.period
+            from generate_series(1, (select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0)) i
+            cross join lateral (
+                select to_char(to_date(#{period}::text, 'YYYYMM') - ((i * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
+            ) periods
+        )
+        <!-- The following unique works are included into result:
+             1. works that were not populated into value batch for given period
+             2. works from previous periods with age weight greater than zero, that were not populated into value batch for any period -->
+        select distinct on (u.wr_wrk_inst)
+            #{period} as period,
+            u.wr_wrk_inst,
+            u.rh_account_number,
+            u.system_title,
+            u.standard_number
+            <!-- TODO: u.standard_number_type -->
+        from ${schema}.df_udm_usage u
+        left join ${schema}.df_udm_value v on v.wr_wrk_inst = u.wr_wrk_inst
+        where (u.period = #{period} or u.period in (select period from prior_periods))
+            and u.is_baseline_flag = true
+            and (v.wr_wrk_inst is null or (u.period = #{period} and v.period != #{period}))
+        order by u.wr_wrk_inst, u.period desc
+    </select>
 </mapper>

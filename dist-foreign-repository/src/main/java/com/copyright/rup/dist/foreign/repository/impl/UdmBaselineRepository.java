@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 
@@ -59,5 +60,10 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     @Override
     public List<Integer> findPeriods() {
         return selectList("IUdmBaselineMapper.findPeriods");
+    }
+
+    @Override
+    public List<UdmValue> findNotPopulatedValuesFromBaseline(Integer period) {
+        return selectList("IUdmBaselineMapper.findNotPopulatedValuesFromBaseline", Objects.requireNonNull(period));
     }
 }
