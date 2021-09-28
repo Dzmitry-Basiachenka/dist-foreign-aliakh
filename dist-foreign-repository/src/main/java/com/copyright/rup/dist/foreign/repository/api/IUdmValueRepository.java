@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for UDM values.
@@ -42,4 +43,13 @@ public interface IUdmValueRepository {
      * @return list of periods
      */
     List<Integer> findPeriods();
+
+    /**
+     * Updates assignee for provided values. Assignee value can be nullable.
+     *
+     * @param valueIds    value ids to update
+     * @param assignee    assignee or null
+     * @param updateUser  user who updates assignee
+     */
+    void updateAssignee(Set<String> valueIds, String assignee, String updateUser);
 }

@@ -310,4 +310,15 @@
         from ${schema}.df_udm_value
         order by period desc
     </select>
+
+    <update id="updateAssignee" parameterType="map">
+        update ${schema}.df_udm_value
+        set
+            assignee = #{assignee},
+        <include refid="StoredEntityMapper.update"/>
+            where df_udm_value_uid in
+            <foreach collection="valueIds" item="valueId" open="(" separator="," close=")">
+                #{valueId}
+            </foreach>
+    </update>
 </mapper>

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -15,6 +16,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +60,7 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String UDM_VALUE_UID_6 = "469e81b1-2e16-481d-a336-89725c6237ce";
     private static final String UDM_VALUE_UID_7 = "5add051a-c4be-475b-9542-e31a05be1eb1";
     private static final String ASSIGNEE = "jjohn@copyright.com";
+    private static final String USER_NAME = "jjohn@copyright.com";
     private static final String SYSTEM_TITLE = "Tenside, surfactants, detergents";
     private static final String STANDARD_NUMBER = "1873-7773";
     private static final String RH_NAME_PART = "John Wiley";
@@ -260,6 +263,32 @@ public class UdmValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "comment");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "updateDate");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "updateUser");
+    }
+
+    @Test
+    public void testUpdateAssignee() {
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(ImmutableSet.of(202106));
+        filter.setComment("comment_assignment_");
+        UdmValueDto udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
+        assertNull(udmValueDto.getAssignee());
+        udmValueRepository
+            .updateAssignee(Collections.singleton("17c79b33-0949-484f-aea4-1f765cc1c019"), ASSIGNEE, USER_NAME);
+        udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
+        assertEquals(ASSIGNEE, udmValueDto.getAssignee());
+    }
+
+    @Test
+    public void testUpdateAssigneeToNull() {
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(ImmutableSet.of(202112));
+        filter.setComment("comment_assignment_3");
+        UdmValueDto udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
+        assertEquals(ASSIGNEE, udmValueDto.getAssignee());
+        udmValueRepository
+            .updateAssignee(Collections.singleton("b8da90e6-f4f3-4782-860a-2c061f858574"), null, USER_NAME);
+        udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
+        assertNull(udmValueDto.getAssignee());
     }
 
     private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue) {

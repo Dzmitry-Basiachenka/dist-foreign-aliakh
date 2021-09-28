@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmValueService}.
@@ -52,5 +54,16 @@ public class UdmValueService implements IUdmValueService {
     @Override
     public int getValueCount(UdmValueFilter filter) {
         return !filter.isEmpty() ? udmValueRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public void assignValues(Set<String> valueIds) {
+        String userName = RupContextUtils.getUserName();
+        udmValueRepository.updateAssignee(valueIds, userName, userName);
+    }
+
+    @Override
+    public void unassignValues(Set<String> valueIds) {
+        udmValueRepository.updateAssignee(valueIds, null, RupContextUtils.getUserName());
     }
 }

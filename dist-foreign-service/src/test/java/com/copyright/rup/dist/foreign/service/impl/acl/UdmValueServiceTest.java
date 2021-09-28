@@ -1,13 +1,16 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
@@ -16,10 +19,15 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmValueService}.
@@ -30,7 +38,11 @@ import java.util.List;
  *
  * @author Anton Azarenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RupContextUtils.class)
 public class UdmValueServiceTest {
+
+    private static final String USER_NAME = "user@copyright.com";
 
     private IUdmValueRepository udmValueRepository;
     private IUdmValueService udmValueService;
@@ -66,5 +78,29 @@ public class UdmValueServiceTest {
         replay(udmValueRepository);
         assertEquals(1, udmValueService.getValueCount(filter));
         verify(udmValueRepository);
+    }
+
+    @Test
+    public void testAssignValues() {
+        mockStatic(RupContextUtils.class);
+        Set<String> valueIds = Collections.singleton("49efb6c9-acb8-43e5-912e-607597581713");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        udmValueRepository.updateAssignee(valueIds, USER_NAME, USER_NAME);
+        expectLastCall().once();
+        replay(udmValueRepository, RupContextUtils.class);
+        udmValueService.assignValues(valueIds);
+        verify(udmValueRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUnAssignValues() {
+        mockStatic(RupContextUtils.class);
+        Set<String> valueIds = Collections.singleton("49efb6c9-acb8-43e5-912e-607597581713");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        udmValueRepository.updateAssignee(valueIds, null, USER_NAME);
+        expectLastCall().once();
+        replay(udmValueRepository, RupContextUtils.class);
+        udmValueService.unassignValues(valueIds);
+        verify(udmValueRepository, RupContextUtils.class);
     }
 }
