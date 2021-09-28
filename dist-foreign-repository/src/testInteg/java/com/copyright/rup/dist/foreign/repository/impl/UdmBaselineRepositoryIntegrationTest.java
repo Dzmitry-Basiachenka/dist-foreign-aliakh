@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
@@ -21,6 +22,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,7 +209,17 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     public void testGetPeriods() {
-        assertEquals(Arrays.asList(202106, 202012, 201906), baselineRepository.findPeriods());
+        assertEquals(Arrays.asList(202106, 202012, 201906, 201512, 201506, 201406, 201006, 200912),
+            baselineRepository.findPeriods());
+    }
+
+    @Test
+    public void testFindNotPopulatedValuesFromBaseline() {
+        assertEquals(loadExpectedValues("json/udm/udm_values_201512.json"),
+            baselineRepository.findNotPopulatedValuesFromBaseline(201512));
+        assertEquals(loadExpectedValues("json/udm/udm_values_201412.json"),
+            baselineRepository.findNotPopulatedValuesFromBaseline(201412));
+        assertTrue(CollectionUtils.isEmpty(baselineRepository.findNotPopulatedValuesFromBaseline(200812)));
     }
 
     private void verifyFilteringFindCountByFilter(Consumer<UdmBaselineFilter> consumer, int count) {
@@ -261,5 +273,17 @@ public class UdmBaselineRepositoryIntegrationTest {
             throw new AssertionError(e);
         }
         return udmBaselineDtos;
+    }
+
+    private List<UdmValue> loadExpectedValues(String fileName) {
+        List<UdmValue> udmValues = new ArrayList<>();
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            udmValues.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UdmValue>>() {
+            }));
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return udmValues;
     }
 }

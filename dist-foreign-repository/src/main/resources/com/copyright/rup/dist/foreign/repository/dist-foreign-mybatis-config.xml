@@ -73,6 +73,7 @@
         <typeAlias alias="UdmBatch" type="com.copyright.rup.dist.foreign.domain.UdmBatch"/>
         <typeAlias alias="UdmUsage" type="com.copyright.rup.dist.foreign.domain.UdmUsage"/>
         <typeAlias alias="UdmUsageDto" type="com.copyright.rup.dist.foreign.domain.UdmUsageDto"/>
+        <typeAlias alias="UdmValue" type="com.copyright.rup.dist.foreign.domain.UdmValue"/>
         <typeAlias alias="UdmBaselineDto" type="com.copyright.rup.dist.foreign.domain.UdmBaselineDto"/>
         <typeAlias alias="UdmValueDto" type="com.copyright.rup.dist.foreign.domain.UdmValueDto"/>
         <typeAlias alias="UdmTouRmsTouPair" type="com.copyright.rup.dist.foreign.repository.impl.UdmTouToRmsTouResultHandler$UdmTouRmsTouPair"/>

@@ -4,6 +4,16 @@
 
 <mapper namespace="IUdmValueMapper">
 
+    <resultMap id="udmValueResultMap" type="UdmValue" extends="StoredEntityMapper.storedEntityResult">
+        <result property="period" column="period"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="standardNumberType" column="standard_number_type"/>
+    </resultMap>
+
     <resultMap id="udmValueDtoResultMap" type="UdmValueDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_udm_value_uid"/>
         <result property="valuePeriod" column="period"/>

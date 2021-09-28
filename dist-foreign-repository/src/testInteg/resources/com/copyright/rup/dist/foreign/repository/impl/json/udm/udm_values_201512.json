@@ -1,0 +1,23 @@
+[
+  {
+    "period": 201512,
+    "rhAccountNumber": 1000002835,
+    "wrWrkInst": 10002508,
+    "systemTitle": "Tenside, surfactants, detergents",
+    "standardNumber": "1873-7773"
+  },
+  {
+    "period": 201512,
+    "rhAccountNumber": 1000002835,
+    "wrWrkInst": 10009596,
+    "systemTitle": "Brand new band",
+    "standardNumber": "7896-1555"
+  },
+  {
+    "period": 201512,
+    "rhAccountNumber": 1000002854,
+    "wrWrkInst": 20008506,
+    "systemTitle": "Colloids and surfaces. B, Biointerfaces",
+    "standardNumber": "1873-2233"
+  }
+]
