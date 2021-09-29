@@ -1,15 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of {@link IUdmValueFilterController}.
@@ -24,6 +30,11 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UdmValueFilterController extends CommonController<IUdmValueFilterWidget>
     implements IUdmValueFilterController {
+
+    @Autowired
+    private IUdmValueService udmValueService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     @Override
     protected IUdmValueFilterWidget instantiateWidget() {
@@ -42,7 +53,16 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
 
     @Override
     public List<Integer> getPeriods() {
-        //todo {aazarenka} will implement later
-        return new ArrayList<>();
+        return udmValueService.getPeriods();
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
+        return udmValueService.getCurrencyCodesToCurrencyNamesMap();
     }
 }
