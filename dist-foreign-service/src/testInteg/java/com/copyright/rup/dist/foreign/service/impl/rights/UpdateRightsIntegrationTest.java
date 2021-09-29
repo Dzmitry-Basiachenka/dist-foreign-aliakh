@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
@@ -9,6 +10,7 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -62,6 +64,8 @@ import java.util.stream.IntStream;
 @Transactional
 public class UpdateRightsIntegrationTest {
 
+    private static final Long RH_ACCOUNT_NUMBER_1 = 1000023401L;
+    private static final Long RH_ACCOUNT_NUMBER_2 = 1000000322L;
     private static final String FAS = "FAS";
     private static final String AACL = "AACL";
     private static final String RH_FOUND_REASON = "Rightsholder account 1000000322 was found in RMS";
@@ -182,6 +186,24 @@ public class UpdateRightsIntegrationTest {
     }
 
     @Test
+    public void testUpdateUdmValuesRights() {
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
+        expectRmsCall("rms_grants_udm_values_122769421_request.json", "rms_grants_udm_values_122769421_response.json");
+        expectRmsCall("rms_grants_udm_values_243618757_request.json", "rms_grants_udm_values_243618757_response.json");
+        expectRmsCall("rms_grants_udm_values_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        expectPrmCall();
+        List<UdmValue> values =
+            Arrays.asList(buildUdmValue(122769421), buildUdmValue(243618757), buildUdmValue(140160102));
+        rightsService.updateUdmValuesRights(values, 202112);
+        assertEquals(RH_ACCOUNT_NUMBER_1, values.get(0).getRhAccountNumber());
+        assertEquals(RH_ACCOUNT_NUMBER_2, values.get(1).getRhAccountNumber());
+        assertNull(values.get(2).getRhAccountNumber());
+        mockServer.verify();
+        asyncMockServer.verify();
+    }
+
+    @Test
     public void testUpdateSalRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
@@ -224,6 +246,12 @@ public class UpdateRightsIntegrationTest {
         usage.setSalUsage(new SalUsage());
         usage.getSalUsage().setBatchPeriodEndDate(LocalDate.of(2020, 6, 30));
         return usage;
+    }
+
+    private UdmValue buildUdmValue(long wrWrkInst) {
+        UdmValue value = new UdmValue();
+        value.setWrWrkInst(wrWrkInst);
+        return value;
     }
 
     private UdmUsage buildUdmUsage(String usageId, long wrWrkInst, String typeOfUse) {

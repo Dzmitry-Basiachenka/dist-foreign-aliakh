@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import java.util.List;
@@ -47,6 +48,14 @@ public interface IRightsService {
      * @param udmUsages list of {@link UdmUsage}s to update
      */
     void updateUdmRights(List<UdmUsage> udmUsages);
+
+    /**
+     * Sends work info to RMS to get grants and updates RH Account Number in given UDM values based on a response.
+     *
+     * @param udmValues list of {@link UdmValue}s to update
+     * @param period    current period
+     */
+    void updateUdmValuesRights(List<UdmValue> udmValues, Integer period);
 
     /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response. Sets usage status

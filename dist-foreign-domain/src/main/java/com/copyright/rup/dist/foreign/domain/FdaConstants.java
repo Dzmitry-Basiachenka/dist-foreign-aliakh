@@ -42,9 +42,14 @@ public final class FdaConstants {
     public static final String ACL_PRODUCT_FAMILY = "ACL";
 
     /**
-     * ACL_UDM product family.
+     * ACL_UDM_USAGE product family.
      */
-    public static final String ACL_UDM_PRODUCT_FAMILY = "ACL_UDM";
+    public static final String ACL_UDM_USAGE_PRODUCT_FAMILY = "ACL_UDM_USAGE";
+
+    /**
+     * ACL_UDM_VALUE product family.
+     */
+    public static final String ACL_UDM_VALUE_PRODUCT_FAMILY = "ACL_UDM_VALUE";
 
     /**
      * SAL product family.
