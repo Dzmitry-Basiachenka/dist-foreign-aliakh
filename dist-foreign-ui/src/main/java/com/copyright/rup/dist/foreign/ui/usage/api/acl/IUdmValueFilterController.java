@@ -18,7 +18,9 @@ import java.util.Map;
 public interface IUdmValueFilterController extends IFilterController<IUdmValueFilterWidget> {
 
     /**
-     * @return list of assignees.
+     * Gets list of assignees from UDM values.
+     *
+     * @return list of assignees
      */
     List<String> getAssignees();
 

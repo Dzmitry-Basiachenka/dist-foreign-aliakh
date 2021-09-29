@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.util.ReflectTools;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +21,12 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 public interface IUdmValueController extends IController<IUdmValueWidget> {
+
+    /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IUdmValueController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
      * Gets all available baseline periods.
@@ -69,4 +78,11 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @param valueIds set of value ids to un-assign
      */
     void unassignValues(Set<String> valueIds);
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 }

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,4 +13,14 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  * @author Aliaksandr Liakh
  */
 public interface IUdmValueFilterWidget extends IFilterWidget<IUdmValueFilterController> {
+
+    /**
+     * @return {@link UdmValueFilter}.
+     */
+    UdmValueFilter getFilter();
+
+    /**
+     * @return applied {@link UdmValueFilter}.
+     */
+    UdmValueFilter getAppliedFilter();    
 }

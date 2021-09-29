@@ -52,4 +52,11 @@ public interface IUdmValueRepository {
      * @param updateUser  user who updates assignee
      */
     void updateAssignee(Set<String> valueIds, String assignee, String updateUser);
+
+    /**
+     * Finds list of assignees from UDM values.
+     *
+     * @return list of assignees
+     */
+    List<String> findAssignees();
 }

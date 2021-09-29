@@ -39,7 +39,6 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private Button applyButton;
     private UdmValueFilter udmValueFilter = new UdmValueFilter();
     private UdmValueFilter appliedUdmValueFilter = new UdmValueFilter();
-    @SuppressWarnings("unused") // TODO remove when the filter is implemented
     private IUdmValueFilterController controller;
 
     /**
@@ -50,7 +49,17 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     public UdmValueFilterWidget(IUdmValueFilterController controller) {
         this.controller = controller;
     }
+    
+    @Override
+    public UdmValueFilter getFilter() {
+        return udmValueFilter;
+    }
 
+    @Override
+    public UdmValueFilter getAppliedFilter() {
+        return appliedUdmValueFilter;
+    }
+    
     @Override
     public void setController(IUdmValueFilterController controller) {
         this.controller = controller;
@@ -67,7 +76,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     @Override
     public void applyFilter() {
-        appliedUdmValueFilter = new UdmValueFilter(appliedUdmValueFilter);
+        appliedUdmValueFilter = new UdmValueFilter(udmValueFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }

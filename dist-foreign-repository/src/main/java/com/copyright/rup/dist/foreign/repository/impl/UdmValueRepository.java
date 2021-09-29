@@ -58,6 +58,11 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
         update("IUdmValueMapper.updateAssignee", parameters);
     }
 
+    @Override
+    public List<String> findAssignees() {
+        return selectList("IUdmValueMapper.findAssignees");
+    }
+
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
         filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));

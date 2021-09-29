@@ -291,6 +291,12 @@ public class UdmValueRepositoryIntegrationTest {
         assertNull(udmValueDto.getAssignee());
     }
 
+    @Test
+    public void testFindAssignees() {
+        assertEquals(Arrays.asList("ajohn@copyright.com", "djohn@copyright.com", "ejohn@copyright.com",
+            "jjohn@copyright.com", "wjohn@copyright.com"), udmValueRepository.findAssignees());
+    }
+
     private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue) {
         assertEquals(expectedValue.getId(), actualValue.getId());
         assertEquals(expectedValue.getValuePeriod(), actualValue.getValuePeriod());
