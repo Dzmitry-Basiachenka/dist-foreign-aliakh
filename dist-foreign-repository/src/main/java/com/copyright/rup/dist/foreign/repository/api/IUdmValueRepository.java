@@ -67,4 +67,11 @@ public interface IUdmValueRepository {
      * @return list of assignees
      */
     List<String> findAssignees();
+
+    /**
+     * Finds list of last value periods from UDM values.
+     *
+     * @return list of last value periods
+     */
+    List<String> findLastValuePeriods();
 }

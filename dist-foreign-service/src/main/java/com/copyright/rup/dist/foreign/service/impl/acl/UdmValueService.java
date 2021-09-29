@@ -86,6 +86,11 @@ public class UdmValueService implements IUdmValueService {
     }
 
     @Override
+    public List<String> getLastValuePeriods() {
+        return udmValueRepository.findLastValuePeriods();
+    }
+
+    @Override
     @Transactional
     public int populateValueBatch(Integer period) {
         List<UdmValue> allNotPopulatedValues = baselineRepository.findNotPopulatedValuesFromBaseline(period);

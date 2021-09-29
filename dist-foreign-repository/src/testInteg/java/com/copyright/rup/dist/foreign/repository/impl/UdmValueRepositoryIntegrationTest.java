@@ -19,7 +19,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
-
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,8 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String UDM_VALUE_UID_5 = "e1cbd88f-7b0f-4f92-b6f4-73faadeb4501";
     private static final String UDM_VALUE_UID_6 = "469e81b1-2e16-481d-a336-89725c6237ce";
     private static final String UDM_VALUE_UID_7 = "5add051a-c4be-475b-9542-e31a05be1eb1";
+    private static final String PERIOD_1 = "201406";
+    private static final String PERIOD_2 = "202106";
     private static final String ASSIGNEE = "jjohn@copyright.com";
     private static final String USER_NAME = "jjohn@copyright.com";
     private static final String SYSTEM_TITLE = "Tenside, surfactants, detergents";
@@ -95,11 +97,11 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     public void testFindCountByAllFilters() {
-        //todo {aliakh} last fields will be added later
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(Collections.singleton(201506));
         filter.setStatus(UdmValueStatusEnum.NEW);
         filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
         filter.setWrWrkInst(306985899L);
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
@@ -121,6 +123,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPeriods(Collections.singleton(201506));
         filter.setStatus(UdmValueStatusEnum.NEW);
         filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
         filter.setWrWrkInst(306985899L);
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
@@ -203,6 +206,22 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindDtosByFilterLastValuePeriods() {
+        assertFilteringFindDtosByFilter(filter -> filter.setLastValuePeriods(Sets.newHashSet(PERIOD_1, PERIOD_2)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastValuePeriods(Collections.singleton(PERIOD_1)),
+            UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastValuePeriods(Collections.singleton(PERIOD_2)),
+            UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name())),
+            UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2);
+    }
+
+    @Test
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))), 3);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
@@ -247,6 +266,20 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType(null, null)), 4);
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("BK", "BOOK")), 1);
         assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT), 4);
+    }
+
+    @Test
+    public void testFindCountByFilterLastValuePeriods() {
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Sets.newHashSet(PERIOD_1, PERIOD_2)), 2);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(PERIOD_1)), 1);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(PERIOD_2)), 1);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name())), 3);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())), 2);
     }
 
     @Test

@@ -8,6 +8,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -16,6 +18,10 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.ValueProvider;
+import com.vaadin.server.SerializablePredicate;
+import com.vaadin.ui.CheckBoxGroup;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +29,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -38,15 +45,20 @@ import java.util.List;
 @PrepareForTest({Windows.class})
 public class LastValuePeriodFilterWidgetTest {
 
-    private static final String LAST_VALUE_PERIOD = "062021";
+    private static final String LAST_VALUE_PERIOD = "202106";
+    private static final String IS_NULL = "IS_NULL";
+    private static final String IS_NOT_NULL = "IS_NOT_NULL";
+
     private final LastValuePeriodFilterWidget lastValuePeriodFilterWidget =
         new LastValuePeriodFilterWidget(() -> Collections.singletonList(LAST_VALUE_PERIOD), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
         List<String> assignees = lastValuePeriodFilterWidget.loadBeans();
-        assertEquals(1, assignees.size());
+        assertEquals(3, assignees.size());
         assertEquals(LAST_VALUE_PERIOD, assignees.get(0));
+        assertEquals(IS_NULL, assignees.get(1));
+        assertEquals(IS_NOT_NULL, assignees.get(2));
     }
 
     @Test
@@ -61,7 +73,7 @@ public class LastValuePeriodFilterWidgetTest {
 
     @Test
     public void testOnSave() {
-        FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
+        FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(LAST_VALUE_PERIOD)).once();
         replay(filterSaveEvent);
         lastValuePeriodFilterWidget.onSave(filterSaveEvent);
@@ -71,10 +83,12 @@ public class LastValuePeriodFilterWidgetTest {
     @Test
     public void testShowFilterWindow() {
         mockStatic(Windows.class);
-        FilterWindow filterWindow = createMock(FilterWindow.class);
+        FilterWindow<String> filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
         expect(Windows.showFilterWindow(eq("Last Value Periods filter"), same(lastValuePeriodFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
+        VerticalLayout verticalLayout = new VerticalLayout(new Panel(), new Panel(new CheckBoxGroup<>()));
+        expect(filterWindow.getContent()).andReturn(verticalLayout).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
@@ -86,5 +100,30 @@ public class LastValuePeriodFilterWidgetTest {
         lastValuePeriodFilterWidget.showFilterWindow();
         assertEquals(Collections.singletonList(LAST_VALUE_PERIOD), providerCapture.getValue().apply(LAST_VALUE_PERIOD));
         verify(filterWindow, Windows.class);
+    }
+
+    @Test
+    public void testSetItemEnabledProvider() {
+        CheckBoxGroup<String> checkBoxGroup = new CheckBoxGroup<>();
+        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, new HashSet<>());
+        SerializablePredicate<String> itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
+        assertTrue(itemEnabledProvider.test(LAST_VALUE_PERIOD));
+        assertTrue(itemEnabledProvider.test(IS_NULL));
+        assertTrue(itemEnabledProvider.test(IS_NOT_NULL));
+        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(LAST_VALUE_PERIOD));
+        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
+        assertTrue(itemEnabledProvider.test(LAST_VALUE_PERIOD));
+        assertFalse(itemEnabledProvider.test(IS_NULL));
+        assertFalse(itemEnabledProvider.test(IS_NOT_NULL));
+        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(IS_NULL));
+        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
+        assertFalse(itemEnabledProvider.test(LAST_VALUE_PERIOD));
+        assertTrue(itemEnabledProvider.test(IS_NULL));
+        assertFalse(itemEnabledProvider.test(IS_NOT_NULL));
+        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(IS_NOT_NULL));
+        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
+        assertFalse(itemEnabledProvider.test(LAST_VALUE_PERIOD));
+        assertFalse(itemEnabledProvider.test(IS_NULL));
+        assertTrue(itemEnabledProvider.test(IS_NOT_NULL));
     }
 }
