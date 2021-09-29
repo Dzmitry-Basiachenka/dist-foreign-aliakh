@@ -225,7 +225,6 @@
         select distinct on (u.wr_wrk_inst)
             #{period} as period,
             u.wr_wrk_inst,
-            u.rh_account_number,
             u.system_title,
             u.standard_number
             <!-- TODO: u.standard_number_type -->

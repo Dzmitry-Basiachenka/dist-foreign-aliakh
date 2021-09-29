@@ -691,4 +691,42 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_age_weight', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-09-28-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-65962 [Value] FDA&UDM: Create and Populate Value batch: add records to df_grant_priority table for ACL_UDM_VALUE and rename ACL_UDM to ACL_UDM_USAGE")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'b3ccd3e3-c96e-449e-8d10-1852b5083bf9')
+            column(name: 'product_family', value: 'ACL_UDM_VALUE')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '0')
+            column(name: 'license_type', value: 'ACL')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'c9515c05-8e7b-40e2-a131-b41321bcae8a')
+            column(name: 'product_family', value: 'ACL_UDM_VALUE')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '1')
+            column(name: 'license_type', value: 'ACL')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'product_family', value: 'ACL_UDM_USAGE')
+            where "product_family = 'ACL_UDM'"
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                where "df_grant_priority_uid in ('b3ccd3e3-c96e-449e-8d10-1852b5083bf9','c9515c05-8e7b-40e2-a131-b41321bcae8a')"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'product_family', value: 'ACL_UDM')
+                where "product_family = 'ACL_UDM_USAGE'"
+            }
+        }
+    }
 }

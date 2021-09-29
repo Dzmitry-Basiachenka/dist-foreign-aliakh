@@ -14,6 +14,7 @@ import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorS
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -213,7 +214,7 @@ public class RightsService implements IRightsService {
     @Transactional
     public void updateUdmRights(List<UdmUsage> udmUsages) {
         if (CollectionUtils.isNotEmpty(udmUsages)) {
-            Set<String> licenseTypes = getLicenseTypes(FdaConstants.ACL_UDM_PRODUCT_FAMILY);
+            Set<String> licenseTypes = getLicenseTypes(FdaConstants.ACL_UDM_USAGE_PRODUCT_FAMILY);
             Map<LocalDate, List<UdmUsage>> periodEndDatesToUdmUsagesMap = udmUsages
                 .stream()
                 .collect(Collectors.groupingBy(UdmUsage::getPeriodEndDate));
@@ -222,8 +223,8 @@ public class RightsService implements IRightsService {
                     .map(UdmUsage::getWrWrkInst)
                     .collect(Collectors.toList());
                 Map<Long, Long> wrWrkInstToRhAccountNumberMap = rmsGrantProcessorService
-                    .getAccountNumbersByWrWrkInsts(wrWrkInsts, periodEndDate, FdaConstants.ACL_UDM_PRODUCT_FAMILY,
-                        productFamilyToRightStatusesMap.get(FdaConstants.ACL_UDM_PRODUCT_FAMILY),
+                    .getAccountNumbersByWrWrkInsts(wrWrkInsts, periodEndDate, FdaConstants.ACL_UDM_USAGE_PRODUCT_FAMILY,
+                        productFamilyToRightStatusesMap.get(FdaConstants.ACL_UDM_USAGE_PRODUCT_FAMILY),
                         Collections.emptySet(), licenseTypes);
                 groupedUdmUsages.forEach(usage -> {
                     Long wrWrkInst = usage.getWrWrkInst();
@@ -241,6 +242,30 @@ public class RightsService implements IRightsService {
                     udmUsageService.updateProcessedUsage(usage);
                 });
             });
+        }
+    }
+
+    @Override
+    public void updateUdmValuesRights(List<UdmValue> udmValues, Integer period) {
+        if (CollectionUtils.isNotEmpty(udmValues)) {
+            Set<String> licenseTypes = getLicenseTypes(FdaConstants.ACL_UDM_VALUE_PRODUCT_FAMILY);
+            LocalDate periodEndDate = buildPeriodEndDateFromPeriod(period);
+            List<Long> wrWrkInsts = udmValues.stream()
+                .map(UdmValue::getWrWrkInst)
+                .collect(Collectors.toList());
+            Map<Long, Long> wrWrkInstToRhAccountNumberMap = rmsGrantProcessorService
+                .getAccountNumbersByWrWrkInsts(wrWrkInsts, periodEndDate, FdaConstants.ACL_UDM_VALUE_PRODUCT_FAMILY,
+                    productFamilyToRightStatusesMap.get(FdaConstants.ACL_UDM_VALUE_PRODUCT_FAMILY),
+                    Collections.emptySet(), licenseTypes);
+            Set<Long> rhAccountNumbers = new HashSet<>();
+            udmValues.forEach(value -> {
+                Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(value.getWrWrkInst());
+                if (Objects.nonNull(rhAccountNumber)) {
+                    rhAccountNumbers.add(rhAccountNumber);
+                    value.setRhAccountNumber(rhAccountNumber);
+                }
+            });
+            rightsholderService.updateRightsholders(rhAccountNumbers);
         }
     }
 
@@ -421,5 +446,11 @@ public class RightsService implements IRightsService {
             throw new RupRuntimeException("The list of usages to update rights contains multiple product families");
         }
         return productFamilies.iterator().next();
+    }
+
+    private LocalDate buildPeriodEndDateFromPeriod(Integer period) {
+        int year = period / 100;
+        int month = period % 100;
+        return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
     }
 }
