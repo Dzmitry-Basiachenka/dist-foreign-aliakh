@@ -1,3 +1,17 @@
+14.1.19
+-
+* B-68259: [Value] FDA & UDM: Assign/Unassign work values for research: add Assignment Menu Bar on values tab
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI to filter Price, Price in USD
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI to filter Last Price Flag, Last Content Flag
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI to filter Comment, Last Price Comment, Last Content Comment
+* B-67687: [Value] FDA&UDM: Value filters (basic filters): implement query to filter values
+* B-69502 FDA: Value filters part 2 (additional filters): implement UI to filter Content
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: implement query to find unpublished values from usages baseline
+* B-67687: [Value] FDA&UDM: Value filters (basic filters): implement service logic to get UDM values by filter
+* B-68259: [Value] FDA & UDM: Assign/Unassign work values for research: implement backend logic to Assign/Unassign work values
+* B-67687: [Value] FDA&UDM: Value filters (basic filters): implement controller logic
+* B-69502 FDA: Value filters part 2 (additional filters): implement backend to filter Assignees
+
 14.1.18
 -
 * B-67687 [Value] FDA & UDM: Value filters (basic filters): implement query and service logic to get value periods
