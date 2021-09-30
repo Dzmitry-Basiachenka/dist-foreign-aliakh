@@ -346,9 +346,10 @@ public class UdmEditUsageWindow extends Window {
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
-            .withValidator(value -> StringUtils.isNotEmpty(value.trim())
-                    || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
-                    || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
+            .withValidator(value -> hasResearcherPermission
+                || StringUtils.isNotEmpty(value.trim())
+                || StringUtils.isNotEmpty(reportedTitleField.getValue().trim())
+                || StringUtils.isNotEmpty(reportedStandardNumberField.getValue().trim()),
                 ForeignUi.getMessage("field.error.work_information_not_found"))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
