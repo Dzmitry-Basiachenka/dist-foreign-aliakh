@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
@@ -17,7 +18,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +73,17 @@ public class UdmValueRepositoryIntegrationTest {
     private IUdmValueRepository udmValueRepository;
 
     @Test
+    public void testInsert() {
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(Collections.singleton(209906));
+        assertEquals(0, udmValueRepository.findCountByFilter(filter));
+        udmValueRepository.insert(buildUdmValue());
+        List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, null);
+        assertEquals(1, values.size());
+        verifyValueDto(loadExpectedValueDto("json/udm/udm_value_dto_94e6d604.json").get(0), values.get(0), false);
+    }
+
+    @Test
     public void testFindPeriods() {
         List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201912, 201506, 201406);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
@@ -122,7 +133,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setComment(COMMENT);
         List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
-        verifyValueDto(loadExpectedValueDto("json/udm/udm_value_dto_dae1b2c9.json").get(0), values.get(0));
+        verifyValueDto(loadExpectedValueDto("json/udm/udm_value_dto_dae1b2c9.json").get(0), values.get(0), true);
     }
 
     @Test
@@ -297,7 +308,7 @@ public class UdmValueRepositoryIntegrationTest {
             "jjohn@copyright.com", "wjohn@copyright.com"), udmValueRepository.findAssignees());
     }
 
-    private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue) {
+    private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue, boolean isValidateDates) {
         assertEquals(expectedValue.getId(), actualValue.getId());
         assertEquals(expectedValue.getValuePeriod(), actualValue.getValuePeriod());
         assertEquals(expectedValue.getStatus(), actualValue.getStatus());
@@ -318,6 +329,12 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
         assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
         assertEquals(expectedValue.getComment(), actualValue.getComment());
+        assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
+        assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
+        if (isValidateDates) {
+            assertEquals(expectedValue.getUpdateDate(), actualValue.getUpdateDate());
+            assertEquals(expectedValue.getCreateDate(), actualValue.getCreateDate());
+        }
     }
 
     private void assertFilteringFindDtosByFilter(Consumer<UdmValueFilter> consumer, String... usageIds) {
@@ -351,6 +368,21 @@ public class UdmValueRepositoryIntegrationTest {
 
     private Sort buildSort() {
         return new Sort("detailId", Sort.Direction.ASC);
+    }
+
+    private UdmValue buildUdmValue() {
+        UdmValue value = new UdmValue();
+        value.setId("94e6d604-e1d6-49a3-bac5-c266793beda8");
+        value.setPeriod(209906);
+        value.setRhAccountNumber(100008622L);
+        value.setStatus(UdmValueStatusEnum.NEW);
+        value.setWrWrkInst(327005896L);
+        value.setStandardNumber("1245-8969");
+        value.setStandardNumberType("ISBN13");
+        value.setSystemTitle("Pink dolphins in real life");
+        value.setUpdateUser(USER_NAME);
+        value.setCreateUser(USER_NAME);
+        return value;
     }
 
     private List<UdmValueDto> loadExpectedValueDto(String fileName) {

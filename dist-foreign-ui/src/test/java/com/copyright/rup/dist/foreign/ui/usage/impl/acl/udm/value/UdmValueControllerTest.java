@@ -137,4 +137,12 @@ public class UdmValueControllerTest {
         controller.unassignValues(valueIds);
         verify(valueService);
     }
+
+    @Test
+    public void testPopulatesValueBatch() {
+        expect(valueService.populateValueBatch(202019)).andReturn(1).once();
+        replay(valueService);
+        assertEquals(1, controller.populatesValueBatch(202019));
+        verify(valueService);
+    }
 }

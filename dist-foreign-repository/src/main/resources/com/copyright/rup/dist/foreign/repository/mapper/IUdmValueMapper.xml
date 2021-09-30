@@ -71,7 +71,11 @@
             content_unit_price,
             content_comment,
             content_flag,
-            comment
+            comment,
+            v.created_datetime,
+            v.updated_datetime,
+            v.created_by_user,
+            v.updated_by_user
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
@@ -295,6 +299,30 @@
             </when>
         </choose>
     </sql>
+
+    <insert id="insert" parameterType="UdmValue">
+        insert into ${schema}.df_udm_value (
+            df_udm_value_uid,
+            period,
+            wr_wrk_inst,
+            rh_account_number,
+            status_ind,
+            system_title,
+            standard_number,
+            standard_number_type,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{period},
+            #{wrWrkInst},
+            #{rhAccountNumber},
+            #{status},
+            #{systemTitle},
+            #{standardNumber},
+            #{standardNumberType},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
 
     <select id="findDtosByFilter" resultMap="udmValueDtoResultMap" parameterType="map"
             fetchSize="${usageSelectFetchSize}">

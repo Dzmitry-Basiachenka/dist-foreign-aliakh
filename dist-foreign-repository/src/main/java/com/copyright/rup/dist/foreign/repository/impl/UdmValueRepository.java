@@ -3,13 +3,13 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,6 +28,11 @@ import java.util.Set;
  */
 @Repository
 public class UdmValueRepository extends BaseRepository implements IUdmValueRepository {
+
+    @Override
+    public void insert(UdmValue value) {
+        insert("IUdmValueMapper.insert", Objects.requireNonNull(value));
+    }
 
     @Override
     public int findCountByFilter(UdmValueFilter filter) {

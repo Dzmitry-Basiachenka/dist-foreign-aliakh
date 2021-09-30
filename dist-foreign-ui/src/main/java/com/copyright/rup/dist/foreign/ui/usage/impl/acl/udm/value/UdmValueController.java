@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
@@ -51,8 +52,7 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
 
     @Override
     public int populatesValueBatch(Integer period) {
-        //TODO: use service logic
-        return 0;
+        return valueService.populateValueBatch(period);
     }
 
     @Override
