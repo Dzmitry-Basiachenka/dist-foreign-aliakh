@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
@@ -18,6 +19,13 @@ import java.util.Set;
  * @author Anton Azarenka
  */
 public interface IUdmValueRepository {
+
+    /**
+     * Inserts UDM Value into database.
+     *
+     * @param value {@link UdmValue} instance
+     */
+    void insert(UdmValue value);
 
     /**
      * Finds values count based on applied filter.
@@ -47,9 +55,9 @@ public interface IUdmValueRepository {
     /**
      * Updates assignee for provided values. Assignee value can be nullable.
      *
-     * @param valueIds    value ids to update
-     * @param assignee    assignee or null
-     * @param updateUser  user who updates assignee
+     * @param valueIds   value ids to update
+     * @param assignee   assignee or null
+     * @param updateUser user who updates assignee
      */
     void updateAssignee(Set<String> valueIds, String assignee, String updateUser);
 

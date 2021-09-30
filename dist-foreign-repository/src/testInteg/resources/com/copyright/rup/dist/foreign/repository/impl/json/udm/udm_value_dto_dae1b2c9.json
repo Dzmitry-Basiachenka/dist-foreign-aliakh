@@ -21,6 +21,10 @@
     "contentUnitPrice": 10.0000000000,
     "contentFlag": false,
     "contentComment": "Content comment",
-    "comment": "Comment"
+    "comment": "Comment",
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com",
+    "createDate": "2021-09-11T00:00:00-04:00",
+    "updateDate": "2021-09-11T00:00:00-04:00"
   }
 ]

@@ -729,4 +729,22 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-09-30-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-65962 [Value] FDA&UDM: Create and Populate Value batch: add primary keys to df_udm_age_weight and df_udm_value")
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_udm_value',
+                columnNames: 'df_udm_value_uid',
+                constraintName: 'pk_df_udm_value_uid')
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_udm_age_weight',
+                columnNames: 'period_prior',
+                constraintName: 'pk_period_prior')
+    }
 }

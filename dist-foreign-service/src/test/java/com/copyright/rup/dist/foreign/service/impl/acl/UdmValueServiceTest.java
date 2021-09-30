@@ -11,10 +11,13 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
 import org.junit.Before;
@@ -45,13 +48,19 @@ public class UdmValueServiceTest {
     private static final String USER_NAME = "user@copyright.com";
 
     private IUdmValueRepository udmValueRepository;
+    private IUdmBaselineRepository udmBaselineRepository;
+    private IRightsService rightsService;
     private IUdmValueService udmValueService;
 
     @Before
     public void setUp() {
         udmValueRepository = createMock(IUdmValueRepository.class);
+        udmBaselineRepository = createMock(IUdmBaselineRepository.class);
+        rightsService = createMock(IRightsService.class);
         udmValueService = new UdmValueService();
         Whitebox.setInternalState(udmValueService, udmValueRepository);
+        Whitebox.setInternalState(udmValueService, udmBaselineRepository);
+        Whitebox.setInternalState(udmValueService, rightsService);
     }
 
     @Test
@@ -111,5 +120,28 @@ public class UdmValueServiceTest {
         replay(udmValueRepository);
         assertEquals(assignees, udmValueService.getAssignees());
         verify(udmValueRepository);
+    }
+
+    @Test
+    public void testPopulateValueBatch() {
+        UdmValue value1 = buildUdmValue(2365985896L);
+        UdmValue value2 = buildUdmValue(3000985896L);
+        List<UdmValue> values = Arrays.asList(value1, value2);
+        expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202012)).andReturn(values).once();
+        rightsService.updateUdmValuesRights(values, 202012);
+        expectLastCall().andAnswer(() -> {
+            values.get(0).setRhAccountNumber(1000002958L);
+            return null;
+        }).once();
+        udmValueRepository.insert(value1);
+        replay(udmBaselineRepository, udmValueRepository, rightsService);
+        assertEquals(1, udmValueService.populateValueBatch(202012));
+        verify(udmBaselineRepository, udmValueRepository, rightsService);
+    }
+
+    private UdmValue buildUdmValue(Long wrWrkInst) {
+        UdmValue value = new UdmValue();
+        value.setWrWrkInst(wrWrkInst);
+        return value;
     }
 }

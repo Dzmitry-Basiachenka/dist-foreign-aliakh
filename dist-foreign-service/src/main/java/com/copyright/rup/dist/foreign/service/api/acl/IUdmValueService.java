@@ -72,4 +72,13 @@ public interface IUdmValueService {
      * @return list of assignees
      */
     List<String> getAssignees();
+
+    /**
+     * Populates value batch for provided period. Gets list of values from usages baseline for given period
+     * and sends them to RMS for getting grants. Inserts granted values into df_udm_values table.
+     *
+     * @param period period of value batch to populate
+     * @return count of populated values
+     */
+    int populateValueBatch(Integer period);
 }

@@ -72,8 +72,10 @@ databaseChangeLog {
             column(name: 'content_unit_price', value: 10.0000000000)
             column(name: 'comment', value: 'Comment')
             column(name: 'content_comment', value: 'Content comment')
-            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
@@ -97,8 +99,10 @@ databaseChangeLog {
             column(name: 'content_unit_price', value: 10.0000000000)
             column(name: 'comment', value: 'Comment')
             column(name: 'content_comment', value: 'Content comment')
-            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
@@ -122,8 +126,10 @@ databaseChangeLog {
             column(name: 'content_unit_price', value: 10.0000000000)
             column(name: 'comment', value: 'Comment')
             column(name: 'content_comment', value: 'Content comment')
-            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
@@ -147,8 +153,10 @@ databaseChangeLog {
             column(name: 'content_unit_price', value: 10.0000000000)
             column(name: 'comment', value: 'Comment')
             column(name: 'content_comment', value: 'Content comment')
-            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
@@ -164,8 +172,10 @@ databaseChangeLog {
             column(name: 'assignee', value: 'ajohn@copyright.com')
             column(name: 'price_year', value: 2021)
             column(name: 'content_unit_price', value: 10.0000000000)
-            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
         //for sorting
