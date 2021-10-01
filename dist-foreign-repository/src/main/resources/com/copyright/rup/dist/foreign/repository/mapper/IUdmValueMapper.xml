@@ -48,6 +48,7 @@
             df_udm_value_uid,
             period,
             assignee,
+            vp.last_value_period,
             v.rh_account_number,
             r.name rh_name,
             wr_wrk_inst,
@@ -79,6 +80,7 @@
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmValueMapper.udmValueLateralJoins"/>
         <include refid="IUdmValueMapper.udmValueFilter"/>
         order by
         <choose>
@@ -98,7 +100,19 @@
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmValueMapper.udmValueLateralJoins"/>
         <include refid="IUdmValueMapper.udmValueFilter"/>
+    </sql>
+
+    <sql id="udmValueLateralJoins">
+        left join lateral (
+            select v2.period as last_value_period
+            from ${schema}.df_udm_value v2
+            where v.wr_wrk_inst = v2.wr_wrk_inst
+                and v.period > v2.period
+            order by v2.period desc
+            limit 1
+        ) vp on true
     </sql>
 
     <sql id="udmValueFilter">
@@ -137,6 +151,18 @@
                         and v.publication_type_uid is null
                     </otherwise>
                 </choose>
+            </if>
+            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and !filter.lastValuePeriods.contains('IS_NULL') and !filter.lastValuePeriods.contains('IS_NOT_NULL')">
+                and
+                <foreach collection="filter.lastValuePeriods" item="lastValuePeriod" open="(" separator=" or " close=")">
+                    last_value_period::text = #{lastValuePeriod}
+                </foreach>
+            </if>
+            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and filter.lastValuePeriods.contains('IS_NULL')">
+                and last_value_period is null
+            </if>
+            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and filter.lastValuePeriods.contains('IS_NOT_NULL')">
+                and last_value_period is not null
             </if>
             <if test="null != filter.wrWrkInst">
                 and v.wr_wrk_inst = #{filter.wrWrkInst}
@@ -369,5 +395,20 @@
         from ${schema}.df_udm_value
         where assignee is not null
         order by assignee
+    </select>
+
+    <select id="findLastValuePeriods" resultType="string">
+        select distinct vp.last_value_period
+        from ${schema}.df_udm_value v
+        left join lateral (
+            select v2.period as last_value_period
+            from ${schema}.df_udm_value v2
+            where v.wr_wrk_inst = v2.wr_wrk_inst
+                and v.period > v2.period
+            order by v2.period desc
+            limit 1
+        ) vp on true
+        where vp.last_value_period is not null
+        order by vp.last_value_period
     </select>
 </mapper>

@@ -68,6 +68,11 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
         return selectList("IUdmValueMapper.findAssignees");
     }
 
+    @Override
+    public List<String> findLastValuePeriods() {
+        return selectList("IUdmValueMapper.findLastValuePeriods");
+    }
+
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
         filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));

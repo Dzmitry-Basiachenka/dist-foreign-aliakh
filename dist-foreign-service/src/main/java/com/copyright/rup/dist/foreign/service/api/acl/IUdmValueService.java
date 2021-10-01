@@ -74,6 +74,13 @@ public interface IUdmValueService {
     List<String> getAssignees();
 
     /**
+     * Gets list of last value periods from UDM values.
+     *
+     * @return list of last value periods
+     */
+    List<String> getLastValuePeriods();
+
+    /**
      * Populates value batch for provided period. Gets list of values from usages baseline for given period
      * and sends them to RMS for getting grants. Inserts granted values into df_udm_values table.
      *
