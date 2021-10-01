@@ -1,3 +1,12 @@
+14.1.20
+-
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: implement query to find unpublished values from usages baseline
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: implement logic to insert values into db
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: adjust query that finds not populated values
+* B-67687: [Value] FDA&UDM: Value filters (basic filters): adjust UI fields on UDM filter values and implement filter validator
+* CDP-1013: FDA: Edit UDM usages Researcher role: Wr Wrk Inst field becomes mandatory while editing WORK_NOT_FOUND usages
+* B-69502 FDA: Value filters part 2 (additional filters): implement backend to filter Last Value Periods by dates
+
 14.1.19
 -
 * B-68259: [Value] FDA & UDM: Assign/Unassign work values for research: add Assignment Menu Bar on values tab
