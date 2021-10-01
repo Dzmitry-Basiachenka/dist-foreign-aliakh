@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -11,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -31,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,11 +53,15 @@ public class UdmValueFilterWidgetTest {
         new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE));
+    private static final Map<String, String> CURRENCIES = ImmutableMap.of("USD", "United States Dollar");
     private UdmValueFilterWidget widget;
+    private IUdmValueFilterController controller;
 
     @Before
     public void setUp() {
-        IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
+        controller = createMock(IUdmValueFilterController.class);
+        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCIES).once();
+        replay(controller);
         widget = new UdmValueFilterWidget(controller);
         widget.setController(controller);
     }
@@ -64,6 +73,7 @@ public class UdmValueFilterWidgetTest {
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
+        verify(controller);
     }
 
     private void verifyFiltersLayout(Component layout) {

@@ -1,10 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -12,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
@@ -25,12 +30,14 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -65,8 +72,6 @@ public class UdmValueFiltersWindowTest {
     private static final BigDecimal CONTENT = new BigDecimal("70");
     private static final String LAST_CONTENT_FLAG = "N";
     private static final String LAST_CONTENT_COMMENT = "last content comment";
-    private static final String PUB_TYPE = "BK";
-    private static final String LAST_PUB_TYPE = "BK2";
     private static final String COMMENT = "comment";
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
@@ -81,8 +86,13 @@ public class UdmValueFiltersWindowTest {
 
     @Before
     public void setUp() {
-        window = new UdmValueFiltersWindow(createMock(IUdmValueFilterController.class), new UdmValueFilter());
+        IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
+        expect(controller.getPublicationTypes()).andReturn(
+            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
+        replay(controller);
+        window = new UdmValueFiltersWindow(controller, new UdmValueFilter());
         binder = Whitebox.getInternalState(window, "filterBinder");
+        verify(controller);
     }
 
     @Test
@@ -113,10 +123,15 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
         valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
-        valueFilter.setPubType(PUB_TYPE);
-        valueFilter.setLastPubType(LAST_PUB_TYPE);
+        valueFilter.setPubType(buildPublicationType());
+        valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setComment(COMMENT);
-        window = new UdmValueFiltersWindow(createMock(IUdmValueFilterController.class), valueFilter);
+        IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
+        expect(controller.getPublicationTypes()).andReturn(
+            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
+        replay(controller);
+        window = new UdmValueFiltersWindow(controller, valueFilter);
+        verify(controller);
         verifyFiltersData();
     }
 
@@ -376,8 +391,8 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
         valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
-        valueFilter.setPubType(PUB_TYPE);
-        valueFilter.setLastPubType(LAST_PUB_TYPE);
+        valueFilter.setPubType(buildPublicationType());
+        valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setComment(COMMENT);
         return valueFilter;
     }
@@ -404,8 +419,8 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastContentFlagComboBox", LAST_CONTENT_FLAG);
         assertTextFieldValue("lastContentCommentField", LAST_CONTENT_COMMENT);
-        assertComboBoxValue("pubTypeComboBox", PUB_TYPE);
-        assertComboBoxValue("lastPubTypeComboBox", LAST_PUB_TYPE);
+        assertComboBoxValue("pubTypeComboBox", buildPublicationType());
+        assertComboBoxValue("lastPubTypeComboBox", buildPublicationType());
         assertTextFieldValue("commentField", COMMENT);
     }
 
@@ -461,8 +476,8 @@ public class UdmValueFiltersWindowTest {
         populateComboBox("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("lastContentFlagComboBox", LAST_CONTENT_FLAG);
         populateTextField("lastContentCommentField", LAST_CONTENT_COMMENT);
-        populateComboBox("pubTypeComboBox", PUB_TYPE);
-        populateComboBox("lastPubTypeComboBox", LAST_PUB_TYPE);
+        populateComboBox("pubTypeComboBox", buildPublicationType());
+        populateComboBox("lastPubTypeComboBox", buildPublicationType());
         populateTextField("commentField", COMMENT);
     }
 
@@ -489,5 +504,12 @@ public class UdmValueFiltersWindowTest {
 
     private String buildStringWithExpectedLength(int length) {
         return StringUtils.repeat('a', length);
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName("BK");
+        publicationType.setDescription("Book");
+        return publicationType;
     }
 }

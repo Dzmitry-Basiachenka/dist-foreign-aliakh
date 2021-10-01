@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,8 +195,9 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 20, null)), UDM_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, 20, null)), UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(null), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType(null, null)), UDM_VALUE_UID_1,
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("BK", "BOOK")), UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
             UDM_VALUE_UID_3, UDM_VALUE_UID_4);
     }
@@ -241,7 +244,8 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20, null)), 1);
         assertFilteringFindCountByFilter(
             filter -> filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.IS_NULL, 20, null)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setPubType(null), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType(null, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("BK", "BOOK")), 1);
         assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT), 4);
     }
 
@@ -395,5 +399,12 @@ public class UdmValueRepositoryIntegrationTest {
             throw new AssertionError(e);
         }
         return udmUsageDtos;
+    }
+
+    private PublicationType createPubType(String name, String description) {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName(name);
+        publicationType.setDescription(description);
+        return publicationType;
     }
 }
