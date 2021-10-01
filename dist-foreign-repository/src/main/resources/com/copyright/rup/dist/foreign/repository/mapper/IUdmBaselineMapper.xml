@@ -211,8 +211,14 @@
     </select>
 
     <select id="findNotPopulatedValuesFromBaseline" resultMap="IUdmValueMapper.udmValueResultMap">
+        <!-- Selects works from current period -->
+        with current_period_works as (
+            select wr_wrk_inst
+            from ${schema}.df_udm_value
+            where period = #{period}
+        ),
         <!-- Selects periods with age weight greater than zero -->
-        with prior_periods as (
+        prior_periods as (
             select periods.period
             from generate_series(1, (select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0)) i
             cross join lateral (
@@ -232,7 +238,10 @@
         left join ${schema}.df_udm_value v on v.wr_wrk_inst = u.wr_wrk_inst
         where (u.period = #{period} or u.period in (select period from prior_periods))
             and u.is_baseline_flag = true
-            and (v.wr_wrk_inst is null or (u.period = #{period} and v.period != #{period}))
+            <!-- work is absent in df_udm_value table -->
+            and (v.wr_wrk_inst is null
+                <!-- work from current period hasn't been populated yet -->
+                or (u.period = #{period} and u.wr_wrk_inst not in (select * from current_period_works)))
         order by u.wr_wrk_inst, u.period desc
     </select>
 </mapper>
