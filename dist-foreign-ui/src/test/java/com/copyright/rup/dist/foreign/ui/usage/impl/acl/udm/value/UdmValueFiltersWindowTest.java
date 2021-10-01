@@ -59,7 +59,7 @@ public class UdmValueFiltersWindowTest {
     private static final String UNCHECKED = "unchecked";
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String ASSIGNEE = "wjohn@copyright.com";
-    private static final String LAST_VALUE_PERIOD = "062021";
+    private static final String LAST_VALUE_PERIOD = "202106";
     private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
     private static final String SYSTEM_STANDARD_NUMBER = "0927-7765";

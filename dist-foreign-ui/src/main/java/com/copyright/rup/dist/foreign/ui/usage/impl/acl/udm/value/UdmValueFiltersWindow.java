@@ -363,15 +363,18 @@ public class UdmValueFiltersWindow extends Window {
                                          Function<UdmValueFilter, FilterExpression<?>> expressionFunction) {
         FilterExpression<?> filterExpression = expressionFunction.apply(valueFilter);
         Object fieldValue = filterExpression.getFieldFirstValue();
+        FilterOperatorEnum filterOperator = filterExpression.getOperator();
         if (Objects.nonNull(fieldValue)) {
-            FilterOperatorEnum filterOperator = filterExpression.getOperator();
             textField.setValue(fieldValue.toString());
+            comboBox.setSelectedItem(filterOperator);
+        } else if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
+            textField.setEnabled(false);
             comboBox.setSelectedItem(filterOperator);
         }
     }
 
-    private void updateOperatorField(TextField textField, FilterOperatorEnum value) {
-        if (FilterOperatorEnum.IS_NULL == value) {
+    private void updateOperatorField(TextField textField, FilterOperatorEnum filterOperator) {
+        if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
             textField.clear();
             textField.setEnabled(false);
         } else {
@@ -487,6 +490,8 @@ public class UdmValueFiltersWindow extends Window {
         FilterExpression<T> filterExpression = new FilterExpression<>();
         if (StringUtils.isNotEmpty(textField.getValue())) {
             filterExpression.setFieldFirstValue(valueConverter.apply(textField.getValue().trim()));
+            filterExpression.setOperator(comboBox.getValue());
+        } else if (0 == comboBox.getValue().getArgumentsNumber()) {
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
