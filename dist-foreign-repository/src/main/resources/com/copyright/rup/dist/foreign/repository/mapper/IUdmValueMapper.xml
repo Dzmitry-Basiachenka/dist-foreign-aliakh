@@ -113,7 +113,14 @@
                 and v.status_ind = #{filter.status}
             </if>
             <if test="null != filter.currency">
-                and v.currency = #{filter.currency}
+                <choose>
+                    <when test="null != filter.currency.code">
+                        and v.currency = #{filter.currency.code}
+                    </when>
+                    <otherwise>
+                        and v.currency is null
+                    </otherwise>
+                </choose>
             </if>
             <if test="null != filter.assignees and filter.assignees.size() > 0">
                 and
@@ -121,14 +128,21 @@
                     v.assignee = #{assignee}
                 </foreach>
             </if>
+            <if test="null != filter.pubType">
+                <choose>
+                    <when test="null != filter.pubType.name">
+                        and pt.name = #{filter.pubType.name}
+                    </when>
+                    <otherwise>
+                        and v.publication_type_uid is null
+                    </otherwise>
+                </choose>
+            </if>
             <if test="null != filter.wrWrkInst">
                 and v.wr_wrk_inst = #{filter.wrWrkInst}
             </if>
             <if test="null != filter.rhAccountNumber">
                 and v.rh_account_number = #{filter.rhAccountNumber}
-            </if>
-            <if test="null != filter.pubType">
-                and pt.name = #{filter.pubType}
             </if>
             <if test="null != filter.comment">
                 and v.comment ilike '%' || #{filter.comment} || '%'
@@ -343,8 +357,8 @@
         update ${schema}.df_udm_value
         set
             assignee = #{assignee},
-        <include refid="StoredEntityMapper.update"/>
-            where df_udm_value_uid in
+            <include refid="StoredEntityMapper.update"/>
+        where df_udm_value_uid in
             <foreach collection="valueIds" item="valueId" open="(" separator="," close=")">
                 #{valueId}
             </foreach>

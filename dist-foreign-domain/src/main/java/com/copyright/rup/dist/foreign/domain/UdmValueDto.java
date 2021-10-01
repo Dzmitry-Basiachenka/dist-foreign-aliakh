@@ -43,7 +43,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private Integer priceYear;
     private String priceComment;
     private BigDecimal priceInUsd;
-    private String priceFlag;
+    private boolean priceFlag;
     private BigDecimal currencyExchangeRate;
     private LocalDate currencyExchangeRateDate;
     private String lastContent;
@@ -240,11 +240,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.priceInUsd = priceInUsd;
     }
 
-    public String getPriceFlag() {
+    public boolean isPriceFlag() {
         return priceFlag;
     }
 
-    public void setPriceFlag(String priceFlag) {
+    public void setPriceFlag(boolean priceFlag) {
         this.priceFlag = priceFlag;
     }
 

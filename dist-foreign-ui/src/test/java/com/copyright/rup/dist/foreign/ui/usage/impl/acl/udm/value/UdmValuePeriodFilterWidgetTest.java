@@ -75,7 +75,7 @@ public class UdmValuePeriodFilterWidgetTest {
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<Integer, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Period filter"), same(valuePeriodFilterWidget),
+        expect(Windows.showFilterWindow(eq("Periods filter"), same(valuePeriodFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();

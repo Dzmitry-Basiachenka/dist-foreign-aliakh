@@ -249,7 +249,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getPriceYear, "table.column.price_year", "priceYear", 100),
             addColumn(UdmValueDto::getPriceComment, "table.column.price_comment", "priceComment", 120),
             addAmountColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
-            addColumn(UdmValueDto::getPriceFlag, "table.column.price_flag", "priceFlag", 100),
+            addColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
             addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 200),
             addColumn(value -> getStringFromLocalDate(value.getCurrencyExchangeRateDate()),

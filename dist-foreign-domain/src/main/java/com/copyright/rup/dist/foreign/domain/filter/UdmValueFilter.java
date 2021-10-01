@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.filter;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,7 +25,7 @@ public class UdmValueFilter {
 
     private Set<Integer> periods = new HashSet<>();
     private UdmValueStatusEnum status;
-    private String currency;
+    private Currency currency;
     private Set<String> assignees = new HashSet<>();
     private Set<String> lastValuePeriods = new HashSet<>();
     private Long wrWrkInst;
@@ -38,8 +40,8 @@ public class UdmValueFilter {
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private String lastContentFlag;
     private String lastContentComment;
-    private String pubType;
-    private String lastPubType;
+    private PublicationType pubType;
+    private PublicationType lastPubType;
     private String comment;
 
     /**
@@ -94,11 +96,11 @@ public class UdmValueFilter {
         this.status = status;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -214,19 +216,19 @@ public class UdmValueFilter {
         this.lastContentComment = lastContentComment;
     }
 
-    public String getPubType() {
+    public PublicationType getPubType() {
         return pubType;
     }
 
-    public void setPubType(String pubType) {
+    public void setPubType(PublicationType pubType) {
         this.pubType = pubType;
     }
 
-    public String getLastPubType() {
+    public PublicationType getLastPubType() {
         return lastPubType;
     }
 
-    public void setLastPubType(String lastPubType) {
+    public void setLastPubType(PublicationType lastPubType) {
         this.lastPubType = lastPubType;
     }
 
