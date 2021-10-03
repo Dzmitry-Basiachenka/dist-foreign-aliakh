@@ -22,8 +22,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +35,6 @@ import java.util.stream.Collectors;
  */
 public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFilterWidget {
 
-    private static final String NULL_VALUE = "NULL";
     private ComboBox<UdmValueStatusEnum> statusComboBox;
     private ComboBox<Currency> currencyComboBox;
     private Button moreFiltersButton;
@@ -135,10 +132,13 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     private void initCurrencyFilter() {
         currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
-        currencyComboBox.setItems(getCurrencies());
-        currencyComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getCode())
-            ? String.format("%s - %s", value.getCode(), value.getDescription())
-            : NULL_VALUE);
+        currencyComboBox.setItems(controller.getCurrencyCodesToCurrencyNamesMap()
+            .entrySet()
+            .stream()
+            .map(currency -> new Currency(currency.getKey(), currency.getValue()))
+            .collect(Collectors.toList()));
+        currencyComboBox.setItemCaptionGenerator(
+            value -> String.format("%s - %s", value.getCode(), value.getDescription()));
         currencyComboBox.addValueChangeListener(event -> {
             udmValueFilter.setCurrency(currencyComboBox.getValue());
             filterChanged();
@@ -149,7 +149,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     private void initStatusFilter() {
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"));
-        statusComboBox.setPopupWidth("250px");
+        statusComboBox.setPopupWidth("220px");
         statusComboBox.setItems(new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE)));
@@ -190,15 +190,5 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
-    }
-
-    private List<Currency> getCurrencies() {
-        List<Currency> currencies = controller.getCurrencyCodesToCurrencyNamesMap()
-            .entrySet()
-            .stream()
-            .map(curency -> new Currency(curency.getKey(), curency.getValue()))
-            .collect(Collectors.toList());
-        currencies.add(0, new Currency(null, null));
-        return currencies;
     }
 }

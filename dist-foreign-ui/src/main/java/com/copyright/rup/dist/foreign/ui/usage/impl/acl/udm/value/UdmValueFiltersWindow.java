@@ -146,8 +146,8 @@ public class UdmValueFiltersWindow extends Window {
     private TextField initWrWrkInstLayout() {
         filterBinder.forField(wrWrkInstField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
+            .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
+            .withConverter(new StringToLongConverter(ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE)))
             .bind(UdmValueFilter::getWrWrkInst, UdmValueFilter::setWrWrkInst);
         wrWrkInstField.setValue(
             Objects.nonNull(valueFilter.getWrWrkInst()) ? valueFilter.getWrWrkInst().toString() : StringUtils.EMPTY);
@@ -199,8 +199,8 @@ public class UdmValueFiltersWindow extends Window {
     private TextField initRhAccountNumberLayout() {
         filterBinder.forField(rhAccountNumberField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
+            .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
+            .withConverter(new StringToLongConverter(ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE)))
             .bind(UdmValueFilter::getRhAccountNumber, UdmValueFilter::setRhAccountNumber);
         rhAccountNumberField.setValue(Objects.nonNull(valueFilter.getRhAccountNumber())
             ? valueFilter.getRhAccountNumber().toString() : StringUtils.EMPTY);
@@ -326,6 +326,7 @@ public class UdmValueFiltersWindow extends Window {
         pubTypeComboBox.setSelectedItem(valueFilter.getPubType());
         pubTypeComboBox.setSizeFull();
         lastPubTypeComboBox.setItems(publicationTypes);
+        lastPubTypeComboBox.setPageLength(12);
         lastPubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
             ? String.format("%s - %s", value.getName(), value.getDescription())
             : NULL_VALUE);

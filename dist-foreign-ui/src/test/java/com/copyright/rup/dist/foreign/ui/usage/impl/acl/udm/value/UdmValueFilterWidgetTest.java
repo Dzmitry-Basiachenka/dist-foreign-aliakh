@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -35,8 +36,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmValueFilterWidget}.
@@ -53,14 +56,38 @@ public class UdmValueFilterWidgetTest {
         new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE));
-    private static final Map<String, String> CURRENCIES = ImmutableMap.of("USD", "United States Dollar");
+    private static final List<Currency> CURRENCIES =
+        Arrays.asList(new Currency("USD", "US Dollar"), new Currency("AUD", "Australian Dollar"),
+            new Currency("CAD", "Canadian Dollar"), new Currency("EUR", "Euro"), new Currency("GBP", "Pound Sterling"),
+            new Currency("JPY", "Yen"), new Currency("BRL", "Brazilian Real"), new Currency("CNY", "Yuan Renminbi"),
+            new Currency("CZK", "Czech Koruna"), new Currency("DKK", "Danish Krone"),
+            new Currency("NZD", "New Zealand Dollar"), new Currency("NOK", "Norwegian Kron"),
+            new Currency("ZAR", "Rand"), new Currency("CHF", "Swiss Franc"), new Currency("INR", "Indian Rupee"));
+    private static final Map<String, String> CURRENCY_CODES_TO_CURRENCY_NAMES_MAP =
+        ImmutableMap.<String, String>builder()
+            .put("USD", "US Dollar")
+            .put("AUD", "Australian Dollar")
+            .put("CAD", "Canadian Dollar")
+            .put("EUR", "Euro")
+            .put("GBP", "Pound Sterling")
+            .put("JPY", "Yen")
+            .put("BRL", "Brazilian Real")
+            .put("CNY", "Yuan Renminbi")
+            .put("CZK", "Czech Koruna")
+            .put("DKK", "Danish Krone")
+            .put("NZD", "New Zealand Dollar")
+            .put("NOK", "Norwegian Kron")
+            .put("ZAR", "Rand")
+            .put("CHF", "Swiss Franc")
+            .put("INR", "Indian Rupee")
+            .build();
     private UdmValueFilterWidget widget;
     private IUdmValueFilterController controller;
 
     @Before
     public void setUp() {
         controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCIES).once();
+        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP).once();
         replay(controller);
         widget = new UdmValueFilterWidget(controller);
         widget.setController(controller);
@@ -101,12 +128,18 @@ public class UdmValueFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
+    @SuppressWarnings("unchecked")
     private void verifyCurrencyComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Currency", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
+        ListDataProvider<Currency> listDataProvider =
+            (ListDataProvider<Currency>) comboBox.getDataProvider();
+        Object[] items = listDataProvider.getItems().toArray();
+        assertEquals(CURRENCIES.size(), items.length);
+        IntStream.range(0, CURRENCIES.size()).forEach(i -> verifyCurrencies(CURRENCIES.get(i), (Currency) items[i]));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -121,6 +154,7 @@ public class UdmValueFilterWidgetTest {
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
+        assertEquals("220px", comboBox.getPopupWidth());
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
         ListDataProvider<UdmValueStatusEnum> listDataProvider =
             (ListDataProvider<UdmValueStatusEnum>) comboBox.getDataProvider();
@@ -157,5 +191,10 @@ public class UdmValueFilterWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(1, listeners.size());
         assertNotNull(listeners.iterator().next());
+    }
+
+    private void verifyCurrencies(Currency expectedCurrency, Currency actualCurrency) {
+        assertEquals(expectedCurrency.getCode(), actualCurrency.getCode());
+        assertEquals(expectedCurrency.getDescription(), actualCurrency.getDescription());
     }
 }

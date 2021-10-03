@@ -5,11 +5,13 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -76,6 +78,18 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
         filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
+        filterCopy.setSystemTitleExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
+        filterCopy.setSystemStandardNumberExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemStandardNumberExpression()));
+        filterCopy.setRhNameExpression(setEscapeSqlLikePatternForFilterExpression(filterCopy.getRhNameExpression()));
         return filterCopy;
+    }
+
+    private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
+        FilterExpression<String> filterExpression) {
+        String firstValue = escapeSqlLikePattern(filterExpression.getFieldFirstValue());
+        filterExpression.setFieldFirstValue(firstValue);
+        return filterExpression;
     }
 }

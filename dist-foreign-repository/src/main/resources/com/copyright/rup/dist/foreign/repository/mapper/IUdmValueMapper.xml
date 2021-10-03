@@ -127,14 +127,9 @@
                 and v.status_ind = #{filter.status}
             </if>
             <if test="null != filter.currency">
-                <choose>
-                    <when test="null != filter.currency.code">
-                        and v.currency = #{filter.currency.code}
-                    </when>
-                    <otherwise>
-                        and v.currency is null
-                    </otherwise>
-                </choose>
+                <if test="null != filter.currency.code">
+                    and v.currency = #{filter.currency.code}
+                </if>
             </if>
             <if test="null != filter.assignees and filter.assignees.size() > 0">
                 and
@@ -174,28 +169,34 @@
                 and v.comment ilike '%' || #{filter.comment} || '%'
             </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
-                    <property name="column" value="v.system_title"/>
-                    <property name="operator" value="filter.systemTitleExpression.operator"/>
-                    <property name="fieldFirstValue" value="${filter.systemTitleExpression.fieldFirstValue}"/>
-                    <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
-                </include>
+                <choose>
+                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemStandardNumberExpression.operator">
+                        and v.system_title = #{filter.systemTitleExpression.fieldFirstValue}
+                    </when>
+                    <otherwise>
+                        and v.system_title ilike '%' || #{filter.systemTitleExpression.fieldFirstValue} || '%'
+                    </otherwise>
+                </choose>
             </if>
             <if test="!filter.systemStandardNumberExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
-                    <property name="column" value="v.standard_number"/>
-                    <property name="operator" value="filter.systemStandardNumberExpression.operator"/>
-                    <property name="fieldFirstValue" value="${filter.systemStandardNumberExpression.fieldFirstValue}"/>
-                    <property name="fieldSecondValue" value="${filter.systemStandardNumberExpression.fieldSecondValue}"/>
-                </include>
+                <choose>
+                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemStandardNumberExpression.operator">
+                        and v.standard_number = #{filter.systemStandardNumberExpression.fieldFirstValue}
+                    </when>
+                    <otherwise>
+                        and v.standard_number ilike '%' || #{filter.systemStandardNumberExpression.fieldFirstValue} || '%'
+                    </otherwise>
+                </choose>
             </if>
             <if test="!filter.rhNameExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
-                    <property name="column" value="r.name"/>
-                    <property name="operator" value="filter.rhNameExpression.operator"/>
-                    <property name="fieldFirstValue" value="${filter.rhNameExpression.fieldFirstValue}"/>
-                    <property name="fieldSecondValue" value="${filter.rhNameExpression.fieldSecondValue}"/>
-                </include>
+                <choose>
+                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.rhNameExpression.operator">
+                        and r.name = #{filter.rhNameExpression.fieldFirstValue}
+                    </when>
+                    <otherwise>
+                        and r.name ilike '%' || #{filter.rhNameExpression.fieldFirstValue} || '%'
+                    </otherwise>
+                </choose>
             </if>
             <if test="!filter.priceExpression.isEmpty()">
                 <include refid="IUdmValueMapper.filterExpression">
@@ -248,9 +249,6 @@
         </if>
         <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NOT_NULL == ${operator}">
             and ${column} is not null
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@CONTAINS == ${operator}">
-            and ${column} ilike '%' || '${fieldFirstValue}' || '%'
         </if>
     </sql>
 

@@ -186,6 +186,53 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testWrWrkInstValidation() {
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        verifyTextFieldValidationMessage(wrWrkInstField, "123456789", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890", "Field value should not exceed 9 digits", false);
+        verifyTextFieldValidationMessage(wrWrkInstField, "123456789", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(wrWrkInstField, "234fdsfs", "Field value should contain numeric values only",
+            false);
+    }
+
+    @Test
+    public void testSystemTitleFieldValidation() {
+        TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
+        verifyTextFieldValidationMessage(
+            systemTitleField, buildStringWithExpectedLength(2000), StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(systemTitleField, buildStringWithExpectedLength(2001),
+            "Field value should not exceed 2000 characters", false);
+    }
+
+    @Test
+    public void testStandardNumberFieldValidation() {
+        TextField systemStandardNumberField = Whitebox.getInternalState(window, "systemStandardNumberField");
+        verifyTextFieldValidationMessage(systemStandardNumberField, buildStringWithExpectedLength(1000),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(systemStandardNumberField, buildStringWithExpectedLength(1001),
+            "Field value should not exceed 1000 characters", false);
+    }
+
+    @Test
+    public void testRhAccountNumberFieldValidation() {
+        TextField rhAccountNumberField = Whitebox.getInternalState(window, "rhAccountNumberField");
+        verifyTextFieldValidationMessage(rhAccountNumberField, "1234567897", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(
+            rhAccountNumberField, "21234567897", "Field value should not exceed 10 digits", false);
+        verifyTextFieldValidationMessage(rhAccountNumberField, "1234567891", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(rhAccountNumberField, "234fdsfs",
+            "Field value should contain numeric values only", false);
+    }
+
+    @Test
+    public void testRhNameValidation() {
+        TextField rhNameField = Whitebox.getInternalState(window, "rhNameField");
+        verifyTextFieldValidationMessage(rhNameField, buildStringWithExpectedLength(255), StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(rhNameField, buildStringWithExpectedLength(256),
+            "Field value should not exceed 255 characters", false);
+    }
+
+    @Test
     public void testPriceValidation() {
         TextField priceField = Whitebox.getInternalState(window, "priceField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
