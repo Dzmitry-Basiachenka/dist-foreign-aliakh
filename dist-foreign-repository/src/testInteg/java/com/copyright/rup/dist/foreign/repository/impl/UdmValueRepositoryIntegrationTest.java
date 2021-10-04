@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,8 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String ASSIGNEE = "jjohn@copyright.com";
     private static final String USER_NAME = "jjohn@copyright.com";
     private static final String SYSTEM_TITLE = "Tenside, surfactants, detergents";
+    private static final String SYSTEM_TITLE_WITH_METASYMBOLS =
+        "Colloids and  libero !@#$%^&*()_+-=?/'\"}{][<>convallis. B, Biointerfaces";
     private static final String STANDARD_NUMBER = "1873-7773";
     private static final String RH_NAME_PART = "John Wiley";
     private static final String COMMENT = "Comment";
@@ -147,6 +151,8 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
             UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
+            UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(
             filter -> filter.setAssignees(new HashSet<>(Arrays.asList("wjohn@copyright.com", "ajohn@copyright.com"))),
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
@@ -154,6 +160,8 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), UDM_VALUE_UID_2, UDM_VALUE_UID_3,
             UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), UDM_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Tenside", null)), UDM_VALUE_UID_2, UDM_VALUE_UID_3,
             UDM_VALUE_UID_4);
@@ -225,11 +233,14 @@ public class UdmValueRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))), 3);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(new HashSet<>(
             Arrays.asList("wjohn@copyright.com", "ajohn@copyright.com"))), 3);
         assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(306985899L), 2);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Tenside", null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumber(1000002859L), 5);
