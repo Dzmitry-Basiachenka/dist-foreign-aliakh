@@ -14,37 +14,52 @@ public enum FilterOperatorEnum {
     /**
      * 'Equals' filter operator.
      */
-    EQUALS,
+    EQUALS(1),
     /**
      * 'Greater than' filter operator.
      */
-    GREATER_THAN,
+    GREATER_THAN(1),
     /**
      * 'Greater than or equals to' filter operator.
      */
-    GREATER_THAN_OR_EQUALS_TO,
+    GREATER_THAN_OR_EQUALS_TO(1),
     /**
      * 'Less than' filter operator.
      */
-    LESS_THAN,
+    LESS_THAN(1),
     /**
      * 'Less than or equals to' filter operator.
      */
-    LESS_THAN_OR_EQUALS_TO,
+    LESS_THAN_OR_EQUALS_TO(1),
     /**
      * 'Between' filter operator.
      */
-    BETWEEN,
+    BETWEEN(2),
     /**
      * 'Is NULL' filter operator.
      */
-    IS_NULL,
+    IS_NULL(0),
     /**
      * 'Is not NULL' filter operator.
      */
-    IS_NOT_NULL,
+    IS_NOT_NULL(0),
     /**
      * Contains filter operator.
      */
-    CONTAINS
+    CONTAINS(1);
+
+    private final int argumentsNumber;
+
+    /**
+     * Constructor.
+     *
+     * @param argumentsNumber arguments number.
+     */
+    FilterOperatorEnum(int argumentsNumber) {
+        this.argumentsNumber = argumentsNumber;
+    }
+
+    public int getArgumentsNumber() {
+        return argumentsNumber;
+    }
 }

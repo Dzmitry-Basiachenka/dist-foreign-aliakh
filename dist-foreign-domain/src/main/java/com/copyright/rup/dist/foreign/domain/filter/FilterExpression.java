@@ -64,7 +64,8 @@ public class FilterExpression<T> {
     }
 
     public boolean isEmpty() {
-        return Objects.isNull(fieldFirstValue) && Objects.isNull(fieldSecondValue);
+        return Objects.isNull(fieldFirstValue) && Objects.isNull(fieldSecondValue)
+            && FilterOperatorEnum.IS_NULL != operator && FilterOperatorEnum.IS_NOT_NULL != operator;
     }
 
     @Override
