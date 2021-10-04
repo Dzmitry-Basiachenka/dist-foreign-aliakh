@@ -249,7 +249,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getPriceYear, "table.column.price_year", "priceYear", 100),
             addColumn(UdmValueDto::getPriceComment, "table.column.price_comment", "priceComment", 120),
             addAmountColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
-            addColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
+            addBooleanColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
             addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 200),
             addColumn(value -> getStringFromLocalDate(value.getCurrencyExchangeRateDate()),
@@ -261,7 +261,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 200),
             addColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
             addColumn(UdmValueDto::getContentComment, "table.column.content_comment", "contentComment", 200),
-            addColumn(UdmValueDto::isContentFlag, "table.column.content_flag", "contentFlag", 100),
+            addBooleanColumn(UdmValueDto::isContentFlag, "table.column.content_flag", "contentFlag", 100),
             addAmountColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
@@ -285,6 +285,17 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                                                    String columnId, double width) {
         return udmValuesGrid.addColumn(value -> formatAmount(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true)
+            .setSortProperty(columnId)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private Column<UdmValueDto, ?> addBooleanColumn(ValueProvider<UdmValueDto, Boolean> valueProvider,
+                                                    String captionProperty, String columnId, double width) {
+        return udmValuesGrid.addColumn(value -> valueProvider.apply(value) ? "Y" : "N")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)

@@ -80,7 +80,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
             column(name: 'df_udm_value_uid', value: '07026f4a-8a21-4529-97ad-5dab5c92bcce')
-            column(name: 'period', value: 201506)
+            column(name: 'period', value: 201512)
             column(name: 'status_ind', value: 'PRELIM_RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: 123456789)
@@ -192,10 +192,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
             column(name: 'df_udm_value_uid', value: '469e81b1-2e16-481d-a336-89725c6237ce')
-            column(name: 'period', value: 202106)
+            column(name: 'period', value: 201106)
             column(name: 'status_ind', value: 'NEW')
             column(name: 'rh_account_number', value: 1000010077)
-            column(name: 'wr_wrk_inst', value: 306985899)
+            column(name: 'wr_wrk_inst', value: 306985867)
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')
             column(name: 'standard_number', value: '1873-7773')
             column(name: 'standard_number_type', value: 'VALISSN')
@@ -220,10 +220,10 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
             column(name: 'df_udm_value_uid', value: '5add051a-c4be-475b-9542-e31a05be1eb1')
-            column(name: 'period', value: 201506)
+            column(name: 'period', value: 201006)
             column(name: 'status_ind', value: 'PRELIM_RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 2000017004)
-            column(name: 'wr_wrk_inst', value: 123456789)
+            column(name: 'wr_wrk_inst', value: 306985868)
             column(name: 'system_title', value: 'Colloids and surfaces. B, Biointerfaces')
             column(name: 'standard_number', value: '1873-7774')
             column(name: 'standard_number_type', value: 'VALISBN13')

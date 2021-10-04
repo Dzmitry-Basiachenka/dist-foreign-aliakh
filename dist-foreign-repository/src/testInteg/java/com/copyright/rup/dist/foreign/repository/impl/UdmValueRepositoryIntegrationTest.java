@@ -93,7 +93,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201912, 201506, 201406);
+        List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201912, 201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -148,7 +148,7 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     public void testFindDtosByFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
-            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_4);
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
             UDM_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
@@ -231,7 +231,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     public void testFindCountByFilter() {
-        assertFilteringFindCountByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))), 2);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(new HashSet<>(
@@ -301,7 +301,7 @@ public class UdmValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "status");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "rhAccountNumber");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "rhName");
-        assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "wrWrkInst");
+        assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "wrWrkInst");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "systemTitle");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "systemStandardNumber");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "standardNumberType");
