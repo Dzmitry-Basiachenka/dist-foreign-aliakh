@@ -35,10 +35,10 @@ public class UdmValueFilter {
     private FilterExpression<String> rhNameExpression = new FilterExpression<>();
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
-    private String lastPriceFlag;
+    private Boolean lastPriceFlag;
     private String lastPriceComment;
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
-    private String lastContentFlag;
+    private Boolean lastContentFlag;
     private String lastContentComment;
     private PublicationType pubType;
     private PublicationType lastPubType;
@@ -176,11 +176,11 @@ public class UdmValueFilter {
         this.priceInUsdExpression = priceInUsdExpression;
     }
 
-    public String getLastPriceFlag() {
+    public Boolean getLastPriceFlag() {
         return lastPriceFlag;
     }
 
-    public void setLastPriceFlag(String lastPriceFlag) {
+    public void setLastPriceFlag(Boolean lastPriceFlag) {
         this.lastPriceFlag = lastPriceFlag;
     }
 
@@ -200,11 +200,11 @@ public class UdmValueFilter {
         this.contentExpression = contentExpression;
     }
 
-    public String getLastContentFlag() {
+    public Boolean getLastContentFlag() {
         return lastContentFlag;
     }
 
-    public void setLastContentFlag(String lastContentFlag) {
+    public void setLastContentFlag(Boolean lastContentFlag) {
         this.lastContentFlag = lastContentFlag;
     }
 

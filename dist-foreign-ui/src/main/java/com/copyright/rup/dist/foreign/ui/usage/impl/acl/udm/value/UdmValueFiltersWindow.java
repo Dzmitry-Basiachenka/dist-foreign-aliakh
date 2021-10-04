@@ -264,7 +264,7 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initLastPriceFlagLastPriceCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastPriceFlagComboBox, lastPriceCommentField);
         lastPriceFlagComboBox.setItems(Y_N_ITEMS);
-        lastPriceFlagComboBox.setSelectedItem(valueFilter.getLastPriceFlag());
+        lastPriceFlagComboBox.setSelectedItem(convertBooleanToString(valueFilter.getLastPriceFlag()));
         lastPriceFlagComboBox.setSizeFull();
         lastPriceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getLastPriceComment(), StringUtils.EMPTY));
         filterBinder.forField(lastPriceCommentField)
@@ -298,7 +298,7 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initLastContentFlagLastContentCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastContentFlagComboBox, lastContentCommentField);
         lastContentFlagComboBox.setItems(Y_N_ITEMS);
-        lastContentFlagComboBox.setSelectedItem(valueFilter.getLastContentFlag());
+        lastContentFlagComboBox.setSelectedItem(convertBooleanToString(valueFilter.getLastContentFlag()));
         lastContentFlagComboBox.setSizeFull();
         lastContentCommentField.setValue(
             ObjectUtils.defaultIfNull(valueFilter.getLastContentComment(), StringUtils.EMPTY));
@@ -464,11 +464,11 @@ public class UdmValueFiltersWindow extends Window {
             BigDecimal::new));
         valueFilter.setPriceInUsdExpression(buildNumberFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setLastPriceFlag(lastPriceFlagComboBox.getValue());
+        valueFilter.setLastPriceFlag(convertStringToBoolean(lastPriceFlagComboBox.getValue()));
         valueFilter.setLastPriceComment(getStringFromTextField(lastPriceCommentField));
         valueFilter.setContentExpression(buildNumberFilterExpression(contentField, contentOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setLastContentFlag(lastContentFlagComboBox.getValue());
+        valueFilter.setLastContentFlag(convertStringToBoolean(lastContentFlagComboBox.getValue()));
         valueFilter.setLastContentComment(getStringFromTextField(lastContentCommentField));
         valueFilter.setPubType(
             Objects.nonNull(pubTypeComboBox.getValue()) ? pubTypeComboBox.getValue() : null);
@@ -506,5 +506,21 @@ public class UdmValueFiltersWindow extends Window {
 
     private SerializablePredicate<String> getNumberValidator() {
         return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
+    }
+
+    private Boolean convertStringToBoolean(String value) {
+        if (Objects.isNull(value)) {
+            return null;
+        } else {
+            return "Y".equals(value);
+        }
+    }
+
+    private String convertBooleanToString(Boolean value) {
+        if (Objects.isNull(value)) {
+            return null;
+        } else {
+            return value ? "Y" : "N";
+        }
     }
 }

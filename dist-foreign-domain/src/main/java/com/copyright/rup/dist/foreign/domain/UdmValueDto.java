@@ -33,7 +33,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private String lastPubType;
     private String publicationType;
     private BigDecimal lastPriceInUsd;
-    private String lastPriceFlag;
+    private boolean lastPriceFlag;
     private String lastPriceSource;
     private String lastPriceComment;
     private BigDecimal price;
@@ -47,7 +47,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private BigDecimal currencyExchangeRate;
     private LocalDate currencyExchangeRateDate;
     private String lastContent;
-    private String lastContentFlag;
+    private boolean lastContentFlag;
     private String lastContentSource;
     private String lastContentComment;
     private String content;
@@ -160,11 +160,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.lastPriceInUsd = lastPriceInUsd;
     }
 
-    public String getLastPriceFlag() {
+    public boolean isLastPriceFlag() {
         return lastPriceFlag;
     }
 
-    public void setLastPriceFlag(String lastPriceFlag) {
+    public void setLastPriceFlag(boolean lastPriceFlag) {
         this.lastPriceFlag = lastPriceFlag;
     }
 
@@ -272,11 +272,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.lastContent = lastContent;
     }
 
-    public String getLastContentFlag() {
+    public boolean isLastContentFlag() {
         return lastContentFlag;
     }
 
-    public void setLastContentFlag(String lastContentFlag) {
+    public void setLastContentFlag(boolean lastContentFlag) {
         this.lastContentFlag = lastContentFlag;
     }
 
