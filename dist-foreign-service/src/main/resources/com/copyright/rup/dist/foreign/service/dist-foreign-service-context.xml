@@ -22,8 +22,11 @@
         <constructor-arg value="$RUP{dist.foreign.rest.rms.rights.cache}"/>
     </bean>
 
-    <bean id="df.service.rmsGrantProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantProcessorService">
+    <bean id="df.service.rmsGrantProcessorCacheService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantProcessorService">
         <constructor-arg ref="df.service.rmsCacheService"/>
+    </bean>
+    <bean id="df.service.rmsGrantProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantProcessorService">
+        <constructor-arg ref="dist.common.integration.rmsRightsService"/>
     </bean>
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
