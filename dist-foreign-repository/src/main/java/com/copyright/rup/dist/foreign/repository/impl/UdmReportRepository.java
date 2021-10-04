@@ -11,10 +11,11 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.io.PipedOutputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -53,16 +54,15 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
 
     @Override
     public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
-        Map<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("filter", Objects.requireNonNull(filter));
         writeCsvReportByParts("IUdmReportMapper.findUdmBaselineUsagesCountByFilter",
-            "IUdmReportMapper.findUdmBaselineUsageDtosByFilter",
-            parameters, !filter.isEmpty(),
+            "IUdmReportMapper.findUdmBaselineUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new UdmBaselineUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
-        Map<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
         writeCsvReportByParts("IUdmReportMapper.findUdmUsagesCountByFilter",
             "IUdmReportMapper.findUdmUsageDtosByFilter", parameters, !filter.isEmpty(), () -> handler);

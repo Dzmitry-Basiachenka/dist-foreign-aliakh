@@ -149,7 +149,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
         fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton);
         layout.setMargin(true);
-        VaadinUtils.addComponentStyle(layout, "baseline-buttons");
+        VaadinUtils.addComponentStyle(layout, "udm-baseline-buttons");
         return layout;
     }
 }
