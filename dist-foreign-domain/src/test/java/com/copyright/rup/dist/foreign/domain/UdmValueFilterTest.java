@@ -37,10 +37,10 @@ public class UdmValueFilterTest {
     private static final String RH_NAME = "Rothchild Consultants";
     private static final BigDecimal PRICE = new BigDecimal("100.00");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("200.00");
-    private static final String LAST_PRICE_FLAG = "Y";
+    private static final Boolean LAST_PRICE_FLAG = true;
     private static final String LAST_PRICE_COMMENT = "last price comment";
     private static final BigDecimal CONTENT = new BigDecimal("70");
-    private static final String LAST_CONTENT_FLAG = "N";
+    private static final Boolean LAST_CONTENT_FLAG = false;
     private static final String LAST_CONTENT_COMMENT = "last content comment";
     private static final PublicationType PUB_TYPE;
     private static final PublicationType LAST_PUB_TYPE;
