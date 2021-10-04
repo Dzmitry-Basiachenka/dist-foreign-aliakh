@@ -88,8 +88,7 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
 
     private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
         FilterExpression<String> filterExpression) {
-        String firstValue = escapeSqlLikePattern(filterExpression.getFieldFirstValue());
-        filterExpression.setFieldFirstValue(firstValue);
-        return filterExpression;
+        return new FilterExpression<>(filterExpression.getOperator(),
+            escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue());
     }
 }

@@ -103,7 +103,7 @@ public class UdmValueFiltersWindow extends Window {
         setCaption(ForeignUi.getMessage("window.udm_values_additional_filters"));
         setResizable(false);
         setWidth(550, Unit.PIXELS);
-        setHeight(560, Unit.PIXELS);
+        setHeight(650, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-values-additional-filters-window");
     }
 

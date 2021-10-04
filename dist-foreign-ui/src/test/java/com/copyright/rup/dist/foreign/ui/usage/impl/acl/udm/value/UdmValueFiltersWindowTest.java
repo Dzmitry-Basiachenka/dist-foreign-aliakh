@@ -100,7 +100,7 @@ public class UdmValueFiltersWindowTest {
         assertEquals("UDM values additional filters", window.getCaption());
         assertEquals(550, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(560, window.getHeight(), 0);
+        assertEquals(650, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
     }
