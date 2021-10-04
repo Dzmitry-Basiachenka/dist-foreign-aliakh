@@ -189,16 +189,16 @@ public class UpdateRightsIntegrationTest {
     public void testUpdateUdmValuesRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms_grants_udm_values_122769421_request.json", "rms_grants_udm_values_122769421_response.json");
-        expectRmsCall("rms_grants_udm_values_243618757_request.json", "rms_grants_udm_values_243618757_response.json");
-        expectRmsCall("rms_grants_udm_values_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        expectRmsCall("rms_grants_udm_values_202112_1_request.json", "rms_grants_udm_values_202112_1_response.json");
+        expectRmsCall("rms_grants_udm_values_202112_2_request.json", "rms_grants_udm_values_202112_2_response.json");
         expectPrmCall();
-        List<UdmValue> values =
-            Arrays.asList(buildUdmValue(122769421), buildUdmValue(243618757), buildUdmValue(140160102));
+        List<UdmValue> values = Arrays.asList(buildUdmValue(122769421), buildUdmValue(243618757),
+            buildUdmValue(140160102), buildUdmValue(210001133));
         rightsService.updateUdmValuesRights(values, 202112);
         assertEquals(RH_ACCOUNT_NUMBER_1, values.get(0).getRhAccountNumber());
         assertEquals(RH_ACCOUNT_NUMBER_2, values.get(1).getRhAccountNumber());
         assertNull(values.get(2).getRhAccountNumber());
+        assertEquals(RH_ACCOUNT_NUMBER_1, values.get(3).getRhAccountNumber());
         mockServer.verify();
         asyncMockServer.verify();
     }
