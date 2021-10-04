@@ -464,11 +464,13 @@ public class UdmValueFiltersWindow extends Window {
             BigDecimal::new));
         valueFilter.setPriceInUsdExpression(buildNumberFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setLastPriceFlag(convertStringToBoolean(lastPriceFlagComboBox.getValue()));
+        valueFilter.setLastPriceFlag(Objects.isNull(lastPriceFlagComboBox.getValue())
+            ? null : convertStringToBoolean(lastPriceFlagComboBox.getValue()));
         valueFilter.setLastPriceComment(getStringFromTextField(lastPriceCommentField));
         valueFilter.setContentExpression(buildNumberFilterExpression(contentField, contentOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setLastContentFlag(convertStringToBoolean(lastContentFlagComboBox.getValue()));
+        valueFilter.setLastContentFlag(Objects.isNull(lastContentFlagComboBox.getValue())
+            ? null : convertStringToBoolean(lastContentFlagComboBox.getValue()));
         valueFilter.setLastContentComment(getStringFromTextField(lastContentCommentField));
         valueFilter.setPubType(
             Objects.nonNull(pubTypeComboBox.getValue()) ? pubTypeComboBox.getValue() : null);
@@ -509,11 +511,7 @@ public class UdmValueFiltersWindow extends Window {
     }
 
     private Boolean convertStringToBoolean(String value) {
-        if (Objects.isNull(value)) {
-            return null;
-        } else {
-            return "Y".equals(value);
-        }
+        return "Y".equals(value);
     }
 
     private String convertBooleanToString(Boolean value) {
