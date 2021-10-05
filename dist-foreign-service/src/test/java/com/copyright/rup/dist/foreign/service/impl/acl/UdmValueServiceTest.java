@@ -102,7 +102,7 @@ public class UdmValueServiceTest {
     }
 
     @Test
-    public void testUnAssignValues() {
+    public void testUnassignValues() {
         mockStatic(RupContextUtils.class);
         Set<String> valueIds = Collections.singleton("49efb6c9-acb8-43e5-912e-607597581713");
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
