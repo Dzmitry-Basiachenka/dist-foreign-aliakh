@@ -170,6 +170,7 @@ databaseChangeLog {
             column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'assignee', value: 'ajohn@copyright.com')
             column(name: 'price_year', value: 2021)
+            column(name: 'price_comment', value: 'Price comment')
             column(name: 'content_unit_price', value: 10.0000000000)
             column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'updated_by_user', value: 'user@copyright.com')

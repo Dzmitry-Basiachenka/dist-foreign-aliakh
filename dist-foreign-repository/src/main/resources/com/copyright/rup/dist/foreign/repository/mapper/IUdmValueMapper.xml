@@ -177,6 +177,16 @@
                     </otherwise>
                 </choose>
             </if>
+            <if test="null != filter.lastPubType">
+                <choose>
+                    <when test="null != filter.lastPubType.name">
+                        and lpt.name = #{filter.lastPubType.name}
+                    </when>
+                    <otherwise>
+                        and lvp.publication_type_uid is null
+                    </otherwise>
+                </choose>
+            </if>
             <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and !filter.lastValuePeriods.contains('IS_NULL') and !filter.lastValuePeriods.contains('IS_NOT_NULL')">
                 and
                 <foreach collection="filter.lastValuePeriods" item="lastValuePeriod" open="(" separator=" or " close=")">
@@ -194,6 +204,12 @@
             </if>
             <if test="null != filter.rhAccountNumber">
                 and v.rh_account_number = #{filter.rhAccountNumber}
+            </if>
+            <if test="null != filter.lastPriceComment">
+                and lvp.last_price_comment ilike '%' || #{filter.lastPriceComment} || '%'
+            </if>
+            <if test="null != filter.lastContentComment">
+                and lvp.last_content_comment ilike '%' || #{filter.lastContentComment} || '%'
             </if>
             <if test="null != filter.comment">
                 and v.comment ilike '%' || #{filter.comment} || '%'
@@ -320,8 +336,26 @@
             <when test="sort.property == 'standardNumberType'">
                 standard_number_type <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'lastValuePeriod'">
+                last_value_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastPubType'">
+                last_pub_type <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'publicationType'">
                 pt.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastPriceInUsd'">
+                last_price_in_usd <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastPriceFlag'">
+                last_price_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastPriceSource'">
+                last_price_source <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastPriceComment'">
+                last_price_comment <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'price'">
                 price <include refid="IUsageMapper.direction"/>
@@ -353,6 +387,18 @@
             <when test="sort.property == 'currencyExchangeRateDate'">
                 currency_exchange_rate_date <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'lastContent'">
+                last_content <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastContentFlag'">
+                last_content_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastContentSource'">
+                last_content_source <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastContentComment'">
+                last_content_comment <include refid="IUsageMapper.direction"/>
+            </when>            
             <when test="sort.property == 'content'">
                 content <include refid="IUsageMapper.direction"/>
             </when>
@@ -361,6 +407,9 @@
             </when>
             <when test="sort.property == 'contentFlag'">
                 content_flag <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPrice'">
+                content_unit_price <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'comment'">
                 comment <include refid="IUsageMapper.direction"/>

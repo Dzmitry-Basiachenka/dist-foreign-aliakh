@@ -1,18 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +28,7 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -31,7 +39,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -50,6 +63,8 @@ import java.util.stream.IntStream;
  *
  * @author Aliaksandr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
 public class UdmValueFilterWidgetTest {
 
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES =
@@ -103,6 +118,90 @@ public class UdmValueFilterWidgetTest {
         verify(controller);
     }
 
+    @Test
+    public void testApplyFilter() {
+        widget.init();
+        widget.clearFilter();
+        verify(controller);
+        Button applyButton = getApplyButton();
+        assertFalse(applyButton.isEnabled());
+        assertTrue(widget.getAppliedFilter().isEmpty());
+        assertTrue(widget.getFilter().isEmpty());
+        widget.getFilter().setStatus(UdmValueStatusEnum.NEW);
+        assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
+        applyButton.setEnabled(true);
+        assertFalse(widget.getFilter().isEmpty());
+        assertTrue(applyButton.isEnabled());
+        applyButton.click();
+        assertFalse(applyButton.isEnabled());
+        assertFalse(widget.getAppliedFilter().isEmpty());
+    }
+
+    @Test
+    public void testFilterChangedEmptyFilter() {
+        widget.init();
+        Button applyButton = getApplyButton();
+        assertFalse(applyButton.isEnabled());
+        widget.applyFilter();
+        verify(controller);
+        assertFalse(applyButton.isEnabled());
+    }
+
+    @Test
+    public void testClearFilter() {
+        widget.init();
+        Button applyButton = getApplyButton();
+        assertTrue(widget.getFilter().isEmpty());
+        assertTrue(widget.getAppliedFilter().isEmpty());
+        widget.getFilter().setStatus(UdmValueStatusEnum.NEW);
+        applyButton.setEnabled(true);
+        applyButton.click();
+        assertFalse(widget.getFilter().isEmpty());
+        assertFalse(widget.getAppliedFilter().isEmpty());
+        widget.clearFilter();
+        assertTrue(widget.getFilter().isEmpty());
+        assertTrue(widget.getAppliedFilter().isEmpty());
+        assertFalse(applyButton.isEnabled());
+        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "statusComboBox").getValue());
+        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "currencyComboBox").getValue());
+        verify(controller);
+    }
+
+    @Test
+    public void verifyMoreFiltersButtonClickListener() {
+        reset(controller);
+        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP).once();
+        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).once();
+        replay(controller);
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Windows.showModalWindow(anyObject(UdmValueFiltersWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, controller);
+        widget.init();
+        ClickListener clickListener = (ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
+            .getListeners(ClickEvent.class).iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class, controller);
+    }
+
+    @Test
+    public void verifyButtonClickListener() {
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        replay(clickEvent, controller);
+        widget.init();
+        Button applyButton = getApplyButton();
+        widget.getFilter().setStatus(UdmValueStatusEnum.NEW);
+        applyButton.setEnabled(true);
+        assertFalse(widget.getFilter().isEmpty());
+        Button clearButton = (Button) ((HorizontalLayout) widget.getComponent(1)).getComponent(1);
+        ClickListener clickListener = (ClickListener) clearButton.getListeners(ClickEvent.class).iterator().next();
+        clickListener.buttonClick(clickEvent);
+        assertFalse(applyButton.isEnabled());
+        assertTrue(widget.getFilter().isEmpty());
+        verify(clickEvent, controller);
+    }
+
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
@@ -131,7 +230,7 @@ public class UdmValueFilterWidgetTest {
     @SuppressWarnings("unchecked")
     private void verifyCurrencyComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
+        ComboBox<?> comboBox = (ComboBox<?>) component;
         assertEquals("Currency", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
@@ -151,7 +250,7 @@ public class UdmValueFilterWidgetTest {
 
     private void verifyValuesStatusComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
+        ComboBox<?> comboBox = (ComboBox<?>) component;
         assertEquals("Status", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals("220px", comboBox.getPopupWidth());
@@ -196,5 +295,9 @@ public class UdmValueFilterWidgetTest {
     private void verifyCurrencies(Currency expectedCurrency, Currency actualCurrency) {
         assertEquals(expectedCurrency.getCode(), actualCurrency.getCode());
         assertEquals(expectedCurrency.getDescription(), actualCurrency.getDescription());
+    }
+
+    private Button getApplyButton() {
+        return Whitebox.getInternalState(widget, "applyButton");
     }
 }
