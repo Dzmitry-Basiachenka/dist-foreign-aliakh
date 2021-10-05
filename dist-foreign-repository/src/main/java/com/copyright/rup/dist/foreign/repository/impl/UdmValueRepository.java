@@ -77,12 +77,14 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
-        filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
         filterCopy.setSystemTitleExpression(
             setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
         filterCopy.setSystemStandardNumberExpression(
             setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemStandardNumberExpression()));
         filterCopy.setRhNameExpression(setEscapeSqlLikePatternForFilterExpression(filterCopy.getRhNameExpression()));
+        filterCopy.setLastPriceComment(escapeSqlLikePattern(filterCopy.getLastPriceComment()));
+        filterCopy.setLastContentComment(escapeSqlLikePattern(filterCopy.getLastContentComment()));
+        filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
         return filterCopy;
     }
 
