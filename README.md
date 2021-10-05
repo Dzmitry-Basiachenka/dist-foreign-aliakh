@@ -1,3 +1,13 @@
+14.1.21
+-
+* B-68616 FDA & UDM: export baseline data: make changes based on comments in CR-DIST-FOREIGN-261
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: switch off cache for getting grants for values
+* B-68259 [Value] FDA & UDM: Assign/Unassign work values for research: make changes based on comments in CR-DIST-FOREIGN-262
+* B-67687 [Value] FDA&UDM: Value filters (basic filters): fix wrong test data, fix UDM value filter window, fix escapeSqlLikePattern for filter expression and fix UDM value table change true/false on Y/N
+* B-69502 FDA: Value filters part 2 (additional filters): implement backend to filter Last Price Flag, Last Content Flag
+* B-69502 FDA: Value filters part 2 (additional filters): implement backend to filter Comment, Last Price Comment, Last Content Comment
+* B-69502 FDA: Value filters part 2 (additional filters): fix UI to filter Price, Price in USD
+
 14.1.20
 -
 * B-65962 [Value] FDA&UDM: Create and Populate Value batch: implement query to find unpublished values from usages baseline
