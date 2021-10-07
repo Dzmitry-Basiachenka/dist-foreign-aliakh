@@ -254,12 +254,12 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 "currencyExchangeRate", 200),
             addColumn(value -> getStringFromLocalDate(value.getCurrencyExchangeRateDate()),
                 "table.column.currency_exchange_rate_date", "currencyExchangeRateDate", 200),
-            addColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
+            addAmountColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
             addBooleanColumn(UdmValueDto::isLastContentFlag, "table.column.last_content_flag", "lastContentFlag", 130),
             addColumn(UdmValueDto::getLastContentSource, "table.column.last_content_source", "lastContentSource", 150),
             addColumn(UdmValueDto::getLastContentComment, "table.column.last_content_comment", "lastContentComment",
                 200),
-            addColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
+            addAmountColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
             addColumn(UdmValueDto::getContentComment, "table.column.content_comment", "contentComment", 200),
             addBooleanColumn(UdmValueDto::isContentFlag, "table.column.content_flag", "contentFlag", 100),
             addAmountColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
@@ -295,7 +295,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private Column<UdmValueDto, ?> addBooleanColumn(ValueProvider<UdmValueDto, Boolean> valueProvider,
                                                     String captionProperty, String columnId, double width) {
-        return udmValuesGrid.addColumn(value -> valueProvider.apply(value) ? "Y" : "N")
+        return udmValuesGrid.addColumn(value -> convertBooleanToString(valueProvider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)
@@ -324,5 +324,13 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
         return udmValueDtos.stream()
             .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
+    }
+
+    private String convertBooleanToString(Boolean value) {
+        if (Objects.isNull(value)) {
+            return null;
+        } else {
+            return value ? "Y" : "N";
+        }
     }
 }
