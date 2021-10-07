@@ -1,3 +1,9 @@
+14.1.22
+-
+* B-68822 FDA: Tech Debt: change formatting of Content, Last Content columns, fix sorting of boolean columns  in UDM Values grid
+* B-68822 FDA: Tech Debt: fix failed test after refactoring boolean columns in UDM Values grid from primitives to objects
+* CDP-1014: FDA: UDM Values filters: Values filtered by partial system title value and operator ‘EQUALS’ are displayed on UI
+
 14.1.21
 -
 * B-68616 FDA & UDM: export baseline data: make changes based on comments in CR-DIST-FOREIGN-261
