@@ -70,8 +70,9 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String PERIOD_2 = "202106";
     private static final String USER_NAME = "jjohn@copyright.com";
     private static final String SYSTEM_TITLE = "Tenside, surfactants, detergents";
+    private static final String PART_SYSTEM_TITLE = "Tenside";
     private static final String SYSTEM_TITLE_WITH_METASYMBOLS =
-        "Colloids and  libero !@#$%^&*()_+-=?/'\"}{][<>convallis. B, Biointerfaces";
+        "Colloids and  libero !@#$%^&*()_+-=?/\\'\"}{][<>convallis. B, Biointerfaces";
     private static final String STANDARD_NUMBER = "1873-7773";
     private static final String RH_NAME_PART = "John Wiley";
     private static final String LAST_PRICE_COMMENT_FRAGMENT = "rice commen";
@@ -161,13 +162,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDtosByFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
-            UDM_VALUE_UID_2, UDM_VALUE_UID_4);
-        assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
-            UDM_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
-            UDM_VALUE_UID_4);
+    public void testFindDtosByAdditionalFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_2, ASSIGNEE_3)),
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_2)),
@@ -192,10 +187,12 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), UDM_VALUE_UID_2, UDM_VALUE_UID_3,
             UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), UDM_VALUE_UID_1);
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, PART_SYSTEM_TITLE, null)));
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
-            new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Tenside", null)), UDM_VALUE_UID_2, UDM_VALUE_UID_3,
-            UDM_VALUE_UID_4);
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, PART_SYSTEM_TITLE, null)), UDM_VALUE_UID_2,
+            UDM_VALUE_UID_3, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumber(1000002859L), UDM_VALUE_UID_1,
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemStandardNumberExpression(
@@ -263,6 +260,16 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindDtosByBasicFilter() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
+            UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
+            UDM_VALUE_UID_4);
+    }
+
+    @Test
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))), 2);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
@@ -281,9 +288,11 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, PART_SYSTEM_TITLE, null)), 0);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
-            new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Tenside", null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, PART_SYSTEM_TITLE, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumber(1000002859L), 5);
         assertFilteringFindCountByFilter(filter -> filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null)), 3);

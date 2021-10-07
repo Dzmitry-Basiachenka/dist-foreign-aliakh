@@ -216,7 +216,7 @@
             </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
                 <choose>
-                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemStandardNumberExpression.operator">
+                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemTitleExpression.operator">
                         and v.system_title = #{filter.systemTitleExpression.fieldFirstValue}
                     </when>
                     <otherwise>
