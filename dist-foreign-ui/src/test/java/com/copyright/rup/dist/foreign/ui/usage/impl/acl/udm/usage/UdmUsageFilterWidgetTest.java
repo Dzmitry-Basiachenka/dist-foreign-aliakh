@@ -38,7 +38,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -166,16 +165,25 @@ public class UdmUsageFilterWidgetTest {
     }
 
     @Test
-    @Ignore
-    //TODO reimplement this test (example - FasNtsUsageFilterWidgetTest#testApplyFilter)
     public void verifyApplyButtonClickListener() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        replay(clickEvent, udmUsageFilterController, ForeignSecurityUtils.class);
+        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
+        replay(udmUsageFilterController);
         widget.init();
-        ClickListener clickListener = (ClickListener) getApplyButton().getListeners(ClickEvent.class).iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, udmUsageFilterController, ForeignSecurityUtils.class);
+        widget.clearFilter();
+        verify(udmUsageFilterController);
+        Button applyButton = getApplyButton();
+        assertFalse(applyButton.isEnabled());
+        assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
+        assertTrue(widget.getFilter().getUdmBatchesIds().isEmpty());
+        widget.getFilter().setUdmBatchesIds(Collections.singleton("87a2f5f4-5663-4ae7-8765-3515c2a82918"));
+        assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
+        applyButton.setEnabled(true);
+        assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
+        assertFalse(widget.getFilter().getUdmBatchesIds().isEmpty());
+        assertTrue(applyButton.isEnabled());
+        applyButton.click();
+        assertFalse(applyButton.isEnabled());
+        assertFalse(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
     }
 
     @Test
