@@ -84,7 +84,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'PRELIM_RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 1000002859)
             column(name: 'wr_wrk_inst', value: 123456789)
-            column(name: 'system_title', value: 'Colloids and  libero !@#$%^&*()_+-=?/\'"}{][<>convallis. B, Biointerfaces')
+            column(name: 'system_title', value: 'Colloids and  libero !@#$%^&*()_+-=?/\\\'"}{][<>convallis. B, Biointerfaces')
             column(name: 'standard_number', value: '1873-7773')
             column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'assignee', value: 'jjohn@copyright.com')
