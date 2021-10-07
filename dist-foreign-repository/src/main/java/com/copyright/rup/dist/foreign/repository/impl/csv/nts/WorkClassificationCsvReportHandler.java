@@ -1,17 +1,12 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.nts;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Writes {@link WorkClassification}s into a {@link PipedOutputStream}.
@@ -47,9 +42,7 @@ public class WorkClassificationCsvReportHandler extends BaseCsvReportHandler<Wor
         beanProperties.add(bean.getStandardNumberType());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(getBeanPropertyAsString(bean.getRhName()));
-        beanProperties.add(Objects.nonNull(bean.getUpdateDate())
-            ? DateFormatUtils.format(bean.getUpdateDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
-            : StringUtils.EMPTY);
+        beanProperties.add(convertDateToString(bean.getUpdateDate()));
         beanProperties.add(bean.getUpdateUser());
         return beanProperties;
     }

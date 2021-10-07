@@ -72,8 +72,7 @@ public class AuditSalCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(salUsage.getReportedStandardNumber());
         beanProperties.add(bean.getWorkTitle());
         beanProperties.add(salUsage.getReportedMediaType());
-        beanProperties.add(Objects.nonNull(salUsage.getMediaTypeWeight())
-            ? roundAndGetBeanBigDecimal(salUsage.getMediaTypeWeight()) : null);
+        beanProperties.add(roundAndGetBeanBigDecimal(salUsage.getMediaTypeWeight()));
         beanProperties.add(salUsage.getReportedArticle());
         beanProperties.add(salUsage.getReportedAuthor());
         beanProperties.add(salUsage.getReportedPublisher());

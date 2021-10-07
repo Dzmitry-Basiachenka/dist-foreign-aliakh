@@ -1,16 +1,13 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,31 +76,21 @@ public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHand
         beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyEndDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getAnnualMultiplier()));
-        beanProperties.add(Objects.nonNull(bean.getStatisticalMultiplier())
-            ? roundAndGetBeanBigDecimal(bean.getStatisticalMultiplier())
-            : StringUtils.EMPTY);
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getStatisticalMultiplier()));
         beanProperties.add(bean.getReportedTypeOfUse());
         beanProperties.add(getBeanPropertyAsString(bean.getQuantity()));
-        beanProperties.add(Objects.nonNull(bean.getAnnualizedCopies())
-            ? roundAndGetBeanBigDecimal(bean.getAnnualizedCopies())
-            : StringUtils.EMPTY);
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(Objects.nonNull(bean.getIneligibleReason())
             ? bean.getIneligibleReason().getReason()
             : StringUtils.EMPTY);
-        beanProperties.add(getStringFromDate(bean.getCreateDate()));
+        beanProperties.add(convertDateToString(bean.getCreateDate()));
         beanProperties.add(bean.getUpdateUser());
-        beanProperties.add(getStringFromDate(bean.getUpdateDate()));
+        beanProperties.add(convertDateToString(bean.getUpdateDate()));
         return beanProperties;
     }
 
     @Override
     protected List<String> getBeanHeaders() {
         return HEADERS;
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
-            : StringUtils.EMPTY;
     }
 }
