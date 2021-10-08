@@ -747,4 +747,28 @@ databaseChangeLog {
                 columnNames: 'period_prior',
                 constraintName: 'pk_period_prior')
     }
+
+    changeSet(id: '2021-10-08-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-65962 [Value] FDA&UDM: Create and Populate Value batch: add indexes to df_udm_value, df_udm_usage tables")
+
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_usage', indexName: 'ix_df_udm_usage_period') {
+            column(name: 'period')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_usage', indexName: 'ix_df_udm_usage_wr_wrk_inst') {
+            column(name: 'wr_wrk_inst')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_value', indexName: 'ix_df_udm_value_period') {
+            column(name: 'period')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_value', indexName: 'ix_df_udm_value_wr_wrk_inst') {
+            column(name: 'wr_wrk_inst')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_udm_usage_period")
+            sql("drop index ${dbAppsSchema}.ix_df_udm_usage_wr_wrk_inst")
+            sql("drop index ${dbAppsSchema}.ix_df_udm_value_period")
+            sql("drop index ${dbAppsSchema}.ix_df_udm_value_wr_wrk_inst")
+        }
+    }
 }
