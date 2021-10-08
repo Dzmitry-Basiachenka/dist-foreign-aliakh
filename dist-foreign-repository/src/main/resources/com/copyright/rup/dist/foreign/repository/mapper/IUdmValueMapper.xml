@@ -64,13 +64,13 @@
             system_title,
             standard_number,
             standard_number_type,
-            lvp.last_value_period,
-            lpt.name last_pub_type,
+            last_value.last_value_period,
+            last_publication_type.name last_pub_type,
             pt.name pub_type,
-            lvp.last_price_in_usd,
-            lvp.last_price_flag,
-            lvp.last_price_source,
-            lvp.last_price_comment,
+            last_value.last_price_in_usd,
+            last_value.last_price_flag,
+            last_value.last_price_source,
+            last_value.last_price_comment,
             price,
             currency,
             price_in_usd,
@@ -83,10 +83,10 @@
             currency,
             currency_exchange_rate,
             currency_exchange_rate_date,
-            lvp.last_content,
-            lvp.last_content_flag,
-            lvp.last_content_source,
-            lvp.last_content_comment,
+            last_value.last_content,
+            last_value.last_content_flag,
+            last_value.last_content_source,
+            last_value.last_content_comment,
             content,
             content_unit_price,
             content_comment,
@@ -99,7 +99,7 @@
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
-        <include refid="IUdmValueMapper.udmValueLateralJoins"/>
+        <include refid="IUdmValueMapper.udmValueLastValueJoins"/>
         <include refid="IUdmValueMapper.udmValueFilter"/>
         order by
         <choose>
@@ -119,11 +119,11 @@
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
-        <include refid="IUdmValueMapper.udmValueLateralJoins"/>
+        <include refid="IUdmValueMapper.udmValueLastValueJoins"/>
         <include refid="IUdmValueMapper.udmValueFilter"/>
     </sql>
 
-    <sql id="udmValueLateralJoins">
+    <sql id="udmValueLastValueJoins">
         left join lateral (
             select
                 v2.period as last_value_period,
@@ -141,8 +141,8 @@
                 and v.period > v2.period
             order by v2.period desc
             limit 1
-        ) lvp on true
-        left join ${schema}.df_publication_type lpt on lvp.publication_type_uid = lpt.df_publication_type_uid
+        ) last_value on true
+        left join ${schema}.df_publication_type last_publication_type on last_value.publication_type_uid = last_publication_type.df_publication_type_uid
     </sql>
 
     <sql id="udmValueFilter">
@@ -180,10 +180,10 @@
             <if test="null != filter.lastPubType">
                 <choose>
                     <when test="null != filter.lastPubType.name">
-                        and lpt.name = #{filter.lastPubType.name}
+                        and last_publication_type.name = #{filter.lastPubType.name}
                     </when>
                     <otherwise>
-                        and lvp.publication_type_uid is null
+                        and last_value.publication_type_uid is null
                     </otherwise>
                 </choose>
             </if>
@@ -206,10 +206,10 @@
                 and v.rh_account_number = #{filter.rhAccountNumber}
             </if>
             <if test="null != filter.lastPriceComment">
-                and lvp.last_price_comment ilike '%' || #{filter.lastPriceComment} || '%'
+                and last_value.last_price_comment ilike '%' || #{filter.lastPriceComment} || '%'
             </if>
             <if test="null != filter.lastContentComment">
-                and lvp.last_content_comment ilike '%' || #{filter.lastContentComment} || '%'
+                and last_value.last_content_comment ilike '%' || #{filter.lastContentComment} || '%'
             </if>
             <if test="null != filter.comment">
                 and v.comment ilike '%' || #{filter.comment} || '%'
@@ -261,7 +261,7 @@
                 </include>
             </if>
             <if test="null != filter.lastPriceFlag">
-                and lvp.last_price_flag = #{filter.lastPriceFlag}
+                and last_value.last_price_flag = #{filter.lastPriceFlag}
             </if>
             <if test="!filter.contentExpression.isEmpty()">
                 <include refid="IUdmValueMapper.filterExpression">
@@ -272,7 +272,7 @@
                 </include>
             </if>
             <if test="null != filter.lastContentFlag">
-                and lvp.last_content_flag = #{filter.lastContentFlag}
+                and last_value.last_content_flag = #{filter.lastContentFlag}
             </if>
         </where>
     </sql>
@@ -481,7 +481,7 @@
     </select>
 
     <select id="findLastValuePeriods" resultType="string">
-        select distinct lvp.last_value_period
+        select distinct last_value.last_value_period
         from ${schema}.df_udm_value v
         left join lateral (
             select v2.period as last_value_period
@@ -490,8 +490,8 @@
                 and v.period > v2.period
             order by v2.period desc
             limit 1
-        ) lvp on true
-        where lvp.last_value_period is not null
-        order by lvp.last_value_period
+        ) last_value on true
+        where last_value.last_value_period is not null
+        order by last_value.last_value_period desc
     </select>
 </mapper>

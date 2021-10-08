@@ -46,25 +46,26 @@ public class Currency {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-
-        Currency currency = (Currency) o;
-
-        return new EqualsBuilder().append(code, currency.code)
+        Currency currency = (Currency) obj;
+        return new EqualsBuilder()
+            .append(code, currency.code)
             .append(description, currency.description)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(code).append(description).toHashCode();
+        return new HashCodeBuilder()
+            .append(code)
+            .append(description)
+            .toHashCode();
     }
 
     @Override
