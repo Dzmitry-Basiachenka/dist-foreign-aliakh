@@ -1,3 +1,10 @@
+14.1.23
+-
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: make changes based on comments in CR-DIST-FOREIGN-264
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: add indexes by wr_wrk_inst and period for UDM tables
+* B-69502 FDA: Value filters part 2 (additional filters): make changes based on comments in code review
+* B-68822 Tech Debt: FDA: apply convertDateToString method from BaseCsvReportWrite to handlers
+
 14.1.22
 -
 * B-68822 FDA: Tech Debt: change formatting of Content, Last Content columns, fix sorting of boolean columns  in UDM Values grid
