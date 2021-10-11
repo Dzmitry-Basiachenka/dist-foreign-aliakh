@@ -217,13 +217,10 @@
             from ${schema}.df_udm_value
             where period = #{period}
         ),
-        <!-- Selects periods with age weight greater than zero -->
-        prior_periods as (
-            select periods.period
-            from generate_series(1, (select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0)) i
-            cross join lateral (
-                select to_char(to_date(#{period}::text, 'YYYYMM') - ((i * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
-            ) periods
+        <!-- Selects last period with age weight greater than zero -->
+        last_period_to_select_works as (
+            select to_char(to_date(#{period}::text, 'YYYYMM') -
+                (((select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0) * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
         )
         <!-- The following unique works are included into result:
              1. works that were not populated into value batch for given period
@@ -236,7 +233,7 @@
             <!-- TODO: u.standard_number_type -->
         from ${schema}.df_udm_usage u
         left join ${schema}.df_udm_value v on v.wr_wrk_inst = u.wr_wrk_inst
-        where (u.period = #{period} or u.period in (select period from prior_periods))
+        where u.period between (select period from last_period_to_select_works) and #{period}
             and u.is_baseline_flag = true
             <!-- work is absent in df_udm_value table -->
             and (v.wr_wrk_inst is null

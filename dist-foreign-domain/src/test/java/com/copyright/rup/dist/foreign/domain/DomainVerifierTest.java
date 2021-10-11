@@ -116,7 +116,8 @@ public class DomainVerifierTest {
             {UdmValueDto.class},
             {UdmValueFilter.class},
             {UdmBaselineDto.class},
-            {ExchangeRate.class}
+            {ExchangeRate.class},
+            {UdmValue.class}
         };
         return Arrays.asList(testData);
     }
