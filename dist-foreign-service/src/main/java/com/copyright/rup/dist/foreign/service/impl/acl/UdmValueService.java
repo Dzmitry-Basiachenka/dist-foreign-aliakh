@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmValueService}.
@@ -96,7 +94,7 @@ public class UdmValueService implements IUdmValueService {
         List<UdmValue> allNotPopulatedValues = baselineRepository.findNotPopulatedValuesFromBaseline(period);
         rightsService.updateUdmValuesRights(allNotPopulatedValues, period);
         String userName = RupContextUtils.getUserName();
-        List<UdmValue> grantedValues = allNotPopulatedValues.stream()
+        return (int) allNotPopulatedValues.stream()
             .filter(value -> Objects.nonNull(value.getRhAccountNumber()))
             .peek(value -> {
                 value.setId(RupPersistUtils.generateUuid());
@@ -104,8 +102,6 @@ public class UdmValueService implements IUdmValueService {
                 value.setCreateUser(userName);
                 value.setUpdateUser(userName);
                 udmValueRepository.insert(value);
-            })
-            .collect(Collectors.toList());
-        return CollectionUtils.size(grantedValues);
+            }).count();
     }
 }

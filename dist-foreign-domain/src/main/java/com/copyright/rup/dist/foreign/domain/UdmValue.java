@@ -119,6 +119,7 @@ public class UdmValue extends StoredEntity<String> {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("period", period)
             .append("status", status)
             .append("rhAccountNumber", rhAccountNumber)
