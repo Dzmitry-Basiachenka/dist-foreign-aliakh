@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -65,7 +67,8 @@ import java.util.stream.IntStream;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, Windows.class, RupContextUtils.class, JavaScript.class})
+@PrepareForTest(
+    {UdmValueWidget.class, ForeignSecurityUtils.class, Windows.class, RupContextUtils.class, JavaScript.class})
 public class UdmValueWidgetTest {
 
     private static final String FORMATTED_PLUS_THOUSAND = "1,000.00";
@@ -298,6 +301,45 @@ public class UdmValueWidgetTest {
         verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
 
+    @Test
+    public void testEditButtonClickListenerAllowed() throws Exception {
+        setSpecialistExpectations();
+        mockStatic(Windows.class);
+        UdmValueDto udmValueDto = buildUdmValueDto("5487ce2c-a833-4f60-af1d-beb5ff22b9da", USER);
+        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
+        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(Button.ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmValueDto);
+        grid.select(udmValueDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testEditButtonClickListenerForbiddenInvalidAssignee() {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        UdmValueDto udmValueDto = buildUdmValueDto("280de61e-82d5-42d6-b760-3fce41ba8d82", null);
+        Windows.showNotificationWindow("Selected UDM value cannot be edited. Please assign it to yourself first");
+        expectLastCall().once();
+        replay(controller, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmValueDto);
+        grid.select(udmValueDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
@@ -352,10 +394,10 @@ public class UdmValueWidgetTest {
             .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
-    private UdmValueDto buildUdmValueDto(String valueId, String user) {
+    private UdmValueDto buildUdmValueDto(String valueId, String assignee) {
         UdmValueDto udmValueDto = new UdmValueDto();
         udmValueDto.setId(valueId);
-        udmValueDto.setAssignee(user);
+        udmValueDto.setAssignee(assignee);
         return udmValueDto;
     }
 
@@ -385,5 +427,9 @@ public class UdmValueWidgetTest {
             valueWidget.getSecondComponent()).getComponent(0));
         MenuBar menuBar = (MenuBar) buttonBar.getComponent(menuBarIndex);
         return menuBar.getItems().get(0).getChildren();
+    }
+
+    private HorizontalLayout getButtonsLayout() {
+        return (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
     }
 }
