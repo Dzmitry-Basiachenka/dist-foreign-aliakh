@@ -857,4 +857,136 @@ databaseChangeLog {
                 referencedColumnNames: 'df_udm_value_uid',
                 constraintName: 'fk_df_udm_usage_2_df_udm_value')
     }
+
+    changeSet(id: '2021-10-13-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-69220 [Value] FDA & UDM: Populate Price Type and Price Access Type: create and populate Price Type table")
+
+        createTable(tableName: 'df_udm_price_type', schemaName: dbAppsSchema, tablespace: dbDataTablespace, remarks: 'Table for storing UDM Price Types') {
+
+            column(name: 'price_type_id', type: 'NUMERIC(38)', remarks: 'Price type identifier') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'Price type name') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_price_type',
+                columnNames: 'price_type_id', constraintName: 'pk_df_udm_price_type')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 0)
+            column(name: 'name', value: 'Individual')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 1)
+            column(name: 'name', value: 'Institution')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 2)
+            column(name: 'name', value: 'Corporate Tiered pricing')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 3)
+            column(name: 'name', value: 'List Price')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 4)
+            column(name: 'name', value: 'Open Access')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 5)
+            column(name: 'name', value: 'Free to Qualified')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 6)
+            column(name: 'name', value: 'Cost of Membership')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 7)
+            column(name: 'name', value: 'Per-Article price')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_type') {
+            column(name: 'price_type_id', value: 8)
+            column(name: 'name', value: 'Other (Add to Price Note)')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_udm_price_type', schemaName: dbAppsSchema)
+        }
+    }
+
+    changeSet(id: '2021-10-13-02', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-69220 [Value] FDA & UDM: Populate Price Type and Price Access Type: create and populate Price Access Type table")
+
+        createTable(tableName: 'df_udm_price_access_type', schemaName: dbAppsSchema, tablespace: dbDataTablespace, remarks: 'Table for storing UDM Price Access Types') {
+
+            column(name: 'price_access_type_id', type: 'NUMERIC(38)', remarks: 'Price access type identifier') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'Price type name') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_price_access_type',
+                columnNames: 'price_access_type_id', constraintName: 'pk_df_udm_price_access_type')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_access_type') {
+            column(name: 'price_access_type_id', value: 0)
+            column(name: 'name', value: 'Print')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_access_type') {
+            column(name: 'price_access_type_id', value: 1)
+            column(name: 'name', value: 'Digital')
+        }
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_price_access_type') {
+            column(name: 'price_access_type_id', value: 2)
+            column(name: 'name', value: 'Combined - only option')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_udm_price_access_type', schemaName: dbAppsSchema)
+        }
+    }
 }
