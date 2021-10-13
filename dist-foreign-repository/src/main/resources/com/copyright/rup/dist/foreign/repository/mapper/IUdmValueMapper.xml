@@ -31,6 +31,7 @@
         <result property="lastPriceInUsd" column="last_price_in_usd"/>
         <result property="lastPriceFlag" column="last_price_flag"/>
         <result property="lastPriceSource" column="last_price_source"/>
+        <result property="priceSource" column="price_source"/>
         <result property="lastPriceComment" column="last_price_comment"/>
         <result property="price" column="price"/>
         <result property="currency" column="currency"/>
@@ -45,6 +46,7 @@
         <result property="lastContent" column="last_content"/>
         <result property="lastContentFlag" column="last_content_flag"/>
         <result property="lastContentSource" column="last_content_source"/>
+        <result property="contentSource" column="content_source"/>
         <result property="lastContentComment" column="last_content_comment"/>
         <result property="content" column="content"/>
         <result property="contentComment" column="content_comment"/>
@@ -71,6 +73,7 @@
             last_value.last_price_flag,
             last_value.last_price_source,
             last_value.last_price_comment,
+            price_source,
             price,
             currency,
             price_in_usd,
@@ -87,6 +90,7 @@
             last_value.last_content_flag,
             last_value.last_content_source,
             last_value.last_content_comment,
+            content_source,
             content,
             content_unit_price,
             content_comment,
@@ -354,6 +358,9 @@
             <when test="sort.property == 'lastPriceSource'">
                 last_price_source <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'priceSource'">
+                price_source <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'lastPriceComment'">
                 last_price_comment <include refid="IUsageMapper.direction"/>
             </when>
@@ -395,6 +402,9 @@
             </when>
             <when test="sort.property == 'lastContentSource'">
                 last_content_source <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentSource'">
+                content_source <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'lastContentComment'">
                 last_content_comment <include refid="IUsageMapper.direction"/>
