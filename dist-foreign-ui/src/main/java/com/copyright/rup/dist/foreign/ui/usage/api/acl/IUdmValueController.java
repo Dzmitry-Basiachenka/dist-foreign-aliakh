@@ -85,4 +85,11 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * Updates UDM value.
+     *
+     * @param udmValueDto {@link UdmValueDto} to update
+     */
+    void updateValue(UdmValueDto udmValueDto);    
 }

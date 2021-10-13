@@ -27,6 +27,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
@@ -38,10 +39,12 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -191,16 +194,27 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_value"));
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
-            //TODO enable when UdmEditValueWindow is implemented
-            //UdmValueDto selectedValue = udmValuesGrid.getSelectedItems().iterator().next();
-            //openEditWindow(Collections.singleton(selectedValue),
-            //    () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
+            UdmValueDto selectedValue = udmValuesGrid.getSelectedItems().iterator().next();
+            openEditWindow(Collections.singleton(selectedValue),
+                () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
         });
         VaadinUtils.setButtonsAutoDisabled(editButton);
         HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
+    }
+
+    private void openEditWindow(Set<UdmValueDto> selectedValues, Supplier<Window> createWindow) {
+        if (checkHasValuesAssignee(selectedValues)) {
+            Windows.showModalWindow(createWindow.get());
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.udm_value_edit_forbidden_unassigned"));
+        }
+    }
+
+    private boolean checkHasValuesAssignee(Set<UdmValueDto> values) {
+        return values.stream().allMatch(value -> userName.equals(value.getAssignee()));
     }
 
     private void initValuesGrid() {

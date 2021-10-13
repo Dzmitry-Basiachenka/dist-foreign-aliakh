@@ -201,11 +201,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             if (areUsagesNonBaseline(selectedUsages)) {
                 openEditWindow(selectedUsages, createWindow);
             } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_baseline_usage"));
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.udm_usage_edit_forbidden_baseline"));
             }
         } else {
             Windows.showNotificationWindow(
-                ForeignUi.getMessage("message.error.edit_forbidden_for_researcher",
+                ForeignUi.getMessage("message.error.udm_usage_edit_forbidden_for_researcher",
                     USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER
                         .stream()
                         .map(UsageStatusEnum::name)
@@ -217,7 +218,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         if (checkHasUsagesAssignee(selectedUsages)) {
             Windows.showModalWindow(createWindow.get());
         } else {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.edit_not_allowed"));
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.udm_usage_edit_forbidden_unassigned"));
         }
     }
 

@@ -97,6 +97,12 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
         valueService.unassignValues(valueIds);
     }
 
+    @Override
+    @SuppressWarnings("unused") // TODO remove when the method is implemented
+    public void updateValue(UdmValueDto udmValueDto) {
+        // TODO implement method
+    }
+
     private UdmValueFilter getFilter() {
         return udmValueFilterController.getWidget().getAppliedFilter();
     }
