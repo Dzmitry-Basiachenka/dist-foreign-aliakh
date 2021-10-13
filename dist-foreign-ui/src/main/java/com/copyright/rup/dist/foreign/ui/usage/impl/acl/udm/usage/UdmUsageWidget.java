@@ -336,11 +336,10 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private void switchSelectAllCheckBoxVisibility(int beansCount) {
         //TODO {dbasiachenka} replace after implementation of controller logic
         int threshold = 10000;
-        if (beansCount > threshold) {
-            gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.HIDDEN);
-        } else {
-            gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
-        }
+        gridSelectionModel.setSelectAllCheckBoxVisibility(beansCount > threshold
+            ? SelectAllCheckBoxVisibility.HIDDEN
+            : SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel.beforeClientResponse(false);
     }
 
     private void addColumns() {

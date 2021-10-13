@@ -64,7 +64,6 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Verifies {@link UdmUsageWidget}.
@@ -109,6 +108,7 @@ public class UdmUsageWidgetTest {
     private static final String USER = "user@copyright.com";
     private static final int UDM_RECORD_THRESHOLD = 10000;
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
+    private static final String UNCHECKED = "unchecked";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -216,7 +216,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testSelectAssignMenuItem() {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
@@ -251,7 +251,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testSelectUnassignMenuItem() {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
@@ -285,7 +285,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testSelectUnassignMenuItemNotAllowed() {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
@@ -311,6 +311,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testIsUsageProcessingCompleted() throws Exception {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
@@ -439,6 +440,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testMultipleEditButtonClickListenerResearcherForbidden() throws Exception {
         mockStatic(Windows.class);
         setResearcherExpectations();
@@ -467,6 +469,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testMultipleEditButtonClickListenerResearcherAllowed() throws Exception {
         mockStatic(Windows.class);
         setResearcherExpectations();
@@ -499,6 +502,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testEditButtonClickListenerBaselineResearcher() throws Exception {
         mockStatic(Windows.class);
         setResearcherExpectations();
@@ -520,6 +524,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testEditButtonClickListenerInvalidAssignee() throws Exception {
         mockStatic(Windows.class);
         setSpecialistExpectations();
@@ -598,6 +603,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testSelectAllCheckBoxVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
@@ -610,8 +616,8 @@ public class UdmUsageWidgetTest {
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        Stream<?> stream = dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null, null));
-        assertEquals(udmUsageDtos, stream.collect(Collectors.toList()));
+        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
         assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
@@ -619,6 +625,7 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
+    @SuppressWarnings(UNCHECKED)
     public void testSelectAllCheckBoxNotVisible() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
@@ -631,8 +638,8 @@ public class UdmUsageWidgetTest {
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
         CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
-        Stream<?> stream = dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null, null));
-        assertEquals(udmUsageDtos, stream.collect(Collectors.toList()));
+        assertEquals(udmUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());

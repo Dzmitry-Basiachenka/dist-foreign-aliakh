@@ -28,6 +28,8 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -74,6 +76,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private MenuBar.MenuItem unassignItem;
     private Button editButton;
     private DataProvider<UdmValueDto, Void> dataProvider;
+    private MultiSelectionModelImpl<UdmValueDto> gridSelectionModel;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -205,6 +208,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> {
                 int size = controller.getBeansCount();
+                if (isNotViewOnlyPermission()) {
+                    switchSelectAllCheckBoxVisibility(size);
+                }
                 if (0 < size) {
                     udmValuesGrid.removeStyleName(EMPTY_STYLE_NAME);
                 } else {
@@ -216,8 +222,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         udmValuesGrid = new Grid<>(dataProvider);
         addColumns();
         udmValuesGrid.setSizeFull();
-        if (hasSpecialistPermission || hasManagerPermission || hasResearcherPermission) {
-            udmValuesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        if (isNotViewOnlyPermission()) {
+            gridSelectionModel =
+                (MultiSelectionModelImpl<UdmValueDto>) udmValuesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
             udmValuesGrid.addSelectionListener(event -> {
                 Set<UdmValueDto> valueDtos = event.getAllSelectedItems();
                 boolean isSelected = CollectionUtils.isNotEmpty(valueDtos);
@@ -229,6 +236,19 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         }
         VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
+    }
+
+    private boolean isNotViewOnlyPermission() {
+        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        //TODO {dbasiachenka} replace after implementation of controller logic
+        int threshold = 10000;
+        gridSelectionModel.setSelectAllCheckBoxVisibility(beansCount > threshold
+            ? SelectAllCheckBoxVisibility.HIDDEN
+            : SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel.beforeClientResponse(false);
     }
 
     private void addColumns() {

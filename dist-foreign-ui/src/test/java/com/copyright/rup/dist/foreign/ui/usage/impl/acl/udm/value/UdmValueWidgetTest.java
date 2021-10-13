@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -22,6 +23,9 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableList;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -29,10 +33,12 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
@@ -59,13 +65,15 @@ import java.util.stream.IntStream;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class, Windows.class, RupContextUtils.class})
+@PrepareForTest({ForeignSecurityUtils.class, Windows.class, RupContextUtils.class, JavaScript.class})
 public class UdmValueWidgetTest {
 
     private static final String FORMATTED_PLUS_THOUSAND = "1,000.00";
     private static final String FORMATTED_MINUS_THOUSAND = "-1,000.00";
     private static final String USER = "user@copyright.com";
     private static final String UNCHECKED = "unchecked";
+    private static final int UDM_RECORD_THRESHOLD = 10000;
+    private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
 
     private IUdmValueController controller;
     private UdmValueWidget valueWidget;
@@ -246,6 +254,50 @@ public class UdmValueWidgetTest {
         verify(controller, confirmWindowMock, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
     }
 
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testSelectAllCheckBoxVisible() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        List<UdmValueDto> udmValueDtos = ImmutableList.of(new UdmValueDto(), new UdmValueDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmValueDtos).once();
+        expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(udmValueDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testSelectAllCheckBoxNotVisible() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        List<UdmValueDto> udmValueDtos = ImmutableList.of(new UdmValueDto(), new UdmValueDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmValueDtos).once();
+        expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(udmValueDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
@@ -257,6 +309,7 @@ public class UdmValueWidgetTest {
             "Content Unit Price", "Comment", "Updated By", "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Values Count: 0", footerRow.getCell("valuePeriod").getText());
