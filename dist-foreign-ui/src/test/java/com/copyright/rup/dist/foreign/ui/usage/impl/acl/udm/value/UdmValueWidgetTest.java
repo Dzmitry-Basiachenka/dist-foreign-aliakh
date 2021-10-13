@@ -272,9 +272,10 @@ public class UdmValueWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
         verifyMenuBar(layout.getComponent(1), "Assignment", Arrays.asList("Assign", "Unassign"));
+        verifyButton(layout.getComponent(2), "Edit Value");
     }
 
     private void verifyButton(Component component, String name) {
