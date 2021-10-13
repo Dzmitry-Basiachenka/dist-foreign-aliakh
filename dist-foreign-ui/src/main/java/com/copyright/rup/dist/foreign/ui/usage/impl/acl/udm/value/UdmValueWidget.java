@@ -55,6 +55,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
+    private static final int EXPECTED_SELECTED_SIZE = 1;
     private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00########",
         CurrencyUtils.getParameterizedDecimalFormatSymbols());
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER =
@@ -71,6 +72,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private MenuBar assignmentMenuBar;
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
+    private Button editButton;
     private DataProvider<UdmValueDto, Void> dataProvider;
 
     @Override
@@ -94,6 +96,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         UdmValueMediator mediator = new UdmValueMediator();
         mediator.setPopulateButton(populateButton);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
+        mediator.setEditButton(editButton);
         return mediator;
     }
 
@@ -182,7 +185,16 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private HorizontalLayout initButtonsLayout() {
         populateButton = Buttons.createButton(ForeignUi.getMessage("button.populate_value_batch"));
         populateButton.addClickListener(event -> Windows.showModalWindow(new UdmPopulateValueBatchWindow(controller)));
-        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar);
+        editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_value"));
+        editButton.setEnabled(false);
+        editButton.addClickListener(event -> {
+            //TODO enable when UdmEditValueWindow is implemented
+            //UdmValueDto selectedValue = udmValuesGrid.getSelectedItems().iterator().next();
+            //openEditWindow(Collections.singleton(selectedValue),
+            //    () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
+        });
+        VaadinUtils.setButtonsAutoDisabled(editButton);
+        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
@@ -211,6 +223,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 boolean isSelected = CollectionUtils.isNotEmpty(valueDtos);
                 assignItem.setEnabled(isSelected);
                 unassignItem.setEnabled(isSelected);
+                editButton.setEnabled(EXPECTED_SELECTED_SIZE == valueDtos.size());
             });
         } else {
             udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
