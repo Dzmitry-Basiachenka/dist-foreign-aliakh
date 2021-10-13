@@ -35,6 +35,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private BigDecimal lastPriceInUsd;
     private Boolean lastPriceFlag;
     private String lastPriceSource;
+    private String priceSource;
     private String lastPriceComment;
     private BigDecimal price;
     private String currency;
@@ -49,6 +50,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private BigDecimal lastContent;
     private Boolean lastContentFlag;
     private String lastContentSource;
+    private String contentSource;
     private String lastContentComment;
     private BigDecimal content;
     private String contentComment;
@@ -176,6 +178,14 @@ public class UdmValueDto extends StoredEntity<String> {
         this.lastPriceSource = lastPriceSource;
     }
 
+    public String getPriceSource() {
+        return priceSource;
+    }
+
+    public void setPriceSource(String priceSource) {
+        this.priceSource = priceSource;
+    }
+
     public String getLastPriceComment() {
         return lastPriceComment;
     }
@@ -288,6 +298,14 @@ public class UdmValueDto extends StoredEntity<String> {
         this.lastContentSource = lastContentSource;
     }
 
+    public String getContentSource() {
+        return contentSource;
+    }
+
+    public void setContentSource(String contentSource) {
+        this.contentSource = contentSource;
+    }
+
     public String getLastContentComment() {
         return lastContentComment;
     }
@@ -362,6 +380,8 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(lastPriceInUsd, that.lastPriceInUsd)
             .append(lastPriceFlag, that.lastPriceFlag)
             .append(lastPriceSource, that.lastPriceSource)
+            .append(priceSource, that.priceSource)
+            .append(contentSource, that.contentSource)
             .append(lastPriceComment, that.lastPriceComment)
             .append(price, that.price)
             .append(currency, that.currency)
@@ -404,6 +424,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(lastPriceInUsd)
             .append(lastPriceFlag)
             .append(lastPriceSource)
+            .append(priceSource)
             .append(lastPriceComment)
             .append(price)
             .append(currency)
@@ -418,6 +439,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(lastContent)
             .append(lastContentFlag)
             .append(lastContentSource)
+            .append(contentSource)
             .append(lastContentComment)
             .append(content)
             .append(contentComment)
@@ -446,6 +468,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append("lastPriceInUsd", lastPriceInUsd)
             .append("lastPriceFlag", lastPriceFlag)
             .append("lastPriceSource", lastPriceSource)
+            .append("priceSource", priceSource)
             .append("lastPriceComment", lastPriceComment)
             .append("price", price)
             .append("currency", currency)
@@ -460,6 +483,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append("lastContent", lastContent)
             .append("lastContentFlag", lastContentFlag)
             .append("lastContentSource", lastContentSource)
+            .append("contentSource", contentSource)
             .append("lastContentComment", lastContentComment)
             .append("content", content)
             .append("contentComment", contentComment)
