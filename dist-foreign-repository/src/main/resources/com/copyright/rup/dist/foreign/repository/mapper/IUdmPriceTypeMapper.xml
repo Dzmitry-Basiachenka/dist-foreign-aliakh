@@ -1,0 +1,18 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmPriceTypeMapper">
+
+    <select id="findPriceTypes" resultType="string">
+        select name
+        from ${schema}.df_udm_price_type
+        order by price_type_id
+    </select>
+
+    <select id="findPriceAccessTypes" resultType="string">
+        select name
+        from ${schema}.df_udm_price_access_type
+        order by price_access_type_id
+    </select>
+</mapper>
