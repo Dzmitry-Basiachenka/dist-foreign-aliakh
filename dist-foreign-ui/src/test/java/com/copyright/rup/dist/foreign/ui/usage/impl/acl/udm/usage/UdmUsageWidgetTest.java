@@ -26,6 +26,9 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.google.common.collect.ImmutableList;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -34,11 +37,14 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+import com.vaadin.ui.components.grid.NoSelectionModel;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
@@ -58,6 +64,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Verifies {@link UdmUsageWidget}.
@@ -69,7 +76,8 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UdmUsageWidget.class, ForeignSecurityUtils.class, Windows.class, RupContextUtils.class})
+@PrepareForTest({UdmUsageWidget.class, ForeignSecurityUtils.class, Windows.class, RupContextUtils.class,
+    JavaScript.class})
 public class UdmUsageWidgetTest {
 
     private static final List<String> VISIBLE_COLUMNS_FOR_RESEARCHER =
@@ -99,6 +107,8 @@ public class UdmUsageWidgetTest {
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment";
     private static final String USER = "user@copyright.com";
+    private static final int UDM_RECORD_THRESHOLD = 10000;
+    private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -132,7 +142,9 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true, true, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
+        Grid grid = (Grid) layout.getComponent(1);
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -152,7 +164,9 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, true, false, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
+        Grid grid = (Grid) layout.getComponent(1);
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -172,7 +186,9 @@ public class UdmUsageWidgetTest {
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, false, true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_VIEW_ONLY);
+        Grid grid = (Grid) layout.getComponent(1);
+        assertTrue(grid.getSelectionModel() instanceof NoSelectionModel);
+        verifyGrid(grid, VISIBLE_COLUMNS_FOR_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -193,7 +209,9 @@ public class UdmUsageWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, true, false,
             true);
-        verifyGrid((Grid) layout.getComponent(1), VISIBLE_COLUMNS_FOR_RESEARCHER);
+        Grid grid = (Grid) layout.getComponent(1);
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        verifyGrid(grid, VISIBLE_COLUMNS_FOR_RESEARCHER);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -577,6 +595,48 @@ public class UdmUsageWidgetTest {
         assertFalse(multipleEditButton.isEnabled());
         assertFalse(assignItem.isEnabled());
         assertFalse(unassignItem.isEnabled());
+    }
+
+    @Test
+    public void testSelectAllCheckBoxVisible() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        List<UdmUsageDto> udmUsageDtos = ImmutableList.of(new UdmUsageDto(), new UdmUsageDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
+        expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
+        replay(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null, null));
+        assertEquals(udmUsageDtos, stream.collect(Collectors.toList()));
+        assertEquals(UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    public void testSelectAllCheckBoxNotVisible() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        List<UdmUsageDto> udmUsageDtos = ImmutableList.of(new UdmUsageDto(), new UdmUsageDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmUsageDtos).once();
+        expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();
+        replay(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null, null));
+        assertEquals(udmUsageDtos, stream.collect(Collectors.toList()));
+        assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
     }
 
     private void testSelectionOfMultipleUsages() {

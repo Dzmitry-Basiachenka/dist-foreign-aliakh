@@ -31,6 +31,8 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -79,6 +81,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private MenuBar.MenuItem unassignItem;
     private SearchWidget searchWidget;
     private Set<UdmUsageDto> selectedUdmUsages;
+    private MultiSelectionModelImpl<UdmUsageDto> gridSelectionModel;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -295,6 +298,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> {
                 int size = controller.getBeansCount();
+                if (isNotViewOnlyPermission()) {
+                    switchSelectAllCheckBoxVisibility(size);
+                }
                 if (0 < size) {
                     udmUsagesGrid.removeStyleName(EMPTY_STYLE_NAME);
                 } else {
@@ -306,8 +312,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
         udmUsagesGrid.setSizeFull();
-        if (hasSpecialistPermission || hasManagerPermission || hasResearcherPermission) {
-            udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+        if (isNotViewOnlyPermission()) {
+            gridSelectionModel =
+                (MultiSelectionModelImpl<UdmUsageDto>) udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
             udmUsagesGrid.addSelectionListener(event -> {
                 Set<UdmUsageDto> usageDtos = event.getAllSelectedItems();
                 boolean isSelected = CollectionUtils.isNotEmpty(usageDtos);
@@ -320,6 +327,20 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         }
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
+    }
+
+    private boolean isNotViewOnlyPermission() {
+        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        //TODO {dbasiachenka} replace after implementation of controller logic
+        int threshold = 10000;
+        if (beansCount > threshold) {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.HIDDEN);
+        } else {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
+        }
     }
 
     private void addColumns() {
