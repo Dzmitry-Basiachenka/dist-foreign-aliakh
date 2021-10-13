@@ -771,4 +771,90 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_udm_value_wr_wrk_inst")
         }
     }
+
+    changeSet(id: '2021-10-13-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-68260 [Value] FDA & UDM: Publish values to baseline: Implement db table for baseline values and add df_udm_value_uid column to df_udm_usage table")
+
+        createTable(tableName: 'df_udm_value_baseline', schemaName: dbAppsSchema, tablespace: dbDataTablespace, remarks: 'Table for storing UDM baseline values') {
+            column(name: 'df_udm_value_baseline_uid', type: 'VARCHAR(255)', remarks: 'The identifier of UDM baseline value') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The UDM baseline value period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'Wr Wrk Inst') {
+                constraints(nullable: false)
+            }
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'System title')
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication type uid')
+            column(name: 'price', type: 'NUMERIC(38,10)', remarks: 'Price') {
+                constraints(nullable: false)
+            }
+            column(name: 'price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Price Flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'content', type: 'NUMERIC (38, 10)', remarks: 'Content') {
+                constraints(nullable: false)
+            }
+            column(name: 'content_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'content_unit_price', type: 'NUMERIC (38, 10)', remarks: 'Content unit price') {
+                constraints(nullable: false)
+            }
+            column(name: 'comment', type: 'VARCHAR(1024)', remarks: 'Comment')
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_value_uid', type: 'VARCHAR(255)', remarks: 'The identifier of UDM value')
+        }
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_udm_value_baseline',
+                columnNames: 'df_udm_value_baseline_uid',
+                constraintName: 'pk_df_udm_value_baseline_uid')
+
+        addForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_value_baseline',
+                baseColumnNames: 'df_udm_value_baseline_uid',
+                referencedTableName: 'df_udm_value',
+                referencedColumnNames: 'df_udm_value_uid',
+                constraintName: 'fk_df_udm_value_baseline_2_df_udm_value')
+
+        addForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_value_baseline',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_udm_value_baseline_2_df_publication_type')
+
+        addForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_usage',
+                baseColumnNames: 'df_udm_value_uid',
+                referencedTableName: 'df_udm_value',
+                referencedColumnNames: 'df_udm_value_uid',
+                constraintName: 'fk_df_udm_usage_2_df_udm_value')
+    }
 }
