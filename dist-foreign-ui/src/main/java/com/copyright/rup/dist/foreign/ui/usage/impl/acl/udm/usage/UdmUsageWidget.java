@@ -327,6 +327,15 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         } else {
             udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         }
+        udmUsagesGrid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                UdmUsageDto udmUsageDto = event.getItem();
+                UdmEditUsageWindow components = new UdmEditUsageWindow(controller, udmUsageDto);
+                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages));
+                Windows.showModalWindow(components);
+                highlightSelectedUsage(udmUsageDto);
+            }
+        });
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
 
@@ -351,7 +360,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> {
                 controller.showUdmUsageHistory(udmUsageId, closeEvent -> restoreSelection(selectedUdmUsages));
-                selectUsageForAudit(usage);
+                highlightSelectedUsage(usage);
             });
             return button;
         })
@@ -458,18 +467,18 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     /**
-     * Hides current usage selection and selects usage for which the history window was opened.
+     * Hides current usage selection and selects usage for which edit or history window was opened.
      *
      * @param usageToSeeAudit usage to select
      */
-    private void selectUsageForAudit(UdmUsageDto usageToSeeAudit) {
+    private void highlightSelectedUsage(UdmUsageDto usageToSeeAudit) {
         selectedUdmUsages = udmUsagesGrid.getSelectedItems();
         udmUsagesGrid.deselectAll();
         udmUsagesGrid.select(usageToSeeAudit);
     }
 
     /**
-     * Restores previous usage selection. Removes selection of usage for which the history window was opened.
+     * Restores previous usage selection. Removes selection of usage for which edit or history window was opened.
      *
      * @param usagesToSelect set of usages to select
      */

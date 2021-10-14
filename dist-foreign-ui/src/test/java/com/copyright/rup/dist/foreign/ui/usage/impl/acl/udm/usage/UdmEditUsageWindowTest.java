@@ -144,12 +144,8 @@ public class UdmEditUsageWindowTest {
     public void testConstructorSpecialist() {
         setSpecialistExpectations();
         initEditWindow();
-        assertEquals("Edit UDM Usage", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
 
@@ -157,12 +153,8 @@ public class UdmEditUsageWindowTest {
     public void testConstructorManager() {
         setManagerExpectations();
         initEditWindow();
-        assertEquals("Edit UDM Usage", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
 
@@ -171,12 +163,51 @@ public class UdmEditUsageWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         setResearcherExpectations();
         initEditWindow();
-        assertEquals("Edit UDM Usage", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
+        verifyPanelResearcher(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorSpecialistWithoutSaveButton() {
+        setSpecialistExpectations();
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        verify(controller, ForeignSecurityUtils.class);
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
+        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorManagerWithoutSaveButton() {
+        setManagerExpectations();
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        verify(controller, ForeignSecurityUtils.class);
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
+        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorResearcherWithoutSaveButton() {
+        mockStatic(ForeignSecurityUtils.class);
+        setResearcherExpectations();
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new UdmEditUsageWindow(controller, udmUsage);
+        binder = Whitebox.getInternalState(window, BINDER_NAME);
+        verify(controller, ForeignSecurityUtils.class);
+        verifyWindowSize();
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
         verifyPanelResearcher(verticalLayout.getComponent(0));
     }
 
@@ -491,11 +522,19 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(textField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
     }
 
-    private VerticalLayout verifyRootLayout(Component component) {
+    private void verifyWindowSize() {
+        assertEquals("Edit UDM Usage", window.getCaption());
+        assertEquals(650, window.getWidth(), 0);
+        assertEquals(Unit.PIXELS, window.getWidthUnits());
+        assertEquals(700, window.getHeight(), 0);
+        assertEquals(Unit.PIXELS, window.getHeightUnits());
+    }
+
+    private VerticalLayout verifyRootLayout(Component component, boolean isVisible) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), isVisible);
         return verticalLayout;
     }
 
@@ -657,13 +696,15 @@ public class UdmEditUsageWindowTest {
         return comboBox;
     }
 
-    private void verifyButtonsLayout(Component component) {
+    private void verifyButtonsLayout(Component component, boolean isVisible) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Save");
         verifyButton(layout.getComponent(1), "Discard");
         verifyButton(layout.getComponent(2), "Close");
+        Button button = (Button) layout.getComponent(0);
+        assertEquals(isVisible, button.isVisible());
     }
 
     private void verifyButton(Component component, String caption) {
