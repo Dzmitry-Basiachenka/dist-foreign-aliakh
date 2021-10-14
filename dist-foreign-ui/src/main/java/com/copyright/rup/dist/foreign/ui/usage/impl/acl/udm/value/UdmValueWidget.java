@@ -78,6 +78,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
     private Button editButton;
+    private Button publishButton;
     private DataProvider<UdmValueDto, Void> dataProvider;
     private MultiSelectionModelImpl<UdmValueDto> gridSelectionModel;
 
@@ -103,6 +104,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         mediator.setPopulateButton(populateButton);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setPublishButton(publishButton);
         return mediator;
     }
 
@@ -198,8 +200,10 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             openEditWindow(Collections.singleton(selectedValue),
                 () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
         });
+        publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
+        publishButton.addClickListener(event -> Windows.showModalWindow(new UdmPublishToBaselineWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(editButton);
-        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton);
+        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton, publishButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;

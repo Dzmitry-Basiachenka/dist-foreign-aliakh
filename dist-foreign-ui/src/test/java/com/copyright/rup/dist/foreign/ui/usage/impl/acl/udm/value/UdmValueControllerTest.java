@@ -119,6 +119,15 @@ public class UdmValueControllerTest {
     }
 
     @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Arrays.asList(200212, 201912);
+        expect(valueService.getPeriods()).andReturn(periods).once();
+        replay(valueService);
+        assertEquals(periods, controller.getPeriods());
+        verify(valueService);
+    }
+
+    @Test
     public void testAssignValues() {
         Set<String> valueIds = Collections.singleton("303e2ed4-5ade-41e8-a989-2d73482209fd");
         valueService.assignValues(valueIds);
