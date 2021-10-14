@@ -416,6 +416,14 @@ public class UdmUsageControllerTest {
             pos -> udmReportService.writeUdmUsageCsvReportView(udmUsageFilter, pos));
     }
 
+    @Test
+    public void testGetUdmRecordThreshold() {
+        expect(udmUsageService.getUdmRecordThreshold()).andReturn(10000).once();
+        replay(udmUsageService);
+        assertEquals(10000, controller.getUdmRecordThreshold());
+        verify(udmUsageService);
+    }
+
     private void testGetExportUsagesStreamSource(Supplier<IStreamSource> streamSourceSupplier,
                                                  Consumer<PipedOutputStream> consumer) {
         mockStatic(OffsetDateTime.class);

@@ -238,4 +238,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @return {@code true} - if UDM batch doesn't have usages in baseline, {@code false} - otherwise
      */
     boolean isUdmBatchContainsBaselineUsages(String udmBatchId);
+
+    /**
+     * @return threshold value for size of UDM records.
+     */
+    int getUdmRecordThreshold();
 }
