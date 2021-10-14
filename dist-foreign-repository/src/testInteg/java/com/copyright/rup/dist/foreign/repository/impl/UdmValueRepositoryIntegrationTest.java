@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -21,7 +22,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +99,8 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201912, 201512, 201506, 201406, 201106, 201006);
+        List<Integer> expectedPeriods = Arrays.asList(209506, 209406, 209306, 209206, 209106, 202112, 202106, 201912,
+            201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -417,6 +418,15 @@ public class UdmValueRepositoryIntegrationTest {
     public void testFindLastValuePeriods() {
         assertEquals(Arrays.asList("202106", "201912", "201506", "201406", "201106"),
             udmValueRepository.findLastValuePeriods());
+    }
+
+    @Test
+    public void testIsAllowedForPublishing() {
+        assertFalse(udmValueRepository.isAllowedForPublishing(209106));
+        assertFalse(udmValueRepository.isAllowedForPublishing(209206));
+        assertFalse(udmValueRepository.isAllowedForPublishing(209306));
+        assertFalse(udmValueRepository.isAllowedForPublishing(209406));
+        assertTrue(udmValueRepository.isAllowedForPublishing(209506));
     }
 
     private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue, boolean isValidateDates) {

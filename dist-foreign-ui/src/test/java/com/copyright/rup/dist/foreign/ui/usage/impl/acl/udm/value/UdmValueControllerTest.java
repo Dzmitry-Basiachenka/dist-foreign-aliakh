@@ -8,8 +8,10 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -152,6 +154,22 @@ public class UdmValueControllerTest {
         expect(valueService.populateValueBatch(202019)).andReturn(1).once();
         replay(valueService);
         assertEquals(1, controller.populatesValueBatch(202019));
+        verify(valueService);
+    }
+
+    @Test
+    public void testIsAllowedForPublishingTrue() {
+        expect(valueService.isAllowedForPublishing(202106)).andReturn(true).once();
+        replay(valueService);
+        assertTrue(controller.isAllowedForPublishing(202106));
+        verify(valueService);
+    }
+
+    @Test
+    public void testIsAllowedForPublishingFalse() {
+        expect(valueService.isAllowedForPublishing(202106)).andReturn(false).once();
+        replay(valueService);
+        assertFalse(controller.isAllowedForPublishing(202106));
         verify(valueService);
     }
 }

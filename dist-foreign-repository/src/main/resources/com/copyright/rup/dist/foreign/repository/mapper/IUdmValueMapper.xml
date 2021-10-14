@@ -504,4 +504,18 @@
         where last_value.last_value_period is not null
         order by last_value.last_value_period desc
     </select>
+
+    <select id="isAllowedForPublishing" parameterType="map" resultType="boolean">
+        select not exists (
+            select 1
+            from ${schema}.df_udm_value
+            where period = #{period}
+                and (publication_type_uid is null
+                    or content_unit_price is null
+                    or status_ind in
+                    <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                        #{status}
+                    </foreach>)
+        )
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -137,6 +138,22 @@ public class UdmValueServiceTest {
         replay(udmBaselineRepository, udmValueRepository, rightsService);
         assertEquals(1, udmValueService.populateValueBatch(202012));
         verify(udmBaselineRepository, udmValueRepository, rightsService);
+    }
+
+    @Test
+    public void testIsAllowedForPublishingTrue() {
+        expect(udmValueRepository.isAllowedForPublishing(202106)).andReturn(true).once();
+        replay(udmValueRepository);
+        assertTrue(udmValueService.isAllowedForPublishing(202106));
+        verify(udmValueRepository);
+    }
+
+    @Test
+    public void testIsAllowedForPublishingFalse() {
+        expect(udmValueRepository.isAllowedForPublishing(202106)).andReturn(false).once();
+        replay(udmValueRepository);
+        assertFalse(udmValueService.isAllowedForPublishing(202106));
+        verify(udmValueRepository);
     }
 
     private UdmValue buildUdmValue(Long wrWrkInst) {
