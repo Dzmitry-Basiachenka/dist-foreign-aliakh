@@ -17,8 +17,10 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -26,6 +28,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 
+import com.google.common.collect.ImmutableMap;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,9 +37,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -52,6 +57,8 @@ import java.util.Set;
 @PrepareForTest({ForeignSecurityUtils.class})
 public class UdmValueControllerTest {
 
+    private static final String ACL_PRODUCT_FAMILY = "ACL";
+
     private final UdmValueController controller = new UdmValueController();
     private final UdmValueFilter udmValueFilter = new UdmValueFilter();
     private IUdmValueFilterController udmValueFilterController;
@@ -59,6 +66,7 @@ public class UdmValueControllerTest {
     private IUdmValueService valueService;
     private IUdmValueWidget udmValueWidget;
     private IUdmBaselineService baselineService;
+    private IPublicationTypeService publicationTypeService;
 
     @Before
     public void setUp() {
@@ -67,11 +75,13 @@ public class UdmValueControllerTest {
         valueService = createMock(IUdmValueService.class);
         udmValueWidget = createMock(IUdmValueWidget.class);
         baselineService = createMock(IUdmBaselineService.class);
+        publicationTypeService = createMock(IPublicationTypeService.class);
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
         Whitebox.setInternalState(controller, udmValueWidget);
         Whitebox.setInternalState(controller, baselineService);
+        Whitebox.setInternalState(controller, publicationTypeService);
     }
 
     @Test
@@ -171,5 +181,30 @@ public class UdmValueControllerTest {
         replay(valueService);
         assertFalse(controller.isAllowedForPublishing(202106));
         verify(valueService);
+    }
+
+    @Test
+    public void testGetCurrencyCodesToCurrencyNamesMap() {
+        Map<String, String> map = ImmutableMap.of("USD", "US Dollar");
+        expect(valueService.getCurrencyCodesToCurrencyNamesMap()).andReturn(map).once();
+        replay(valueService);
+        assertEquals(map, controller.getCurrencyCodesToCurrencyNamesMap());
+        verify(valueService);
+    }
+
+    @Test
+    public void testGetPublicationTypes() {
+        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
+        replay(publicationTypeService);
+        assertEquals(pubTypes, controller.getPublicationTypes());
+        verify(publicationTypeService);
+    }
+
+    private PublicationType buildPublicationType(String name, String weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 }

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -348,7 +349,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private Column<UdmValueDto, ?> addBooleanColumn(ValueProvider<UdmValueDto, Boolean> valueProvider,
                                                     String captionProperty, String columnId, double width) {
-        return udmValuesGrid.addColumn(value -> convertBooleanToString(valueProvider.apply(value)))
+        return udmValuesGrid.addColumn(value -> BooleanUtils.toYNString(valueProvider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)
@@ -377,13 +378,5 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
         return udmValueDtos.stream()
             .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
-    }
-
-    private String convertBooleanToString(Boolean value) {
-        if (Objects.isNull(value)) {
-            return null;
-        } else {
-            return value ? "Y" : "N";
-        }
     }
 }

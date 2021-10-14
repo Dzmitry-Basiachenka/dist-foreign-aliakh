@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
@@ -264,7 +265,7 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initLastPriceFlagLastPriceCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastPriceFlagComboBox, lastPriceCommentField);
         lastPriceFlagComboBox.setItems(Y_N_ITEMS);
-        lastPriceFlagComboBox.setSelectedItem(convertBooleanToString(valueFilter.getLastPriceFlag()));
+        lastPriceFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getLastPriceFlag()));
         lastPriceFlagComboBox.setSizeFull();
         lastPriceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getLastPriceComment(), StringUtils.EMPTY));
         filterBinder.forField(lastPriceCommentField)
@@ -298,7 +299,7 @@ public class UdmValueFiltersWindow extends Window {
     private HorizontalLayout initLastContentFlagLastContentCommentLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(lastContentFlagComboBox, lastContentCommentField);
         lastContentFlagComboBox.setItems(Y_N_ITEMS);
-        lastContentFlagComboBox.setSelectedItem(convertBooleanToString(valueFilter.getLastContentFlag()));
+        lastContentFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getLastContentFlag()));
         lastContentFlagComboBox.setSizeFull();
         lastContentCommentField.setValue(
             ObjectUtils.defaultIfNull(valueFilter.getLastContentComment(), StringUtils.EMPTY));
@@ -512,13 +513,5 @@ public class UdmValueFiltersWindow extends Window {
 
     private Boolean convertStringToBoolean(String value) {
         return "Y".equals(value);
-    }
-
-    private String convertBooleanToString(Boolean value) {
-        if (Objects.isNull(value)) {
-            return null;
-        } else {
-            return value ? "Y" : "N";
-        }
     }
 }

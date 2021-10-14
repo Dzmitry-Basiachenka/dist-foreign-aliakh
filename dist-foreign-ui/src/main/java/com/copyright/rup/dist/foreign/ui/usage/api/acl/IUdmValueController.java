@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -9,6 +10,7 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -116,5 +118,19 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      *
      * @param udmValueDto {@link UdmValueDto} to update
      */
-    void updateValue(UdmValueDto udmValueDto);    
+    void updateValue(UdmValueDto udmValueDto);
+
+    /**
+     * Gets map of currency codes to currency names.
+     *
+     * @return map of currency codes to currency names
+     */
+    Map<String, String> getCurrencyCodesToCurrencyNamesMap();
+
+    /**
+     * Gets list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}
+     */
+    List<PublicationType> getPublicationTypes();
 }

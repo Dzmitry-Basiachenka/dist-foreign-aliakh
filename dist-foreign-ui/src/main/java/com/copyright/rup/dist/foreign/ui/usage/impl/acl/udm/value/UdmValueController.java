@@ -3,8 +3,11 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -23,6 +26,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,6 +48,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IUdmBaselineService baselineService;
     @Autowired
     private IUdmValueService valueService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     @Override
     public List<Integer> getBaselinePeriods() {
@@ -117,6 +123,16 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @SuppressWarnings("unused") // TODO remove when the method is implemented
     public void updateValue(UdmValueDto udmValueDto) {
         // TODO implement method
+    }
+
+    @Override
+    public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
+        return valueService.getCurrencyCodesToCurrencyNamesMap();
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     private UdmValueFilter getFilter() {
