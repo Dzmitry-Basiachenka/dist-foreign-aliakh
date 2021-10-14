@@ -803,6 +803,10 @@ databaseChangeLog {
                 constraints(nullable: false)
             }
             column(name: 'comment', type: 'VARCHAR(1024)', remarks: 'Comment')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
             column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
                 constraints(nullable: false)
             }

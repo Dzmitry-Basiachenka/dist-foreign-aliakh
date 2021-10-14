@@ -51,6 +51,23 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     }
 
     @Override
+    public List<Integer> getPeriods() {
+        return valueService.getPeriods();
+    }
+
+    @Override
+    public int publishToBaseline(Integer period) {
+        //TODO: Use service logic here
+        return 0;
+    }
+
+    @Override
+    public boolean isAllowedForPublishing(Integer period) {
+        //TODO: Use service logic here
+        return false;
+    }
+
+    @Override
     public int populatesValueBatch(Integer period) {
         return valueService.populateValueBatch(period);
     }

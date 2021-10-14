@@ -29,6 +29,13 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
         ReflectTools.findMethod(IUdmValueController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
+     * Gets all available value periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
+
+    /**
      * Gets all available baseline periods.
      *
      * @return list of periods
@@ -42,6 +49,24 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return count of populated values
      */
     int populatesValueBatch(Integer period);
+
+    /**
+     * Publishes value batch to baseline.
+     *
+     * @param period period of value batch to publish
+     * @return count of published values
+     */
+    int publishToBaseline(Integer period);
+
+    /**
+     * Checks whether a value batch for given period is allowed for publishing.
+     * In order to publish the entire butch, all work values must have: Pub Type, Content Unit Price.
+     * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
+     *
+     * @param period period of value batch to check
+     * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
+     */
+    boolean isAllowedForPublishing(Integer period);
 
     /**
      * @return number of items.

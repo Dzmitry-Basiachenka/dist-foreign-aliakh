@@ -38,6 +38,7 @@ public class UdmValueMediatorTest {
     private final Button populateButton = new Button("Populate Value Batch");
     private final MenuBar assignmentMenuBar = new MenuBar();
     private final Button editButton = new Button("Edit Value");
+    private final Button publishButton = new Button("Publish");
     private UdmValueMediator mediator;
 
     @Before
@@ -46,6 +47,7 @@ public class UdmValueMediatorTest {
         mediator.setPopulateButton(populateButton);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setPublishButton(publishButton);
     }
 
     @Test
@@ -56,6 +58,7 @@ public class UdmValueMediatorTest {
         assertFalse(populateButton.isVisible());
         assertFalse(assignmentMenuBar.isVisible());
         assertFalse(editButton.isVisible());
+        assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -67,6 +70,7 @@ public class UdmValueMediatorTest {
         assertFalse(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -78,6 +82,7 @@ public class UdmValueMediatorTest {
         assertTrue(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertTrue(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -89,6 +94,7 @@ public class UdmValueMediatorTest {
         assertFalse(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
     }
 

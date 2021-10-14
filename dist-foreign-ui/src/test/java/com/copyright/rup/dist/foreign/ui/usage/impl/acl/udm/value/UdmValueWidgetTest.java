@@ -340,6 +340,21 @@ public class UdmValueWidgetTest {
         verify(controller, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
     }
 
+    @Test
+    public void testPublishButtonClick() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        expect(controller.getPeriods()).andReturn(Collections.singletonList(202006)).once();
+        Windows.showModalWindow(anyObject(UdmPublishToBaselineWindow.class));
+        expectLastCall().once();
+        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        initWidget();
+        HorizontalLayout buttonsLayout =
+            (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
+        ((Button) buttonsLayout.getComponent(3)).click();
+        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+    }
+
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
@@ -367,10 +382,11 @@ public class UdmValueWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
         verifyMenuBar(layout.getComponent(1), "Assignment", Arrays.asList("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Edit Value");
+        verifyButton(layout.getComponent(3), "Publish");
     }
 
     private void verifyButton(Component component, String name) {

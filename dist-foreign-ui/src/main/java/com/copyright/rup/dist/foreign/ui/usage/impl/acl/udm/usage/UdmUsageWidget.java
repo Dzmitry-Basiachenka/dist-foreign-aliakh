@@ -70,7 +70,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
     private final Button multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
-    private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish_usage"));
+    private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
     private final String userName = RupContextUtils.getUserName();
     private IUdmUsageController controller;
     private Grid<UdmUsageDto> udmUsagesGrid;
