@@ -32,6 +32,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +86,8 @@ public class UdmUsageService implements IUdmUsageService {
     @Autowired
     @Qualifier("udmUsageChainExecutor")
     private IChainExecutor<UdmUsage> chainExecutor;
+    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    private int udmRecordsThreshold;
 
     @Override
     @Transactional
@@ -277,6 +280,11 @@ public class UdmUsageService implements IUdmUsageService {
         LOGGER.info("Publish to baseline UDM usages. Finished. PublishedCount={}, RemovedCount={}",
             publishedCount, removedCount);
         return Pair.of(publishedCount, removedCount);
+    }
+
+    @Override
+    public int getUdmRecordThreshold() {
+        return udmRecordsThreshold;
     }
 
     private UdmUsage convertUdmDtoToUsage(UdmUsageDto usageDto) {

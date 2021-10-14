@@ -182,4 +182,9 @@ public interface IUdmUsageService {
      * @return pair of count of published to baseline and count of removed from baseline
      */
     Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
+
+    /**
+     * @return threshold value for size of UDM records.
+     */
+    int getUdmRecordThreshold();
 }

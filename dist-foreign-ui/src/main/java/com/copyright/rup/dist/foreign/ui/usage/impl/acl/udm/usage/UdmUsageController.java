@@ -262,6 +262,11 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
         return new UdmUsageWidget();
     }
 
+    @Override
+    public int getUdmRecordThreshold() {
+        return udmUsageService.getUdmRecordThreshold();
+    }
+
     private UdmUsageFilter getFilter() {
         UdmUsageFilter udmUsageFilter = udmUsageFilterController.getWidget().getAppliedFilter();
         udmUsageFilter.setSearchValue(getWidget().getSearchValue());
