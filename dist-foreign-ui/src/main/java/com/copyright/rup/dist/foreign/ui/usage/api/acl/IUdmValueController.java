@@ -60,7 +60,7 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
 
     /**
      * Checks whether a value batch for given period is allowed for publishing.
-     * In order to publish the entire butch, all work values must have: Pub Type, Content Unit Price.
+     * In order to publish the entire batch, all work values must have: Pub Type, Content Unit Price.
      * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
      *
      * @param period period of value batch to check

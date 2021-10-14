@@ -63,8 +63,7 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
 
     @Override
     public boolean isAllowedForPublishing(Integer period) {
-        //TODO: Use service logic here
-        return false;
+        return valueService.isAllowedForPublishing(period);
     }
 
     @Override

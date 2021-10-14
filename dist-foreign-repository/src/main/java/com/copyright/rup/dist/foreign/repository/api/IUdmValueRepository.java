@@ -74,4 +74,14 @@ public interface IUdmValueRepository {
      * @return list of last value periods
      */
     List<String> findLastValuePeriods();
+
+    /**
+     * Checks whether a value batch for given period is allowed for publishing.
+     * In order to publish the entire batch, all work values must have: Pub Type, Content Unit Price.
+     * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
+     *
+     * @param period period of value batch to check
+     * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
+     */
+    boolean isAllowedForPublishing(Integer period);
 }

@@ -104,4 +104,9 @@ public class UdmValueService implements IUdmValueService {
                 udmValueRepository.insert(value);
             }).count();
     }
+
+    @Override
+    public boolean isAllowedForPublishing(Integer period) {
+        return udmValueRepository.isAllowedForPublishing(period);
+    }
 }
