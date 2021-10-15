@@ -1,3 +1,19 @@
+14.1.24
+-
+* B-67673 FDA: Value Edits: implement the Edit Value button
+* B-67673 FDA: Value Edits: implement fields layout
+* B-67673 FDA: Value Edits: implement Edit UDM Value window
+* B-69421 FDA & UDM: Select all (Usages, Values): refine service and controller logic for UDM Usage
+* B-69421 FDA & UDM: Select all (Usages, Values): add select all checkbox on UDM Usages tab
+* B-69729 FDA & UDM: View single record: implement logic related to usage view  modal window open  by double mouse click
+* B-69220 [Value] FDA & UDM: Populate Price Type and Price Access Type: create and populate price type tables
+* B-69739 [Value] FDA & UDM: Add Price Source & Content Source to Values UI: adjust UdmValueDto and repository logic to get fields from DB
+* B-69739 [Value] FDA & UDM: Add Price Source & Content Source to Values UI: adjust UI to display new Columns
+* B-69739 [Value] FDA & UDM: Add Price Source & Content Source to Values UI: adjust UI to display new columns
+* B-68260 [Value] FDA & UDM: Publish values to baseline: Implement db table for baseline values and add df_udm_value_uid column to df_udm_usage table
+* B-68260 [Value] FDA & UDM: Publish values to baseline: Implement window for publishing values to baseline
+* B-68260 [Value] FDA & UDM: Publish values to baseline: Implement verification logic for publishing to baseline
+
 14.1.23
 -
 * B-65962 [Value] FDA&UDM: Create and Populate Value batch: make changes based on comments in CR-DIST-FOREIGN-264
