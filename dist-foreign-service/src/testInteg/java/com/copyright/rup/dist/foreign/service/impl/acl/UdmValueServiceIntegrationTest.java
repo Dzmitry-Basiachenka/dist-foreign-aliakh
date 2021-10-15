@@ -56,4 +56,9 @@ public class UdmValueServiceIntegrationTest {
     public void testGetCurrencyCodesToCurrencyNames() {
         assertEquals(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP, valueService.getCurrencyCodesToCurrencyNamesMap());
     }
+
+    @Test
+    public void testGetUdmRecordThreshold() {
+        assertEquals(10000, valueService.getUdmRecordThreshold());
+    }
 }

@@ -201,6 +201,14 @@ public class UdmValueControllerTest {
         verify(publicationTypeService);
     }
 
+    @Test
+    public void testGetUdmRecordThreshold() {
+        expect(valueService.getUdmRecordThreshold()).andReturn(10000).once();
+        replay(valueService);
+        assertEquals(10000, controller.getUdmRecordThreshold());
+        verify(valueService);
+    }
+
     private PublicationType buildPublicationType(String name, String weight) {
         PublicationType pubType = new PublicationType();
         pubType.setName(name);

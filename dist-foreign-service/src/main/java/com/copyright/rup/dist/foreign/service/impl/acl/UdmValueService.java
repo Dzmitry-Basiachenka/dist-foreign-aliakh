@@ -44,6 +44,8 @@ public class UdmValueService implements IUdmValueService {
     private IUdmBaselineRepository baselineRepository;
     @Autowired
     private IRightsService rightsService;
+    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    private int udmRecordsThreshold;
 
     @Override
     public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
@@ -108,5 +110,10 @@ public class UdmValueService implements IUdmValueService {
     @Override
     public boolean isAllowedForPublishing(Integer period) {
         return udmValueRepository.isAllowedForPublishing(period);
+    }
+
+    @Override
+    public int getUdmRecordThreshold() {
+        return udmRecordsThreshold;
     }
 }
