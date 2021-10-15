@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -16,6 +17,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -30,6 +32,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.LocalDate;
@@ -51,26 +54,31 @@ import java.util.stream.Collectors;
  */
 public class UdmEditValueWindow extends Window {
 
+    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+    private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
+
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
     private final UdmValueDto udmValue;
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final ClickListener saveButtonClickListener;
-    private final TextField valuePeriodField = new TextField();
-    private final ComboBox<UdmValueStatusEnum> valueStatusComboBox = new ComboBox<>();
-    private final TextField wrWrkInstField = new TextField();
-    private final ComboBox<PublicationType> pubTypeComboBox = new ComboBox<>();
-    private final TextField priceField = new TextField();
-    private final ComboBox<Currency> currencyComboBox = new ComboBox<>();
-    private final ComboBox<String> priceTypeComboBox = new ComboBox<>();
-    private final ComboBox<String> priceAccessTypeComboBox = new ComboBox<>();
-    private final TextField priceYearField = new TextField();
-    private final TextField priceSourceField = new TextField();
-    private final TextField priceCommentField = new TextField();
-    private final TextField contentField = new TextField();
-    private final TextField contentSourceField = new TextField();
-    private final TextField contentCommentField = new TextField();
-    private final TextField commentField = new TextField();
+    private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
+    private final TextField valuePeriodField = new TextField(ForeignUi.getMessage("label.value_period"));
+    private final ComboBox<UdmValueStatusEnum> valueStatusComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.value_status"));
+    private final ComboBox<PublicationType> pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
+    private final TextField priceField = new TextField(ForeignUi.getMessage("label.price"));
+    private final ComboBox<Currency> currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
+    private final ComboBox<String> priceTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.price_type"));
+    private final ComboBox<String> priceAccessTypeComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.price_access_type"));
+    private final TextField priceYearField = new TextField(ForeignUi.getMessage("label.price_year"));
+    private final TextField priceSourceField = new TextField(ForeignUi.getMessage("label.price_source"));
+    private final TextField priceCommentField = new TextField(ForeignUi.getMessage("label.price_comment"));
+    private final TextField contentField = new TextField(ForeignUi.getMessage("label.content"));
+    private final TextField contentSourceField = new TextField(ForeignUi.getMessage("label.content_source"));
+    private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
+    private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
 
     /**
      * Constructor.
@@ -106,23 +114,7 @@ public class UdmEditValueWindow extends Window {
                         buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName),
                         buildReadOnlyLayout("label.rh_account_number",
                             value -> Objects.toString(value.getRhAccountNumber()))
-                    ))),
-                buildVerticalLayoutWithFixedWidth(
-                    new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
-                        buildValuePeriodLayout(),
-                        buildReadOnlyLayout("label.last_value_period",
-                            value -> Objects.toString(value.getLastValuePeriod())),
-                        buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee),
-                        initValueStatusLayout()
                     )),
-                    new Panel(ForeignUi.getMessage("label.publication_type"), new VerticalLayout(
-                        buildPubTypeLayout(),
-                        buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType)
-                    ))
-                )
-            ),
-            new HorizontalLayout(
-                buildVerticalLayoutWithFixedWidth(
                     new Panel(ForeignUi.getMessage("label.price"), new VerticalLayout(
                         buildPriceLayout(),
                         buildCurrencyLayout(),
@@ -144,8 +136,20 @@ public class UdmEditValueWindow extends Window {
                         buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment),
                         buildReadOnlyLayout("label.last_price_flag",
                             value -> BooleanUtils.toYNString(value.isLastPriceFlag()))
-                    ))),
+                    ))
+                ),
                 buildVerticalLayoutWithFixedWidth(
+                    new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
+                        buildValuePeriodLayout(),
+                        buildReadOnlyLayout("label.last_value_period",
+                            value -> Objects.toString(value.getLastValuePeriod())),
+                        buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee),
+                        initValueStatusLayout()
+                    )),
+                    new Panel(ForeignUi.getMessage("label.publication_type"), new VerticalLayout(
+                        buildPubTypeLayout(),
+                        buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType)
+                    )),
                     new Panel(ForeignUi.getMessage("label.content"), new VerticalLayout(
                         buildContentLayout(),
                         buildContentSourceLayout(),
@@ -162,11 +166,13 @@ public class UdmEditValueWindow extends Window {
                     )),
                     new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
                         buildCommentLayout()
+                    )),
+                    new Panel(new VerticalLayout(
+                        buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser),
+                        buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
                     ))
                 )
-            ),
-            buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
+            )
         );
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
@@ -217,11 +223,10 @@ public class UdmEditValueWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(valuePeriodField, valueStatusComboBox, wrWrkInstField,
+                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, valuePeriodField, valueStatusComboBox,
                     pubTypeComboBox, priceField, currencyComboBox, priceTypeComboBox, priceAccessTypeComboBox,
                     priceYearField, priceSourceField, priceCommentField, contentField, contentSourceField,
-                    contentCommentField, commentField
-                ));
+                    contentCommentField, commentField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
@@ -229,12 +234,35 @@ public class UdmEditValueWindow extends Window {
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
+    private HorizontalLayout buildWrWrkInstLayout() {
+        wrWrkInstField.setSizeFull();
+        binder.forField(wrWrkInstField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
+            .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
+                (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-value-edit-wr-wrk-inst-field");
+        return buildCommonLayout(wrWrkInstField, ForeignUi.getMessage("label.wr_wrk_inst"));
+    }
+
     private HorizontalLayout buildValuePeriodLayout() {
-        String fieldName = ForeignUi.getMessage("label.value_period");
         valuePeriodField.setSizeFull();
-        // TODO add validation
+        binder.forField(valuePeriodField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(value -> StringUtils.isEmpty(value) || value.trim().length() == PeriodValidator.VALID_LENGTH,
+                ForeignUi.getMessage("field.error.period_length", PeriodValidator.VALID_LENGTH))
+            .withValidator(value -> StringUtils.isEmpty(value) || PeriodValidator.isYearValid(value),
+                ForeignUi.getMessage("field.error.year_not_in_range",
+                    PeriodValidator.MIN_YEAR, PeriodValidator.MAX_YEAR))
+            .withValidator(value -> StringUtils.isEmpty(value) || PeriodValidator.isMonthValid(value),
+                ForeignUi.getMessage("field.error.month_invalid",
+                    PeriodValidator.MONTH_6, PeriodValidator.MONTH_12))
+            .bind(usage -> Objects.toString(usage.getValuePeriod(), StringUtils.EMPTY),
+                (usage, value) -> usage.setValuePeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(valuePeriodField, "udm-value-edit-value-period-field");
-        return buildCommonLayout(valuePeriodField, fieldName);
+        return buildCommonLayout(valuePeriodField, ForeignUi.getMessage("label.value_period"));
     }
 
     private HorizontalLayout initValueStatusLayout() {
@@ -246,15 +274,10 @@ public class UdmEditValueWindow extends Window {
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
             UdmValueStatusEnum.RESEARCH_COMPLETE);
         valueStatusComboBox.setSelectedItem(udmValue.getStatus());
+        valueStatusComboBox.addValueChangeListener(event -> binder.validate());
+        binder.forField(valueStatusComboBox).bind(UdmValueDto::getStatus, UdmValueDto::setStatus);
         VaadinUtils.addComponentStyle(valueStatusComboBox, "udm-value-edit-value-status-combo-box");
         return buildCommonLayout(valueStatusComboBox, ForeignUi.getMessage("label.value_status"));
-    }
-
-    private HorizontalLayout buildWrWrkInstLayout() {
-        wrWrkInstField.setSizeFull();
-        // TODO add validation
-        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-value-edit-wr-wrk-inst-field");
-        return buildCommonLayout(wrWrkInstField, ForeignUi.getMessage("label.wr_wrk_inst"));
     }
 
     private HorizontalLayout buildPubTypeLayout() {
@@ -262,11 +285,12 @@ public class UdmEditValueWindow extends Window {
         List<PublicationType> publicationTypes = controller.getPublicationTypes();
         pubTypeComboBox.setItems(publicationTypes);
         pubTypeComboBox.setPageLength(12);
-        pubTypeComboBox.setItemCaptionGenerator(pubType -> Objects.nonNull(pubType.getName())
-            ? String.format("%s - %s", pubType.getName(), pubType.getDescription())
+        pubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
+            ? String.format("%s - %s", value.getName(), value.getDescription())
             : StringUtils.EMPTY);
-        // TODO pubTypeComboBox.setSelectedItem
-        pubTypeComboBox.setSizeFull();
+        pubTypeComboBox.setSelectedItem(udmValue.getPublicationType());
+        pubTypeComboBox.addValueChangeListener(event -> binder.validate());
+        binder.forField(pubTypeComboBox).bind(UdmValueDto::getPublicationType, UdmValueDto::setPublicationType);
         VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-value-edit-pub-type-combo-box");
         return buildCommonLayout(pubTypeComboBox, ForeignUi.getMessage("label.pub_type"));
     }

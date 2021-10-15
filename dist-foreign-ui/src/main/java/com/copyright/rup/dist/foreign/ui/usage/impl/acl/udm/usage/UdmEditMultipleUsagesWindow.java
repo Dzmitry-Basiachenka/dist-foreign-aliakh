@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -64,8 +65,6 @@ public class UdmEditMultipleUsagesWindow extends Window {
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String MAX_LENGTH_FIELD_MESSAGE = "field.error.number_length";
-    private static final int MIN_YEAR = 1950;
-    private static final int MAX_YEAR = 2099;
     private final IUdmUsageController controller;
     private final ComboBox<UsageStatusEnum> statusComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.detail_status"));
@@ -168,12 +167,14 @@ public class UdmEditMultipleUsagesWindow extends Window {
         binder.forField(periodField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isEmpty(value) || value.trim().length() == 6,
-                ForeignUi.getMessage("field.error.period_length", 6))
-            .withValidator(value -> StringUtils.isEmpty(value) || periodYearValidator(value),
-                ForeignUi.getMessage("field.error.year_not_in_range", MIN_YEAR, MAX_YEAR))
-            .withValidator(value -> StringUtils.isEmpty(value) || periodMonthValidator(value),
-                ForeignUi.getMessage("field.error.month_invalid", 6, 12))
+            .withValidator(value -> StringUtils.isEmpty(value) || value.trim().length() == PeriodValidator.VALID_LENGTH,
+                ForeignUi.getMessage("field.error.period_length", PeriodValidator.VALID_LENGTH))
+            .withValidator(value -> StringUtils.isEmpty(value) || PeriodValidator.isYearValid(value),
+                ForeignUi.getMessage("field.error.year_not_in_range",
+                    PeriodValidator.MIN_YEAR, PeriodValidator.MAX_YEAR))
+            .withValidator(value -> StringUtils.isEmpty(value) || PeriodValidator.isMonthValid(value),
+                ForeignUi.getMessage("field.error.month_invalid",
+                    PeriodValidator.MONTH_6, PeriodValidator.MONTH_12))
             .bind(usage -> Objects.toString(usage.getPeriod(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(periodField, "udm-multiple-edit-period-field");
@@ -409,16 +410,6 @@ public class UdmEditMultipleUsagesWindow extends Window {
                     usageDto.getPeriodEndDate());
             udmUsageDtoToFieldValuesMap.put(usageDto, valuesMap);
         });
-    }
-
-    private boolean periodYearValidator(String value) {
-        int year = Integer.parseInt(value.trim().substring(0, 4));
-        return year >= MIN_YEAR && year <= MAX_YEAR;
-    }
-
-    private boolean periodMonthValidator(String value) {
-        int month = Integer.parseInt(value.trim().substring(4, 6));
-        return month == 6 || month == 12;
     }
 
     private void setPeriodEndDate(UdmUsageDto usageDto) {

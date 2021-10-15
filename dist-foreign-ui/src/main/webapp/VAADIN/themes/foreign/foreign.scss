@@ -350,12 +350,14 @@
     }
 
     .edit-udm-usage-window .v-readonly.v-textfield,
-    .multiple-edit-udm-usages-window .v-readonly.v-textfield {
+    .multiple-edit-udm-usages-window .v-readonly.v-textfield,
+    .edit-udm-value-window .v-readonly.v-textfield {
         border-style: none !important;
     }
 
     .edit-udm-usage-window .v-caption,
-    .multiple-edit-udm-usages-window .v-caption {
+    .multiple-edit-udm-usages-window .v-caption,
+    .edit-udm-value-window .v-caption {
         visibility: hidden;
         height: 0px;
     }

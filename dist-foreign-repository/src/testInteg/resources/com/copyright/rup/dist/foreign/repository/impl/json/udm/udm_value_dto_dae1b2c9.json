@@ -14,7 +14,11 @@
     "priceSource": "http://google.com",
     "priceInUsd": 2.5000000000,
     "priceType": "Individual",
-    "publicationType": "BK",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book"
+    },
     "priceYear": 2021,
     "content": 60.0000000000,
     "contentSource": "Book",

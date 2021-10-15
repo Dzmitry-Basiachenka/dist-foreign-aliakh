@@ -27,7 +27,9 @@
         <result property="standardNumberType" column="standard_number_type"/>
         <result property="lastValuePeriod" column="last_value_period"/>
         <result property="lastPubType" column="last_pub_type"/>
-        <result property="publicationType" column="pub_type"/>
+        <result property="publicationType.id" column="pub_type_id"/>
+        <result property="publicationType.name" column="pub_type_name"/>
+        <result property="publicationType.description" column="pub_type_description"/>
         <result property="lastPriceInUsd" column="last_price_in_usd"/>
         <result property="lastPriceFlag" column="last_price_flag"/>
         <result property="lastPriceSource" column="last_price_source"/>
@@ -68,7 +70,9 @@
             standard_number_type,
             last_value.last_value_period,
             last_publication_type.name last_pub_type,
-            pt.name pub_type,
+            v.publication_type_uid pub_type_id,
+            pt.name pub_type_name,
+            pt.description pub_type_description,
             last_value.last_price_in_usd,
             last_value.last_price_flag,
             last_value.last_price_source,
