@@ -10,10 +10,12 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -30,8 +32,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -62,6 +66,10 @@ public class UdmEditValueWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmValueController.class);
         saveButtonClickListener = createMock(ClickListener.class);
+        expect(controller.getPublicationTypes()).andReturn(
+            Collections.singletonList(buildPublicationType("Book", "1.00"))).once();
+        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(
+            ImmutableMap.of("USD", "US Dollar")).once();
     }
 
     @Test
@@ -69,13 +77,15 @@ public class UdmEditValueWindowTest {
         setSpecialistExpectations();
         initEditWindow();
         assertEquals("Edit UDM Value", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
+        assertEquals(960, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
+
+    // TODO implement tests for the fields when its validators are implemented
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
@@ -109,7 +119,7 @@ public class UdmEditValueWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(0, verticalLayout.getComponentCount());
+        assertEquals(4, verticalLayout.getComponentCount());
         // TODO verify components when implemented
     }
 
@@ -151,5 +161,12 @@ public class UdmEditValueWindowTest {
 
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
+    }
+
+    private PublicationType buildPublicationType(String name, String weight) {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName(name);
+        publicationType.setWeight(new BigDecimal(weight));
+        return publicationType;
     }
 }
