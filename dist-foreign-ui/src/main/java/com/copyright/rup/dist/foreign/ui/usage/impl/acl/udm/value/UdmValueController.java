@@ -135,6 +135,11 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
         return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
+    @Override
+    public int getUdmRecordThreshold() {
+        return valueService.getUdmRecordThreshold();
+    }
+
     private UdmValueFilter getFilter() {
         return udmValueFilterController.getWidget().getAppliedFilter();
     }

@@ -266,6 +266,7 @@ public class UdmValueWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmValueDtos).once();
         expect(controller.getBeansCount()).andReturn(UDM_RECORD_THRESHOLD).once();
+        expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
         initWidget();
         Grid<UdmValueDto> grid =
@@ -288,6 +289,7 @@ public class UdmValueWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(udmValueDtos).once();
         expect(controller.getBeansCount()).andReturn(EXCEEDED_UDM_RECORD_THRESHOLD).once();
+        expect(controller.getUdmRecordThreshold()).andReturn(UDM_RECORD_THRESHOLD).once();
         replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
         initWidget();
         Grid<UdmValueDto> grid =
@@ -296,6 +298,27 @@ public class UdmValueWidgetTest {
         assertEquals(udmValueDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
             null)).collect(Collectors.toList()));
         assertEquals(EXCEEDED_UDM_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testSelectAllCheckBoxNotVisibleWhenGridEmpty() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(Collections.emptyList()).once();
+        expect(controller.getBeansCount()).andReturn(0).once();
+        replay(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(Collections.emptyList(), dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(0, dataProvider.size(new Query<>()));
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);

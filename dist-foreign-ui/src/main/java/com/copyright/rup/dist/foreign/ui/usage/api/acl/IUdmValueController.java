@@ -133,4 +133,9 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return list of {@link PublicationType}
      */
     List<PublicationType> getPublicationTypes();
+
+    /**
+     * @return threshold value for size of UDM records.
+     */
+    int getUdmRecordThreshold();
 }

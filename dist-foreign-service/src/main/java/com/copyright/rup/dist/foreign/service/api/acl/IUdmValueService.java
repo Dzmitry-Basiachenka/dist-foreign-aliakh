@@ -98,4 +98,9 @@ public interface IUdmValueService {
      * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
      */
     boolean isAllowedForPublishing(Integer period);
+
+    /**
+     * @return threshold value for size of UDM records.
+     */
+    int getUdmRecordThreshold();
 }
