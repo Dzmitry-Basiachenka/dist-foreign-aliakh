@@ -30,12 +30,15 @@ import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.MouseEventDetails;
+import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
@@ -43,6 +46,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 import com.vaadin.ui.components.grid.NoSelectionModel;
 
@@ -56,6 +60,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -106,9 +111,10 @@ public class UdmUsageWidgetTest {
     private static final String SEARCH_PLACEHOLDER_RESEARCHER =
         "Enter Reported/System Title or Usage Detail ID or Standard Number or Article or Comment";
     private static final String USER = "user@copyright.com";
+    private static final String UNCHECKED = "unchecked";
     private static final int UDM_RECORD_THRESHOLD = 10000;
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
-    private static final String UNCHECKED = "unchecked";
+    private static final int DOUBLE_CLICK = 0x00002;
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -470,6 +476,32 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
+    public void testViewUsageWindowByDoubleClick() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("121e005a-3fc0-4f65-bc91-1ec3932a86c8");
+        udmUsageDto.setAssignee(USER);
+        udmUsageDto.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
+        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto)).andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmUsageDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmUsageDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmUsageDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+    }
+
+    @Test
     public void testMultipleEditButtonClickListenerResearcherAllowed() throws Exception {
         mockStatic(Windows.class);
         setResearcherExpectations();
@@ -911,5 +943,12 @@ public class UdmUsageWidgetTest {
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
         verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    private MouseEventDetails createMouseEvent() {
+        MouseEventDetails mouseEventDetails = new MouseEventDetails();
+        mouseEventDetails.setType(DOUBLE_CLICK);
+        mouseEventDetails.setButton(MouseButton.LEFT);
+        return mouseEventDetails;
     }
 }
