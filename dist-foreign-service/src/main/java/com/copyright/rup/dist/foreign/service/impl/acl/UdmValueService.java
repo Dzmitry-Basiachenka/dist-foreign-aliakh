@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ public class UdmValueService implements IUdmValueService {
     private IRightsService rightsService;
     @Value("$RUP{dist.foreign.udm.record.threshold}")
     private int udmRecordsThreshold;
+
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
     public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
@@ -93,10 +97,11 @@ public class UdmValueService implements IUdmValueService {
     @Override
     @Transactional
     public int populateValueBatch(Integer period) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Populate UDM Value batch. Started. Period={}, UserName={}", period, userName);
         List<UdmValue> allNotPopulatedValues = baselineRepository.findNotPopulatedValuesFromBaseline(period);
         rightsService.updateUdmValuesRights(allNotPopulatedValues, period);
-        String userName = RupContextUtils.getUserName();
-        return (int) allNotPopulatedValues.stream()
+        int populatedValuesCount = (int) allNotPopulatedValues.stream()
             .filter(value -> Objects.nonNull(value.getRhAccountNumber()))
             .peek(value -> {
                 value.setId(RupPersistUtils.generateUuid());
@@ -105,6 +110,10 @@ public class UdmValueService implements IUdmValueService {
                 value.setUpdateUser(userName);
                 udmValueRepository.insert(value);
             }).count();
+        //TODO: Update baseline usages with corresponding value id
+        LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}", period,
+            userName, populatedValuesCount);
+        return populatedValuesCount;
     }
 
     @Override
@@ -115,5 +124,15 @@ public class UdmValueService implements IUdmValueService {
     @Override
     public int getUdmRecordThreshold() {
         return udmRecordsThreshold;
+    }
+
+    @Override
+    public int publishToBaseline(Integer period) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Publish UDM Values to baseline. Started. Period={}, UserName={}", period, userName);
+        int publishedValuesCount = udmValueRepository.publishToBaseline(period, userName);
+        LOGGER.info("Publish UDM Values to baseline. Finished. Period={}, UserName={}, PublishedValuesCount={}",
+            period, userName, publishedValuesCount);
+        return publishedValuesCount;
     }
 }

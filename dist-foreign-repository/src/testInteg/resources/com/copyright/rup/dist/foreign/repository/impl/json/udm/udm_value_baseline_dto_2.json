@@ -1,0 +1,32 @@
+[
+  {
+    "id": "2e07c041-79e8-48e5-a875-229d5e0f5259",
+    "period": 211112,
+    "wrWrkInst": 569856369,
+    "systemTitle": "Malcolm Gruel Jr",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 120.0000000000,
+    "content": 5.0000000000,
+    "contentUnitPrice": 24.0000000000,
+    "contentFlag": true,
+    "comment": "Comment",
+    "createUser": "user@copyright.com",
+    "updateUser": "jjohn@copyright.com"
+  },
+  {
+    "id": "fc3e7747-3d3b-4f07-93fb-f66c97d9f737",
+    "period": 211112,
+    "wrWrkInst": 153363156,
+    "systemTitle": "Travor and Co",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 60.0000000000,
+    "content": 5.0000000000,
+    "contentUnitPrice": 12.0000000000,
+    "contentFlag": true,
+    "comment": "Comment",
+    "createUser": "jjohn@copyright.com",
+    "updateUser": "jjohn@copyright.com"
+  }
+]

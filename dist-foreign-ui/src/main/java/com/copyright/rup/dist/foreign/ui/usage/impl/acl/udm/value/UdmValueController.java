@@ -63,8 +63,7 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
 
     @Override
     public int publishToBaseline(Integer period) {
-        //TODO: Use service logic here
-        return 0;
+        return valueService.publishToBaseline(period);
     }
 
     @Override

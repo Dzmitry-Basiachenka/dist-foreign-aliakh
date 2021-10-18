@@ -1,0 +1,32 @@
+[
+  {
+    "id": "81226f4a-6a21-4529-97ad-5dab5c92bcce",
+    "period": 211012,
+    "wrWrkInst": 823333789,
+    "systemTitle": "Redfords and Mitchells",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 60.0000000000,
+    "content": 5.0000000000,
+    "contentUnitPrice": 12.0000000000,
+    "contentFlag": true,
+    "comment": "Comment",
+    "createUser": "jjohn@copyright.com",
+    "updateUser": "jjohn@copyright.com"
+  },
+  {
+    "id": "97226f4a-ca11-4529-bb59-5dab5c92b8ce",
+    "period": 211012,
+    "wrWrkInst": 273337156,
+    "systemTitle": "Bread and Butter",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 60.0000000000,
+    "content": 5.0000000000,
+    "contentUnitPrice": 12.0000000000,
+    "contentFlag": true,
+    "comment": "Comment",
+    "createUser": "jjohn@copyright.com",
+    "updateUser": "jjohn@copyright.com"
+  }
+]

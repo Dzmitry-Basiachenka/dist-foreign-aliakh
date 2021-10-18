@@ -1,0 +1,44 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmValueBaselineMapper">
+
+    <resultMap id="udmValueBaselineDtoResultMap" type="UdmValueBaselineDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_value_baseline_uid"/>
+        <result property="period" column="period"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="publicationType" column="pub_type"/>
+        <result property="price" column="price"/>
+        <result property="priceFlag" column="price_flag"/>
+        <result property="content" column="content"/>
+        <result property="contentFlag" column="content_flag"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+    <!-- NOTE: Used for testing purposes only -->
+    <select id="findValuesByPeriod" parameterType="int" resultMap="udmValueBaselineDtoResultMap">
+        select
+            v.df_udm_value_baseline_uid,
+            v.period,
+            v.wr_wrk_inst,
+            v.system_title,
+            pt.name pub_type,
+            v.price,
+            v.price_flag,
+            v.content,
+            v.content_flag,
+            v.content_unit_price,
+            v.comment,
+            v.created_datetime,
+            v.updated_datetime,
+            v.created_by_user,
+            v.updated_by_user
+        from ${schema}.df_udm_value_baseline v
+        left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        where v.period = #{period}
+        order by v.df_udm_value_baseline_uid
+    </select>
+</mapper>
