@@ -82,6 +82,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private SearchWidget searchWidget;
     private Set<UdmUsageDto> selectedUdmUsages;
     private MultiSelectionModelImpl<UdmUsageDto> gridSelectionModel;
+    private boolean isAllSelected;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -331,7 +332,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmUsageDto udmUsageDto = event.getItem();
                 UdmEditUsageWindow components = new UdmEditUsageWindow(controller, udmUsageDto);
-                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages));
+                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected));
                 Windows.showModalWindow(components);
                 highlightSelectedUsage(udmUsageDto);
             }
@@ -359,7 +360,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             Button button = Buttons.createButton(udmUsageId);
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> {
-                controller.showUdmUsageHistory(udmUsageId, closeEvent -> restoreSelection(selectedUdmUsages));
+                controller.showUdmUsageHistory(udmUsageId, closeEvent ->
+                    restoreSelection(selectedUdmUsages, isAllSelected));
                 highlightSelectedUsage(usage);
             });
             return button;
@@ -473,6 +475,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
      */
     private void highlightSelectedUsage(UdmUsageDto usageToSeeAudit) {
         selectedUdmUsages = udmUsagesGrid.getSelectedItems();
+        isAllSelected = Objects.nonNull(gridSelectionModel) && gridSelectionModel.isAllSelected();
         udmUsagesGrid.deselectAll();
         udmUsagesGrid.select(usageToSeeAudit);
     }
@@ -480,11 +483,17 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     /**
      * Restores previous usage selection. Removes selection of usage for which edit or history window was opened.
      *
-     * @param usagesToSelect set of usages to select
+     * @param usagesToSelect      set of usages to select
+     * @param isAllUsagesSelected {@code true} if all usages are selected, {@code false} otherwise
      */
-    private void restoreSelection(Set<UdmUsageDto> usagesToSelect) {
+    private void restoreSelection(Set<UdmUsageDto> usagesToSelect, boolean isAllUsagesSelected) {
         selectedUdmUsages = null;
-        udmUsagesGrid.deselectAll();
-        usagesToSelect.forEach(udmUsageDto -> udmUsagesGrid.select(udmUsageDto));
+        isAllSelected = false;
+        if (Objects.nonNull(gridSelectionModel) && isAllUsagesSelected) {
+            gridSelectionModel.selectAll();
+        } else {
+            udmUsagesGrid.deselectAll();
+            usagesToSelect.forEach(udmUsageDto -> udmUsagesGrid.select(udmUsageDto));
+        }
     }
 }
