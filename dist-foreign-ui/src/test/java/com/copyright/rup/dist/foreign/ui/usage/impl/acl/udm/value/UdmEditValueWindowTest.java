@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
@@ -34,6 +35,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -145,7 +147,23 @@ public class UdmEditValueWindowTest {
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
+        verifyPanel(verticalLayout.getComponent(0));
+    }
+
+    @Test
+    public void testConstructorWithoutSaveButton() {
+        setSpecialistExpectations();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new UdmEditValueWindow(controller, udmValue);
+        binder = Whitebox.getInternalState(window, "binder");
+        verify(controller, ForeignSecurityUtils.class);
+        assertEquals("View UDM Value", window.getCaption());
+        assertEquals(960, window.getWidth(), 0);
+        assertEquals(Unit.PIXELS, window.getWidthUnits());
+        assertEquals(700, window.getHeight(), 0);
+        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
         verifyPanel(verticalLayout.getComponent(0));
     }
 
@@ -319,11 +337,11 @@ public class UdmEditValueWindowTest {
             String.format("Field value should not exceed %s characters", maxSize), false);
     }
 
-    private VerticalLayout verifyRootLayout(Component component) {
+    private VerticalLayout verifyRootLayout(Component component, boolean isVisible) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), isVisible);
         return verticalLayout;
     }
 
@@ -448,13 +466,15 @@ public class UdmEditValueWindowTest {
         return comboBox;
     }
 
-    private void verifyButtonsLayout(Component component) {
+    private void verifyButtonsLayout(Component component, boolean isVisible) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Save");
         verifyButton(layout.getComponent(1), "Discard");
         verifyButton(layout.getComponent(2), "Close");
+        Button button = (Button) layout.getComponent(0);
+        assertEquals(isVisible, button.isVisible());
     }
 
     private void verifyButton(Component component, String caption) {

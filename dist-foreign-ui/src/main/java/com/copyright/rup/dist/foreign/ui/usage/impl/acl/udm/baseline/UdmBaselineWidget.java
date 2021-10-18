@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -15,6 +16,7 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
@@ -89,8 +91,9 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             });
         udmBaselineGrid = new Grid<>(dataProvider);
         addColumns();
-        udmBaselineGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        udmBaselineGrid.setSelectionMode(SelectionMode.SINGLE);
         udmBaselineGrid.setSizeFull();
+        initViewWindow();
         VaadinUtils.addComponentStyle(udmBaselineGrid, "udm-baseline-grid");
     }
 
@@ -126,7 +129,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     }
 
     private Column<UdmBaselineDto, ?> addColumn(ValueProvider<UdmBaselineDto, ?> valueProvider, String captionProperty,
-                                             String columnId, double width) {
+                                                String columnId, double width) {
         return udmBaselineGrid.addColumn(valueProvider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
@@ -151,5 +154,17 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-baseline-buttons");
         return layout;
+    }
+
+    private void initViewWindow() {
+        udmBaselineGrid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                UdmBaselineDto udmBaselineDto = event.getItem();
+                ViewBaselineWindow window = new ViewBaselineWindow(udmBaselineDto);
+                window.addCloseListener(closeEvent -> udmBaselineGrid.deselect(udmBaselineDto));
+                Windows.showModalWindow(window);
+                udmBaselineGrid.select(udmBaselineDto);
+            }
+        });
     }
 }

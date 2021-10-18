@@ -130,6 +130,7 @@ public class UdmEditUsageWindow extends Window {
     public UdmEditUsageWindow(IUdmUsageController usageController, UdmUsageDto selectedUdmUsage) {
         this(usageController, selectedUdmUsage, null);
         this.saveButton.setVisible(false);
+        setCaption(ForeignUi.getMessage("window.view_udm_usage"));
     }
 
     private ComponentContainer initRootLayout() {

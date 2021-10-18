@@ -29,17 +29,21 @@ import com.google.common.collect.ImmutableList;
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.MouseEventDetails;
+import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -51,6 +55,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -71,6 +76,7 @@ import java.util.stream.IntStream;
     {UdmValueWidget.class, ForeignSecurityUtils.class, Windows.class, RupContextUtils.class, JavaScript.class})
 public class UdmValueWidgetTest {
 
+    private static final int DOUBLE_CLICK = 0x00002;
     private static final String FORMATTED_PLUS_THOUSAND = "1,000.00";
     private static final String FORMATTED_MINUS_THOUSAND = "-1,000.00";
     private static final String USER = "user@copyright.com";
@@ -378,6 +384,29 @@ public class UdmValueWidgetTest {
         verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testViewValueWindowByDoubleClick() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        UdmValueDto udmValueDto = new UdmValueDto();
+        udmValueDto.setId("121e005a-3fc0-4f65-bc91-1ec3932a86c8");
+        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
+        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto)).andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmValueDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmValueDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class);
+    }
+
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
@@ -470,5 +499,12 @@ public class UdmValueWidgetTest {
 
     private HorizontalLayout getButtonsLayout() {
         return (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
+    }
+
+    private MouseEventDetails createMouseEvent() {
+        MouseEventDetails mouseEventDetails = new MouseEventDetails();
+        mouseEventDetails.setType(DOUBLE_CLICK);
+        mouseEventDetails.setButton(MouseButton.LEFT);
+        return mouseEventDetails;
     }
 }

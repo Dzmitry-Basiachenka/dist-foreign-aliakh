@@ -144,7 +144,7 @@ public class UdmEditUsageWindowTest {
     public void testConstructorSpecialist() {
         setSpecialistExpectations();
         initEditWindow();
-        verifyWindowSize();
+        verifyWindowSize("Edit UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
@@ -153,7 +153,7 @@ public class UdmEditUsageWindowTest {
     public void testConstructorManager() {
         setManagerExpectations();
         initEditWindow();
-        verifyWindowSize();
+        verifyWindowSize("Edit UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
@@ -163,7 +163,7 @@ public class UdmEditUsageWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         setResearcherExpectations();
         initEditWindow();
-        verifyWindowSize();
+        verifyWindowSize("Edit UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelResearcher(verticalLayout.getComponent(0));
     }
@@ -177,7 +177,7 @@ public class UdmEditUsageWindowTest {
         window = new UdmEditUsageWindow(controller, udmUsage);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize();
+        verifyWindowSize("View UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
@@ -191,7 +191,7 @@ public class UdmEditUsageWindowTest {
         window = new UdmEditUsageWindow(controller, udmUsage);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize();
+        verifyWindowSize("View UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
@@ -206,7 +206,7 @@ public class UdmEditUsageWindowTest {
         window = new UdmEditUsageWindow(controller, udmUsage);
         binder = Whitebox.getInternalState(window, BINDER_NAME);
         verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize();
+        verifyWindowSize("View UDM Usage");
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
         verifyPanelResearcher(verticalLayout.getComponent(0));
     }
@@ -522,8 +522,8 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(textField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
     }
 
-    private void verifyWindowSize() {
-        assertEquals("Edit UDM Usage", window.getCaption());
+    private void verifyWindowSize(String caption) {
+        assertEquals(caption, window.getCaption());
         assertEquals(650, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(700, window.getHeight(), 0);
