@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -50,6 +51,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IUdmValueService valueService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private IUdmPriceTypeService udmPriceTypeService;
 
     @Override
     public List<Integer> getBaselinePeriods() {
@@ -138,6 +141,16 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Override
     public int getUdmRecordThreshold() {
         return valueService.getUdmRecordThreshold();
+    }
+
+    @Override
+    public List<String> getAllPriceTypes() {
+        return udmPriceTypeService.getAllPriceTypes();
+    }
+
+    @Override
+    public List<String> getAllPriceAccessTypes() {
+        return udmPriceTypeService.getAllPriceAccessTypes();
     }
 
     private UdmValueFilter getFilter() {

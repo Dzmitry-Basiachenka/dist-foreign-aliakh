@@ -1,12 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -34,15 +33,10 @@ import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibi
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -304,7 +298,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addBooleanColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
             addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 200),
-            addColumn(value -> getStringFromLocalDate(value.getCurrencyExchangeRateDate()),
+            addColumn(value -> DateUtils.format(value.getCurrencyExchangeRateDate()),
                 "table.column.currency_exchange_rate_date", "currencyExchangeRateDate", 200),
             addAmountColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
             addBooleanColumn(UdmValueDto::isLastContentFlag, "table.column.last_content_flag", "lastContentFlag", 130),
@@ -319,7 +313,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
             addColumn(UdmValueDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
-            addColumn(value -> getStringFromDate(value.getUpdateDate()), "table.column.updated_date", "updateDate",
+            addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
     }
 
@@ -355,16 +349,6 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             .setSortProperty(columnId)
             .setHidable(true)
             .setWidth(width);
-    }
-
-    private String getStringFromLocalDate(LocalDate date) {
-        return CommonDateUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
-            : StringUtils.EMPTY;
     }
 
     private Set<String> getSelectedValueIds() {

@@ -1,12 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -37,14 +36,10 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -405,11 +400,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
-            addColumn(u -> getStringFromLocalDate(u.getUsageDate()), "table.column.usage_date", "usageDate", 100,
+            addColumn(u -> DateUtils.format(u.getUsageDate()), "table.column.usage_date", "usageDate", 100,
                 false),
-            addColumn(u -> getStringFromLocalDate(u.getSurveyStartDate()), "table.column.survey_start_date",
+            addColumn(u -> DateUtils.format(u.getSurveyStartDate()), "table.column.survey_start_date",
                 "surveyStartDate", 130, false),
-            addColumn(u -> getStringFromLocalDate(u.getSurveyEndDate()), "table.column.survey_end_date",
+            addColumn(u -> DateUtils.format(u.getSurveyEndDate()), "table.column.survey_end_date",
                 "surveyEndDate", 130, false),
             addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", 130,
                 hasResearcherPermission),
@@ -421,9 +416,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 hasResearcherPermission),
             addColumn(u -> null != u.getIneligibleReason() ? u.getIneligibleReason().getReason() : StringUtils.EMPTY,
                 "table.column.ineligible_reason", "ineligibleReason", 200, false),
-            addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
+            addColumn(u -> DateUtils.format(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
             addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 150, false),
-            addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
+            addColumn(u -> DateUtils.format(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
                 false));
     }
 
@@ -437,16 +432,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setHidable(!isHidden)
             .setHidden(isHidden)
             .setWidth(width);
-    }
-
-    private String getStringFromLocalDate(LocalDate date) {
-        return CommonDateUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
-            : StringUtils.EMPTY;
     }
 
     private Set<String> getSelectedUsageIds() {

@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -83,10 +84,11 @@ public class UdmEditValueWindowTest {
     private static final String LAST_PRICE_COMMENT = "last price comment";
     private static final BigDecimal PRICE = new BigDecimal("100.00");
     private static final String PRICE_SOURCE = "price source";
-    private static final String CURRENCY = "EUR";
+    private static final Currency CURRENCY = new Currency("USD", "US Dollar");
+    private static final String CURRENCY_CODE = CURRENCY.getCode();
     private static final String PRICE_TYPE = "Individual";
     private static final String PRICE_ACCESS_TYPE = "Print";
-    private static final int PRICE_YEAR = 2021;
+    private static final Integer PRICE_YEAR = 2021;
     private static final String PRICE_COMMENT = "price comment";
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("116.12");
     private static final boolean PRICE_FLAG = true;
@@ -103,13 +105,10 @@ public class UdmEditValueWindowTest {
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("5.00");
     private static final String COMMENT = "comment";
     private static final String USER_NAME = "user@copyright.com";
-    private static final String VALID_INTEGER = "25";
-    private static final String VALID_DECIMAL = "0.1";
     private static final String INVALID_NUMBER = "12a";
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
-    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
 
     static {
         PUBLICATION_TYPE = new PublicationType();
@@ -132,7 +131,9 @@ public class UdmEditValueWindowTest {
         expect(controller.getPublicationTypes()).andReturn(
             Collections.singletonList(buildPublicationType("Book", "1.00"))).once();
         expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(
-            ImmutableMap.of("USD", "US Dollar")).once();
+            ImmutableMap.of(CURRENCY.getCode(), CURRENCY.getDescription())).once();
+        expect(controller.getAllPriceTypes()).andReturn(Collections.singletonList(PRICE_TYPE)).once();
+        expect(controller.getAllPriceAccessTypes()).andReturn(Collections.singletonList(PRICE_ACCESS_TYPE)).once();
     }
 
     @Test
@@ -157,6 +158,7 @@ public class UdmEditValueWindowTest {
         VerticalLayout verticalLayout = getPanelContent();
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         VerticalLayout row1 = (VerticalLayout) horizontalLayout.getComponent(0);
+        assertEquals(2, row1.getComponentCount());
         Panel panel1 = (Panel) row1.getComponent(0);
         VerticalLayout content1 = (VerticalLayout) panel1.getContent();
         assertEquals(6, content1.getComponentCount());
@@ -166,66 +168,128 @@ public class UdmEditValueWindowTest {
         assertTextFieldValue(content1.getComponent(3), STANDARD_NUMBER_TYPE);
         assertTextFieldValue(content1.getComponent(4), RH_NAME);
         assertTextFieldValue(content1.getComponent(5), RH_ACCOUNT_NUMBER.toString());
-        VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
-        Panel panel2 = (Panel) row2.getComponent(0);
+        Panel panel2 = (Panel) row1.getComponent(1);
         VerticalLayout content2 = (VerticalLayout) panel2.getContent();
-        assertEquals(4, content2.getComponentCount());
-        assertTextFieldValue(content2.getComponent(0), VALUE_PERIOD.toString());
-        assertTextFieldValue(content2.getComponent(1), LAST_VALUE_PERIOD.toString());
-        assertTextFieldValue(content2.getComponent(2), ASSIGNEE);
-        assertComboBoxFieldValue(content2.getComponent(3), STATUS);
-        Panel panel3 = (Panel) row2.getComponent(1);
+        assertEquals(15, content2.getComponentCount());
+        assertTextFieldValue(content2.getComponent(0), PRICE.toString());
+        assertComboBoxFieldValue(content2.getComponent(1), CURRENCY);
+        assertTextFieldValue(content2.getComponent(2), CURRENCY_EXCHANGE_RATE.toString());
+        assertTextFieldValue(content2.getComponent(3), "12/31/2020");
+        assertTextFieldValue(content2.getComponent(4), PRICE_IN_USD.toString());
+        assertComboBoxFieldValue(content2.getComponent(5), PRICE_TYPE);
+        assertComboBoxFieldValue(content2.getComponent(6), PRICE_ACCESS_TYPE);
+        assertTextFieldValue(content2.getComponent(7), PRICE_YEAR.toString());
+        assertTextFieldValue(content2.getComponent(8), PRICE_SOURCE);
+        assertTextFieldValue(content2.getComponent(9), PRICE_COMMENT);
+        assertTextFieldValue(content2.getComponent(10), "Y");
+        assertTextFieldValue(content2.getComponent(11), LAST_PRICE_IN_USD.toString());
+        assertTextFieldValue(content2.getComponent(12), LAST_PRICE_SOURCE);
+        assertTextFieldValue(content2.getComponent(13), LAST_PRICE_COMMENT);
+        assertTextFieldValue(content2.getComponent(14), "N");
+        VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
+        assertEquals(5, row2.getComponentCount());
+        Panel panel3 = (Panel) row2.getComponent(0);
         VerticalLayout content3 = (VerticalLayout) panel3.getContent();
-        assertEquals(2, content3.getComponentCount());
-        assertComboBoxFieldValue(content3.getComponent(0), PUBLICATION_TYPE);
-        assertTextFieldValue(content3.getComponent(1), LAST_PUB_TYPE);
+        assertEquals(4, content3.getComponentCount());
+        assertTextFieldValue(content3.getComponent(0), VALUE_PERIOD.toString());
+        assertTextFieldValue(content3.getComponent(1), LAST_VALUE_PERIOD.toString());
+        assertTextFieldValue(content3.getComponent(2), ASSIGNEE);
+        assertComboBoxFieldValue(content3.getComponent(3), STATUS);
+        Panel panel4 = (Panel) row2.getComponent(1);
+        VerticalLayout content4 = (VerticalLayout) panel4.getContent();
+        assertEquals(2, content4.getComponentCount());
+        assertComboBoxFieldValue(content4.getComponent(0), PUBLICATION_TYPE);
+        assertTextFieldValue(content4.getComponent(1), LAST_PUB_TYPE);
         // TODO test other fields
     }
 
     @Test
-    public void testWrWrkInstValidation() {
-        setSpecialistExpectations();
+    public void testPriceFieldValidation() {
         initEditWindow();
-        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
-            "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        String numberValidationMessage = "Field value should contain numeric values only";
+        String nonNegativeValidationMessage = "Field value should be positive number or zero";
+        String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
+        verifyTextFieldValidationMessage(priceField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "-1", nonNegativeValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, "0", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.1", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.12", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.123", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.1234", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.12345", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.123456", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.1234567", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.12345678", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.123456789", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "0.12345678901", scaleValidationMessage, false);
     }
 
     @Test
-    public void testValuePeriodFieldValidation() {
+    public void testCurrencyComboBoxValidation() {
         initEditWindow();
-        TextField valuePeriodField = Whitebox.getInternalState(window, "valuePeriodField");
-        String yearValidationMessage = "Year value should be in range from 1950 to 2099";
-        String monthValidationMessage = "Month value should be 06 or 12";
-        String lengthValidationMessage = "Period value should contain 6 digits";
-        verifyTextFieldValidationMessage(valuePeriodField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(valuePeriodField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "194912", yearValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "195012", yearValidationMessage, true);
-        verifyTextFieldValidationMessage(valuePeriodField, "209912", yearValidationMessage, true);
-        verifyTextFieldValidationMessage(valuePeriodField, "210012", yearValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202100", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202101", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202102", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202103", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202104", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202105", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202106", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(valuePeriodField, "202107", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202108", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202109", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202110", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202111", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "202112", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(valuePeriodField, "202113", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "2021120", lengthValidationMessage, false);
-        verifyTextFieldValidationMessage(valuePeriodField, "20211", lengthValidationMessage, false);
+        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        Currency currency = new Currency("USD", "US Dollar");
+        priceField.setValue(StringUtils.EMPTY);
+        currencyComboBox.setValue(null);
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+        priceField.setValue(StringUtils.EMPTY);
+        currencyComboBox.setValue(currency);
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+        priceField.setValue("1");
+        currencyComboBox.setValue(null);
+        verifyBinderStatusAndValidationMessage("Field value cannot be empty if Price is specified", false);
+        priceField.setValue("1");
+        currencyComboBox.setValue(currency);
+        verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+    }
+
+    @Test
+    public void testPriceYearFieldValidation() {
+        initEditWindow();
+        TextField priceYearField = Whitebox.getInternalState(window, "priceYearField");
+        String yearValidationMessage = "Field value should be in range from 1950 to 2099";
+        verifyTextFieldValidationMessage(priceYearField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceYearField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(priceYearField, "1949", yearValidationMessage, false);
+        verifyTextFieldValidationMessage(priceYearField, " 1949 ", yearValidationMessage, false);
+        verifyTextFieldValidationMessage(priceYearField, "1950", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, " 1950 ", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, "2099", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, " 2099 ", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, "2100", yearValidationMessage, false);
+        verifyTextFieldValidationMessage(priceYearField, " 2100 ", yearValidationMessage, false);
+        verifyTextFieldValidationMessage(priceYearField, "20211", yearValidationMessage, false);
+        verifyTextFieldValidationMessage(priceYearField, "202", yearValidationMessage, false);
+    }
+
+    @Test
+    public void testPriceSourceFieldValidation() {
+        initEditWindow();
+        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        TextField priceSourceField = Whitebox.getInternalState(window, "priceSourceField");
+        int maxSize = 1000;
+        priceField.setValue(StringUtils.EMPTY);
+        verifyLengthValidation(priceSourceField, maxSize);
+        priceField.setValue("1");
+        verifyTextFieldValidationMessage(priceSourceField, StringUtils.EMPTY,
+            "Field value cannot be empty if Price is specified", false);
+        verifyTextFieldValidationMessage(priceSourceField, buildStringWithExpectedLength(maxSize),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceSourceField, buildStringWithExpectedLength(maxSize + 1),
+            String.format("Field value should not exceed %s characters", maxSize), false);
+    }
+
+    @Test
+    public void testPriceCommentFieldValidation() {
+        initEditWindow();
+        TextField priceSourceField = Whitebox.getInternalState(window, "priceCommentField");
+        verifyLengthValidation(priceSourceField, 1000);
     }
 
     @Test
@@ -245,6 +309,14 @@ public class UdmEditValueWindowTest {
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+    }
+
+    private void verifyLengthValidation(TextField textField, int maxSize) {
+        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize + 1),
+            String.format("Field value should not exceed %s characters", maxSize), false);
     }
 
     private VerticalLayout verifyRootLayout(Component component) {
@@ -268,30 +340,51 @@ public class UdmEditValueWindowTest {
         VerticalLayout content1 = (VerticalLayout) panel1.getContent();
         assertEquals(6, content1.getComponentCount());
         verifyTextFieldLayout(content1.getComponent(0), "System Title", true, false);
-        verifyTextFieldLayout(content1.getComponent(1), "Wr Wrk Inst", false, true);
+        verifyTextFieldLayout(content1.getComponent(1), "Wr Wrk Inst", true, false);
         verifyTextFieldLayout(content1.getComponent(2), "System Standard Number", true, false);
         verifyTextFieldLayout(content1.getComponent(3), "Standard Number Type", true, false);
         verifyTextFieldLayout(content1.getComponent(4), "RH Name", true, false);
         verifyTextFieldLayout(content1.getComponent(5), "RH Account #", true, false);
-        VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
-        Panel panel2 = (Panel) row2.getComponent(0);
-        assertEquals("General", panel2.getCaption());
+        Panel panel2 = (Panel) row1.getComponent(1);
+        assertEquals("Price", panel2.getCaption());
         VerticalLayout content2 = (VerticalLayout) panel2.getContent();
-        assertEquals(4, content2.getComponentCount());
-        verifyTextFieldLayout(content2.getComponent(0), "Value Period", false, true);
-        verifyTextFieldLayout(content2.getComponent(1), "Last Value Period", true, false);
-        verifyTextFieldLayout(content2.getComponent(2), "Assignee", true, false);
-        verifyComboBoxLayout(content2.getComponent(3), "Value Status", true,
+        assertEquals(15, content2.getComponentCount());
+        verifyTextFieldLayout(content2.getComponent(0), "Price", false, true);
+        verifyComboBoxLayout(content2.getComponent(1), "Currency", true, Collections.singletonList(CURRENCY));
+        verifyTextFieldLayout(content2.getComponent(2), "Currency Exchange Rate", true, false);
+        verifyTextFieldLayout(content2.getComponent(3), "Currency Exchange Rate Date", true, false);
+        verifyTextFieldLayout(content2.getComponent(4), "Price in USD", true, false);
+        verifyComboBoxLayout(content2.getComponent(5), "Price Type", true, Collections.singletonList(PRICE_TYPE));
+        verifyComboBoxLayout(content2.getComponent(6), "Price Access Type", true,
+            Collections.singletonList(PRICE_ACCESS_TYPE));
+        verifyTextFieldLayout(content2.getComponent(7), "Price Year", false, true);
+        verifyTextFieldLayout(content2.getComponent(8), "Price Source", false, true);
+        verifyTextFieldLayout(content2.getComponent(9), "Price Comment", false, true);
+        verifyTextFieldLayout(content2.getComponent(10), "Price Flag", true, false);
+        verifyTextFieldLayout(content2.getComponent(11), "Last Price in USD", true, false);
+        verifyTextFieldLayout(content2.getComponent(12), "Last Price Source", true, false);
+        verifyTextFieldLayout(content2.getComponent(13), "Last Price Comment", true, false);
+        verifyTextFieldLayout(content2.getComponent(14), "Last Price Flag", true, false);
+        VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
+        assertEquals(2, row1.getComponentCount());
+        Panel panel3 = (Panel) row2.getComponent(0);
+        assertEquals("General", panel3.getCaption());
+        VerticalLayout content3 = (VerticalLayout) panel3.getContent();
+        assertEquals(4, content3.getComponentCount());
+        verifyTextFieldLayout(content3.getComponent(0), "Value Period", true, false);
+        verifyTextFieldLayout(content3.getComponent(1), "Last Value Period", true, false);
+        verifyTextFieldLayout(content3.getComponent(2), "Assignee", true, false);
+        verifyComboBoxLayout(content3.getComponent(3), "Value Status", true,
             Arrays.asList(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
                 UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE, UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
                 UdmValueStatusEnum.RESEARCH_COMPLETE));
-        Panel panel3 = (Panel) row2.getComponent(1);
-        assertEquals("Publication Type", panel3.getCaption());
-        VerticalLayout content3 = (VerticalLayout) panel3.getContent();
-        assertEquals(2, content3.getComponentCount());
-        verifyComboBoxLayout(content3.getComponent(0), "Pub Type", true,
+        Panel panel4 = (Panel) row2.getComponent(1);
+        assertEquals("Publication Type", panel4.getCaption());
+        VerticalLayout content4 = (VerticalLayout) panel4.getContent();
+        assertEquals(2, content4.getComponentCount());
+        verifyComboBoxLayout(content4.getComponent(0), "Pub Type", true,
             Collections.singletonList(buildPublicationType("Book", "1.00")));
-        verifyTextFieldLayout(content3.getComponent(1), "Last Pub Type", true, false);
+        verifyTextFieldLayout(content4.getComponent(1), "Last Pub Type", true, false);
         // TODO verify components when implemented
     }
 
@@ -390,7 +483,7 @@ public class UdmEditValueWindowTest {
         udmValue.setLastPriceComment(LAST_PRICE_COMMENT);
         udmValue.setPrice(PRICE);
         udmValue.setPriceSource(PRICE_SOURCE);
-        udmValue.setCurrency(CURRENCY);
+        udmValue.setCurrency(CURRENCY_CODE);
         udmValue.setPriceType(PRICE_TYPE);
         udmValue.setPriceAccessType(PRICE_ACCESS_TYPE);
         udmValue.setPriceYear(PRICE_YEAR);
@@ -432,6 +525,10 @@ public class UdmEditValueWindowTest {
 
     private VerticalLayout getPanelContent() {
         return (VerticalLayout) ((Panel) ((VerticalLayout) window.getContent()).getComponent(0)).getContent();
+    }
+
+    private String buildStringWithExpectedLength(int length) {
+        return StringUtils.repeat('a', length);
     }
 
     private void initEditWindow() {

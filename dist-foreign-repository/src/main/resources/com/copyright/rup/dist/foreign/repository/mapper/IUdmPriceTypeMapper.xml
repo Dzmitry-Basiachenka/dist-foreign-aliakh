@@ -4,13 +4,13 @@
 
 <mapper namespace="IUdmPriceTypeMapper">
 
-    <select id="findPriceTypes" resultType="string">
+    <select id="findAllPriceTypes" resultType="string">
         select name
         from ${schema}.df_udm_price_type
         order by price_type_id
     </select>
 
-    <select id="findPriceAccessTypes" resultType="string">
+    <select id="findAllPriceAccessTypes" resultType="string">
         select name
         from ${schema}.df_udm_price_access_type
         order by price_access_type_id
