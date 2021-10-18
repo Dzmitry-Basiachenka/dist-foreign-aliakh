@@ -25,13 +25,13 @@ public class UdmValueDto extends StoredEntity<String> {
     private String assignee;
     private Long rhAccountNumber;
     private String rhName;
-    private String wrWrkInst;
+    private Long wrWrkInst;
     private String systemTitle;
     private String systemStandardNumber;
     private String standardNumberType;
     private Integer lastValuePeriod;
     private String lastPubType;
-    private String publicationType;
+    private PublicationType publicationType;
     private BigDecimal lastPriceInUsd;
     private Boolean lastPriceFlag;
     private String lastPriceSource;
@@ -98,11 +98,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.rhName = rhName;
     }
 
-    public String getWrWrkInst() {
+    public Long getWrWrkInst() {
         return wrWrkInst;
     }
 
-    public void setWrWrkInst(String wrWrkInst) {
+    public void setWrWrkInst(Long wrWrkInst) {
         this.wrWrkInst = wrWrkInst;
     }
 
@@ -146,11 +146,11 @@ public class UdmValueDto extends StoredEntity<String> {
         this.lastPubType = lastPubType;
     }
 
-    public String getPublicationType() {
+    public PublicationType getPublicationType() {
         return publicationType;
     }
 
-    public void setPublicationType(String publicationType) {
+    public void setPublicationType(PublicationType publicationType) {
         this.publicationType = publicationType;
     }
 
