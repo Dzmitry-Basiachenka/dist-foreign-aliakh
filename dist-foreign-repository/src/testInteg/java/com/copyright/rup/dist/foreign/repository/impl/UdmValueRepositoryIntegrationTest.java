@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
@@ -24,6 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -85,6 +87,8 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Autowired
     private IUdmValueRepository udmValueRepository;
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
 
     @Test
     public void testInsert() {
@@ -99,8 +103,8 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(209506, 209406, 209306, 209206, 209106, 202112, 202106, 201912,
-            201512, 201506, 201406, 201106, 201006);
+        List<Integer> expectedPeriods = Arrays.asList(211112, 211012, 209506, 209406, 209306, 209206, 209106, 202112,
+            202106, 201912, 201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -429,6 +433,40 @@ public class UdmValueRepositoryIntegrationTest {
         assertTrue(udmValueRepository.isAllowedForPublishing(209506));
     }
 
+    @Test
+    public void testPublishToBaseline() {
+        assertEquals(2, udmValueRepository.publishToBaseline(211012, USER_NAME));
+        assertEquals(1, udmValueRepository.publishToBaseline(211112, USER_NAME));
+        verifyValueBaselineDto(
+            loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_1.json"),
+            sqlSessionTemplate.selectList("IUdmValueBaselineMapper.findValuesByPeriod", 211012));
+        verifyValueBaselineDto(
+            loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_2.json"),
+            sqlSessionTemplate.selectList("IUdmValueBaselineMapper.findValuesByPeriod", 211112));
+    }
+
+    private void verifyValueBaselineDto(List<UdmValueBaselineDto> expectedValues,
+                                        List<UdmValueBaselineDto> actualValues) {
+        assertEquals(expectedValues.size(), actualValues.size());
+        IntStream.range(0, expectedValues.size()).forEach(index -> {
+            UdmValueBaselineDto expectedValue = expectedValues.get(index);
+            UdmValueBaselineDto actualValue = actualValues.get(index);
+            assertEquals(expectedValue.getId(), actualValue.getId());
+            assertEquals(expectedValue.getPeriod(), actualValue.getPeriod());
+            assertEquals(expectedValue.getWrWrkInst(), actualValue.getWrWrkInst());
+            assertEquals(expectedValue.getSystemTitle(), actualValue.getSystemTitle());
+            assertEquals(expectedValue.getPublicationType(), actualValue.getPublicationType());
+            assertEquals(expectedValue.getPrice(), actualValue.getPrice());
+            assertEquals(expectedValue.getPriceFlag(), actualValue.getPriceFlag());
+            assertEquals(expectedValue.getContent(), actualValue.getContent());
+            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+            assertEquals(expectedValue.getContentFlag(), actualValue.getContentFlag());
+            assertEquals(expectedValue.getComment(), actualValue.getComment());
+            assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
+            assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
+        });
+    }
+
     private void verifyValueDto(UdmValueDto expectedValue, UdmValueDto actualValue, boolean isValidateDates) {
         assertEquals(expectedValue.getId(), actualValue.getId());
         assertEquals(expectedValue.getValuePeriod(), actualValue.getValuePeriod());
@@ -518,6 +556,18 @@ public class UdmValueRepositoryIntegrationTest {
             throw new AssertionError(e);
         }
         return udmUsageDtos;
+    }
+
+    private List<UdmValueBaselineDto> loadExpectedValueBaselineDto(String fileName) {
+        List<UdmValueBaselineDto> valueBaselineDtos = new ArrayList<>();
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            valueBaselineDtos.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UdmValueBaselineDto>>() {
+            }));
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return valueBaselineDtos;
     }
 
     private PublicationType createPubType(String name, String description) {

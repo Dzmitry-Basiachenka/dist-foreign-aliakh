@@ -66,7 +66,7 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
      *
      * @param period period of value batch to check
-     * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
+     * @return {@code true} if value batch for given period is allowed for publishing, otherwise {@code false}
      */
     boolean isAllowedForPublishing(Integer period);
 

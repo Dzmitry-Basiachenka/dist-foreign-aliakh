@@ -95,7 +95,7 @@ public interface IUdmValueService {
      * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
      *
      * @param period period of value batch to check
-     * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
+     * @return {@code true} if value batch for given period is allowed for publishing, otherwise {@code false}
      */
     boolean isAllowedForPublishing(Integer period);
 
@@ -103,4 +103,12 @@ public interface IUdmValueService {
      * @return threshold value for size of UDM records.
      */
     int getUdmRecordThreshold();
+
+    /**
+     * Publishes value batch for given period to baseline.
+     *
+     * @param period period of value batch to publish
+     * @return count of newly published records
+     */
+    int publishToBaseline(Integer period);
 }

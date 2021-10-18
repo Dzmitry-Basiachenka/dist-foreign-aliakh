@@ -141,6 +141,16 @@ public class UdmValueServiceTest {
     }
 
     @Test
+    public void testPublishToBaseline() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(udmValueRepository.publishToBaseline(202012, USER_NAME)).andReturn(1).once();
+        replay(udmValueRepository, RupContextUtils.class);
+        assertEquals(1, udmValueService.publishToBaseline(202012));
+        verify(udmValueRepository, RupContextUtils.class);
+    }
+
+    @Test
     public void testIsAllowedForPublishingTrue() {
         expect(udmValueRepository.isAllowedForPublishing(202106)).andReturn(true).once();
         replay(udmValueRepository);

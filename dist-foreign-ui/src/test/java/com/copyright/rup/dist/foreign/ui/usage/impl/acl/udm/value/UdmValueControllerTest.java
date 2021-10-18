@@ -215,4 +215,12 @@ public class UdmValueControllerTest {
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
     }
+
+    @Test
+    public void testPublishToBaseline() {
+        expect(valueService.publishToBaseline(202106)).andReturn(2).once();
+        replay(valueService);
+        assertEquals(2, controller.publishToBaseline(202106));
+        verify(valueService);
+    }
 }

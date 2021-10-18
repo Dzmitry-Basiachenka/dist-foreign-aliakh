@@ -81,7 +81,16 @@ public interface IUdmValueRepository {
      * And all work values must NOT be in the following statuses: NEW, RSCHD_IN_THE_PREV_PERIOD
      *
      * @param period period of value batch to check
-     * @return (@code true) if value batch for given period is allowed for publishing, otherwise {@code false}
+     * @return {@code true} if value batch for given period is allowed for publishing, otherwise {@code false}
      */
     boolean isAllowedForPublishing(Integer period);
+
+    /**
+     * Publishes value batch for given period to baseline.
+     *
+     * @param period   period of value batch to publish
+     * @param userName name of the user who publishes to baseline
+     * @return count of published values
+     */
+    int publishToBaseline(Integer period, String userName);
 }

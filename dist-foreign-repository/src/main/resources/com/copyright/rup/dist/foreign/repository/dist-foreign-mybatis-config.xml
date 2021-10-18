@@ -76,6 +76,7 @@
         <typeAlias alias="UdmValue" type="com.copyright.rup.dist.foreign.domain.UdmValue"/>
         <typeAlias alias="UdmBaselineDto" type="com.copyright.rup.dist.foreign.domain.UdmBaselineDto"/>
         <typeAlias alias="UdmValueDto" type="com.copyright.rup.dist.foreign.domain.UdmValueDto"/>
+        <typeAlias alias="UdmValueBaselineDto" type="com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto"/>
         <typeAlias alias="UdmTouRmsTouPair" type="com.copyright.rup.dist.foreign.repository.impl.UdmTouToRmsTouResultHandler$UdmTouRmsTouPair"/>
         <typeAlias alias="UdmActionReason" type="com.copyright.rup.dist.foreign.domain.UdmActionReason"/>
         <typeAlias alias="UdmIneligibleReason" type="com.copyright.rup.dist.foreign.domain.UdmIneligibleReason"/>
@@ -123,6 +124,7 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmIneligibleReasonMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBaselineMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueBaselineMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmPriceTypeMapper.xml"/>
     </mappers>
 </configuration>
