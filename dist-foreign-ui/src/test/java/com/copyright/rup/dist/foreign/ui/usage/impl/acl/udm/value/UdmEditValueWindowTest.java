@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -167,8 +168,6 @@ public class UdmEditValueWindowTest {
         verifyPanel(verticalLayout.getComponent(0));
     }
 
-    // TODO implement tests for the fields when its validators are implemented
-
     @Test
     public void testUdmValueDataBinding() {
         setSpecialistExpectations();
@@ -218,7 +217,27 @@ public class UdmEditValueWindowTest {
         assertEquals(2, content4.getComponentCount());
         assertComboBoxFieldValue(content4.getComponent(0), PUBLICATION_TYPE);
         assertTextFieldValue(content4.getComponent(1), LAST_PUB_TYPE);
-        // TODO test other fields
+        Panel panel5 = (Panel) row2.getComponent(2);
+        VerticalLayout content5 = (VerticalLayout) panel5.getContent();
+        assertEquals(9, content5.getComponentCount());
+        assertTextFieldValue(content5.getComponent(0), CONTENT.toString());
+        assertTextFieldValue(content5.getComponent(1), CONTENT_SOURCE);
+        assertTextFieldValue(content5.getComponent(2), CONTENT_COMMENT);
+        assertTextFieldValue(content5.getComponent(3), "N");
+        assertTextFieldValue(content5.getComponent(4), LAST_CONTENT.toString());
+        assertTextFieldValue(content5.getComponent(5), LAST_CONTENT_SOURCE);
+        assertTextFieldValue(content5.getComponent(6), LAST_CONTENT_COMMENT);
+        assertTextFieldValue(content5.getComponent(7), "Y");
+        assertTextFieldValue(content5.getComponent(8), CONTENT_UNIT_PRICE.toString());
+        Panel panel6 = (Panel) row2.getComponent(3);
+        VerticalLayout content6 = (VerticalLayout) panel6.getContent();
+        assertEquals(1, content6.getComponentCount());
+        assertTextFieldValue(content6.getComponent(0), COMMENT);
+        Panel panel7 = (Panel) row2.getComponent(4);
+        VerticalLayout content7 = (VerticalLayout) panel7.getContent();
+        assertEquals(2, content7.getComponentCount());
+        assertTextFieldValue(content7.getComponent(0), USER_NAME);
+        assertTextFieldValue(content7.getComponent(1), "12/31/2020");
     }
 
     @Test
@@ -306,8 +325,62 @@ public class UdmEditValueWindowTest {
     @Test
     public void testPriceCommentFieldValidation() {
         initEditWindow();
-        TextField priceSourceField = Whitebox.getInternalState(window, "priceCommentField");
-        verifyLengthValidation(priceSourceField, 1000);
+        verifyLengthValidation(Whitebox.getInternalState(window, "priceCommentField"), 1000);
+    }
+
+    @Test
+    public void testContentFieldValidation() {
+        initEditWindow();
+        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        String numberValidationMessage = "Field value should contain numeric values only";
+        String nonNegativeValidationMessage = "Field value should be positive number or zero";
+        String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
+        verifyTextFieldValidationMessage(contentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "-1", nonNegativeValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, "0", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.1", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.12", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.123", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.1234", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.12345", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.123456", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.1234567", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.12345678", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.123456789", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "0.12345678901", scaleValidationMessage, false);
+    }
+
+    @Test
+    public void testContentSourceFieldValidation() {
+        initEditWindow();
+        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentSourceField = Whitebox.getInternalState(window, "contentSourceField");
+        int maxSize = 1000;
+        contentField.setValue(StringUtils.EMPTY);
+        verifyLengthValidation(contentSourceField, maxSize);
+        contentField.setValue("1");
+        verifyTextFieldValidationMessage(contentSourceField, StringUtils.EMPTY,
+            "Field value cannot be empty if Content is specified", false);
+        verifyTextFieldValidationMessage(contentSourceField, buildStringWithExpectedLength(maxSize),
+            StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentSourceField, buildStringWithExpectedLength(maxSize + 1),
+            String.format("Field value should not exceed %s characters", maxSize), false);
+    }
+
+    @Test
+    public void testContentCommentFieldValidation() {
+        initEditWindow();
+        verifyLengthValidation(Whitebox.getInternalState(window, "contentCommentField"), 1000);
+    }
+
+    @Test
+    public void testCommentFieldValidation() {
+        initEditWindow();
+        verifyLengthValidation(Whitebox.getInternalState(window, "commentField"), 1000);
     }
 
     @Test
@@ -352,6 +425,11 @@ public class UdmEditValueWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(1, verticalLayout.getComponentCount());
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        verifyRow1(horizontalLayout);
+        verifyRow2(horizontalLayout);
+    }
+
+    private void verifyRow1(HorizontalLayout horizontalLayout) {
         VerticalLayout row1 = (VerticalLayout) horizontalLayout.getComponent(0);
         Panel panel1 = (Panel) row1.getComponent(0);
         assertEquals("Work Information", panel1.getCaption());
@@ -383,8 +461,11 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(content2.getComponent(12), "Last Price Source", true, false);
         verifyTextFieldLayout(content2.getComponent(13), "Last Price Comment", true, false);
         verifyTextFieldLayout(content2.getComponent(14), "Last Price Flag", true, false);
+    }
+
+    private void verifyRow2(HorizontalLayout horizontalLayout) {
         VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
-        assertEquals(2, row1.getComponentCount());
+        assertEquals(5, row2.getComponentCount());
         Panel panel3 = (Panel) row2.getComponent(0);
         assertEquals("General", panel3.getCaption());
         VerticalLayout content3 = (VerticalLayout) panel3.getContent();
@@ -403,7 +484,30 @@ public class UdmEditValueWindowTest {
         verifyComboBoxLayout(content4.getComponent(0), "Pub Type", true,
             Collections.singletonList(buildPublicationType("Book", "1.00")));
         verifyTextFieldLayout(content4.getComponent(1), "Last Pub Type", true, false);
-        // TODO verify components when implemented
+        Panel panel5 = (Panel) row2.getComponent(2);
+        assertEquals("Content", panel5.getCaption());
+        VerticalLayout content5 = (VerticalLayout) panel5.getContent();
+        assertEquals(9, content5.getComponentCount());
+        verifyTextFieldLayout(content5.getComponent(0), "Content", false, true);
+        verifyTextFieldLayout(content5.getComponent(1), "Content Source", false, true);
+        verifyTextFieldLayout(content5.getComponent(2), "Content Comment", false, true);
+        verifyTextFieldLayout(content5.getComponent(3), "Content Flag", true, false);
+        verifyTextFieldLayout(content5.getComponent(4), "Last Content", true, false);
+        verifyTextFieldLayout(content5.getComponent(5), "Last Content Source", true, false);
+        verifyTextFieldLayout(content5.getComponent(6), "Last Content Comment", true, false);
+        verifyTextFieldLayout(content5.getComponent(7), "Last Content Flag", true, false);
+        verifyTextFieldLayout(content5.getComponent(8), "Content Unit Price", true, false);
+        Panel panel6 = (Panel) row2.getComponent(3);
+        assertEquals("Comment", panel6.getCaption());
+        VerticalLayout content6 = (VerticalLayout) panel6.getContent();
+        assertEquals(1, content6.getComponentCount());
+        verifyTextFieldLayout(content6.getComponent(0), "Comment", false, true);
+        Panel panel7 = (Panel) row2.getComponent(4);
+        assertNull(panel7.getCaption());
+        VerticalLayout content7 = (VerticalLayout) panel7.getContent();
+        assertEquals(2, content7.getComponentCount());
+        verifyTextFieldLayout(content7.getComponent(0), "Updated By", true, false);
+        verifyTextFieldLayout(content7.getComponent(1), "Updated Date", true, false);
     }
 
     private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {

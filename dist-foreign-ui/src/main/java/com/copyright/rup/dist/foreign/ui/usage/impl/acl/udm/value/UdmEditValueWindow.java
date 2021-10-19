@@ -54,8 +54,8 @@ import java.util.stream.Collectors;
 public class UdmEditValueWindow extends Window {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
-    private static final Range<Integer> PRICE_COMPARE_RANGE = Range.atLeast(0);
-    private static final Range<Integer> PRICE_SCALE_RANGE = Range.closed(0, 10);
+    private static final Range<Integer> DECIMAL_COMPARE_RANGE = Range.atLeast(0);
+    private static final Range<Integer> DECIMAL_SCALE_RANGE = Range.closed(0, 10);
 
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
@@ -129,10 +129,11 @@ public class UdmEditValueWindow extends Window {
                         buildPriceLayout(),
                         buildCurrencyLayout(),
                         buildReadOnlyLayout("label.currency_exchange_rate",
-                            value -> Objects.toString(value.getCurrencyExchangeRate())),
+                            value -> Objects.toString(value.getCurrencyExchangeRate(), StringUtils.EMPTY)),
                         buildReadOnlyLayout("label.currency_exchange_rate_date",
                             value -> DateUtils.format(value.getCurrencyExchangeRateDate())),
-                        buildReadOnlyLayout("label.price_in_usd", value -> Objects.toString(value.getPriceInUsd())),
+                        buildReadOnlyLayout("label.price_in_usd",
+                            value -> Objects.toString(value.getPriceInUsd(), StringUtils.EMPTY)),
                         buildPriceTypeLayout(),
                         buildPriceAccessTypeLayout(),
                         buildPriceYearLayout(),
@@ -143,8 +144,7 @@ public class UdmEditValueWindow extends Window {
                         buildReadOnlyLayout("label.price_flag",
                             value -> BooleanUtils.toYNString(value.isPriceFlag())),
                         buildReadOnlyLayout("label.last_price_in_usd",
-                            value -> Objects.nonNull(value.getLastPriceInUsd())
-                                ? Objects.toString(value.getLastPriceInUsd()) : StringUtils.EMPTY),
+                            value -> Objects.toString(value.getLastPriceInUsd(), StringUtils.EMPTY)),
                         buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource),
                         buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment),
                         buildReadOnlyLayout("label.last_price_flag",
@@ -155,7 +155,7 @@ public class UdmEditValueWindow extends Window {
                     new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
                         buildReadOnlyLayout("label.value_period", value -> Objects.toString(value.getValuePeriod())),
                         buildReadOnlyLayout("label.last_value_period",
-                            value -> Objects.toString(value.getLastValuePeriod())),
+                            value -> Objects.toString(value.getLastValuePeriod(), StringUtils.EMPTY)),
                         buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee),
                         initValueStatusLayout()
                     )),
@@ -166,19 +166,24 @@ public class UdmEditValueWindow extends Window {
                     new Panel(ForeignUi.getMessage("label.content"), new VerticalLayout(
                         buildContentLayout(),
                         buildContentSourceLayout(),
-                        buildContentCommentLayout(),
+                        buildEditableStringLayout(contentCommentField, "label.content_comment", 1000,
+                            UdmValueDto::getContentComment, UdmValueDto::setContentComment,
+                            "udm-value-edit-content-comment-field"),
                         buildReadOnlyLayout("label.content_flag",
                             value -> BooleanUtils.toYNString(value.isContentFlag())),
-                        buildReadOnlyLayout("label.last_content", value -> Objects.toString(value.getLastContent())),
+                        buildReadOnlyLayout("label.last_content",
+                            value -> Objects.toString(value.getLastContent(), StringUtils.EMPTY)),
                         buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource),
                         buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment),
                         buildReadOnlyLayout("label.last_content_flag",
                             value -> BooleanUtils.toYNString(value.isLastContentFlag())),
                         buildReadOnlyLayout("label.content_unit_price",
-                            value -> Objects.toString(value.getContentUnitPrice()))
+                            value -> Objects.toString(value.getContentUnitPrice(), StringUtils.EMPTY))
                     )),
                     new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
-                        buildCommentLayout()
+                        buildEditableStringLayout(commentField, "label.comment", 1000,
+                            UdmValueDto::getComment, UdmValueDto::setComment,
+                            "udm-value-edit-comment-field")
                     )),
                     new Panel(new VerticalLayout(
                         buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser),
@@ -294,13 +299,13 @@ public class UdmEditValueWindow extends Window {
         binder.forField(priceField)
             .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isEmpty(value) ||
-                    PRICE_COMPARE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
+            .withValidator(value -> StringUtils.isEmpty(value) || DECIMAL_COMPARE_RANGE.contains(
+                NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero"))
             .withValidator(value -> StringUtils.isEmpty(value) ||
-                    PRICE_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
-                ForeignUi.getMessage("field.error.number_scale", PRICE_SCALE_RANGE.upperEndpoint()))
-            .bind(usage -> Objects.toString(usage.getPrice()),
+                    DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
+                ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
+            .bind(usage -> Objects.toString(usage.getPrice(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPrice(StringUtils.isNotEmpty(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
@@ -378,29 +383,32 @@ public class UdmEditValueWindow extends Window {
 
     private HorizontalLayout buildContentLayout() {
         contentField.setSizeFull();
-        // TODO add validation
+        binder.forField(contentField)
+            .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()),
+                NUMBER_VALIDATION_MESSAGE)
+            .withValidator(value -> StringUtils.isEmpty(value) || DECIMAL_COMPARE_RANGE.contains(
+                NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
+                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+            .withValidator(value -> StringUtils.isEmpty(value) ||
+                    DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
+                ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
+            .bind(usage -> Objects.toString(usage.getContent(), StringUtils.EMPTY),
+                (usage, value) -> usage.setContent(StringUtils.isNotEmpty(value)
+                    ? NumberUtils.createBigDecimal(value.trim()) : null));
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");
         return buildCommonLayout(contentField, ForeignUi.getMessage("label.content"));
     }
 
     private HorizontalLayout buildContentSourceLayout() {
         contentSourceField.setSizeFull();
-        // TODO add validation
+        binder.forField(contentSourceField)
+            .withValidator(value -> StringUtils.isNotBlank(value)
+                    || StringUtils.isBlank(contentField.getValue().trim()),
+                ForeignUi.getMessage("field.error.empty_if_content_specified"))
+            .withValidator(
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
+            .bind(UdmValueDto::getContentSource, UdmValueDto::setContentSource);
         VaadinUtils.addComponentStyle(contentSourceField, "udm-value-edit-content-source-field");
         return buildCommonLayout(contentSourceField, ForeignUi.getMessage("label.content_source"));
-    }
-
-    private HorizontalLayout buildContentCommentLayout() {
-        contentCommentField.setSizeFull();
-        // TODO add validation
-        VaadinUtils.addComponentStyle(contentCommentField, "udm-value-edit-content-comment-field");
-        return buildCommonLayout(contentCommentField, ForeignUi.getMessage("label.content_comment"));
-    }
-
-    private HorizontalLayout buildCommentLayout() {
-        commentField.setSizeFull();
-        // TODO add validation
-        VaadinUtils.addComponentStyle(commentField, "udm-value-edit-comment-field");
-        return buildCommonLayout(commentField, ForeignUi.getMessage("label.comment"));
     }
 }
