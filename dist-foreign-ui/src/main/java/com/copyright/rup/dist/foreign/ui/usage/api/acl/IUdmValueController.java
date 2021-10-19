@@ -138,4 +138,14 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return threshold value for size of UDM records.
      */
     int getUdmRecordThreshold();
+
+    /**
+     * @return list of all price types.
+     */
+    List<String> getAllPriceTypes();
+
+    /**
+     * @return list of all price access types.
+     */
+    List<String> getAllPriceAccessTypes();
 }

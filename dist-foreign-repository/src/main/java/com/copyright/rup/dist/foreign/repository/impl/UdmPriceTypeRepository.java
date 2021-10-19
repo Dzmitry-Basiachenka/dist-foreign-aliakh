@@ -20,12 +20,12 @@ import java.util.List;
 public class UdmPriceTypeRepository extends BaseRepository implements IUdmPriceTypeRepository {
 
     @Override
-    public List<String> findPriceTypes() {
-        return selectList("IUdmPriceTypeMapper.findPriceTypes");
+    public List<String> findAllPriceTypes() {
+        return selectList("IUdmPriceTypeMapper.findAllPriceTypes");
     }
 
     @Override
-    public List<String> findPriceAccessTypes() {
-        return selectList("IUdmPriceTypeMapper.findPriceAccessTypes");
+    public List<String> findAllPriceAccessTypes() {
+        return selectList("IUdmPriceTypeMapper.findAllPriceAccessTypes");
     }
 }

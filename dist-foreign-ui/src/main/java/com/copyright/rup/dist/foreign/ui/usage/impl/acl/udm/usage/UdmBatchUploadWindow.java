@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -16,7 +17,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -43,8 +43,6 @@ import java.util.Arrays;
 public class UdmBatchUploadWindow extends Window {
 
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
-    private static final int MIN_YEAR = 1950;
-    private static final int MAX_YEAR = 2099;
     private static final String[] MONTHS = new String[]{"06", "12"};
     private final Binder<UdmBatch> batchBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
@@ -159,8 +157,8 @@ public class UdmBatchUploadWindow extends Window {
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
-            .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
-                MIN_YEAR, MAX_YEAR))
+            .withValidator(YearValidator.getValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
+                YearValidator.MIN_YEAR, YearValidator.MAX_YEAR))
             .bind(s -> s, (s, v) -> s = v).validate();
         VaadinUtils.addComponentStyle(periodYearField, "period-year-field");
         return periodYearField;
@@ -206,11 +204,6 @@ public class UdmBatchUploadWindow extends Window {
         channelField.setSizeFull();
         VaadinUtils.addComponentStyle(channelField, "usage-channel-field");
         return channelField;
-    }
-
-    private SerializablePredicate<String> getYearValidator() {
-        return value -> Integer.parseInt(StringUtils.trim(value)) >= MIN_YEAR
-            && Integer.parseInt(StringUtils.trim(value)) <= MAX_YEAR;
     }
 
     private UdmBatch buildUdmBatch() {

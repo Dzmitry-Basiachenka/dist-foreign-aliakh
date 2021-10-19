@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
@@ -67,6 +68,7 @@ public class UdmValueControllerTest {
     private IUdmValueWidget udmValueWidget;
     private IUdmBaselineService baselineService;
     private IPublicationTypeService publicationTypeService;
+    private IUdmPriceTypeService udmPriceTypeService;
 
     @Before
     public void setUp() {
@@ -76,12 +78,14 @@ public class UdmValueControllerTest {
         udmValueWidget = createMock(IUdmValueWidget.class);
         baselineService = createMock(IUdmBaselineService.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
+        udmPriceTypeService = createMock(IUdmPriceTypeService.class);
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
         Whitebox.setInternalState(controller, udmValueWidget);
         Whitebox.setInternalState(controller, baselineService);
         Whitebox.setInternalState(controller, publicationTypeService);
+        Whitebox.setInternalState(controller, udmPriceTypeService);
     }
 
     @Test
@@ -207,6 +211,24 @@ public class UdmValueControllerTest {
         replay(valueService);
         assertEquals(10000, controller.getUdmRecordThreshold());
         verify(valueService);
+    }
+
+    @Test
+    public void testGetAllPriceTypes() {
+        List<String> priceTypes = Arrays.asList("Individual", "Institution");
+        expect(udmPriceTypeService.getAllPriceTypes()).andReturn(priceTypes).once();
+        replay(udmPriceTypeService);
+        assertEquals(priceTypes, controller.getAllPriceTypes());
+        verify(udmPriceTypeService);
+    }
+
+    @Test
+    public void testGetAllPriceAccessTypes() {
+        List<String> priceAccessTypes = Arrays.asList("Print", "Digital");
+        expect(udmPriceTypeService.getAllPriceAccessTypes()).andReturn(priceAccessTypes).once();
+        replay(udmPriceTypeService);
+        assertEquals(priceAccessTypes, controller.getAllPriceAccessTypes());
+        verify(udmPriceTypeService);
     }
 
     private PublicationType buildPublicationType(String name, String weight) {

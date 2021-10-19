@@ -34,20 +34,20 @@ public class UdmPriceTypeRepositoryIntegrationTest {
     private IUdmPriceTypeRepository udmPriceTypeRepository;
 
     @Test
-    public void testFindPriceTypes() {
+    public void testFindAllPriceTypes() {
         List<String> expectedPriceTypes =
             Arrays.asList("Individual", "Institution", "Corporate Tiered pricing", "List Price", "Open Access",
                 "Free to Qualified", "Cost of Membership", "Per-Article price", "Other (Add to Price Note)");
-        List<String> actualPriceTypes = udmPriceTypeRepository.findPriceTypes();
+        List<String> actualPriceTypes = udmPriceTypeRepository.findAllPriceTypes();
         assertEquals(expectedPriceTypes.size(), actualPriceTypes.size());
         IntStream.range(0, expectedPriceTypes.size())
             .forEach(index -> assertEquals(expectedPriceTypes.get(index), actualPriceTypes.get(index)));
     }
 
     @Test
-    public void testFindAccessPriceTypes() {
+    public void testFindAllAccessPriceTypes() {
         List<String> expectedPriceAccessTypes = Arrays.asList("Print", "Digital", "Combined - only option");
-        List<String> actualPriceAccessTypes = udmPriceTypeRepository.findPriceAccessTypes();
+        List<String> actualPriceAccessTypes = udmPriceTypeRepository.findAllPriceAccessTypes();
         assertEquals(expectedPriceAccessTypes.size(), actualPriceAccessTypes.size());
         IntStream.range(0, expectedPriceAccessTypes.size())
             .forEach(index -> assertEquals(expectedPriceAccessTypes.get(index), actualPriceAccessTypes.get(index)));

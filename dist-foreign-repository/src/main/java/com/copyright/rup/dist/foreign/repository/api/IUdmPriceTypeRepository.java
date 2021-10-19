@@ -16,10 +16,10 @@ public interface IUdmPriceTypeRepository {
     /**
      * @return list of all price types.
      */
-    List<String> findPriceTypes();
+    List<String> findAllPriceTypes();
 
     /**
      * @return list of all price access types.
      */
-    List<String> findPriceAccessTypes();
+    List<String> findAllPriceAccessTypes();
 }

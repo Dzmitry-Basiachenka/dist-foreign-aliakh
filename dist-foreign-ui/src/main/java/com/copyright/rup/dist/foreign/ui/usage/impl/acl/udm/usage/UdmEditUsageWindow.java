@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
@@ -9,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -39,13 +38,10 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -183,15 +179,15 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.det_lc", usage -> String.format("%s - %s",
                 usage.getDetailLicenseeClass().getId(), usage.getDetailLicenseeClass().getDescription())),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name()),
-            buildReadOnlyLayout("label.usage_date", usage -> getStringFromLocalDate(usage.getUsageDate())),
-            buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
-            buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
+            buildReadOnlyLayout("label.usage_date", usage -> DateUtils.format(usage.getUsageDate())),
+            buildReadOnlyLayout("label.survey_start_date", usage -> DateUtils.format(usage.getSurveyStartDate())),
+            buildReadOnlyLayout("label.survey_end_date", usage -> DateUtils.format(usage.getSurveyEndDate())),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
             buildReadOnlyLayout("label.ineligible_reason", usage -> Objects.nonNull(usage.getIneligibleReason())
                 ? usage.getIneligibleReason().getReason() : StringUtils.EMPTY),
-            buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
+            buildReadOnlyLayout("label.load_date", usage -> DateUtils.format(usage.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
+            buildReadOnlyLayout("label.updated_date", usage -> DateUtils.format(usage.getUpdateDate()))
         };
     }
 
@@ -232,18 +228,18 @@ public class UdmEditUsageWindow extends Window {
             buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress),
             buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name()),
-            buildReadOnlyLayout("label.usage_date", usage -> getStringFromLocalDate(usage.getUsageDate())),
-            buildReadOnlyLayout("label.survey_start_date", usage -> getStringFromLocalDate(usage.getSurveyStartDate())),
-            buildReadOnlyLayout("label.survey_end_date", usage -> getStringFromLocalDate(usage.getSurveyEndDate())),
+            buildReadOnlyLayout("label.usage_date", usage -> DateUtils.format(usage.getUsageDate())),
+            buildReadOnlyLayout("label.survey_start_date", usage -> DateUtils.format(usage.getSurveyStartDate())),
+            buildReadOnlyLayout("label.survey_end_date", usage -> DateUtils.format(usage.getSurveyEndDate())),
             buildAnnualMultiplierLayout(),
             buildStatisticalMultiplier(),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse),
             buildQuantityLayout(),
             buildAnnualizedCopiesField(),
             initIneligibleReasonLayout(),
-            buildReadOnlyLayout("label.load_date", usage -> getStringFromDate(usage.getCreateDate())),
+            buildReadOnlyLayout("label.load_date", usage -> DateUtils.format(usage.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", usage -> getStringFromDate(usage.getUpdateDate()))
+            buildReadOnlyLayout("label.updated_date", usage -> DateUtils.format(usage.getUpdateDate()))
         };
     }
 
@@ -530,17 +526,6 @@ public class UdmEditUsageWindow extends Window {
         } else {
             annualizedCopiesField.clear();
         }
-    }
-
-    //TODO introduce Utils class to convert dates to String for all UI components
-    private String getStringFromLocalDate(LocalDate date) {
-        return CommonDateUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
-            : StringUtils.EMPTY;
     }
 
     private String buildDetailLicenseeClassString(DetailLicenseeClass detailLicenseeClass) {
