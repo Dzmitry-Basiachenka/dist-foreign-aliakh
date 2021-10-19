@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -13,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -87,7 +89,7 @@ public class UdmEditValueWindowTest {
     private static final String LAST_PRICE_COMMENT = "last price comment";
     private static final BigDecimal PRICE = new BigDecimal("100.00");
     private static final String PRICE_SOURCE = "price source";
-    private static final Currency CURRENCY = new Currency("USD", "US Dollar");
+    private static final Currency CURRENCY = new Currency("EUR", "Euro");
     private static final String CURRENCY_CODE = CURRENCY.getCode();
     private static final String PRICE_TYPE = "Individual";
     private static final String PRICE_ACCESS_TYPE = "Print";
@@ -112,6 +114,7 @@ public class UdmEditValueWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String PRICE_FIELD = "priceField";
 
     static {
         PUBLICATION_TYPE = new PublicationType();
@@ -243,7 +246,7 @@ public class UdmEditValueWindowTest {
     @Test
     public void testPriceFieldValidation() {
         initEditWindow();
-        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         String numberValidationMessage = "Field value should contain numeric values only";
         String nonNegativeValidationMessage = "Field value should be positive number or zero";
         String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
@@ -269,7 +272,7 @@ public class UdmEditValueWindowTest {
     @Test
     public void testCurrencyComboBoxValidation() {
         initEditWindow();
-        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
         Currency currency = new Currency("USD", "US Dollar");
         priceField.setValue(StringUtils.EMPTY);
@@ -284,6 +287,27 @@ public class UdmEditValueWindowTest {
         priceField.setValue("1");
         currencyComboBox.setValue(currency);
         verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
+    }
+
+    @Test
+    public void testPriceInUsdRecalculation() {
+        initEditWindow();
+        reset(controller);
+        Currency currency = new Currency("GBP", "Pound Sterling");
+        LocalDate date = LocalDate.now();
+        ExchangeRate exchangeRate = new ExchangeRate();
+        exchangeRate.setExchangeRateValue(new BigDecimal("0.7243"));
+        exchangeRate.setExchangeRateUpdateDate(date);
+        expect(controller.getExchangeRate(currency.getCode(), date)).andReturn(exchangeRate).once();
+        replay(controller);
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
+        priceField.setValue("100");
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        currencyComboBox.setValue(currency);
+        window.recalculatePriceInUsd();
+        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
+        assertEquals("72.4300000000", priceInUsdField.getValue());
+        verify(controller);
     }
 
     @Test
@@ -308,7 +332,7 @@ public class UdmEditValueWindowTest {
     @Test
     public void testPriceSourceFieldValidation() {
         initEditWindow();
-        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         TextField priceSourceField = Whitebox.getInternalState(window, "priceSourceField");
         int maxSize = 1000;
         priceField.setValue(StringUtils.EMPTY);

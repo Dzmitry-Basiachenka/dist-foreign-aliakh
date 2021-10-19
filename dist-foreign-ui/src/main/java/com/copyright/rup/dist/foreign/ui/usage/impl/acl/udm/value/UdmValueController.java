@@ -3,10 +3,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
@@ -22,10 +24,12 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +57,9 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IPublicationTypeService publicationTypeService;
     @Autowired
     private IUdmPriceTypeService udmPriceTypeService;
+    @Qualifier("df.integration.rfexIntegrationCacheService")
+    @Autowired
+    private IRfexIntegrationService rfexIntegrationService;
 
     @Override
     public List<Integer> getBaselinePeriods() {
@@ -150,6 +157,11 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Override
     public List<String> getAllPriceAccessTypes() {
         return udmPriceTypeService.getAllPriceAccessTypes();
+    }
+
+    @Override
+    public ExchangeRate getExchangeRate(String foreignCurrencyCode, LocalDate date) {
+        return rfexIntegrationService.getExchangeRate(foreignCurrencyCode, date);
     }
 
     private UdmValueFilter getFilter() {
