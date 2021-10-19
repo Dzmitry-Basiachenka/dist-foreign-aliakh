@@ -1,3 +1,12 @@
+14.1.25
+-
+* B-68260 [Value] FDA & UDM: Publish values to baseline: Implement logic to publish values to baseline
+* B-69729: FDA & UDM: View single record: implement view baseline window and add logic to open view value window
+* B-69421: FDA & UDM: Select all (Usages, Values): fix wrong hiding SelectAllCheckBox on UDM Usages tab after closing View and Audit windows
+* B-69421: FDA & UDM: Select all (Usages, Values): refine service and controller logic for UDM Value
+  B-67673 FDA: Value Edits: implement fields in Price section
+* B-67673 FDA: Value Edits: implement fields in Work Information, General, Publication Type sections
+
 14.1.24
 -
 * B-67673 FDA: Value Edits: implement the Edit Value button
