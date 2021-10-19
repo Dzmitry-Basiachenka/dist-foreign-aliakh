@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -18,10 +18,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
-
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -74,9 +70,9 @@ public class ViewBaselineWindow extends Window {
             buildReadOnlyLayout(
                 "label.annualized_copies", baseline -> Objects.toString(baseline.getAnnualizedCopies())),
             buildReadOnlyLayout("label.created_by", UdmBaselineDto::getCreateUser),
-            buildReadOnlyLayout("label.created_date", baseline -> getStringFromDate(baseline.getCreateDate())),
+            buildReadOnlyLayout("label.created_date", baseline -> DateUtils.format(baseline.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmBaselineDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", baseline -> getStringFromDate(baseline.getUpdateDate())),
+            buildReadOnlyLayout("label.updated_date", baseline -> DateUtils.format(baseline.getUpdateDate())),
             buttonsLayout
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -102,11 +98,5 @@ public class ViewBaselineWindow extends Window {
         layout.setSizeFull();
         layout.setExpandRatio(component, 1);
         return layout;
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
-            : StringUtils.EMPTY;
     }
 }
