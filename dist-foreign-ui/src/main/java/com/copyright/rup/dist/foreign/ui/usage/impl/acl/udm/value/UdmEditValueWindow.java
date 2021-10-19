@@ -98,6 +98,18 @@ public class UdmEditValueWindow extends Window {
         VaadinUtils.addComponentStyle(this, "edit-udm-value-window");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param valueController  instance of {@link IUdmValueController}
+     * @param selectedUdmValue UDM value to be displayed on the window
+     */
+    public UdmEditValueWindow(IUdmValueController valueController, UdmValueDto selectedUdmValue) {
+        this(valueController, selectedUdmValue, null);
+        saveButton.setVisible(false);
+        setCaption(ForeignUi.getMessage("window.view_udm_value"));
+    }
+
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();

@@ -23,6 +23,7 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
@@ -76,6 +77,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private Button publishButton;
     private DataProvider<UdmValueDto, Void> dataProvider;
     private MultiSelectionModelImpl<UdmValueDto> gridSelectionModel;
+    private Set<UdmValueDto> selectedUdmValues;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -246,8 +248,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 editButton.setEnabled(EXPECTED_SELECTED_SIZE == valueDtos.size());
             });
         } else {
-            udmValuesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+            udmValuesGrid.setSelectionMode(SelectionMode.SINGLE);
         }
+        initViewWindow();
         VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
     }
 
@@ -361,5 +364,39 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
         return udmValueDtos.stream()
             .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
+    }
+
+    private void initViewWindow() {
+        udmValuesGrid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                UdmValueDto udmValueDto = event.getItem();
+                UdmEditValueWindow components = new UdmEditValueWindow(controller, udmValueDto);
+                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues));
+                Windows.showModalWindow(components);
+                highlightSelectedUsage(udmValueDto);
+            }
+        });
+    }
+
+    /**
+     * Hides current value selection and selects value for which view window was opened.
+     *
+     * @param selectedValue usage to select
+     */
+    private void highlightSelectedUsage(UdmValueDto selectedValue) {
+        selectedUdmValues = udmValuesGrid.getSelectedItems();
+        udmValuesGrid.deselectAll();
+        udmValuesGrid.select(selectedValue);
+    }
+
+    /**
+     * Restores previous value selection. Removes selection of value for which view window was opened.
+     *
+     * @param usagesToSelect set of values to select
+     */
+    private void restoreSelection(Set<UdmValueDto> usagesToSelect) {
+        selectedUdmValues = null;
+        udmValuesGrid.deselectAll();
+        usagesToSelect.forEach(udmValueDto -> udmValuesGrid.select(udmValueDto));
     }
 }

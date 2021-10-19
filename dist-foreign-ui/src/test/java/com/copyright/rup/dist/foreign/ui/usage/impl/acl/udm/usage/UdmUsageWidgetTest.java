@@ -48,7 +48,7 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
-import com.vaadin.ui.components.grid.NoSelectionModel;
+import com.vaadin.ui.components.grid.SingleSelectionModel;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
@@ -193,7 +193,7 @@ public class UdmUsageWidgetTest {
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, false, true);
         Grid grid = (Grid) layout.getComponent(1);
-        assertTrue(grid.getSelectionModel() instanceof NoSelectionModel);
+        assertTrue(grid.getSelectionModel() instanceof SingleSelectionModel);
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_VIEW_ONLY);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
@@ -625,7 +625,7 @@ public class UdmUsageWidgetTest {
         MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
         MenuBar.MenuItem assignItem = Whitebox.getInternalState(usagesWidget, "assignItem");
         MenuBar.MenuItem unassignItem = Whitebox.getInternalState(usagesWidget, "unassignItem");
-        assertFalse(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
+        assertTrue(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
         assertFalse(editButton.isEnabled());

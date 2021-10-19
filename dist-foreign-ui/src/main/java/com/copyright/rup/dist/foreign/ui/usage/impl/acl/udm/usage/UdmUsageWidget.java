@@ -24,6 +24,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
@@ -322,8 +323,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 multipleEditButton.setEnabled(isSelected);
             });
         } else {
-            udmUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+            udmUsagesGrid.setSelectionMode(SelectionMode.SINGLE);
         }
+        initViewWindow();
+        VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
+    }
+
+    private void initViewWindow() {
         udmUsagesGrid.addItemClickListener(event -> {
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmUsageDto udmUsageDto = event.getItem();
@@ -333,7 +339,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 highlightSelectedUsage(udmUsageDto);
             }
         });
-        VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
 
     private boolean isNotViewOnlyPermission() {
@@ -455,7 +460,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     /**
-     * Hides current usage selection and selects usage for which edit or history window was opened.
+     * Hides current usage selection and selects usage for which view or history window was opened.
      *
      * @param usageToSeeAudit usage to select
      */
@@ -467,7 +472,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     /**
-     * Restores previous usage selection. Removes selection of usage for which edit or history window was opened.
+     * Restores previous usage selection. Removes selection of usage for which view or history window was opened.
      *
      * @param usagesToSelect      set of usages to select
      * @param isAllUsagesSelected {@code true} if all usages are selected, {@code false} otherwise
