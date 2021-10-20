@@ -799,7 +799,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 10003378)
             column(name: 'system_title', value: 'Amsterdam tomorrow')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -812,7 +811,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 10007822)
             column(name: 'system_title', value: 'Edge of future')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -826,7 +824,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 10003378)
             column(name: 'system_title', value: 'Amsterdam tomorrow')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -840,7 +837,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 10002508)
             column(name: 'system_title', value: 'Tenside, surfactants, detergents')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -853,7 +849,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 70063308)
             column(name: 'system_title', value: 'Artifacts in video compression')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -870,7 +865,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 28908508)
             column(name: 'system_title', value: 'Artifacts in video compression')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -883,7 +877,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 38908778)
             column(name: 'system_title', value: 'Artifacts in video compression')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
@@ -1029,7 +1022,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 28908508)
             column(name: 'system_title', value: 'Artifacts in video compression')
             column(name: 'standard_number', value: '0927-7765')
-            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }

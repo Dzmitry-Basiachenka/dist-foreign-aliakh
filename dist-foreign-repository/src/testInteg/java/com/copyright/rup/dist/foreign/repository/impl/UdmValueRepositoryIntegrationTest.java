@@ -359,7 +359,6 @@ public class UdmValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "wrWrkInst");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "systemTitle");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "systemStandardNumber");
-        assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "standardNumberType");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "lastValuePeriod");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "lastPubType");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "publicationType");
@@ -482,7 +481,6 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(expectedValue.getWrWrkInst(), actualValue.getWrWrkInst());
         assertEquals(expectedValue.getSystemTitle(), actualValue.getSystemTitle());
         assertEquals(expectedValue.getSystemStandardNumber(), actualValue.getSystemStandardNumber());
-        assertEquals(expectedValue.getStandardNumberType(), actualValue.getStandardNumberType());
         assertEquals(expectedValue.getPrice(), actualValue.getPrice());
         assertEquals(expectedValue.getPriceSource(), actualValue.getPriceSource());
         assertEquals(expectedValue.getPriceInUsd(), actualValue.getPriceInUsd());
@@ -543,7 +541,6 @@ public class UdmValueRepositoryIntegrationTest {
         value.setStatus(UdmValueStatusEnum.NEW);
         value.setWrWrkInst(327005896L);
         value.setStandardNumber("1245-8969");
-        value.setStandardNumberType("ISBN13");
         value.setSystemTitle("Pink dolphins in real life");
         value.setUpdateUser(USER_NAME);
         value.setCreateUser(USER_NAME);
