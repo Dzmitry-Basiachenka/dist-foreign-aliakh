@@ -410,12 +410,12 @@ public class UdmValueWidgetTest {
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
-            "System Title", "System Standard Number", "Standard Number Type", "Last Value Period", "Last Pub Type",
-            "Pub Type", "Last Price in USD", "Last Price Flag", "Last Price Source", "Price Source",
-            "Last Price Comment", "Price", "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment",
-            "Price in USD", "Price Flag", "Currency Exchange Rate", "Currency Exchange Rate Date", "Last Content",
-            "Last Content Flag", "Last Content Source", "Content Source", "Last Content Comment", "Content",
-            "Content Comment", "Content Flag", "Content Unit Price", "Comment", "Updated By", "Updated Date"),
+            "System Title", "System Standard Number", "Last Value Period", "Last Pub Type", "Pub Type",
+            "Last Price in USD", "Last Price Flag", "Last Price Source", "Price Source", "Last Price Comment", "Price",
+            "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment", "Price in USD", "Price Flag",
+            "Currency Exchange Rate", "Currency Exchange Rate Date", "Last Content", "Last Content Flag",
+            "Last Content Source", "Content Source", "Last Content Comment", "Content", "Content Comment",
+            "Content Flag", "Content Unit Price", "Comment", "Updated By", "Updated Date"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid, 100, 100, Unit.PERCENTAGE);
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);

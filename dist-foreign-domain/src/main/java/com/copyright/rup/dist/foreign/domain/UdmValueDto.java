@@ -28,7 +28,6 @@ public class UdmValueDto extends StoredEntity<String> {
     private Long wrWrkInst;
     private String systemTitle;
     private String systemStandardNumber;
-    private String standardNumberType;
     private Integer lastValuePeriod;
     private String lastPubType;
     private PublicationType publicationType;
@@ -120,14 +119,6 @@ public class UdmValueDto extends StoredEntity<String> {
 
     public void setSystemStandardNumber(String systemStandardNumber) {
         this.systemStandardNumber = systemStandardNumber;
-    }
-
-    public String getStandardNumberType() {
-        return standardNumberType;
-    }
-
-    public void setStandardNumberType(String standardNumberType) {
-        this.standardNumberType = standardNumberType;
     }
 
     public Integer getLastValuePeriod() {
@@ -373,7 +364,6 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(systemStandardNumber, that.systemStandardNumber)
-            .append(standardNumberType, that.standardNumberType)
             .append(lastValuePeriod, that.lastValuePeriod)
             .append(lastPubType, that.lastPubType)
             .append(publicationType, that.publicationType)
@@ -417,7 +407,6 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(wrWrkInst)
             .append(systemTitle)
             .append(systemStandardNumber)
-            .append(standardNumberType)
             .append(lastValuePeriod)
             .append(lastPubType)
             .append(publicationType)
@@ -461,7 +450,6 @@ public class UdmValueDto extends StoredEntity<String> {
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
             .append("systemStandardNumber", systemStandardNumber)
-            .append("standardNumberType", standardNumberType)
             .append("lastValuePeriod", lastValuePeriod)
             .append("lastPubType", lastPubType)
             .append("publicationType", publicationType)

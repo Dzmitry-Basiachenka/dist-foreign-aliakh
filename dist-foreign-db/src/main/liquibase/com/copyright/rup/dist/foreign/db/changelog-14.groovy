@@ -993,4 +993,16 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_price_access_type', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-10-20-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-68823 FDA: Technical Debt: remove standard_number_type column from df_udm_value table")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_udm_value', columnName: 'standard_number_type')
+
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+                column(name: 'standard_number_type', type: 'VARCHAR(50)', remarks: 'Standard number type')
+            }
+        }
+    }
 }

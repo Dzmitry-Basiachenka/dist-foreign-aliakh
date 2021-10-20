@@ -283,8 +283,6 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getSystemTitle, "table.column.system_title", "systemTitle", 100),
             addColumn(UdmValueDto::getSystemStandardNumber, "table.column.system_standard_number",
                 "systemStandardNumber", 190),
-            addColumn(UdmValueDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType",
-                190),
             addColumn(UdmValueDto::getLastValuePeriod, "table.column.last_value_period", "lastValuePeriod", 150),
             addColumn(UdmValueDto::getLastPubType, "table.column.last_pub_type", "lastPubType", 150),
             addColumn(UdmValueDto::getPublicationType, "table.column.publication_type", "publicationType", 150),

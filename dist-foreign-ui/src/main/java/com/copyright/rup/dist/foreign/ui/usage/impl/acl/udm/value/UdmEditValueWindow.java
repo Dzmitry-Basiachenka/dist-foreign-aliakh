@@ -143,7 +143,6 @@ public class UdmEditValueWindow extends Window {
                         buildReadOnlyLayout("label.system_title", UdmValueDto::getSystemTitle),
                         buildReadOnlyLayout("label.wr_wrk_inst", value -> Objects.toString(value.getWrWrkInst())),
                         buildReadOnlyLayout("label.system_standard_number", UdmValueDto::getSystemStandardNumber),
-                        buildReadOnlyLayout("label.standard_number_type", UdmValueDto::getStandardNumberType),
                         buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName),
                         buildReadOnlyLayout("label.rh_account_number",
                             value -> Objects.toString(value.getRhAccountNumber()))

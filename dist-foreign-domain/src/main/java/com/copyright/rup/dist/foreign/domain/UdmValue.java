@@ -23,7 +23,6 @@ public class UdmValue extends StoredEntity<String> {
     private Long wrWrkInst;
     private String systemTitle;
     private String standardNumber;
-    private String standardNumberType;
 
     public Integer getPeriod() {
         return period;
@@ -73,14 +72,6 @@ public class UdmValue extends StoredEntity<String> {
         this.standardNumber = standardNumber;
     }
 
-    public String getStandardNumberType() {
-        return standardNumberType;
-    }
-
-    public void setStandardNumberType(String standardNumberType) {
-        this.standardNumberType = standardNumberType;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -98,7 +89,6 @@ public class UdmValue extends StoredEntity<String> {
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(standardNumber, that.standardNumber)
-            .append(standardNumberType, that.standardNumberType)
             .isEquals();
     }
 
@@ -112,7 +102,6 @@ public class UdmValue extends StoredEntity<String> {
             .append(wrWrkInst)
             .append(systemTitle)
             .append(standardNumber)
-            .append(standardNumberType)
             .toHashCode();
     }
 
@@ -125,8 +114,7 @@ public class UdmValue extends StoredEntity<String> {
             .append("rhAccountNumber", rhAccountNumber)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
-            .append("systemStandardNumber", standardNumber)
-            .append("standardNumberType", standardNumberType)
+            .append("standardNumber", standardNumber)
             .toString();
     }
 }
