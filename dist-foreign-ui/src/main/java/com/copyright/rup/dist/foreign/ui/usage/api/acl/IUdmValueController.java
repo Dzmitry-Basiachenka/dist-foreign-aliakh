@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -9,6 +10,7 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -148,4 +150,13 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return list of all price access types.
      */
     List<String> getAllPriceAccessTypes();
+
+    /**
+     * Gets exchange rate of foreign currency to USD.
+     *
+     * @param foreignCurrencyCode foreign currency code to load exchange rate
+     * @param date                date when the currency data was updated from the service provider
+     * @return instance of {@link ExchangeRate}
+     */
+    ExchangeRate getExchangeRate(String foreignCurrencyCode, LocalDate date);
 }

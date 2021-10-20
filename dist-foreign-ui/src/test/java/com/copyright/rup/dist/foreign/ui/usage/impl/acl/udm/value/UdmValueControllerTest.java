@@ -17,9 +17,11 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
@@ -39,6 +41,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -69,6 +72,7 @@ public class UdmValueControllerTest {
     private IUdmBaselineService baselineService;
     private IPublicationTypeService publicationTypeService;
     private IUdmPriceTypeService udmPriceTypeService;
+    private IRfexIntegrationService rfexIntegrationService;
 
     @Before
     public void setUp() {
@@ -79,6 +83,7 @@ public class UdmValueControllerTest {
         baselineService = createMock(IUdmBaselineService.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
         udmPriceTypeService = createMock(IUdmPriceTypeService.class);
+        rfexIntegrationService = createMock(IRfexIntegrationService.class);
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
@@ -86,6 +91,7 @@ public class UdmValueControllerTest {
         Whitebox.setInternalState(controller, baselineService);
         Whitebox.setInternalState(controller, publicationTypeService);
         Whitebox.setInternalState(controller, udmPriceTypeService);
+        Whitebox.setInternalState(controller, rfexIntegrationService);
     }
 
     @Test
@@ -244,5 +250,18 @@ public class UdmValueControllerTest {
         replay(valueService);
         assertEquals(2, controller.publishToBaseline(202106));
         verify(valueService);
+    }
+
+    @Test
+    public void testGetExchangeRate() {
+        String currencyCode = "EUR";
+        LocalDate date = LocalDate.now();
+        ExchangeRate exchangeRate = new ExchangeRate();
+        exchangeRate.setExchangeRateValue(new BigDecimal("0.8592"));
+        exchangeRate.setExchangeRateUpdateDate(date);
+        expect(rfexIntegrationService.getExchangeRate(currencyCode, date)).andReturn(exchangeRate).once();
+        replay(rfexIntegrationService);
+        assertEquals(exchangeRate, controller.getExchangeRate(currencyCode, date));
+        verify(rfexIntegrationService);
     }
 }

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,9 @@ public class UdmEditValueWindow extends Window {
     private final ComboBox<PublicationType> pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
     private final TextField priceField = new TextField(ForeignUi.getMessage("label.price"));
     private final ComboBox<Currency> currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
+    private final TextField priceInUsdField = new TextField();
+    private final TextField currencyExchangeRateField = new TextField();
+    private final TextField currencyExchangeRateDateField = new TextField();
     private final ComboBox<String> priceTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.price_type"));
     private final ComboBox<String> priceAccessTypeComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.price_access_type"));
@@ -110,6 +115,24 @@ public class UdmEditValueWindow extends Window {
         setCaption(ForeignUi.getMessage("window.view_udm_value"));
     }
 
+    /**
+     * Recalculate price in USD as the product of price and currency exchange rate
+     * and sets currency exchange rate and currency exchange rate date.
+     */
+    void recalculatePriceInUsd() {
+        if (Objects.isNull(priceField.getErrorMessage()) && StringUtils.isNotBlank(priceField.getValue().trim())
+            && Objects.isNull(currencyComboBox.getErrorMessage()) && Objects.nonNull(currencyComboBox.getValue())) {
+            ExchangeRate exchangeRate = controller.getExchangeRate(currencyComboBox.getValue().getCode(),
+                LocalDate.now());
+            BigDecimal price = NumberUtils.createBigDecimal(priceField.getValue().trim());
+            BigDecimal priceInUsd = price.multiply(exchangeRate.getExchangeRateValue())
+                .setScale(10, BigDecimal.ROUND_HALF_UP);
+            currencyExchangeRateField.setValue(exchangeRate.getExchangeRateValue().toString());
+            currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
+            priceInUsdField.setValue(priceInUsd.toString());
+        }
+    }
+
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
@@ -128,11 +151,11 @@ public class UdmEditValueWindow extends Window {
                     new Panel(ForeignUi.getMessage("label.price"), new VerticalLayout(
                         buildPriceLayout(),
                         buildCurrencyLayout(),
-                        buildReadOnlyLayout("label.currency_exchange_rate",
+                        buildReadOnlyLayout(currencyExchangeRateField, "label.currency_exchange_rate",
                             value -> Objects.toString(value.getCurrencyExchangeRate(), StringUtils.EMPTY)),
-                        buildReadOnlyLayout("label.currency_exchange_rate_date",
+                        buildReadOnlyLayout(currencyExchangeRateDateField, "label.currency_exchange_rate_date",
                             value -> DateUtils.format(value.getCurrencyExchangeRateDate())),
-                        buildReadOnlyLayout("label.price_in_usd",
+                        buildReadOnlyLayout(priceInUsdField, "label.price_in_usd",
                             value -> Objects.toString(value.getPriceInUsd(), StringUtils.EMPTY)),
                         buildPriceTypeLayout(),
                         buildPriceAccessTypeLayout(),
@@ -214,12 +237,16 @@ public class UdmEditValueWindow extends Window {
         return verticalLayout;
     }
 
-    private HorizontalLayout buildReadOnlyLayout(String caption, ValueProvider<UdmValueDto, String> getter) {
-        TextField textField = new TextField();
+    private HorizontalLayout buildReadOnlyLayout(TextField textField, String caption,
+                                                 ValueProvider<UdmValueDto, String> getter) {
         textField.setReadOnly(true);
         textField.setSizeFull();
         binder.forField(textField).bind(getter, null);
         return buildCommonLayout(textField, ForeignUi.getMessage(caption));
+    }
+
+    private HorizontalLayout buildReadOnlyLayout(String caption, ValueProvider<UdmValueDto, String> getter) {
+        return buildReadOnlyLayout(new TextField(), caption, getter);
     }
 
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
@@ -308,6 +335,11 @@ public class UdmEditValueWindow extends Window {
             .bind(usage -> Objects.toString(usage.getPrice(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPrice(StringUtils.isNotEmpty(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
+        priceField.addValueChangeListener(event -> {
+            if (event.isUserOriginated()) {
+                recalculatePriceInUsd();
+            }
+        });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
         return buildCommonLayout(priceField, ForeignUi.getMessage("label.price"));
     }
@@ -318,18 +350,26 @@ public class UdmEditValueWindow extends Window {
         currencyComboBox.setItems(currencyCodesToCurrencyNamesMap
             .entrySet()
             .stream()
-            .map(currency -> new Currency(currency.getKey(), currency.getValue()))
+            .map(entry -> new Currency(entry.getKey(), entry.getValue()))
             .collect(Collectors.toList()));
-        currencyComboBox.setItemCaptionGenerator(
-            currency -> String.format("%s - %s", currency.getCode(), currency.getDescription()));
-        currencyComboBox.setSelectedItem(Objects.isNull(udmValue.getCurrency())
-            ? null
-            : new Currency(udmValue.getCurrency(), currencyCodesToCurrencyNamesMap.get(udmValue.getCurrency())));
-        currencyComboBox.addValueChangeListener(event -> binder.validate());
+        currencyComboBox.setItemCaptionGenerator(currency -> Objects.nonNull(currency)
+            ? String.format("%s - %s", currency.getCode(), currency.getDescription())
+            : StringUtils.EMPTY);
+        currencyComboBox.setSelectedItem(Objects.nonNull(udmValue.getCurrency())
+            ? new Currency(udmValue.getCurrency(), currencyCodesToCurrencyNamesMap.get(udmValue.getCurrency()))
+            : null);
+        currencyComboBox.addValueChangeListener(event -> {
+            binder.validate();
+            if (event.isUserOriginated()) {
+                recalculatePriceInUsd();
+            }
+        });
         binder.forField(currencyComboBox)
             .withValidator(value -> Objects.nonNull(value) || StringUtils.isBlank(priceField.getValue().trim()),
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
-            .bind(usage -> new Currency(usage.getCurrency(), currencyCodesToCurrencyNamesMap.get(usage.getCurrency())),
+            .bind(usage -> Objects.nonNull(usage.getCurrency())
+                    ? new Currency(usage.getCurrency(), currencyCodesToCurrencyNamesMap.get(usage.getCurrency()))
+                    : null,
                 (usage, value) -> usage.setCurrency(Objects.nonNull(value) ? value.getCode() : null));
         VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-edit-currency-combo-box");
         return buildCommonLayout(currencyComboBox, ForeignUi.getMessage("label.currency"));
