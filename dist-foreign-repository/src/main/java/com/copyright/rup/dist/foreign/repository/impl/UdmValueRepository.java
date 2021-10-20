@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
@@ -109,7 +110,10 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
 
     private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
         FilterExpression<String> filterExpression) {
-        return new FilterExpression<>(filterExpression.getOperator(),
-            escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue());
+        return Objects.nonNull(filterExpression.getOperator())
+            && filterExpression.getOperator().equals(FilterOperatorEnum.CONTAINS)
+            ? new FilterExpression<>(filterExpression.getOperator(),
+            escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue())
+            : filterExpression;
     }
 }
