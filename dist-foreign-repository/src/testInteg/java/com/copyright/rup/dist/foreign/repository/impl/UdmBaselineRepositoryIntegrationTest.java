@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -209,7 +211,8 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     public void testGetPeriods() {
-        assertEquals(Arrays.asList(202106, 202012, 201906, 201512, 201506, 201406, 201006, 200912),
+        assertEquals(
+            Arrays.asList(211512, 211412, 210412, 202106, 202012, 201906, 201512, 201506, 201406, 201006, 200912),
             baselineRepository.findPeriods());
     }
 
@@ -220,6 +223,47 @@ public class UdmBaselineRepositoryIntegrationTest {
         assertEquals(loadExpectedValues("json/udm/udm_values_201412.json"),
             baselineRepository.findNotPopulatedValuesFromBaseline(201412));
         assertTrue(CollectionUtils.isEmpty(baselineRepository.findNotPopulatedValuesFromBaseline(200812)));
+    }
+
+    @Test
+    public void testPopulateValueId() {
+        Map<Long, String> wrWrkInstToValueIdMap = ImmutableMap.of(
+            28908508L, "9b2550ff-a80a-41a9-a63c-047216a62241",
+            38908778L, "436be73d-82c9-4e53-bda6-b882e528bed7");
+        assertEquals(3, baselineRepository.populateValueId(211512, wrWrkInstToValueIdMap, USER_NAME));
+        UdmBaselineFilter filter = new UdmBaselineFilter();
+        filter.setPeriod(211512);
+        verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211512.json"),
+            baselineRepository.findDtosByFilter(filter, null, null));
+        filter.setPeriod(211412);
+        verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211412.json"),
+            baselineRepository.findDtosByFilter(filter, null, null));
+    }
+
+    private void verifyUdmBaselineDto(List<UdmBaselineDto> expectedUsages, List<UdmBaselineDto> actualUsages) {
+        assertEquals(expectedUsages.size(), actualUsages.size());
+        IntStream.range(0, expectedUsages.size()).forEach(index -> {
+            UdmBaselineDto expectedUsage = expectedUsages.get(index);
+            UdmBaselineDto actualUsage = actualUsages.get(index);
+            assertEquals(expectedUsage.getId(), actualUsage.getId());
+            assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
+            assertEquals(expectedUsage.getUsageOrigin(), actualUsage.getUsageOrigin());
+            assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
+            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+            assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
+            assertEquals(expectedUsage.getDetailLicenseeClassName(), actualUsage.getDetailLicenseeClassName());
+            assertEquals(expectedUsage.getAggregateLicenseeClassId(), actualUsage.getAggregateLicenseeClassId());
+            assertEquals(expectedUsage.getAggregateLicenseeClassName(), actualUsage.getAggregateLicenseeClassName());
+            assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
+            assertEquals(expectedUsage.getChannel(), actualUsage.getChannel());
+            assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
+            assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
+            assertEquals(expectedUsage.getValueId(), actualUsage.getValueId());
+            assertEquals(expectedUsage.getCreateUser(), actualUsage.getCreateUser());
+            assertEquals(expectedUsage.getUpdateUser(), actualUsage.getUpdateUser());
+            assertEquals(expectedUsage.getVersion(), actualUsage.getVersion());
+        });
     }
 
     private void verifyFilteringFindCountByFilter(Consumer<UdmBaselineFilter> consumer, int count) {

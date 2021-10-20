@@ -32,6 +32,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
     private UdmChannelEnum channel;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
+    private String valueId;
 
     public Integer getPeriod() {
         return period;
@@ -137,6 +138,14 @@ public class UdmBaselineDto extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
+    public String getValueId() {
+        return valueId;
+    }
+
+    public void setValueId(String valueId) {
+        this.valueId = valueId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -161,6 +170,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(channel, that.channel)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
+            .append(valueId, that.valueId)
             .isEquals();
     }
 
@@ -181,6 +191,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(channel)
             .append(typeOfUse)
             .append(annualizedCopies)
+            .append(valueId)
             .toHashCode();
     }
 
@@ -201,6 +212,7 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append("channel", channel)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
+            .append("valueId", valueId)
             .toString();
     }
 }

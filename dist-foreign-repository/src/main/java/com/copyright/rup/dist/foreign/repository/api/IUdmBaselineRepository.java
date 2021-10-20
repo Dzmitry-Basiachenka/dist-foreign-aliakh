@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -67,4 +68,14 @@ public interface IUdmBaselineRepository {
      * @return list of {@link UdmValue}s
      */
     List<UdmValue> findNotPopulatedValuesFromBaseline(Integer period);
+
+    /**
+     * Populates baseline usages with corresponding values id.
+     *
+     * @param period                usage period
+     * @param wrWrkInstToValueIdMap map of wrWrkInst to value id
+     * @param userName              user who updated usages
+     * @return count of updated usages
+     */
+    int populateValueId(Integer period, Map<Long, String> wrWrkInstToValueIdMap, String userName);
 }

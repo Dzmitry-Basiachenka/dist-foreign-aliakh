@@ -66,4 +66,13 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     public List<UdmValue> findNotPopulatedValuesFromBaseline(Integer period) {
         return selectList("IUdmBaselineMapper.findNotPopulatedValuesFromBaseline", Objects.requireNonNull(period));
     }
+
+    @Override
+    public int populateValueId(Integer period, Map<Long, String> wrWrkInstToValueIdMap, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("wrWrkInstToValueIdMap", Objects.requireNonNull(wrWrkInstToValueIdMap));
+        parameters.put("updateUser", Objects.requireNonNull(userName));
+        return selectOne("IUdmBaselineMapper.populateValueId", parameters);
+    }
 }

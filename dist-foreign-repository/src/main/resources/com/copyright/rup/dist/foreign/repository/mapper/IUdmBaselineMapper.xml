@@ -19,6 +19,7 @@
         <result property="channel" column="channel"/>
         <result property="typeOfUse" column="reported_type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
+        <result property="valueId" column="df_udm_value_uid"/>
     </resultMap>
 
     <sql id="udmBaselineFilter">
@@ -149,6 +150,7 @@
             ub.channel,
             u.reported_type_of_use,
             u.annualized_copies,
+            u.df_udm_value_uid,
             u.baseline_created_datetime as created_datetime,
             u.baseline_created_by_user as created_by_user,
             u.updated_datetime,
@@ -181,6 +183,13 @@
         join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
         where is_baseline_flag = true
             <include refid="IUdmBaselineMapper.udmBaselineFilter"/>
+    </sql>
+
+    <sql id="selectOldestPeriodWithPositiveAgeWeight">
+        last_period_to_select_works as (
+            select to_char(to_date(#{period}::text, 'YYYYMM') -
+                (((select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0) * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
+        )
     </sql>
 
     <select id="findDtosByFilter" resultMap="udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
@@ -217,11 +226,8 @@
             from ${schema}.df_udm_value
             where period = #{period}
         ),
-        <!-- Selects last period with age weight greater than zero -->
-        last_period_to_select_works as (
-            select to_char(to_date(#{period}::text, 'YYYYMM') -
-                (((select count(*) from ${schema}.df_udm_age_weight where weight > 0 and period_prior > 0) * 6) || ' months')::INTERVAL, 'YYYYMM')::int as period
-        )
+        <!-- Selects oldest period with age weight greater than zero -->
+        <include refid="IUdmBaselineMapper.selectOldestPeriodWithPositiveAgeWeight"/>
         <!-- The following unique works are included into result:
              1. works that were not populated into value batch for given period
              2. works from previous periods with age weight greater than zero, that were not populated into value batch for any period -->
@@ -240,5 +246,32 @@
                 <!-- work from current period hasn't been populated yet -->
                 or (u.period = #{period} and u.wr_wrk_inst not in (select * from current_period_works)))
         order by u.wr_wrk_inst, u.period desc
+    </select>
+
+    <select id="populateValueId" parameterType="map" resultType="int">
+        with work_to_value_id (wr_wrk_inst, df_udm_value_uid) as (
+            values
+                <foreach collection="wrWrkInstToValueIdMap" index="wrWrkInst" item="valueId" separator=",">
+                    (#{wrWrkInst}, #{valueId})
+                </foreach>
+        ),
+        <!-- Selects oldest period with age weight greater than zero -->
+        <include refid="IUdmBaselineMapper.selectOldestPeriodWithPositiveAgeWeight"/>,
+        updated_usages_uids as (
+            update apps.df_udm_usage u
+            set
+                df_udm_value_uid = wv.df_udm_value_uid,
+                updated_by_user = #{updateUser},
+                updated_datetime = now(),
+                record_version = u.record_version + 1
+            from work_to_value_id wv
+            where wv.wr_wrk_inst = u.wr_wrk_inst
+                and u.period between (select period from last_period_to_select_works) and #{period}
+                and u.df_udm_value_uid is null
+                and u.is_baseline_flag is true
+            returning df_udm_usage_uid
+        )
+        select count(*)
+        from updated_usages_uids
     </select>
 </mapper>

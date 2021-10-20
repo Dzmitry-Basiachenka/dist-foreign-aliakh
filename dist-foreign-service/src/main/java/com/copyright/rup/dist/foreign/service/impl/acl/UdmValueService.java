@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmValueService}.
@@ -101,7 +102,7 @@ public class UdmValueService implements IUdmValueService {
         LOGGER.info("Populate UDM Value batch. Started. Period={}, UserName={}", period, userName);
         List<UdmValue> allNotPopulatedValues = baselineRepository.findNotPopulatedValuesFromBaseline(period);
         rightsService.updateUdmValuesRights(allNotPopulatedValues, period);
-        int populatedValuesCount = (int) allNotPopulatedValues.stream()
+        Map<Long, String> wrWrkInstToValueIdMap = allNotPopulatedValues.stream()
             .filter(value -> Objects.nonNull(value.getRhAccountNumber()))
             .peek(value -> {
                 value.setId(RupPersistUtils.generateUuid());
@@ -109,11 +110,12 @@ public class UdmValueService implements IUdmValueService {
                 value.setCreateUser(userName);
                 value.setUpdateUser(userName);
                 udmValueRepository.insert(value);
-            }).count();
-        //TODO: Update baseline usages with corresponding value id
-        LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}", period,
-            userName, populatedValuesCount);
-        return populatedValuesCount;
+            })
+            .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
+        int updatedUsagesCount = baselineRepository.populateValueId(period, wrWrkInstToValueIdMap, userName);
+        LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}, " +
+                "UpdatedUsagesCount={}", period, userName, wrWrkInstToValueIdMap.size(), updatedUsagesCount);
+        return wrWrkInstToValueIdMap.size();
     }
 
     @Override
