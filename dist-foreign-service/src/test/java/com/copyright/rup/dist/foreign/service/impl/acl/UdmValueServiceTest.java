@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -21,6 +22,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
+import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +45,7 @@ import java.util.Set;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class UdmValueServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
@@ -125,6 +127,8 @@ public class UdmValueServiceTest {
 
     @Test
     public void testPopulateValueBatch() {
+        mockStatic(RupContextUtils.class);
+        mockStatic(RupPersistUtils.class);
         UdmValue value1 = buildUdmValue(2365985896L);
         UdmValue value2 = buildUdmValue(3000985896L);
         List<UdmValue> values = Arrays.asList(value1, value2);
@@ -134,10 +138,15 @@ public class UdmValueServiceTest {
             values.get(0).setRhAccountNumber(1000002958L);
             return null;
         }).once();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(RupPersistUtils.generateUuid()).andReturn("04c91c97-3096-4380-8462-59ca4d7cf1e7").once();
         udmValueRepository.insert(value1);
-        replay(udmBaselineRepository, udmValueRepository, rightsService);
+        expectLastCall().once();
+        expect(udmBaselineRepository.populateValueId(202012,
+            ImmutableMap.of(2365985896L, "04c91c97-3096-4380-8462-59ca4d7cf1e7"), USER_NAME)).andReturn(1).once();
+        replay(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
         assertEquals(1, udmValueService.populateValueBatch(202012));
-        verify(udmBaselineRepository, udmValueRepository, rightsService);
+        verify(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
     }
 
     @Test
