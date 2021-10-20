@@ -38,6 +38,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -78,6 +79,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private DataProvider<UdmValueDto, Void> dataProvider;
     private MultiSelectionModelImpl<UdmValueDto> gridSelectionModel;
     private Set<UdmValueDto> selectedUdmValues;
+    private boolean isAllSelected;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -371,9 +373,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmValueDto udmValueDto = event.getItem();
                 UdmEditValueWindow components = new UdmEditValueWindow(controller, udmValueDto);
-                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues));
+                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues, isAllSelected));
                 Windows.showModalWindow(components);
-                highlightSelectedUsage(udmValueDto);
+                highlightSelectedValue(udmValueDto);
             }
         });
     }
@@ -381,10 +383,11 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     /**
      * Hides current value selection and selects value for which view window was opened.
      *
-     * @param selectedValue usage to select
+     * @param selectedValue value to select
      */
-    private void highlightSelectedUsage(UdmValueDto selectedValue) {
+    private void highlightSelectedValue(UdmValueDto selectedValue) {
         selectedUdmValues = udmValuesGrid.getSelectedItems();
+        isAllSelected = Objects.nonNull(gridSelectionModel) && gridSelectionModel.isAllSelected();
         udmValuesGrid.deselectAll();
         udmValuesGrid.select(selectedValue);
     }
@@ -392,11 +395,17 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     /**
      * Restores previous value selection. Removes selection of value for which view window was opened.
      *
-     * @param usagesToSelect set of values to select
+     * @param valuesToSelect      set of values to select
+     * @param isAllValuesSelected {@code true} if all values are selected, {@code false} otherwise
      */
-    private void restoreSelection(Set<UdmValueDto> usagesToSelect) {
+    private void restoreSelection(Set<UdmValueDto> valuesToSelect, boolean isAllValuesSelected) {
         selectedUdmValues = null;
-        udmValuesGrid.deselectAll();
-        usagesToSelect.forEach(udmValueDto -> udmValuesGrid.select(udmValueDto));
+        isAllSelected = false;
+        if (Objects.nonNull(gridSelectionModel) && isAllValuesSelected) {
+            gridSelectionModel.selectAll();
+        } else {
+            udmValuesGrid.deselectAll();
+            valuesToSelect.forEach(udmValueDto -> udmValuesGrid.select(udmValueDto));
+        }
     }
 }
