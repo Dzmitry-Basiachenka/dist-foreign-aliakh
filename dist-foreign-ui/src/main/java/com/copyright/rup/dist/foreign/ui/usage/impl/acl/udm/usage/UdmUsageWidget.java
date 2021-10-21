@@ -334,7 +334,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmUsageDto udmUsageDto = event.getItem();
                 UdmEditUsageWindow window = new UdmEditUsageWindow(controller, udmUsageDto);
-                window.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected));
+                window.addCloseListener(Objects.nonNull(gridSelectionModel)
+                    ? closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected)
+                    : closeEvent -> udmUsagesGrid.deselect(udmUsageDto));
                 Windows.showModalWindow(window);
                 highlightSelectedUsage(udmUsageDto);
             }
