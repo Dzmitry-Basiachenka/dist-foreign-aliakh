@@ -58,7 +58,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
     private static final int EXPECTED_SELECTED_SIZE = 1;
-    private static final DecimalFormat AMOUNT_FORMATTER = new DecimalFormat("#,##0.00########",
+    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
         CurrencyUtils.getParameterizedDecimalFormatSymbols());
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER =
         ImmutableSet.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD);
@@ -120,7 +120,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
      * @return formatted string or empty string in case if amount is null
      */
     String formatAmount(BigDecimal amount) {
-        return CurrencyUtils.format(amount, AMOUNT_FORMATTER);
+        return CurrencyUtils.format(amount, MONEY_FORMATTER);
     }
 
     private VerticalLayout initValuesLayout() {
