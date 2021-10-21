@@ -249,7 +249,7 @@ public class UdmEditValueWindowTest {
         String nonNegativeValidationMessage = "Field value should be positive number or zero";
         String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
         verifyTextFieldValidationMessage(priceField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(priceField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, SPACES_STRING, numberValidationMessage, true);
         verifyTextFieldValidationMessage(priceField, INVALID_NUMBER, numberValidationMessage, false);
         verifyTextFieldValidationMessage(priceField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(priceField, "-1", nonNegativeValidationMessage, false);
@@ -351,6 +351,19 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
+    public void testPriceFlagRecalculation() {
+        initEditWindow();
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
+        TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
+        priceField.setValue("100");
+        window.recalculatePriceFlag();
+        assertEquals("Y", priceFlagField.getValue());
+        priceField.setValue(StringUtils.EMPTY);
+        window.recalculatePriceFlag();
+        assertEquals("N", priceFlagField.getValue());
+    }
+
+    @Test
     public void testContentFieldValidation() {
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, "contentField");
@@ -358,7 +371,7 @@ public class UdmEditValueWindowTest {
         String nonNegativeValidationMessage = "Field value should be positive number or zero";
         String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
         verifyTextFieldValidationMessage(contentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(contentField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, SPACES_STRING, numberValidationMessage, true);
         verifyTextFieldValidationMessage(contentField, INVALID_NUMBER, numberValidationMessage, false);
         verifyTextFieldValidationMessage(contentField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "-1", nonNegativeValidationMessage, false);
@@ -397,6 +410,19 @@ public class UdmEditValueWindowTest {
     public void testContentCommentFieldValidation() {
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "contentCommentField"), 1000);
+    }
+
+    @Test
+    public void testContentFlagRecalculation() {
+        initEditWindow();
+        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
+        contentField.setValue("100");
+        window.recalculateContentFlag();
+        assertEquals("Y", contentFlagField.getValue());
+        contentField.setValue(StringUtils.EMPTY);
+        window.recalculateContentFlag();
+        assertEquals("N", contentFlagField.getValue());
     }
 
     @Test
