@@ -50,11 +50,13 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -106,14 +108,16 @@ public class UdmEditValueWindowTest {
     private static final String CONTENT_SOURCE = "content source";
     private static final String CONTENT_COMMENT = "content comment";
     private static final boolean CONTENT_FLAG = false;
-    private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("5.00");
+    private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("5.806");
     private static final String COMMENT = "comment";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String VALID_DECIMAL = "0.1";
     private static final String INVALID_NUMBER = "12a";
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String PRICE_FIELD = "priceField";
+    private static final String CONTENT_FIELD = "contentField";
 
     static {
         PUBLICATION_TYPE = new PublicationType();
@@ -279,10 +283,10 @@ public class UdmEditValueWindowTest {
         priceField.setValue(StringUtils.EMPTY);
         currencyComboBox.setValue(currency);
         verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
-        priceField.setValue("1");
+        priceField.setValue(VALID_DECIMAL);
         currencyComboBox.setValue(null);
         verifyBinderStatusAndValidationMessage("Field value cannot be empty if Price is specified", false);
-        priceField.setValue("1");
+        priceField.setValue(VALID_DECIMAL);
         currencyComboBox.setValue(currency);
         verifyBinderStatusAndValidationMessage(StringUtils.EMPTY, true);
     }
@@ -290,6 +294,11 @@ public class UdmEditValueWindowTest {
     @Test
     public void testPriceInUsdRecalculation() {
         initEditWindow();
+        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
+        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        TextField currencyExchangeRateField = Whitebox.getInternalState(window, "currencyExchangeRateField");
+        TextField currencyExchangeRateDateField = Whitebox.getInternalState(window, "currencyExchangeRateDateField");
+        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
         reset(controller);
         Currency currency = new Currency("GBP", "Pound Sterling");
         LocalDate date = LocalDate.now();
@@ -298,14 +307,32 @@ public class UdmEditValueWindowTest {
         exchangeRate.setExchangeRateUpdateDate(date);
         expect(controller.getExchangeRate(currency.getCode(), date)).andReturn(exchangeRate).once();
         replay(controller);
-        TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
-        priceField.setValue("100");
-        ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
+        priceField.setValue(PRICE.toString());
         currencyComboBox.setValue(currency);
         window.recalculatePriceInUsd();
-        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
+        assertEquals("0.7243", currencyExchangeRateField.getValue());
+        assertEquals(date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US)),
+            currencyExchangeRateDateField.getValue());
         assertEquals("72.4300000000", priceInUsdField.getValue());
         verify(controller);
+        priceField.setValue(INVALID_NUMBER);
+        currencyComboBox.setValue(CURRENCY);
+        window.recalculatePriceInUsd();
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateField.getValue());
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateDateField.getValue());
+        assertEquals(StringUtils.EMPTY, priceInUsdField.getValue());
+        priceField.setValue(StringUtils.EMPTY);
+        currencyComboBox.setValue(CURRENCY);
+        window.recalculatePriceInUsd();
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateField.getValue());
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateDateField.getValue());
+        assertEquals(StringUtils.EMPTY, priceInUsdField.getValue());
+        priceField.setValue(VALID_DECIMAL);
+        currencyComboBox.setValue(null);
+        window.recalculatePriceInUsd();
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateField.getValue());
+        assertEquals(StringUtils.EMPTY, currencyExchangeRateDateField.getValue());
+        assertEquals(StringUtils.EMPTY, priceInUsdField.getValue());
     }
 
     @Test
@@ -335,7 +362,7 @@ public class UdmEditValueWindowTest {
         int maxSize = 1000;
         priceField.setValue(StringUtils.EMPTY);
         verifyLengthValidation(priceSourceField, maxSize);
-        priceField.setValue("1");
+        priceField.setValue(VALID_DECIMAL);
         verifyTextFieldValidationMessage(priceSourceField, StringUtils.EMPTY,
             "Field value cannot be empty if Price is specified", false);
         verifyTextFieldValidationMessage(priceSourceField, buildStringWithExpectedLength(maxSize),
@@ -355,18 +382,21 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
-        priceField.setValue("100");
+        priceField.setValue(VALID_DECIMAL);
         window.recalculatePriceFlag();
         assertEquals("Y", priceFlagField.getValue());
         priceField.setValue(StringUtils.EMPTY);
         window.recalculatePriceFlag();
         assertEquals("N", priceFlagField.getValue());
+        priceField.setValue(INVALID_NUMBER);
+        window.recalculatePriceFlag();
+        assertEquals(StringUtils.EMPTY, priceFlagField.getValue());
     }
 
     @Test
     public void testContentFieldValidation() {
         initEditWindow();
-        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         String numberValidationMessage = "Field value should contain numeric values only";
         String nonNegativeValidationMessage = "Field value should be positive number or zero";
         String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
@@ -392,12 +422,12 @@ public class UdmEditValueWindowTest {
     @Test
     public void testContentSourceFieldValidation() {
         initEditWindow();
-        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         TextField contentSourceField = Whitebox.getInternalState(window, "contentSourceField");
         int maxSize = 1000;
         contentField.setValue(StringUtils.EMPTY);
         verifyLengthValidation(contentSourceField, maxSize);
-        contentField.setValue("1");
+        contentField.setValue(VALID_DECIMAL);
         verifyTextFieldValidationMessage(contentSourceField, StringUtils.EMPTY,
             "Field value cannot be empty if Content is specified", false);
         verifyTextFieldValidationMessage(contentSourceField, buildStringWithExpectedLength(maxSize),
@@ -415,14 +445,41 @@ public class UdmEditValueWindowTest {
     @Test
     public void testContentFlagRecalculation() {
         initEditWindow();
-        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
-        contentField.setValue("100");
+        contentField.setValue(VALID_DECIMAL);
         window.recalculateContentFlag();
         assertEquals("Y", contentFlagField.getValue());
         contentField.setValue(StringUtils.EMPTY);
         window.recalculateContentFlag();
         assertEquals("N", contentFlagField.getValue());
+        contentField.setValue(INVALID_NUMBER);
+        window.recalculateContentFlag();
+        assertEquals(StringUtils.EMPTY, contentFlagField.getValue());
+    }
+
+    @Test
+    public void testRecalculateContentUnitPrice() {
+        initEditWindow();
+        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
+        TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
+        TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");
+        priceInUsdField.setValue(PRICE_IN_USD.toString());
+        contentField.setValue("2");
+        window.recalculateContentUnitPrice();
+        assertEquals("58.0600000000", contentUnitPriceField.getValue());
+        priceInUsdField.setValue(StringUtils.EMPTY);
+        contentField.setValue(VALID_DECIMAL);
+        window.recalculateContentUnitPrice();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceField.getValue());
+        priceInUsdField.setValue(VALID_DECIMAL);
+        contentField.setValue(INVALID_NUMBER);
+        window.recalculateContentUnitPrice();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceField.getValue());
+        priceInUsdField.setValue(VALID_DECIMAL);
+        contentField.setValue(StringUtils.EMPTY);
+        window.recalculateContentUnitPrice();
+        assertEquals(StringUtils.EMPTY, contentUnitPriceField.getValue());
     }
 
     @Test
