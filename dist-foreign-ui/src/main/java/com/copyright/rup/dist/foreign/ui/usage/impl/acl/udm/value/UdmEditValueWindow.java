@@ -20,7 +20,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
@@ -33,6 +32,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -237,7 +237,7 @@ public class UdmEditValueWindow extends Window {
         );
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
-        editFieldsLayout.setMargin(new MarginInfo(true));
+        editFieldsLayout.setMargin(false);
         HorizontalLayout buttonsLayout = initButtonsLayout();
         rootLayout.addComponents(panel, buttonsLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
