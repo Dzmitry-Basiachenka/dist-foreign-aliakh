@@ -40,6 +40,11 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
     }
 
     @Override
+    public void update(UdmValueDto udmValueDto) {
+        update("IUdmValueMapper.update", Objects.requireNonNull(udmValueDto));
+    }
+
+    @Override
     public int findCountByFilter(UdmValueFilter filter) {
         return selectOne("IUdmValueMapper.findCountByFilter",
             ImmutableMap.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));

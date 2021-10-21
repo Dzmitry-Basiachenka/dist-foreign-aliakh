@@ -53,6 +53,15 @@ public class UdmValueService implements IUdmValueService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
+    public void updateValue(UdmValueDto udmValueDto) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.debug("Update UDM value. Started. Value={}, UserName={}", udmValueDto, userName);
+        udmValueDto.setUpdateUser(userName);
+        udmValueRepository.update(udmValueDto);
+        LOGGER.debug("Update UDM value. Finished. Value={}, UserName={}", udmValueDto, userName);
+    }
+
+    @Override
     public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
         return currencyCodesToCurrencyNamesMap;
     }

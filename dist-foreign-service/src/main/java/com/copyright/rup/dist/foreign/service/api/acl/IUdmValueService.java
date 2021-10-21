@@ -21,6 +21,13 @@ import java.util.Set;
 public interface IUdmValueService {
 
     /**
+     * Updates UDM value.
+     *
+     * @param udmValueDto {@link UdmValueDto} to update
+     */
+    void updateValue(UdmValueDto udmValueDto);
+
+    /**
      * Gets map of currency codes to currency names.
      *
      * @return map of currency codes to currency names

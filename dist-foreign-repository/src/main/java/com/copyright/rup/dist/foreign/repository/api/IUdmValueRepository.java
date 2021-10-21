@@ -28,6 +28,13 @@ public interface IUdmValueRepository {
     void insert(UdmValue value);
 
     /**
+     * Updates UDM value.
+     *
+     * @param udmValueDto instance of {@link UdmValueDto}
+     */
+    void update(UdmValueDto udmValueDto);
+
+    /**
      * Finds values count based on applied filter.
      *
      * @param filter instance of {@link UdmValueFilter}

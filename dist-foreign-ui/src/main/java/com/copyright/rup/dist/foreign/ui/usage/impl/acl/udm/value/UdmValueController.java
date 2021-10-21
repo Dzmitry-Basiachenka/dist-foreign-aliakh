@@ -129,9 +129,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     }
 
     @Override
-    @SuppressWarnings("unused") // TODO remove when the method is implemented
     public void updateValue(UdmValueDto udmValueDto) {
-        // TODO implement method
+        valueService.updateValue(udmValueDto);
     }
 
     @Override
