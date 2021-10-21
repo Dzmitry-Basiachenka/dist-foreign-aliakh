@@ -349,6 +349,7 @@
         font-weight: bolder;
     }
 
+    /**==== Styles for UDM specific windows ====*/
     .edit-udm-usage-window .v-readonly.v-textfield,
     .multiple-edit-udm-usages-window .v-readonly.v-textfield,
     .edit-udm-value-window .v-readonly.v-textfield,
@@ -372,6 +373,12 @@
 
     .view-udm-baseline-window .v-label.v-has-width {
         margin-top: 6px;
+    }
+
+    .edit-udm-value-window .v-panel-caption {
+        font-weight: bold;
+        color: #44698b;
+        font-size: 16px;
     }
 
     /**==== Styles for nested tabs ====*/
