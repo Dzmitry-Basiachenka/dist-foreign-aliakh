@@ -78,9 +78,11 @@ public class UdmEditValueWindow extends Window {
     private final TextField priceYearField = new TextField(ForeignUi.getMessage("label.price_year"));
     private final TextField priceSourceField = new TextField(ForeignUi.getMessage("label.price_source"));
     private final TextField priceCommentField = new TextField(ForeignUi.getMessage("label.price_comment"));
+    private final TextField priceFlagField = new TextField();
     private final TextField contentField = new TextField(ForeignUi.getMessage("label.content"));
     private final TextField contentSourceField = new TextField(ForeignUi.getMessage("label.content_source"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
+    private final TextField contentFlagField = new TextField();
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
 
     /**
@@ -116,7 +118,7 @@ public class UdmEditValueWindow extends Window {
     }
 
     /**
-     * Recalculate price in USD as the product of price and currency exchange rate
+     * Recalculates price in USD as the product of price and currency exchange rate
      * and sets currency exchange rate and currency exchange rate date.
      */
     void recalculatePriceInUsd() {
@@ -130,6 +132,24 @@ public class UdmEditValueWindow extends Window {
             currencyExchangeRateField.setValue(exchangeRate.getExchangeRateValue().toString());
             currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
             priceInUsdField.setValue(priceInUsd.toString());
+        }
+    }
+
+    /**
+     * Recalculates price flag: sets it to "Y" if price is set or to "N" otherwise.
+     */
+    void recalculatePriceFlag() {
+        if (Objects.isNull(priceField.getErrorMessage())) {
+            priceFlagField.setValue(StringUtils.isNotBlank(priceField.getValue().trim()) ? "Y" : "N");
+        }
+    }
+
+    /**
+     * Recalculates content flag: sets it to "Y" if content is set or to "N" otherwise.
+     */
+    void recalculateContentFlag() {
+        if (Objects.isNull(contentField.getErrorMessage())) {
+            contentFlagField.setValue(StringUtils.isNotBlank(contentField.getValue().trim()) ? "Y" : "N");
         }
     }
 
@@ -163,7 +183,7 @@ public class UdmEditValueWindow extends Window {
                         buildEditableStringLayout(priceCommentField, "label.price_comment", 1000,
                             UdmValueDto::getPriceComment, UdmValueDto::setPriceComment,
                             "udm-value-edit-price-comment-field"),
-                        buildReadOnlyLayout("label.price_flag",
+                        buildReadOnlyLayout(priceFlagField, "label.price_flag",
                             value -> BooleanUtils.toYNString(value.isPriceFlag())),
                         buildReadOnlyLayout("label.last_price_in_usd",
                             value -> Objects.toString(value.getLastPriceInUsd(), StringUtils.EMPTY)),
@@ -191,7 +211,7 @@ public class UdmEditValueWindow extends Window {
                         buildEditableStringLayout(contentCommentField, "label.content_comment", 1000,
                             UdmValueDto::getContentComment, UdmValueDto::setContentComment,
                             "udm-value-edit-content-comment-field"),
-                        buildReadOnlyLayout("label.content_flag",
+                        buildReadOnlyLayout(contentFlagField, "label.content_flag",
                             value -> BooleanUtils.toYNString(value.isContentFlag())),
                         buildReadOnlyLayout("label.last_content",
                             value -> Objects.toString(value.getLastContent(), StringUtils.EMPTY)),
@@ -323,20 +343,21 @@ public class UdmEditValueWindow extends Window {
     private HorizontalLayout buildPriceLayout() {
         priceField.setSizeFull();
         binder.forField(priceField)
-            .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()),
+            .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isEmpty(value) || DECIMAL_COMPARE_RANGE.contains(
+            .withValidator(value -> StringUtils.isBlank(value) || DECIMAL_COMPARE_RANGE.contains(
                 NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero"))
-            .withValidator(value -> StringUtils.isEmpty(value) ||
+            .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
             .bind(usage -> Objects.toString(usage.getPrice(), StringUtils.EMPTY),
-                (usage, value) -> usage.setPrice(StringUtils.isNotEmpty(value)
+                (usage, value) -> usage.setPrice(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         priceField.addValueChangeListener(event -> {
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
+                recalculatePriceFlag();
             }
         });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
@@ -423,17 +444,22 @@ public class UdmEditValueWindow extends Window {
     private HorizontalLayout buildContentLayout() {
         contentField.setSizeFull();
         binder.forField(contentField)
-            .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()),
+            .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isEmpty(value) || DECIMAL_COMPARE_RANGE.contains(
+            .withValidator(value -> StringUtils.isBlank(value) || DECIMAL_COMPARE_RANGE.contains(
                 NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero"))
-            .withValidator(value -> StringUtils.isEmpty(value) ||
+            .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
             .bind(usage -> Objects.toString(usage.getContent(), StringUtils.EMPTY),
-                (usage, value) -> usage.setContent(StringUtils.isNotEmpty(value)
+                (usage, value) -> usage.setContent(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
+        contentField.addValueChangeListener(event -> {
+            if (event.isUserOriginated()) {
+                recalculateContentFlag();
+            }
+        });
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");
         return buildCommonLayout(contentField, ForeignUi.getMessage("label.content"));
     }
