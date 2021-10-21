@@ -83,6 +83,7 @@ public class UdmEditValueWindow extends Window {
     private final TextField contentSourceField = new TextField(ForeignUi.getMessage("label.content_source"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
     private final TextField contentFlagField = new TextField();
+    private final TextField contentUnitPriceField = new TextField();
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
 
     /**
@@ -122,7 +123,7 @@ public class UdmEditValueWindow extends Window {
      * and sets currency exchange rate and currency exchange rate date.
      */
     void recalculatePriceInUsd() {
-        if (Objects.isNull(priceField.getErrorMessage()) && StringUtils.isNotBlank(priceField.getValue().trim())
+        if (Objects.isNull(priceField.getErrorMessage()) && StringUtils.isNotBlank(priceField.getValue())
             && Objects.isNull(currencyComboBox.getErrorMessage()) && Objects.nonNull(currencyComboBox.getValue())) {
             ExchangeRate exchangeRate = controller.getExchangeRate(currencyComboBox.getValue().getCode(),
                 LocalDate.now());
@@ -132,7 +133,12 @@ public class UdmEditValueWindow extends Window {
             currencyExchangeRateField.setValue(exchangeRate.getExchangeRateValue().toString());
             currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
             priceInUsdField.setValue(priceInUsd.toString());
+        } else {
+            currencyExchangeRateField.clear();
+            currencyExchangeRateDateField.clear();
+            priceInUsdField.clear();
         }
+        recalculateContentUnitPrice();
     }
 
     /**
@@ -140,7 +146,9 @@ public class UdmEditValueWindow extends Window {
      */
     void recalculatePriceFlag() {
         if (Objects.isNull(priceField.getErrorMessage())) {
-            priceFlagField.setValue(StringUtils.isNotBlank(priceField.getValue().trim()) ? "Y" : "N");
+            priceFlagField.setValue(StringUtils.isNotBlank(priceField.getValue()) ? "Y" : "N");
+        } else {
+            priceFlagField.clear();
         }
     }
 
@@ -149,7 +157,24 @@ public class UdmEditValueWindow extends Window {
      */
     void recalculateContentFlag() {
         if (Objects.isNull(contentField.getErrorMessage())) {
-            contentFlagField.setValue(StringUtils.isNotBlank(contentField.getValue().trim()) ? "Y" : "N");
+            contentFlagField.setValue(StringUtils.isNotBlank(contentField.getValue()) ? "Y" : "N");
+        } else {
+            contentFlagField.clear();
+        }
+    }
+
+    /**
+     * Recalculates content unit price as the quotient of price in usd and content.
+     */
+    void recalculateContentUnitPrice() {
+        if (Objects.isNull(priceInUsdField.getErrorMessage()) && StringUtils.isNotBlank(priceInUsdField.getValue())
+            && Objects.isNull(contentField.getErrorMessage()) && StringUtils.isNotBlank(contentField.getValue())) {
+            BigDecimal priceInUsd = NumberUtils.createBigDecimal(priceInUsdField.getValue().trim());
+            BigDecimal content = NumberUtils.createBigDecimal(contentField.getValue().trim());
+            BigDecimal contentUnitPrice = priceInUsd.divide(content, 10, BigDecimal.ROUND_HALF_UP);
+            contentUnitPriceField.setValue(contentUnitPrice.toString());
+        } else {
+            contentUnitPriceField.clear();
         }
     }
 
@@ -219,7 +244,7 @@ public class UdmEditValueWindow extends Window {
                         buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment),
                         buildReadOnlyLayout("label.last_content_flag",
                             value -> BooleanUtils.toYNString(value.isLastContentFlag())),
-                        buildReadOnlyLayout("label.content_unit_price",
+                        buildReadOnlyLayout(contentUnitPriceField, "label.content_unit_price",
                             value -> Objects.toString(value.getContentUnitPrice(), StringUtils.EMPTY))
                     )),
                     new Panel(ForeignUi.getMessage("label.comment"), new VerticalLayout(
@@ -385,7 +410,7 @@ public class UdmEditValueWindow extends Window {
             }
         });
         binder.forField(currencyComboBox)
-            .withValidator(value -> Objects.nonNull(value) || StringUtils.isBlank(priceField.getValue().trim()),
+            .withValidator(value -> Objects.nonNull(value) || StringUtils.isBlank(priceField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
             .bind(usage -> Objects.nonNull(usage.getCurrency())
                     ? new Currency(usage.getCurrency(), currencyCodesToCurrencyNamesMap.get(usage.getCurrency()))
@@ -432,7 +457,7 @@ public class UdmEditValueWindow extends Window {
     private HorizontalLayout buildPriceSourceLayout() {
         priceSourceField.setSizeFull();
         binder.forField(priceSourceField)
-            .withValidator(value -> StringUtils.isNotBlank(value) || StringUtils.isBlank(priceField.getValue().trim()),
+            .withValidator(value -> StringUtils.isNotBlank(value) || StringUtils.isBlank(priceField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
@@ -457,6 +482,7 @@ public class UdmEditValueWindow extends Window {
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         contentField.addValueChangeListener(event -> {
             if (event.isUserOriginated()) {
+                recalculateContentUnitPrice();
                 recalculateContentFlag();
             }
         });
@@ -467,8 +493,7 @@ public class UdmEditValueWindow extends Window {
     private HorizontalLayout buildContentSourceLayout() {
         contentSourceField.setSizeFull();
         binder.forField(contentSourceField)
-            .withValidator(value -> StringUtils.isNotBlank(value)
-                    || StringUtils.isBlank(contentField.getValue().trim()),
+            .withValidator(value -> StringUtils.isNotBlank(value) || StringUtils.isBlank(contentField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_content_specified"))
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
