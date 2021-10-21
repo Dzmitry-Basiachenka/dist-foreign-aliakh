@@ -16,7 +16,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
-
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -34,6 +33,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibi
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -285,7 +285,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 "systemStandardNumber", 190),
             addColumn(UdmValueDto::getLastValuePeriod, "table.column.last_value_period", "lastValuePeriod", 150),
             addColumn(UdmValueDto::getLastPubType, "table.column.last_pub_type", "lastPubType", 150),
-            addColumn(UdmValueDto::getPublicationType, "table.column.publication_type", "publicationType", 150),
+            addColumn(value -> Objects.nonNull(value.getPublicationType())
+                ? value.getPublicationType().getName()
+                : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
             addAmountColumn(UdmValueDto::getLastPriceInUsd, "table.column.last_price_in_usd", "lastPriceInUsd", 120),
             addBooleanColumn(UdmValueDto::isLastPriceFlag, "table.column.last_price_flag", "lastPriceFlag", 120),
             addColumn(UdmValueDto::getLastPriceSource, "table.column.last_price_source", "lastPriceSource", 150),
