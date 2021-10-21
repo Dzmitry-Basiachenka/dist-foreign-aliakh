@@ -370,9 +370,11 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         udmValuesGrid.addItemClickListener(event -> {
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmValueDto udmValueDto = event.getItem();
-                UdmEditValueWindow components = new UdmEditValueWindow(controller, udmValueDto);
-                components.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues, isAllSelected));
-                Windows.showModalWindow(components);
+                UdmEditValueWindow window = new UdmEditValueWindow(controller, udmValueDto);
+                window.addCloseListener(Objects.nonNull(gridSelectionModel)
+                    ? closeEvent -> restoreSelection(selectedUdmValues, isAllSelected)
+                    : closeEvent -> udmValuesGrid.deselect(udmValueDto));
+                Windows.showModalWindow(window);
                 highlightSelectedValue(udmValueDto);
             }
         });
