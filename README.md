@@ -1,3 +1,15 @@
+14.1.26
+-
+* B-68260 FDA & UDM: Publish values to baseline: adjust baseline usages by adding reference to corresponding value id
+* B-69421 FDA & UDM: Select all (Usages, Values): fix wrong hiding SelectAllCheckBox on UDM Values tab after closing View window
+* B-67673 FDA: Value Edits: implement behavior of the Price Flag, Content Flag fields
+* B-67673 FDA: Value Edits: implement behavior of the Price in USD field
+* B-67673 FDA: Value Edits: apply css styles for panel captions on Edit Value window
+* B-69729 FDA & UDM: View single record: fix issue related to deselect record after close view window for view only role
+* B-69729 FDA & UDM: View single record: make changes based on comments in CR-DIST-FOREIGN-267
+* B-68823 FDA: Tech Debt: remove standard number type from UDM values
+* B-68823 FDA: Tech Debt: fix issue related to filter values by system title, stundard number, rh name with underscore
+
 14.1.25
 -
 * B-68260 [Value] FDA & UDM: Publish values to baseline: Implement logic to publish values to baseline
