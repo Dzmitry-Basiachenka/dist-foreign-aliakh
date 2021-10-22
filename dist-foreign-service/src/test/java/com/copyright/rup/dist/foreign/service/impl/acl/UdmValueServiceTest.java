@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,6 +65,19 @@ public class UdmValueServiceTest {
         Whitebox.setInternalState(udmValueService, udmValueRepository);
         Whitebox.setInternalState(udmValueService, udmBaselineRepository);
         Whitebox.setInternalState(udmValueService, rightsService);
+    }
+
+    @Test
+    public void testUpdateValue() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        UdmValueDto udmValueDto = new UdmValueDto();
+        udmValueRepository.update(udmValueDto);
+        expectLastCall().once();
+        replay(udmValueRepository, RupContextUtils.class);
+        udmValueService.updateValue(udmValueDto);
+        assertEquals(USER_NAME, udmValueDto.getUpdateUser());
+        verify(udmValueRepository, RupContextUtils.class);
     }
 
     @Test

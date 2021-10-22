@@ -453,6 +453,32 @@
         )
     </insert>
 
+    <update id="update" parameterType="UdmValueDto">
+        update ${schema}.df_udm_value
+        set
+            status_ind = #{status},
+            publication_type_uid = #{publicationType.id},
+            price_source = #{priceSource},
+            price = #{price},
+            currency = #{currency},
+            price_type = #{priceType},
+            price_access_type = #{priceAccessType},
+            price_year = #{priceYear},
+            price_comment = #{priceComment},
+            price_in_usd = #{priceInUsd},
+            price_flag = #{priceFlag},
+            currency_exchange_rate = #{currencyExchangeRate},
+            currency_exchange_rate_date = #{currencyExchangeRateDate},
+            content_source = #{contentSource},
+            content = #{content},
+            content_comment = #{contentComment},
+            content_flag = #{contentFlag},
+            content_unit_price = #{contentUnitPrice},
+            comment = #{comment},
+            <include refid="StoredEntityMapper.update"/>
+        where df_udm_value_uid = #{id}
+    </update>
+
     <select id="findDtosByFilter" resultMap="udmValueDtoResultMap" parameterType="map"
             fetchSize="${usageSelectFetchSize}">
         <include refid="IUdmValueMapper.selectDtosByFilterSql"/>

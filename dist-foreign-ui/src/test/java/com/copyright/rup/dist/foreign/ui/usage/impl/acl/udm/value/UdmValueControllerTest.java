@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -166,6 +167,16 @@ public class UdmValueControllerTest {
         expectLastCall().once();
         replay(valueService);
         controller.unassignValues(valueIds);
+        verify(valueService);
+    }
+
+    @Test
+    public void testUpdateValue() {
+        UdmValueDto udmValueDto = new UdmValueDto();
+        valueService.updateValue(udmValueDto);
+        expectLastCall().once();
+        replay(valueService);
+        controller.updateValue(udmValueDto);
         verify(valueService);
     }
 

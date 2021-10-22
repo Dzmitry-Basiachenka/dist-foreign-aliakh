@@ -20,9 +20,12 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -34,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,6 +89,11 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String BOOK = "Book";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
+
     @Autowired
     private IUdmValueRepository udmValueRepository;
     @Autowired
@@ -102,9 +111,39 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdate() {
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(ImmutableSet.of(211212));
+        UdmValueDto originalValue = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
+        originalValue.setStatus(UdmValueStatusEnum.NEW);
+        originalValue.setPublicationType(buildPublicationType());
+        originalValue.setPriceSource("http://commodity.com");
+        originalValue.setPrice(new BigDecimal("61.0000000000"));
+        originalValue.setCurrency("USD");
+        originalValue.setPriceType("Institution");
+        originalValue.setPriceAccessType("Online only");
+        originalValue.setPriceYear(2111);
+        originalValue.setPriceComment("Price Comment");
+        originalValue.setPriceInUsd(new BigDecimal("61.0000000000"));
+        originalValue.setPriceFlag(true);
+        originalValue.setCurrencyExchangeRate(new BigDecimal("1.0000000000"));
+        originalValue.setCurrencyExchangeRateDate(LocalDate.of(2021, 10, 21));
+        originalValue.setContentSource("http://commodity.com/page/1");
+        originalValue.setContent(new BigDecimal("1.0000000000"));
+        originalValue.setContentComment("Content Comment");
+        originalValue.setContentFlag(true);
+        originalValue.setContentUnitPrice(new BigDecimal("61.0000000000"));
+        originalValue.setComment("Comment");
+        originalValue.setUpdateUser("user@copyright.com");
+        udmValueRepository.update(originalValue);
+        verifyValueDto(originalValue, udmValueRepository.findDtosByFilter(filter, null, null).get(0),
+            false);
+    }
+
+    @Test
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(211112, 211012, 209506, 209406, 209306, 209206, 209106, 202112,
-            202106, 201912, 201512, 201506, 201406, 201106, 201006);
+        List<Integer> expectedPeriods = Arrays.asList(211212, 211112, 211012, 209506, 209406, 209306, 209206, 209106,
+            202112, 202106, 201912, 201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
@@ -484,9 +523,11 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(expectedValue.getPrice(), actualValue.getPrice());
         assertEquals(expectedValue.getPriceSource(), actualValue.getPriceSource());
         assertEquals(expectedValue.getPriceInUsd(), actualValue.getPriceInUsd());
+        assertEquals(expectedValue.isPriceFlag(), actualValue.isPriceFlag());
         assertEquals(expectedValue.getContent(), actualValue.getContent());
         assertEquals(expectedValue.getCurrency(), actualValue.getCurrency());
         assertEquals(expectedValue.getCurrencyExchangeRate(), actualValue.getCurrencyExchangeRate());
+        assertEquals(expectedValue.getCurrencyExchangeRateDate(), actualValue.getCurrencyExchangeRateDate());
         assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
         assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
         assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
@@ -575,6 +616,14 @@ public class UdmValueRepositoryIntegrationTest {
         PublicationType publicationType = new PublicationType();
         publicationType.setName(name);
         publicationType.setDescription(description);
+        return publicationType;
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setId("ad8df236-5200-4acf-be55-cf82cd342f14");
+        publicationType.setName("OT");
+        publicationType.setDescription("Other");
         return publicationType;
     }
 }
