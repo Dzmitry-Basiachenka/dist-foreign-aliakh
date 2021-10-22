@@ -225,7 +225,7 @@ public class UdmEditValueWindowTest {
         Panel panel5 = (Panel) row2.getComponent(2);
         VerticalLayout content5 = (VerticalLayout) panel5.getContent();
         assertEquals(9, content5.getComponentCount());
-        assertTextFieldValue(content5.getComponent(0), CONTENT.toString());
+        assertTextFieldValue(content5.getComponent(0), "20.00");
         assertTextFieldValue(content5.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(content5.getComponent(2), CONTENT_COMMENT);
         assertTextFieldValue(content5.getComponent(3), "N");
@@ -313,7 +313,7 @@ public class UdmEditValueWindowTest {
         assertEquals("0.7243", currencyExchangeRateField.getValue());
         assertEquals(date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US)),
             currencyExchangeRateDateField.getValue());
-        assertEquals("72.4300000000", priceInUsdField.getValue());
+        assertEquals("72.43", priceInUsdField.getValue());
         verify(controller);
         priceField.setValue(INVALID_NUMBER);
         currencyComboBox.setValue(CURRENCY);
@@ -398,14 +398,14 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         String numberValidationMessage = "Field value should contain numeric values only";
-        String nonNegativeValidationMessage = "Field value should be positive number or zero";
+        String positiveValidationMessage = "Field value should be positive number";
         String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
         verifyTextFieldValidationMessage(contentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, SPACES_STRING, numberValidationMessage, true);
         verifyTextFieldValidationMessage(contentField, INVALID_NUMBER, numberValidationMessage, false);
         verifyTextFieldValidationMessage(contentField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(contentField, "-1", nonNegativeValidationMessage, false);
-        verifyTextFieldValidationMessage(contentField, "0", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "-1", positiveValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, "0", positiveValidationMessage, false);
         verifyTextFieldValidationMessage(contentField, "0.1", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.12", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.123", StringUtils.EMPTY, true);
@@ -467,7 +467,7 @@ public class UdmEditValueWindowTest {
         priceInUsdField.setValue(PRICE_IN_USD.toString());
         contentField.setValue("2");
         window.recalculateContentUnitPrice();
-        assertEquals("58.0600000000", contentUnitPriceField.getValue());
+        assertEquals("58.06", contentUnitPriceField.getValue());
         priceInUsdField.setValue(StringUtils.EMPTY);
         contentField.setValue(VALID_DECIMAL);
         window.recalculateContentUnitPrice();
