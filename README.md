@@ -1,3 +1,11 @@
+14.1.27
+-
+* B-67673 FDA: Value Edits: implement behavior of the Content Unit Price field
+* B-67673 FDA: Value Edits: implement backend to save values
+* B-67673 FDA: Value Edits: implement saving calculated fields
+* B-67673 FDA: Value Edits: update font size for panel caption
+* CDP-1017 FDA: ACL: Values tab: Pub Type is displayed as result of PublicationType.toString method
+
 14.1.26
 -
 * B-68260 FDA & UDM: Publish values to baseline: adjust baseline usages by adding reference to corresponding value id
