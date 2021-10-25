@@ -239,33 +239,9 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         udmValuesGrid = new Grid<>(dataProvider);
         addColumns();
         udmValuesGrid.setSizeFull();
-        if (isNotViewOnlyPermission()) {
-            gridSelectionModel =
-                (MultiSelectionModelImpl<UdmValueDto>) udmValuesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-            udmValuesGrid.addSelectionListener(event -> {
-                Set<UdmValueDto> valueDtos = event.getAllSelectedItems();
-                boolean isSelected = CollectionUtils.isNotEmpty(valueDtos);
-                assignItem.setEnabled(isSelected);
-                unassignItem.setEnabled(isSelected);
-                editButton.setEnabled(EXPECTED_SELECTED_SIZE == valueDtos.size());
-            });
-        } else {
-            udmValuesGrid.setSelectionMode(SelectionMode.SINGLE);
-        }
+        initSelectionMode();
         initViewWindow();
         VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
-    }
-
-    private boolean isNotViewOnlyPermission() {
-        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
-    }
-
-    private void switchSelectAllCheckBoxVisibility(int beansCount) {
-        gridSelectionModel.setSelectAllCheckBoxVisibility(
-            0 == beansCount || beansCount > controller.getUdmRecordThreshold()
-                ? SelectAllCheckBoxVisibility.HIDDEN
-                : SelectAllCheckBoxVisibility.VISIBLE);
-        gridSelectionModel.beforeClientResponse(false);
     }
 
     private void addColumns() {
@@ -356,16 +332,32 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             .setWidth(width);
     }
 
-    private Set<String> getSelectedValueIds() {
-        return udmValuesGrid.getSelectedItems()
-            .stream()
-            .map(BaseEntity::getId)
-            .collect(Collectors.toSet());
+    private void initSelectionMode() {
+        if (isNotViewOnlyPermission()) {
+            gridSelectionModel =
+                (MultiSelectionModelImpl<UdmValueDto>) udmValuesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            udmValuesGrid.addSelectionListener(event -> {
+                Set<UdmValueDto> valueDtos = event.getAllSelectedItems();
+                boolean isSelected = CollectionUtils.isNotEmpty(valueDtos);
+                assignItem.setEnabled(isSelected);
+                unassignItem.setEnabled(isSelected);
+                editButton.setEnabled(EXPECTED_SELECTED_SIZE == valueDtos.size());
+            });
+        } else {
+            udmValuesGrid.setSelectionMode(SelectionMode.SINGLE);
+        }
     }
 
-    private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
-        return udmValueDtos.stream()
-            .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
+    private boolean isNotViewOnlyPermission() {
+        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        gridSelectionModel.setSelectAllCheckBoxVisibility(
+            0 == beansCount || beansCount > controller.getUdmRecordThreshold()
+                ? SelectAllCheckBoxVisibility.HIDDEN
+                : SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel.beforeClientResponse(false);
     }
 
     private void initViewWindow() {
@@ -380,6 +372,18 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 highlightSelectedValue(udmValueDto);
             }
         });
+    }
+
+    private Set<String> getSelectedValueIds() {
+        return udmValuesGrid.getSelectedItems()
+            .stream()
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
+    }
+
+    private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {
+        return udmValueDtos.stream()
+            .allMatch(udmValueDto -> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER.contains(udmValueDto.getStatus()));
     }
 
     /**

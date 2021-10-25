@@ -311,48 +311,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
         udmUsagesGrid.setSizeFull();
-        if (isNotViewOnlyPermission()) {
-            gridSelectionModel =
-                (MultiSelectionModelImpl<UdmUsageDto>) udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
-            udmUsagesGrid.addSelectionListener(event -> {
-                Set<UdmUsageDto> usageDtos = event.getAllSelectedItems();
-                boolean isSelected = CollectionUtils.isNotEmpty(usageDtos);
-                assignItem.setEnabled(isSelected);
-                unassignItem.setEnabled(isSelected);
-                editButton.setEnabled(EXPECTED_SELECTED_SIZE == usageDtos.size());
-                multipleEditButton.setEnabled(isSelected);
-            });
-        } else {
-            udmUsagesGrid.setSelectionMode(SelectionMode.SINGLE);
-        }
+        initSelectionMode();
         initViewWindow();
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
-    }
-
-    private void initViewWindow() {
-        udmUsagesGrid.addItemClickListener(event -> {
-            if (event.getMouseEventDetails().isDoubleClick()) {
-                UdmUsageDto udmUsageDto = event.getItem();
-                UdmEditUsageWindow window = new UdmEditUsageWindow(controller, udmUsageDto);
-                window.addCloseListener(Objects.nonNull(gridSelectionModel)
-                    ? closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected)
-                    : closeEvent -> udmUsagesGrid.deselect(udmUsageDto));
-                Windows.showModalWindow(window);
-                highlightSelectedUsage(udmUsageDto);
-            }
-        });
-    }
-
-    private boolean isNotViewOnlyPermission() {
-        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
-    }
-
-    private void switchSelectAllCheckBoxVisibility(int beansCount) {
-        gridSelectionModel.setSelectAllCheckBoxVisibility(
-            0 == beansCount || beansCount > controller.getUdmRecordThreshold()
-                ? SelectAllCheckBoxVisibility.HIDDEN
-                : SelectAllCheckBoxVisibility.VISIBLE);
-        gridSelectionModel.beforeClientResponse(false);
     }
 
     private void addColumns() {
@@ -442,6 +403,49 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setHidable(!isHidden)
             .setHidden(isHidden)
             .setWidth(width);
+    }
+
+    private void initSelectionMode() {
+        if (isNotViewOnlyPermission()) {
+            gridSelectionModel =
+                (MultiSelectionModelImpl<UdmUsageDto>) udmUsagesGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            udmUsagesGrid.addSelectionListener(event -> {
+                Set<UdmUsageDto> usageDtos = event.getAllSelectedItems();
+                boolean isSelected = CollectionUtils.isNotEmpty(usageDtos);
+                assignItem.setEnabled(isSelected);
+                unassignItem.setEnabled(isSelected);
+                editButton.setEnabled(EXPECTED_SELECTED_SIZE == usageDtos.size());
+                multipleEditButton.setEnabled(isSelected);
+            });
+        } else {
+            udmUsagesGrid.setSelectionMode(SelectionMode.SINGLE);
+        }
+    }
+
+    private boolean isNotViewOnlyPermission() {
+        return hasSpecialistPermission || hasManagerPermission || hasResearcherPermission;
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        gridSelectionModel.setSelectAllCheckBoxVisibility(
+            0 == beansCount || beansCount > controller.getUdmRecordThreshold()
+                ? SelectAllCheckBoxVisibility.HIDDEN
+                : SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel.beforeClientResponse(false);
+    }
+
+    private void initViewWindow() {
+        udmUsagesGrid.addItemClickListener(event -> {
+            if (event.getMouseEventDetails().isDoubleClick()) {
+                UdmUsageDto udmUsageDto = event.getItem();
+                UdmEditUsageWindow window = new UdmEditUsageWindow(controller, udmUsageDto);
+                window.addCloseListener(Objects.nonNull(gridSelectionModel)
+                    ? closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected)
+                    : closeEvent -> udmUsagesGrid.deselect(udmUsageDto));
+                Windows.showModalWindow(window);
+                highlightSelectedUsage(udmUsageDto);
+            }
+        });
     }
 
     private Set<String> getSelectedUsageIds() {
