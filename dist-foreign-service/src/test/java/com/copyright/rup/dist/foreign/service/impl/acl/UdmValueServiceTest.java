@@ -164,6 +164,20 @@ public class UdmValueServiceTest {
     }
 
     @Test
+    public void testPopulateValueBatchWhenNoWorksToPopulate() {
+        mockStatic(RupContextUtils.class);
+        mockStatic(RupPersistUtils.class);
+        List<UdmValue> values = Arrays.asList(buildUdmValue(2365985896L), buildUdmValue(3000985896L));
+        expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202012)).andReturn(values).once();
+        rightsService.updateUdmValuesRights(values, 202012);
+        expectLastCall().once();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        replay(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
+        assertEquals(0, udmValueService.populateValueBatch(202012));
+        verify(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
+    }
+
+    @Test
     public void testPublishToBaseline() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
