@@ -1,3 +1,10 @@
+14.1.28
+-
+* CDP-1020 FDA: ACL: UDM Values Edit: Price in USD is calculated on the basis of ‘exchangeRateValue’ instead of ‘inverseExchangeRateValu
+* CDP-1019 FDA: ACL: Edit Value: Exception occurs when Price in USD contains comma in the amount’ of Currency Exchange Rate REST-call
+* CDP-1018 FDA: Populate Value Batch: Exception occures after trying to repopulate values, if there are no any new records available
+* B-69421: FDA & UDM: Select all (Usages, Values): make changes based on comments in CR-DIST-FOREIGN-268
+
 14.1.27
 -
 * B-67673 FDA: Value Edits: implement behavior of the Content Unit Price field
