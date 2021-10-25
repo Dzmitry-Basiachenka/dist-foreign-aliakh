@@ -84,11 +84,11 @@ public class UdmEditValueWindowTest {
     private static final Integer LAST_VALUE_PERIOD = 202012;
     private static final String LAST_PUB_TYPE = "BK2";
     private static final PublicationType PUBLICATION_TYPE;
-    private static final BigDecimal LAST_PRICE_IN_USD = new BigDecimal("125.21");
+    private static final BigDecimal LAST_PRICE_IN_USD = new BigDecimal("3444.70");
     private static final boolean LAST_PRICE_FLAG = false;
     private static final String LAST_PRICE_SOURCE = "last price source";
     private static final String LAST_PRICE_COMMENT = "last price comment";
-    private static final BigDecimal PRICE = new BigDecimal("100.00");
+    private static final BigDecimal PRICE = new BigDecimal("4000.00");
     private static final String PRICE_SOURCE = "price source";
     private static final Currency CURRENCY = new Currency("EUR", "Euro");
     private static final String CURRENCY_CODE = CURRENCY.getCode();
@@ -96,19 +96,19 @@ public class UdmEditValueWindowTest {
     private static final String PRICE_ACCESS_TYPE = "Print";
     private static final Integer PRICE_YEAR = 2021;
     private static final String PRICE_COMMENT = "price comment";
-    private static final BigDecimal PRICE_IN_USD = new BigDecimal("116.12");
+    private static final BigDecimal PRICE_IN_USD = new BigDecimal("3444.71");
     private static final boolean PRICE_FLAG = true;
     private static final BigDecimal CURRENCY_EXCHANGE_RATE = new BigDecimal("1.1612");
     private static final LocalDate CURRENCY_EXCHANGE_RATE_DATE = LocalDate.of(2020, 12, 31);
-    private static final BigDecimal LAST_CONTENT = new BigDecimal("101.00");
+    private static final BigDecimal LAST_CONTENT = new BigDecimal("4.00");
     private static final boolean LAST_CONTENT_FLAG = true;
     private static final String LAST_CONTENT_SOURCE = "last content source";
     private static final String LAST_CONTENT_COMMENT = "last content comment";
-    private static final BigDecimal CONTENT = new BigDecimal("20");
+    private static final BigDecimal CONTENT = new BigDecimal("3");
     private static final String CONTENT_SOURCE = "content source";
     private static final String CONTENT_COMMENT = "content comment";
     private static final boolean CONTENT_FLAG = false;
-    private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("5.806");
+    private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("1148.23");
     private static final String COMMENT = "comment";
     private static final String USER_NAME = "user@copyright.com";
     private static final String VALID_DECIMAL = "0.1";
@@ -225,7 +225,7 @@ public class UdmEditValueWindowTest {
         Panel panel5 = (Panel) row2.getComponent(2);
         VerticalLayout content5 = (VerticalLayout) panel5.getContent();
         assertEquals(9, content5.getComponentCount());
-        assertTextFieldValue(content5.getComponent(0), "20.00");
+        assertTextFieldValue(content5.getComponent(0), "3.00");
         assertTextFieldValue(content5.getComponent(1), CONTENT_SOURCE);
         assertTextFieldValue(content5.getComponent(2), CONTENT_COMMENT);
         assertTextFieldValue(content5.getComponent(3), "N");
@@ -313,7 +313,7 @@ public class UdmEditValueWindowTest {
         assertEquals("0.7243", currencyExchangeRateField.getValue());
         assertEquals(date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US)),
             currencyExchangeRateDateField.getValue());
-        assertEquals("72.43", priceInUsdField.getValue());
+        assertEquals("2897.20", priceInUsdField.getValue());
         verify(controller);
         priceField.setValue(INVALID_NUMBER);
         currencyComboBox.setValue(CURRENCY);
@@ -467,7 +467,7 @@ public class UdmEditValueWindowTest {
         priceInUsdField.setValue(PRICE_IN_USD.toString());
         contentField.setValue("2");
         window.recalculateContentUnitPrice();
-        assertEquals("58.06", contentUnitPriceField.getValue());
+        assertEquals("1722.355", contentUnitPriceField.getValue());
         priceInUsdField.setValue(StringUtils.EMPTY);
         contentField.setValue(VALID_DECIMAL);
         window.recalculateContentUnitPrice();

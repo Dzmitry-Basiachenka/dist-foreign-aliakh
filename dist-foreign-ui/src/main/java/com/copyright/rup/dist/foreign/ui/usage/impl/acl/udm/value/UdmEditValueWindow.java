@@ -65,7 +65,7 @@ public class UdmEditValueWindow extends Window {
     private static final Range<Integer> DECIMAL_SCALE_RANGE = Range.closed(0, 10);
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
+    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("0.00########",
         CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private final Binder<UdmValueDto> binder = new Binder<>();
