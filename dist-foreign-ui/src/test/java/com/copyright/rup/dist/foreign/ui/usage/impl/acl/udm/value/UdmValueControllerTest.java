@@ -268,7 +268,7 @@ public class UdmValueControllerTest {
         String currencyCode = "EUR";
         LocalDate date = LocalDate.now();
         ExchangeRate exchangeRate = new ExchangeRate();
-        exchangeRate.setExchangeRateValue(new BigDecimal("0.8592"));
+        exchangeRate.setInverseExchangeRateValue(new BigDecimal("1.1628"));
         exchangeRate.setExchangeRateUpdateDate(date);
         expect(rfexIntegrationService.getExchangeRate(currencyCode, date)).andReturn(exchangeRate).once();
         replay(rfexIntegrationService);
