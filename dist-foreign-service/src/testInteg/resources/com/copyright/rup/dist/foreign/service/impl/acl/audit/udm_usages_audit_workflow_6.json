@@ -1,0 +1,22 @@
+[
+  {
+    "actionType": "PUBLISH_TO_BASELINE",
+    "actionReason": "UDM usage was published to baseline by 'SYSTEM'"
+  },
+  {
+    "actionType": "ASSIGNEE_CHANGE",
+    "actionReason": "Assignment was changed. Old assignee is 'user@copyright.com'. New assignee is 'SYSTEM'"
+  },
+  {
+    "actionType": "RH_FOUND",
+    "actionReason": "Rightsholder account 1000000322 was found in RMS"
+  },
+  {
+    "actionType": "WORK_FOUND",
+    "actionReason": "Wr Wrk Inst 243618757 was found in PI"
+  },
+  {
+    "actionType": "LOADED",
+    "actionReason": "Uploaded in 'UDM Batch 2020 June' Batch"
+  }
+]
