@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,9 +122,12 @@ public class UdmValueService implements IUdmValueService {
                 udmValueRepository.insert(value);
             })
             .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
-        int updatedUsagesCount = baselineRepository.populateValueId(period, wrWrkInstToValueIdMap, userName);
+        int updatedUsagesCount = 0;
+        if (MapUtils.isNotEmpty(wrWrkInstToValueIdMap)) {
+            updatedUsagesCount = baselineRepository.populateValueId(period, wrWrkInstToValueIdMap, userName);
+        }
         LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}, " +
-                "UpdatedUsagesCount={}", period, userName, wrWrkInstToValueIdMap.size(), updatedUsagesCount);
+            "UpdatedUsagesCount={}", period, userName, wrWrkInstToValueIdMap.size(), updatedUsagesCount);
         return wrWrkInstToValueIdMap.size();
     }
 
