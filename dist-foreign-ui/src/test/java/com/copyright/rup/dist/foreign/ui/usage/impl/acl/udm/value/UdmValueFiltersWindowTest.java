@@ -240,7 +240,7 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
         assertOperatorComboboxItems(priceOperatorComboBox);
-        verifyBigDecimalOperationValidations(priceField);
+        verifyAmountValidationZeroAllowed(priceField);
     }
 
     @Test
@@ -249,7 +249,7 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
             Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
         assertOperatorComboboxItems(priceInUsdOperatorComboBox);
-        verifyBigDecimalOperationValidations(priceInUsdField);
+        verifyAmountValidationZeroAllowed(priceInUsdField);
     }
 
     @Test
@@ -258,7 +258,7 @@ public class UdmValueFiltersWindowTest {
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
         assertOperatorComboboxItems(contentOperatorComboBox);
-        verifyBigDecimalOperationValidations(contentField);
+        verifyAmountValidationZeroDenied(contentField);
     }
 
     @Test
@@ -411,17 +411,23 @@ public class UdmValueFiltersWindowTest {
         assertFalse(textField.isEnabled());
     }
 
-    private void verifyBigDecimalOperationValidations(TextField textField) {
-        verifyCommonOperationValidations(textField, DECIMAL_VALIDATION_MESSAGE);
+    private void verifyAmountValidationZeroAllowed(TextField textField) {
+        verifyTextFieldValidationMessage(textField, "0", StringUtils.EMPTY, true);
+        verifyCommonAmountValidations(textField);
+    }
+
+    private void verifyAmountValidationZeroDenied(TextField textField) {
+        verifyTextFieldValidationMessage(textField, "0", DECIMAL_VALIDATION_MESSAGE, false);
+        verifyCommonAmountValidations(textField);
+    }
+
+    private void verifyCommonAmountValidations(TextField textField) {
         verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(textField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
-    }
-
-    private void verifyCommonOperationValidations(TextField textField, String numberValidationMessage) {
         verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, SPACES_STRING, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(textField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
     }
 

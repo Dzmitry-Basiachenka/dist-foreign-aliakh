@@ -235,7 +235,7 @@ public class UdmValueFiltersWindow extends Window {
         priceOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(priceField, event.getValue()));
         filterBinder.forField(priceField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(getAmountValidator(true), AMOUNT_VALIDATION_MESSAGE)
             .bind(filter -> filter.getPriceExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceExpression().setFieldFirstValue(new BigDecimal(value)));
         priceField.setSizeFull();
@@ -252,7 +252,7 @@ public class UdmValueFiltersWindow extends Window {
         priceInUsdOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(priceInUsdField, event.getValue()));
         filterBinder.forField(priceInUsdField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(getAmountValidator(true), AMOUNT_VALIDATION_MESSAGE)
             .bind(filter -> filter.getPriceInUsdExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceInUsdExpression().setFieldFirstValue(new BigDecimal(value)));
         priceInUsdField.setSizeFull();
@@ -286,7 +286,7 @@ public class UdmValueFiltersWindow extends Window {
         contentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(contentField, event.getValue()));
         filterBinder.forField(contentField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(getAmountValidator(false), AMOUNT_VALIDATION_MESSAGE)
             .bind(filter -> filter.getContentExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getContentExpression().setFieldFirstValue(new BigDecimal(value)));
         contentField.setSizeFull();
@@ -501,10 +501,10 @@ public class UdmValueFiltersWindow extends Window {
         return filterExpression;
     }
 
-    private SerializablePredicate<String> getAmountValidator() {
+    private SerializablePredicate<String> getAmountValidator(boolean zeroAllowed) {
         return value -> null == value
             || StringUtils.isEmpty(value)
-            || StringUtils.isNotBlank(value) && new AmountValidator(false).isValid(value.trim());
+            || StringUtils.isNotBlank(value) && new AmountValidator(zeroAllowed).isValid(value.trim());
     }
 
     private SerializablePredicate<String> getNumberValidator() {
