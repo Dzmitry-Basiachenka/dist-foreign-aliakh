@@ -235,7 +235,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 }
                 udmValuesGrid.getFooterRow(0).getCell("valuePeriod").setText(String.format(FOOTER_LABEL, size));
                 return size;
-            });
+            }, UdmValueDto::getId);
         udmValuesGrid = new Grid<>(dataProvider);
         addColumns();
         udmValuesGrid.setSizeFull();
