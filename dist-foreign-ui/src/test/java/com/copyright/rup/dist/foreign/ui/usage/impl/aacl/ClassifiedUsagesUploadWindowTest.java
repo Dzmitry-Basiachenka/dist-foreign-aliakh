@@ -21,6 +21,8 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -30,6 +32,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +45,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ClassifiedUsagesUploadWindow}.
@@ -112,6 +116,20 @@ public class ClassifiedUsagesUploadWindowTest {
         verify(window, usageController, Windows.class, processor, uploadField);
     }
 
+    @Test
+    public void testUploadFieldValidation() {
+        window = new ClassifiedUsagesUploadWindow(usageController);
+        Binder binder = Whitebox.getInternalState(window, "uploadBinder");
+        UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
+        String emptyFieldValidationMessage = "Field value should be specified";
+        String fileExtensionValidationMessage = "File extension is incorrect";
+        verifyField(uploadField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        verifyField(uploadField, "   ", binder, emptyFieldValidationMessage, false);
+        verifyField(uploadField, "classification_usages.dox", binder, fileExtensionValidationMessage, false);
+        verifyField(uploadField, "classification_usages", binder, fileExtensionValidationMessage, false);
+        verifyField(uploadField, "classification_usages.csv", binder, null, true);
+    }
+
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -164,5 +182,14 @@ public class ClassifiedUsagesUploadWindowTest {
             }
         });
         return processingResult;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifyField(AbstractField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

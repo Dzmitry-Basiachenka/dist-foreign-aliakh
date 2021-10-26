@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetailsReportWidget;
@@ -91,7 +92,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         });
         VaadinUtils.addComponentStyle(periodEndDateFromField, "period-end-date-from-field");
         stringBinder.forField(periodEndDateFromField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(getNumericValidator(), ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
@@ -109,7 +110,7 @@ public class SalHistoricalItemBankDetailsReportWidget extends Window
         });
         VaadinUtils.addComponentStyle(periodEndDateToField, "period-end-date-to-field");
         stringBinder.forField(periodEndDateToField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(getNumericValidator(), ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IAaclBaselineUsagesReportWidget;
@@ -64,7 +65,7 @@ public class AaclBaselineUsagesReportWidget extends Window implements IAaclBasel
         numberOfBaselineYearsField = new TextField(ForeignUi.getMessage("label.number_of_baseline_years"));
         numberOfBaselineYearsField.setRequiredIndicatorVisible(true);
         binder.forField(numberOfBaselineYearsField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
                 StringUtils.trim(value)) >= 0, ForeignUi.getMessage("field.error.positive_number"))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))

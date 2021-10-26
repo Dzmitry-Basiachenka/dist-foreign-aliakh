@@ -69,8 +69,11 @@ public class ItemBankUploadWindowTest {
     private static final String ITEM_BANK_NAME = "Item bank 2000";
     private static final String LICENSEE_NAME = "RGS Energy Group, Inc.";
     private static final String PERIOD_END_DATE = "2000";
+    private static final String SPACES_STRING = "   ";
     private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
     private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
+    private static final String ITEM_BANK_NAME_FIELD = "itemBankNameField";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private ItemBankUploadWindow window;
     private ISalUsageController usagesController;
 
@@ -131,7 +134,7 @@ public class ItemBankUploadWindowTest {
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD)).setValue(PERIOD_END_DATE);
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "itemBankNameField")).setValue(ITEM_BANK_NAME);
+        ((TextField) Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD)).setValue(ITEM_BANK_NAME);
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -145,7 +148,7 @@ public class ItemBankUploadWindowTest {
         window = createPartialMock(ItemBankUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, "itemBankNameField", new TextField("Item Bank Name", ITEM_BANK_NAME));
+        Whitebox.setInternalState(window, ITEM_BANK_NAME_FIELD, new TextField("Item Bank Name", ITEM_BANK_NAME));
         Whitebox.setInternalState(window, ACCOUNT_NUMBER_FIELD, new TextField("Licensee Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "licenseeNameField", new TextField("Licensee Name", LICENSEE_NAME));
         Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", PERIOD_END_DATE));
@@ -168,7 +171,9 @@ public class ItemBankUploadWindowTest {
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        verifyField(periodEndDate, "null", binder, "Field value should be specified", false);
+        verifyField(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(periodEndDate, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(periodEndDate, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
         verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
@@ -182,12 +187,44 @@ public class ItemBankUploadWindowTest {
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
-        verifyField(accountNumberField, "null", binder, "Field value should be specified", false);
+        verifyField(accountNumberField, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyField(accountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
         verifyField(accountNumberField, "a", binder, "Field value should contain numeric values only", false);
         verifyField(accountNumberField, "1", binder, StringUtils.EMPTY, true);
         verifyField(accountNumberField, "1000000000", binder, StringUtils.EMPTY, true);
         verify(usagesController);
+    }
+
+    @Test
+    public void testItemBankNameFieldValidation() {
+        expect(usagesController.usageBatchExists(ITEM_BANK_NAME)).andReturn(true).times(2);
+        expect(usagesController.usageBatchExists("Item Bank")).andReturn(false).times(2);
+        replay(usagesController);
+        window = new ItemBankUploadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField itemBankName = Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD);
+        verifyField(itemBankName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(itemBankName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(itemBankName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
+            false);
+        verifyField(itemBankName, ITEM_BANK_NAME, binder, "Item Bank with such name already exists", false);
+        verifyField(itemBankName, "Item Bank", binder, null, true);
+        verify(usagesController);
+    }
+
+    @Test
+    public void testUploadFieldValidation() {
+        window = new ItemBankUploadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "uploadBinder");
+        UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
+        String fileExtensionValidationMessage = "File extension is incorrect";
+        verifyField(uploadField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(uploadField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(uploadField, "item_bank.dox", binder, fileExtensionValidationMessage, false);
+        verifyField(uploadField, "item_bank", binder, fileExtensionValidationMessage, false);
+        verifyField(uploadField, "item_bank.csv", binder, null, true);
     }
 
     private void verifyRootLayout(Component component) {
@@ -249,7 +286,7 @@ public class ItemBankUploadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Arrays.asList(
-            Whitebox.getInternalState(window, "itemBankNameField"),
+            Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "licenseeNameField"),
@@ -268,7 +305,8 @@ public class ItemBankUploadWindowTest {
         return (Button) component;
     }
 
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+    @SuppressWarnings("unchecked")
+    private void verifyField(AbstractField field, String value, Binder binder, String message, boolean isValid) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();
         List<String> errorMessages =

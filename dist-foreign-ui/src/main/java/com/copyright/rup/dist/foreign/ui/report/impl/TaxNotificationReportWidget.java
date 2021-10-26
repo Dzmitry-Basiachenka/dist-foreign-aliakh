@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportWidget;
@@ -131,7 +132,7 @@ public class TaxNotificationReportWidget extends Window implements ITaxNotificat
         VaadinUtils.addComponentStyle(numberOfDaysField, "number-of-days-field");
         binder = new Binder<>();
         binder.forField(numberOfDaysField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(new IntegerRangeValidator(
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_max_value", DAYS_MAX_VALUE),

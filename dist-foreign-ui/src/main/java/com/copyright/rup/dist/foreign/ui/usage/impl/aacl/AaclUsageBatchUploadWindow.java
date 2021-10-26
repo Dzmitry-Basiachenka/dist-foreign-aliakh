@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -46,7 +47,6 @@ import java.util.Collections;
  */
 public class AaclUsageBatchUploadWindow extends Window {
 
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
@@ -162,7 +162,7 @@ public class AaclUsageBatchUploadWindow extends Window {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
         binder.forField(usageBatchNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
@@ -185,7 +185,7 @@ public class AaclUsageBatchUploadWindow extends Window {
         periodEndDateField = new TextField(ForeignUi.getMessage("label.distribution_period"));
         periodEndDateField.setRequiredIndicatorVisible(true);
         binder.forField(periodEndDateField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
@@ -200,7 +200,7 @@ public class AaclUsageBatchUploadWindow extends Window {
         numberOfBaselineYears = new TextField(ForeignUi.getMessage("label.number_of_baseline_years"));
         numberOfBaselineYears.setRequiredIndicatorVisible(true);
         binder.forField(numberOfBaselineYears)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)) || Integer.parseInt(
                 StringUtils.trim(value)) >= 0, ForeignUi.getMessage("field.error.positive_number"))
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage("field.error.value_not_convertible")))

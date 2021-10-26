@@ -80,6 +80,7 @@ public class SalFundPoolLoadWindowTest {
         "Number of students should be entered for at least one grade group";
     private static final String NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE =
         "Field value should be 0 when Item Bank Split % is 100";
+    private static final String FIELD_LENGTH_ERROR_MESSAGE = "Field value should not exceed %d characters";
 
     private SalFundPoolLoadWindow window;
     private ISalUsageController usagesController;
@@ -129,13 +130,15 @@ public class SalFundPoolLoadWindowTest {
     @Test
     public void testIsValidFundPoolName() {
         expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
-        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(1);
+        expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
         setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, FUND_POOL_EXISTS_ERROR_MESSAGE);
+        setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.repeat('a', 51));
+        verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, String.format(FIELD_LENGTH_ERROR_MESSAGE, 50));
         setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldIsValid(binder, FUND_POOL_NAME_FIELD);
         verify(usagesController);
@@ -147,6 +150,8 @@ public class SalFundPoolLoadWindowTest {
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextFieldValue(ASSESSMENT_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, ASSESSMENT_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
+        setTextFieldValue(ASSESSMENT_NAME_FIELD, StringUtils.repeat('a', 256));
+        verifyFieldErrorMessage(binder, ASSESSMENT_NAME_FIELD, String.format(FIELD_LENGTH_ERROR_MESSAGE, 255));
         setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2019 HTR");
         verifyFieldIsValid(binder, ASSESSMENT_NAME_FIELD);
         verify(usagesController);

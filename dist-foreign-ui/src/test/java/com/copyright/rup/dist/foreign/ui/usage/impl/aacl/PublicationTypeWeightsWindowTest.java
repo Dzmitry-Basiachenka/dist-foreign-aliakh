@@ -17,6 +17,8 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWi
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
 import com.google.common.collect.ImmutableList;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
@@ -25,8 +27,10 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -180,6 +184,22 @@ public class PublicationTypeWeightsWindowTest {
         verify(listener);
     }
 
+    @Test
+    public void testPublicationTypeWeightFieldValidation() {
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        Binder binder = grid.getEditor().getBinder();
+        List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
+        TextField publicationTypeWeight = fields.get(0);
+        String emptyFieldValidationMessage = "Field value should be specified";
+        String positiveNumberValidationMessage = "Field value should be positive number or zero";
+        verifyField(publicationTypeWeight, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        verifyField(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
+        verifyField(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage, false);
+        verifyField(publicationTypeWeight, "value", binder, positiveNumberValidationMessage, false);
+        verifyField(publicationTypeWeight, "0", binder, null, true);
+        verifyField(publicationTypeWeight, "999999999.99", binder, null, true);
+    }
+
     private void verifySize(Component component) {
         assertEquals(525, component.getWidth(), 0);
         assertEquals(250, component.getHeight(), 0);
@@ -216,5 +236,13 @@ public class PublicationTypeWeightsWindowTest {
         pubType.setName(name);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

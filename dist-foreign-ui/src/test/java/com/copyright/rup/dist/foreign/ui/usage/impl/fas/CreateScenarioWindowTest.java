@@ -194,6 +194,14 @@ public class CreateScenarioWindowTest {
         return button;
     }
 
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
+    }
+
     private static class TestCreateScenarioWindow extends CreateScenarioWindow {
 
         private EventObject eventObject;
@@ -220,13 +228,5 @@ public class CreateScenarioWindowTest {
         public void close() {
             this.closed = true;
         }
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

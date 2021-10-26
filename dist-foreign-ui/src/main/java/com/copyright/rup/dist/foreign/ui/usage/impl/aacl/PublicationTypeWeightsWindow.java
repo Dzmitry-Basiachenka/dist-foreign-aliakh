@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -115,7 +116,7 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         textField.addStyleName("editable-field");
         Binder<PublicationType> binder = grid.getEditor().getBinder();
         return binder.forField(textField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero"))
             .withConverter(new BigDecimalConverter())

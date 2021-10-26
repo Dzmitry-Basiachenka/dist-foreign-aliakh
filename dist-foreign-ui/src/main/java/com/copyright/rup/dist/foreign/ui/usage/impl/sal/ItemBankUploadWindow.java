@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.SalFields;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -47,7 +48,6 @@ import java.util.Objects;
  */
 public class ItemBankUploadWindow extends Window {
 
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
@@ -136,7 +136,7 @@ public class ItemBankUploadWindow extends Window {
         uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(s -> s, (s, v) -> s = v).validate();
@@ -159,7 +159,7 @@ public class ItemBankUploadWindow extends Window {
         itemBankNameField = new TextField(ForeignUi.getMessage("label.item_bank_name"));
         itemBankNameField.setRequiredIndicatorVisible(true);
         binder.forField(itemBankNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Item Bank"))
@@ -191,7 +191,7 @@ public class ItemBankUploadWindow extends Window {
         accountNumberField = new TextField(ForeignUi.getMessage("label.licensee_account_number"));
         accountNumberField.setRequiredIndicatorVisible(true);
         binder.forField(accountNumberField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
@@ -207,7 +207,7 @@ public class ItemBankUploadWindow extends Window {
         periodEndDateField = new TextField(ForeignUi.getMessage("label.distribution_period"));
         periodEndDateField.setRequiredIndicatorVisible(true);
         binder.forField(periodEndDateField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
