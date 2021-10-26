@@ -24,6 +24,8 @@ import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -43,6 +45,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AaclFundPoolUploadWindow}.
@@ -58,6 +62,8 @@ import java.util.Collection;
 public class AaclFundPoolUploadWindowTest {
 
     private static final String FUND_POOL_NAME = "fund pool name";
+    private static final String FUND_POOL_NAME_FIELD = "fundPoolNameField";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
 
     private AaclFundPoolUploadWindow window;
     private IAaclUsageController aaclUsageController;
@@ -89,7 +95,7 @@ public class AaclFundPoolUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("aacl_fund_pool.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "fundPoolNameField")).setValue(FUND_POOL_NAME);
+        ((TextField) Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD)).setValue(FUND_POOL_NAME);
         assertTrue(window.isValid());
         verify(aaclUsageController);
     }
@@ -103,7 +109,7 @@ public class AaclFundPoolUploadWindowTest {
         window = createPartialMock(AaclFundPoolUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "aaclUsageController", aaclUsageController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, "fundPoolNameField", new TextField("Fund Pool Name", FUND_POOL_NAME));
+        Whitebox.setInternalState(window, FUND_POOL_NAME_FIELD, new TextField("Fund Pool Name", FUND_POOL_NAME));
         expect(window.isValid()).andReturn(true).once();
         expect(aaclUsageController.getAaclFundPoolCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(result).once();
@@ -114,6 +120,23 @@ public class AaclFundPoolUploadWindowTest {
         replay(Windows.class, window, aaclUsageController, processor, uploadField);
         window.onUploadClicked();
         verify(Windows.class, window, aaclUsageController, processor, uploadField);
+    }
+
+    @Test
+    public void testFundPoolNameFieldValidation() {
+        expect(aaclUsageController.fundPoolExists(FUND_POOL_NAME)).andReturn(true).times(2);
+        expect(aaclUsageController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).once();
+        replay(aaclUsageController);
+        window = new AaclFundPoolUploadWindow(aaclUsageController);
+        Binder binder = Whitebox.getInternalState(window, "fundPoolBinder");
+        TextField fundPoolName = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
+        verifyField(fundPoolName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(fundPoolName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(fundPoolName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
+            false);
+        verifyField(fundPoolName, FUND_POOL_NAME, binder, "Fund Pool with such name already exists", false);
+        verifyField(fundPoolName, FUND_POOL_NAME, binder, null, true);
+        verify(aaclUsageController);
     }
 
     private void verifyRootLayout(Component component) {
@@ -151,7 +174,7 @@ public class AaclFundPoolUploadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "fundPoolNameField"),
+            Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
@@ -182,5 +205,15 @@ public class AaclFundPoolUploadWindowTest {
             fail();
         }
         return result;
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages = errors
+            .stream()
+            .map(ValidationResult::getErrorMessage)
+            .collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

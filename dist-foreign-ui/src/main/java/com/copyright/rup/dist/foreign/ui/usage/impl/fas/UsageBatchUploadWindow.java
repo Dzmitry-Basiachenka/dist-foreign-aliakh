@@ -50,8 +50,6 @@ import java.math.BigDecimal;
  */
 public class UsageBatchUploadWindow extends Window {
 
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
-
     private final IFasUsageController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> uploadBinder = new Binder<>();
@@ -248,7 +246,7 @@ public class UsageBatchUploadWindow extends Window {
         paymentDateWidget.addValueChangeListener(event ->
             fiscalYearField.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
         binder.forField(paymentDateWidget)
-            .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-field");
         return paymentDateWidget;

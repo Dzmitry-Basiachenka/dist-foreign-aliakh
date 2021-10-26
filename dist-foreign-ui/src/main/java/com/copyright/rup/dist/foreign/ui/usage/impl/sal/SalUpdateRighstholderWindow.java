@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -94,7 +95,7 @@ class SalUpdateRighstholderWindow extends Window {
         rhAccountNumberField = new TextField(ForeignUi.getMessage("label.rh_account_number"));
         rhAccountNumberField.setRequiredIndicatorVisible(true);
         usageBinder.forField(rhAccountNumberField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclFundPoolCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -39,8 +40,6 @@ import java.util.Arrays;
  * @author Aliaksandr Liakh
  */
 public class AaclFundPoolUploadWindow extends Window {
-
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
 
     private final IAaclUsageController aaclUsageController;
     private final Binder<FundPool> fundPoolBinder = new Binder<>();
@@ -114,7 +113,7 @@ public class AaclFundPoolUploadWindow extends Window {
         uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue).validate();
@@ -137,7 +136,7 @@ public class AaclFundPoolUploadWindow extends Window {
         fundPoolNameField.setSizeFull();
         fundPoolNameField.setRequiredIndicatorVisible(true);
         fundPoolBinder.forField(fundPoolNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !aaclUsageController.fundPoolExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))

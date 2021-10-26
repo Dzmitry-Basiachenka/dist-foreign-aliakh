@@ -78,6 +78,7 @@ public class FundPoolLoadWindowTest {
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String RRO_NAME = "RRO name";
     private static final String USAGE_BATCH_NAME = "BatchName";
+    private static final String SPACES_STRING = "   ";
     private static final String PERIOD_FROM_FIELD = "fundPoolPeriodFromField";
     private static final String PERIOD_TO_FIELD = "fundPoolPeriodToField";
     private static final String STM_FIELD = "stmAmountField";
@@ -86,10 +87,12 @@ public class FundPoolLoadWindowTest {
     private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
     private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
     private static final String MARKET_VALIDATION_FIELD = "marketValidationField";
+    private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
     private static final String INVALID_MARKET_MESSAGE = "Please select at least one market";
     private static final String INVALID_NUMERIC_VALUE_MESSAGE = "Field value should contain numeric values only";
     private static final String INVALID_NUMBER_LENGTH_MESSAGE = "Field value should not exceed 10 digits";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final LocalDate PAYMENT_DATA_WIDGET = LocalDate.of(2019, 6, 20);
     private FundPoolLoadWindow window;
     private INtsUsageController usagesController;
@@ -130,7 +133,7 @@ public class FundPoolLoadWindowTest {
         replay(usagesController);
         window = new FundPoolLoadWindow(usagesController);
         assertFalse(window.isValid());
-        setTextFieldValue("usageBatchNameField", USAGE_BATCH_NAME);
+        setTextFieldValue(USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         assertFalse(window.isValid());
         setTextFieldValue(ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         assertFalse(window.isValid());
@@ -181,8 +184,12 @@ public class FundPoolLoadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
         TextField periodFrom = Whitebox.getInternalState(window, PERIOD_FROM_FIELD);
         TextField periodTo = Whitebox.getInternalState(window, PERIOD_TO_FIELD);
+        verifyFieldValidationMessage(periodFrom, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyFieldValidationMessage(periodFrom, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "invalidDateFrom", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyFieldValidationMessage(periodTo, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyFieldValidationMessage(periodTo, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyFieldValidationMessage(periodTo, "invalidDateTo", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verifyFieldValidationMessage(periodTo, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
@@ -224,6 +231,9 @@ public class FundPoolLoadWindowTest {
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         verifyFieldValidationMessage(accountNumberField, "0", binder, StringUtils.EMPTY, true);
         verifyFieldValidationMessage(accountNumberField, "1000024950", binder, StringUtils.EMPTY, true);
+        verifyFieldValidationMessage(accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
+            false);
+        verifyFieldValidationMessage(accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyFieldValidationMessage(accountNumberField, "10000249500", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         verifyFieldValidationMessage(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
         verifyFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
@@ -281,6 +291,24 @@ public class FundPoolLoadWindowTest {
         verify(window, usagesController, Windows.class);
     }
 
+    @Test
+    public void testUsageBatchNameFieldValidation() {
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(true).times(3);
+        expect(usagesController.usageBatchExists("Batch")).andReturn(false).times(3);
+        replay(usagesController);
+        window = new FundPoolLoadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField usageBatchName = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        verifyFieldValidationMessage(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyFieldValidationMessage(usageBatchName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyFieldValidationMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        verifyFieldValidationMessage(usageBatchName, USAGE_BATCH_NAME, binder,
+            "Usage Batch with such name already exists", false);
+        verifyFieldValidationMessage(usageBatchName, "Batch", binder, null, true);
+        verify(usagesController);
+    }
+
     private void initUploadComponents() {
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
@@ -290,7 +318,7 @@ public class FundPoolLoadWindowTest {
         paymentDateWidget.setValue(PAYMENT_DATA_WIDGET);
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "rro", rro);
-        setTextField("usageBatchNameField", USAGE_BATCH_NAME);
+        setTextField(USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         setTextField(ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         setTextField(PERIOD_TO_FIELD, PERIOD_TO);
         setTextField(PERIOD_FROM_FIELD, PERIOD_FROM);
@@ -310,6 +338,9 @@ public class FundPoolLoadWindowTest {
         verifyAmountValidationMessage(grossAmountField, "value", binder, false);
         verifyAmountValidationMessage(grossAmountField, "10000000000.00", binder, false);
         verifyAmountValidationMessage(grossAmountField, "9999999999.99", binder, true);
+        verifyFieldValidationMessage(grossAmountField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
+            false);
+        verifyFieldValidationMessage(grossAmountField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
     }
 
     private void verifyRootLayout(Component component) {
@@ -346,7 +377,7 @@ public class FundPoolLoadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, "usageBatchNameField"),
+            Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, "paymentDateWidget"),

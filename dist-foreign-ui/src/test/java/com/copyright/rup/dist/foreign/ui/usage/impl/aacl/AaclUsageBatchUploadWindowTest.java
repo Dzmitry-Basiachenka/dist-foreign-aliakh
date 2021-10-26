@@ -66,6 +66,7 @@ public class AaclUsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameField";
     private static final String PERIOD_END_DATE_FIELD = "periodEndDateField";
     private static final String NUMBER_OF_BASELINE_YEARS = "numberOfBaselineYears";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
 
     private AaclUsageBatchUploadWindow window;
     private IAaclUsageController usagesController;
@@ -107,12 +108,29 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     @Test
+    public void testUsageBatchNameFieldValidation() {
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(true).times(2);
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(usagesController);
+        window = new AaclUsageBatchUploadWindow(usagesController);
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        TextField usageBatchName = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        verifyField(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(usageBatchName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(usageBatchName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
+            false);
+        verifyField(usageBatchName, USAGE_BATCH_NAME, binder, "Usage Batch with such name already exists", false);
+        verifyField(usageBatchName, USAGE_BATCH_NAME, binder, null, true);
+        verify(usagesController);
+    }
+
+    @Test
     public void testPeriodEndDateValidation() {
         replay(usagesController);
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        verifyField(periodEndDate, "null", binder, "Field value should be specified", false);
+        verifyField(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
         verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
@@ -126,7 +144,7 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
-        verifyField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
+        verifyField(numberOfBaselineYears, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number",
             false);
         verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number",

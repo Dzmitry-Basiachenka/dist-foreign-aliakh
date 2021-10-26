@@ -26,6 +26,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -50,6 +51,7 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
     private static final String INVALID_RELATION_ERROR_MESSAGE =
         "Field value should be greater or equal to Period End Date From";
+    private static final String EMPTY_FIELD_ERROR_MESSAGE = "Field value should be specified";
     private static final String PERIOD_FROM_FIELD = "periodEndDateFromField";
     private static final String PERIOD_TO_FIELD = "periodEndDateToField";
 
@@ -89,6 +91,8 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         Binder<String> binder = Whitebox.getInternalState(widget, "stringBinder");
         TextField periodFrom = Whitebox.getInternalState(widget, PERIOD_FROM_FIELD);
         TextField periodTo = Whitebox.getInternalState(widget, PERIOD_TO_FIELD);
+        verifyTextFieldValidationMessage(periodFrom, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR_MESSAGE, false);
+        verifyTextFieldValidationMessage(periodTo, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR_MESSAGE, false);
         verifyTextFieldValidationMessage(periodFrom, "1949", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyTextFieldValidationMessage(periodTo, "1949", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyTextFieldValidationMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);

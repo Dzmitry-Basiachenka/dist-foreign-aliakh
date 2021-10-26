@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -68,7 +69,6 @@ public class UdmEditUsageWindow extends Window {
     private static final List<UsageStatusEnum> EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER =
         Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
             UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW);
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final IUdmUsageController controller;
@@ -278,7 +278,7 @@ public class UdmEditUsageWindow extends Window {
         String fieldName = ForeignUi.getMessage("label.statistical_multiplier");
         statisticalMultiplierField.setSizeFull();
         binder.forField(statisticalMultiplierField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> NumberUtils.isNumber(value.trim()) &&
                     STATISTICAL_MULTIPLIER_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
                 ForeignUi.getMessage("field.error.positive_number_between", "0.00001", "1.00000"))
@@ -299,7 +299,7 @@ public class UdmEditUsageWindow extends Window {
         String fieldName = ForeignUi.getMessage("label.annual_multiplier");
         annualMultiplierField.setSizeFull();
         binder.forField(annualMultiplierField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(value.trim())
                     && ANNUAL_MULTIPLIER_RANGE.contains(NumberUtils.toInt(value.trim())),
                 ForeignUi.getMessage("field.error.positive_number_between", "1", "25"))
@@ -317,7 +317,7 @@ public class UdmEditUsageWindow extends Window {
         String fieldName = ForeignUi.getMessage("label.quantity");
         quantityField.setSizeFull();
         binder.forField(quantityField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value))
@@ -368,7 +368,7 @@ public class UdmEditUsageWindow extends Window {
     private HorizontalLayout buildCompanyLayout() {
         String fieldName = ForeignUi.getMessage("label.company_id");
         binder.forField(companyIdField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(value.trim()), NUMBER_VALIDATION_MESSAGE)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .bind(usage -> Objects.toString(usage.getCompanyId(), StringUtils.EMPTY),
@@ -478,7 +478,7 @@ public class UdmEditUsageWindow extends Window {
         detailLicenseeClassComboBox.addValueChangeListener(event ->
             fieldToValueChangesMap.updateFieldValue(fieldName, buildDetailLicenseeClassString(event.getValue())));
         binder.forField(detailLicenseeClassComboBox)
-            .withValidator(Objects::nonNull, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(Objects::nonNull, ForeignUi.getMessage("field.error.empty"))
             .bind(UdmUsageDto::getDetailLicenseeClass, UdmUsageDto::setDetailLicenseeClass);
         VaadinUtils.addComponentStyle(detailLicenseeClassComboBox, "udm-edit-detail-licensee-class-combo-box");
         return buildCommonLayout(detailLicenseeClassComboBox, fieldName);

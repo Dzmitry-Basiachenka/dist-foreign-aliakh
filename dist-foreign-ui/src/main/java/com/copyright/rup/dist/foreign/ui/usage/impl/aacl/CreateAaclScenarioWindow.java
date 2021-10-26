@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
@@ -98,7 +99,7 @@ class CreateAaclScenarioWindow extends Window {
                 CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(scenarioNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))

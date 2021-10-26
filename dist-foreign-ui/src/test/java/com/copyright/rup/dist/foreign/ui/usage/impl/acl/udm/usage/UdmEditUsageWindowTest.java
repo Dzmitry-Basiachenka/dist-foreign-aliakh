@@ -337,6 +337,9 @@ public class UdmEditUsageWindowTest {
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
         String numberValidationMessage = "Field value should be positive number between 1 and 25";
         verifyIntegerValidations(annualMultiplierField, numberValidationMessage);
+        verifyTextFieldValidationMessage(annualMultiplierField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE,
+            false);
+        verifyTextFieldValidationMessage(annualMultiplierField, "   ", EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(annualMultiplierField, "1000", numberValidationMessage, false);
         verifyTextFieldValidationMessage(annualMultiplierField, "26", numberValidationMessage, false);
         verifyTextFieldValidationMessage(annualMultiplierField, "0", numberValidationMessage, false);
@@ -350,6 +353,9 @@ public class UdmEditUsageWindowTest {
         String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
         String scaleValidationMessage = "Field value should not exceed 5 digits after the decimal point";
         verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE,
+            false);
+        verifyTextFieldValidationMessage(statisticalMultiplierField, "   ", EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(statisticalMultiplierField, "0.000001", decimalValidationMessage, false);
         verifyTextFieldValidationMessage(statisticalMultiplierField, "0.00001", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(statisticalMultiplierField, "0.9", StringUtils.EMPTY, true);

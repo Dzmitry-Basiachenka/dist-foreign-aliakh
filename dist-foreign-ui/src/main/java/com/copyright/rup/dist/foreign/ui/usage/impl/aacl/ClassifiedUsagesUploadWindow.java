@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Threshold
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.ClassifiedUsageCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -126,7 +127,7 @@ public class ClassifiedUsagesUploadWindow extends Window {
         uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue).validate();

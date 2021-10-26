@@ -15,6 +15,8 @@ import com.copyright.rup.dist.foreign.ui.report.api.ITaxNotificationReportContro
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -24,8 +26,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
@@ -49,6 +53,9 @@ public class TaxNotificationReportWidgetTest {
     private static final String SCENARIO_ID_2 = "69a22caf-57da-45fa-afbb-35cf96ffd0ba";
     private static final Scenario SCENARIO_1 = buildScenario(SCENARIO_ID_1, "Scenario One");
     private static final Scenario SCENARIO_2 = buildScenario(SCENARIO_ID_2, "Scenario Two");
+    private static final String EMPTY_FIELD_ERROR_MESSAGE = "Field value should be specified";
+    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE = "Field value should be positive number " +
+        "or zero and should not exceed 99999";
 
     private TaxNotificationReportWidget widget;
 
@@ -129,6 +136,19 @@ public class TaxNotificationReportWidgetTest {
         assertEquals(Collections.emptySet(), widget.getSelectedScenarioIds());
     }
 
+    @Test
+    public void testNumberOfDaysFieldValidation() {
+        Binder binder = Whitebox.getInternalState(widget, "binder");
+        TextField numberOfDays = Whitebox.getInternalState(widget, "numberOfDaysField");
+        verifyField(numberOfDays, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR_MESSAGE, false);
+        verifyField(numberOfDays, "   ", binder, EMPTY_FIELD_ERROR_MESSAGE, false);
+        verifyField(numberOfDays, "a", binder, "Field value should contain numeric values only", false);
+        verifyField(numberOfDays, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(numberOfDays, "999999", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(numberOfDays, "0", binder, null, true);
+        verifyField(numberOfDays, "99999", binder, null, true);
+    }
+
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
         List<Column> columns = grid.getColumns();
@@ -152,5 +172,15 @@ public class TaxNotificationReportWidgetTest {
         Component closeButton = buttonsLayout.getComponent(1);
         assertEquals(Button.class, closeButton.getClass());
         assertEquals("Close", closeButton.getCaption());
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages = errors
+            .stream()
+            .map(ValidationResult::getErrorMessage)
+            .collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

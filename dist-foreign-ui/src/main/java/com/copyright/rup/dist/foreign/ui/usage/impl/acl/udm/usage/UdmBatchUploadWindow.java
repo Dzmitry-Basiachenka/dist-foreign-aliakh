@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -130,7 +131,7 @@ public class UdmBatchUploadWindow extends Window {
         uploadField = new UploadField();
         uploadField.setRequiredIndicatorVisible(true);
         binder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .withValidator(value -> !udmUsageController.udmBatchExists(getBatchName()),
@@ -154,7 +155,7 @@ public class UdmBatchUploadWindow extends Window {
         periodYearField.setPlaceholder("YYYY");
         periodYearField.setRequiredIndicatorVisible(true);
         binder.forField(periodYearField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(YearValidator.getValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
@@ -169,7 +170,7 @@ public class UdmBatchUploadWindow extends Window {
         monthField.setItems(MONTHS);
         monthField.setRequiredIndicatorVisible(true);
         binder.forField(monthField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .bind(s -> s, (s, v) -> s = v).validate();
         monthField.setSizeFull();
         VaadinUtils.addComponentStyle(monthField, "period-month-field");

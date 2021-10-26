@@ -37,6 +37,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -215,6 +216,22 @@ public class CreateAaclScenarioWindowTest {
         verify(controller);
     }
 
+    @Test
+    public void testScenarioNameFieldValidation() {
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
+        replay(controller);
+        window = new CreateAaclScenarioWindow(controller);
+        TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
+        Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
+        String emptyFieldValidationMessage = "Field value should be specified";
+        verifyField(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        verifyField(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
+        verifyField(scenarioName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
+        verify(controller);
+    }
+
     private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
         scenarioNameField.setValue(scenarioName);
         List<String> errorMessages = ((List<ValidationResult>) binder.validate().getValidationErrors())
@@ -268,6 +285,16 @@ public class CreateAaclScenarioWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages = errors
+            .stream()
+            .map(ValidationResult::getErrorMessage)
+            .collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private static class TestCreateAaclScenarioWindow extends CreateAaclScenarioWindow {

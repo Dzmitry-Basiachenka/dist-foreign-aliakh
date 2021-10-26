@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Validatio
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
@@ -141,7 +142,7 @@ public class UsageDataUploadWindow extends Window {
         uploadField.setSizeFull();
         uploadField.setRequiredIndicatorVisible(true);
         uploadBinder.forField(uploadField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(s -> s, (s, v) -> s = v).validate();

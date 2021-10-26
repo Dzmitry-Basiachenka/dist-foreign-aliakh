@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.MarketFilterWidget;
@@ -45,7 +46,6 @@ import java.util.Set;
 class FundPoolLoadWindow extends Window {
 
     private static final String EMPTY_MARKET_STYLE = "empty-selected-markets";
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final String NOT_NUMERIC_MESSAGE = "field.error.not_numeric";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
@@ -183,7 +183,7 @@ class FundPoolLoadWindow extends Window {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.setRequiredIndicatorVisible(true);
         binder.forField(usageBatchNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
@@ -227,7 +227,7 @@ class FundPoolLoadWindow extends Window {
         fundPoolPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
         VaadinUtils.addComponentStyle(fundPoolPeriodFromField, "fund-pool-period-from-field");
         stringBinder.forField(fundPoolPeriodFromField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
@@ -241,7 +241,7 @@ class FundPoolLoadWindow extends Window {
         fundPoolPeriodToField.setSizeFull();
         VaadinUtils.addComponentStyle(fundPoolPeriodToField, "fund-pool-period-to-field");
         stringBinder.forField(fundPoolPeriodToField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
                 MIN_YEAR, MAX_YEAR))
@@ -283,7 +283,7 @@ class FundPoolLoadWindow extends Window {
         accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
         accountNumberField.setRequiredIndicatorVisible(true);
         binder.forField(accountNumberField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(getNumericValidator(), ForeignUi.getMessage(NOT_NUMERIC_MESSAGE))
             .bind(usageBatch -> usageBatch.getRro().getAccountNumber().toString(),
@@ -298,7 +298,7 @@ class FundPoolLoadWindow extends Window {
         paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         binder.forField(paymentDateWidget)
-            .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-field");
         return paymentDateWidget;
@@ -320,7 +320,7 @@ class FundPoolLoadWindow extends Window {
         TextField textField = new TextField(label);
         textField.setRequiredIndicatorVisible(true);
         binder.forField(textField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
@@ -333,7 +333,7 @@ class FundPoolLoadWindow extends Window {
         TextField textField = new TextField(label);
         textField.setRequiredIndicatorVisible(true);
         binder.forField(textField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withValidator(getFundPoolAmountValidator(),

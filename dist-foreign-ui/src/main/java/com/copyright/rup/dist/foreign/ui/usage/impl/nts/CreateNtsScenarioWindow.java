@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
@@ -90,7 +91,7 @@ class CreateNtsScenarioWindow extends Window {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(scenarioNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
@@ -107,7 +108,7 @@ class CreateNtsScenarioWindow extends Window {
         rhMinimumAmountField.setValue("300");
         rhMinimumAmountField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(rhMinimumAmountField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> new AmountValidator(true).isValid(value),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
@@ -138,7 +139,7 @@ class CreateNtsScenarioWindow extends Window {
         amountField.setRequiredIndicatorVisible(true);
         amountField.setValue("0");
         fundBinder.forField(amountField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> new AmountValidator(true).isValid(value),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))

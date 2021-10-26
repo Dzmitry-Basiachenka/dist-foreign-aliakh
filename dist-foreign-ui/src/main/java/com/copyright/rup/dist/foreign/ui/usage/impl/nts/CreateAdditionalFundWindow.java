@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -82,7 +83,7 @@ class CreateAdditionalFundWindow extends Window {
         fundNameField = new TextField(ForeignUi.getMessage("field.fund_name"));
         fundNameField.setRequiredIndicatorVisible(true);
         binder.forField(fundNameField)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.additionalFundExists(StringUtils.trim(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
@@ -94,7 +95,7 @@ class CreateAdditionalFundWindow extends Window {
         commentArea = new TextArea(ForeignUi.getMessage("field.comment"));
         commentArea.setRequiredIndicatorVisible(true);
         binder.forField(commentArea)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withValidator(new RequiredValidator())
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
             .bind(FundPool::getComment, FundPool::setComment);
         VaadinUtils.setMaxComponentsWidth(commentArea);

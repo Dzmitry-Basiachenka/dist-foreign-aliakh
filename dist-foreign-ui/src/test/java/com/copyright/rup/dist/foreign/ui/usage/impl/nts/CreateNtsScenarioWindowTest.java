@@ -15,8 +15,8 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
@@ -30,6 +30,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -57,6 +58,9 @@ public class CreateNtsScenarioWindowTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "NTS Distribution " + DATE;
     private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
+    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number or zero and should not exceed 10 digits";
     private FundPool preServiceFeeFund;
 
     private INtsUsageController controller;
@@ -148,6 +152,51 @@ public class CreateNtsScenarioWindowTest {
         verify(controller);
     }
 
+    @Test
+    public void testScenarioNameFieldValidation() {
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
+        replay(controller);
+        window = new CreateNtsScenarioWindow(controller);
+        Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
+        TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
+        verifyField(scenarioName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(scenarioName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(scenarioName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
+        verify(controller);
+    }
+
+    @Test
+    public void testRhMinimumAmountFieldValidation() {
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).anyTimes();
+        replay(controller);
+        window = new CreateNtsScenarioWindow(controller);
+        verifyAmountField(Whitebox.getInternalState(window, "scenarioBinder"),
+            Whitebox.getInternalState(window, "rhMinimumAmountField"));
+        verify(controller);
+    }
+
+    @Test
+    public void testPreServiceFeeAmountFieldValidation() {
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
+        window = new CreateNtsScenarioWindow(controller);
+        verifyAmountField(Whitebox.getInternalState(window, "fundBinder"),
+            Whitebox.getInternalState(window, "preServiceFeeAmountField"));
+        verify(controller);
+    }
+
+    @Test
+    public void testPostServiceFeeAmountFieldValidation() {
+        expect(controller.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller);
+        window = new CreateNtsScenarioWindow(controller);
+        verifyAmountField(Whitebox.getInternalState(window, "fundBinder"),
+            Whitebox.getInternalState(window, "postServiceFeeAmountField"));
+        verify(controller);
+    }
+
     private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
         scenarioNameField.setValue(scenarioName);
         List<String> errorMessages = ((List<ValidationResult>) binder.validate().getValidationErrors())
@@ -217,6 +266,25 @@ public class CreateNtsScenarioWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
+    }
+
+    private void verifyAmountField(Binder binder, TextField field) {
+        verifyField(field, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(field, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        verifyField(field, "10000000000", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, " -1 ", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "10000000000",binder, null, true);
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages = errors
+            .stream()
+            .map(ValidationResult::getErrorMessage)
+            .collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private static class TestCreateNtsScenarioWindow extends CreateNtsScenarioWindow {

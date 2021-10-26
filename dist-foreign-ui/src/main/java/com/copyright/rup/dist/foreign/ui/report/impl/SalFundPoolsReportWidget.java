@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISalFundPoolsReportWidget;
@@ -32,7 +33,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsReportWidget {
 
-    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
 
@@ -82,7 +82,7 @@ public class SalFundPoolsReportWidget extends Window implements ISalFundPoolsRep
         distributionYear = new TextField(ForeignUi.getMessage("label.distribution_year"));
         distributionYear.setRequiredIndicatorVisible(true);
         binder.forField(distributionYear)
-            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
             .withValidator(getYearValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
