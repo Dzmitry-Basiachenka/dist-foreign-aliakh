@@ -11,6 +11,7 @@
         <result property="period" column="period"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="status" column="status_ind"/>
+        <result property="assignee" column="assignee"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="reportedTitle" column="reported_title"/>
@@ -38,6 +39,8 @@
         <result property="annualizedCopies" column="annualized_copies"/>
         <result property="actionReasonId" column="df_udm_action_reason_uid"/>
         <result property="ineligibleReasonId" column="df_udm_ineligible_reason_uid"/>
+        <result property="valueId" column="df_udm_value_uid"/>
+        <result property="baselineFlag" column="is_baseline_flag"/>
     </resultMap>
 
     <resultMap id="udmUsageDtoResultMap" type="UdmUsageDto" extends="StoredEntityMapper.storedEntityResult">
@@ -517,6 +520,7 @@
             period,
             period_end_date,
             status_ind,
+            assignee,
             rh_account_number,
             wr_wrk_inst,
             reported_title,
@@ -546,6 +550,8 @@
             ir.df_udm_ineligible_reason_uid,
             ir.ineligible_reason,
             annualized_copies,
+            df_udm_value_uid,
+            is_baseline_flag,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,

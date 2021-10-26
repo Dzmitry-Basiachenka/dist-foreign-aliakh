@@ -1,0 +1,22 @@
+{
+  "works": [
+    {
+      "status": ["GRANT"],
+      "wr_wrk_inst": 123059057,
+      "period_end_date": "06/30/2020",
+      "license_type": ["ACL"]
+    },
+    {
+      "status": ["GRANT"],
+      "wr_wrk_inst": 140160102,
+      "period_end_date": "06/30/2020",
+      "license_type": ["ACL"]
+    },
+    {
+      "status": ["GRANT"],
+      "wr_wrk_inst": 200008506,
+      "period_end_date": "06/30/2020",
+      "license_type": ["ACL"]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -17,13 +17,9 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections.CollectionUtils;
@@ -113,46 +109,9 @@ public class LoadUdmUsagesIntegrationTest {
     }
 
     private void verifyUdmUsages(List<String> udmUsageIds) throws IOException {
-        List<UdmUsage> expectedUsages = loadExpectedUdmUsages();
+        List<UdmUsage> expectedUsages = testHelper.loadExpectedUdmUsages("acl/usage/udm_usages_for_upload.json");
         List<UdmUsage> actualUsages = udmUsageRepository.findByIds(udmUsageIds);
-        assertEquals(expectedUsages.size(), actualUsages.size());
-        IntStream.range(0, expectedUsages.size())
-            .forEach(index -> verifyUdmUsage(expectedUsages.get(index), actualUsages.get(index)));
-    }
-
-    private void verifyUdmUsage(UdmUsage expectedUsage, UdmUsage actualUsage) {
-        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-        assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
-        assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
-        assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(expectedUsage.getReportedTitle(), actualUsage.getReportedTitle());
-        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getReportedPubType(), actualUsage.getReportedPubType());
-        assertEquals(expectedUsage.getPubFormat(), actualUsage.getPubFormat());
-        assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
-        assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
-        assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
-        assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
-        assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
-        assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
-        assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
-        assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
-        assertEquals(expectedUsage.getUsageDate(), actualUsage.getUsageDate());
-        assertEquals(expectedUsage.getSurveyStartDate(), actualUsage.getSurveyStartDate());
-        assertEquals(expectedUsage.getSurveyEndDate(), actualUsage.getSurveyEndDate());
-        assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
-        assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
-        assertEquals(expectedUsage.getIneligibleReasonId(), actualUsage.getIneligibleReasonId());
-        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
-        assertEquals(expectedUsage.getAnnualMultiplier(), actualUsage.getAnnualMultiplier());
-        assertEquals(expectedUsage.getStatisticalMultiplier(), actualUsage.getStatisticalMultiplier());
-        assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
-        assertEquals(expectedUsage.getRightsholder(), actualUsage.getRightsholder());
+        testHelper.assertUdmUsages(expectedUsages, actualUsages);
     }
 
     private void verifyUdmAudit(List<String> udmUsageIds) {
@@ -206,19 +165,10 @@ public class LoadUdmUsagesIntegrationTest {
     }
 
     private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/acl/udm_usages_for_upload.csv");
+        String csvText = TestUtils.fileToString(this.getClass(), "usage/udm_usages_for_upload.csv");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtils.write(csvText, out, StandardCharsets.UTF_8);
         return out;
-    }
-
-    private List<UdmUsage> loadExpectedUdmUsages() throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), "usage/acl/udm_usages_for_upload.json");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<UdmUsage>>() {
-        });
     }
 
     private UdmBatch buildUdmBatch() {

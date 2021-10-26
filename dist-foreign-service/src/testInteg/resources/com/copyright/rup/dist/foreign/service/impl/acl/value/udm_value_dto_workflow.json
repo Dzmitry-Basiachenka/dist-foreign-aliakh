@@ -1,0 +1,82 @@
+[
+  {
+    "id": "94e6d604-e1d6-49a3-bac5-c266793beda8",
+    "valuePeriod": 202006,
+    "status": "RESEARCH_COMPLETE",
+    "rhAccountNumber": 1000024950,
+    "rhName": "2D Publications",
+    "wrWrkInst": 123059057,
+    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
+    "systemStandardNumber": "978-0-271-01750-1",
+    "price": 100.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "publicationType": {
+      "name": "NP"
+    },
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "94e6d604-e1d6-49a3-bac5-c266793beda8",
+    "valuePeriod": 202006,
+    "status": "RESEARCH_COMPLETE",
+    "rhAccountNumber": 1000000322,
+    "rhName": "American College of Physicians - Journals",
+    "wrWrkInst": 200008506,
+    "systemTitle": "Colloids and surfaces. B, Biointerfaces",
+    "systemStandardNumber": "1873-2233",
+    "price": 100.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "publicationType": {
+      "name": "NP"
+    },
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "94e6d604-e1d6-49a3-bac5-c266793beda8",
+    "valuePeriod": 202006,
+    "status": "RESEARCH_COMPLETE",
+    "rhAccountNumber": 1000000322,
+    "rhName": "American College of Physicians - Journals",
+    "wrWrkInst": 243618757,
+    "systemTitle": "Midbus",
+    "systemStandardNumber": "978-0-947731-91-5",
+    "price": 100.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "publicationType": {
+      "name": "NP"
+    },
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "f4e6d604-e1d6-49a3-bac5-c266793beda8",
+    "valuePeriod": 202006,
+    "status": "RESEARCH_COMPLETE",
+    "rhAccountNumber": 1000000322,
+    "rhName": "American College of Physicians - Journals",
+    "wrWrkInst": 876543210,
+    "systemTitle": "Paris tonique",
+    "systemStandardNumber": "12345XX-79069",
+    "price": 100.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "publicationType": {
+      "name": "NP"
+    },
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  }
+]

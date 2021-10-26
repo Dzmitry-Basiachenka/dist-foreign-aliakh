@@ -1,0 +1,58 @@
+[
+  {
+    "id": "81226f4a-6a21-4529-97ad-5dab5c92bcce",
+    "period": 202006,
+    "wrWrkInst": 123059057,
+    "systemTitle": "BIOCHEMISTRY (MOSCOW)",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 100.0000000000,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "94e6d604-e1d6-49a3-bac5-c266793beda8",
+    "period": 202006,
+    "wrWrkInst": 200008506,
+    "systemTitle": "Colloids and surfaces. B, Biointerfaces",
+    "publicationType": "NP",
+    "price": 100.0000000000,
+    "priceFlag": true,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "97226f4a-ca11-4529-bb59-5dab5c92b8ce",
+    "period": 202006,
+    "wrWrkInst": 243618757,
+    "systemTitle": "Midbus",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 100.0000000000,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  },
+  {
+    "id": "9a226f4a-ca11-4529-bb59-5dab5c92b8ce",
+    "period": 202006,
+    "wrWrkInst": 876543210,
+    "systemTitle": "Paris tonique",
+    "publicationType": "NP",
+    "priceFlag": true,
+    "price": 100.0000000000,
+    "content": 10.0000000000,
+    "contentUnitPrice": 10.0000000000,
+    "contentFlag": true,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  }
+]

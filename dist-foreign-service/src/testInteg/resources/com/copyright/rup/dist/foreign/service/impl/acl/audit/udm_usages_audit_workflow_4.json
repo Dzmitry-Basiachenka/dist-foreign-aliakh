@@ -1,0 +1,14 @@
+[
+  {
+    "actionType": "RH_NOT_FOUND",
+    "actionReason": "Rightsholder account for 987654321 was not found in RMS"
+  },
+  {
+    "actionType": "WORK_FOUND",
+    "actionReason": "Wr Wrk Inst 987654321 was found in PI"
+  },
+  {
+    "actionType": "LOADED",
+    "actionReason": "Uploaded in 'UDM Batch 2020 June' Batch"
+  }
+]

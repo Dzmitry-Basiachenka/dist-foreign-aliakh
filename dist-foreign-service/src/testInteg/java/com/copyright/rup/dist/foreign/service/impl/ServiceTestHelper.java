@@ -11,6 +11,9 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -22,14 +25,20 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +52,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -67,6 +77,8 @@ public class ServiceTestHelper {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -224,6 +236,18 @@ public class ServiceTestHelper {
             });
     }
 
+    public void assertUdmAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
+        List<UsageAuditItem> actualAuditItems = udmUsageAuditService.getUdmUsageAudit(entityId);
+        assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
+        IntStream.range(0, expectedAuditItems.size())
+            .forEach(index -> {
+                UsageAuditItem expectedItem = expectedAuditItems.get(index);
+                UsageAuditItem actualItem = actualAuditItems.get(index);
+                assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
+                assertEquals(expectedItem.getActionType(), actualItem.getActionType());
+            });
+    }
+
     public void assertScenarioAudit(String scenarioId, List<Pair<ScenarioActionTypeEnum, String>> expectedAudit) {
         assertEquals(expectedAudit, scenarioAuditService.getActions(scenarioId).stream()
             .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
@@ -260,6 +284,137 @@ public class ServiceTestHelper {
                 .collect(Collectors.groupingBy(UsageDto::getStatus,
                     Collectors.mapping(UsageDto::getId, Collectors.toList())));
         assertPaidUsages(expectedUsages, usageIdsGroupedByStatus);
+    }
+
+    public void assertUdmUsages(List<UdmUsage> expectedUsages, List<UdmUsage> actualUsages) {
+        assertEquals(expectedUsages.size(), actualUsages.size());
+        IntStream.range(0, expectedUsages.size()).forEach(index -> {
+            UdmUsage expectedUsage = expectedUsages.get(index);
+            UdmUsage actualUsage = actualUsages.get(index);
+            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+            assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
+            assertEquals(expectedUsage.getPeriod(), actualUsage.getPeriod());
+            assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
+            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+            assertEquals(expectedUsage.getReportedTitle(), actualUsage.getReportedTitle());
+            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+            assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getReportedPubType(), actualUsage.getReportedPubType());
+            assertEquals(expectedUsage.getPubFormat(), actualUsage.getPubFormat());
+            assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+            assertEquals(expectedUsage.getLanguage(), actualUsage.getLanguage());
+            assertEquals(expectedUsage.getCompanyId(), actualUsage.getCompanyId());
+            assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
+            assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
+            assertEquals(expectedUsage.getSurveyRespondent(), actualUsage.getSurveyRespondent());
+            assertEquals(expectedUsage.getIpAddress(), actualUsage.getIpAddress());
+            assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
+            assertEquals(expectedUsage.getUsageDate(), actualUsage.getUsageDate());
+            assertEquals(expectedUsage.getSurveyStartDate(), actualUsage.getSurveyStartDate());
+            assertEquals(expectedUsage.getSurveyEndDate(), actualUsage.getSurveyEndDate());
+            assertEquals(expectedUsage.getReportedTypeOfUse(), actualUsage.getReportedTypeOfUse());
+            assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
+            assertEquals(expectedUsage.getIneligibleReasonId(), actualUsage.getIneligibleReasonId());
+            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+            assertEquals(expectedUsage.getCompanyName(), actualUsage.getCompanyName());
+            assertEquals(expectedUsage.getAnnualMultiplier(), actualUsage.getAnnualMultiplier());
+            assertEquals(expectedUsage.getStatisticalMultiplier(), actualUsage.getStatisticalMultiplier());
+            assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
+            assertEquals(expectedUsage.getRightsholder(), actualUsage.getRightsholder());
+            assertEquals(expectedUsage.getAssignee(), actualUsage.getAssignee());
+            assertEquals(expectedUsage.isBaselineFlag(), actualUsage.isBaselineFlag());
+            assertEquals(StringUtils.isNotBlank(expectedUsage.getValueId()),
+                StringUtils.isNotBlank(actualUsage.getValueId()));
+        });
+    }
+
+    public void assertUdmValueDtos(List<UdmValueDto> expectedValues, List<UdmValueDto> actualValues) {
+        assertEquals(expectedValues.size(), expectedValues.size());
+        IntStream.range(0, expectedValues.size()).forEach(index -> {
+            UdmValueDto expectedValue = expectedValues.get(index);
+            UdmValueDto actualValue = actualValues.get(index);
+            assertEquals(expectedValue.getValuePeriod(), actualValue.getValuePeriod());
+            assertEquals(expectedValue.getStatus(), actualValue.getStatus());
+            assertEquals(expectedValue.getAssignee(), actualValue.getAssignee());
+            assertEquals(expectedValue.getRhAccountNumber(), actualValue.getRhAccountNumber());
+            assertEquals(expectedValue.getPublicationType().getName(), actualValue.getPublicationType().getName());
+            assertEquals(expectedValue.getRhName(), actualValue.getRhName());
+            assertEquals(expectedValue.getWrWrkInst(), actualValue.getWrWrkInst());
+            assertEquals(expectedValue.getSystemTitle(), actualValue.getSystemTitle());
+            assertEquals(expectedValue.getSystemStandardNumber(), actualValue.getSystemStandardNumber());
+            assertEquals(expectedValue.getPrice(), actualValue.getPrice());
+            assertEquals(expectedValue.getPriceSource(), actualValue.getPriceSource());
+            assertEquals(expectedValue.getPriceInUsd(), actualValue.getPriceInUsd());
+            assertEquals(expectedValue.getContent(), actualValue.getContent());
+            assertEquals(expectedValue.getCurrency(), actualValue.getCurrency());
+            assertEquals(expectedValue.getCurrencyExchangeRate(), actualValue.getCurrencyExchangeRate());
+            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+            assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
+            assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
+            assertEquals(expectedValue.getContentSource(), actualValue.getContentSource());
+            assertEquals(expectedValue.getComment(), actualValue.getComment());
+            assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
+            assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
+        });
+    }
+
+    public void assertValueBaselineDtos(List<UdmValueBaselineDto> expectedValues,
+                                        List<UdmValueBaselineDto> actualValues) {
+        assertEquals(expectedValues.size(), actualValues.size());
+        IntStream.range(0, expectedValues.size()).forEach(index -> {
+            UdmValueBaselineDto expectedValue = expectedValues.get(index);
+            UdmValueBaselineDto actualValue = actualValues.get(index);
+            assertEquals(expectedValue.getPeriod(), actualValue.getPeriod());
+            assertEquals(expectedValue.getWrWrkInst(), actualValue.getWrWrkInst());
+            assertEquals(expectedValue.getSystemTitle(), actualValue.getSystemTitle());
+            assertEquals(expectedValue.getPublicationType(), actualValue.getPublicationType());
+            assertEquals(expectedValue.getPrice(), actualValue.getPrice());
+            assertEquals(expectedValue.getPriceFlag(), actualValue.getPriceFlag());
+            assertEquals(expectedValue.getContent(), actualValue.getContent());
+            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+            assertEquals(expectedValue.getContentFlag(), actualValue.getContentFlag());
+            assertEquals(expectedValue.getComment(), actualValue.getComment());
+            assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
+            assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
+        });
+    }
+
+    public List<UdmUsage> loadExpectedUdmUsages(String pathToUsageDtosFile) throws IOException {
+        String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UdmUsage>>() {
+        });
+    }
+
+    public List<UdmValueDto> loadExpectedUdmValueDto(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UdmValueDto>>() {
+        });
+    }
+
+    public List<UdmValueBaselineDto> loadExpectedValueBaselineDto(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UdmValueBaselineDto>>() {
+        });
+    }
+
+    public List<UsageAuditItem> loadExpectedUsageAuditItems(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UsageAuditItem>>() {
+        });
     }
 
     private void assertPaidUsages(List<PaidUsage> expectedUsages,

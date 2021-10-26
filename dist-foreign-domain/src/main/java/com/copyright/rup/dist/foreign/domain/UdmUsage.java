@@ -24,6 +24,7 @@ public class UdmUsage extends StoredEntity<String> {
     private String originalDetailId;
     private String batchId;
     private UsageStatusEnum status;
+    private String assignee;
     private Integer period;
     private LocalDate periodEndDate;
     private LocalDate usageDate;
@@ -55,6 +56,8 @@ public class UdmUsage extends StoredEntity<String> {
     private BigDecimal statisticalMultiplier;
     private BigDecimal annualizedCopies;
     private String comment;
+    private String valueId;
+    private boolean baselineFlag;
 
     public String getOriginalDetailId() {
         return originalDetailId;
@@ -78,6 +81,14 @@ public class UdmUsage extends StoredEntity<String> {
 
     public void setStatus(UsageStatusEnum status) {
         this.status = status;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
     }
 
     public Integer getPeriod() {
@@ -328,6 +339,22 @@ public class UdmUsage extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public String getValueId() {
+        return valueId;
+    }
+
+    public void setValueId(String valueId) {
+        this.valueId = valueId;
+    }
+
+    public boolean isBaselineFlag() {
+        return baselineFlag;
+    }
+
+    public void setBaselineFlag(boolean baselineFlag) {
+        this.baselineFlag = baselineFlag;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -342,6 +369,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(originalDetailId, udmUsage.originalDetailId)
             .append(batchId, udmUsage.batchId)
             .append(status, udmUsage.status)
+            .append(assignee, udmUsage.assignee)
             .append(period, udmUsage.period)
             .append(periodEndDate, udmUsage.periodEndDate)
             .append(usageDate, udmUsage.usageDate)
@@ -373,6 +401,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
             .append(annualizedCopies, udmUsage.annualizedCopies)
             .append(comment, udmUsage.comment)
+            .append(valueId, udmUsage.valueId)
+            .append(baselineFlag, udmUsage.baselineFlag)
             .isEquals();
     }
 
@@ -383,6 +413,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append(originalDetailId)
             .append(batchId)
             .append(status)
+            .append(assignee)
             .append(period)
             .append(periodEndDate)
             .append(usageDate)
@@ -414,6 +445,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append(statisticalMultiplier)
             .append(annualizedCopies)
             .append(comment)
+            .append(valueId)
+            .append(baselineFlag)
             .toHashCode();
     }
 
@@ -424,6 +457,7 @@ public class UdmUsage extends StoredEntity<String> {
             .append("originalDetailId", originalDetailId)
             .append("batchId", batchId)
             .append("status", status)
+            .append("assignee", assignee)
             .append("period", period)
             .append("periodEndDate", periodEndDate)
             .append("usageDate", usageDate)
@@ -456,6 +490,8 @@ public class UdmUsage extends StoredEntity<String> {
             .append("statisticalMultiplier", statisticalMultiplier)
             .append("annualizedCopies", annualizedCopies)
             .append("comment", comment)
+            .append("valueId", valueId)
+            .append("baselineFlag", baselineFlag)
             .toString();
     }
 }
