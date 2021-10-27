@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -61,7 +62,6 @@ import java.util.stream.Collectors;
 public class UdmEditValueWindow extends Window {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
-    private static final Range<Integer> DECIMAL_COMPARE_RANGE = Range.atLeast(0);
     private static final Range<Integer> DECIMAL_SCALE_RANGE = Range.closed(0, 10);
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
@@ -398,9 +398,8 @@ public class UdmEditValueWindow extends Window {
         binder.forField(priceField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isBlank(value) || DECIMAL_COMPARE_RANGE.contains(
-                NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+            .withValidator(value -> StringUtils.isBlank(value) || new AmountValidator(true).isValid(value.trim()),
+                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
@@ -499,9 +498,8 @@ public class UdmEditValueWindow extends Window {
         binder.forField(contentField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isBlank(value) ||
-                    NumberUtils.createBigDecimal(value.trim()).compareTo(BigDecimal.ZERO) > 0,
-                ForeignUi.getMessage("field.error.positive_number"))
+            .withValidator(value -> StringUtils.isBlank(value) || new AmountValidator(false).isValid(value.trim()),
+                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))

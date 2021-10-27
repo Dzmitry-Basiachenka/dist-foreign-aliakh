@@ -116,6 +116,12 @@ public class UdmEditValueWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number or zero and should not exceed 10 digits";
+    private static final String POSITIVE_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
+    private static final String SCALE_VALIDATION_MESSAGE =
+        "Field value should not exceed 10 digits after the decimal point";
     private static final String PRICE_FIELD = "priceField";
     private static final String CONTENT_FIELD = "contentField";
 
@@ -249,14 +255,11 @@ public class UdmEditValueWindowTest {
     public void testPriceFieldValidation() {
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
-        String numberValidationMessage = "Field value should contain numeric values only";
-        String nonNegativeValidationMessage = "Field value should be positive number or zero";
-        String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
         verifyTextFieldValidationMessage(priceField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(priceField, SPACES_STRING, numberValidationMessage, true);
-        verifyTextFieldValidationMessage(priceField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, true);
+        verifyTextFieldValidationMessage(priceField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(priceField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(priceField, "-1", nonNegativeValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, "-1", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
         verifyTextFieldValidationMessage(priceField, "0", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(priceField, "0.1", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(priceField, "0.12", StringUtils.EMPTY, true);
@@ -268,7 +271,19 @@ public class UdmEditValueWindowTest {
         verifyTextFieldValidationMessage(priceField, "0.12345678", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(priceField, "0.123456789", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(priceField, "0.1234567890", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(priceField, "0.12345678901", scaleValidationMessage, false);
+        verifyTextFieldValidationMessage(priceField, "0.12345678901", SCALE_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(priceField, "1.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "12.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "123.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "1234.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "12345.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "123456.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "1234567.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "12345678.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "123456789.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "1234567890.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(priceField, "12345678901.1234567890",
+            POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
     }
 
     @Test
@@ -397,15 +412,12 @@ public class UdmEditValueWindowTest {
     public void testContentFieldValidation() {
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
-        String numberValidationMessage = "Field value should contain numeric values only";
-        String positiveValidationMessage = "Field value should be positive number";
-        String scaleValidationMessage = "Field value should not exceed 10 digits after the decimal point";
         verifyTextFieldValidationMessage(contentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(contentField, SPACES_STRING, numberValidationMessage, true);
-        verifyTextFieldValidationMessage(contentField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, true);
+        verifyTextFieldValidationMessage(contentField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(contentField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(contentField, "-1", positiveValidationMessage, false);
-        verifyTextFieldValidationMessage(contentField, "0", positiveValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, "-1", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyTextFieldValidationMessage(contentField, "0", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
         verifyTextFieldValidationMessage(contentField, "0.1", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.12", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.123", StringUtils.EMPTY, true);
@@ -416,7 +428,19 @@ public class UdmEditValueWindowTest {
         verifyTextFieldValidationMessage(contentField, "0.12345678", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.123456789", StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(contentField, "0.1234567890", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(contentField, "0.12345678901", scaleValidationMessage, false);
+        verifyTextFieldValidationMessage(contentField, "0.12345678901", SCALE_VALIDATION_MESSAGE, false);
+        verifyTextFieldValidationMessage(contentField, "1.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "12.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "123.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "1234.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "12345.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "123456.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "1234567.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "12345678.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "123456789.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "1234567890.1234567890", StringUtils.EMPTY, true);
+        verifyTextFieldValidationMessage(contentField, "12345678901.1234567890",
+            POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
     }
 
     @Test
