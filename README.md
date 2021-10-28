@@ -1,3 +1,9 @@
+14.1.30
+-
+* B-67673 FDA: Value Edits: limit number of digits before decimal point in Price, Content fields
+* B-68823 Tech Debt: FDA: allow zero filter for Price and Price in USD filters on Values tab
+* B-68823 Tech Debt: FDA: apply required validator for all product families
+
 14.1.29
 -
 * CDP-1021 FDA: ACL: Edit Value: Exception occurs when user edits newly populated value and then selects it
