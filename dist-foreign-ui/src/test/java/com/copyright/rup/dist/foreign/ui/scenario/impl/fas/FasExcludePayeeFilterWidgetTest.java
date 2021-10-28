@@ -94,6 +94,7 @@ public class FasExcludePayeeFilterWidgetTest {
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, " 0 ", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "0", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, StringUtils.EMPTY, null, false);
+        setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "   ", null, false);
         verify(controller);
     }
 
