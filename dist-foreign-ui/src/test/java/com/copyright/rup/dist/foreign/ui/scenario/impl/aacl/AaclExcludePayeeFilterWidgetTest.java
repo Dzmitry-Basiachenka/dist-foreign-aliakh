@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -27,7 +29,9 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AaclExcludePayeeFilterWidget}.
@@ -72,6 +76,30 @@ public class AaclExcludePayeeFilterWidgetTest {
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, " 0 ", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, "0", filterValue, false);
         setThresholdAndValidateFilterAndApplyButton(threshold, applyButton, filter, StringUtils.EMPTY, null, false);
+    }
+
+    @Test
+    public void testMinimumNetThresholdFieldValidation() {
+        widget.init();
+        Binder binder = Whitebox.getInternalState(widget, "binder");
+        TextField minimumNetThreshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
+        String positiveNumberErrorMessage = "Field value should be positive number and should not exceed 10 digits";
+        verifyField(minimumNetThreshold, StringUtils.EMPTY, binder, null, true);
+         verifyField(minimumNetThreshold, "   ", binder, null, true);
+        verifyField(minimumNetThreshold, "  99  ", binder, null, true);
+        verifyField(minimumNetThreshold, "  0.005  ", binder, null, true);
+        verifyField(minimumNetThreshold, "  1.00  ", binder, null, true);
+        verifyField(minimumNetThreshold, "  9999999999.99  ", binder, null, true);
+        verifyField(minimumNetThreshold, "123a4567", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "0", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "0.00", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, ".01", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "0.004", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "01.01", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "1.01.", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "1,01", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "-1", binder, positiveNumberErrorMessage, false);
+        verifyField(minimumNetThreshold, "  99999999999.99  ", binder, positiveNumberErrorMessage, false);
     }
 
     private void setThresholdAndValidateFilterAndApplyButton(TextField minimumNetThreshold, Button applyButton,
@@ -125,5 +153,16 @@ public class AaclExcludePayeeFilterWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(1, listeners.size());
         assertNotNull(listeners.iterator().next());
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        if (isValid) {
+            assertEquals(0, errorMessages.size());
+        }
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

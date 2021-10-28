@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.common.ScenarioFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterWidget;
@@ -128,8 +128,7 @@ public class FasExcludePayeeFilterWidget extends VerticalLayout implements IFasE
     private void initMinimumNetThresholdFilter() {
         minimumNetThreshold = new TextField(ForeignUi.getMessage("label.minimum_net_threshold"));
         binder.forField(minimumNetThreshold)
-            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
+            .withValidator(new AmountZeroValidator())
             .bind(source -> source, (beanValue, fieldValue) -> beanValue = fieldValue);
         minimumNetThreshold.addValueChangeListener(event -> {
             if (!binder.validate().hasErrors()) {
