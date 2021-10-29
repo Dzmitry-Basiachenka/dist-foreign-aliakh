@@ -4,12 +4,12 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
@@ -277,8 +277,7 @@ public class UsageBatchUploadWindow extends Window {
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
             .withValidator(requiredValidator)
-            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
+            .withValidator(new AmountZeroValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
