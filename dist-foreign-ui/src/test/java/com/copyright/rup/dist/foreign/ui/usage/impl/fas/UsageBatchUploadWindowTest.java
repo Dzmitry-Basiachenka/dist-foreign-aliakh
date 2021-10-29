@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -29,7 +30,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue.ValueChangeEvent;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -53,6 +53,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -149,11 +150,14 @@ public class UsageBatchUploadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "binder");
         validateField(grossAmountField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
         validateField(grossAmountField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(grossAmountField, "123.5684", binder, true, StringUtils.EMPTY);
+        validateField(grossAmountField, "0", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
         validateField(grossAmountField, "0.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
+        validateField(grossAmountField, "0.004", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
         validateField(grossAmountField, "value", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
         validateField(grossAmountField, "10000000000.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "9999999999.99", binder, true, StringUtils.EMPTY);
+        validateField(grossAmountField, "0.005", binder, true, null);
+        validateField(grossAmountField, "123.5684", binder, true, null);
+        validateField(grossAmountField, "9999999999.99", binder, true, null);
         verify(usagesController);
     }
 
@@ -169,8 +173,8 @@ public class UsageBatchUploadWindowTest {
         validateField(accountNumberField, "9999999999.99", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
         validateField(accountNumberField, "0.00", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
         validateField(accountNumberField, "value", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
-        validateField(accountNumberField, "0", binder, true, StringUtils.EMPTY);
-        validateField(accountNumberField, "1000001863", binder, true, StringUtils.EMPTY);
+        validateField(accountNumberField, "0", binder, true, null);
+        validateField(accountNumberField, "1000001863", binder, true, null);
         verify(usagesController);
     }
 
@@ -189,7 +193,7 @@ public class UsageBatchUploadWindowTest {
             "Field value should not exceed 50 characters");
         validateField(usageBatchNameField, existingBatchName, binder, false,
             "Usage Batch with such name already exists");
-        validateField(usageBatchNameField, USAGE_BATCH_NAME, binder, true, StringUtils.EMPTY);
+        validateField(usageBatchNameField, USAGE_BATCH_NAME, binder, true, null);
         verify(usagesController);
     }
 
@@ -381,12 +385,22 @@ public class UsageBatchUploadWindowTest {
         verifyGrossAmountComponent(horizontalLayout.getComponent(0));
     }
 
+    @SuppressWarnings("unchecked")
     private void validateField(TextField field, String value, Binder binder, boolean isValid, String errorMessage) {
         field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(errorMessage));
+        binder.validate();
+        List<TextField> fields = (List<TextField>) binder.getFields()
+            .filter(actualField -> actualField.equals(field))
+            .collect(Collectors.toList());
+        assertEquals(1 , fields.size());
+        TextField actualField = fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(errorMessage, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private TextField verifyTextField(Component component, String caption) {
