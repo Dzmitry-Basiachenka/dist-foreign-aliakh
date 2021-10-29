@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of {@link IUdmBaselineRepository}.
@@ -30,6 +32,7 @@ import java.util.Set;
 @Repository
 public class UdmBaselineRepository extends BaseRepository implements IUdmBaselineRepository {
 
+    private static final int PARTITION_SIZE_FOR_POPULATING = 16000; // Max count of allowed parameters for 2 variables
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -69,10 +72,15 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
 
     @Override
     public int populateValueId(Integer period, Map<Long, String> wrWrkInstToValueIdMap, String userName) {
+        AtomicInteger populatedValuesCount = new AtomicInteger(0);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("period", Objects.requireNonNull(period));
-        parameters.put("wrWrkInstToValueIdMap", Objects.requireNonNull(wrWrkInstToValueIdMap));
         parameters.put("updateUser", Objects.requireNonNull(userName));
-        return selectOne("IUdmBaselineMapper.populateValueId", parameters);
+        Iterables.partition(Objects.requireNonNull(wrWrkInstToValueIdMap).entrySet(), PARTITION_SIZE_FOR_POPULATING)
+            .forEach(partition -> {
+                parameters.put("wrWrkInstToValueIdMap", partition);
+                populatedValuesCount.addAndGet(selectOne("IUdmBaselineMapper.populateValueId", parameters));
+            });
+        return populatedValuesCount.get();
     }
 }
