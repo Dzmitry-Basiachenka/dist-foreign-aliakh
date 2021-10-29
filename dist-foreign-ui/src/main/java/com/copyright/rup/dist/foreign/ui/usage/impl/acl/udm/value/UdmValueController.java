@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -31,7 +32,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -134,12 +134,12 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     }
 
     @Override
-    public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
-        return valueService.getCurrencyCodesToCurrencyNamesMap();
+    public List<Currency> getAllCurrencies() {
+        return valueService.getAllCurrencies();
     }
 
     @Override
-    public List<PublicationType> getPublicationTypes() {
+    public List<PublicationType> getAllPublicationTypes() {
         return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 

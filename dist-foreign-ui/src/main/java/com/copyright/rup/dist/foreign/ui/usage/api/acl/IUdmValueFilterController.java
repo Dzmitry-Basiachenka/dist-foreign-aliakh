@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface for controller for UDM value filtering.
@@ -44,9 +44,9 @@ public interface IUdmValueFilterController extends IFilterController<IUdmValueFi
     List<PublicationType> getPublicationTypes();
 
     /**
-     * Gets map of currency codes to currency names.
+     * Gets list of all currencies.
      *
-     * @return map of currency codes to currency names
+     * @return list of {@link Currency}
      */
-    Map<String, String> getCurrencyCodesToCurrencyNamesMap();
+    List<Currency> getAllCurrencies();
 }

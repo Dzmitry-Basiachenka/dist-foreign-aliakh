@@ -22,7 +22,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmValueFilterWidget}.
@@ -132,11 +131,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     private void initCurrencyFilter() {
         currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
-        currencyComboBox.setItems(controller.getCurrencyCodesToCurrencyNamesMap()
-            .entrySet()
-            .stream()
-            .map(currency -> new Currency(currency.getKey(), currency.getValue()))
-            .collect(Collectors.toList()));
+        currencyComboBox.setItems(controller.getAllCurrencies());
         currencyComboBox.setItemCaptionGenerator(
             value -> String.format("%s - %s", value.getCode(), value.getDescription()));
         currencyComboBox.addValueChangeListener(event -> {

@@ -2,9 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +12,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link UdmValueService}.
@@ -30,31 +30,29 @@ import java.util.Map;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class UdmValueServiceIntegrationTest {
 
-    private static final Map<String, String> CURRENCY_CODES_TO_CURRENCY_NAMES_MAP =
-        ImmutableMap.<String, String>builder()
-            .put("USD", "US Dollar")
-            .put("AUD", "Australian Dollar")
-            .put("CAD", "Canadian Dollar")
-            .put("EUR", "Euro")
-            .put("GBP", "Pound Sterling")
-            .put("JPY", "Yen")
-            .put("BRL", "Brazilian Real")
-            .put("CNY", "Yuan Renminbi")
-            .put("CZK", "Czech Koruna")
-            .put("DKK", "Danish Krone")
-            .put("NZD", "New Zealand Dollar")
-            .put("NOK", "Norwegian Kron")
-            .put("ZAR", "Rand")
-            .put("CHF", "Swiss Franc")
-            .put("INR", "Indian Rupee")
-            .build();
+    private static final List<Currency> CURRENCIES = Arrays.asList(
+        new Currency("USD", "US Dollar"),
+        new Currency("AUD", "Australian Dollar"),
+        new Currency("CAD", "Canadian Dollar"),
+        new Currency("EUR", "Euro"),
+        new Currency("GBP", "Pound Sterling"),
+        new Currency("JPY", "Yen"),
+        new Currency("BRL", "Brazilian Real"),
+        new Currency("CNY", "Yuan Renminbi"),
+        new Currency("CZK", "Czech Koruna"),
+        new Currency("DKK", "Danish Krone"),
+        new Currency("NZD", "New Zealand Dollar"),
+        new Currency("NOK", "Norwegian Kron"),
+        new Currency("ZAR", "Rand"),
+        new Currency("CHF", "Swiss Franc"),
+        new Currency("INR", "Indian Rupee"));
 
     @Autowired
     private IUdmValueService valueService;
 
     @Test
     public void testGetCurrencyCodesToCurrencyNames() {
-        assertEquals(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP, valueService.getCurrencyCodesToCurrencyNamesMap());
+        assertEquals(CURRENCIES, valueService.getAllCurrencies());
     }
 
     @Test

@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -31,8 +32,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +45,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -205,20 +203,20 @@ public class UdmValueControllerTest {
     }
 
     @Test
-    public void testGetCurrencyCodesToCurrencyNamesMap() {
-        Map<String, String> map = ImmutableMap.of("USD", "US Dollar");
-        expect(valueService.getCurrencyCodesToCurrencyNamesMap()).andReturn(map).once();
+    public void testGetAllCurrencies() {
+        List<Currency> currencies = Collections.singletonList(new Currency("USD", "US Dollar"));
+        expect(valueService.getAllCurrencies()).andReturn(currencies).once();
         replay(valueService);
-        assertEquals(map, controller.getCurrencyCodesToCurrencyNamesMap());
+        assertEquals(currencies, controller.getAllCurrencies());
         verify(valueService);
     }
 
     @Test
-    public void testGetPublicationTypes() {
+    public void testGetAllPublicationTypes() {
         List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
         expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeService);
-        assertEquals(pubTypes, controller.getPublicationTypes());
+        assertEquals(pubTypes, controller.getAllPublicationTypes());
         verify(publicationTypeService);
     }
 

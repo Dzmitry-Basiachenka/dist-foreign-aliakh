@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.common.validator;
 
-import com.vaadin.server.SerializablePredicate;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.validator.AbstractValidator;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -12,29 +15,24 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Aliaksandr Liakh
  */
-public final class YearValidator {
+public class YearValidator extends AbstractValidator<String> {
+
+    private static final int MIN_YEAR = 1950;
+    private static final int MAX_YEAR = 2099;
 
     /**
-     * Minimum year.
+     * Constructor.
      */
-    public static final int MIN_YEAR = 1950;
-
-    /**
-     * Maximum year.
-     */
-    public static final int MAX_YEAR = 2099;
-
-    private YearValidator() {
-        throw new AssertionError("Constructor shouldn't be called directly");
+    public YearValidator() {
+        super(ForeignUi.getMessage("field.error.number_not_in_range", MIN_YEAR, MAX_YEAR));
     }
 
-    /**
-     * Gets validator.
-     *
-     * @return instance of {@link SerializablePredicate}
-     */
-    public static SerializablePredicate<String> getValidator() {
-        return value -> Integer.parseInt(StringUtils.trim(value)) >= MIN_YEAR
-            && Integer.parseInt(StringUtils.trim(value)) <= MAX_YEAR;
+    @Override
+    public ValidationResult apply(String value, ValueContext context) {
+        return toResult(value, StringUtils.isBlank(value) || isValid(StringUtils.trimToEmpty(value)));
+    }
+
+    private boolean isValid(String value) {
+        return Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
     }
 }

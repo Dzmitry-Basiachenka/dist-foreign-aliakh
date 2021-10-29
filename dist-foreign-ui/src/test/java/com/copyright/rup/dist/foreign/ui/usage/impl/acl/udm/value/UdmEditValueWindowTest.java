@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
@@ -143,10 +142,8 @@ public class UdmEditValueWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IUdmValueController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            Collections.singletonList(buildPublicationType("Book", "1.00"))).once();
-        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(
-            ImmutableMap.of(CURRENCY.getCode(), CURRENCY.getDescription())).once();
+        expect(controller.getAllPublicationTypes()).andReturn(Collections.singletonList(PUBLICATION_TYPE)).once();
+        expect(controller.getAllCurrencies()).andReturn(Collections.singletonList(CURRENCY)).once();
         expect(controller.getAllPriceTypes()).andReturn(Collections.singletonList(PRICE_TYPE)).once();
         expect(controller.getAllPriceAccessTypes()).andReturn(Collections.singletonList(PRICE_ACCESS_TYPE)).once();
     }
@@ -188,67 +185,67 @@ public class UdmEditValueWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         VerticalLayout row1 = (VerticalLayout) horizontalLayout.getComponent(0);
         assertEquals(2, row1.getComponentCount());
-        Panel panel1 = (Panel) row1.getComponent(0);
-        VerticalLayout content1 = (VerticalLayout) panel1.getContent();
-        assertEquals(5, content1.getComponentCount());
-        assertTextFieldValue(content1.getComponent(0), SYSTEM_TITLE);
-        assertTextFieldValue(content1.getComponent(1), WR_WRK_INST.toString());
-        assertTextFieldValue(content1.getComponent(2), SYSTEM_STANDARD_NUMBER);
-        assertTextFieldValue(content1.getComponent(3), RH_NAME);
-        assertTextFieldValue(content1.getComponent(4), RH_ACCOUNT_NUMBER.toString());
-        Panel panel2 = (Panel) row1.getComponent(1);
-        VerticalLayout content2 = (VerticalLayout) panel2.getContent();
-        assertEquals(15, content2.getComponentCount());
-        assertTextFieldValue(content2.getComponent(0), PRICE.toString());
-        assertComboBoxFieldValue(content2.getComponent(1), CURRENCY);
-        assertTextFieldValue(content2.getComponent(2), CURRENCY_EXCHANGE_RATE.toString());
-        assertTextFieldValue(content2.getComponent(3), "12/31/2020");
-        assertTextFieldValue(content2.getComponent(4), PRICE_IN_USD.toString());
-        assertComboBoxFieldValue(content2.getComponent(5), PRICE_TYPE);
-        assertComboBoxFieldValue(content2.getComponent(6), PRICE_ACCESS_TYPE);
-        assertTextFieldValue(content2.getComponent(7), PRICE_YEAR.toString());
-        assertTextFieldValue(content2.getComponent(8), PRICE_SOURCE);
-        assertTextFieldValue(content2.getComponent(9), PRICE_COMMENT);
-        assertTextFieldValue(content2.getComponent(10), "Y");
-        assertTextFieldValue(content2.getComponent(11), LAST_PRICE_IN_USD.toString());
-        assertTextFieldValue(content2.getComponent(12), LAST_PRICE_SOURCE);
-        assertTextFieldValue(content2.getComponent(13), LAST_PRICE_COMMENT);
-        assertTextFieldValue(content2.getComponent(14), "N");
+        Panel workPanel = (Panel) row1.getComponent(0);
+        VerticalLayout workContent = (VerticalLayout) workPanel.getContent();
+        assertEquals(5, workContent.getComponentCount());
+        assertTextFieldValue(workContent.getComponent(0), SYSTEM_TITLE);
+        assertTextFieldValue(workContent.getComponent(1), WR_WRK_INST.toString());
+        assertTextFieldValue(workContent.getComponent(2), SYSTEM_STANDARD_NUMBER);
+        assertTextFieldValue(workContent.getComponent(3), RH_NAME);
+        assertTextFieldValue(workContent.getComponent(4), RH_ACCOUNT_NUMBER.toString());
+        Panel pricePanel = (Panel) row1.getComponent(1);
+        VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
+        assertEquals(15, priceContent.getComponentCount());
+        assertTextFieldValue(priceContent.getComponent(0), PRICE.toString());
+        assertComboBoxFieldValue(priceContent.getComponent(1), CURRENCY);
+        assertTextFieldValue(priceContent.getComponent(2), CURRENCY_EXCHANGE_RATE.toString());
+        assertTextFieldValue(priceContent.getComponent(3), "12/31/2020");
+        assertTextFieldValue(priceContent.getComponent(4), PRICE_IN_USD.toString());
+        assertComboBoxFieldValue(priceContent.getComponent(5), PRICE_TYPE);
+        assertComboBoxFieldValue(priceContent.getComponent(6), PRICE_ACCESS_TYPE);
+        assertTextFieldValue(priceContent.getComponent(7), PRICE_YEAR.toString());
+        assertTextFieldValue(priceContent.getComponent(8), PRICE_SOURCE);
+        assertTextFieldValue(priceContent.getComponent(9), PRICE_COMMENT);
+        assertTextFieldValue(priceContent.getComponent(10), "Y");
+        assertTextFieldValue(priceContent.getComponent(11), LAST_PRICE_IN_USD.toString());
+        assertTextFieldValue(priceContent.getComponent(12), LAST_PRICE_SOURCE);
+        assertTextFieldValue(priceContent.getComponent(13), LAST_PRICE_COMMENT);
+        assertTextFieldValue(priceContent.getComponent(14), "N");
         VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
         assertEquals(5, row2.getComponentCount());
-        Panel panel3 = (Panel) row2.getComponent(0);
-        VerticalLayout content3 = (VerticalLayout) panel3.getContent();
-        assertEquals(4, content3.getComponentCount());
-        assertTextFieldValue(content3.getComponent(0), VALUE_PERIOD.toString());
-        assertTextFieldValue(content3.getComponent(1), LAST_VALUE_PERIOD.toString());
-        assertTextFieldValue(content3.getComponent(2), ASSIGNEE);
-        assertComboBoxFieldValue(content3.getComponent(3), STATUS);
-        Panel panel4 = (Panel) row2.getComponent(1);
-        VerticalLayout content4 = (VerticalLayout) panel4.getContent();
-        assertEquals(2, content4.getComponentCount());
-        assertComboBoxFieldValue(content4.getComponent(0), PUBLICATION_TYPE);
-        assertTextFieldValue(content4.getComponent(1), LAST_PUB_TYPE);
-        Panel panel5 = (Panel) row2.getComponent(2);
-        VerticalLayout content5 = (VerticalLayout) panel5.getContent();
-        assertEquals(9, content5.getComponentCount());
-        assertTextFieldValue(content5.getComponent(0), "3.00");
-        assertTextFieldValue(content5.getComponent(1), CONTENT_SOURCE);
-        assertTextFieldValue(content5.getComponent(2), CONTENT_COMMENT);
-        assertTextFieldValue(content5.getComponent(3), "N");
-        assertTextFieldValue(content5.getComponent(4), LAST_CONTENT.toString());
-        assertTextFieldValue(content5.getComponent(5), LAST_CONTENT_SOURCE);
-        assertTextFieldValue(content5.getComponent(6), LAST_CONTENT_COMMENT);
-        assertTextFieldValue(content5.getComponent(7), "Y");
-        assertTextFieldValue(content5.getComponent(8), CONTENT_UNIT_PRICE.toString());
-        Panel panel6 = (Panel) row2.getComponent(3);
-        VerticalLayout content6 = (VerticalLayout) panel6.getContent();
-        assertEquals(1, content6.getComponentCount());
-        assertTextFieldValue(content6.getComponent(0), COMMENT);
-        Panel panel7 = (Panel) row2.getComponent(4);
-        VerticalLayout content7 = (VerticalLayout) panel7.getContent();
-        assertEquals(2, content7.getComponentCount());
-        assertTextFieldValue(content7.getComponent(0), USER_NAME);
-        assertTextFieldValue(content7.getComponent(1), "12/31/2020");
+        Panel generalPanel = (Panel) row2.getComponent(0);
+        VerticalLayout generalContent = (VerticalLayout) generalPanel.getContent();
+        assertEquals(4, generalContent.getComponentCount());
+        assertTextFieldValue(generalContent.getComponent(0), VALUE_PERIOD.toString());
+        assertTextFieldValue(generalContent.getComponent(1), LAST_VALUE_PERIOD.toString());
+        assertTextFieldValue(generalContent.getComponent(2), ASSIGNEE);
+        assertComboBoxFieldValue(generalContent.getComponent(3), STATUS);
+        Panel pubTypePanel = (Panel) row2.getComponent(1);
+        VerticalLayout pubTypeContent = (VerticalLayout) pubTypePanel.getContent();
+        assertEquals(2, pubTypeContent.getComponentCount());
+        assertComboBoxFieldValue(pubTypeContent.getComponent(0), PUBLICATION_TYPE);
+        assertTextFieldValue(pubTypeContent.getComponent(1), LAST_PUB_TYPE);
+        Panel contentPanel = (Panel) row2.getComponent(2);
+        VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
+        assertEquals(9, contentContent.getComponentCount());
+        assertTextFieldValue(contentContent.getComponent(0), "3.00");
+        assertTextFieldValue(contentContent.getComponent(1), CONTENT_SOURCE);
+        assertTextFieldValue(contentContent.getComponent(2), CONTENT_COMMENT);
+        assertTextFieldValue(contentContent.getComponent(3), "N");
+        assertTextFieldValue(contentContent.getComponent(4), LAST_CONTENT.toString());
+        assertTextFieldValue(contentContent.getComponent(5), LAST_CONTENT_SOURCE);
+        assertTextFieldValue(contentContent.getComponent(6), LAST_CONTENT_COMMENT);
+        assertTextFieldValue(contentContent.getComponent(7), "Y");
+        assertTextFieldValue(contentContent.getComponent(8), CONTENT_UNIT_PRICE.toString());
+        Panel commentPanel = (Panel) row2.getComponent(3);
+        VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
+        assertEquals(1, commentContent.getComponentCount());
+        assertTextFieldValue(commentContent.getComponent(0), COMMENT);
+        Panel updatePanel = (Panel) row2.getComponent(4);
+        VerticalLayout updateContent = (VerticalLayout) updatePanel.getContent();
+        assertEquals(2, updateContent.getComponentCount());
+        assertTextFieldValue(updateContent.getComponent(0), USER_NAME);
+        assertTextFieldValue(updateContent.getComponent(1), "12/31/2020");
     }
 
     @Test
@@ -361,6 +358,8 @@ public class UdmEditValueWindowTest {
         verifyTextFieldValidationMessage(priceYearField, " 1949 ", yearValidationMessage, false);
         verifyTextFieldValidationMessage(priceYearField, "1950", yearValidationMessage, true);
         verifyTextFieldValidationMessage(priceYearField, " 1950 ", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, "1999", yearValidationMessage, true);
+        verifyTextFieldValidationMessage(priceYearField, " 1999 ", yearValidationMessage, true);
         verifyTextFieldValidationMessage(priceYearField, "2099", yearValidationMessage, true);
         verifyTextFieldValidationMessage(priceYearField, " 2099 ", yearValidationMessage, true);
         verifyTextFieldValidationMessage(priceYearField, "2100", yearValidationMessage, false);
@@ -398,13 +397,13 @@ public class UdmEditValueWindowTest {
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
         priceField.setValue(VALID_DECIMAL);
-        window.recalculatePriceFlag();
+        window.recalculateFlag(priceField, priceFlagField);
         assertEquals("Y", priceFlagField.getValue());
         priceField.setValue(StringUtils.EMPTY);
-        window.recalculatePriceFlag();
+        window.recalculateFlag(priceField, priceFlagField);
         assertEquals("N", priceFlagField.getValue());
         priceField.setValue(INVALID_NUMBER);
-        window.recalculatePriceFlag();
+        window.recalculateFlag(priceField, priceFlagField);
         assertEquals(StringUtils.EMPTY, priceFlagField.getValue());
     }
 
@@ -472,13 +471,13 @@ public class UdmEditValueWindowTest {
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
         contentField.setValue(VALID_DECIMAL);
-        window.recalculateContentFlag();
+        window.recalculateFlag(contentField, contentFlagField);
         assertEquals("Y", contentFlagField.getValue());
         contentField.setValue(StringUtils.EMPTY);
-        window.recalculateContentFlag();
+        window.recalculateFlag(contentField, contentFlagField);
         assertEquals("N", contentFlagField.getValue());
         contentField.setValue(INVALID_NUMBER);
-        window.recalculateContentFlag();
+        window.recalculateFlag(contentField, contentFlagField);
         assertEquals(StringUtils.EMPTY, contentFlagField.getValue());
     }
 
@@ -560,82 +559,82 @@ public class UdmEditValueWindowTest {
 
     private void verifyRow1(HorizontalLayout horizontalLayout) {
         VerticalLayout row1 = (VerticalLayout) horizontalLayout.getComponent(0);
-        Panel panel1 = (Panel) row1.getComponent(0);
-        assertEquals("Work Information", panel1.getCaption());
-        VerticalLayout content1 = (VerticalLayout) panel1.getContent();
-        assertEquals(5, content1.getComponentCount());
-        verifyTextFieldLayout(content1.getComponent(0), "System Title", true, false);
-        verifyTextFieldLayout(content1.getComponent(1), "Wr Wrk Inst", true, false);
-        verifyTextFieldLayout(content1.getComponent(2), "System Standard Number", true, false);
-        verifyTextFieldLayout(content1.getComponent(3), "RH Name", true, false);
-        verifyTextFieldLayout(content1.getComponent(4), "RH Account #", true, false);
-        Panel panel2 = (Panel) row1.getComponent(1);
-        assertEquals("Price", panel2.getCaption());
-        VerticalLayout content2 = (VerticalLayout) panel2.getContent();
-        assertEquals(15, content2.getComponentCount());
-        verifyTextFieldLayout(content2.getComponent(0), "Price", false, true);
-        verifyComboBoxLayout(content2.getComponent(1), "Currency", true, Collections.singletonList(CURRENCY));
-        verifyTextFieldLayout(content2.getComponent(2), "Currency Exchange Rate", true, false);
-        verifyTextFieldLayout(content2.getComponent(3), "Currency Exchange Rate Date", true, false);
-        verifyTextFieldLayout(content2.getComponent(4), "Price in USD", true, false);
-        verifyComboBoxLayout(content2.getComponent(5), "Price Type", true, Collections.singletonList(PRICE_TYPE));
-        verifyComboBoxLayout(content2.getComponent(6), "Price Access Type", true,
+        Panel workPanel = (Panel) row1.getComponent(0);
+        assertEquals("Work Information", workPanel.getCaption());
+        VerticalLayout workContent = (VerticalLayout) workPanel.getContent();
+        assertEquals(5, workContent.getComponentCount());
+        verifyTextFieldLayout(workContent.getComponent(0), "System Title", true, false);
+        verifyTextFieldLayout(workContent.getComponent(1), "Wr Wrk Inst", true, false);
+        verifyTextFieldLayout(workContent.getComponent(2), "System Standard Number", true, false);
+        verifyTextFieldLayout(workContent.getComponent(3), "RH Name", true, false);
+        verifyTextFieldLayout(workContent.getComponent(4), "RH Account #", true, false);
+        Panel pricePanel = (Panel) row1.getComponent(1);
+        assertEquals("Price", pricePanel.getCaption());
+        VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
+        assertEquals(15, priceContent.getComponentCount());
+        verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true);
+        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, Collections.singletonList(CURRENCY));
+        verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(4), "Price in USD", true, false);
+        verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, Collections.singletonList(PRICE_TYPE));
+        verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true,
             Collections.singletonList(PRICE_ACCESS_TYPE));
-        verifyTextFieldLayout(content2.getComponent(7), "Price Year", false, true);
-        verifyTextFieldLayout(content2.getComponent(8), "Price Source", false, true);
-        verifyTextFieldLayout(content2.getComponent(9), "Price Comment", false, true);
-        verifyTextFieldLayout(content2.getComponent(10), "Price Flag", true, false);
-        verifyTextFieldLayout(content2.getComponent(11), "Last Price in USD", true, false);
-        verifyTextFieldLayout(content2.getComponent(12), "Last Price Source", true, false);
-        verifyTextFieldLayout(content2.getComponent(13), "Last Price Comment", true, false);
-        verifyTextFieldLayout(content2.getComponent(14), "Last Price Flag", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(7), "Price Year", false, true);
+        verifyTextFieldLayout(priceContent.getComponent(8), "Price Source", false, true);
+        verifyTextFieldLayout(priceContent.getComponent(9), "Price Comment", false, true);
+        verifyTextFieldLayout(priceContent.getComponent(10), "Price Flag", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(11), "Last Price in USD", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(12), "Last Price Source", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(13), "Last Price Comment", true, false);
+        verifyTextFieldLayout(priceContent.getComponent(14), "Last Price Flag", true, false);
     }
 
     private void verifyRow2(HorizontalLayout horizontalLayout) {
         VerticalLayout row2 = (VerticalLayout) horizontalLayout.getComponent(1);
         assertEquals(5, row2.getComponentCount());
-        Panel panel3 = (Panel) row2.getComponent(0);
-        assertEquals("General", panel3.getCaption());
-        VerticalLayout content3 = (VerticalLayout) panel3.getContent();
-        assertEquals(4, content3.getComponentCount());
-        verifyTextFieldLayout(content3.getComponent(0), "Value Period", true, false);
-        verifyTextFieldLayout(content3.getComponent(1), "Last Value Period", true, false);
-        verifyTextFieldLayout(content3.getComponent(2), "Assignee", true, false);
-        verifyComboBoxLayout(content3.getComponent(3), "Value Status", true,
+        Panel generalPanel = (Panel) row2.getComponent(0);
+        assertEquals("General", generalPanel.getCaption());
+        VerticalLayout generalContent = (VerticalLayout) generalPanel.getContent();
+        assertEquals(4, generalContent.getComponentCount());
+        verifyTextFieldLayout(generalContent.getComponent(0), "Value Period", true, false);
+        verifyTextFieldLayout(generalContent.getComponent(1), "Last Value Period", true, false);
+        verifyTextFieldLayout(generalContent.getComponent(2), "Assignee", true, false);
+        verifyComboBoxLayout(generalContent.getComponent(3), "Value Status", true,
             Arrays.asList(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
                 UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE, UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
                 UdmValueStatusEnum.RESEARCH_COMPLETE));
-        Panel panel4 = (Panel) row2.getComponent(1);
-        assertEquals("Publication Type", panel4.getCaption());
-        VerticalLayout content4 = (VerticalLayout) panel4.getContent();
-        assertEquals(2, content4.getComponentCount());
-        verifyComboBoxLayout(content4.getComponent(0), "Pub Type", true,
-            Collections.singletonList(buildPublicationType("Book", "1.00")));
-        verifyTextFieldLayout(content4.getComponent(1), "Last Pub Type", true, false);
-        Panel panel5 = (Panel) row2.getComponent(2);
-        assertEquals("Content", panel5.getCaption());
-        VerticalLayout content5 = (VerticalLayout) panel5.getContent();
-        assertEquals(9, content5.getComponentCount());
-        verifyTextFieldLayout(content5.getComponent(0), "Content", false, true);
-        verifyTextFieldLayout(content5.getComponent(1), "Content Source", false, true);
-        verifyTextFieldLayout(content5.getComponent(2), "Content Comment", false, true);
-        verifyTextFieldLayout(content5.getComponent(3), "Content Flag", true, false);
-        verifyTextFieldLayout(content5.getComponent(4), "Last Content", true, false);
-        verifyTextFieldLayout(content5.getComponent(5), "Last Content Source", true, false);
-        verifyTextFieldLayout(content5.getComponent(6), "Last Content Comment", true, false);
-        verifyTextFieldLayout(content5.getComponent(7), "Last Content Flag", true, false);
-        verifyTextFieldLayout(content5.getComponent(8), "Content Unit Price", true, false);
-        Panel panel6 = (Panel) row2.getComponent(3);
-        assertEquals("Comment", panel6.getCaption());
-        VerticalLayout content6 = (VerticalLayout) panel6.getContent();
-        assertEquals(1, content6.getComponentCount());
-        verifyTextFieldLayout(content6.getComponent(0), "Comment", false, true);
-        Panel panel7 = (Panel) row2.getComponent(4);
-        assertNull(panel7.getCaption());
-        VerticalLayout content7 = (VerticalLayout) panel7.getContent();
-        assertEquals(2, content7.getComponentCount());
-        verifyTextFieldLayout(content7.getComponent(0), "Updated By", true, false);
-        verifyTextFieldLayout(content7.getComponent(1), "Updated Date", true, false);
+        Panel pubTypePanel = (Panel) row2.getComponent(1);
+        assertEquals("Publication Type", pubTypePanel.getCaption());
+        VerticalLayout pubTypeContent = (VerticalLayout) pubTypePanel.getContent();
+        assertEquals(2, pubTypeContent.getComponentCount());
+        verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true,
+            Collections.singletonList(PUBLICATION_TYPE));
+        verifyTextFieldLayout(pubTypeContent.getComponent(1), "Last Pub Type", true, false);
+        Panel contentPanel = (Panel) row2.getComponent(2);
+        assertEquals("Content", contentPanel.getCaption());
+        VerticalLayout contentContent = (VerticalLayout) contentPanel.getContent();
+        assertEquals(9, contentContent.getComponentCount());
+        verifyTextFieldLayout(contentContent.getComponent(0), "Content", false, true);
+        verifyTextFieldLayout(contentContent.getComponent(1), "Content Source", false, true);
+        verifyTextFieldLayout(contentContent.getComponent(2), "Content Comment", false, true);
+        verifyTextFieldLayout(contentContent.getComponent(3), "Content Flag", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(4), "Last Content", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(5), "Last Content Source", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(6), "Last Content Comment", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(7), "Last Content Flag", true, false);
+        verifyTextFieldLayout(contentContent.getComponent(8), "Content Unit Price", true, false);
+        Panel commentPanel = (Panel) row2.getComponent(3);
+        assertEquals("Comment", commentPanel.getCaption());
+        VerticalLayout commentContent = (VerticalLayout) commentPanel.getContent();
+        assertEquals(1, commentContent.getComponentCount());
+        verifyTextFieldLayout(commentContent.getComponent(0), "Comment", false, true);
+        Panel updatePanel = (Panel) row2.getComponent(4);
+        assertNull(updatePanel.getCaption());
+        VerticalLayout updateContent = (VerticalLayout) updatePanel.getContent();
+        assertEquals(2, updateContent.getComponentCount());
+        verifyTextFieldLayout(updateContent.getComponent(0), "Updated By", true, false);
+        verifyTextFieldLayout(updateContent.getComponent(1), "Updated Date", true, false);
     }
 
     private void verifyTextFieldLayout(Component component, String caption, boolean isReadOnly, boolean isValidated) {
@@ -797,12 +796,5 @@ public class UdmEditValueWindowTest {
 
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
-    }
-
-    private PublicationType buildPublicationType(String name, String weight) {
-        PublicationType publicationType = new PublicationType();
-        publicationType.setName(name);
-        publicationType.setWeight(new BigDecimal(weight));
-        return publicationType;
     }
 }

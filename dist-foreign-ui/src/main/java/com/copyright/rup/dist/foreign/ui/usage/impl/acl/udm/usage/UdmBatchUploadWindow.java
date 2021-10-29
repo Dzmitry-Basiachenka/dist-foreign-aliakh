@@ -158,8 +158,7 @@ public class UdmBatchUploadWindow extends Window {
             .withValidator(new RequiredValidator())
             .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
-            .withValidator(YearValidator.getValidator(), ForeignUi.getMessage("field.error.number_not_in_range",
-                YearValidator.MIN_YEAR, YearValidator.MAX_YEAR))
+            .withValidator(new YearValidator())
             .bind(s -> s, (s, v) -> s = v).validate();
         VaadinUtils.addComponentStyle(periodYearField, "period-year-field");
         return periodYearField;

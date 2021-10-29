@@ -5,6 +5,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,12 @@ public class UdmValueService implements IUdmValueService {
     }
 
     @Override
-    public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
-        return currencyCodesToCurrencyNamesMap;
+    public List<Currency> getAllCurrencies() {
+        return ImmutableList.copyOf(currencyCodesToCurrencyNamesMap
+            .entrySet()
+            .stream()
+            .map(entry -> new Currency(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList()));
     }
 
     @Override

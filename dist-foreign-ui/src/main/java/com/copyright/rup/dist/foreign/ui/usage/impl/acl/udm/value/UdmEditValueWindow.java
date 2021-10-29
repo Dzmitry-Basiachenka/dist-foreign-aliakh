@@ -46,9 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Window to edit UDM value.
@@ -151,24 +149,18 @@ public class UdmEditValueWindow extends Window {
     }
 
     /**
-     * Recalculates price flag: sets it to "Y" if price is set or to "N" otherwise.
+     * Recalculates the flag field: clears it if the value field is not valid,
+     * sets it to "Y" if the value field is valid and not blank,
+     * sets it to "N" if the value field is valid and blank.
+     *
+     * @param valueField the value field
+     * @param flagField  the flag field
      */
-    void recalculatePriceFlag() {
-        if (Objects.isNull(priceField.getErrorMessage())) {
-            priceFlagField.setValue(StringUtils.isNotBlank(priceField.getValue()) ? "Y" : "N");
+    void recalculateFlag(TextField valueField, TextField flagField) {
+        if (Objects.isNull(valueField.getErrorMessage())) {
+            flagField.setValue(StringUtils.isNotBlank(valueField.getValue()) ? "Y" : "N");
         } else {
-            priceFlagField.clear();
-        }
-    }
-
-    /**
-     * Recalculates content flag: sets it to "Y" if content is set or to "N" otherwise.
-     */
-    void recalculateContentFlag() {
-        if (Objects.isNull(contentField.getErrorMessage())) {
-            contentFlagField.setValue(StringUtils.isNotBlank(contentField.getValue()) ? "Y" : "N");
-        } else {
-            contentFlagField.clear();
+            flagField.clear();
         }
     }
 
@@ -380,8 +372,8 @@ public class UdmEditValueWindow extends Window {
 
     private HorizontalLayout buildPubTypeLayout() {
         pubTypeComboBox.setSizeFull();
-        List<PublicationType> publicationTypes = controller.getPublicationTypes();
-        pubTypeComboBox.setItems(publicationTypes);
+        List<PublicationType> pubTypes = controller.getAllPublicationTypes();
+        pubTypeComboBox.setItems(pubTypes);
         pubTypeComboBox.setPageLength(12);
         pubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
             ? String.format("%s - %s", value.getName(), value.getDescription())
@@ -409,7 +401,7 @@ public class UdmEditValueWindow extends Window {
         priceField.addValueChangeListener(event -> {
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
-                recalculatePriceFlag();
+                recalculateFlag(priceField, priceFlagField);
             }
         });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
@@ -418,18 +410,16 @@ public class UdmEditValueWindow extends Window {
 
     private HorizontalLayout buildCurrencyLayout() {
         currencyComboBox.setSizeFull();
-        Map<String, String> currencyCodesToCurrencyNamesMap = controller.getCurrencyCodesToCurrencyNamesMap();
-        currencyComboBox.setItems(currencyCodesToCurrencyNamesMap
-            .entrySet()
-            .stream()
-            .map(entry -> new Currency(entry.getKey(), entry.getValue()))
-            .collect(Collectors.toList()));
+        List<Currency> currencies = controller.getAllCurrencies();
+        currencyComboBox.setItems(currencies);
         currencyComboBox.setItemCaptionGenerator(currency -> Objects.nonNull(currency)
             ? String.format("%s - %s", currency.getCode(), currency.getDescription())
             : StringUtils.EMPTY);
-        currencyComboBox.setSelectedItem(Objects.nonNull(udmValue.getCurrency())
-            ? new Currency(udmValue.getCurrency(), currencyCodesToCurrencyNamesMap.get(udmValue.getCurrency()))
-            : null);
+        currencyComboBox.setSelectedItem(currencies
+            .stream()
+            .filter(currency -> currency.getCode().equals(udmValue.getCurrency()))
+            .findFirst()
+            .orElse(null));
         currencyComboBox.addValueChangeListener(event -> {
             binder.validate();
             if (event.isUserOriginated()) {
@@ -439,9 +429,11 @@ public class UdmEditValueWindow extends Window {
         binder.forField(currencyComboBox)
             .withValidator(value -> Objects.nonNull(value) || StringUtils.isBlank(priceField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
-            .bind(bean -> Objects.nonNull(bean.getCurrency())
-                    ? new Currency(bean.getCurrency(), currencyCodesToCurrencyNamesMap.get(bean.getCurrency()))
-                    : null,
+            .bind(bean -> currencies
+                    .stream()
+                    .filter(currency -> currency.getCode().equals(bean.getCurrency()))
+                    .findFirst()
+                    .orElse(null),
                 (bean, value) -> bean.setCurrency(Objects.nonNull(value) ? value.getCode() : null));
         VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-edit-currency-combo-box");
         return buildCommonLayout(currencyComboBox, ForeignUi.getMessage("label.currency"));
@@ -472,9 +464,7 @@ public class UdmEditValueWindow extends Window {
         binder.forField(priceYearField)
             .withValidator(value -> StringUtils.isBlank(value) || StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
-            .withValidator(value -> StringUtils.isBlank(value) || YearValidator.getValidator().test(value),
-                ForeignUi.getMessage("field.error.number_not_in_range",
-                    YearValidator.MIN_YEAR, YearValidator.MAX_YEAR))
+            .withValidator(new YearValidator())
             .bind(bean -> Objects.toString(bean.getPriceYear(), StringUtils.EMPTY),
                 (bean, value) -> bean.setPriceYear(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(priceYearField, "udm-value-edit-price-year-field");
@@ -509,7 +499,7 @@ public class UdmEditValueWindow extends Window {
         contentField.addValueChangeListener(event -> {
             if (event.isUserOriginated()) {
                 recalculateContentUnitPrice();
-                recalculateContentFlag();
+                recalculateFlag(contentField, contentFlagField);
             }
         });
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");

@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,11 +28,11 @@ public interface IUdmValueService {
     void updateValue(UdmValueDto udmValueDto);
 
     /**
-     * Gets map of currency codes to currency names.
+     * Gets list of all currencies.
      *
-     * @return map of currency codes to currency names
+     * @return list of {@link Currency}
      */
-    Map<String, String> getCurrencyCodesToCurrencyNamesMap();
+    List<Currency> getAllCurrencies();
 
     /**
      * Gets all available periods for value.

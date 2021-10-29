@@ -146,8 +146,11 @@ public class UdmBatchUploadWindowTest {
         verifyField(periodYearField, "1949", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodYearField, "2100", binder, "Field value should be in range from 1950 to 2099", false);
         verifyField(periodYearField, "1950", binder, StringUtils.EMPTY, true);
+        verifyField(periodYearField, " 1950 ", binder, StringUtils.EMPTY, true);
         verifyField(periodYearField, "1999", binder, StringUtils.EMPTY, true);
+        verifyField(periodYearField, " 1999 ", binder, StringUtils.EMPTY, true);
         verifyField(periodYearField, "2099", binder, StringUtils.EMPTY, true);
+        verifyField(periodYearField, " 2099 ", binder, StringUtils.EMPTY, true);
         verify(controller);
     }
 
