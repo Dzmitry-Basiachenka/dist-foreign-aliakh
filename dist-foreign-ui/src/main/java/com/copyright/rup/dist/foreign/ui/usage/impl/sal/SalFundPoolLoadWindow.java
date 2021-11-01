@@ -1,8 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
@@ -27,6 +28,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -188,8 +190,7 @@ class SalFundPoolLoadWindow extends Window {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount"));
         binder.forField(grossAmountField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
+            .withValidator(new AmountZeroValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .bind(fundPool -> fundPool.getSalFields().getGrossAmount(),
                 (fundPool, amount) -> fundPool.getSalFields().setGrossAmount(amount));
@@ -220,8 +221,7 @@ class SalFundPoolLoadWindow extends Window {
         gradeKto5NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_k_5_number_of_students"));
         gradeKto5NumberOfStudentsBinding = binder.forField(gradeKto5NumberOfStudents)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
@@ -241,8 +241,7 @@ class SalFundPoolLoadWindow extends Window {
         grade6to8NumberOfStudents = new TextField(ForeignUi.getMessage("label.fund_pool.grade_6_8_number_of_students"));
         grade6to8NumberOfStudentsBinding = binder.forField(grade6to8NumberOfStudents)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
@@ -263,8 +262,7 @@ class SalFundPoolLoadWindow extends Window {
             new TextField(ForeignUi.getMessage("label.fund_pool.grade_9_12_number_of_students"));
         grade9to12NumberOfStudentsBinding = binder.forField(grade9to12NumberOfStudents)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToIntegerConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .withValidator(gradeNumberOfStudentsAllZeroValidator(),
                 ForeignUi.getMessage("field.error.number_of_students_zero"))
