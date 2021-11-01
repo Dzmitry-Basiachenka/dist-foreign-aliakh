@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -62,6 +63,8 @@ public class UdmValueServiceTest {
         udmBaselineRepository = createMock(IUdmBaselineRepository.class);
         rightsService = createMock(IRightsService.class);
         udmValueService = new UdmValueService();
+        Whitebox.setInternalState(udmValueService, "currencyCodesToCurrencyNamesMap",
+            ImmutableMap.of("USD", "US Dollar", "EUR", "Euro"));
         Whitebox.setInternalState(udmValueService, udmValueRepository);
         Whitebox.setInternalState(udmValueService, udmBaselineRepository);
         Whitebox.setInternalState(udmValueService, rightsService);
@@ -78,6 +81,12 @@ public class UdmValueServiceTest {
         udmValueService.updateValue(udmValueDto);
         assertEquals(USER_NAME, udmValueDto.getUpdateUser());
         verify(udmValueRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testGetAllCurrencies() {
+        assertEquals(Arrays.asList(new Currency("USD", "US Dollar"), new Currency("EUR", "Euro")),
+            udmValueService.getAllCurrencies());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -14,7 +15,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of {@link IUdmValueFilterController}.
@@ -61,7 +61,7 @@ public class UdmValueFilterController extends CommonController<IUdmValueFilterWi
     }
 
     @Override
-    public Map<String, String> getCurrencyCodesToCurrencyNamesMap() {
-        return udmValueService.getCurrencyCodesToCurrencyNamesMap();
+    public List<Currency> getAllCurrencies() {
+        return udmValueService.getAllCurrencies();
     }
 }

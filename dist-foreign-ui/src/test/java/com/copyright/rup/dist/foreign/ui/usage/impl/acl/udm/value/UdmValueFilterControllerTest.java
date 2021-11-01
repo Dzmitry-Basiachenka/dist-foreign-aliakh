@@ -7,13 +7,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
-
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Verifies {@link UdmValueFilterController}.
@@ -66,7 +64,11 @@ public class UdmValueFilterControllerTest {
 
     @Test
     public void testGetLastValuePeriods() {
-        // TODO add implementation
+        List<String> periods = Collections.singletonList("202106");
+        expect(udmValueService.getLastValuePeriods()).andReturn(periods).once();
+        replay(udmValueService);
+        assertEquals(periods, controller.getLastValuePeriods());
+        verify(udmValueService);
     }
 
     @Test
@@ -88,11 +90,11 @@ public class UdmValueFilterControllerTest {
     }
 
     @Test
-    public void testGetCurrencyCodesToCurrencyNamesMap() {
-        Map<String, String> map = ImmutableMap.of("USD", "US Dollar");
-        expect(udmValueService.getCurrencyCodesToCurrencyNamesMap()).andReturn(map).once();
+    public void testGetAllCurrencies() {
+        List<Currency> currencies = Collections.singletonList(new Currency("USD", "US Dollar"));
+        expect(udmValueService.getAllCurrencies()).andReturn(currencies).once();
         replay(udmValueService);
-        assertEquals(map, controller.getCurrencyCodesToCurrencyNamesMap());
+        assertEquals(currencies, controller.getAllCurrencies());
         verify(udmValueService);
     }
 

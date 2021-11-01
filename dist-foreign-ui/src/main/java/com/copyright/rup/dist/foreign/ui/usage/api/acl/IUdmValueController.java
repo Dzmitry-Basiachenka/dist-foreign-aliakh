@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -12,7 +13,6 @@ import com.vaadin.util.ReflectTools;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -123,18 +123,18 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
     void updateValue(UdmValueDto udmValueDto);
 
     /**
-     * Gets map of currency codes to currency names.
+     * Gets list of all currencies.
      *
-     * @return map of currency codes to currency names
+     * @return list of {@link Currency}
      */
-    Map<String, String> getCurrencyCodesToCurrencyNamesMap();
+    List<Currency> getAllCurrencies();
 
     /**
      * Gets list of all {@link PublicationType}s.
      *
      * @return list of {@link PublicationType}
      */
-    List<PublicationType> getPublicationTypes();
+    List<PublicationType> getAllPublicationTypes();
 
     /**
      * @return threshold value for size of UDM records.

@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
-import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -51,7 +50,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -79,31 +77,14 @@ public class UdmValueFilterWidgetTest {
             new Currency("CZK", "Czech Koruna"), new Currency("DKK", "Danish Krone"),
             new Currency("NZD", "New Zealand Dollar"), new Currency("NOK", "Norwegian Kron"),
             new Currency("ZAR", "Rand"), new Currency("CHF", "Swiss Franc"), new Currency("INR", "Indian Rupee"));
-    private static final Map<String, String> CURRENCY_CODES_TO_CURRENCY_NAMES_MAP =
-        ImmutableMap.<String, String>builder()
-            .put("USD", "US Dollar")
-            .put("AUD", "Australian Dollar")
-            .put("CAD", "Canadian Dollar")
-            .put("EUR", "Euro")
-            .put("GBP", "Pound Sterling")
-            .put("JPY", "Yen")
-            .put("BRL", "Brazilian Real")
-            .put("CNY", "Yuan Renminbi")
-            .put("CZK", "Czech Koruna")
-            .put("DKK", "Danish Krone")
-            .put("NZD", "New Zealand Dollar")
-            .put("NOK", "Norwegian Kron")
-            .put("ZAR", "Rand")
-            .put("CHF", "Swiss Franc")
-            .put("INR", "Indian Rupee")
-            .build();
+
     private UdmValueFilterWidget widget;
     private IUdmValueFilterController controller;
 
     @Before
     public void setUp() {
         controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP).once();
+        expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
         replay(controller);
         widget = new UdmValueFilterWidget(controller);
         widget.setController(controller);
@@ -171,7 +152,7 @@ public class UdmValueFilterWidgetTest {
     @Test
     public void verifyMoreFiltersButtonClickListener() {
         reset(controller);
-        expect(controller.getCurrencyCodesToCurrencyNamesMap()).andReturn(CURRENCY_CODES_TO_CURRENCY_NAMES_MAP).once();
+        expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
         expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).once();
         replay(controller);
         mockStatic(Windows.class);
