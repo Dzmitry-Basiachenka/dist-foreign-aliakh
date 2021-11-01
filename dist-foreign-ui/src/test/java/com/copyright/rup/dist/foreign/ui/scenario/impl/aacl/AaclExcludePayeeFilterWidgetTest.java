@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilt
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -85,7 +84,7 @@ public class AaclExcludePayeeFilterWidgetTest {
         TextField minimumNetThreshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
         String positiveNumberErrorMessage = "Field value should be positive number and should not exceed 10 digits";
         verifyField(minimumNetThreshold, StringUtils.EMPTY, binder, null, true);
-         verifyField(minimumNetThreshold, "   ", binder, null, true);
+        verifyField(minimumNetThreshold, "   ", binder, null, true);
         verifyField(minimumNetThreshold, "  99  ", binder, null, true);
         verifyField(minimumNetThreshold, "  0.005  ", binder, null, true);
         verifyField(minimumNetThreshold, "  1.00  ", binder, null, true);
@@ -155,14 +154,21 @@ public class AaclExcludePayeeFilterWidgetTest {
         assertNotNull(listeners.iterator().next());
     }
 
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+    @SuppressWarnings("unchecked")
+    private void verifyField(TextField field, String value, Binder binder, String errorMessage, boolean isValid) {
         field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        if (isValid) {
-            assertEquals(0, errorMessages.size());
-        }
-        assertEquals(!isValid, errorMessages.contains(message));
+        binder.validate();
+        List<TextField> fields = (List<TextField>) binder.getFields()
+            .filter(actualField -> actualField.equals(field))
+            .collect(Collectors.toList());
+        assertEquals(1 , fields.size());
+        TextField actualField = fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(errorMessage, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 }

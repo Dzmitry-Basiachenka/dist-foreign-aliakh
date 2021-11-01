@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -109,8 +109,7 @@ class CreateNtsScenarioWindow extends Window {
         rhMinimumAmountField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(rhMinimumAmountField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(value),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(scenario -> scenario.getNtsFields().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
@@ -140,8 +139,7 @@ class CreateNtsScenarioWindow extends Window {
         amountField.setValue("0");
         fundBinder.forField(amountField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(value),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(getter, setter);
         VaadinUtils.setMaxComponentsWidth(amountField);

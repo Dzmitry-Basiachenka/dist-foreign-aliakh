@@ -148,16 +148,16 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        validateField(grossAmountField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(grossAmountField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(grossAmountField, "0", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "0.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "0.004", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "value", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "10000000000.00", binder, false, INVALID_GROSS_AMOUNT_ERROR_MESSAGE);
-        validateField(grossAmountField, "0.005", binder, true, null);
-        validateField(grossAmountField, "123.5684", binder, true, null);
-        validateField(grossAmountField, "9999999999.99", binder, true, null);
+        verifyField(grossAmountField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "0", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "0.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "0.004", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "value", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "10000000000.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        verifyField(grossAmountField, "0.005", binder, null, true);
+        verifyField(grossAmountField, "123.5684", binder, null, true);
+        verifyField(grossAmountField, "9999999999.99", binder, null, true);
         verify(usagesController);
     }
 
@@ -167,14 +167,14 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        validateField(accountNumberField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(accountNumberField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(accountNumberField, "10000018631", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
-        validateField(accountNumberField, "9999999999.99", binder, false, INVALID_NUMBER_LENGTH_MESSAGE);
-        validateField(accountNumberField, "0.00", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
-        validateField(accountNumberField, "value", binder, false, INVALID_NUMERIC_VALUE_MESSAGE);
-        validateField(accountNumberField, "0", binder, true, null);
-        validateField(accountNumberField, "1000001863", binder, true, null);
+        verifyField(accountNumberField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(accountNumberField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(accountNumberField, "10000018631", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        verifyField(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        verifyField(accountNumberField, "0.00", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyField(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        verifyField(accountNumberField, "0", binder, null, true);
+        verifyField(accountNumberField, "1000001863", binder, null, true);
         verify(usagesController);
     }
 
@@ -187,13 +187,12 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        validateField(usageBatchNameField, StringUtils.EMPTY, binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(usageBatchNameField, "   ", binder, false, EMPTY_ERROR_MESSAGE);
-        validateField(usageBatchNameField, StringUtils.repeat('a', 51), binder, false,
-            "Field value should not exceed 50 characters");
-        validateField(usageBatchNameField, existingBatchName, binder, false,
-            "Usage Batch with such name already exists");
-        validateField(usageBatchNameField, USAGE_BATCH_NAME, binder, true, null);
+        verifyField(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(usageBatchNameField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        verifyField(usageBatchNameField, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        verifyField(usageBatchNameField, existingBatchName, binder, "Usage Batch with such name already exists", false);
+        verifyField(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
         verify(usagesController);
     }
 
@@ -386,7 +385,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void validateField(TextField field, String value, Binder binder, boolean isValid, String errorMessage) {
+    private void verifyField(TextField field, String value, Binder binder, String errorMessage, boolean isValid) {
         field.setValue(value);
         binder.validate();
         List<TextField> fields = (List<TextField>) binder.getFields()
