@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
@@ -321,8 +321,7 @@ class FundPoolLoadWindow extends Window {
         textField.setRequiredIndicatorVisible(true);
         binder.forField(textField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(textField);
@@ -334,8 +333,7 @@ class FundPoolLoadWindow extends Window {
         textField.setRequiredIndicatorVisible(true);
         binder.forField(textField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withValidator(getFundPoolAmountValidator(),
                 ForeignUi.getMessage("message.error.invalid_stm_or_non_stm_amount"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage(NOT_NUMERIC_MESSAGE)))

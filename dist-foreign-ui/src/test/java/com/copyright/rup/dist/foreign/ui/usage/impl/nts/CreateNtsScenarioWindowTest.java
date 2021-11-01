@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -271,20 +272,37 @@ public class CreateNtsScenarioWindowTest {
     private void verifyAmountField(Binder binder, TextField field) {
         verifyField(field, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyField(field, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(field, "10000000000", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, " -1 ", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
         verifyField(field, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, "10000000000",binder, null, true);
+        verifyField(field, ".01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "01.01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "01.01.", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, " -1 ", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "10000000000", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        verifyField(field, "  0  ", binder, null, true);
+        verifyField(field, "  0.004  ", binder, null, true);
+        verifyField(field, "  0.005  ", binder, null, true);
+        verifyField(field, "  1.00  ", binder, null, true);
+        verifyField(field, "  99  ", binder, null, true);
+        verifyField(field, "  9999999999.99  ", binder, null, true);
+        verifyField(field, "1000000000",binder, null, true);
     }
 
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+    @SuppressWarnings("unchecked")
+    private void verifyField(TextField field, String value, Binder binder, String errorMessage, boolean isValid) {
         field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
+        binder.validate();
+        List<TextField> fields = (List<TextField>) binder.getFields()
+            .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
+        assertEquals(1 , fields.size());
+        TextField actualField = fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(errorMessage, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private static class TestCreateNtsScenarioWindow extends CreateNtsScenarioWindow {
