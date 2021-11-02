@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -9,6 +8,8 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -17,6 +18,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.google.common.collect.Range;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
@@ -390,8 +392,7 @@ public class UdmEditValueWindow extends Window {
         binder.forField(priceField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isBlank(value) || new AmountValidator(true).isValid(value.trim()),
-                ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10))
+            .withValidator(new AmountValidator())
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
@@ -488,8 +489,7 @@ public class UdmEditValueWindow extends Window {
         binder.forField(contentField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
-            .withValidator(value -> StringUtils.isBlank(value) || new AmountValidator(false).isValid(value.trim()),
-                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
+            .withValidator(new AmountZeroValidator())
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
