@@ -119,6 +119,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 100.00)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-01-03-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -212,6 +216,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 9900)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-05-22-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -289,7 +297,9 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'APPROVED')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-11-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -412,6 +422,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 9900.00)
             column(name: 'is_rh_participating_flag', value: false)
             column(name: 'is_payee_participating_flag', value: false)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -714,7 +728,9 @@ databaseChangeLog {
             column(name: 'name', value: 'CFC/ Center Fran dexploitation du droit de Copie')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-27-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -1729,7 +1745,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 30.86)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-27-01', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -3980,7 +3998,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 51.50)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-27-02', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -5141,6 +5161,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '29e140ab-2a71-40a3-a55a-a68dcdb95a9b')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

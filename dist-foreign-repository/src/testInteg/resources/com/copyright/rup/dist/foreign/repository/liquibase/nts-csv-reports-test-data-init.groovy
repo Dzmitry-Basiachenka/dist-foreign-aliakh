@@ -266,6 +266,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'classification', value: 'STM')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-07-30-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -580,7 +584,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '66171a5c-7a8b-4eed-abc9-82756a32ba0e')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-07-02-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -717,7 +723,9 @@ databaseChangeLog {
             column(name: 'classification', value: 'STM')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-07-30-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -779,7 +787,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'f17ebc80-e74e-436d-ba6e-acf3d355b7ff')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-10-28-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1017,7 +1027,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 30.86)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-11-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -1142,6 +1154,10 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: false)
             column(name: 'is_payee_participating_flag', value: false)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-18-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1191,6 +1207,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 9900.00)
             column(name: 'is_rh_participating_flag', value: false)
             column(name: 'is_payee_participating_flag', value: false)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1250,6 +1270,10 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: 'e256decd-46ac-4625-aa80-cafb26f93c2a')
             column(name: 'reported_value', value: 0.00)
             column(name: 'is_rh_participating_flag', value: 'false')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

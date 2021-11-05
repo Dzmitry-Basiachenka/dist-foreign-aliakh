@@ -396,7 +396,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-18-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -513,6 +515,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 2500)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -639,6 +645,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 15000.00)
             column(name: 'is_rh_participating_flag', value: 'false')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-24-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -681,6 +691,10 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: '37ea653f-c748-4cb9-b4a3-7b11d434244a')
             column(name: 'reported_value', value: 0.00)
             column(name: 'is_rh_participating_flag', value: 'false')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -840,6 +854,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: '566d2fba-1342-413e-a96e-1c678e781c3e')
             column(name: 'df_usage_batch_uid', value: '20ceb26a-6c22-45b9-92e6-c7d98ab04faa')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-05-19-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -944,6 +962,10 @@ databaseChangeLog {
             column(name: 'original_publication_type', value: 'Scholarly Journal')
             column(name: 'baseline_uid', value: '0f31bd85-397c-4a10-948b-7b97c0767815')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-19-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1033,6 +1055,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '093a615e-0af3-4497-9846-1578049a7b4b')
             column(name: 'df_usage_batch_uid', value: 'd20a4c96-2cf6-4377-85f1-2a7cd6648b77')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1169,6 +1195,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '193a615e-0af3-4497-9846-1578049a7b4b')
             column(name: 'df_usage_batch_uid', value: '120a4c96-2cf6-4377-85f1-2a7cd6648b77')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1308,6 +1338,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'c32157a9-36ff-4c26-90aa-278bbbc7d270')
             column(name: 'df_usage_batch_uid', value: '4a8ac110-ed00-406f-b3f9-0956dcb39d34')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

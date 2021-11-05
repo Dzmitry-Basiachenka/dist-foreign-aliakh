@@ -815,7 +815,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-12-03-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -886,6 +888,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 100)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -958,6 +964,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 100)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1046,6 +1056,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Arturo de Mézières')
             column(name: 'reported_value', value: 100)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1145,7 +1159,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2500)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-27-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -1279,7 +1295,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-08-05-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -1319,6 +1337,10 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: 'fb297d5d-4d46-4492-93b0-cd6e02b8ce8d')
             column(name: 'reported_value', value: 0.00)
             column(name: 'is_rh_participating_flag', value: 'false')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1433,6 +1455,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 100.00)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-19-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
@@ -1518,6 +1544,10 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-02-04-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -1582,6 +1612,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 900)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1681,6 +1715,10 @@ databaseChangeLog {
             column(name: 'df_work_classification_uid', value: 'e920c634-f59d-4d9c-82bd-275af99132b6')
             column(name: 'wr_wrk_inst', value: 471137967)
             column(name: 'classification', value: 'STM')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1927,6 +1965,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 9900)
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

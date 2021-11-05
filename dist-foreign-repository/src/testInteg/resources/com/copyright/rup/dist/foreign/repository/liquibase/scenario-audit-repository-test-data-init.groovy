@@ -18,6 +18,8 @@ databaseChangeLog {
             column(name: 'description', value: 'The description of scenario 2')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

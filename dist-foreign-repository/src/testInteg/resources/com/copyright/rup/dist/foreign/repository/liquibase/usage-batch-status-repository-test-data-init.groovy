@@ -414,6 +414,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 100.00)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-02-15-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -709,6 +713,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 900)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-02-15-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -962,6 +970,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 900)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1233,6 +1245,10 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1848,6 +1864,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 15)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

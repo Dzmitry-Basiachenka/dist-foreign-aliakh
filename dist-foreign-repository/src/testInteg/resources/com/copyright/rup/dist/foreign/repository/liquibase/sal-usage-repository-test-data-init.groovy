@@ -202,6 +202,10 @@ databaseChangeLog {
             column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-24-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -316,6 +320,10 @@ databaseChangeLog {
             column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-25-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -360,6 +368,10 @@ databaseChangeLog {
             column(name: 'reported_page_range', value: '14-17')
             column(name: 'reported_vol_number_series', value: 'Vol 17, Issue 2')
             column(name: 'detail_type', value: 'IB')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -466,6 +478,10 @@ databaseChangeLog {
             column(name: 'states', value: 'MN;OR')
             column(name: 'number_of_views', value: 254)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-28-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -541,6 +557,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -704,6 +724,10 @@ databaseChangeLog {
             column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 42)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-07-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -830,6 +854,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'cbe96e80-1aa8-41e3-b57b-b8ee67a0f673')
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1107,6 +1135,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: '6531a39b-eabe-4153-b695-1b3aced1af93')
             column(name: 'df_usage_batch_uid', value: 'a7b46cfc-95fa-4adb-8eae-e34438f17ece')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-19-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1190,6 +1222,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: '2371254d-2520-445f-b135-5ee9bccbbe05')
             column(name: 'df_usage_batch_uid', value: '35a5be09-00e3-49aa-9bfe-cd7a6c1b354e')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-12-01-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -1242,6 +1278,10 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 1765)
             column(name: 'scored_assessment_date', value: '2015-07-01')
             column(name: 'question_identifier', value: 'SB9')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1514,6 +1554,8 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 5)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -108,6 +108,10 @@ databaseChangeLog {
             column(name: 'states', value: 'SD,VT')
             column(name: 'number_of_views', value: 762)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-14-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -353,7 +357,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '043ae316-6d55-45c3-92af-d7069530ea9e')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-16-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -759,7 +765,9 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 4)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-10-15-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -1027,7 +1035,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '9bd219c1-caae-4542-84e3-f9f4dba0d034')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-11-05-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
@@ -1655,7 +1665,9 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 42)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-11-09-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1794,7 +1806,9 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 42)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-11-26-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -1912,7 +1926,9 @@ databaseChangeLog {
             column(name: 'coverage_year', value: '2014-2015')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-12-28-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -2061,6 +2077,8 @@ databaseChangeLog {
             column(name: 'number_of_views', value: 5)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

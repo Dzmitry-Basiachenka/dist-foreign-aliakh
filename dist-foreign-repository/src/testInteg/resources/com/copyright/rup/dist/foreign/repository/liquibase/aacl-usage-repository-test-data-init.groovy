@@ -91,6 +91,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2018 TUR')
             column(name: 'number_of_pages', value: 341)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-01-27-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -162,6 +166,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2018 TUR')
             column(name: 'number_of_pages', value: 341)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-01-28-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -199,6 +207,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2019 TUR')
             column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -251,6 +263,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2019 FR')
             column(name: 'number_of_pages', value: 400)
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -315,6 +331,10 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: 3.5)
             column(name: 'institution', value: 'CORNELL UNIVERSITY')
             column(name: 'comment', value: 'Baseline usage 4')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -416,6 +436,10 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: 400)
             column(name: 'right_limitation', value: 'ALL')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-03-12-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -507,6 +531,10 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '09f85d7d-3a37-45b2-ab6e-7a341c3f115c')
             column(name: 'product_family', value: 'AACL')
             column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -625,6 +653,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '9a1fa971-90ae-4744-ab93-6f584e08bc1e')
             column(name: 'df_usage_batch_uid', value: 'a87b82ca-cfca-463d-96e9-fa856618c389')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -799,6 +831,10 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'WORK_FOUND')
             column(name: 'action_reason', value: 'Wr Wrk Inst 269040892 was found by standard number 1008902112377654XX')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-03-19-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -878,6 +914,10 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-03-23-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -956,6 +996,10 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
             column(name: 'detail_licensee_class_id', value: 113)
             column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1208,7 +1252,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'add4c0ae-d12e-4c5e-a04b-7f4b0ada3a23')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-04-02-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -1282,7 +1328,7 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Feb 2020 TUR')
             column(name: 'number_of_pages', value: 100)
             column(name: 'right_limitation', value: 'PRINT')
-            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'detail_licensee_class_id', value: 115)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
             column(name: 'original_publication_type', value: 'NATL-INTL Newspaper')
@@ -1331,6 +1377,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'ceef1548-700e-48a2-a732-f9d183b3d2e3')
             column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1461,6 +1511,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'c3841792-b091-4c61-8814-fc38404479a5')
             column(name: 'df_usage_batch_uid', value: '0c2447c6-29fb-4c8c-a421-514d40547e49')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1673,6 +1727,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: 'aeccfc6d-c983-4fbb-96ee-d2fc4c4472b7')
             column(name: 'df_usage_batch_uid', value: '0fc14882-971a-4ba3-ac49-483cd2890b62')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-05-14-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -1792,6 +1850,10 @@ databaseChangeLog {
             column(name: 'number_of_pages', value: 250)
             column(name: 'right_limitation', value: 'DIGITAL')
             column(name: 'baseline_uid', value: 'b012c81c-2370-458e-a6cb-349b66d08e6e')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1954,6 +2016,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '4858b8fb-9e2c-4c58-849e-2e580f03b523')
             column(name: 'df_usage_batch_uid', value: '450aa265-2019-4caf-9c91-9e4d358f12a0')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

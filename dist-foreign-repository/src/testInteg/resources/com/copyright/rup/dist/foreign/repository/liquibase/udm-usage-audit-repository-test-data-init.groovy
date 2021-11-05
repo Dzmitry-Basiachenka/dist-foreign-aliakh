@@ -66,7 +66,9 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
         }
 
-        rollback ''
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-06-29-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -128,6 +130,8 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
         }
 
-        rollback ''
+        rollback {
+            dbRollback
+        }
     }
 }

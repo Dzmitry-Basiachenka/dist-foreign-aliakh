@@ -214,7 +214,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 1280.00)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-04-03-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -244,7 +246,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2500)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -339,6 +343,10 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: 16.24)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -469,6 +477,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 33)
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

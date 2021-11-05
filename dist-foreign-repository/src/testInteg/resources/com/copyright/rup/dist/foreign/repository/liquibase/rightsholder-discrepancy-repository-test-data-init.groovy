@@ -196,6 +196,8 @@ databaseChangeLog {
             column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -385,7 +385,9 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2017-06-10 11:28:58.735531+03')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-04-02-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -699,6 +701,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 3000)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-16-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -757,6 +763,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2014)
             column(name: 'author', value: 'Aarseth1088.89 Espen J.')
             column(name: 'reported_value', value: 500)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1073,7 +1083,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2000.00)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-12-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -1211,7 +1223,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '680b2dca-9efa-4b4d-97ba-2fb5d18fd25b')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-12-12-01', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -1342,7 +1356,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '668495a3-44fd-4863-8fc1-9f96229bfe9d')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-03-11-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -1364,7 +1380,9 @@ databaseChangeLog {
             column(name: 'gross_amount', value: 10.95)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-03-20-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -1436,7 +1454,9 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-24-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -1509,6 +1529,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '85df79f3-7e3f-4d74-9931-9aa513195815')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

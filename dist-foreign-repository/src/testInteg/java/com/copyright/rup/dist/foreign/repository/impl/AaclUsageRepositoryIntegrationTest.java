@@ -10,6 +10,8 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
@@ -37,7 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +69,12 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=aacl-usage-repository-test-data-init.groovy"})
+//TODO: split test data into separate files for each test method
+@TestData(fileName = "aacl-usage-repository-test-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 @Transactional
 public class AaclUsageRepositoryIntegrationTest {
 
@@ -712,18 +719,18 @@ public class AaclUsageRepositoryIntegrationTest {
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "netAmount", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "serviceFeeAmount", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "serviceFeeAmount", Sort.Direction.DESC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeClassId", Sort.Direction.ASC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeClassId", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeClassId", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeClassId", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeEnrollment", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeEnrollment", Sort.Direction.DESC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeDiscipline", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "detailLicenseeDiscipline", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "detailLicenseeDiscipline", Sort.Direction.DESC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeClassId", Sort.Direction.ASC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeClassId", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeClassId", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeClassId", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeEnrollment", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeEnrollment", Sort.Direction.DESC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeDiscipline", Sort.Direction.ASC);
-        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeDiscipline", Sort.Direction.DESC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "aggregateLicenseeDiscipline", Sort.Direction.ASC);
+        assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "aggregateLicenseeDiscipline", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "publicationType", Sort.Direction.ASC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_7, "publicationType", Sort.Direction.DESC);
         assertSortingFindByScenarioIdAndRhAccountNumber(USAGE_ID_8, "publicationTypeWeight", Sort.Direction.ASC);
@@ -807,9 +814,9 @@ public class AaclUsageRepositoryIntegrationTest {
     public void testFindPayeeAggClassesPairsByScenarioId() {
         AggregateLicenseeClass aggregateLicenseeClass = buildAggregateLicenseeClass(108, "EXGP", "Life Sciences");
         List<PayeeAccountAggregateLicenseeClassesPair> pairs = Arrays.asList(
+            buildPayeeAggLcPair(1000000027L, aggregateLicenseeClass),
             buildPayeeAggLcPair(2580011451L, aggregateLicenseeClass,
-                buildAggregateLicenseeClass(113, "MU", "Life Sciences")),
-            buildPayeeAggLcPair(1000000027L, aggregateLicenseeClass));
+                buildAggregateLicenseeClass(113, "MU", "Life Sciences")));
         assertEquals(pairs, aaclUsageRepository.findPayeeAggClassesPairsByScenarioId(SCENARIO_ID_5));
     }
 
