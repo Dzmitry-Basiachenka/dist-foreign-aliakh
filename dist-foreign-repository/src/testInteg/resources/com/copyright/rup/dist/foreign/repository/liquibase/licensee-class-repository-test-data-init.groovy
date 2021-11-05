@@ -70,6 +70,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '91f3c9ba-1b61-4dcc-b087-f88f89d22c35')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

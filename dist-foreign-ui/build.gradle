@@ -65,3 +65,7 @@ afterEvaluate {
         systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
     }
 }
+
+tasks.withType(Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}

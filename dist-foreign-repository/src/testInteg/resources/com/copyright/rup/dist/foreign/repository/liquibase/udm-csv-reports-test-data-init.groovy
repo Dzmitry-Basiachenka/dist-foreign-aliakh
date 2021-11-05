@@ -322,7 +322,9 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-09-22-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
@@ -464,6 +466,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2020-02-15 12:00:00+00')
             column(name: 'updated_by_user', value: 'wjohn@copyright.com')
             column(name: 'updated_datetime', value: '2020-04-15 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

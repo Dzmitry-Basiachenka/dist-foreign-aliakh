@@ -1127,7 +1127,9 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2019-02-14 11:45:01.52369+03')
         }
 
-        rollback ''
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-24-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -1241,6 +1243,10 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'EXCLUDED_FROM_SCENARIO')
             column(name: 'action_reason', value: 'Usage was excluded from scenario')
             column(name: 'created_datetime', value: '2051-02-14 11:49:02.645621+03')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1370,6 +1376,10 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test batch for usage timings\' Batch')
             column(name: 'created_datetime', value: '2019-02-14 11:45:01.52369+03')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

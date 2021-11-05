@@ -127,6 +127,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2020-02-10 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-09-06-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -268,6 +272,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2020-02-15 12:00:00+00')
             column(name: 'updated_by_user', value: 'wjohn@copyright.com')
             column(name: 'updated_datetime', value: '2020-04-15 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -852,6 +860,10 @@ databaseChangeLog {
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'assignee', value: 'jjohn@copyright.com')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-10-18-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -1215,6 +1227,10 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'wjohn@copyright.com')
             column(name: 'updated_datetime', value: '2020-04-15 12:00:00+00')
             column(name: 'record_version', value: '1')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

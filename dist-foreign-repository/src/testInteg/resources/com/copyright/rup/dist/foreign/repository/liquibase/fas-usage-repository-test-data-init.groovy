@@ -102,6 +102,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: 99.99)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-10-17-00', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
@@ -251,6 +255,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 100.00)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-10-17-01', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
@@ -365,6 +373,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 100.00)
             column(name: 'is_rh_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-10-17-02', author: 'Uladzislau Shalamitski <ushalmitski@copyright.com>') {
@@ -431,6 +443,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 10000)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -615,6 +631,10 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-04-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -686,6 +706,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD,VT')
             column(name: 'number_of_views', value: 762)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

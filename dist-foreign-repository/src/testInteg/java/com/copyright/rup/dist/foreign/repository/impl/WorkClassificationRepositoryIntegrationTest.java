@@ -9,6 +9,8 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,9 +22,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -41,8 +42,10 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=work-classification-repository-test-data-init.groovy"})
-@Transactional
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class WorkClassificationRepositoryIntegrationTest {
 
     private static final String BATCH_UID = "e17ebc80-e74e-436d-ba6e-acf3d355b7ff";
@@ -56,16 +59,19 @@ public class WorkClassificationRepositoryIntegrationTest {
     private WorkClassificationRepository workClassificationRepository;
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-classification-by-work.groovy")
     public void testFindClassificationByWrWrkInst() {
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-classification-by-missing-work.groovy")
     public void testFindClassificationByWrWrkInstWithNoClassification() {
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-insert-or-update-existing-classification.groovy")
     public void testInsertOrUpdateWithExistingClassification() {
         WorkClassification classification = buildClassification(BELLETRISTIC, WR_WRK_INST_1);
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
@@ -76,6 +82,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-insert-or-update-with-new-classification.groovy")
     public void testInsertOrUpdateWithNewClassification() {
         WorkClassification classification = buildClassification(STM, WR_WRK_INST_2);
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
@@ -86,6 +93,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-delete-by-work.groovy")
     public void testDeleteByWrWkrInst() {
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
@@ -95,6 +103,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-by-batch-ids.groovy")
     public void testFindByBatchIds() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_batch_ids.json");
@@ -105,6 +114,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-by-batch-ids.groovy")
     public void testFindCountByBatchIds() {
         assertEquals(3,
             workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY));
@@ -115,6 +125,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-by-search.groovy")
     public void testFindBySearch() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_search.json");
@@ -126,6 +137,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "work-classification-repository-test-find-by-search.groovy")
     public void testFindCountBySearch() {
         assertEquals(5, workClassificationRepository.findCountBySearch(StringUtils.EMPTY));
         assertEquals(1, workClassificationRepository.findCountBySearch("243904752"));

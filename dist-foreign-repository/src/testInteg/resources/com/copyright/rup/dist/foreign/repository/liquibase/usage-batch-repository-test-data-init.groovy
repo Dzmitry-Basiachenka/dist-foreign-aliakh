@@ -239,7 +239,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 1280.00)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-24-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -457,6 +459,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 1000)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-29-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -496,7 +502,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 141.32)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-05-22-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -645,6 +653,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Mirjam H. Hüberli')
             column(name: 'reported_value', value: 1280.00)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-02-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -718,6 +730,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 762)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -819,6 +835,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'fe7713dd-4b19-436f-b7e0-34ad644faf78')
             column(name: 'df_usage_batch_uid', value: 'f0de407a-a615-4171-8e98-9fc28fab5324')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

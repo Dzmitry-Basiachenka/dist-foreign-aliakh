@@ -77,6 +77,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2018 TUR')
             column(name: 'number_of_pages', value: 6)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-01-28-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
@@ -124,6 +128,10 @@ databaseChangeLog {
             column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
             column(name: 'number_of_pages', value: 199)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -209,6 +217,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2018 TUR')
             column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -319,6 +331,10 @@ databaseChangeLog {
             column(name: 'usage_source', value: 'Aug 2018 TUR')
             column(name: 'number_of_pages', value: 6)
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -722,6 +738,10 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-04-23-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -977,6 +997,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '89e290d3-c656-4b23-9e20-1daa975eeb19')
             column(name: 'df_usage_batch_uid', value: '1e56b3b1-40a9-4f4f-8e2f-868caaba8693')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1271,6 +1295,10 @@ databaseChangeLog {
             column(name: 'total_share', value: 1.0000000)
             column(name: 'df_publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'publication_type_weight', value: 1.00)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

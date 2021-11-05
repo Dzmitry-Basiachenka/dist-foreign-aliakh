@@ -11,6 +11,10 @@ databaseChangeLog {
             column(name: 'usage_origin', value: 'SS')
             column(name: 'channel', value: 'CCC')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-04-29-02', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -114,6 +118,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-05-18-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -158,6 +166,10 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'system@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -249,6 +261,10 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -383,6 +399,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-06-17-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
@@ -477,6 +497,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-06-21-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -567,6 +591,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-07-02-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -619,7 +647,9 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
         }
 
-        rollback ''
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-07-02-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -708,6 +738,10 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -833,6 +867,10 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2020-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2020-02-10 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

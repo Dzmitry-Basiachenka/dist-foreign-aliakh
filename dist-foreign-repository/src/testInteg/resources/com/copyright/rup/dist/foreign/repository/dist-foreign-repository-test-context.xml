@@ -22,21 +22,15 @@
         </property>
     </bean>
 
-    <bean id="extendedChangelog" parent="defaultChangelog"
-          class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
-            <list value-type="java.lang.String" merge="true">
-                <value>/com/copyright/rup/dist/foreign/repository/liquibase/${test.liquibase.changelog:#{null}}</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="dfDataSource"
-          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
-        <property name="version" value="10.3-1"/>
-        <property name="resourcesFromPaths"
-                  value="#{'${test.liquibase.changelog:}'.equals('') ? defaultChangelog : extendedChangelog}"/>
+    <bean id="dfDataSource" class="com.copyright.rup.common.test.integ.db.testcontainers.TestcontainersPostgresDatabaseFactory">
+        <property name="engineVersion" value="12.7"/>
+        <property name="resourcesFromPaths" value="#{defaultChangelog}"/>
         <property name="createCommonTablesOnStartup" value="false"/>
+        <property name="port" value="5433"/>
     </bean>
 
+    <bean id="liquibaseExecutor" class="com.copyright.rup.dist.common.test.liquibase.LiquibaseExecutor">
+        <constructor-arg index="0" value="com/copyright/rup/dist/foreign/repository/liquibase/"/>
+        <constructor-arg index="1" ref="dfDataSource"/>
+    </bean>
 </beans>

@@ -37,6 +37,10 @@ databaseChangeLog {
             column(name: 'currency_exchange_rate', value: 1.05)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-09-27-01', author: 'Azarenka Anton <aazarenka@copyright.com>') {
@@ -243,6 +247,10 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2021-09-10')
             column(name: 'updated_by_user', value: 'user_2@copyright.com')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-09-28-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
@@ -296,6 +304,10 @@ databaseChangeLog {
             column(name: 'content_comment', value: 'Content_comment_3')
             column(name: 'updated_datetime', value: '2021-09-11')
             column(name: 'updated_by_user', value: 'jjohn@copyright.com')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -480,6 +492,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'created_by_user', value: 'user@copyright.com')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-10-15-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -622,6 +638,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'created_by_user', value: 'user@copyright.com')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2021-10-21-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
@@ -654,6 +674,10 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
             column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

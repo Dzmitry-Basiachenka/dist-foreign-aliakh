@@ -57,6 +57,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 10)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -67,6 +71,10 @@ databaseChangeLog {
             column(name: 'name', value: 'FAS Distribution 2019')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'nts_fields', value: '{"rh_minimum_amount": 300.00, "pre_service_fee_fund_uid": "b5b64c3a-55d2-462e-b169-362dca6a4dd7"}')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -170,6 +178,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 150)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-02-06-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -220,6 +232,10 @@ databaseChangeLog {
             column(name: 'df_aggregate_licensee_class_id', value: 113)
             column(name: 'gross_amount', value: 40.75)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-02-10-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -231,6 +247,10 @@ databaseChangeLog {
             column(name: 'name', value: 'AACL fund pool to verify details inserting')
             column(name: 'created_datetime', value: '2020-01-03 11:00:00-04')
             column(name: 'created_by_user', value: 'coordinator@copyright.com')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -318,6 +338,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: 'f260168c-501b-483a-ba6d-8705dc4e4d06')
             column(name: 'df_usage_batch_uid', value: 'a4407ece-c1b1-48ad-a961-2439cada4e13')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-28-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -403,6 +427,10 @@ databaseChangeLog {
             column(name: 'reported_page_range', value: '25-30')
             column(name: 'reported_vol_number_series', value: '55(2)')
             column(name: 'detail_type', value: 'IB')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

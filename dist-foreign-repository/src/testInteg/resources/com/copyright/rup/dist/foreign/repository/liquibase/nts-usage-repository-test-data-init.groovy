@@ -278,6 +278,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 632876487)
             column(name: 'classification', value: 'BELLETRISTIC')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-29-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -325,6 +329,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'reported_value', value: 10)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -445,6 +453,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 159526527)
             column(name: 'classification', value: 'STM')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-22-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -544,6 +556,10 @@ databaseChangeLog {
             column(name: 'df_work_classification_uid', value: '30a9a53f-db64-4af3-9616-1e40edcef489')
             column(name: 'wr_wrk_inst', value: 642267671)
             column(name: 'classification', value: 'STM')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -768,6 +784,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 632876488)
             column(name: 'classification', value: 'BELLETRISTIC')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -862,6 +882,10 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2017)
             column(name: 'reported_value', value: 16.24)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -986,6 +1010,10 @@ databaseChangeLog {
             column(name: 'df_work_classification_uid', value: 'e920c634-f59d-4d9c-82bd-275af99132b6')
             column(name: 'wr_wrk_inst', value: 471137967)
             column(name: 'classification', value: 'STM')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -1164,6 +1192,10 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: 987632764)
             column(name: 'classification', value: 'NON-STM')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-07-29-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1322,6 +1354,10 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-07-30-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
@@ -1448,6 +1484,10 @@ databaseChangeLog {
             column(name: 'reported_value', value: 33)
             column(name: 'is_rh_participating_flag', value: true)
             column(name: 'is_payee_participating_flag', value: true)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

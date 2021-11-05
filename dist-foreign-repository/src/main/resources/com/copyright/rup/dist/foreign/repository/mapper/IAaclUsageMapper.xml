@@ -1394,5 +1394,6 @@
         left join aggregate_mapping am on am.detLcId = uaacl.detail_licensee_class_id
         left join ${schema}.df_detail_licensee_class dlc on am.aggLcId  = dlc.detail_licensee_class_id
         where df_scenario_uid = #{scenarioId}
+        order by payee_account_number
     </select>
 </mapper>
