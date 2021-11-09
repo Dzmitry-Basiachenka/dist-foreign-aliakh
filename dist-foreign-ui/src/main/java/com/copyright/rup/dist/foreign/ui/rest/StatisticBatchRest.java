@@ -68,7 +68,7 @@ public class StatisticBatchRest implements StatisticBatchApiDelegate {
         stats.setDateFrom(dateFrom);
         stats.setDateTo(dateTo);
         for (BatchStatistic statistic : statistics) {
-            stats.getStatistic().add(buildBatchStat(statistic));
+            stats.addStatisticItem(buildBatchStat(statistic));
         }
         return stats;
     }

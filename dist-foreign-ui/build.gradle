@@ -36,6 +36,7 @@ dependencies {
     compile("io.swagger:swagger-annotations:${swaggerAnnotationsVersion}")
     compile("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
     compile("org.springframework:spring-webmvc:${rupJava.standardDependencies.spring.version}")
+    compile("org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}")
 
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
     runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}")

@@ -1,263 +1,286 @@
-swagger: '2.0'
+openapi: 3.0.1
 info:
   title: FDA REST Services
   description: Set of services implemented for FDA.
   version: 1.0.0
-host: 'dist-foreign.aws-p-dev.copyright.com'
-schemes:
-  - http
-basePath: /dist-foreign-ui/api
-produces:
-  - application/json
+servers:
+  - url: http://dist-foreign.aws-p-dev.copyright.com/dist-foreign-ui/api
 paths:
   /jobs/{jobName:.+}:
     get:
-      operationId: getJobStatus
-      summary: Gets status of the job
       tags:
         - jobs
+      summary: Gets status of the job
+      description: Gets status of the job
+      operationId: getJobStatus
       parameters:
-        - $ref: '#/parameters/job_name'
-        - name: jobName
-          in: path
-          required: true
-          type: string
+        - $ref: '#/components/parameters/job_name'
       responses:
         200:
           description: The job is waiting
-          schema:
-            $ref: '#/definitions/JobStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatus'
         202:
           description: The job is running
-          schema:
-            $ref: '#/definitions/JobStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatus'
         404:
           description: Job not found. Error code [NOT_FOUND]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
           description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
-      operationId: triggerJob
-      summary: Triggers the job
       tags:
         - jobs
+      summary: Triggers the job
+      description: Triggers the job
+      operationId: triggerJob
       parameters:
-        - $ref: '#/parameters/job_name'
-        - name: jobName
-          in: path
-          required: true
-          type: string
+        - $ref: '#/components/parameters/job_name'
       responses:
         200:
           description: The job is triggred
-          schema:
-            $ref: '#/definitions/JobStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatus'
         202:
           description: The job is already running
-          schema:
-            $ref: '#/definitions/JobStatus'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatus'
         404:
           description: Job not found. Error code [NOT_FOUND]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
           description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /statistic/batch:
     get:
-      operationId: getBatchesStatistic
-      summary: Gets batches statistic
       tags:
         - statistic, batch
+      summary: Gets batches statistic
+      description: Gets batches statistic
+      operationId: getBatchesStatistic
       parameters:
         - name: name
           in: query
-          required: false
-          type: string
           description: Batch name
+          schema:
+            type: string
         - name: date
           in: query
-          required: false
-          type: string
-          pattern: '^\d{4}-\d{2}-\d{2}$'
           description: Batch action date in the format yyyy-MM-dd
+          schema:
+            pattern: ^\d{4}-\d{2}-\d{2}$
+            type: string
         - name: dateFrom
           in: query
-          required: false
-          type: string
-          pattern: '^\d{4}-\d{2}-\d{2}$'
           description: Batch action start date in the format yyyy-MM-dd
+          schema:
+            pattern: ^\d{4}-\d{2}-\d{2}$
+            type: string
         - name: dateTo
           in: query
-          required: false
-          type: string
-          pattern: '^\d{4}-\d{2}-\d{2}$'
           description: Batch action end date in the format yyyy-MM-dd
+          schema:
+            pattern: ^\d{4}-\d{2}-\d{2}$
+            type: string
       responses:
         200:
           description: Batches statistic
-          schema:
-            $ref: '#/definitions/BatchStats'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStats'
         404:
           description: Batch not found by name. Error code [NOT_FOUND]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
           description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /statistic/usage/{usageId}:
     get:
-      operationId: getUsageStatistic
-      summary: Gets usage statistic
       tags:
         - statistic, usage
+      summary: Gets usage statistic
+      description: Gets usage statistic
+      operationId: getUsageStatistic
       parameters:
         - name: usageId
           in: path
-          required: true
-          type: string
           description: Usage id
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Usage statistic
-          schema:
-            $ref: '#/definitions/UsageStat'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageStat'
         404:
           description: Usage not found by id. Error code [NOT_FOUND]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
           description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
-          schema:
-            $ref: '#/definitions/Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-definitions:
-  Error:
-    description: Error
-    type: object
-    properties:
-      error:
-        type: string
-        example: ERROR_CODE
-      message:
-        type: string
-        example: Field value is not valid. Field=name, Value=null, Reason=must not be null
-      stackTrace:
-        type: string
-        example: java.lang.NullPointerException\n\tat java.lang.Thread.run(Thread.java:748)
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: ERROR_CODE
+        message:
+          type: string
+          example: Field value is not valid. Field=name, Value=null, Reason=must not be null
+        stackTrace:
+          type: string
+          example: java.lang.NullPointerException\n\tat java.lang.Thread.run(Thread.java:748)
+      description: Error
 
-  JobStatus:
-    description: JobStatus
-    type: object
-    properties:
-      status:
-        type: string
+    JobStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      description: JobStatus
 
-  BatchStats:
-    description: Batches statistic
-    type: object
-    properties:
-      date:
-        type: string
-      dateFrom:
-        type: string
-      dateTo:
-        type: string
-      statistic:
-        type: array
-        items:
-          $ref: '#/definitions/BatchStat'
+    BatchStats:
+      type: object
+      properties:
+        date:
+          type: string
+        dateFrom:
+          type: string
+        dateTo:
+          type: string
+        statistic:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchStat'
+      description: Batches statistic
 
-  BatchStat:
-    description: Batch statistic
-    type: object
-    properties:
-      batchName:
-        type: string
-      totalCount:
-        type: integer
-      totalAmount:
-        type: number
-      matchedCount:
-        type: integer
-      matchedAmount:
-        type: number
-      matchedPercent:
-        type: number
-      worksNotFoundCount:
-        type: integer
-      worksNotFoundAmount:
-        type: number
-      worksNotFoundPercent:
-        type: number
-      multipleMatchingCount:
-        type: integer
-      multipleMatchingAmount:
-        type: number
-      multipleMatchingPercent:
-        type: number
-      ntsWithdrawnCount:
-        type: integer
-      ntsWithdrawnAmount:
-        type: number
-      ntsWithdrawnPercent:
-        type: number
-      rhNotFoundCount:
-        type: integer
-      rhNotFoundAmount:
-        type: number
-      rhNotFoundPercent:
-        type: number
-      rhFoundCount:
-        type: integer
-      rhFoundAmount:
-        type: number
-      rhFoundPercent:
-        type: number
-      eligibleCount:
-        type: integer
-      eligibleAmount:
-        type: number
-      eligiblePercent:
-        type: number
-      sendForRaCount:
-        type: integer
-      sendForRaAmount:
-        type: number
-      sendForRaPercent:
-        type: number
-      paidCount:
-        type: integer
-      paidAmount:
-        type: number
-      paidPercent:
-        type: number
+    BatchStat:
+      type: object
+      properties:
+        batchName:
+          type: string
+        totalCount:
+          type: integer
+        totalAmount:
+          type: number
+        matchedCount:
+          type: integer
+        matchedAmount:
+          type: number
+        matchedPercent:
+          type: number
+        worksNotFoundCount:
+          type: integer
+        worksNotFoundAmount:
+          type: number
+        worksNotFoundPercent:
+          type: number
+        multipleMatchingCount:
+          type: integer
+        multipleMatchingAmount:
+          type: number
+        multipleMatchingPercent:
+          type: number
+        ntsWithdrawnCount:
+          type: integer
+        ntsWithdrawnAmount:
+          type: number
+        ntsWithdrawnPercent:
+          type: number
+        rhNotFoundCount:
+          type: integer
+        rhNotFoundAmount:
+          type: number
+        rhNotFoundPercent:
+          type: number
+        rhFoundCount:
+          type: integer
+        rhFoundAmount:
+          type: number
+        rhFoundPercent:
+          type: number
+        eligibleCount:
+          type: integer
+        eligibleAmount:
+          type: number
+        eligiblePercent:
+          type: number
+        sendForRaCount:
+          type: integer
+        sendForRaAmount:
+          type: number
+        sendForRaPercent:
+          type: number
+        paidCount:
+          type: integer
+        paidAmount:
+          type: number
+        paidPercent:
+          type: number
+      description: Batch statistic
 
-  UsageStat:
-    description: Usage statistic
-    type: object
-    properties:
-      usageId:
-        type: string
-      status:
-        type: string
-      matchingMs:
-        type: integer
-      rightsMs:
-        type: integer
-      eligibilityMs:
-        type: integer
+    UsageStat:
+      type: object
+      properties:
+        usageId:
+          type: string
+        status:
+          type: string
+        matchingMs:
+          type: integer
+        rightsMs:
+          type: integer
+        eligibilityMs:
+          type: integer
+      description: Usage statistic
 
-parameters:
-  job_name:
-    name: jobName
-    in: path
-    required: true
-    type: string
+  parameters:
+    job_name:
+      name: jobName
+      in: path
+      required: true
+      schema:
+        type: string
