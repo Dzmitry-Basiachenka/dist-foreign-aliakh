@@ -38,7 +38,9 @@ databaseChangeLog {
                     '"grade_6_8_gross_amount": 0.00, "grade_9_12_gross_amount": 200.00, "item_bank_split_percent": 0.20000, "service_fee": 0.25000}')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-12-23-00', author: 'Anton Azarenka <azarenka@copyright.com>') {
@@ -128,6 +130,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: 'd7a0806f-6088-407d-97eb-5e3661b167c5')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

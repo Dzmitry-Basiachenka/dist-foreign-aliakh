@@ -159,7 +159,9 @@ databaseChangeLog {
             column(name: 'classification', value: 'BELLETRISTIC')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-07-01', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -203,7 +205,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-07-02', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -283,7 +287,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-03-29-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -373,7 +379,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-19-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -495,7 +503,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 3000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-10-11-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -584,6 +594,8 @@ databaseChangeLog {
             column(name: 'classification', value: 'NON-STM')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

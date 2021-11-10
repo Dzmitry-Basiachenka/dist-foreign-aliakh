@@ -1,16 +1,18 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.caching.api.ICacheService;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -30,8 +32,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=sal-workflow-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class SalWorkflowIntegrationTest {
 
     private static final String IB_USAGE_ID_1 = "6c59d64f-a56e-4ca8-a914-a8ac299c6082";
@@ -47,13 +51,23 @@ public class SalWorkflowIntegrationTest {
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2019, 6, 30);
 
     @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
+    @Autowired
     private SalWorkflowIntegrationTestBuilder testBuilder;
 
+    @Before
+    public void setUp() {
+        testBuilder.reset();
+        cacheServices.forEach(ICacheService::invalidateCache);
+    }
+
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = "sal-workflow-data-init.groovy")
     public void testSalWorkflowWithoutUsageData() throws IOException, InterruptedException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)
-            .withItemBankCsvFile("usage/sal/sal_item_bank_details_for_workflow.csv",
+            .withItemBankCsvFile("usage/sal/sal_item_bank_details_for_workflow_1.csv",
                 IB_USAGE_ID_1, IB_USAGE_ID_2, IB_USAGE_ID_3)
             .withUsageBatch(buildItemBank())
             .withFundPoolId("077383cf-8d9b-42ac-bdac-073cde78fa1e")
@@ -78,10 +92,12 @@ public class SalWorkflowIntegrationTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = "sal-workflow-data-init.groovy")
     public void testSalWorkflowWithUsageData() throws IOException, InterruptedException {
         testBuilder
             .withProductFamily(SAL_PRODUCT_FAMILY)
-            .withItemBankCsvFile("usage/sal/sal_item_bank_details_for_workflow.csv",
+            .withItemBankCsvFile("usage/sal/sal_item_bank_details_for_workflow_2.csv",
                 IB_USAGE_ID_1, IB_USAGE_ID_2, IB_USAGE_ID_3)
             .withUsageDataCsvFile("usage/sal/sal_usage_data_for_workflow.csv",
                 UD_USAGE_ID_1, UD_USAGE_ID_2, UD_USAGE_ID_3, UD_USAGE_ID_4)

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
@@ -17,9 +19,8 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,12 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=work-classification-data-init.groovy"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+//TODO: split test data into separate files for each test method
+@TestData(fileName = "work-classification-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 @Transactional
 public class WorkClassificationIntegrationTest {
 

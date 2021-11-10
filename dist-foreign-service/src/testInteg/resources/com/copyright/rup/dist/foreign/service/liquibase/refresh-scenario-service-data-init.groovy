@@ -458,6 +458,8 @@ databaseChangeLog {
             column(name: 'name', value: '2HC [T]')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -15,9 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +41,12 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=create-scenario-data-init.groovy"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+//TODO: split test data into separate files for each test method
+@TestData(fileName = "create-scenario-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 @Transactional
 public class CreateScenarioIntegrationTest {
 
@@ -149,10 +154,10 @@ public class CreateScenarioIntegrationTest {
     public void testCreateClaScenario() {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
-            .expectPreferences("prm/not_found_response.json", RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_9,
+            .expectPreferences("prm/not_found_response.json", RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_7,
                 RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectRollups("prm/cla_rollups_response.json",
-                RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
+                RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectUsages(Arrays.asList(
                 buildUsage("8fc81e08-3611-4697-8059-6c970ee5d643", 2000133267L, 2000017000L,
                     new BigDecimal("0.10000"), "897.204", "8074.836", "8972.0400000000", 122235134L,

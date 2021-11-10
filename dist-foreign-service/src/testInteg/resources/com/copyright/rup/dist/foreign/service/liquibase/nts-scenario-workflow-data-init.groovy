@@ -203,6 +203,8 @@ databaseChangeLog {
             column(name: 'classification', value: 'BELLETRISTIC')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -76,5 +76,9 @@ databaseChangeLog {
             column(name: 'df_usage_fas_uid', value: '6fa92092-5cd3-4a12-bbf4-762f7ff6f815')
             column(name: 'reported_value', value: 0.00)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

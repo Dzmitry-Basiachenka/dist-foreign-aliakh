@@ -89,5 +89,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 500.00)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -150,6 +150,8 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2012-03-15 11:40:54.735531+03')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -24,11 +27,12 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
@@ -38,7 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies functionality for loading UDM usages.
@@ -52,7 +55,11 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestData(fileName = "empty-change-set-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class LoadUdmUsagesIntegrationTest {
 
     private static final String UDM_BATCH_NAME = "UDM Batch 2021 June";
@@ -72,8 +79,15 @@ public class LoadUdmUsagesIntegrationTest {
     private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private ServiceTestHelper testHelper;
+    @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
 
     private final UdmBatch batch = buildUdmBatch();
+
+    @Before
+    public void setUp() {
+        cacheServices.forEach(ICacheService::invalidateCache);
+    }
 
     @Test
     public void testLoadUsages() throws Exception {
@@ -152,16 +166,15 @@ public class LoadUdmUsagesIntegrationTest {
         return usageAuditItems;
     }
 
+    // TODO: investigate the order of audit items committed in one transaction
     private void assertUdmAudit(String udmUsageId, List<UsageAuditItem> expectedAuditItems) {
         List<UsageAuditItem> actualAuditItems = udmUsageAuditService.getUdmUsageAudit(udmUsageId);
         assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
-        IntStream.range(0, expectedAuditItems.size())
-            .forEach(index -> {
-                UsageAuditItem expectedItem = expectedAuditItems.get(index);
-                UsageAuditItem actualItem = actualAuditItems.get(index);
-                assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
-                assertEquals(expectedItem.getActionType(), actualItem.getActionType());
-            });
+        expectedAuditItems.forEach(expectedItem -> {
+            assertTrue(actualAuditItems.stream().anyMatch(actualItem ->
+                expectedItem.getActionReason().equals(actualItem.getActionReason()) &&
+                    expectedItem.getActionType() == actualItem.getActionType()));
+        });
     }
 
     private ByteArrayOutputStream getCsvOutputStream() throws IOException {

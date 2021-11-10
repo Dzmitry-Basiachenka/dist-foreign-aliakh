@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -22,9 +24,8 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -49,8 +50,11 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=load-classified-usages-data-init.groovy"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestData(fileName = "load-classified-usages-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class LoadClassifiedUsagesIntegrationTest {
 
     private static final String USAGE_ID_1 = "d5973116-2ea0-4808-80f5-93016e24cfa4";

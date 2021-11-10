@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.caching.api.ICacheService;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -14,19 +17,19 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies AACL scenario creation.
@@ -40,16 +43,25 @@ import java.util.Collections;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=create-aacl-scenario-data-init.groovy"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@Transactional
+@TestData(fileName = "create-aacl-scenario-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class CreateAaclScenarioIntegrationTest {
 
     private static final String SCENARIO_NAME = "AACL Scenario";
     private static final String SCENARIO_DESCRIPTION = "AACL Scenario Description";
 
     @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
+    @Autowired
     private CreateAaclScenarioIntegrationTestBuilder builder;
+
+    @Before
+    public void setUp() {
+        cacheServices.forEach(ICacheService::invalidateCache);
+    }
 
     @Test
     public void testCreateAaclScenario() throws IOException {

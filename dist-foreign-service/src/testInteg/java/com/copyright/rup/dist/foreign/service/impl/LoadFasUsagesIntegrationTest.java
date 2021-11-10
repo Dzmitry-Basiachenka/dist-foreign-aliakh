@@ -4,9 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -20,11 +23,12 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +54,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestData(fileName = "empty-change-set-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class LoadFasUsagesIntegrationTest {
 
     private static final String USAGE_ID_1 = "0f263081-1a5d-4c76-a1ff-d9a6e1e0b694";
@@ -69,6 +77,13 @@ public class LoadFasUsagesIntegrationTest {
     private IUsageService usageService;
     @Autowired
     private ServiceTestHelper testHelper;
+    @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
+
+    @Before
+    public void setUp() {
+        cacheServices.forEach(ICacheService::invalidateCache);
+    }
 
     @Test
     public void testLoadUsages() throws Exception {
@@ -102,7 +117,7 @@ public class LoadFasUsagesIntegrationTest {
             UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
             UsageActionTypeEnum.LOADED, UPLOADED_REASON)));
-        testHelper.assertAudit(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
+        testHelper.assertAuditIgnoringOrder(USAGE_ID_4, buildUsageAuditItems(USAGE_ID_4, ImmutableMap.of(
             UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible",
             UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS",
             UsageActionTypeEnum.WORK_FOUND, "Usage was uploaded with Wr Wrk Inst",

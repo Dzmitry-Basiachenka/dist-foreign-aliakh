@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -10,12 +13,12 @@ import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
@@ -37,18 +40,28 @@ import java.util.Map;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=load-researched-usages-data-init.groovy"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@TestData(fileName = "load-researched-usages-data-init.groovy")
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class LoadResearchedUsagesIntegrationTest {
+
+    private static final String USAGE_ID_1 = "c219108e-f319-4636-b837-b71bccb29b76";
+    private static final String USAGE_ID_2 = "54580cd4-33b5-4079-bfc7-5c35bf9c5c9e";
+    private static final String USAGE_ID_3 = "644cb9ba-396d-4844-ac83-8053412b7cea";
 
     @Autowired
     private IFasUsageService fasUsageService;
     @Autowired
     private ServiceTestHelper testHelper;
+    @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
 
-    private static final String USAGE_ID_1 = "c219108e-f319-4636-b837-b71bccb29b76";
-    private static final String USAGE_ID_2 = "54580cd4-33b5-4079-bfc7-5c35bf9c5c9e";
-    private static final String USAGE_ID_3 = "644cb9ba-396d-4844-ac83-8053412b7cea";
+    @Before
+    public void setUp() {
+        cacheServices.forEach(ICacheService::invalidateCache);
+    }
 
     @Test
     public void testLoadResearchedUsages() {

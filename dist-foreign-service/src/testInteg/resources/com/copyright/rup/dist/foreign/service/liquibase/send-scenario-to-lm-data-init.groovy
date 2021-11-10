@@ -181,7 +181,9 @@ databaseChangeLog {
             column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-17-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -363,6 +365,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 5000.00)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -574,6 +580,10 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: '06620f6f-6ebd-4944-a9d5-eedb9fdd1648')
             column(name: 'df_usage_batch_uid', value: 'e5177da8-099f-41c4-b4b0-49a38da94805')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-11-05-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
@@ -781,6 +791,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD,VT')
             column(name: 'number_of_views', value: 24)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

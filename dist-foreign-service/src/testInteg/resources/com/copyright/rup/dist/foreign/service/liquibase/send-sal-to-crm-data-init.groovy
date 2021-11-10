@@ -256,5 +256,9 @@ databaseChangeLog {
             column(name: 'df_scenario_usage_filter_uid', value: '173a615e-0af3-4497-9846-1578049a7b4b')
             column(name: 'df_usage_batch_uid', value: '220a4c96-2cf6-4377-85f1-2a7cd6648b77')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

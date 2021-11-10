@@ -96,6 +96,8 @@ databaseChangeLog {
             column(name: 'reported_value', value: 10000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

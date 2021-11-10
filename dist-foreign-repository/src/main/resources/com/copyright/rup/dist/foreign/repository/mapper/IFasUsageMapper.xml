@@ -248,5 +248,6 @@
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         <include refid="IUsageMapper.usageFilter"/>
             and u.status_ind = #{status}
+        order by u.df_usage_uid
     </select>
 </mapper>
