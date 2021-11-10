@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
@@ -48,7 +49,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Verifies correctness of updating usages rights.
@@ -303,11 +303,12 @@ public class UpdateRightsIntegrationTest {
         assertEquals(expectedRhAccountNumber, usage.getRightsholder().getAccountNumber());
     }
 
+    // TODO: check ordering of audit items
     private void assertAudit(String usageId, String... reasons) {
         List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
         assertEquals(CollectionUtils.size(auditItems), ArrayUtils.getLength(reasons));
-        IntStream.range(0, reasons.length)
-            .forEach(index -> assertEquals(reasons[index], auditItems.get(index).getActionReason()));
+        Arrays.stream(reasons).forEach(expectedReason ->
+            assertTrue(auditItems.stream().anyMatch(item -> expectedReason.equals(item.getActionReason()))));
     }
 
     private void expectRmsCallIgnoreDate(String rmsRequestFileName, String rmsResponseFileName) {
