@@ -54,7 +54,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 6000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-09-13-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -110,7 +112,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 6000)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-07-10-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -179,6 +183,10 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
             column(name: 'df_usage_fas_uid', value: 'c70b06a4-dfdf-4fe3-8ad9-f90d973f566f')
             column(name: 'reported_value', value: 0.00)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -294,6 +302,10 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: '68fd94c0-a8c0-4a59-bfe3-6674c4b12199')
             column(name: 'number_of_pages', value: 341)
             column(name: 'right_limitation', value: 'ALL')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

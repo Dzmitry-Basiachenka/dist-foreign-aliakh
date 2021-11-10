@@ -2,7 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
+import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -18,10 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -40,21 +41,30 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=receive-paid-usages-from-lm-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@TestExecutionListeners(
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
+    listeners = {LiquibaseTestExecutionListener.class}
+)
 public class ReceivePaidUsagesFromLmTest {
+
+    private static final String TEST_DATA = "receive-paid-usages-from-lm-data-init.groovy";
 
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private ServiceTestHelper testHelper;
+    @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
 
     @Before
     public void reset() {
         testHelper.reset();
+        cacheServices.forEach(ICacheService::invalidateCache);
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidFasUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_fas.json");
@@ -62,6 +72,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidNtsUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_nts_receive_paid_from_lm_test.json");
@@ -69,6 +81,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_aacl.json");
@@ -76,6 +90,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidSplitAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_aacl.json");
@@ -85,6 +101,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidSplitUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_fas.json");
@@ -94,6 +112,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePostDistributionUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_fas.json");
@@ -101,6 +121,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePostDistributionAaclUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_aacl.json");
@@ -108,6 +130,8 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePostDistributionSplitUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_split_paid_usages_fas.json");
@@ -119,6 +143,8 @@ public class ReceivePaidUsagesFromLmTest {
      * usages in one message.
      */
     @Test
+    //TODO: split test data into separate files for each test method
+    @TestData(fileName = TEST_DATA)
     public void testReceivePaidInformationFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages.json");

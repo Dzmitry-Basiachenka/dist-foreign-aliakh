@@ -298,5 +298,9 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'wjohn@copyright.com')
             column(name: 'updated_datetime', value: '2020-04-15 12:00:00+00')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

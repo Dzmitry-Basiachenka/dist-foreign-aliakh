@@ -101,6 +101,8 @@ databaseChangeLog {
             column(name: 'detail_type', value: 'IB')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

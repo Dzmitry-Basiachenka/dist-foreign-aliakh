@@ -76,6 +76,8 @@ databaseChangeLog {
             column(name: 'comment', value: 'AACL baseline usage that should not be pulled')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

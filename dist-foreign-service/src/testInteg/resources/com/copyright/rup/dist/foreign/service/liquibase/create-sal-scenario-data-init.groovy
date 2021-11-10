@@ -111,5 +111,9 @@ databaseChangeLog {
             column(name: 'states', value: 'SD;VT')
             column(name: 'number_of_views', value: 42)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

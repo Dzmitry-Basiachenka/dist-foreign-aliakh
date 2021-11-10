@@ -207,6 +207,8 @@ databaseChangeLog {
             column(name: 'reported_value', value: 500)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

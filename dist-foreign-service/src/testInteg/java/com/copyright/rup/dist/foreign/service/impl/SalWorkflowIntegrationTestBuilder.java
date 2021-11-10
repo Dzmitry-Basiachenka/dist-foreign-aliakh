@@ -192,6 +192,30 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    void reset() {
+        this.expectedUsageIdToAuditMap.clear();
+        this.expectedUsageLmDetailIdToAuditMap.clear();
+        this.expectedRmsRequestsToResponses.clear();
+        this.expectedRollupsJson = null;
+        this.expectedRollupsRightholderIds = null;
+        this.predefinedItemBankDetailIds = null;
+        this.predefinedUsageDataDetailIds = null;
+        this.itemBankCsvFile = null;
+        this.usageDataCsvFile = null;
+        this.fundPoolId = null;
+        this.productFamily = null;
+        this.usageBatch = null;
+        this.expectedUsagesJsonFile = null;
+        this.expectedLmDetailsJsonFiles = null;
+        this.expectedPaidUsagesJsonFile = null;
+        this.expectedPaidUsageLmDetailIds = null;
+        this.expectedArchivedUsagesJsonFile = null;
+        this.expectedCrmRequestJsonFile = null;
+        this.expectedCrmResponseJsonFile = null;
+        this.expectedLmDetailsMessagesCount = 0;
+        this.sqsClientMock.reset();
+    }
+
     @Override
     public Runner build() {
         return new Runner();

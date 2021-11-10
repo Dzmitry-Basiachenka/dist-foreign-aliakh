@@ -63,6 +63,10 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: 1000003821)
             column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-02-01-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -351,6 +355,10 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '3259b121-8b0e-4b9e-8d7a-88707cf418a4')
             column(name: 'rh_account_number', value: 2000017000)
             column(name: 'name', value: 'CEDRO, Centro Espanol de Derechos Reprograficos')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

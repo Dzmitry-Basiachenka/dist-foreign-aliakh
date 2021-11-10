@@ -233,7 +233,9 @@ databaseChangeLog {
             column(name: 'name', value: 'John Wiley & Sons - Books')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-03-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
@@ -405,7 +407,9 @@ databaseChangeLog {
             column(name: 'name', value: '2HC [T]')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
@@ -534,7 +538,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 62.41)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2019-06-14-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -604,6 +610,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2017)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 91.00)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

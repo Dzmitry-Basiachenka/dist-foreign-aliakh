@@ -202,5 +202,9 @@ databaseChangeLog {
             column(name: 'publication_type_weight', value: 1.71)
             column(name: 'baseline_uid', value: '9aeb87ed-5000-4bee-abcb-e3dfc4f84235')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

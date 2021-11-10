@@ -223,6 +223,10 @@ databaseChangeLog {
             column(name: 'market_period_from', value: 2015)
             column(name: 'market_period_to', value: 2015)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-09-04-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
@@ -294,6 +298,10 @@ databaseChangeLog {
             column(name: 'question_identifier', value: 'SB7663')
             column(name: 'states', value: 'SD,VT')
             column(name: 'number_of_views', value: 762)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

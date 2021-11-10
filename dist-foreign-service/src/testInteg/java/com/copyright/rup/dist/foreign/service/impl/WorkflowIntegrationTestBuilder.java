@@ -312,8 +312,20 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"));
         }
 
+        // TODO: investigate the order of audit items committed in one transaction
         private void verifyUsagesAudit() {
-            assertEquals(expectedUsageLmDetailIdToAuditMap, buildUsageAuditMapForAssertion());
+            Map<String, List<Pair<UsageActionTypeEnum, String>>> actualUsageLmDetailIdToAuditMap =
+                buildUsageAuditMapForAssertion();
+            assertEquals(expectedUsageLmDetailIdToAuditMap.size(), actualUsageLmDetailIdToAuditMap.size());
+            expectedUsageLmDetailIdToAuditMap.forEach((key, expectedAudit) -> {
+                List<Pair<UsageActionTypeEnum, String>> actualAudit = actualUsageLmDetailIdToAuditMap.get(key);
+                assertEquals(expectedAudit.size(), actualAudit.size());
+                expectedAudit.forEach(expectedItem -> {
+                    assertTrue(actualAudit.stream().anyMatch(actualItem ->
+                        expectedItem.getRight().equals(actualItem.getRight()) &&
+                            expectedItem.getLeft() == actualItem.getLeft()));
+                });
+            });
         }
 
         private Map<String, List<Pair<UsageActionTypeEnum, String>>> buildUsageAuditMapForAssertion() {

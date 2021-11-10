@@ -77,5 +77,9 @@ databaseChangeLog {
             column(name: 'reported_vol_number_series', value: 'Vol 17, Issue 2')
             column(name: 'detail_type', value: 'IB')
         }
+
+        rollback {
+            dbRollback
+        }
     }
 }

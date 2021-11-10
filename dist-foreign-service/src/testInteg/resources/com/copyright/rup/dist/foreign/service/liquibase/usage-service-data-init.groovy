@@ -232,7 +232,9 @@ databaseChangeLog {
             column(name: 'name', value: 'CFC/ Center Fran dexploitation du droit de Copie')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2017-11-10-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -313,6 +315,8 @@ databaseChangeLog {
             column(name: 'action_reason', value: 'Usage was sent to CRM')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

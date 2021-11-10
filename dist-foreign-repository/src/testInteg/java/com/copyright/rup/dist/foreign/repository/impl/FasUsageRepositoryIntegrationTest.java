@@ -257,8 +257,8 @@ public class FasUsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
+            USAGE_ID_2);
     }
 
     @Test
@@ -266,23 +266,23 @@ public class FasUsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1,
-            USAGE_ID_2, USAGE_ID_3);
+            USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
-        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
+            USAGE_ID_2);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
-        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
+        verifyUsages(fasUsageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_3,
+            USAGE_ID_2);
     }
 
     private void verifyUsages(List<Usage> usages, int count, String... usageIds) {

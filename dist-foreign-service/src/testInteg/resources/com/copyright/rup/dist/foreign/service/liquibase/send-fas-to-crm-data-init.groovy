@@ -239,6 +239,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 3000)
         }
+
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2018-09-14-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
@@ -280,6 +284,10 @@ databaseChangeLog {
             column(name: 'market_period_to', value: 2016)
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'reported_value', value: 3000)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

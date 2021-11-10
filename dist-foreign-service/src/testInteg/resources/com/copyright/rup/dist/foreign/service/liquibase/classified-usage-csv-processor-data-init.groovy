@@ -304,6 +304,8 @@ databaseChangeLog {
             column(name: 'right_limitation', value: 'PRINT')
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 }

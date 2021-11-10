@@ -692,6 +692,7 @@
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}
+        order by df_usage_uid
         returning df_usage_archive_uid
     </select>
 

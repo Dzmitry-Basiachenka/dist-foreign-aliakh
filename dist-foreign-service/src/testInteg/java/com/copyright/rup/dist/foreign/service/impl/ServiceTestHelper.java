@@ -224,6 +224,17 @@ public class ServiceTestHelper {
             String.format(TestUtils.fileToString(this.getClass(), paidUsagesMessageTemplateFile), usageIds.toArray()));
     }
 
+    // TODO: investigate the order of audit items committed in one transaction
+    public void assertAuditIgnoringOrder(String entityId, List<UsageAuditItem> expectedAuditItems) {
+        List<UsageAuditItem> actualAuditItems = usageAuditService.getUsageAudit(entityId);
+        assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
+        expectedAuditItems.forEach(expectedItem -> {
+            assertTrue(actualAuditItems.stream().anyMatch(actualItem ->
+                expectedItem.getActionReason().equals(actualItem.getActionReason()) &&
+                    expectedItem.getActionType() == actualItem.getActionType()));
+        });
+    }
+
     public void assertAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
         List<UsageAuditItem> actualAuditItems = usageAuditService.getUsageAudit(entityId);
         assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));

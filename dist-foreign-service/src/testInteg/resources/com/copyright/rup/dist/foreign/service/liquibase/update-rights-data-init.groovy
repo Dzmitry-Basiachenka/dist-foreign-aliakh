@@ -319,7 +319,9 @@ databaseChangeLog {
             column(name: 'reported_value', value: 16.00)
         }
 
-        rollback ""
+        rollback {
+            dbRollback
+        }
     }
 
     changeSet(id: '2020-01-15-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
@@ -385,6 +387,10 @@ databaseChangeLog {
             column(name: 'usage_period', value: 2015)
             column(name: 'usage_source', value: 'Feb 2015 TUR')
             column(name: 'number_of_pages', value: 180)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -484,6 +490,10 @@ databaseChangeLog {
             column(name: 'reported_media_type', value: 'Text')
             column(name: 'media_type_weight', value: 1.0)
             column(name: 'coverage_year', value: '2014-2015')
+        }
+
+        rollback {
+            dbRollback
         }
     }
 
@@ -609,6 +619,10 @@ databaseChangeLog {
             column(name: 'annual_multiplier', value: 25)
             column(name: 'statistical_multiplier', value: 1)
             column(name: 'annualized_copies', value: 300)
+        }
+
+        rollback {
+            dbRollback
         }
     }
 }

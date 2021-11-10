@@ -3,10 +3,20 @@
     {
       "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
       "product_family": "SAL",
-      "detail_id": "834f8e6c-b13d-4686-9977-82fe4bde2f20",
-      "royalty_amount": 216.20,
-      "service_fee_amount": 72.07,
-      "collected_amount": 288.27,
+      "detail_id": "49163e1c-cbdb-454b-8b42-ca775aea2624",
+      "royalty_amount": 72.91,
+      "service_fee_amount": 24.30,
+      "collected_amount": 97.21,
+      "wr_wrk_inst": "122769471",
+      "work_title": "life and death of Mozart"
+    },
+    {
+      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "product_family": "SAL",
+      "detail_id": "20b73f78-c892-4c6d-a023-e6d01f988285",
+      "royalty_amount": 150.00,
+      "service_fee_amount": 50.00,
+      "collected_amount": 200.00,
       "wr_wrk_inst": "122769471",
       "work_title": "life and death of Mozart"
     },
@@ -23,20 +33,10 @@
     {
       "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
       "product_family": "SAL",
-      "detail_id": "98d17e37-2900-4478-b105-6dd99f48d22b",
-      "royalty_amount": 50.00,
-      "service_fee_amount": 16.67,
-      "collected_amount": 66.67,
-      "wr_wrk_inst": "122769471",
-      "work_title": "life and death of Mozart"
-    },
-    {
-      "rh_uid": "85f864f2-30a5-4215-ac4f-f1f541901218",
-      "product_family": "SAL",
-      "detail_id": "cd5dabe8-bada-42ca-8329-12ac72d10ad8",
-      "royalty_amount": 50.00,
-      "service_fee_amount": 16.67,
-      "collected_amount": 66.67,
+      "detail_id": "834f8e6c-b13d-4686-9977-82fe4bde2f20",
+      "royalty_amount": 216.20,
+      "service_fee_amount": 72.07,
+      "collected_amount": 288.27,
       "wr_wrk_inst": "122769471",
       "work_title": "life and death of Mozart"
     }
