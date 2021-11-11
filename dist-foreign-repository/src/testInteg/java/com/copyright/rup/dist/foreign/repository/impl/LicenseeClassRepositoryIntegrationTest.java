@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,13 +36,10 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "licensee-class-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class LicenseeClassRepositoryIntegrationTest {
 
     @Autowired
@@ -115,6 +111,7 @@ public class LicenseeClassRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "licensee-class-repository-test-data-init-find-detail-licensee-classes-by-scenario-id.groovy")
     public void testFindDetailLicenseeClassesByScenarioId() throws IOException {
         List<DetailLicenseeClass> expectedDetailsMapping =
             loadExpectedClasses("expected_detail_licensee_classes_by_scenario_id.json");
