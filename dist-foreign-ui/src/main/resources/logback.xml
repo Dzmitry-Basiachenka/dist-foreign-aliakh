@@ -65,7 +65,7 @@
     <logger name="org.jasig.cas.client.session.SingleSignOutHandler" level="ERROR" />
 
     <root level="${logLevelGen}">
-        <appender-ref ref="RUP-CONSOLE"/>
+        <appender-ref ref="RUP-LOG"/>
     </root>
 
 </configuration>
