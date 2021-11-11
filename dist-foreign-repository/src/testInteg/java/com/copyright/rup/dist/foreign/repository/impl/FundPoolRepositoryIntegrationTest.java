@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -46,13 +45,10 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "fund-pool-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class FundPoolRepositoryIntegrationTest {
 
     private static final String NTS_FUND_POOL_ID_1 = "b5b64c3a-55d2-462e-b169-362dca6a4dd7";
@@ -113,6 +109,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-by-id.groovy")
     public void testFindByIdForNts() {
         FundPool fundPool = fundPoolRepository.findById(NTS_FUND_POOL_ID_1);
         assertNotNull(fundPool);
@@ -124,6 +121,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-details-by-fund-pool-id.groovy")
     public void testFindByIdForAacl() {
         FundPool fundPool = fundPoolRepository.findById(AACL_FUND_POOL_ID);
         assertNotNull(fundPool);
@@ -135,6 +133,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-by-product-family.groovy")
     public void testFindByProductFamily() {
         List<FundPool> fundPools = fundPoolRepository.findByProductFamily(NTS_PRODUCT_FAMILY);
         assertEquals(3, fundPools.size());
@@ -147,6 +146,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-nts-not-attached-to-scenario.groovy")
     public void testFindNtsNotAttachedToScenario() {
         List<FundPool> fundPools = fundPoolRepository.findNtsNotAttachedToScenario();
         assertEquals(1, fundPools.size());
@@ -154,6 +154,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-aacl-not-attached-to-scenario.groovy")
     public void testFindAaclNotAttachedToScenario() {
         List<String> actualIds = fundPoolRepository.findAaclNotAttachedToScenario().stream()
             .map(FundPool::getId)
@@ -165,6 +166,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-sal-not-attached-to-scenario.groovy")
     public void testFindSalNotAttachedToScenario() {
         List<String> actualIds = fundPoolRepository.findSalNotAttachedToScenario().stream()
             .map(FundPool::getId)
@@ -175,6 +177,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchId() {
         List<String> names =
             fundPoolRepository.findNamesByUsageBatchId("63b45167-a6ce-4cd5-84c6-5167916aee98");
@@ -190,6 +193,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-by-id.groovy")
     public void testDelete() {
         assertNotNull(fundPoolRepository.findById(NTS_FUND_POOL_ID_1));
         fundPoolRepository.delete(NTS_FUND_POOL_ID_1);
@@ -197,6 +201,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-fund-pool-exists.groovy")
     public void testFundPoolExists() {
         assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, NAME_1));
         assertTrue(fundPoolRepository.fundPoolExists(NTS_PRODUCT_FAMILY, "q1 2019 100%"));
@@ -213,6 +218,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-insert-detail.groovy")
     public void testInsertDetail() {
         String fundPoolId = "6d38454b-ce71-4b0e-8ecf-436d23dc6c3e";
         FundPoolDetail detail = new FundPoolDetail();
@@ -236,6 +242,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-details-by-fund-pool-id.groovy")
     public void testFindDetailsByFundPoolId() throws IOException {
         List<FundPoolDetail> expectedDetails = loadExpectedFundPoolDetails("expected_aacl_fund_pool_details.json");
         List<FundPoolDetail> actualDetails = fundPoolRepository.findDetailsByFundPoolId(AACL_FUND_POOL_ID);
@@ -245,6 +252,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "fund-pool-repository-test-data-init-find-details-by-fund-pool-id.groovy")
     public void testDeleteDetailsByFundPoolId() {
         assertEquals(2, fundPoolRepository.findDetailsByFundPoolId(AACL_FUND_POOL_ID).size());
         fundPoolRepository.deleteDetailsByFundPoolId(AACL_FUND_POOL_ID);
