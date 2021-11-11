@@ -1,3 +1,17 @@
+14.1.31
+-
+* B-70501 Tech Debt: FDA: fix security vulnerability CVE-2021-22119
+* B-70501 Tech Debt: FDA: fix security vulnerabilities CVE-2021-33609, CVE-2021-22119
+* B-69880 FDA: Swagger 3 for FDA & LM: migrate to Swagger 3
+* B-70307 FDA: Test Containers for PostGres: move service integration tests to test containers
+* B-70307 FDA: Test Containers for PostGres: move repository integration tests to test containers
+* B-68823 Tech Debt: FDA: apply amount validators to UDM product family
+* B-68823 Tech Debt: FDA: apply amount validators to SAL product family
+* B-68823 Tech Debt: FDA: apply amount validators to NTS product family
+* B-68823 Tech Debt: FDA: apply amount validators to FAS product family
+* B-68823 Tech Debt: FDA: implement amount validators
+* B-65962 [Value] FDA&UDM: Create and Populate Value batch: adjust populate value batch logic to populate value ids by parts
+
 14.1.30
 -
 * B-67673 FDA: Value Edits: limit number of digits before decimal point in Price, Content fields
