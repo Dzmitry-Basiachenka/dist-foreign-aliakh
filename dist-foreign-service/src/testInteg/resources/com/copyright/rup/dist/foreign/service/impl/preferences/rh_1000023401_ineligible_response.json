@@ -23,7 +23,7 @@
           "preferenceCode": "ISRHDISTINELIGIBLE",
           "validBeginDate": "2019-01-09T00:00:00-0500",
           "validEndDate": "2099-01-01T00:00:00-0500",
-          "preferenceValue": "true"
+          "preferenceValue": "TRUE"
         }
       ]
     ]
