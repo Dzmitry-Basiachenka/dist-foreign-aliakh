@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,15 +45,13 @@ import java.util.stream.Collectors;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "rightsholder-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class RightsholderRepositoryIntegrationTest {
 
+    private static final String TEST_DATA_INIT_FIND = "rightsholder-repository-test-data-init-find.groovy";
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
     private static final String RH_NAME_7000813806 =
         "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
@@ -68,7 +65,8 @@ public class RightsholderRepositoryIntegrationTest {
     private RightsholderRepository rightsholderRepository;
 
     @Test
-    public void testFindRhPayeeByScenarioId() {
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-rh-payee-pair-by-scenario-id.groovy")
+    public void testFindRhPayeePairByScenarioId() {
         Usage expectedUsage1 = buildUsage();
         Usage expectedUsage2 = buildUsage();
         Usage expectedUsage3 = buildUsage();
@@ -94,43 +92,47 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testInsertRightsholder() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(7, rightsholders.size());
+        assertEquals(0, rightsholders.size());
         Rightsholder rightsholder = buildRightsholder();
         rightsholderRepository.insert(rightsholder);
         rightsholders = rightsholderRepository.findAll();
-        assertEquals(8, rightsholders.size());
+        assertEquals(1, rightsholders.size());
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND)
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(11, accountNumbers.size());
+        assertEquals(10, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Arrays.asList(7000813806L, 2000017004L, 2000017010L, 1000009997L,
             1000002859L, 1000005413L, 1000159997L, 7000800832L, 7001555529L, 2000105646L)));
     }
 
     @Test
+    @TestData(fileName = "rightsholder-repository-test-data-init-delete.groovy")
     public void testDeleteAll() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(7, rightsholders.size());
+        assertEquals(2, rightsholders.size());
         rightsholderRepository.deleteAll();
         rightsholders = rightsholderRepository.findAll();
         assertEquals(0, rightsholders.size());
     }
 
     @Test
+    @TestData(fileName = "rightsholder-repository-test-data-init-delete.groovy")
     public void testDeleteByAccountNumber() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(7, rightsholders.size());
+        assertEquals(2, rightsholders.size());
         rightsholderRepository.deleteByAccountNumber(7000813806L);
         rightsholders = rightsholderRepository.findAll();
-        assertEquals(6, rightsholders.size());
-        assertTrue(rightsholders.stream()
+        assertEquals(1, rightsholders.size());
+        assertEquals(0, rightsholders.stream()
             .filter(rightsholder -> Long.valueOf(7000813806L).equals(rightsholder.getAccountNumber()))
-            .collect(Collectors.toList()).isEmpty());
+            .count());
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND)
     public void testFindRros() {
         List<Rightsholder> rros = rightsholderRepository.findRros(FAS_PRODUCT_FAMILY);
         assertNotNull(rros);
@@ -148,6 +150,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND)
     public void testFindRightsholdersByAccountNumbers() {
         List<Rightsholder> actualResult = rightsholderRepository.findByAccountNumbers(
             Sets.newHashSet(7000813806L, 2000017004L));
@@ -161,11 +164,13 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindRightsholdersByAccountNumbersEmptyResult() {
+    @TestData(fileName = TEST_DATA_INIT_FIND)
+    public void testFindByAccountNumbersEmptyResult() {
         assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Sets.newHashSet(1111111111L))));
     }
 
     @Test
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-from-usages.groovy")
     public void testFindFromUsages() {
         List<Rightsholder> rightsholders =
             rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, null, null, null);
@@ -183,6 +188,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-from-usages.groovy")
     public void testFindCountFromUsages() {
         assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, StringUtils.EMPTY));
         assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, null));
@@ -191,6 +197,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-by-scenario-id.groovy")
     public void testFindByScenarioId() {
         List<Rightsholder> rightsholders =
             rightsholderRepository.findByScenarioId("d7e9bae8-6b10-4675-9668-8e3605a47dad");
