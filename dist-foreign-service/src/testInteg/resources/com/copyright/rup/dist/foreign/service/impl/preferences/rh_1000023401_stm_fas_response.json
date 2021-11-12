@@ -23,7 +23,7 @@
           "preferenceCode": "IS-RH-STM-IPRO",
           "validBeginDate": "2019-10-10T00:00:00-0400",
           "validEndDate": "2099-01-01T00:00:00-0500",
-          "preferenceValue": "true"
+          "preferenceValue": "TRUE"
         }
       ]
     ]
