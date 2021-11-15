@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,13 +35,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "rightsholder-discrepancy-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class RightsholderDiscrepancyRepositoryIntegrationTest {
 
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
@@ -51,6 +47,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-find-by-scenario-id-and-status.groovy")
     public void testInsertAll() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
@@ -65,6 +62,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-find-by-scenario-id-and-status.groovy")
     public void testFindCountByScenarioIdAndStatus() {
         assertEquals(3, rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.DRAFT));
@@ -73,6 +71,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-find-by-scenario-id-and-status.groovy")
     public void testFindByScenarioIdAndStatus() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus("3210b236-1239-4a60-9fab-888b84199321",
@@ -88,6 +87,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-delete-by-scenario-id.groovy")
     public void testDeleteByScenarioIdAndStatus() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
@@ -102,6 +102,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-delete-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
@@ -115,6 +116,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-approve-by-scenario-id.groovy")
     public void testApproveByScenarioId() {
         assertTrue(CollectionUtils.isEmpty(rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED, null, null)));
@@ -124,6 +126,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rightsholder-discrepancy-repository-test-data-init-find-prohibited-account-numbers.groovy")
     public void testFindProhibitedAccountNumbers() {
         List<Long> accountNumbers = rightsholderDiscrepancyRepository.findProhibitedAccountNumbers(SCENARIO_ID);
         assertNotNull(accountNumbers);
