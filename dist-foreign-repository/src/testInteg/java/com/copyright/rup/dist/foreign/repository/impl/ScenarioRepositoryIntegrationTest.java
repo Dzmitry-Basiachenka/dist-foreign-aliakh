@@ -38,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -66,13 +65,10 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "scenario-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class ScenarioRepositoryIntegrationTest {
 
     private static final String SCENARIO_NAME = "name";
@@ -91,6 +87,10 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USER = "user@copyright.com";
     private static final String ONE = "1.00";
+    private static final BigDecimal RH_MINIMUM_AMOUNT = new BigDecimal("300.00");
+    private static final BigDecimal PRE_SEVICE_FEE_AMOUNT = new BigDecimal("50.00");
+    private static final BigDecimal POST_SEVICE_FEE_AMOUNT = new BigDecimal("100.00");
+    private static final BigDecimal PRE_SERVICE_FEE_FUND_TOTAL = new BigDecimal("50.00");
 
     @Autowired
     private ScenarioRepository scenarioRepository;
@@ -104,6 +104,7 @@ public class ScenarioRepositoryIntegrationTest {
     private IScenarioUsageFilterRepository filterRepository;
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testFindCountByName() {
         assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
         scenarioRepository.insert(buildScenario());
@@ -111,43 +112,28 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-by-product-family.groovy")
     public void testFindByProductFamily() {
-        List<Scenario> fasScenarios = scenarioRepository.findByProductFamily("FAS");
-        assertEquals(9, fasScenarios.size());
+        List<Scenario> fasScenarios = scenarioRepository.findByProductFamily(FAS_PRODUCT_FAMILY);
+        assertEquals(2, fasScenarios.size());
         verifyScenario(fasScenarios.get(0), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
             "The description of scenario 6", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(fasScenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
             "The description of scenario 2", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name 9",
-            "The description of scenario 9", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
-            "The description of scenario 4", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(4), SCENARIO_ID_5, "Scenario name 5", "The description of scenario 5",
-            FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(fasScenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
-            "The description of scenario 3", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(fasScenarios.get(6), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
-            "Not all usages are paid", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(fasScenarios.get(7), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
-            "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(fasScenarios.get(8), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
-            "Scenario already archived", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.ARCHIVED);
         List<Scenario> ntsScenarios = scenarioRepository.findByProductFamily(NTS_PRODUCT_FAMILY);
-        assertEquals(3, ntsScenarios.size());
+        assertEquals(2, ntsScenarios.size());
         verifyScenario(ntsScenarios.get(0), SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8",
             NTS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
-        assertNotNull(ntsScenarios.get(0).getNtsFields());
+        verifyNtsFields(ntsScenarios.get(0).getNtsFields(), RH_MINIMUM_AMOUNT, PRE_SEVICE_FEE_AMOUNT,
+            POST_SEVICE_FEE_AMOUNT, new BigDecimal("0.00"), "815d6736-a34e-4fc8-96c3-662a114fa7f2", null);
         verifyScenario(ntsScenarios.get(1), SCENARIO_ID_3, "Rejected NTS scenario with audit",
             "The description of scenario 7", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        Scenario ntsScenario = ntsScenarios.get(2);
-        verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
-            "Description for test NTS scenario", NTS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
-        assertNotNull(ntsScenario.getNtsFields());
-        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
-        assertNotNull(ntsScenarios.get(1).getNtsFields());
+        verifyNtsFields(ntsScenarios.get(1).getNtsFields(), RH_MINIMUM_AMOUNT, PRE_SEVICE_FEE_AMOUNT,
+            POST_SEVICE_FEE_AMOUNT, new BigDecimal("0.00"), "7141290b-7042-4cc6-975f-10546370adce", null);
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-by-product-families-and-statuses.groovy")
     public void testFindByProductFamiliesAndStatuses() {
         List<Scenario> scenarios =
             scenarioRepository.findByProductFamiliesAndStatuses(Sets.newHashSet(NTS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
@@ -164,6 +150,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-fas.groovy")
     public void testFindWithAmountsAndLastActionForFasScenario() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_2);
         verifyScenario(scenario, SCENARIO_ID_2, "Scenario name 9",
@@ -187,6 +174,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-fas.groovy")
     public void testFindArchivedWithAmountsAndLastActionForFasScenario() {
         Scenario scenario =
             scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_5);
@@ -202,6 +190,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-nts.groovy")
     public void testFindWithAmountsAndLastActionForNtsScenario() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_3);
         verifyScenario(scenario, SCENARIO_ID_3, "Rejected NTS scenario with audit",
@@ -212,12 +201,8 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("1100.0000000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("780.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
-        NtsFields ntsFields = scenario.getNtsFields();
-        assertEquals("7141290b-7042-4cc6-975f-10546370adce", ntsFields.getPreServiceFeeFundId());
-        assertEquals("NTS Fund Pool 3", ntsFields.getPreServiceFeeFundName());
-        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
-        assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
-        assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
+        verifyNtsFields(scenario.getNtsFields(), RH_MINIMUM_AMOUNT, PRE_SEVICE_FEE_AMOUNT, POST_SEVICE_FEE_AMOUNT,
+            PRE_SERVICE_FEE_FUND_TOTAL, "7141290b-7042-4cc6-975f-10546370adce", "NTS Fund Pool 3");
         assertEquals(USER, scenario.getCreateUser());
         assertEquals(Date.from(OffsetDateTime.parse("2017-02-14T12:00:00+00:00").toInstant()),
             scenario.getCreateDate());
@@ -235,9 +220,9 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-archived-with-amounts-and-last-action-nts.groovy")
     public void testFindArchivedWithAmountsAndLastActionForNtsScenario() {
-        Scenario scenario =
-            scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_4);
+        Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_4);
         verifyScenario(scenario, SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8", NTS_PRODUCT_FAMILY,
             ScenarioStatusEnum.SENT_TO_LM);
         ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
@@ -246,12 +231,8 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("1100.0000000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("780.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
-        NtsFields ntsFields = scenario.getNtsFields();
-        assertEquals("815d6736-a34e-4fc8-96c3-662a114fa7f2", ntsFields.getPreServiceFeeFundId());
-        assertEquals("NTS Fund Pool 4", ntsFields.getPreServiceFeeFundName());
-        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
-        assertEquals(new BigDecimal("100.00"), ntsFields.getPostServiceFeeAmount());
-        assertEquals(new BigDecimal("50.00"), ntsFields.getPreServiceFeeAmount());
+        verifyNtsFields(scenario.getNtsFields(), RH_MINIMUM_AMOUNT, PRE_SEVICE_FEE_AMOUNT, POST_SEVICE_FEE_AMOUNT,
+            PRE_SERVICE_FEE_FUND_TOTAL, "815d6736-a34e-4fc8-96c3-662a114fa7f2", "NTS Fund Pool 4");
         assertEquals(USER, scenario.getCreateUser());
         assertEquals(Date.from(OffsetDateTime.parse("2017-02-14T12:00:00+00:00").toInstant()),
             scenario.getCreateDate());
@@ -260,6 +241,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchId() {
         List<String> scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
@@ -273,6 +255,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchIdForArchiveUsage() {
         List<String> scenariosNames =
             scenarioRepository.findNamesByUsageBatchId("56282cac-2468-48d4-b346-93d3458a656a");
@@ -282,6 +265,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchIdAssociatedWithFilterOnly() {
         List<String> scenariosNames =
             scenarioRepository.findNamesByUsageBatchId("4eff2685-4895-45a1-a886-c41a0f98204b");
@@ -291,6 +275,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-nts-fund-pool-id.groovy")
     public void testFindNameByNtsFundPoolId() {
         assertEquals(SENT_TO_LM_AUDIT,
             scenarioRepository.findNameByNtsFundPoolId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
@@ -298,6 +283,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-aacl-fund-pool-id.groovy")
     public void testFindNameByAaclFundPoolId() {
         assertEquals("AACL Scenario 1",
             scenarioRepository.findNameByAaclFundPoolId("39548ee4-7929-477e-b9d2-bcb1e76f8037"));
@@ -305,6 +291,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-sal-fund-pool-id.groovy")
     public void testFindNameBySalFundPoolId() {
         assertEquals("SAL Scenario 1",
             scenarioRepository.findNameBySalFundPoolId("462111b6-5d30-4a43-a35b-14796d34d847"));
@@ -312,6 +299,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testRemove() {
         scenarioRepository.insert(buildScenario());
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
@@ -320,6 +308,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-update-status.groovy")
     public void testUpdateStatus() {
         Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_6);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
@@ -335,6 +324,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-update-name-by-id.groovy")
     public void testUpdateNameById() {
         Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_6);
         assertEquals("Scenario name 3", scenario.getName());
@@ -349,6 +339,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-source-rros.groovy")
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario());
         fasUsageRepository.insert(buildUsage());
@@ -370,6 +361,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-rightsholders-by-scenario-id-and-source-rro.groovy")
     public void testFindRightsholdersByScenarioIdAndSourceRro() {
         scenarioRepository.insert(buildScenario());
         // build one usage with different pair of rh and payee
@@ -403,6 +395,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-find-ids-for-archiving.groovy")
     public void testFindIdsForArchiving() {
         List<String> scenariosIds = scenarioRepository.findIdsForArchiving();
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
@@ -411,6 +404,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-insert-aacl-scenario.groovy")
     public void testInsertAaclScenario() {
         Scenario scenario = buildScenario();
         scenario.setProductFamily(AACL_PRODUCT_FAMILY);
@@ -440,6 +434,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertSalScenario() {
         Scenario scenario = buildScenario();
         scenario.setProductFamily(SAL_PRODUCT_FAMILY);
@@ -461,6 +456,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-repository-test-data-init-insert-nts-scenario-and-add-usages.groovy")
     public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario();
         NtsFields ntsFields = new NtsFields();
@@ -558,6 +554,18 @@ public class ScenarioRepositoryIntegrationTest {
             scenario.getCreateDate().toInstant());
         assertEquals(productFamily, scenario.getProductFamily());
         assertEquals(status, scenario.getStatus());
+    }
+
+    private void verifyNtsFields(NtsFields ntsFields, BigDecimal rhMinimumAmount, BigDecimal preServiceFeeAmount,
+                                 BigDecimal postServiceFeeAmount, BigDecimal preServiceFeeFundTotal,
+                                 String preServiceFeeFundId, String preServiceFeeFundName) {
+        assertNotNull(ntsFields);
+        assertEquals(rhMinimumAmount, ntsFields.getRhMinimumAmount());
+        assertEquals(preServiceFeeAmount, ntsFields.getPreServiceFeeAmount());
+        assertEquals(postServiceFeeAmount, ntsFields.getPostServiceFeeAmount());
+        assertEquals(preServiceFeeFundTotal, ntsFields.getPreServiceFeeFundTotal());
+        assertEquals(preServiceFeeFundId, ntsFields.getPreServiceFeeFundId());
+        assertEquals(preServiceFeeFundName, ntsFields.getPreServiceFeeFundName());
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
