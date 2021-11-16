@@ -85,13 +85,21 @@ public class AmountValidatorTest {
         ValueContext context = createMock(ValueContext.class);
         ValidationResult result = new AmountValidator().apply(value, context);
         assertEquals(isValidatorFailed, result.isError());
-        verifyErrorMessage(result);
+        verifyErrorMessage(result, "Field value should be positive number or zero and should not exceed 10 digits");
     }
 
-    private void verifyErrorMessage(ValidationResult result) {
+    @Test
+    public void testAmountValidatorWithCustomMessage() {
+        ValueContext context = createMock(ValueContext.class);
+        String errorMessage = "Field value should be positive number or zero";
+        ValidationResult result = new AmountValidator(errorMessage).apply(value, context);
+        assertEquals(isValidatorFailed, result.isError());
+        verifyErrorMessage(result, errorMessage);
+    }
+
+    private void verifyErrorMessage(ValidationResult result, String expectedErrorMessage) {
         try {
-            assertEquals("Field value should be positive number or zero and should not exceed 10 digits",
-                result.getErrorMessage());
+            assertEquals(expectedErrorMessage, result.getErrorMessage());
         } catch (IllegalStateException e) {
             assertEquals("The result is not an error. It cannot contain error message", e.getMessage());
         }

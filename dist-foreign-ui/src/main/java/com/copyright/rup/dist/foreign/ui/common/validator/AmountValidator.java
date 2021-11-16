@@ -28,6 +28,15 @@ public class AmountValidator extends AbstractValidator<String> {
         super(ForeignUi.getMessage("field.error.positive_number_or_zero_and_length", 10));
     }
 
+    /**
+     * Constructor.
+     *
+     * @param errorMessage the error message
+     */
+    public AmountValidator(String errorMessage) {
+        super(errorMessage);
+    }
+
     @Override
     public ValidationResult apply(String value, ValueContext context) {
         return toResult(value, isValid(StringUtils.trimToEmpty(value)));

@@ -181,8 +181,7 @@ public class AaclUsageAgeWeightWindowTest {
         List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
         TextField weightField = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
-        String positiveNumberValidationMessage =
-            "Field value should be positive number or zero and should not exceed 10 digits";
+        String positiveNumberValidationMessage = "Field value should be positive number or zero";
         verifyField(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
         verifyField(weightField, "   ", binder, emptyFieldValidationMessage, false);
         verifyField(weightField, " -1 ", binder, positiveNumberValidationMessage, false);

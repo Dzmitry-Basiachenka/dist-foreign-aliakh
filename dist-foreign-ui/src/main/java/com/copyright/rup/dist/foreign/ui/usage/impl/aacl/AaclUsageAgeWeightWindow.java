@@ -116,7 +116,7 @@ public class AaclUsageAgeWeightWindow extends AaclCommonScenarioParameterWindow<
         Binder<UsageAge> binder = grid.getEditor().getBinder();
         return binder.forField(textField)
             .withValidator(new RequiredValidator())
-            .withValidator(new AmountValidator())
+            .withValidator(new AmountValidator(ForeignUi.getMessage("field.error.positive_number_or_zero")))
             .withConverter(new BigDecimalConverter())
             .bind(UsageAge::getWeight, UsageAge::setWeight);
     }
