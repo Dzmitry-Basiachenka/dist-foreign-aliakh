@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -16,7 +16,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -117,8 +116,7 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         Binder<PublicationType> binder = grid.getEditor().getBinder();
         return binder.forField(textField)
             .withValidator(new RequiredValidator())
-            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
-                ForeignUi.getMessage("field.error.positive_number_or_zero"))
+            .withValidator(new AmountValidator())
             .withConverter(new BigDecimalConverter())
             .bind(PublicationType::getWeight, PublicationType::setWeight);
     }

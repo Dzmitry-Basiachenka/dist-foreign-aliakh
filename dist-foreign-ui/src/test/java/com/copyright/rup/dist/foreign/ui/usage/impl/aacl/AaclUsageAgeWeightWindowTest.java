@@ -15,6 +15,9 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
+
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
@@ -23,7 +26,10 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -168,6 +174,28 @@ public class AaclUsageAgeWeightWindowTest {
         verify(listener);
     }
 
+    @Test
+    public void testWeightFieldValidation() {
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        Binder binder = grid.getEditor().getBinder();
+        List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
+        TextField weightField = fields.get(0);
+        String emptyFieldValidationMessage = "Field value should be specified";
+        String positiveNumberValidationMessage =
+            "Field value should be positive number or zero and should not exceed 10 digits";
+        verifyField(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        verifyField(weightField, "   ", binder, emptyFieldValidationMessage, false);
+        verifyField(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
+        verifyField(weightField, ".05", binder, positiveNumberValidationMessage, false);
+        verifyField(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
+        verifyField(weightField, "value", binder, positiveNumberValidationMessage, false);
+        verifyField(weightField, "0", binder, null, true);
+        verifyField(weightField, " 0.00 ", binder, null, true);
+        verifyField(weightField, "125", binder, null, true);
+        verifyField(weightField, "125.123456789", binder, null, true);
+        verifyField(weightField, "9999999999.99", binder, null, true);
+    }
+
     private void verifySize(Component component) {
         assertEquals(525, component.getWidth(), 0);
         assertEquals(300, component.getHeight(), 0);
@@ -203,5 +231,13 @@ public class AaclUsageAgeWeightWindowTest {
         usageAge.setPeriod(period);
         usageAge.setWeight(weight);
         return usageAge;
+    }
+
+    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 }
