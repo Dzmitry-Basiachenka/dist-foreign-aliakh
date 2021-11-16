@@ -1,12 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -26,8 +28,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
-import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -37,6 +38,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +51,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ViewAaclFundPoolWindow}.
@@ -86,23 +87,19 @@ public class ViewAaclFundPoolWindowTest {
 
     @Test
     public void testStructure() {
-        assertEquals("View Fund Pool", viewAaclFundPoolWindow.getCaption());
-        verifySize(viewAaclFundPoolWindow);
+        verifyWindow(viewAaclFundPoolWindow, "View Fund Pool", 900, 550, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) viewAaclFundPoolWindow.getContent();
         assertEquals(3, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
         Component component = content.getComponent(1);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
+        verifyGrid((Grid) component, Arrays.asList(
+            Triple.of("Fund Pool Name", -1.0, 1),
+            Triple.of("Gross Fund Pool Total", 170.0, -1),
+            Triple.of("Created By", 170.0, -1),
+            Triple.of("Created Date", -1.0, 0)));
         assertEquals(1, content.getExpandRatio(component), 0);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
-        assertEquals(3, buttonsLayout.getComponentCount());
-        Button viewButton = (Button) buttonsLayout.getComponent(0);
-        Button deleteButton = (Button) buttonsLayout.getComponent(1);
-        Button closeButton = (Button) buttonsLayout.getComponent(2);
-        assertEquals("View", viewButton.getCaption());
-        assertEquals("Delete", deleteButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
+        verifyButtonsLayout(content.getComponent(2), "View", "Delete", "Close");
     }
 
     @Test
@@ -190,27 +187,6 @@ public class ViewAaclFundPoolWindowTest {
         replay(searchWidget, grid);
         viewAaclFundPoolWindow.performSearch();
         verify(searchWidget, grid);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(900, component.getWidth(), 0);
-        assertEquals(550, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Pool Name", "Gross Fund Pool Total", "Created By", "Created Date"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, 170.0, 170.0, -1.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(1, -1, -1, 0),
-            columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
-        Grid.Column createDateColumn = columns.get(3);
-        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
     private Button getButton(int buttonIndex) {

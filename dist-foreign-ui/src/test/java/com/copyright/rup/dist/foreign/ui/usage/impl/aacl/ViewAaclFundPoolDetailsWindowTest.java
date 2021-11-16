@@ -1,29 +1,29 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.FundPoolDetail;
 
-import com.vaadin.server.Sizeable;
-import com.vaadin.ui.Button;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ViewAaclFundPoolDetailsWindow}.
@@ -47,39 +47,21 @@ public class ViewAaclFundPoolDetailsWindowTest {
 
     @Test
     public void testStructure() {
-        assertEquals("AACL Fund Pool", window.getCaption());
         assertEquals("view-aacl-fund-pool-details-window", window.getStyleName());
-        verifySize(window);
+        verifyWindow(window, "AACL Fund Pool", 600, 600, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
+        verifyGrid((Grid) component, Arrays.asList(
+            Triple.of("Agg LC ID", -1.0, 1),
+            Triple.of("Agg LC Enrollment", -1.0, 2),
+            Triple.of("Agg LC Discipline", -1.0, 3),
+            Triple.of("Gross Amount", -1.0, 2)));
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
         assertEquals("view-aacl-fund-pool-details-buttons", buttonsLayout.getStyleName());
-        assertEquals(1, buttonsLayout.getComponentCount());
-        Button closeButton = (Button) buttonsLayout.getComponent(0);
-        assertEquals("Close", closeButton.getCaption());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(600, component.getWidth(), 0);
-        assertEquals(600, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Agg LC ID", "Agg LC Enrollment", "Agg LC Discipline", "Gross Amount"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(1, 2, 3, 2),
-            columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
+        verifyButtonsLayout(buttonsLayout, "Close");
     }
 
     private FundPool buildFundPool() {

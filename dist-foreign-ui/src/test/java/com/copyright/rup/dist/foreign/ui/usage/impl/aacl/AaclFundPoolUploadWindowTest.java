@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -11,7 +16,6 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -23,13 +27,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -44,9 +44,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 /**
  * Verifies {@link AaclFundPoolUploadWindow}.
@@ -77,11 +75,7 @@ public class AaclFundPoolUploadWindowTest {
     public void testConstructor() {
         replay(aaclUsageController);
         window = new AaclFundPoolUploadWindow(aaclUsageController);
-        assertEquals("Upload Fund Pool", window.getCaption());
-        assertEquals(380, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(165, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Upload Fund Pool", 380, 165, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verify(aaclUsageController);
     }
@@ -130,12 +124,14 @@ public class AaclFundPoolUploadWindowTest {
         window = new AaclFundPoolUploadWindow(aaclUsageController);
         Binder binder = Whitebox.getInternalState(window, "fundPoolBinder");
         TextField fundPoolName = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
-        verifyField(fundPoolName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(fundPoolName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(fundPoolName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
+        validateFieldAndVefiryErrorMessage(fundPoolName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
             false);
-        verifyField(fundPoolName, FUND_POOL_NAME, binder, "Fund Pool with such name already exists", false);
-        verifyField(fundPoolName, FUND_POOL_NAME, binder, null, true);
+        validateFieldAndVefiryErrorMessage(fundPoolName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVefiryErrorMessage(fundPoolName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
+        validateFieldAndVefiryErrorMessage(fundPoolName, FUND_POOL_NAME, binder,
+            "Fund Pool with such name already exists", false);
+        validateFieldAndVefiryErrorMessage(fundPoolName, FUND_POOL_NAME, binder, null, true);
         verify(aaclUsageController);
     }
 
@@ -145,7 +141,11 @@ public class AaclFundPoolUploadWindowTest {
         assertEquals(3, verticalLayout.getComponentCount());
         verifyFundPoolNameComponent(verticalLayout.getComponent(0));
         verifyUploadComponent(verticalLayout.getComponent(1));
-        verifyButtonsLayout(verticalLayout.getComponent(2));
+        verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
+        Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(2)).getComponent(0);
+        verifyLoadClickListener(loadButton, Arrays.asList(
+            Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
+            Whitebox.getInternalState(window, "uploadField")));
     }
 
     private void verifyFundPoolNameComponent(Component component) {
@@ -159,35 +159,6 @@ public class AaclFundPoolUploadWindowTest {
         assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        Button loadButton = verifyButton(layout.getComponent(0), "Upload");
-        verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
-            Whitebox.getInternalState(window, "uploadField"));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
     }
 
     private FundPool buildFundPool() {
@@ -205,15 +176,5 @@ public class AaclFundPoolUploadWindowTest {
             fail();
         }
         return result;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

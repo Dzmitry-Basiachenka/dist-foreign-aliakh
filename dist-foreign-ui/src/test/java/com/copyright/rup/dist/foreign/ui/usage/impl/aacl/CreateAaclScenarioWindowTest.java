@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -127,7 +130,7 @@ public class CreateAaclScenarioWindowTest {
         verifyScenarioParameterWidget(content.getComponent(3), "Pub Type Weights");
         verifyScenarioParameterWidget(content.getComponent(4), "Licensee Class Mapping");
         verifyDescriptionArea(content.getComponent(5));
-        verifyButtonsLayout(content.getComponent(6));
+        verifyButtonsLayout(content.getComponent(6), "Confirm", "Cancel");
     }
 
     @Test
@@ -224,11 +227,11 @@ public class CreateAaclScenarioWindowTest {
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         String emptyFieldValidationMessage = "Field value should be specified";
-        verifyField(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVefiryErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
+        validateFieldAndVefiryErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
 
@@ -269,32 +272,6 @@ public class CreateAaclScenarioWindowTest {
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
         assertEquals("scenario-description", descriptionArea.getId());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        assertTrue(buttonsLayout.isSpacing());
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Confirm");
-        verifyButton(buttonsLayout.getComponent(1), "Cancel");
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertNotNull(component);
-        Button button = (Button) component;
-        assertEquals(caption, button.getCaption());
-        return button;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private static class TestCreateAaclScenarioWindow extends CreateAaclScenarioWindow {

@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -8,24 +12,25 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +38,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AggregateLicenseeClassMappingWindow}.
@@ -62,7 +66,13 @@ public class AggregateLicenseeClassMappingWindowTest {
     public void testConstructorInEditMode() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         verifyCommonWindowComponents(content);
-        verifyEditableButtonsLayout(content);
+        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), true,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), true,
+            buttonsLayout.getComponent(3), true));
     }
 
     @Test
@@ -70,7 +80,13 @@ public class AggregateLicenseeClassMappingWindowTest {
         window = new AggregateLicenseeClassMappingWindow(false);
         VerticalLayout content = (VerticalLayout) window.getContent();
         verifyCommonWindowComponents(content);
-        verifyViewOnlyButtonsLayout(content);
+        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), false,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), false,
+            buttonsLayout.getComponent(3), false));
     }
 
     @Test
@@ -129,8 +145,7 @@ public class AggregateLicenseeClassMappingWindowTest {
     }
 
     private void verifyCommonWindowComponents(VerticalLayout content) {
-        assertEquals("Licensee Class Mapping", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Licensee Class Mapping", 950, 550, Unit.PIXELS);
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
@@ -138,58 +153,16 @@ public class AggregateLicenseeClassMappingWindowTest {
         assertEquals(1, content.getExpandRatio(component), 0);
     }
 
-    private void verifyEditableButtonsLayout(VerticalLayout content) {
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(4, buttonsLayout.getComponentCount());
-        Button saveButton = (Button) buttonsLayout.getComponent(0);
-        assertEquals("Save", saveButton.getCaption());
-        assertTrue(saveButton.isVisible());
-        Button closeButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Close", closeButton.getCaption());
-        assertTrue(closeButton.isVisible());
-        Label placeholderLabel = (Label) buttonsLayout.getComponent(2);
-        assertNull(placeholderLabel.getCaption());
-        assertTrue(placeholderLabel.isVisible());
-        Button defaultButton = (Button) buttonsLayout.getComponent(3);
-        assertEquals("Default", defaultButton.getCaption());
-        assertTrue(defaultButton.isVisible());
-    }
-
-    private void verifyViewOnlyButtonsLayout(VerticalLayout content) {
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(4, buttonsLayout.getComponentCount());
-        Button saveButton = (Button) buttonsLayout.getComponent(0);
-        assertEquals("Save", saveButton.getCaption());
-        assertFalse(saveButton.isVisible());
-        Button closeButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Close", closeButton.getCaption());
-        assertTrue(closeButton.isVisible());
-        Label placeholderLabel = (Label) buttonsLayout.getComponent(2);
-        assertNull(placeholderLabel.getCaption());
-        assertFalse(placeholderLabel.isVisible());
-        Button defaultButton = (Button) buttonsLayout.getComponent(3);
-        assertEquals("Default", defaultButton.getCaption());
-        assertFalse(defaultButton.isVisible());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(950, component.getWidth(), 0);
-        assertEquals(550, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
-    }
-
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
+        UiCommonHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Det LC ID", -1.0, 1),
+            Triple.of("Det LC Enrollment", -1.0, 2),
+            Triple.of("Det LC Discipline", -1.0, 3),
+            Triple.of("Agg LC ID", -1.0, 1),
+            Triple.of("Agg LC Enrollment", -1.0, 2),
+            Triple.of("Agg LC Discipline", -1.0, 3)));
         List<Column> columns = grid.getColumns();
-        assertEquals(
-            Arrays.asList("Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Agg LC ID", "Agg LC Enrollment",
-                "Agg LC Discipline"), columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(1, 2, 3, 1, 2, 3),
-            columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertTrue(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
     }
