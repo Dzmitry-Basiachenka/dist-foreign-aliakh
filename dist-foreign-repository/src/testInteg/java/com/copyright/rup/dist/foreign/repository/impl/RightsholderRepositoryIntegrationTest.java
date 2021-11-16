@@ -90,6 +90,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertRightsholder() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
         assertEquals(0, rightsholders.size());

@@ -69,6 +69,7 @@ public class FundPoolRepositoryIntegrationTest {
     private FundPoolRepository fundPoolRepository;
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsert() {
         assertNull(fundPoolRepository.findById(NTS_FUND_POOL_ID_2));
         FundPool fundPool = new FundPool();
@@ -86,6 +87,7 @@ public class FundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertSalFundPool() {
         assertNull(fundPoolRepository.findById(SAL_FUND_POOL_ID));
         FundPool.SalFields salFields = buildSalFields();

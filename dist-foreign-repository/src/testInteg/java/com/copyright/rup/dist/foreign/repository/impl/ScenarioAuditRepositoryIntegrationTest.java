@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,13 +33,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "scenario-audit-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class ScenarioAuditRepositoryIntegrationTest {
 
     private static final String SCENARIO_UID = "3210b236-1239-4a60-9fab-888b84199321";
@@ -49,19 +45,31 @@ public class ScenarioAuditRepositoryIntegrationTest {
     private IScenarioAuditRepository scenarioAuditRepository;
 
     @Test
-    public void testInsertAndFind() {
+    @TestData(fileName = "scenario-audit-repository-test-data-init-insert.groovy")
+    public void testInsert() {
         assertEquals(0, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
         ScenarioAuditItem scenarioAuditItem = buildScenarioAuditItem(SCENARIO_UID);
         scenarioAuditRepository.insert(scenarioAuditItem);
-        scenarioAuditRepository.insert(buildScenarioAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c"));
         List<ScenarioAuditItem> scenarioAuditItems = scenarioAuditRepository.findByScenarioId(SCENARIO_UID);
-        assertTrue(CollectionUtils.isNotEmpty(scenarioAuditItems));
         assertEquals(1, CollectionUtils.size(scenarioAuditItems));
         assertEquals(scenarioAuditItem, scenarioAuditItems.get(0));
     }
 
     @Test
-    public void testDeleteByBatchId() {
+    @TestData(fileName = "scenario-audit-repository-test-data-init-find-by-scenario-id.groovy")
+    public void testFindByScenarioId() {
+        assertEquals(0, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
+        ScenarioAuditItem scenarioAuditItem = buildScenarioAuditItem(SCENARIO_UID);
+        scenarioAuditRepository.insert(scenarioAuditItem);
+        scenarioAuditRepository.insert(buildScenarioAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c"));
+        List<ScenarioAuditItem> scenarioAuditItems = scenarioAuditRepository.findByScenarioId(SCENARIO_UID);
+        assertEquals(1, CollectionUtils.size(scenarioAuditItems));
+        assertEquals(scenarioAuditItem, scenarioAuditItems.get(0));
+    }
+
+    @Test
+    @TestData(fileName = "scenario-audit-repository-test-data-init-find-by-scenario-id.groovy")
+    public void testDeleteByScenarioId() {
         scenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID));
         assertEquals(1, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
         scenarioAuditRepository.deleteByScenarioId(SCENARIO_UID);
@@ -69,6 +77,7 @@ public class ScenarioAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-audit-repository-test-data-init-is-audit-item-exist.groovy")
     public void testIsAuditItemExist() {
         assertFalse(scenarioAuditRepository.isAuditItemExist(SCENARIO_UID, ScenarioActionTypeEnum.SUBMITTED));
         scenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID));
