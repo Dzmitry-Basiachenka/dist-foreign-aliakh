@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -18,8 +19,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWi
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.BinderValidationStatus;
-import com.vaadin.data.ValidationResult;
+import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -43,6 +43,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -80,8 +81,6 @@ public class UdmValueFiltersWindowTest {
     private static final String INVALID_NUMBER = "a12345678";
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
-    private static final String DECIMAL_VALIDATION_MESSAGE =
-        "Field value should be positive number and should not exceed 10 digits";
 
     private UdmValueFiltersWindow window;
     private Binder<UdmUsageFilter> binder;
@@ -190,47 +189,46 @@ public class UdmValueFiltersWindowTest {
     @Test
     public void testWrWrkInstValidation() {
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        verifyTextFieldValidationMessage(wrWrkInstField, "123456789", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890", "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(wrWrkInstField, "123456789", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, "234fdsfs", "Field value should contain numeric values only",
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "123456789", null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "1234567890", "Field value should not exceed 9 digits",
+            false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "123456789", null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "234fdsfs", "Field value should contain numeric values only",
             false);
     }
 
     @Test
     public void testSystemTitleFieldValidation() {
         TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
-        verifyTextFieldValidationMessage(
-            systemTitleField, buildStringWithExpectedLength(2000), StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(systemTitleField, buildStringWithExpectedLength(2001),
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
             "Field value should not exceed 2000 characters", false);
     }
 
     @Test
     public void testStandardNumberFieldValidation() {
         TextField systemStandardNumberField = Whitebox.getInternalState(window, "systemStandardNumberField");
-        verifyTextFieldValidationMessage(systemStandardNumberField, buildStringWithExpectedLength(1000),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(systemStandardNumberField, buildStringWithExpectedLength(1001),
+        validateFieldAndVerifyErrorMessage(systemStandardNumberField, buildStringWithExpectedLength(1000), null, true);
+        validateFieldAndVerifyErrorMessage(systemStandardNumberField, buildStringWithExpectedLength(1001),
             "Field value should not exceed 1000 characters", false);
     }
 
     @Test
     public void testRhAccountNumberFieldValidation() {
         TextField rhAccountNumberField = Whitebox.getInternalState(window, "rhAccountNumberField");
-        verifyTextFieldValidationMessage(rhAccountNumberField, "1234567897", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(
-            rhAccountNumberField, "21234567897", "Field value should not exceed 10 digits", false);
-        verifyTextFieldValidationMessage(rhAccountNumberField, "1234567891", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(rhAccountNumberField, "234fdsfs",
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1234567897", null, true);
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "21234567897",
+            "Field value should not exceed 10 digits", false);
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1234567891", null, true);
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "234fdsfs",
             "Field value should contain numeric values only", false);
     }
 
     @Test
     public void testRhNameValidation() {
         TextField rhNameField = Whitebox.getInternalState(window, "rhNameField");
-        verifyTextFieldValidationMessage(rhNameField, buildStringWithExpectedLength(255), StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(rhNameField, buildStringWithExpectedLength(256),
+        validateFieldAndVerifyErrorMessage(rhNameField, buildStringWithExpectedLength(255), null, true);
+        validateFieldAndVerifyErrorMessage(rhNameField, buildStringWithExpectedLength(256),
             "Field value should not exceed 255 characters", false);
     }
 
@@ -264,30 +262,27 @@ public class UdmValueFiltersWindowTest {
     @Test
     public void testLastPriceCommentValidation() {
         TextField lastPriceCommentField = Whitebox.getInternalState(window, "lastPriceCommentField");
-        verifyTextFieldValidationMessage(lastPriceCommentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(lastPriceCommentField, buildStringWithExpectedLength(1024),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(lastPriceCommentField, buildStringWithExpectedLength(1025),
+        validateFieldAndVerifyErrorMessage(lastPriceCommentField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(lastPriceCommentField, buildStringWithExpectedLength(1024), null, true);
+        validateFieldAndVerifyErrorMessage(lastPriceCommentField, buildStringWithExpectedLength(1025),
             "Field value should not exceed 1024 characters", false);
     }
 
     @Test
     public void testLastContentCommentValidation() {
         TextField lastContentCommentField = Whitebox.getInternalState(window, "lastContentCommentField");
-        verifyTextFieldValidationMessage(lastContentCommentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(lastContentCommentField, buildStringWithExpectedLength(1024),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(lastContentCommentField, buildStringWithExpectedLength(1025),
+        validateFieldAndVerifyErrorMessage(lastContentCommentField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(lastContentCommentField, buildStringWithExpectedLength(1024), null, true);
+        validateFieldAndVerifyErrorMessage(lastContentCommentField, buildStringWithExpectedLength(1025),
             "Field value should not exceed 1024 characters", false);
     }
 
     @Test
     public void testCommentValidation() {
         TextField commentField = Whitebox.getInternalState(window, "commentField");
-        verifyTextFieldValidationMessage(commentField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(commentField, buildStringWithExpectedLength(1024),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(commentField, buildStringWithExpectedLength(1025),
+        validateFieldAndVerifyErrorMessage(commentField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1024), null, true);
+        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1025),
             "Field value should not exceed 1024 characters", false);
     }
 
@@ -412,23 +407,29 @@ public class UdmValueFiltersWindowTest {
     }
 
     private void verifyAmountValidationZeroAllowed(TextField textField) {
-        verifyTextFieldValidationMessage(textField, "0", StringUtils.EMPTY, true);
-        verifyCommonAmountValidations(textField);
+        validateFieldAndVerifyErrorMessage(textField, "0", null, true);
+        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", null, true);
+        verifyCommonAmountValidations(textField,
+            "Field value should be positive number or zero and should not exceed 10 digits");
     }
 
     private void verifyAmountValidationZeroDenied(TextField textField) {
-        verifyTextFieldValidationMessage(textField, "0", DECIMAL_VALIDATION_MESSAGE, false);
-        verifyCommonAmountValidations(textField);
+        String decimalValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        validateFieldAndVerifyErrorMessage(textField, "0", decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, " 0.005 ", null, true);
+        verifyCommonAmountValidations(textField, decimalValidationMessage);
     }
 
-    private void verifyCommonAmountValidations(TextField textField) {
-        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
+    private void verifyCommonAmountValidations(TextField textField, String errorMessage) {
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(textField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(textField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, errorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, ".05", errorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, "99999999999", errorMessage, false);
     }
 
     private UdmValueFilter buildExpectedFilter() {
@@ -545,16 +546,22 @@ public class UdmValueFiltersWindowTest {
         ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 
-    private void verifyTextFieldValidationMessage(TextField textField, String value, String message, boolean isValid) {
-        textField.setValue(value);
-        BinderValidationStatus<UdmUsageFilter> binderStatus = binder.validate();
-        assertEquals(isValid, binderStatus.isOk());
-        if (!isValid) {
-            List<ValidationResult> errors = binderStatus.getValidationErrors();
-            List<String> errorMessages =
-                errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-            assertTrue(errorMessages.contains(message));
-        }
+    private void validateFieldAndVerifyErrorMessage(TextField field, String value, String errorMessage,
+                                                    boolean isValid) {
+        field.setValue(value);
+        binder.validate();
+        List<HasValue<?>> fields = binder.getFields()
+            .filter(actualField -> actualField.equals(field))
+            .collect(Collectors.toList());
+        assertEquals(1 , fields.size());
+        TextField actualField = (TextField) fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(errorMessage, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private String buildStringWithExpectedLength(int length) {
