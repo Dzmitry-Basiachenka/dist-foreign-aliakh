@@ -191,8 +191,7 @@ public class PublicationTypeWeightsWindowTest {
         List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
         TextField publicationTypeWeight = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
-        String positiveNumberValidationMessage =
-            "Field value should be positive number or zero and should not exceed 10 digits";
+        String positiveNumberValidationMessage = "Field value should be positive number or zero";
         verifyField(publicationTypeWeight, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
         verifyField(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
         verifyField(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage, false);
