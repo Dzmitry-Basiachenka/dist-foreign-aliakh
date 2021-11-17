@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -8,28 +13,28 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,8 +70,7 @@ public class AaclUsageAgeWeightWindowTest {
 
     @Test
     public void testConstructorInEditMode() {
-        assertEquals("Usage Age Weights", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -74,49 +78,32 @@ public class AaclUsageAgeWeightWindowTest {
         assertEquals(Grid.class, component.getClass());
         verifyGrid((Grid) component, true);
         assertEquals(1, content.getExpandRatio(component), 0);
+        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(4, buttonsLayout.getComponentCount());
-        Component saveButton = buttonsLayout.getComponent(0);
-        Component closeButton = buttonsLayout.getComponent(1);
-        Component placeholderLabel = buttonsLayout.getComponent(2);
-        Component defaultButton = buttonsLayout.getComponent(3);
-        assertEquals("Save", saveButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
-        assertTrue(placeholderLabel instanceof Label);
-        assertNull(placeholderLabel.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
-        assertTrue(saveButton.isVisible());
-        assertTrue(defaultButton.isVisible());
-        assertTrue(placeholderLabel.isVisible());
-        assertTrue(closeButton.isVisible());
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), true,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), true,
+            buttonsLayout.getComponent(3), true));
     }
 
     @Test
     public void testConstructorInViewMode() {
         window = new AaclUsageAgeWeightWindow(false);
-        assertEquals("Usage Age Weights", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
         verifyGrid((Grid) component, false);
         assertEquals(1, content.getExpandRatio(component), 0);
+        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(4, buttonsLayout.getComponentCount());
-        Component saveButton = buttonsLayout.getComponent(0);
-        Component closeButton = buttonsLayout.getComponent(1);
-        Component placeholderLabel = buttonsLayout.getComponent(2);
-        Component defaultButton = buttonsLayout.getComponent(3);
-        assertEquals("Save", saveButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
-        assertTrue(placeholderLabel instanceof Label);
-        assertNull(placeholderLabel.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
-        assertFalse(saveButton.isVisible());
-        assertFalse(defaultButton.isVisible());
-        assertFalse(placeholderLabel.isVisible());
-        assertTrue(closeButton.isVisible());
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), false,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), false,
+            buttonsLayout.getComponent(3), false));
     }
 
     @Test
@@ -182,36 +169,26 @@ public class AaclUsageAgeWeightWindowTest {
         TextField weightField = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        verifyField(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(weightField, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
-        verifyField(weightField, ".05", binder, positiveNumberValidationMessage, false);
-        verifyField(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
-        verifyField(weightField, "value", binder, positiveNumberValidationMessage, false);
-        verifyField(weightField, "0", binder, null, true);
-        verifyField(weightField, " 0.00 ", binder, null, true);
-        verifyField(weightField, "125", binder, null, true);
-        verifyField(weightField, "125.123456789", binder, null, true);
-        verifyField(weightField, "9999999999.99", binder, null, true);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(525, component.getWidth(), 0);
-        assertEquals(300, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
+        validateFieldAndVefiryErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(weightField, "0", binder, null, true);
+        validateFieldAndVefiryErrorMessage(weightField, " 0.00 ", binder, null, true);
+        validateFieldAndVefiryErrorMessage(weightField, "125", binder, null, true);
+        validateFieldAndVefiryErrorMessage(weightField, "125.123456789", binder, null, true);
+        validateFieldAndVefiryErrorMessage(weightField, "9999999999.99", binder, null, true);
     }
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        assertNull(grid.getCaption());
+        UiCommonHelper.verifyGrid((Grid) grid, Arrays.asList(
+            Triple.of("Usage Period", -1.0, -1),
+            Triple.of("Default Weight", -1.0, -1),
+            Triple.of("Scenario Weight", -1.0, -1)));
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Period", "Default Weight", "Scenario Weight"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0, -1.0),
-            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1, -1),
-            columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
@@ -230,13 +207,5 @@ public class AaclUsageAgeWeightWindowTest {
         usageAge.setPeriod(period);
         usageAge.setWeight(weight);
         return usageAge;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

@@ -1,5 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyTextField;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -11,7 +17,6 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -22,13 +27,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -44,10 +45,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AaclUsageBatchUploadWindow}.
@@ -80,11 +79,7 @@ public class AaclUsageBatchUploadWindowTest {
     public void testConstructor() {
         replay(usagesController);
         window = new AaclUsageBatchUploadWindow(usagesController);
-        assertEquals("Upload Usage Batch", window.getCaption());
-        assertEquals(380, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(210, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Upload Usage Batch", 380, 210, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verify(usagesController);
     }
@@ -115,12 +110,15 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField usageBatchName = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
-        verifyField(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(usageBatchName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(usageBatchName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
+        validateFieldAndVefiryErrorMessage(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
             false);
-        verifyField(usageBatchName, USAGE_BATCH_NAME, binder, "Usage Batch with such name already exists", false);
-        verifyField(usageBatchName, USAGE_BATCH_NAME, binder, null, true);
+        validateFieldAndVefiryErrorMessage(usageBatchName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVefiryErrorMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters",
+            false);
+        validateFieldAndVefiryErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder,
+            "Usage Batch with such name already exists", false);
+        validateFieldAndVefiryErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder, null, true);
         verify(usagesController);
     }
 
@@ -130,11 +128,14 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        verifyField(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
-        verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodEndDate, "2020", binder, null, true);
+        validateFieldAndVefiryErrorMessage(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVefiryErrorMessage(periodEndDate, "a", binder, "Field value should contain numeric values only",
+            false);
+        validateFieldAndVefiryErrorMessage(periodEndDate, "1000", binder,
+            "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVefiryErrorMessage(periodEndDate, "2100", binder,
+            "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVefiryErrorMessage(periodEndDate, "2020", binder, null, true);
         verify(usagesController);
     }
 
@@ -144,15 +145,17 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
-        verifyField(numberOfBaselineYears, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number",
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "two", binder,
+            "Field value should be positive number",
             false);
-        verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
             false);
-        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should be positive number",
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, " -2 ", binder,
+            "Field value should be positive number",
             false);
-        verifyField(numberOfBaselineYears, " 1 ", binder, null, true);
-        verifyField(numberOfBaselineYears, "1", binder, null, true);
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, " 1 ", binder, null, true);
+        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "1", binder, null, true);
         verify(usagesController);
     }
 
@@ -214,7 +217,13 @@ public class AaclUsageBatchUploadWindowTest {
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyPeriodEndDateAndBaselineYears(verticalLayout.getComponent(2));
-        verifyButtonsLayout(verticalLayout.getComponent(3));
+        verifyButtonsLayout(verticalLayout.getComponent(3), "Upload", "Close");
+        Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(3)).getComponent(0);
+        verifyLoadClickListener(loadButton, Arrays.asList(
+            Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
+            Whitebox.getInternalState(window, "uploadField"),
+            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD),
+            Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS)));
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
@@ -238,37 +247,6 @@ public class AaclUsageBatchUploadWindowTest {
         verifyNumberOfBaselineYears(layout.getComponent(1));
     }
 
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        Button loadButton = verifyButton(layout.getComponent(0), "Upload");
-        verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
-            Whitebox.getInternalState(window, "uploadField"),
-            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD),
-            Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
-    }
-
     private void verifyPeriodEndDate(Component component) {
         TextField periodEndDateField = verifyTextField(component, "Period End Date (YYYY)");
         assertEquals(100, periodEndDateField.getWidth(), 0);
@@ -279,20 +257,6 @@ public class AaclUsageBatchUploadWindowTest {
         TextField baselineYearsField = verifyTextField(component, "Number of Baseline Years");
         assertEquals(100, baselineYearsField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, baselineYearsField.getWidthUnits());
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
-    }
-
-    private TextField verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(caption, component.getCaption());
-        return (TextField) component;
     }
 
     private UsageBatch buildUsageBatch() {

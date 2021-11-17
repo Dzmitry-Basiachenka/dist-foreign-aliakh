@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -13,14 +18,15 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -31,6 +37,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,8 +82,7 @@ public class PublicationTypeWeightsWindowTest {
 
     @Test
     public void testConstructorInEditMode() {
-        assertEquals("Pub Type Weights", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -104,29 +110,20 @@ public class PublicationTypeWeightsWindowTest {
     @Test
     public void testConstructorInViewMode() {
         window = new PublicationTypeWeightsWindow(false);
-        assertEquals("Pub Type Weights", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
         assertEquals(Grid.class, component.getClass());
         verifyGrid((Grid) component, false);
         assertEquals(1, content.getExpandRatio(component), 0);
+        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(4, buttonsLayout.getComponentCount());
-        Component saveButton = buttonsLayout.getComponent(0);
-        Component closeButton = buttonsLayout.getComponent(1);
-        Component placeholderLabel = buttonsLayout.getComponent(2);
-        Component defaultButton = buttonsLayout.getComponent(3);
-        assertEquals("Save", saveButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
-        assertTrue(placeholderLabel instanceof Label);
-        assertNull(placeholderLabel.getCaption());
-        assertEquals("Default", defaultButton.getCaption());
-        assertFalse(saveButton.isVisible());
-        assertFalse(defaultButton.isVisible());
-        assertFalse(placeholderLabel.isVisible());
-        assertTrue(closeButton.isVisible());
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), false,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), false,
+            buttonsLayout.getComponent(3), false));
     }
 
     @Test
@@ -192,36 +189,31 @@ public class PublicationTypeWeightsWindowTest {
         TextField publicationTypeWeight = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        verifyField(publicationTypeWeight, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage, false);
-        verifyField(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage, false);
-        verifyField(publicationTypeWeight, "99999999999", binder, positiveNumberValidationMessage, false);
-        verifyField(publicationTypeWeight, "value", binder, positiveNumberValidationMessage, false);
-        verifyField(publicationTypeWeight, "0", binder, null, true);
-        verifyField(publicationTypeWeight, " 0.00 ", binder, null, true);
-        verifyField(publicationTypeWeight, "125", binder, null, true);
-        verifyField(publicationTypeWeight, "125.123456789", binder, null, true);
-        verifyField(publicationTypeWeight, "999999999.99", binder, null, true);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(525, component.getWidth(), 0);
-        assertEquals(250, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
+            emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
+            false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
+            false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "99999999999", binder,
+            positiveNumberValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
+            false);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "0", binder, null, true);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "125", binder, null, true);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
+        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
     }
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        assertNull(grid.getCaption());
+        UiCommonHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Pub Type", -1.0, -1),
+            Triple.of("Default Weight", -1.0, -1),
+            Triple.of("Scenario Weight", -1.0, -1)));
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Pub Type", "Default Weight", "Scenario Weight"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, -1.0, -1.0),
-            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1, -1, -1),
-            columns.stream().map(Column::getExpandRatio).collect(Collectors.toList()));
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
@@ -241,13 +233,5 @@ public class PublicationTypeWeightsWindowTest {
         pubType.setName(name);
         pubType.setWeight(new BigDecimal(weight));
         return pubType;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

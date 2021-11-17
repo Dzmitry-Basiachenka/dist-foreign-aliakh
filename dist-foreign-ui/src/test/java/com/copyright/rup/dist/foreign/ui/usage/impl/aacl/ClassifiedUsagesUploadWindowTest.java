@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -10,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -22,11 +26,8 @@ import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -42,10 +43,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ClassifiedUsagesUploadWindow}.
@@ -72,11 +71,7 @@ public class ClassifiedUsagesUploadWindowTest {
     public void testConstructor() {
         replay(usageController);
         window = new ClassifiedUsagesUploadWindow(usageController);
-        assertEquals("Upload Classified Details", window.getCaption());
-        assertEquals(400, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(135, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Upload Classified Details", 400, 135, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verify(usageController);
     }
@@ -123,11 +118,13 @@ public class ClassifiedUsagesUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
         String emptyFieldValidationMessage = "Field value should be specified";
         String fileExtensionValidationMessage = "File extension is incorrect";
-        verifyField(uploadField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(uploadField, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(uploadField, "classification_usages.dox", binder, fileExtensionValidationMessage, false);
-        verifyField(uploadField, "classification_usages", binder, fileExtensionValidationMessage, false);
-        verifyField(uploadField, "classification_usages.csv", binder, null, true);
+        validateFieldAndVefiryErrorMessage(uploadField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(uploadField, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages.dox", binder,
+            fileExtensionValidationMessage, false);
+        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages", binder, fileExtensionValidationMessage,
+            false);
+        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages.csv", binder, null, true);
     }
 
     private void verifyRootLayout(Component component) {
@@ -135,41 +132,16 @@ public class ClassifiedUsagesUploadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyUploadComponent(verticalLayout.getComponent(0));
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), "Upload", "Close");
+        Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(1)).getComponent(0);
+        verifyLoadClickListener(loadButton,
+            Collections.singleton(Whitebox.getInternalState(window, "uploadField")));
     }
 
     private void verifyUploadComponent(Component component) {
         assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        Button loadButton = verifyButton(layout.getComponent(0), "Upload");
-        verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields =
-            Collections.singleton(Whitebox.getInternalState(window, "uploadField"));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
     }
 
     private ProcessingResult<AaclClassifiedUsage> buildCsvProcessingResult(List<AaclClassifiedUsage> classifiedUsages) {
@@ -182,14 +154,5 @@ public class ClassifiedUsagesUploadWindowTest {
             }
         });
         return processingResult;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyField(AbstractField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

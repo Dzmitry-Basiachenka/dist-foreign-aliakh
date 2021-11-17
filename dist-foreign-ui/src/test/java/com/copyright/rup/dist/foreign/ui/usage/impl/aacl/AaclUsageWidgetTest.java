@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
@@ -37,7 +40,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
@@ -48,6 +50,7 @@ import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +66,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -111,15 +113,38 @@ public class AaclUsageWidgetTest {
     public void testWidgetStructure() {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget);
         assertTrue(usagesWidget.getFirstComponent() instanceof AaclUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
+        verifyGrid((Grid) layout.getComponent(1), Arrays.asList(
+            Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Detail Status", 115.0, -1),
+            Triple.of("Product Family", 125.0, -1),
+            Triple.of("Usage Batch Name", 145.0, -1),
+            Triple.of("Period End Date", 115.0, -1),
+            Triple.of("RH Account #", 115.0, -1),
+            Triple.of("RH Name", 300.0, -1),
+            Triple.of("Wr Wrk Inst", 110.0, -1),
+            Triple.of("System Title", 300.0, -1),
+            Triple.of("Standard Number", 140.0, -1),
+            Triple.of("Standard Number Type", 155.0, -1),
+            Triple.of("Det LC ID", 80.0, -1),
+            Triple.of("Det LC Enrollment", 140.0, -1),
+            Triple.of("Det LC Discipline", 140.0, -1),
+            Triple.of("Pub Type", 140.0, -1),
+            Triple.of("Institution", 140.0, -1),
+            Triple.of("Usage Period", 100.0, -1),
+            Triple.of("Usage Source", 140.0, -1),
+            Triple.of("Number of Copies", 140.0, -1),
+            Triple.of("Number of Pages", 140.0, -1),
+            Triple.of("Right Limitation", 120.0, -1),
+            Triple.of("Comment", 200.0, -1)));
+        verifyWindow((Grid) layout.getComponent(1), null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -449,22 +474,5 @@ public class AaclUsageWidgetTest {
         assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
         IntStream.range(0, menuItems.size())
             .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
-    }
-
-    private void verifyGrid(Grid grid) {
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Period End Date", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Pub Type", "Institution",
-            "Usage Period", "Usage Source", "Number of Copies", "Number of Pages", "Right Limitation", "Comment"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        verifySize(grid);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }

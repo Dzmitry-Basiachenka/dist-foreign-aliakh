@@ -1,10 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +34,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,7 +86,7 @@ public class AaclUsageFilterWidgetTest {
         assertEquals(2, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
-        verifyButtonsLayout(widget.getComponent(1));
+        verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
         verify(usagesFilterController);
     }
 
@@ -246,31 +246,6 @@ public class AaclUsageFilterWidgetTest {
         Collection<?> actualUsagePeriods = listDataProvider.getItems();
         assertEquals(1, actualUsagePeriods.size());
         assertEquals(Collections.singletonList(2020), actualUsagePeriods);
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        assertTrue(layout.isSpacing());
-        verifyButton(layout.getComponent(0), "Apply");
-        verifyButton(layout.getComponent(1), "Clear");
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals(caption, button.getCaption());
-        assertEquals(100, button.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, button.getWidthUnits());
-        verifyButtonClickListener(button);
-    }
-
-    private void verifyButtonClickListener(Button button) {
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        assertTrue(CollectionUtils.isNotEmpty(listeners));
-        assertEquals(1, listeners.size());
-        assertNotNull(listeners.iterator().next());
     }
 
     private Button getApplyButton() {
