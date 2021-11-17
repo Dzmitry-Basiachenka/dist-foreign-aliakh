@@ -1,11 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
@@ -37,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Window to apply additional filters for {@link UdmValueFilterWidget}.
@@ -50,8 +52,6 @@ import java.util.function.Function;
 public class UdmValueFiltersWindow extends Window {
 
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
-    private static final String AMOUNT_VALIDATION_MESSAGE =
-        ForeignUi.getMessage("field.error.positive_number_and_length", 10);
     private static final String NUMBER_VALIDATION_MESSAGE = "field.error.not_numeric";
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String NULL_VALUE = "NULL";
@@ -235,7 +235,7 @@ public class UdmValueFiltersWindow extends Window {
         priceOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(priceField, event.getValue()));
         filterBinder.forField(priceField)
-            .withValidator(getAmountValidator(true), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountValidator())
             .bind(filter -> filter.getPriceExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceExpression().setFieldFirstValue(new BigDecimal(value)));
         priceField.setSizeFull();
@@ -252,7 +252,7 @@ public class UdmValueFiltersWindow extends Window {
         priceInUsdOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(priceInUsdField, event.getValue()));
         filterBinder.forField(priceInUsdField)
-            .withValidator(getAmountValidator(true), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountValidator())
             .bind(filter -> filter.getPriceInUsdExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceInUsdExpression().setFieldFirstValue(new BigDecimal(value)));
         priceInUsdField.setSizeFull();
@@ -286,7 +286,7 @@ public class UdmValueFiltersWindow extends Window {
         contentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(contentField, event.getValue()));
         filterBinder.forField(contentField)
-            .withValidator(getAmountValidator(false), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .bind(filter -> filter.getContentExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getContentExpression().setFieldFirstValue(new BigDecimal(value)));
         contentField.setSizeFull();
@@ -461,14 +461,14 @@ public class UdmValueFiltersWindow extends Window {
         valueFilter.setRhAccountNumber(getLongFromTextField(rhAccountNumberField));
         valueFilter.setRhNameExpression(buildNumberFilterExpression(rhNameField, rhNameOperatorComboBox,
             Function.identity()));
-        valueFilter.setPriceExpression(buildNumberFilterExpression(priceField, priceOperatorComboBox,
+        valueFilter.setPriceExpression(buildAmountFilterExpression(priceField, priceOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setPriceInUsdExpression(buildNumberFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
+        valueFilter.setPriceInUsdExpression(buildAmountFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
             BigDecimal::new));
         valueFilter.setLastPriceFlag(Objects.isNull(lastPriceFlagComboBox.getValue())
             ? null : convertStringToBoolean(lastPriceFlagComboBox.getValue()));
         valueFilter.setLastPriceComment(getStringFromTextField(lastPriceCommentField));
-        valueFilter.setContentExpression(buildNumberFilterExpression(contentField, contentOperatorComboBox,
+        valueFilter.setContentExpression(buildAmountFilterExpression(contentField, contentOperatorComboBox,
             BigDecimal::new));
         valueFilter.setLastContentFlag(Objects.isNull(lastContentFlagComboBox.getValue())
             ? null : convertStringToBoolean(lastContentFlagComboBox.getValue()));
@@ -491,20 +491,29 @@ public class UdmValueFiltersWindow extends Window {
     private <T> FilterExpression<T> buildNumberFilterExpression(TextField textField,
                                                                 ComboBox<FilterOperatorEnum> comboBox,
                                                                 Function<String, T> valueConverter) {
+        return buildFilterExpression(textField, comboBox, valueConverter,
+            field -> StringUtils.isNotEmpty(field.getValue()));
+    }
+
+    private <T> FilterExpression<T> buildAmountFilterExpression(TextField textField,
+                                                                ComboBox<FilterOperatorEnum> comboBox,
+                                                                Function<String, T> valueConverter) {
+        return buildFilterExpression(textField, comboBox, valueConverter,
+            field -> StringUtils.isNotBlank(field.getValue()));
+    }
+
+    private <T> FilterExpression<T> buildFilterExpression(TextField textField,
+                                                          ComboBox<FilterOperatorEnum> comboBox,
+                                                          Function<String, T> valueConverter,
+                                                          Predicate<TextField> successPredicate) {
         FilterExpression<T> filterExpression = new FilterExpression<>();
-        if (StringUtils.isNotEmpty(textField.getValue())) {
+        if (successPredicate.test(textField)) {
             filterExpression.setFieldFirstValue(valueConverter.apply(textField.getValue().trim()));
             filterExpression.setOperator(comboBox.getValue());
         } else if (0 == comboBox.getValue().getArgumentsNumber()) {
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
-    }
-
-    private SerializablePredicate<String> getAmountValidator(boolean zeroAllowed) {
-        return value -> null == value
-            || StringUtils.isEmpty(value)
-            || StringUtils.isNotBlank(value) && new AmountValidator(zeroAllowed).isValid(value.trim());
     }
 
     private SerializablePredicate<String> getNumberValidator() {
