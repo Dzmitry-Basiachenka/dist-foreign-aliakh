@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -35,13 +34,10 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "scenario-usage-filter-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class ScenarioUsageFilterRepositoryIntegrationTest {
 
     private static final String SCENARIO_ID = "2bb64bac-8526-438c-8676-974dd9305bac";
@@ -58,6 +54,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     private IScenarioUsageFilterRepository scenarioUsageFilterRepository;
 
     @Test
+    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-insert.groovy")
     public void testInsert() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);
@@ -68,6 +65,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-find-by-scenario-id.groovy")
     public void testFindByScenarioId() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);
@@ -82,6 +80,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-find-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);

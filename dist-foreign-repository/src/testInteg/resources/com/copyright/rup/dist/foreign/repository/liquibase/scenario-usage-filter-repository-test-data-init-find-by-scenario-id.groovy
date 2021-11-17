@@ -1,8 +1,8 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-    changeSet(id: '2018-03-05-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment('Inserting test data for ScenarioUsageFilterRepositoryIntegrationTest')
+    changeSet(id: '2018-03-05-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment('Inserting test data for testFindByScenarioId, testDeleteByScenarioId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'e1c64cac-3f2b-4105-8056-6660e1ec461a')
