@@ -39,10 +39,17 @@ public class AmountValidator extends AbstractValidator<String> {
 
     @Override
     public ValidationResult apply(String value, ValueContext context) {
-        return toResult(value, isValid(StringUtils.trimToEmpty(value)));
+        return toResult(value, isValid(value));
     }
 
-    private boolean isValid(String value) {
-        return StringUtils.isEmpty(value) || value.matches(AMOUNT_REGEX);
+    /**
+     * Performs validation of passed value.
+     *
+     * @param value the value to validate
+     * @return the result of validation: {@code true} value passed validation otherwise {@code false}
+     */
+    public boolean isValid(String value) {
+        String trimmedValue = StringUtils.trimToEmpty(value);
+        return StringUtils.isEmpty(trimmedValue) || trimmedValue.matches(AMOUNT_REGEX);
     }
 }
