@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2021-09-06-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment('Inserting test data for testFindCountByFilter, testFindDtosByFilter, testSortingFindDtosByFilter')
+        comment('Inserting test data for testFindCountByFilter, testFindDtosByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '0ee5f787-5e96-442b-bf3a-f879a74e5a0a')
