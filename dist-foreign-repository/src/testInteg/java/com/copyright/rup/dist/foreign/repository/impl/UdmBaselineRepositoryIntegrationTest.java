@@ -32,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,15 +55,14 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "udm-baseline-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UdmBaselineRepositoryIntegrationTest {
 
+    private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
+        "udm-baseline-repository-test-data-init-find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
     private static final String SURVEY_COUNTRY = "Portugal";
     private static final String TYPE_OF_USE_1 = "EMAIL_COPY";
@@ -84,7 +82,8 @@ public class UdmBaselineRepositoryIntegrationTest {
     private IUdmBaselineRepository baselineRepository;
 
     @Test
-    public void testRemoveUdmUsageFromBaseline() {
+    @TestData(fileName = "udm-baseline-repository-test-data-init-remove-udm-usages-from-baseline.groovy")
+    public void testRemoveUdmUsagesFromBaseline() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton("201f42dc-7f13-4449-97b0-725aa5a339e0"));
         List<UdmUsageDto> usageDtos = udmUsageRepository.findDtosByFilter(filter, null, null);
@@ -100,6 +99,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriod(202012);
@@ -117,6 +117,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect), 0);
@@ -147,6 +148,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriod(202012);
@@ -165,6 +167,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect));
@@ -196,6 +199,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "detailId");
         verifySortingFindDtosByFilter(USAGE_ID_3, USAGE_ID_2, "usageOrigin");
@@ -217,13 +221,13 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-baseline-repository-test-data-init-find-periods.groovy")
     public void testGetPeriods() {
-        assertEquals(
-            Arrays.asList(211512, 211412, 210412, 202106, 202012, 201906, 201512, 201506, 201406, 201006, 200912),
-            baselineRepository.findPeriods());
+        assertEquals(Arrays.asList(202106, 202012), baselineRepository.findPeriods());
     }
 
     @Test
+    @TestData(fileName = "udm-baseline-repository-test-data-init-find-not-populated-values-from-baseline.groovy")
     public void testFindNotPopulatedValuesFromBaseline() {
         assertEquals(loadExpectedValues("json/udm/udm_values_201512.json"),
             baselineRepository.findNotPopulatedValuesFromBaseline(201512));
@@ -233,6 +237,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-baseline-repository-test-data-init-populate-value-id.groovy")
     public void testPopulateValueId() {
         Map<Long, String> wrWrkInstToValueIdMap = ImmutableMap.of(
             28908508L, "9b2550ff-a80a-41a9-a63c-047216a62241",
