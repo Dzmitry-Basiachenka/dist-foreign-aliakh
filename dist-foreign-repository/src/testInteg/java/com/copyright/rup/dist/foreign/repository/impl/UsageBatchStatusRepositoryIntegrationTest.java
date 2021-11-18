@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -36,13 +35,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "usage-batch-status-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UsageBatchStatusRepositoryIntegrationTest {
 
     private static final String COMPLETED_STATUS = "COMPLETED";
@@ -51,6 +47,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     private IUsageBatchStatusRepository usageBatchStatusRepository;
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-fas.groovy")
     public void testFindUsageBatchStatusesFas() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesFas(
@@ -65,6 +62,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-nts.groovy")
     public void testFindUsageBatchStatusesNts() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesNts(
@@ -79,6 +77,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-aacl.groovy")
     public void testFindUsageBatchStatusesAacl() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesAacl(
@@ -93,6 +92,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-sal.groovy")
     public void testFindUsageBatchStatusesSal() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesSal(
@@ -107,18 +107,21 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-batch-ids-eligible-for-statistic.groovy")
     public void testFindFasUsageBatchIdsEligibleForStatistic() {
         assertEquals(Collections.singleton("515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic("FAS", LocalDate.of(2021, 2, 14)));
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-batch-ids-eligible-for-statistic.groovy")
     public void testFindUsageBatchIdsEligibleForStatistic() {
         assertEquals(Collections.singleton("359de82f-374b-4d53-88ab-0be3982b22aa"),
             usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS", LocalDate.of(2021, 2, 14)));
     }
 
     @Test
+    @TestData(fileName = "usage-batch-status-repository-test-data-init-is-batch-processing-complete.groovy")
     public void testIsBatchProcessingCompleted() {
         assertTrue(usageBatchStatusRepository.isBatchProcessingCompleted("515a78e7-2a92-4b15-859a-fd9f70e80982",
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)));
