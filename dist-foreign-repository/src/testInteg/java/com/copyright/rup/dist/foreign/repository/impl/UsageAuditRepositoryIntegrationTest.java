@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -45,16 +44,15 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "usage-audit-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UsageAuditRepositoryIntegrationTest {
 
-    private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String TEST_DATA_INIT_FIND_BATCHES_STATISTIC =
+        "usage-audit-repository-test-data-init-find-batches-statistic.groovy";
+    private static final String USAGE_UID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_UID_2 = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
     private static final String USAGE_UID_3 = "ea85a226-8a4b-45e3-82f8-1233a9cd7ecb";
     private static final String USAGE_UID_4 = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
@@ -65,30 +63,44 @@ public class UsageAuditRepositoryIntegrationTest {
     private IUsageAuditRepository usageAuditRepository;
 
     @Test
-    public void testInsertAndFind() {
-        List<UsageAuditItem> usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
-        assertEquals(1, CollectionUtils.size(usageAuditItems));
-        usageAuditRepository.insert(buildUsageAuditItem());
-        usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
-        assertEquals(2, CollectionUtils.size(usageAuditItems));
-        UsageAuditItem auditItem = usageAuditItems.get(0);
-        assertEquals(UsageActionTypeEnum.WORK_NOT_FOUND, auditItem.getActionType());
-        assertEquals(USAGE_UID, auditItem.getUsageId());
-        assertEquals("Usage has no standard number and title", auditItem.getActionReason());
-        auditItem = usageAuditItems.get(1);
+    @TestData(fileName = "usage-audit-repository-test-data-init-find-by-usage-id.groovy")
+    public void testFindByUsageId() {
+        List<UsageAuditItem> auditItems = usageAuditRepository.findByUsageId(USAGE_UID_1);
+        assertEquals(1, CollectionUtils.size(auditItems));
+        UsageAuditItem auditItem = auditItems.get(0);
         assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
         assertEquals("Uploaded in 'Test Batch 1' Batch", auditItem.getActionReason());
-        assertEquals(USAGE_UID, auditItem.getUsageId());
+        assertEquals(USAGE_UID_1, auditItem.getUsageId());
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-find-by-usage-id.groovy")
+    public void testInsert() {
+        List<UsageAuditItem> auditItems = usageAuditRepository.findByUsageId(USAGE_UID_1);
+        assertEquals(1, CollectionUtils.size(auditItems));
+        usageAuditRepository.insert(buildUsageAuditItem());
+        auditItems = usageAuditRepository.findByUsageId(USAGE_UID_1);
+        assertEquals(2, CollectionUtils.size(auditItems));
+        UsageAuditItem auditItem1 = auditItems.get(0);
+        assertEquals(UsageActionTypeEnum.WORK_NOT_FOUND, auditItem1.getActionType());
+        assertEquals(USAGE_UID_1, auditItem1.getUsageId());
+        assertEquals("Usage has no standard number and title", auditItem1.getActionReason());
+        UsageAuditItem auditItem2 = auditItems.get(1);
+        assertEquals(UsageActionTypeEnum.LOADED, auditItem2.getActionType());
+        assertEquals("Uploaded in 'Test Batch 1' Batch", auditItem2.getActionReason());
+        assertEquals(USAGE_UID_1, auditItem2.getUsageId());
+    }
+
+    @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
-        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_1)));
         usageAuditRepository.deleteByBatchId("56282dbc-2468-48d4-b926-93d3458a656a");
-        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID)));
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID_1)));
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-for-sal-usage-data-by-batch-id.groovy")
     public void testDeleteForSalUsageDataByBatchId() {
         assertEquals(1,
             CollectionUtils.size(usageAuditRepository.findByUsageId("51e60822-5b4c-4fa8-9922-05e93065f216")));
@@ -104,6 +116,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-for-archived-by-batch-id.groovy")
     public void testDeleteForArchivedByBatchId() {
         assertEquals(1,
             CollectionUtils.size(usageAuditRepository.findByUsageId("422d33c0-4594-451e-a1ca-412c023299aa")));
@@ -112,13 +125,15 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
     public void testDeleteByUsageId() {
-        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
-        usageAuditRepository.deleteByUsageId(USAGE_UID);
-        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID)));
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_1)));
+        usageAuditRepository.deleteByUsageId(USAGE_UID_1);
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID_1)));
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
         assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
@@ -128,6 +143,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-scenario-id.groovy")
     public void testDeleteForExcludedByScenarioId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
         assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
@@ -137,7 +153,8 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindFasBatchStatisticByBatchName() {
+    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    public void testFindFasBatchesStatisticByBatchName() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "FAS batch statistic", null);
         assertNotNull(statistics);
@@ -146,7 +163,8 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindFasBatchStatisticByBatchNameAndDate() {
+    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    public void testFindFasBatchesStatisticByBatchNameAndDate() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "FAS batch statistic", LocalDate.of(2019, 4, 1));
         assertNotNull(statistics);
@@ -155,7 +173,8 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindNtsBatchStatisticByBatchName() {
+    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    public void testFindNtsBatchesStatisticByBatchName() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "NTS batch statistic", null);
         assertNotNull(statistics);
@@ -164,7 +183,8 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindNtsBatchStatisticByBatchNameAndDate() {
+    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    public void testFindNtsBatchesStatisticByBatchNameAndDate() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "NTS batch statistic", LocalDate.of(2019, 4, 1));
         assertNotNull(statistics);
@@ -173,6 +193,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
     public void testFindBatchesStatisticByDateFromAndDateTo() throws IOException {
         List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(
             LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
@@ -183,6 +204,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "usage-audit-repository-test-data-init-find-usage-statistic.groovy")
     public void testFindUsageStatistic() {
         UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
         assertEquals(USAGE_UID_2, statistic.getUsageId());
@@ -195,7 +217,7 @@ public class UsageAuditRepositoryIntegrationTest {
     private UsageAuditItem buildUsageAuditItem() {
         UsageAuditItem usageAuditItem = new UsageAuditItem();
         usageAuditItem.setId(RupPersistUtils.generateUuid());
-        usageAuditItem.setUsageId(USAGE_UID);
+        usageAuditItem.setUsageId(USAGE_UID_1);
         usageAuditItem.setActionType(UsageActionTypeEnum.WORK_NOT_FOUND);
         usageAuditItem.setActionReason("Usage has no standard number and title");
         return usageAuditItem;

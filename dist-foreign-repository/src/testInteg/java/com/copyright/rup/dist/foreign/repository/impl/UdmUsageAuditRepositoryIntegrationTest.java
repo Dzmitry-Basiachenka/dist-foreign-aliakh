@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,13 +31,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "udm-usage-audit-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UdmUsageAuditRepositoryIntegrationTest {
 
     private static final String UDM_USAGE_UID = "e6040f00-8564-4482-ab67-9965483a8a9f";
@@ -49,7 +45,20 @@ public class UdmUsageAuditRepositoryIntegrationTest {
     private IUdmUsageAuditRepository udmUsageAuditRepository;
 
     @Test
-    public void testInsertAndFindByUdmUsageId() {
+    @TestData(fileName = "udm-usage-audit-repository-test-data-init-find-by-udm-usage-id.groovy")
+    public void testFindByUdmUsageId() {
+        List<UsageAuditItem> auditItems = udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID);
+        assertEquals(1, auditItems.size());
+        UsageAuditItem auditItem = auditItems.get(0);
+        assertEquals(UDM_USAGE_AUDIT_UID_2, auditItem.getId());
+        assertEquals(UDM_USAGE_UID, auditItem.getUsageId());
+        assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
+        assertEquals("Uploaded in 'UDM Batch 2021 June' Batch", auditItem.getActionReason());
+    }
+
+    @Test
+    @TestData(fileName = "udm-usage-audit-repository-test-data-init-find-by-udm-usage-id.groovy")
+    public void testInsert() {
         List<UsageAuditItem> auditItems = udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID);
         assertEquals(1, auditItems.size());
         udmUsageAuditRepository.insert(buildUsageAuditItem());
@@ -68,6 +77,7 @@ public class UdmUsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         assertEquals(1,
             CollectionUtils.size(udmUsageAuditRepository.findByUdmUsageId("081dbeb4-ec1d-4519-882d-704acb68d8fa")));
