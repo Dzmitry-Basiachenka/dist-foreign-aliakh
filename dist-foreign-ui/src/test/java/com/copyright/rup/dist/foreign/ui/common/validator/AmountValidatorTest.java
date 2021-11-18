@@ -29,54 +29,57 @@ public class AmountValidatorTest {
 
     private final String value;
     private final boolean isValidatorFailed;
+    private final boolean isValidValue;
 
     /**
      * Constructor.
      *
      * @param value             expected value
      * @param isValidatorFailed {@code true} if validator is failed, {@code false} otherwise
+     * @param isValidValue      {@code true} if value is valid, {@code false} otherwise
      */
-    public AmountValidatorTest(String value, boolean isValidatorFailed) {
+    public AmountValidatorTest(String value, boolean isValidatorFailed, boolean isValidValue) {
         this.value = value;
         this.isValidatorFailed = isValidatorFailed;
+        this.isValidValue = isValidValue;
     }
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {null, false},
-            {StringUtils.EMPTY, false},
-            {"   ", false},
-            {"0", false},
-            {"0.0", false},
-            {"0.1", false},
-            {"0.00", false},
-            {"+0.00", true},
-            {"-0.00", true},
-            {" -1  ", true},
-            {"1", false},
-            {"125", false},
-            {"125.2", false},
-            {"0.10", false},
-            {"0.01", false},
-            {"1.00", false},
-            {"10.00", false},
-            {"9999999999.99", false},
-            {"0.005", false},
-            {"0.004", false},
-            {"999999999999", true},
-            {"000125.52", true},
-            {"01.44", true},
-            {"10000000000.00", true},
-            {"105.8 9", true},
-            {"84.44415", false},
-            {"33..5", true},
-            {"86.0.5", true},
-            {"amount", true},
-            {"-15.55", true},
-            {".55", true},
-            {"874.", true},
-            {"15,687", true}
+            {null, false, true},
+            {StringUtils.EMPTY, false, true},
+            {"   ", false, true},
+            {"0", false, true},
+            {"0.0", false, true},
+            {"0.1", false, true},
+            {"0.00", false, true},
+            {"+0.00", true, false},
+            {"-0.00", true, false},
+            {" -1  ", true, false},
+            {"1", false, true},
+            {"125", false, true},
+            {"125.2", false, true},
+            {"0.10", false, true},
+            {"0.01", false, true},
+            {"1.00", false, true},
+            {"10.00", false, true},
+            {"9999999999.99", false, true},
+            {"0.005", false, true},
+            {"0.004", false, true},
+            {"999999999999", true, false},
+            {"000125.52", true, false},
+            {"01.44", true, false},
+            {"10000000000.00", true, false},
+            {"105.8 9", true, false},
+            {"84.44415", false, true},
+            {"33..5", true, false},
+            {"86.0.5", true, false},
+            {"amount", true, false},
+            {"-15.55", true, false},
+            {".55", true, false},
+            {"874.", true, false},
+            {"15,687", true, false}
         });
     }
 
@@ -95,6 +98,11 @@ public class AmountValidatorTest {
         ValidationResult result = new AmountValidator(errorMessage).apply(value, context);
         assertEquals(isValidatorFailed, result.isError());
         verifyErrorMessage(result, errorMessage);
+    }
+
+    @Test
+    public void testValueValidation() {
+        assertEquals(isValidValue, new AmountValidator().isValid(value));
     }
 
     private void verifyErrorMessage(ValidationResult result, String expectedErrorMessage) {

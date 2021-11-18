@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -18,8 +19,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWi
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.BinderValidationStatus;
-import com.vaadin.data.ValidationResult;
+import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -156,33 +157,31 @@ public class UdmBaselineFiltersWindowTest {
     @Test
     public void testWrWrkInstValidation() {
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInst");
-        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "1234567890",
             "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
     }
 
     @Test
     public void testUsageDetailIdValidation() {
         TextField surveyCountryField = Whitebox.getInternalState(window, "usageDetailId");
-        verifyTextFieldValidationMessage(surveyCountryField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(surveyCountryField, buildStringWithExpectedLength(50),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(surveyCountryField, buildStringWithExpectedLength(51),
+        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(50), null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(51),
             "Field value should not exceed 50 characters", false);
     }
 
     @Test
     public void testSystemTitleValidation() {
         TextField languageField = Whitebox.getInternalState(window, "systemTitle");
-        verifyTextFieldValidationMessage(languageField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(languageField, buildStringWithExpectedLength(2000),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(languageField, buildStringWithExpectedLength(2001),
+        validateFieldAndVerifyErrorMessage(languageField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(2000), null, true);
+        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(2001),
             "Field value should not exceed 2000 characters", false);
     }
 
@@ -267,25 +266,27 @@ public class UdmBaselineFiltersWindowTest {
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
                                                       ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox);
-        verifyTextFieldValidationMessage(fromField, VALID_DECIMAL, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(toField, VALID_DECIMAL, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(toField, "1.2345677",
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.2345677",
             "Field value should be greater or equal to Annualized Copies From", false);
-        verifyTextFieldValidationMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
     }
 
     private void verifyCommonOperationValidations(TextField fromField, TextField toField,
                                                   ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(fromField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(fromField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
         operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        verifyTextFieldValidationMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
         operatorComboBox.setValue(FilterOperatorEnum.EQUALS);
-        verifyTextFieldValidationMessage(fromField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(toField, VALID_INTEGER, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, null, true);
     }
 
     private UdmBaselineFilter buildExpectedFilter() {
@@ -373,16 +374,22 @@ public class UdmBaselineFiltersWindowTest {
         ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 
-    private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
+    private void validateFieldAndVerifyErrorMessage(TextField field, String value, String errorMessage,
+                                                    boolean isValid) {
         field.setValue(value);
-        BinderValidationStatus<UdmBaselineFilter> binderStatus = binder.validate();
-        assertEquals(isValid, binderStatus.isOk());
-        if (!isValid) {
-            List<ValidationResult> errors = binderStatus.getValidationErrors();
-            List<String> errorMessages =
-                errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-            assertTrue(errorMessages.contains(message));
-        }
+        binder.validate();
+        List<HasValue<?>> fields = binder.getFields()
+            .filter(actualField -> actualField.equals(field))
+            .collect(Collectors.toList());
+        assertEquals(1 , fields.size());
+        TextField actualField = (TextField) fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(errorMessage, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private String buildStringWithExpectedLength(int length) {

@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Window to apply additional filters for {@link UdmUsageFilterWidget}.
@@ -55,8 +56,6 @@ import java.util.function.Function;
  */
 public class UdmFiltersWindow extends Window {
 
-    private static final String AMOUNT_VALIDATION_MESSAGE =
-        ForeignUi.getMessage("field.error.positive_number_and_length", 10);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -304,13 +303,13 @@ public class UdmFiltersWindow extends Window {
             UdmUsageFilter::getAnnualizedCopiesExpression);
         annualizedCopiesFromField.addValueChangeListener(event -> filterBinder.validate());
         filterBinder.forField(annualizedCopiesFromField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFromField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldFirstValue(new BigDecimal(value)));
         filterBinder.forField(annualizedCopiesToField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesToField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFromField, annualizedCopiesToField),
@@ -341,12 +340,12 @@ public class UdmFiltersWindow extends Window {
         filterBinder.forField(statisticalMultiplierFromField)
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .bind(filter -> filter.getStatisticalMultiplierExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getStatisticalMultiplierExpression()
                     .setFieldFirstValue(new BigDecimal(value)));
         filterBinder.forField(statisticalMultiplierToField)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .withValidator(
                 value -> validateBigDecimalFromToValues(statisticalMultiplierFromField, statisticalMultiplierToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
@@ -568,9 +567,9 @@ public class UdmFiltersWindow extends Window {
         usageFilter.setLanguage(getStringFromTextField(languageField));
         usageFilter.setAnnualMultiplierExpression(buildNumberFilterExpression(annualMultiplierFromField,
             annualMultiplierToField, annualMultiplierOperatorComboBox, Integer::valueOf));
-        usageFilter.setAnnualizedCopiesExpression(buildNumberFilterExpression(annualizedCopiesFromField,
+        usageFilter.setAnnualizedCopiesExpression(buildAmountFilterExpression(annualizedCopiesFromField,
             annualizedCopiesToField, annualizedCopiesOperatorComboBox, BigDecimal::new));
-        usageFilter.setStatisticalMultiplierExpression(buildNumberFilterExpression(statisticalMultiplierFromField,
+        usageFilter.setStatisticalMultiplierExpression(buildAmountFilterExpression(statisticalMultiplierFromField,
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox, BigDecimal::new));
         usageFilter.setQuantityExpression(buildNumberFilterExpression(quantityFromField, quantityToField,
             quantityOperatorComboBox, Integer::valueOf));
@@ -588,20 +587,29 @@ public class UdmFiltersWindow extends Window {
     private FilterExpression<Number> buildNumberFilterExpression(TextField fromField, TextField toField,
                                                                  ComboBox<FilterOperatorEnum> comboBox,
                                                                  Function<String, Number> valueConverter) {
+        return buildFilterExpression(fromField, toField, comboBox, valueConverter,
+            field -> StringUtils.isNotEmpty(field.getValue()));
+    }
+
+    private FilterExpression<Number> buildAmountFilterExpression(TextField fromField, TextField toField,
+                                                                 ComboBox<FilterOperatorEnum> comboBox,
+                                                                 Function<String, Number> valueConverter) {
+        return buildFilterExpression(fromField, toField, comboBox, valueConverter,
+            field -> StringUtils.isNotBlank(field.getValue()));
+    }
+
+    private FilterExpression<Number> buildFilterExpression(TextField fromField, TextField toField,
+                                                           ComboBox<FilterOperatorEnum> comboBox,
+                                                           Function<String, Number> valueConverter,
+                                                           Predicate<TextField> successPredicate) {
         FilterExpression<Number> filterExpression = new FilterExpression<>();
-        if (StringUtils.isNotEmpty(fromField.getValue())) {
+        if (successPredicate.test(fromField)) {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
-                StringUtils.isNotEmpty(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
+                successPredicate.test(toField) ? valueConverter.apply(toField.getValue().trim()) : null);
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
-    }
-
-    private SerializablePredicate<String> getAmountValidator() {
-        return value -> null == value
-            || StringUtils.isEmpty(value)
-            || StringUtils.isNotBlank(value) && new AmountValidator(false).isValid(value.trim());
     }
 
     private SerializablePredicate<String> getNumberValidator() {
@@ -611,16 +619,17 @@ public class UdmFiltersWindow extends Window {
     private SerializablePredicate<String> getBetweenOperatorValidator(TextField fieldToValidate,
                                                                       ComboBox<FilterOperatorEnum> comboBox) {
         return value -> FilterOperatorEnum.BETWEEN != comboBox.getValue()
-            || StringUtils.isNotEmpty(fieldToValidate.getValue());
+            || StringUtils.isNotBlank(fieldToValidate.getValue());
     }
 
     private boolean validateBigDecimalFromToValues(TextField fromField, TextField toField) {
         String fromValue = fromField.getValue();
         String toValue = toField.getValue();
-        return StringUtils.isEmpty(fromValue)
-            || StringUtils.isEmpty(toValue)
-            || !getAmountValidator().test(fromValue)
-            || !getAmountValidator().test(toValue)
+        AmountZeroValidator amountZeroValidator = new AmountZeroValidator();
+        return StringUtils.isBlank(fromValue)
+            || StringUtils.isBlank(toValue)
+            || !amountZeroValidator.isValid(fromValue)
+            || !amountZeroValidator.isValid(toValue)
             || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
     }
 

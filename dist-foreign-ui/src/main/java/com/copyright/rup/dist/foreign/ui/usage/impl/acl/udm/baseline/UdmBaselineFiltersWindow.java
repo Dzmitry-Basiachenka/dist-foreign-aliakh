@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
-import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AggregateLicenseeClassFilterWidget;
@@ -29,6 +29,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -49,8 +50,6 @@ import java.util.function.Function;
  */
 public class UdmBaselineFiltersWindow extends Window {
 
-    private static final String AMOUNT_VALIDATION_MESSAGE =
-        ForeignUi.getMessage("field.error.positive_number_and_length", 10);
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String NOT_NUMERIC_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
@@ -174,13 +173,13 @@ public class UdmBaselineFiltersWindow extends Window {
             UdmBaselineFilter::getAnnualizedCopiesExpression);
         annualizedCopiesFrom.addValueChangeListener(event -> filterBinder.validate());
         filterBinder.forField(annualizedCopiesFrom)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFrom, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldFirstValue(new BigDecimal(value)));
         filterBinder.forField(annualizedCopiesTo)
-            .withValidator(getAmountValidator(), AMOUNT_VALIDATION_MESSAGE)
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesTo, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFrom, annualizedCopiesTo),
@@ -311,19 +310,13 @@ public class UdmBaselineFiltersWindow extends Window {
                                                                  ComboBox<FilterOperatorEnum> comboBox,
                                                                  Function<String, Number> valueConverter) {
         FilterExpression<Number> filterExpression = new FilterExpression<>();
-        if (StringUtils.isNotEmpty(fromField.getValue())) {
+        if (StringUtils.isNotBlank(fromField.getValue())) {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
-                StringUtils.isNotEmpty(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
+                StringUtils.isNotBlank(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
-    }
-
-    private SerializablePredicate<String> getAmountValidator() {
-        return value -> null == value
-            || StringUtils.isEmpty(value)
-            || StringUtils.isNotBlank(value) && new AmountValidator(false).isValid(value.trim());
     }
 
     private SerializablePredicate<String> getNumberValidator() {
@@ -333,16 +326,17 @@ public class UdmBaselineFiltersWindow extends Window {
     private SerializablePredicate<String> getBetweenOperatorValidator(TextField fieldToValidate,
                                                                       ComboBox<FilterOperatorEnum> comboBox) {
         return value -> FilterOperatorEnum.BETWEEN != comboBox.getValue()
-            || StringUtils.isNotEmpty(fieldToValidate.getValue());
+            || StringUtils.isNotBlank(fieldToValidate.getValue());
     }
 
     private boolean validateBigDecimalFromToValues(TextField fromField, TextField toField) {
         String fromValue = fromField.getValue();
         String toValue = toField.getValue();
-        return StringUtils.isEmpty(fromValue)
-            || StringUtils.isEmpty(toValue)
-            || !getAmountValidator().test(fromValue)
-            || !getAmountValidator().test(toValue)
+        AmountZeroValidator amountZeroValidator = new AmountZeroValidator();
+        return StringUtils.isBlank(fromValue)
+            || StringUtils.isBlank(toValue)
+            || !amountZeroValidator.isValid(fromValue)
+            || !amountZeroValidator.isValid(toValue)
             || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
     }
 }
