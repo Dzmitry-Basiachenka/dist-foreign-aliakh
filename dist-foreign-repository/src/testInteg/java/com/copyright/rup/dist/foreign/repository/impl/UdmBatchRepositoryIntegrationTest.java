@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,13 +38,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "udm-batch-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UdmBatchRepositoryIntegrationTest {
 
     private static final String UDM_BATCH_UID = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
@@ -60,6 +56,7 @@ public class UdmBatchRepositoryIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertUsageBatch() {
         udmBatchRepository.insert(buildUdmBatch());
         UdmBatch udmBatch = udmBatchRepository.findById(UDM_BATCH_UID);
@@ -72,26 +69,26 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-batch-repository-test-data-init-find-all.groovy")
     public void testFindAll() {
         List<UdmBatch> udmBatches = udmBatchRepository.findAll();
         assertFalse(udmBatches.isEmpty());
-        assertEquals(7, udmBatches.size());
+        assertEquals(4, udmBatches.size());
         assertEquals("c57dbf33-b0b9-4493-bcff-c30fd07ee0e4", udmBatches.get(0).getId());
         assertEquals("faaab569-35c1-474e-923d-96f4c062a62a", udmBatches.get(1).getId());
         assertEquals("6a4b192c-8f1b-4887-a75d-67688544eb5f", udmBatches.get(2).getId());
         assertEquals("864911e5-34ac-42a5-a4c8-84dc4c24e7b4", udmBatches.get(3).getId());
-        assertEquals(UDM_BATCH_UID_2, udmBatches.get(4).getId());
-        assertEquals(UDM_BATCH_UID_3, udmBatches.get(5).getId());
-        assertEquals(UDM_BATCH_UID_4, udmBatches.get(6).getId());
     }
 
     @Test
+    @TestData(fileName = "udm-batch-repository-test-data-init-find-all.groovy")
     public void testBatchExists() {
         assertTrue(udmBatchRepository.udmBatchExists("UDM Batch 2021 1"));
         assertFalse(udmBatchRepository.udmBatchExists("No name in database"));
     }
 
     @Test
+    @TestData(fileName = "udm-batch-repository-test-data-init-is-udm-batch-processing-completed.groovy")
     public void testIsUdmBatchProcessingCompleted() {
         assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
@@ -100,18 +97,20 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-batch-repository-test-data-init-is-udm-batch-contains-baseline-usages.groovy")
     public void testIsUdmBatchContainsBaselineUsages() {
         assertFalse(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID_3));
         assertTrue(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID_4));
     }
 
     @Test
+    @TestData(fileName = "udm-batch-repository-test-data-init-delete-by-id.groovy")
     public void testDeleteById() {
         String batchId = UDM_BATCH_UID_2;
-        assertEquals(7, udmBatchRepository.findAll().size());
+        assertEquals(1, udmBatchRepository.findAll().size());
         udmUsageRepository.deleteByBatchId(batchId);
         udmBatchRepository.deleteById(batchId);
-        assertEquals(6, udmBatchRepository.findAll().size());
+        assertEquals(0, udmBatchRepository.findAll().size());
     }
 
     private UdmBatch buildUdmBatch() {
