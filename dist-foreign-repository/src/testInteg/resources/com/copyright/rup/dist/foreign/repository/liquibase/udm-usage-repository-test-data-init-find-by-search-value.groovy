@@ -1,0 +1,101 @@
+databaseChangeLog {
+    property(file: 'database.properties')
+
+    changeSet(id: '2021-06-17-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment('Inserting test data for testSearchByReportedTitle, testSearchBySystemTitle, testSearchByUsageDetailId, ' +
+                'testSearchByStandardNumber, testSearchByArticle, testSearchBySurveyRespondent, testSearchByComment')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
+            column(name: 'df_udm_usage_batch_uid', value: '4f707afb-05d7-4075-bfc9-4c002164c64f')
+            column(name: 'name', value: 'UDM Batch 2021 to test searching')
+            column(name: 'period', value: 202106)
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'CCC')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '4a39452b-1319-4bf9-9a66-f79e6c7063be')
+            column(name: 'df_udm_usage_batch_uid', value: '4f707afb-05d7-4075-bfc9-4c002164c64f')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB0110')
+            column(name: 'period', value: '202106')
+            column(name: 'period_end_date', value: '2021-06-30')
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'assignee', value: 'wjohn@copyright.com')
+            column(name: 'rh_account_number', value: 1000002612)
+            column(name: 'wr_wrk_inst', value: 100002555)
+            column(name: 'reported_title', value: 'Brain surgery')
+            column(name: 'system_title', value: 'Castanea and surgery. C, Biointerfaces')
+            column(name: 'reported_standard_number', value: '100891123776UXX')
+            column(name: 'standard_number', value: '100891123776UXX')
+            column(name: 'reported_pub_type', value: 'Book')
+            column(name: 'publication_format', value: 'Digital')
+            column(name: 'article', value: 'Appendix: The Principles of Newspeak')
+            column(name: 'language', value: 'English')
+            column(name: 'comment', value: 'UDM search comment 1')
+            column(name: 'company_id', value: 1136)
+            column(name: 'company_name', value: 'Albany International Corp.')
+            column(name: 'detail_licensee_class_id', value: 22)
+            column(name: 'survey_respondent', value: 'c986xxxx-19c3-4530-8ffc-zzzzzz000000')
+            column(name: 'ip_address', value: 'ip192.168.211.211')
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'usage_date', value: '2020-05-10')
+            column(name: 'survey_start_date', value: '2020-04-20')
+            column(name: 'survey_end_date', value: '2020-05-15')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'reported_type_of_use', value: 'COPY_FOR_MYSELF')
+            column(name: 'quantity', value: 1)
+            column(name: 'annual_multiplier', value: 1)
+            column(name: 'statistical_multiplier', value: 1.00000)
+            column(name: 'annualized_copies', value: 1.00000)
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+            column(name: 'record_version', value: 3)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '1d856581-09aa-4f70-9e0c-cf7fe121135f')
+            column(name: 'df_udm_usage_batch_uid', value: '4f707afb-05d7-4075-bfc9-4c002164c64f')
+            column(name: 'original_detail_id', value: 'OGN674GHHSB0111')
+            column(name: 'period', value: '202106')
+            column(name: 'period_end_date', value: '2021-06-30')
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+            column(name: 'rh_account_number', value: 1000002612)
+            column(name: 'wr_wrk_inst', value: 100002555)
+            column(name: 'reported_title', value: 'Advances in behavioural economics')
+            column(name: 'system_title', value: 'Transactions of the ASAE')
+            column(name: 'reported_standard_number', value: '100891123776YXX')
+            column(name: 'standard_number', value: '100891123776YXX')
+            column(name: 'reported_pub_type', value: 'Not Shared')
+            column(name: 'publication_format', value: 'Digital')
+            column(name: 'article', value: 'Appendix: The Principles of Newspeak')
+            column(name: 'language', value: 'English')
+            column(name: 'comment', value: 'UDM search comment 2')
+            column(name: 'company_id', value: 1138)
+            column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'survey_respondent', value: 'C986xxxx-19c3-4530-8ffc-zzzzzz111111')
+            column(name: 'ip_address', value: 'ip192.168.211.211')
+            column(name: 'survey_country', value: 'Portugal')
+            column(name: 'usage_date', value: '2020-09-10')
+            column(name: 'survey_start_date', value: '2020-08-20')
+            column(name: 'survey_end_date', value: '2020-10-15')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'reported_type_of_use', value: 'EMAIL_COPY')
+            column(name: 'quantity', value: 17)
+            column(name: 'annual_multiplier', value: 25)
+            column(name: 'statistical_multiplier', value: 1.00000)
+            column(name: 'annualized_copies', value: 425.00000)
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+        }
+
+        rollback {
+            dbRollback
+        }
+    }
+}
