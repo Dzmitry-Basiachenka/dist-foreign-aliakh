@@ -1,0 +1,52 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmProxyValueMapper">
+
+    <resultMap id="udmProxyValueDtoResultMap" type="UdmProxyValueDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="pubTypeName" column="pub_type_name"/>
+        <result property="period" column="period"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceCount" column="content_unit_price_count"/>
+    </resultMap>
+
+    <delete id="deleteProxyValues" parameterType="int">
+        delete from ${schema}.df_udm_proxy_value
+        where period = #{period}
+    </delete>
+
+    <insert id="insertProxyValues" parameterType="map">
+        insert into ${schema}.df_udm_proxy_value (
+            publication_type_uid,
+            period,
+            content_unit_price,
+            content_unit_price_count,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        select
+            publication_type_uid,
+            #{period} as period,
+            percentile_cont(0.5) within group (order by content_unit_price) as content_unit_price,
+            count(1) as content_unit_price_count,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_udm_value
+        where period = #{period}
+            and publication_type_uid is not null
+            and price_flag = true
+            and content_flag = true
+        group by publication_type_uid
+    </insert>
+
+    <!-- NOTE: Used for testing purposes only -->
+    <!-- TODO try to replace with findByFilter when implemented -->
+    <select id="findAllDtos" resultMap="udmProxyValueDtoResultMap">
+        select
+            pt.name pub_type_name,
+            period,
+            content_unit_price,
+            content_unit_price_count
+        from ${schema}.df_udm_proxy_value pv
+        join ${schema}.df_publication_type pt on pv.publication_type_uid = pt.df_publication_type_uid
+        order by period, pub_type_name
+    </select>
+</mapper>
