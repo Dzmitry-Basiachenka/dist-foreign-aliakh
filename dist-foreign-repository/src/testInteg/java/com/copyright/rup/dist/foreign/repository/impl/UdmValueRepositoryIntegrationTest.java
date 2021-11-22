@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -60,15 +59,14 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "udm-value-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UdmValueRepositoryIntegrationTest {
 
+    private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
+        "udm-value-repository-test-data-init-find-dtos-by-filter.groovy";
     private static final String UDM_VALUE_UID_1 = "07026f4a-8a21-4529-97ad-5dab5c92bcce";
     private static final String UDM_VALUE_UID_2 = "2ffbedd7-708c-4cc5-a72b-5d5f962401ab";
     private static final String UDM_VALUE_UID_3 = "833abadc-53cd-47b5-a7d6-8ba08368e636";
@@ -107,6 +105,7 @@ public class UdmValueRepositoryIntegrationTest {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsert() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(Collections.singleton(209906));
@@ -118,6 +117,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-update.groovy")
     public void testUpdate() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(ImmutableSet.of(211212));
@@ -148,15 +148,16 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-find-fields.groovy")
     public void testFindPeriods() {
-        List<Integer> expectedPeriods = Arrays.asList(211212, 211112, 211012, 209506, 209406, 209306, 209206, 209106,
-            202112, 202106, 201912, 201512, 201506, 201406, 201106, 201006);
+        List<Integer> expectedPeriods = Arrays.asList(202112, 202106, 201512, 201506, 201406, 201106, 201006);
         List<Integer> actualPeriods = udmValueRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(Collections.singleton(201506));
@@ -184,6 +185,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(Collections.singleton(201506));
@@ -213,6 +215,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAdditionalFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_2, ASSIGNEE_3)),
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
@@ -313,6 +316,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
@@ -323,6 +327,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(Sets.newHashSet(201506, 202112)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
@@ -395,6 +400,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "detailId");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "valuePeriod");
@@ -436,6 +442,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-update-assignee.groovy")
     public void testUpdateAssignee() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(ImmutableSet.of(202106));
@@ -449,6 +456,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-update-assignee.groovy")
     public void testUpdateAssigneeToNull() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setPeriods(ImmutableSet.of(202112));
@@ -462,18 +470,21 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-find-fields.groovy")
     public void testFindAssignees() {
         assertEquals(Arrays.asList(ASSIGNEE_3, "djohn@copyright.com", "ejohn@copyright.com",
             ASSIGNEE_1, ASSIGNEE_2), udmValueRepository.findAssignees());
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-find-fields.groovy")
     public void testFindLastValuePeriods() {
-        assertEquals(Arrays.asList("202106", "201912", "201506", "201406", "201106"),
+        assertEquals(Arrays.asList("202106", "201506", "201406"),
             udmValueRepository.findLastValuePeriods());
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-is-allowed-for-publishing.groovy")
     public void testIsAllowedForPublishing() {
         assertFalse(udmValueRepository.isAllowedForPublishing(209106));
         assertFalse(udmValueRepository.isAllowedForPublishing(209206));
@@ -483,6 +494,7 @@ public class UdmValueRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "udm-value-repository-test-data-init-publish-to-baseline.groovy")
     public void testPublishToBaseline() {
         assertEquals(2, udmValueRepository.publishToBaseline(211012, USER_NAME));
         assertEquals(1, udmValueRepository.publishToBaseline(211112, USER_NAME));
