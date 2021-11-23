@@ -1005,4 +1005,63 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2021-11-24-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-65964 FDA: Calculate and apply proxy values: create table df_udm_proxy_value")
+
+        createTable(tableName: 'df_udm_proxy_value', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing UDM proxy values') {
+
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication type identifier') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The UDM value period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'content_unit_price', type: 'NUMERIC (38, 10)', remarks: 'Content unit price') {
+                constraints(nullable: false)
+            }
+            column(name: 'content_unit_price_count', type: 'INTEGER', remarks: 'Content unit price count') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_proxy_value',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_udm_proxy_value_2_df_publication_type')
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_udm_proxy_value',
+                columnNames: 'publication_type_uid, period',
+                constraintName: 'pk_publication_type_uid_period')
+
+        rollback {
+            dropTable(tableName: 'df_udm_proxy_value', schemaName: dbAppsSchema)
+        }
+    }
 }
