@@ -80,6 +80,7 @@
         <typeAlias alias="UdmTouRmsTouPair" type="com.copyright.rup.dist.foreign.repository.impl.UdmTouToRmsTouResultHandler$UdmTouRmsTouPair"/>
         <typeAlias alias="UdmActionReason" type="com.copyright.rup.dist.foreign.domain.UdmActionReason"/>
         <typeAlias alias="UdmIneligibleReason" type="com.copyright.rup.dist.foreign.domain.UdmIneligibleReason"/>
+        <typeAlias alias="UdmProxyValueDto" type="com.copyright.rup.dist.foreign.domain.UdmProxyValueDto"/>
     </typeAliases>
 
     <typeHandlers>
@@ -126,5 +127,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueBaselineMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmPriceTypeMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmProxyValueMapper.xml"/>
     </mappers>
 </configuration>
