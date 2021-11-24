@@ -16,6 +16,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;

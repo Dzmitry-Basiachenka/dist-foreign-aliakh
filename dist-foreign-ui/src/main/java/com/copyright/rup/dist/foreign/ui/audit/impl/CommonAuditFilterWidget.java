@@ -10,10 +10,10 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -108,7 +108,7 @@ public abstract class CommonAuditFilterWidget extends VerticalLayout implements 
     protected LazyRightsholderFilterWidget buildRightsholdersFilter() {
         LazyRightsholderFilterWidget rightsholderFilterWidget =
             new LazyRightsholderFilterWidget(ForeignUi.getMessage("label.rightsholders"), controller);
-        rightsholderFilterWidget.addFilterSaveListener(event -> {
+        rightsholderFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<Rightsholder>) event -> {
             getFilter().setRhAccountNumbers(event.getSelectedItemsIds()
                 .stream()
                 .map(Rightsholder::getAccountNumber)

@@ -7,9 +7,11 @@ import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;

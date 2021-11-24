@@ -6,7 +6,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'e9c9f51b-6048-4474-848a-2db1c410e463')
-            column(name: 'rh_account_number', value: 1000002797)
+            column(name: 'rh_account_number', value: 1000159997)
             column(name: 'name', value: 'British Film Institute (BFI)')
         }
 

@@ -40,7 +40,6 @@ import java.util.concurrent.ExecutorService;
  */
 public class RightsholderServiceTest {
 
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final Long ACCOUNT_NUMBER_1 = 7000813806L;
     private static final Long ACCOUNT_NUMBER_2 = 5412316485L;
     private static final String RIGHTSHOLDER_NAME = "Rightsholder Name";
@@ -77,22 +76,21 @@ public class RightsholderServiceTest {
     }
 
     @Test
-    public void testGetFromUsages() {
+    public void testGetAllWithSearch() {
         Pageable pageable = new Pageable(0, 10);
-        expect(rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, "10001", pageable, null))
+        expect(rightsholderRepository.findAllWithSearch("10001", pageable, null))
             .andReturn(Collections.emptyList()).once();
         replay(rightsholderRepository);
         assertEquals(Collections.emptyList(),
-            rightsholderService.getFromUsages(FAS_PRODUCT_FAMILY, "10001", pageable, null));
+            rightsholderService.getAllWithSearch("10001", pageable, null));
         verify(rightsholderRepository);
     }
 
     @Test
-    public void testGetCountFromUsages() {
-        expect(rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "Rightsholder"))
-            .andReturn(5).once();
+    public void testGetCountWithSearch() {
+        expect(rightsholderRepository.findCountWithSearch("Rightsholder")).andReturn(5).once();
         replay(rightsholderRepository);
-        assertEquals(5, rightsholderService.getCountFromUsages(FAS_PRODUCT_FAMILY, "Rightsholder"));
+        assertEquals(5, rightsholderService.getCountWithSearch("Rightsholder"));
         verify(rightsholderRepository);
     }
 

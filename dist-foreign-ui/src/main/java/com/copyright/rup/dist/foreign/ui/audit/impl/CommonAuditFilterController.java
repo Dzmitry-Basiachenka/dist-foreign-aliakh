@@ -45,19 +45,19 @@ public abstract class CommonAuditFilterController extends CommonController<IComm
     private IProductFamilyProvider productFamilyProvider;
 
     @Override
-    public List<Rightsholder> loadBeans(String productFamily, String searchValue, int startIndex, int count,
+    public List<Rightsholder> loadBeans(String searchValue, int startIndex, int count,
                                         List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return rightsholderService.getFromUsages(productFamily, searchValue, new Pageable(startIndex, count), sort);
+        return rightsholderService.getAllWithSearch(searchValue, new Pageable(startIndex, count), sort);
     }
 
     @Override
-    public int getBeansCount(String productFamily, String searchValue) {
-        return rightsholderService.getCountFromUsages(productFamily, searchValue);
+    public int getBeansCount(String searchValue) {
+        return rightsholderService.getCountWithSearch(searchValue);
     }
 
     @Override

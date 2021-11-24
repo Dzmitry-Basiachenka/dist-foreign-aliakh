@@ -13,9 +13,8 @@ import com.copyright.rup.dist.foreign.ui.audit.api.aacl.IAaclAuditFilterControll
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
-import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
@@ -76,7 +75,7 @@ public class AaclAuditFilterWidgetTest {
         component = widget.getComponent(1);
         assertTrue(component instanceof LazyRightsholderFilterWidget);
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
-        assertNotNull(Whitebox.getInternalState(component, IRightsholderFilterSaveListener.class));
+        assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(2);
         assertTrue(component instanceof UsageBatchFilterWidget);
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");

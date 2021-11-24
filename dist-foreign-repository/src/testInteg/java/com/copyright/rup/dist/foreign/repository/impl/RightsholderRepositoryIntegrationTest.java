@@ -171,16 +171,17 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-from-usages.groovy")
-    public void testFindFromUsages() {
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-all-with-search.groovy")
+    public void testFindAllWithSearch() {
         List<Rightsholder> rightsholders =
-            rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, null, null, null);
-        assertEquals(4, rightsholders.size());
+            rightsholderRepository.findAllWithSearch(null, null, null);
+        assertEquals(7, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
             .collect(Collectors.toList())
-            .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L)));
-        rightsholders = rightsholderRepository.findFromUsages(FAS_PRODUCT_FAMILY, "9997", null, null);
+            .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L, 2000017004L, 7000813806L,
+                2000017010L)));
+        rightsholders = rightsholderRepository.findAllWithSearch("9997", null, null);
         assertEquals(2, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
@@ -189,12 +190,12 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-from-usages.groovy")
-    public void testFindCountFromUsages() {
-        assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, StringUtils.EMPTY));
-        assertEquals(4, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, null));
-        assertEquals(2, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "9997"));
-        assertEquals(1, rightsholderRepository.findCountFromUsages(FAS_PRODUCT_FAMILY, "IEEE"));
+    @TestData(fileName = "rightsholder-repository-test-data-init-find-all-with-search.groovy")
+    public void testFindCountWithSearch() {
+        assertEquals(7, rightsholderRepository.findCountWithSearch(StringUtils.EMPTY));
+        assertEquals(7, rightsholderRepository.findCountWithSearch(null));
+        assertEquals(2, rightsholderRepository.findCountWithSearch("9997"));
+        assertEquals(1, rightsholderRepository.findCountWithSearch("IEEE"));
     }
 
     @Test

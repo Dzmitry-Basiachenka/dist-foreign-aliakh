@@ -47,21 +47,19 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
-    public List<Rightsholder> findFromUsages(String productFamily, String searchValue, Pageable pageable, Sort sort) {
+    public List<Rightsholder> findAllWithSearch(String searchValue, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("productFamily", productFamily);
         parameters.put("searchValue", searchValue);
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
-        return selectList("RightsholderMapper.findFromUsages", parameters);
+        return selectList("RightsholderMapper.findAllWithSearch", parameters);
     }
 
     @Override
-    public int findCountFromUsages(String productFamily, String searchValue) {
+    public int findCountWithSearch(String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
-        parameters.put("productFamily", productFamily);
         parameters.put("searchValue", searchValue);
-        return selectOne("RightsholderMapper.findCountFromUsages", parameters);
+        return selectOne("RightsholderMapper.findCountWithSearch", parameters);
     }
 
     @Override

@@ -59,11 +59,10 @@ public class FasAuditFilterControllerTest {
     public void testLoadBeans() {
         List<Rightsholder> rightsholders = Collections.emptyList();
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(rightsholderService.getFromUsages(
-            eq(FAS_PRODUCT_FAMILY), eq("search"), capture(pageableCapture), isNull()))
+        expect(rightsholderService.getAllWithSearch(eq("search"), capture(pageableCapture), isNull()))
             .andReturn(rightsholders).once();
         replay(rightsholderService);
-        assertSame(rightsholders, controller.loadBeans(FAS_PRODUCT_FAMILY, "search", 0, 10, null));
+        assertSame(rightsholders, controller.loadBeans("search", 0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
         verify(rightsholderService);
@@ -71,9 +70,9 @@ public class FasAuditFilterControllerTest {
 
     @Test
     public void testGetBeansCount() {
-        expect(rightsholderService.getCountFromUsages(FAS_PRODUCT_FAMILY, "searchValue")).andReturn(10).once();
+        expect(rightsholderService.getCountWithSearch("searchValue")).andReturn(10).once();
         replay(rightsholderService);
-        assertEquals(10, controller.getBeansCount(FAS_PRODUCT_FAMILY, "searchValue"));
+        assertEquals(10, controller.getBeansCount("searchValue"));
         verify(rightsholderService);
     }
 

@@ -63,50 +63,25 @@
         where rh_account_number = #{accountNumber}
     </delete>
 
-    <select id="findCountFromUsages" parameterType="string" resultType="int">
+    <select id="findCountWithSearch" parameterType="string" resultType="int">
         select count(1)
-        from(
-            select distinct u.rh_account_number
-            from ${schema}.df_usage u
-            left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-            where u.rh_account_number is not null
-                and u.product_family = #{productFamily}
-            <if test="null != searchValue">
-                and <include refid="IUsageMapper.searchWhereClause"/>
-            </if>
-            union
-            select distinct u.rh_account_number
-            from ${schema}.df_usage_archive u
-            left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-            where u.rh_account_number is not null
-                and u.product_family = #{productFamily}
-            <if test="null != searchValue">
-                and <include refid="IUsageMapper.searchWhereClause"/>
-            </if>
-        ) accountNumbers
+        from ${schema}.df_rightsholder
+        where rh_account_number is not null
+        <if test="null != searchValue">
+            and (name ilike '%' || #{searchValue} || '%' or
+            cast(rh_account_number as text) like '%' || #{searchValue} || '%')
+        </if>
     </select>
 
-    <select id="findFromUsages" parameterType="map" resultMap="rightsholderResultMap">
-        select distinct on (u.rh_account_number)
-            u.rh_account_number,
-            r.name
-        from ${schema}.df_usage u
-        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-        where u.rh_account_number is not null
-            and u.product_family = #{productFamily}
+    <select id="findAllWithSearch" parameterType="map" resultMap="rightsholderResultMap">
+        select distinct on (rh_account_number)
+            rh_account_number,
+            name
+        from ${schema}.df_rightsholder
+        where rh_account_number is not null
         <if test="null != searchValue">
-            and <include refid="IUsageMapper.searchWhereClause"/>
-        </if>
-        union
-        select distinct on (u.rh_account_number)
-            u.rh_account_number,
-            r.name
-        from ${schema}.df_usage_archive u
-        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
-        where u.rh_account_number is not null
-            and u.product_family = #{productFamily}
-        <if test="null != searchValue">
-            and <include refid="IUsageMapper.searchWhereClause"/>
+            and (name ilike '%' || #{searchValue} || '%' or
+            cast(rh_account_number as text) like '%' || #{searchValue} || '%')
         </if>
         order by rh_account_number
         <if test="null != pageable">

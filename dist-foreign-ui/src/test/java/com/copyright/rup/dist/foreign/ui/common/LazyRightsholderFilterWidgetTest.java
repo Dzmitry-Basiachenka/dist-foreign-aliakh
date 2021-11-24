@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -68,7 +68,7 @@ public class LazyRightsholderFilterWidgetTest {
 
     @Test
     public void testAddFilterSaveListener() {
-        IRightsholderFilterSaveListener saveListener = createMock(IRightsholderFilterSaveListener.class);
+        IFilterSaveListener saveListener = createMock(IFilterSaveListener.class);
         assertNotEquals(saveListener, Whitebox.getInternalState(itemsFilterWidget, "saveListener"));
         itemsFilterWidget.addFilterSaveListener(saveListener);
         assertEquals(saveListener, Whitebox.getInternalState(itemsFilterWidget, "saveListener"));

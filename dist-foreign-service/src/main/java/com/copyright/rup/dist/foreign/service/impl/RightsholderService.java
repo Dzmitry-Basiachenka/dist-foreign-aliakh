@@ -61,7 +61,6 @@ public class RightsholderService extends CommonRightsholderService implements IR
                                IPrmRightsholderOrganizationService prmRightsholderOrganizationService) {
         super(rightsholderRepository, prmRightsholderService, prmRightsholderOrganizationService);
         this.rightsholderRepository = rightsholderRepository;
-
     }
 
     @Override
@@ -79,13 +78,13 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     @Override
-    public List<Rightsholder> getFromUsages(String productFamily, String searchValue, Pageable pageable, Sort sort) {
-        return rightsholderRepository.findFromUsages(productFamily, searchValue, pageable, sort);
+    public List<Rightsholder> getAllWithSearch(String searchValue, Pageable pageable, Sort sort) {
+        return rightsholderRepository.findAllWithSearch(searchValue, pageable, sort);
     }
 
     @Override
-    public int getCountFromUsages(String productFamily, String searchValue) {
-        return rightsholderRepository.findCountFromUsages(productFamily, searchValue);
+    public int getCountWithSearch(String searchValue) {
+        return rightsholderRepository.findCountWithSearch(searchValue);
     }
 
     @Override
