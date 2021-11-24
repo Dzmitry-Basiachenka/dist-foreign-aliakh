@@ -100,7 +100,8 @@
             v.created_datetime,
             v.updated_datetime,
             v.created_by_user,
-            v.updated_by_user
+            v.updated_by_user,
+            v.record_version
         from ${schema}.df_udm_value v
         left join ${schema}.df_rightsholder r on v.rh_account_number = r.rh_account_number
         left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
