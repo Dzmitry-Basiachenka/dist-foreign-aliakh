@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,12 +28,12 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
 
     @Autowired
     private IUdmUsageController udmUsageController;
-
     @Autowired
     private IUdmValueController udmValueController;
-
     @Autowired
     private IUdmBaselineController udmBaselineController;
+    @Autowired
+    private IUdmBaselineValueController udmBaselineValueController;
 
     @Override
     public IUdmUsageController getUdmUsageController() {
@@ -46,6 +48,11 @@ public class UdmController extends CommonController<IUdmWidget> implements IUdmC
     @Override
     public IUdmBaselineController getUdmBaselineController() {
         return udmBaselineController;
+    }
+
+    @Override
+    public IUdmBaselineValueController getUdmBaselineValueController() {
+        return udmBaselineValueController;
     }
 
     @Override
