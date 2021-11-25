@@ -20,6 +20,7 @@ public class UdmValueMediator implements IMediator {
     private Button populateButton;
     private MenuBar assignmentMenuBar;
     private Button editButton;
+    private Button calculateProxyValuesButton;
     private Button publishButton;
 
     @Override
@@ -30,6 +31,7 @@ public class UdmValueMediator implements IMediator {
         populateButton.setVisible(isSpecialist);
         assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
         editButton.setVisible(isSpecialist || isManager || isResearcher);
+        calculateProxyValuesButton.setVisible(isSpecialist);
         publishButton.setVisible(isSpecialist);
     }
 
@@ -43,6 +45,10 @@ public class UdmValueMediator implements IMediator {
 
     public void setEditButton(Button editButton) {
         this.editButton = editButton;
+    }
+
+    public void setCalculateProxyValuesButton(Button calculateProxyValuesButton) {
+        this.calculateProxyValuesButton = calculateProxyValuesButton;
     }
 
     public void setPublishButton(Button publishButton) {

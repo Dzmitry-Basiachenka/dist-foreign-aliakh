@@ -75,6 +75,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private MenuBar.MenuItem assignItem;
     private MenuBar.MenuItem unassignItem;
     private Button editButton;
+    private Button calculateProxyValuesButton;
     private Button publishButton;
     private DataProvider<UdmValueDto, Void> dataProvider;
     private MultiSelectionModelImpl<UdmValueDto> gridSelectionModel;
@@ -103,6 +104,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         mediator.setPopulateButton(populateButton);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setCalculateProxyValuesButton(calculateProxyValuesButton);
         mediator.setPublishButton(publishButton);
         return mediator;
     }
@@ -199,10 +201,14 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             openEditWindow(Collections.singleton(selectedValue),
                 () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
         });
+        calculateProxyValuesButton = Buttons.createButton(ForeignUi.getMessage("button.calculate_proxies"));
+//        calculateProxyValuesButton.addClickListener(event -> TODO enable when implemented
+//            Windows.showModalWindow(new UdmCalculateProxyValuesWindow(controller)));
         publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmPublishToBaselineWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(editButton);
-        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton, publishButton);
+        HorizontalLayout layout = new HorizontalLayout(populateButton, assignmentMenuBar, editButton,
+            calculateProxyValuesButton, publishButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-value-buttons");
         return layout;
