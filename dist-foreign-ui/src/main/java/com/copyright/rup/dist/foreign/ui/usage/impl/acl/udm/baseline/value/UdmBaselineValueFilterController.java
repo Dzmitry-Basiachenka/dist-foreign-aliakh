@@ -8,6 +8,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Implementation of {@link IUdmBaselineValueFilterController}.
  * <p>
@@ -25,5 +28,11 @@ public class UdmBaselineValueFilterController extends CommonController<IUdmBasel
     @Override
     protected IUdmBaselineValueFilterWidget instantiateWidget() {
         return new UdmBaselineValueFilterWidget(this);
+    }
+
+    @Override
+    public List<Integer> getPeriods() {
+        //TODO will implement later
+        return Collections.emptyList();
     }
 }

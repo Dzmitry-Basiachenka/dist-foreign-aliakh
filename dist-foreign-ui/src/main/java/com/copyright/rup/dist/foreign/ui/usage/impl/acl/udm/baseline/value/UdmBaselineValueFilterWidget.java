@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value.UdmValuePeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -24,6 +27,7 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdmBaselineValueFilterWidget {
 
+    private final UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
     private Button moreFiltersButton;
     @SuppressWarnings("unused")
     private IUdmBaselineValueFilterController controller;
@@ -63,10 +67,21 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
 
     private VerticalLayout initFiltersLayout() {
         initMoreFiltersButton();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), moreFiltersButton);
+        VerticalLayout verticalLayout =
+            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), moreFiltersButton);
         verticalLayout.setMargin(false);
         VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
         return verticalLayout;
+    }
+
+    private UdmValuePeriodFilterWidget buildPeriodFilter() {
+        UdmValuePeriodFilterWidget periodFilterWidget =
+            new UdmValuePeriodFilterWidget(() -> controller.getPeriods());
+        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
+            udmBaselineValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
+        });
+        VaadinUtils.addComponentStyle(periodFilterWidget, "udm-value-periods-filter");
+        return periodFilterWidget;
     }
 
     private void initMoreFiltersButton() {
