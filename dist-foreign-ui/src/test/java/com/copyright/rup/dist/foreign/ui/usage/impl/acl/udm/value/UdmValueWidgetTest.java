@@ -370,7 +370,7 @@ public class UdmValueWidgetTest {
     }
 
     @Test
-    public void testPublishButtonClick() throws Exception {
+    public void testPublishButtonClick() {
         mockStatic(Windows.class);
         setSpecialistExpectations();
         expect(controller.getPeriods()).andReturn(Collections.singletonList(202006)).once();
@@ -380,7 +380,7 @@ public class UdmValueWidgetTest {
         initWidget();
         HorizontalLayout buttonsLayout =
             (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
-        ((Button) buttonsLayout.getComponent(3)).click();
+        ((Button) buttonsLayout.getComponent(4)).click();
         verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
     }
 
@@ -434,11 +434,12 @@ public class UdmValueWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
         verifyMenuBar(layout.getComponent(1), "Assignment", Arrays.asList("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Edit Value");
-        verifyButton(layout.getComponent(3), "Publish");
+        verifyButton(layout.getComponent(3), "Calculate Proxies");
+        verifyButton(layout.getComponent(4), "Publish");
     }
 
     private void verifyButton(Component component, String name) {
