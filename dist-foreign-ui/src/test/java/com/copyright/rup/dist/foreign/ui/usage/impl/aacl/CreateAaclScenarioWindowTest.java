@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 
 import static org.easymock.EasyMock.expect;
@@ -227,11 +227,11 @@ public class CreateAaclScenarioWindowTest {
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         String emptyFieldValidationMessage = "Field value should be specified";
-        validateFieldAndVefiryErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        validateFieldAndVefiryErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
 

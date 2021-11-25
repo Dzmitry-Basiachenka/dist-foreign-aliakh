@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
@@ -118,13 +118,13 @@ public class ClassifiedUsagesUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
         String emptyFieldValidationMessage = "Field value should be specified";
         String fileExtensionValidationMessage = "File extension is incorrect";
-        validateFieldAndVefiryErrorMessage(uploadField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(uploadField, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages.dox", binder,
+        validateFieldAndVerifyErrorMessage(uploadField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(uploadField, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(uploadField, "classification_usages.dox", binder,
             fileExtensionValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages", binder, fileExtensionValidationMessage,
+        validateFieldAndVerifyErrorMessage(uploadField, "classification_usages", binder, fileExtensionValidationMessage,
             false);
-        validateFieldAndVefiryErrorMessage(uploadField, "classification_usages.csv", binder, null, true);
+        validateFieldAndVerifyErrorMessage(uploadField, "classification_usages.csv", binder, null, true);
     }
 
     private void verifyRootLayout(Component component) {
