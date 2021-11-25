@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
@@ -189,22 +189,22 @@ public class PublicationTypeWeightsWindowTest {
         TextField publicationTypeWeight = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
             emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "99999999999", binder,
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "99999999999", binder,
             positiveNumberValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "0", binder, null, true);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "125", binder, null, true);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
-        validateFieldAndVefiryErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "125", binder, null, true);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
+        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
     }
 
     @SuppressWarnings("unchecked")

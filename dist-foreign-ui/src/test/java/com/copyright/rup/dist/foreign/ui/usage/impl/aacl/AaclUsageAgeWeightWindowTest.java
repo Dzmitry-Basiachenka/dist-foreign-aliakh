@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
@@ -169,17 +169,17 @@ public class AaclUsageAgeWeightWindowTest {
         TextField weightField = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        validateFieldAndVefiryErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVefiryErrorMessage(weightField, "0", binder, null, true);
-        validateFieldAndVefiryErrorMessage(weightField, " 0.00 ", binder, null, true);
-        validateFieldAndVefiryErrorMessage(weightField, "125", binder, null, true);
-        validateFieldAndVefiryErrorMessage(weightField, "125.123456789", binder, null, true);
-        validateFieldAndVefiryErrorMessage(weightField, "9999999999.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(weightField, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, " 0.00 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, "125", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, "125.123456789", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, "9999999999.99", binder, null, true);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyTextField;
@@ -110,15 +110,15 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField usageBatchName = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
-        validateFieldAndVefiryErrorMessage(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
+        validateFieldAndVerifyErrorMessage(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
             false);
-        validateFieldAndVefiryErrorMessage(usageBatchName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVefiryErrorMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(usageBatchName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters",
             false);
-        validateFieldAndVefiryErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder,
+        validateFieldAndVerifyErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder,
             "Usage Batch with such name already exists", false);
-        validateFieldAndVefiryErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder, null, true);
         verify(usagesController);
     }
 
@@ -128,14 +128,14 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        validateFieldAndVefiryErrorMessage(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVefiryErrorMessage(periodEndDate, "a", binder, "Field value should contain numeric values only",
+        validateFieldAndVerifyErrorMessage(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "a", binder, "Field value should contain numeric values only",
             false);
-        validateFieldAndVefiryErrorMessage(periodEndDate, "1000", binder,
+        validateFieldAndVerifyErrorMessage(periodEndDate, "1000", binder,
             "Field value should be in range from 1950 to 2099", false);
-        validateFieldAndVefiryErrorMessage(periodEndDate, "2100", binder,
+        validateFieldAndVerifyErrorMessage(periodEndDate, "2100", binder,
             "Field value should be in range from 1950 to 2099", false);
-        validateFieldAndVefiryErrorMessage(periodEndDate, "2020", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "2020", binder, null, true);
         verify(usagesController);
     }
 
@@ -145,17 +145,17 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField numberOfBaselineYears = Whitebox.getInternalState(window, NUMBER_OF_BASELINE_YEARS);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "two", binder,
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, "two", binder,
             "Field value should be positive number",
             false);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
             false);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, " -2 ", binder,
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, " -2 ", binder,
             "Field value should be positive number",
             false);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, " 1 ", binder, null, true);
-        validateFieldAndVefiryErrorMessage(numberOfBaselineYears, "1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, " 1 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(numberOfBaselineYears, "1", binder, null, true);
         verify(usagesController);
     }
 

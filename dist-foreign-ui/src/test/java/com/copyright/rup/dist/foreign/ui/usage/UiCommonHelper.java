@@ -92,7 +92,7 @@ public final class UiCommonHelper {
      * @param isValid <code>true</code> if valid otherwise <code>false</code>
      */
     @SuppressWarnings("unchecked")
-    public static void validateFieldAndVefiryErrorMessage(AbstractField field, String value, Binder binder,
+    public static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
                                                           String message, boolean isValid) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();

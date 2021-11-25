@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVefiryErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
@@ -124,14 +124,14 @@ public class AaclFundPoolUploadWindowTest {
         window = new AaclFundPoolUploadWindow(aaclUsageController);
         Binder binder = Whitebox.getInternalState(window, "fundPoolBinder");
         TextField fundPoolName = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
-        validateFieldAndVefiryErrorMessage(fundPoolName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
+        validateFieldAndVerifyErrorMessage(fundPoolName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
             false);
-        validateFieldAndVefiryErrorMessage(fundPoolName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVefiryErrorMessage(fundPoolName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(fundPoolName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fundPoolName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        validateFieldAndVefiryErrorMessage(fundPoolName, FUND_POOL_NAME, binder,
+        validateFieldAndVerifyErrorMessage(fundPoolName, FUND_POOL_NAME, binder,
             "Fund Pool with such name already exists", false);
-        validateFieldAndVefiryErrorMessage(fundPoolName, FUND_POOL_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fundPoolName, FUND_POOL_NAME, binder, null, true);
         verify(aaclUsageController);
     }
 
