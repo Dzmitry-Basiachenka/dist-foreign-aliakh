@@ -22,7 +22,7 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
 
     @Override
     public void deleteProxyValues(Integer period) {
-        insert("IUdmProxyValueMapper.deleteProxyValues", Objects.requireNonNull(period));
+        delete("IUdmProxyValueMapper.deleteProxyValues", Objects.requireNonNull(period));
     }
 
     @Override
@@ -32,5 +32,13 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
         parameters.put("createUser", Objects.requireNonNull(userName));
         parameters.put("updateUser", userName);
         insert("IUdmProxyValueMapper.insertProxyValues", parameters);
+    }
+
+    @Override
+    public int applyProxyValues(Integer period, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("updateUser", userName);
+        return selectOne("IUdmProxyValueMapper.applyProxyValues", parameters);
     }
 }

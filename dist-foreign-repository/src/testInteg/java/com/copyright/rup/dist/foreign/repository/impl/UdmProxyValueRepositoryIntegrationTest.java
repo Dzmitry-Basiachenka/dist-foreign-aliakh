@@ -6,9 +6,14 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -20,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -44,6 +50,11 @@ public class UdmProxyValueRepositoryIntegrationTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
+
     @Autowired
     private IUdmProxyValueRepository udmProxyValueRepository;
     @Autowired
@@ -61,13 +72,22 @@ public class UdmProxyValueRepositoryIntegrationTest {
     @TestData(fileName = "udm-proxy-value-repository-test-data-init-insert-proxy-values.groovy")
     public void testInsertProxyValues() {
         udmProxyValueRepository.insertProxyValues(PERIOD, USER_NAME);
-        verifyProxyValueDto(
-            loadExpectedProxyValueDto("json/udm/udm_proxy_value_dto.json"),
+        verifyProxyValueDtos(
+            loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto.json"),
             findAllProxyValueDtos());
     }
 
-    private void verifyProxyValueDto(List<UdmProxyValueDto> expectedValues,
-                                     List<UdmProxyValueDto> actualValues) {
+    @Test
+    @TestData(fileName = "udm-proxy-value-repository-test-data-init-apply-proxy-values.groovy")
+    public void testApplyProxyValues() {
+        assertEquals(2, udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME));
+        verifyValueDtos(
+            loadExpectedValueDtos("json/udm/udm_value_dto_42c7bf99.json"),
+            findAllValueDtos());
+    }
+
+    private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues,
+                                      List<UdmProxyValueDto> actualValues) {
         assertEquals(expectedValues.size(), actualValues.size());
         IntStream.range(0, expectedValues.size()).forEach(index -> {
             UdmProxyValueDto expectedValue = expectedValues.get(index);
@@ -79,7 +99,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
         });
     }
 
-    private List<UdmProxyValueDto> loadExpectedProxyValueDto(String fileName) {
+    private List<UdmProxyValueDto> loadExpectedProxyValueDtos(String fileName) {
         List<UdmProxyValueDto> proxyValues = new ArrayList<>();
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
@@ -93,5 +113,58 @@ public class UdmProxyValueRepositoryIntegrationTest {
 
     private List<UdmProxyValueDto> findAllProxyValueDtos() {
         return sqlSessionTemplate.selectList("IUdmProxyValueMapper.findAllDtos");
+    }
+
+    private void verifyValueDtos(List<UdmValueDto> expectedValues,
+                                 List<UdmValueDto> actualValues) {
+        assertEquals(expectedValues.size(), actualValues.size());
+        IntStream.range(0, expectedValues.size()).forEach(index -> {
+            UdmValueDto expectedValue = expectedValues.get(index);
+            UdmValueDto actualValue = actualValues.get(index);
+            assertEquals(expectedValue.getId(), actualValue.getId());
+            assertEquals(expectedValue.getValuePeriod(), actualValue.getValuePeriod());
+            assertEquals(expectedValue.getStatus(), actualValue.getStatus());
+            assertEquals(expectedValue.getAssignee(), actualValue.getAssignee());
+            assertEquals(expectedValue.getRhAccountNumber(), actualValue.getRhAccountNumber());
+            assertEquals(expectedValue.getPublicationType(), actualValue.getPublicationType());
+            assertEquals(expectedValue.getRhName(), actualValue.getRhName());
+            assertEquals(expectedValue.getWrWrkInst(), actualValue.getWrWrkInst());
+            assertEquals(expectedValue.getSystemTitle(), actualValue.getSystemTitle());
+            assertEquals(expectedValue.getSystemStandardNumber(), actualValue.getSystemStandardNumber());
+            assertEquals(expectedValue.getPrice(), actualValue.getPrice());
+            assertEquals(expectedValue.getPriceSource(), actualValue.getPriceSource());
+            assertEquals(expectedValue.getPriceInUsd(), actualValue.getPriceInUsd());
+            assertEquals(expectedValue.isPriceFlag(), actualValue.isPriceFlag());
+            assertEquals(expectedValue.getContent(), actualValue.getContent());
+            assertEquals(expectedValue.getCurrency(), actualValue.getCurrency());
+            assertEquals(expectedValue.getCurrencyExchangeRate(), actualValue.getCurrencyExchangeRate());
+            assertEquals(expectedValue.getCurrencyExchangeRateDate(), actualValue.getCurrencyExchangeRateDate());
+            assertEquals(expectedValue.getContentUnitPrice(), actualValue.getContentUnitPrice());
+            assertEquals(expectedValue.isContentFlag(), actualValue.isContentFlag());
+            assertEquals(expectedValue.getContentComment(), actualValue.getContentComment());
+            assertEquals(expectedValue.getContentSource(), actualValue.getContentSource());
+            assertEquals(expectedValue.getComment(), actualValue.getComment());
+            assertEquals(expectedValue.getUpdateUser(), actualValue.getUpdateUser());
+            assertEquals(expectedValue.getCreateUser(), actualValue.getCreateUser());
+            assertEquals(expectedValue.getVersion(), actualValue.getVersion());
+        });
+    }
+
+    private List<UdmValueDto> loadExpectedValueDtos(String fileName) {
+        List<UdmValueDto> values = new ArrayList<>();
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            values.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<UdmValueDto>>() {
+            }));
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return values;
+    }
+
+    private List<UdmValueDto> findAllValueDtos() {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put("filter", new UdmValueFilter());
+        return sqlSessionTemplate.selectList("IUdmValueMapper.findDtosByFilter", parameters);
     }
 }
