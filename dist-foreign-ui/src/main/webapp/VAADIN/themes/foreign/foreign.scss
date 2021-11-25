@@ -353,7 +353,8 @@
     .edit-udm-usage-window .v-readonly.v-textfield,
     .multiple-edit-udm-usages-window .v-readonly.v-textfield,
     .edit-udm-value-window .v-readonly.v-textfield,
-    .view-udm-baseline-window .v-readonly.v-textfield {
+    .view-udm-baseline-window .v-readonly.v-textfield,
+    .view-udm-usage-window .v-readonly.v-textfield {
         border-style: none !important;
     }
 
@@ -362,12 +363,12 @@
     .edit-udm-value-window .v-caption {
         visibility: hidden;
         height: 0px;
-
     }
 
     .edit-udm-usage-window .v-label.v-has-width,
     .multiple-edit-udm-usages-window .v-label.v-has-width,
-    .edit-udm-value-window .v-label.v-has-width {
+    .edit-udm-value-window .v-label.v-has-width,
+    .view-udm-usage-window .v-label.v-has-width {
         margin-top: 3px;
     }
 
