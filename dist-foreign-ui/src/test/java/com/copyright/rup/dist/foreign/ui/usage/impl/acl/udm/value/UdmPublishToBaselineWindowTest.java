@@ -74,14 +74,14 @@ public class UdmPublishToBaselineWindowTest {
         expect(controller.publishToBaseline(202106)).andReturn(5).once();
         Windows.showNotificationWindow("Value batch publishing completed: 5 record(s) were published");
         expectLastCall().once();
-        replay(controller);
+        replay(Windows.class, controller);
         window = new UdmPublishToBaselineWindow(controller);
         ComboBox<Integer> comboBox = (ComboBox<Integer>) ((VerticalLayout) window.getContent()).getComponent(0);
         comboBox.setSelectedItem(202106);
         Button continueButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1)).getComponent(0);
         continueButton.click();
-        verify(controller);
+        verify(Windows.class, controller);
     }
 
     @Test

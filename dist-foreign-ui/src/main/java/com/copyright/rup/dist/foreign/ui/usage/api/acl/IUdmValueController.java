@@ -159,4 +159,12 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return instance of {@link ExchangeRate}
      */
     ExchangeRate getExchangeRate(String foreignCurrencyCode, LocalDate date);
+
+    /**
+     * Calculates and applies content unit price of UDM proxy values to UDM proxy values.
+     *
+     * @param period period of usage
+     * @return count of updated UDM values
+     */
+    int calculateProxyValues(Integer period);
 }

@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationServi
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
@@ -67,6 +68,7 @@ public class UdmValueControllerTest {
     private IUdmValueFilterController udmValueFilterController;
     private IUdmValueFilterWidget udmValueFilterWidget;
     private IUdmValueService valueService;
+    private IUdmProxyValueService udmProxyValueService;
     private IUdmValueWidget udmValueWidget;
     private IUdmBaselineService baselineService;
     private IPublicationTypeService publicationTypeService;
@@ -78,6 +80,7 @@ public class UdmValueControllerTest {
         udmValueFilterController = createMock(IUdmValueFilterController.class);
         udmValueFilterWidget = createMock(IUdmValueFilterWidget.class);
         valueService = createMock(IUdmValueService.class);
+        udmProxyValueService = createMock(IUdmProxyValueService.class);
         udmValueWidget = createMock(IUdmValueWidget.class);
         baselineService = createMock(IUdmBaselineService.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
@@ -86,6 +89,7 @@ public class UdmValueControllerTest {
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
+        Whitebox.setInternalState(controller, udmProxyValueService);
         Whitebox.setInternalState(controller, udmValueWidget);
         Whitebox.setInternalState(controller, baselineService);
         Whitebox.setInternalState(controller, publicationTypeService);
@@ -246,13 +250,6 @@ public class UdmValueControllerTest {
         verify(udmPriceTypeService);
     }
 
-    private PublicationType buildPublicationType(String name, String weight) {
-        PublicationType pubType = new PublicationType();
-        pubType.setName(name);
-        pubType.setWeight(new BigDecimal(weight));
-        return pubType;
-    }
-
     @Test
     public void testPublishToBaseline() {
         expect(valueService.publishToBaseline(202106)).andReturn(2).once();
@@ -272,5 +269,20 @@ public class UdmValueControllerTest {
         replay(rfexIntegrationService);
         assertEquals(exchangeRate, controller.getExchangeRate(currencyCode, date));
         verify(rfexIntegrationService);
+    }
+
+    @Test
+    public void testCalculateProxyValues() {
+        expect(udmProxyValueService.calculateProxyValues(202106)).andReturn(2).once();
+        replay(udmProxyValueService);
+        assertEquals(2, controller.calculateProxyValues(202106));
+        verify(udmProxyValueService);
+    }
+
+    private PublicationType buildPublicationType(String name, String weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 }
