@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -11,7 +13,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -27,20 +28,20 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Collections;
 
 /**
- * Verifies {@link UdmPopulateValueBatchWindow}.
+ * Verifies {@link UdmCalculateProxyValuesWindow}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
- * Date: 09/23/21
+ * Date: 11/25/2021
  *
- * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Windows.class)
-public class UdmPopulateValueBatchWindowTest {
+public class UdmCalculateProxyValuesWindowTest {
 
     private IUdmValueController controller;
-    private UdmPopulateValueBatchWindow window;
+    private UdmCalculateProxyValuesWindow window;
 
     @Before
     public void setUp() {
@@ -50,27 +51,23 @@ public class UdmPopulateValueBatchWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(controller.getBaselinePeriods()).andReturn(Collections.emptyList()).once();
+        expect(controller.getPeriods()).andReturn(Collections.emptyList()).once();
         replay(controller);
-        window = new UdmPopulateValueBatchWindow(controller);
+        window = new UdmCalculateProxyValuesWindow(controller);
         verify(controller);
-        assertEquals("Populate Value Batch", window.getCaption());
-        assertEquals(280, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(120, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Calculate Proxies", 280, 120, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testClickContinueButton() {
-        expect(controller.getBaselinePeriods()).andReturn(Collections.singletonList(202106)).once();
-        expect(controller.populatesValueBatch(202106)).andReturn(5).once();
-        Windows.showNotificationWindow("Value batch populating completed: 5 record(s) were populated");
+        expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
+        expect(controller.calculateProxyValues(202106)).andReturn(2).once();
+        Windows.showNotificationWindow("Proxy values calculating completed: 2 record(s) were updated");
         expectLastCall().once();
         replay(Windows.class, controller);
-        window = new UdmPopulateValueBatchWindow(controller);
+        window = new UdmCalculateProxyValuesWindow(controller);
         ComboBox<Integer> comboBox = (ComboBox<Integer>) ((VerticalLayout) window.getContent()).getComponent(0);
         comboBox.setSelectedItem(202106);
         Button continueButton =
@@ -84,7 +81,7 @@ public class UdmPopulateValueBatchWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyPeriodComponent(verticalLayout.getComponent(0));
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), "Continue", "Cancel");
     }
 
     @SuppressWarnings("unchecked")
@@ -93,18 +90,5 @@ public class UdmPopulateValueBatchWindowTest {
         assertEquals("Period", comboBox.getCaption());
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Continue");
-        verifyButton(layout.getComponent(1), "Cancel");
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
     }
 }

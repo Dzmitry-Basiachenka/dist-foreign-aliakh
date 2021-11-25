@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationServi
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -53,6 +54,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IUdmBaselineService baselineService;
     @Autowired
     private IUdmValueService valueService;
+    @Autowired
+    private IUdmProxyValueService udmProxyValueService;
     @Autowired
     private IPublicationTypeService publicationTypeService;
     @Autowired
@@ -161,6 +164,11 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Override
     public ExchangeRate getExchangeRate(String foreignCurrencyCode, LocalDate date) {
         return rfexIntegrationService.getExchangeRate(foreignCurrencyCode, date);
+    }
+
+    @Override
+    public int calculateProxyValues(Integer period) {
+        return udmProxyValueService.calculateProxyValues(period);
     }
 
     private UdmValueFilter getFilter() {
