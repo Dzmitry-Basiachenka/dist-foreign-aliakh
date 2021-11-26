@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterEqualsExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterGreaterThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterLessThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -120,7 +121,8 @@ public class DomainVerifierTest {
             {UdmValueBaselineDto.class},
             {UdmBaselineValueFilter.class},
             {UdmBaselineDto.class},
-            {ExchangeRate.class}
+            {ExchangeRate.class},
+            {UdmProxyValueFilter.class}
         };
         return Arrays.asList(testData);
     }
