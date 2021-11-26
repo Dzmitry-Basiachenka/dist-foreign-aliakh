@@ -61,7 +61,6 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         IController<?> controller = supplier.get();
         IWidget widget = controller.initWidget();
         widget.setController(controller);
-        widget.init();
         addTab(widget, ForeignUi.getMessage(caption));
     }
 }

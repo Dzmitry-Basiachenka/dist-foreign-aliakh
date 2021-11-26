@@ -115,6 +115,13 @@ public class UdmUsageWidgetTest {
     private static final int UDM_RECORD_THRESHOLD = 10000;
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
     private static final int DOUBLE_CLICK = 0x00002;
+    private static final String INVALID_ASSIGNEE = "invalid_assignee";
+    private static final String USAGE_PROCESSING_ERROR_MESSAGE = "Please wait while usage processing is completed";
+    private static final String NON_BASELINE_ERROR_MESSAGE = "Only non baseline usages can be edited";
+    private static final String RESEARCHER_STATUSES_ERROR_MESSAGE = "You can edit only UDM usages in statuses " +
+        "WORK_NOT_FOUND, RH_NOT_FOUND, OPS_REVIEW";
+    private static final String USAGE_NOT_EDITED_ERROR_MESSAGE  = "Selected UDM usage cannot be edited. Please " +
+        "assign it to yourself first";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
     private IStreamSource streamSource;
@@ -318,14 +325,14 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testIsUsageProcessingCompleted() throws Exception {
+    public void testIsUsageProcessingCompleted() {
         mockStatic(Windows.class);
         Window confirmWindowMock = createMock(Window.class);
         UdmUsageDto udmUsageDto = buildUdmUsageDto("351ee998-1b0b-4f29-842f-2efb00cbead8", USER);
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageDto.setAssignee(USER);
         setSpecialistExpectations();
-        Windows.showNotificationWindow("Please wait while usage processing is completed");
+        Windows.showNotificationWindow(USAGE_PROCESSING_ERROR_MESSAGE);
         expectLastCall().once();
         replay(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
             RupContextUtils.class);
@@ -342,72 +349,92 @@ public class UdmUsageWidgetTest {
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedWorkNotFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, USER);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistNullAssigneeAllowed() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, null);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistInvalidAssigneeAllowed() throws Exception {
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedRhNotFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_NOT_FOUND);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_NOT_FOUND, USER);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedRhFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_FOUND);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_FOUND, USER);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedEligible() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.ELIGIBLE);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.ELIGIBLE, USER);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedIneligible() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.INELIGIBLE);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.INELIGIBLE, USER);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedOpsReview() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.OPS_REVIEW);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.OPS_REVIEW, USER);
     }
 
     @Test
     public void testEditButtonClickListenerSpecialistAllowedSpecialistReview() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.SPECIALIST_REVIEW);
+        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.SPECIALIST_REVIEW, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedWorkNotFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, USER);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerNullAssigneeAllowed() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, null);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerInvalidAssigneeAllowed() throws Exception {
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedRhNotFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_NOT_FOUND);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_NOT_FOUND, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedRhFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_FOUND);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_FOUND, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedEligible() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.ELIGIBLE);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.ELIGIBLE, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedIneligible() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.INELIGIBLE);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.INELIGIBLE, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedOpsReview() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.OPS_REVIEW);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.OPS_REVIEW, USER);
     }
 
     @Test
     public void testEditButtonClickListenerManagerAllowedManagerReview() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.SPECIALIST_REVIEW);
+        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.SPECIALIST_REVIEW, USER);
     }
 
     @Test
@@ -421,17 +448,17 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListenerResearcherForbiddenRhFound() throws Exception {
+    public void testEditButtonClickListenerResearcherForbiddenRhFound() {
         testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.RH_FOUND);
     }
 
     @Test
-    public void testEditButtonClickListenerResearcherForbiddenEligible() throws Exception {
+    public void testEditButtonClickListenerResearcherForbiddenEligible() {
         testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.ELIGIBLE);
     }
 
     @Test
-    public void testEditButtonClickListenerResearcherForbiddenIneligible() throws Exception {
+    public void testEditButtonClickListenerResearcherForbiddenIneligible() {
         testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.INELIGIBLE);
     }
 
@@ -441,13 +468,13 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListenerResearcherForbiddenResearcherReview() throws Exception {
+    public void testEditButtonClickListenerResearcherForbiddenResearcherReview() {
         testEditButtonClickListenerResearcherForbidden(UsageStatusEnum.SPECIALIST_REVIEW);
     }
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testMultipleEditButtonClickListenerResearcherForbidden() throws Exception {
+    public void testMultipleEditButtonClickListenerResearcherForbidden() {
         mockStatic(Windows.class);
         setResearcherExpectations();
         UdmUsageDto udmUsageDtoFirst = new UdmUsageDto();
@@ -478,16 +505,16 @@ public class UdmUsageWidgetTest {
     @SuppressWarnings(UNCHECKED)
     public void testViewUsageWindowByDoubleClick() throws Exception {
         mockStatic(Windows.class);
-        setSpecialistExpectations();
+        setViewOnlyExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("121e005a-3fc0-4f65-bc91-1ec3932a86c8");
         udmUsageDto.setAssignee(USER);
         udmUsageDto.setStatus(UsageStatusEnum.RH_NOT_FOUND);
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto)).andReturn(mockWindow).once();
+        UdmViewUsageWindow mockWindow = createMock(UdmViewUsageWindow.class);
+        expectNew(UdmViewUsageWindow.class, eq(udmUsageDto)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+        replay(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
             ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
@@ -497,7 +524,7 @@ public class UdmUsageWidgetTest {
         Grid.ItemClick<UdmUsageDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmUsageDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+        verify(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
             ForeignSecurityUtils.class);
     }
 
@@ -535,14 +562,14 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testEditButtonClickListenerBaselineResearcher() throws Exception {
+    public void testEditButtonClickListenerBaselineResearcher() {
         mockStatic(Windows.class);
         setResearcherExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
         udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
         udmUsageDto.setBaselineFlag(true);
-        Windows.showNotificationWindow("Only non baseline usages can be edited");
+        Windows.showNotificationWindow(NON_BASELINE_ERROR_MESSAGE);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
@@ -557,13 +584,13 @@ public class UdmUsageWidgetTest {
 
     @Test
     @SuppressWarnings(UNCHECKED)
-    public void testEditButtonClickListenerInvalidAssignee() throws Exception {
+    public void testEditButtonClickListenerInvalidAssignee() {
         mockStatic(Windows.class);
-        setSpecialistExpectations();
+        setResearcherExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
-        udmUsageDto.setStatus(UsageStatusEnum.RH_FOUND);
-        Windows.showNotificationWindow("Selected UDM usage cannot be edited. Please assign it to yourself first");
+        udmUsageDto.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        Windows.showNotificationWindow(USAGE_NOT_EDITED_ERROR_MESSAGE);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
@@ -699,6 +726,120 @@ public class UdmUsageWidgetTest {
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, RupContextUtils.class, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedValidAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(USER);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedNullAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(null);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedInvalidAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedValidAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(USER);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedNullAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(null);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedInvalidAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherAllowed() throws Exception {
+        setResearcherExpectations();
+        testDoubleClickListenerAllowed(USER);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerSpecialistForbidden(UsageStatusEnum.NEW, USER, false);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistNullAssigneeForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerSpecialistForbidden(UsageStatusEnum.WORK_FOUND, null, true);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistInvalidAssigneeForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerSpecialistForbidden(UsageStatusEnum.WORK_FOUND, INVALID_ASSIGNEE, false);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerManagerForbidden(UsageStatusEnum.NEW, USER, false);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerNullAssigneeForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerManagerForbidden(UsageStatusEnum.NEW, null, true);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerInvalidAssigneeForbiddenUsageProcessingCompleted() {
+        testDoubleClickListenerManagerForbidden(UsageStatusEnum.WORK_FOUND, INVALID_ASSIGNEE, false);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenNonBaseline() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.RH_NOT_FOUND, USER, true,
+            NON_BASELINE_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenNewStatus() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.NEW, USER, false,
+            RESEARCHER_STATUSES_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenRhFoundStatus() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.RH_FOUND, USER, false,
+            RESEARCHER_STATUSES_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenEligibleStatus() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.ELIGIBLE, USER, false,
+            RESEARCHER_STATUSES_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenIneligibleStatus() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.INELIGIBLE, USER, false,
+            RESEARCHER_STATUSES_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherForbiddenSpecialistReviewStatus() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.SPECIALIST_REVIEW, USER, false,
+            RESEARCHER_STATUSES_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherNullAssigneeForbidden() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.RH_NOT_FOUND, null, false,
+            USAGE_NOT_EDITED_ERROR_MESSAGE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherInvalidAssigneeForbidden() {
+        testDoubleClickListenerResearcherForbidden(UsageStatusEnum.RH_NOT_FOUND, INVALID_ASSIGNEE, false,
+            USAGE_NOT_EDITED_ERROR_MESSAGE);
     }
 
     private void testSelectionOfMultipleUsages() {
@@ -885,26 +1026,27 @@ public class UdmUsageWidgetTest {
         return udmUsage;
     }
 
-    private void testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum status) throws Exception {
+    private void testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum status, String user) throws Exception {
         setSpecialistExpectations();
-        testEditButtonClickListenerAllowed(status);
+        testEditButtonClickListenerAllowed(status, user);
     }
 
-    private void testEditButtonClickListenerManagerAllowed(UsageStatusEnum status) throws Exception {
+    private void testEditButtonClickListenerManagerAllowed(UsageStatusEnum status, String user) throws Exception {
         setManagerExpectations();
-        testEditButtonClickListenerAllowed(status);
+        testEditButtonClickListenerAllowed(status, user);
     }
 
     private void testEditButtonClickListenerResearcherAllowed(UsageStatusEnum status) throws Exception {
         setResearcherExpectations();
-        testEditButtonClickListenerAllowed(status);
+        testEditButtonClickListenerAllowed(status, USER);
     }
 
-    private void testEditButtonClickListenerAllowed(UsageStatusEnum status) throws Exception {
+    @SuppressWarnings(UNCHECKED)
+    private void testEditButtonClickListenerAllowed(UsageStatusEnum status, String user) throws Exception {
         mockStatic(Windows.class);
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
-        udmUsageDto.setAssignee(USER);
+        udmUsageDto.setAssignee(user);
         udmUsageDto.setStatus(status);
         UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
         expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
@@ -924,15 +1066,14 @@ public class UdmUsageWidgetTest {
             ForeignSecurityUtils.class);
     }
 
-    private void testEditButtonClickListenerResearcherForbidden(UsageStatusEnum status) throws Exception {
+    private void testEditButtonClickListenerResearcherForbidden(UsageStatusEnum status) {
         mockStatic(Windows.class);
         setResearcherExpectations();
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
         udmUsageDto.setAssignee(USER);
         udmUsageDto.setStatus(status);
-        Windows.showNotificationWindow("You can edit only UDM usages in statuses WORK_NOT_FOUND, RH_NOT_FOUND, " +
-            "OPS_REVIEW");
+        Windows.showNotificationWindow(RESEARCHER_STATUSES_ERROR_MESSAGE);
         expectLastCall().once();
         replay(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
@@ -950,5 +1091,82 @@ public class UdmUsageWidgetTest {
         mouseEventDetails.setType(DOUBLE_CLICK);
         mouseEventDetails.setButton(MouseButton.LEFT);
         return mouseEventDetails;
+    }
+
+    private void testDoubleClickListenerSpecialistAllowed(String user) throws Exception {
+        setSpecialistExpectations();
+        testDoubleClickListenerAllowed(user);
+    }
+
+    private void testDoubleClickListenerManagerAllowed(String user) throws Exception {
+        setManagerExpectations();
+        testDoubleClickListenerAllowed(user);
+    }
+
+    private void testDoubleClickListenerSpecialistForbidden(UsageStatusEnum status, String user,
+                                                            Boolean isBaseLineFlag) {
+        setSpecialistExpectations();
+        testDoubleClickListenerForbidden(status, user, isBaseLineFlag, USAGE_PROCESSING_ERROR_MESSAGE);
+    }
+
+    private void testDoubleClickListenerManagerForbidden(UsageStatusEnum status, String user, Boolean isBaseLineFlag) {
+        setManagerExpectations();
+        testDoubleClickListenerForbidden(status, user, isBaseLineFlag, USAGE_PROCESSING_ERROR_MESSAGE);
+    }
+
+    private void testDoubleClickListenerResearcherForbidden(UsageStatusEnum status, String user,
+                                                            Boolean isBaseLineFlag, String message) {
+        setResearcherExpectations();
+        testDoubleClickListenerForbidden(status, user, isBaseLineFlag, message);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testDoubleClickListenerAllowed(String user) throws Exception {
+        mockStatic(Windows.class);
+        UdmUsageDto udmUsageDto = new UdmUsageDto();
+        udmUsageDto.setId("f4477145-58ab-44e8-915d-423dcee0977b");
+        udmUsageDto.setAssignee(user);
+        udmUsageDto.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
+        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmUsageDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmUsageDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmUsageDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testDoubleClickListenerForbidden(UsageStatusEnum status, String user, Boolean isBaseLineFlag,
+                                                  String message) {
+        mockStatic(Windows.class);
+        Window confirmWindowMock = createMock(Window.class);
+        UdmUsageDto udmUsageDto = buildUdmUsageDto("305eaae8-2ee1-45db-aca5-17d2661df434", user);
+        udmUsageDto.setStatus(status);
+        udmUsageDto.setBaselineFlag(isBaseLineFlag);
+        Windows.showNotificationWindow(message);
+        expectLastCall().once();
+        replay(controller, streamSource, confirmWindowMock, Windows.class, UdmEditUsageWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmUsageDto> grid =
+            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmUsageDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmUsageDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmUsageDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, UdmViewUsageWindow.class,
+            RupContextUtils.class, ForeignSecurityUtils.class);
     }
 }
