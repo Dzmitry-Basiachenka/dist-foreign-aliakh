@@ -202,8 +202,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 () -> new UdmEditValueWindow(controller, selectedValue, saveEvent -> refresh()));
         });
         calculateProxyValuesButton = Buttons.createButton(ForeignUi.getMessage("button.calculate_proxies"));
-//        calculateProxyValuesButton.addClickListener(event -> TODO enable when implemented
-//            Windows.showModalWindow(new UdmCalculateProxyValuesWindow(controller)));
+        calculateProxyValuesButton.addClickListener(event ->
+            Windows.showModalWindow(new UdmCalculateProxyValuesWindow(controller, saveEvent -> refresh())));
         publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmPublishToBaselineWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(editButton);

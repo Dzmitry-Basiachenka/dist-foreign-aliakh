@@ -4,12 +4,12 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -367,6 +367,21 @@ public class UdmValueWidgetTest {
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
         verify(controller, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testCalculateProxyValuesButtonClick() {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        expect(controller.getPeriods()).andReturn(Collections.singletonList(202006)).once();
+        Windows.showModalWindow(anyObject(UdmCalculateProxyValuesWindow.class));
+        expectLastCall().once();
+        replay(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
+        initWidget();
+        HorizontalLayout buttonsLayout =
+            (HorizontalLayout) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(0);
+        ((Button) buttonsLayout.getComponent(3)).click();
+        verify(controller, Windows.class, ForeignSecurityUtils.class, RupContextUtils.class);
     }
 
     @Test

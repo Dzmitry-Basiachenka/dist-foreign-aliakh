@@ -7,6 +7,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
@@ -27,14 +28,17 @@ public class UdmCalculateProxyValuesWindow extends Window {
     private final IUdmValueController controller;
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private final Button continueButton = Buttons.createButton(ForeignUi.getMessage("button.continue"));
+    private final ClickListener continueButtonClickListener;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUdmValueController}
+     * @param controller    instance of {@link IUdmValueController}
+     * @param clickListener action that should be performed after Save button was clicked
      */
-    public UdmCalculateProxyValuesWindow(IUdmValueController controller) {
+    public UdmCalculateProxyValuesWindow(IUdmValueController controller, ClickListener clickListener) {
         this.controller = controller;
+        this.continueButtonClickListener = clickListener;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.calculate_proxies"));
         setResizable(false);
@@ -58,6 +62,7 @@ public class UdmCalculateProxyValuesWindow extends Window {
         continueButton.setEnabled(false);
         continueButton.addClickListener(event -> {
             int updatedValuesCount = controller.calculateProxyValues(periodComboBox.getValue());
+            continueButtonClickListener.buttonClick(event);
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_proxy_value.calculate",
                 updatedValuesCount));
