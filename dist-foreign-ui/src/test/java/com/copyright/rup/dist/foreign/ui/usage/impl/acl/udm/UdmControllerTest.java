@@ -7,6 +7,7 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
@@ -30,6 +31,7 @@ public class UdmControllerTest {
 
     private IUdmUsageController udmUsageController;
     private IUdmValueController udmValueController;
+    private IUdmProxyValueController udmProxyValueController;
     private IUdmBaselineController udmBaselineController;
     private IUdmBaselineValueController udmBaselineValueController;
 
@@ -37,10 +39,12 @@ public class UdmControllerTest {
     public void setUp() {
         udmUsageController = createMock(IUdmUsageController.class);
         udmValueController = createMock(IUdmValueController.class);
+        udmProxyValueController = createMock(IUdmProxyValueController.class);
         udmBaselineController = createMock(IUdmBaselineController.class);
         udmBaselineValueController = createMock(IUdmBaselineValueController.class);
         Whitebox.setInternalState(controller, udmUsageController);
         Whitebox.setInternalState(controller, udmValueController);
+        Whitebox.setInternalState(controller, udmProxyValueController);
         Whitebox.setInternalState(controller, udmBaselineController);
         Whitebox.setInternalState(controller, udmBaselineValueController);
     }
@@ -53,6 +57,11 @@ public class UdmControllerTest {
     @Test
     public void testGetUdmValueController() {
         assertSame(udmValueController, controller.getUdmValueController());
+    }
+
+    @Test
+    public void testGetUdmProxyValueController() {
+        assertSame(udmProxyValueController, controller.getUdmProxyValueController());
     }
 
     @Test

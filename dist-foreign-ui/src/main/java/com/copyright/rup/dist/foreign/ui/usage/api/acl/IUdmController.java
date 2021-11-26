@@ -24,6 +24,11 @@ public interface IUdmController extends IController<IUdmWidget> {
     IUdmValueController getUdmValueController();
 
     /**
+     * @return instance of {@link IUdmProxyValueController}.
+     */
+    IUdmProxyValueController getUdmProxyValueController();
+
+    /**
      * @return instance of {@link IUdmBaselineController}
      */
     IUdmBaselineController getUdmBaselineController();

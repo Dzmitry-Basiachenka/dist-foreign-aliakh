@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
-
 import com.vaadin.ui.Component;
 import com.vaadin.ui.TabSheet;
 
@@ -34,6 +33,9 @@ public class UdmWidget extends TabSheet implements IUdmWidget {
         this.addStyleName("sub-tabsheet");
         initAndAddTab(() -> udmController.getUdmUsageController(), "tab.usages");
         initAndAddTab(() -> udmController.getUdmValueController(), "tab.values");
+        if (ForeignSecurityUtils.hasSpecialistPermission()) {
+            initAndAddTab(() -> udmController.getUdmProxyValueController(), "tab.proxy_values");
+        }
         if (!ForeignSecurityUtils.hasResearcherPermission()) {
             initAndAddTab(() -> udmController.getUdmBaselineController(), "tab.baseline");
             initAndAddTab(() -> udmController.getUdmBaselineValueController(), "tab.baseline_values");
