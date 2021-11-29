@@ -94,7 +94,7 @@ public class UdmBaselineValueFilterWidgetTest {
         Button button = (Button) component;
         assertEquals("More Filters", component.getCaption());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        Collection<?> listeners = button.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
+        Collection<?> listeners = button.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
     }
 }
