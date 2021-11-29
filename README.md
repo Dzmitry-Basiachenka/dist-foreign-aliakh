@@ -1,3 +1,20 @@
+14.1.32
+-
+* B-69863 FDA: View baseline values: implement logic to get baseline value periods
+* B-69863 FDA: View baseline values: implement UDM baseline values filters window
+* B-69863 FDA: View baseline values: implement periods filter modal window
+* B-69863 FDA: View baseline values: implement UDM Baseline Value Filter
+* B-65964 FDA: Calculate and apply proxy values: implement frontend to apply proxy values
+* B-65964 FDA: Calculate and apply proxy values: implement Liquibase script to create table df_udm_proxy_values
+* B-65964 FDA: Calculate and apply proxy values: implement single period selection dialog
+* B-65964 FDA: Calculate and apply proxy values: implement button Calculate Proxies
+* B-65964 FDA: Calculate and apply proxy values: implement backend to apply proxy values
+* B-65964 FDA: Calculate and apply proxy values: implement backend to calculate proxy values
+* B-68257 FDA & UDM: View proxy values: Implement UI tab for proxy values
+* B-69757 FDA: Edit functionality modification (Usages and Values): modify single edit functionality for UDM Usage
+* B-69757 FDA: Edit functionality modification (Usages and Values): implement view UDM usage window
+* B-65868 Tech Debt: FDA: apply lazy filter widget for Rightsholders filters
+
 14.1.31
 -
 * B-70501 Tech Debt: FDA: fix security vulnerability CVE-2021-22119
