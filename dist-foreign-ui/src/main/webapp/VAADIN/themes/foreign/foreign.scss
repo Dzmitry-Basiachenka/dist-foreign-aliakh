@@ -190,27 +190,27 @@
    }
 
    /**==== Styles for lazy rightsholder filter widget ====*/
-   .lazy-rightsholders-grid .v-grid-row > td {
+   .lazy-filter-widget-grid .v-grid-row > td {
         background-color: white;
    }
 
-   .lazy-rightsholders-grid .v-grid-row-selected {
+   .lazy-filter-widget-grid .v-grid-row-selected {
         color: black;
         text-shadow: none;
    }
 
-   .lazy-rightsholders-grid .v-grid-row-selected > .v-grid-cell {
+   .lazy-filter-widget-grid .v-grid-row-selected > .v-grid-cell {
         background: none;
    }
 
-   .lazy-rightsholders-grid .v-grid-cell.frozen {
+   .lazy-filter-widget-grid .v-grid-cell.frozen {
         -webkit-box-shadow: none;
         padding: 1px;
         border-right: white;
    }
 
-   .lazy-rightsholders-grid .v-grid-cell {
-        padding: 0px;
+   .lazy-filter-widget-grid .v-grid-cell {
+        padding: 2px;
         white-space: normal;
    }
 

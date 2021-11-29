@@ -15,10 +15,8 @@ import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
-import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 import com.vaadin.data.provider.ListDataProvider;
@@ -32,6 +30,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -78,11 +77,11 @@ public class SalAuditFilterWidgetTest {
         component = widget.getComponent(1);
         assertTrue(component instanceof LazyRightsholderFilterWidget);
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
-        assertNotNull(Whitebox.getInternalState(component, IRightsholderFilterSaveListener.class));
+        assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(2);
         assertTrue(component instanceof SalLicenseeFilterWidget);
         assertEquals("Licensees", Whitebox.getInternalState(component, Button.class).getCaption());
-        assertNotNull(Whitebox.getInternalState(component, FilterWindow.IFilterSaveListener.class));
+        assertNotNull(Whitebox.getInternalState(component, IFilterSaveListener.class));
         component = widget.getComponent(3);
         assertTrue(component instanceof UsageBatchFilterWidget);
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");

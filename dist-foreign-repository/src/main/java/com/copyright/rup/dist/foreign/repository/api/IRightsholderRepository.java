@@ -37,24 +37,22 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     void deleteByAccountNumber(Long accountNumber);
 
     /**
-     * Finds list of unique {@link Rightsholder}s from all usages base on search value.
+     * Finds list of unique {@link Rightsholder}s base on search value.
      *
-     * @param productFamily product family
      * @param searchValue   value to search
      * @param pageable      instance of {@link Pageable}
      * @param sort          instance of {@link Sort}
      * @return list of unique {@link Rightsholder}s from all usages
      */
-    List<Rightsholder> findFromUsages(String productFamily, String searchValue, Pageable pageable, Sort sort);
+    List<Rightsholder> findAllWithSearch(String searchValue, Pageable pageable, Sort sort);
 
     /**
-     * Finds count of unique rightsholders from usages based on search value.
+     * Finds count of unique rightsholders based on search value.
      *
-     * @param productFamily product family
      * @param searchValue   value to search
      * @return count of rightsholders
      */
-    int findCountFromUsages(String productFamily, String searchValue);
+    int findCountWithSearch(String searchValue);
 
     /**
      * Returns list of {@link Rightsholder}s from usages with given scenario identifier.

@@ -1,26 +1,29 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
-
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
-import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
-import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.ILazyFilterWindowController;
+import com.copyright.rup.vaadin.ui.component.filter.LazyFilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.QuerySortOrder;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Widget represents combination of {@link Label} and {@link Button} which shows number of selected items.
- * It allows you to add listeners on button.
+ * Widget provides functionality for configuring items filter widget for rightsholders with lazy loading.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -28,13 +31,11 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public class LazyRightsholderFilterWidget extends HorizontalLayout {
+public class LazyRightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder> implements
+    ILazyFilterWindowController<Rightsholder> {
 
     private final ICommonAuditFilterController controller;
-    private Set<Rightsholder> selectedItems = new HashSet<>();
-    private IRightsholderFilterSaveListener saveListener;
-    private Label label;
-    private Button button;
+    private final Set<Rightsholder> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -43,63 +44,50 @@ public class LazyRightsholderFilterWidget extends HorizontalLayout {
      * @param controller instance of {@link ICommonAuditFilterController}
      */
     public LazyRightsholderFilterWidget(String caption, ICommonAuditFilterController controller) {
+        super(caption);
         this.controller = controller;
-        initButton(caption);
-        initLabel();
-        setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-        addComponents(label, button);
-        setExpandRatio(button, 1);
     }
 
-    /**
-     * Adds a click listener to the button. The listener is called whenever the user clicks on button.
-     *
-     * @param clickListener the listener to be added
-     */
-    public void addClickListener(ClickListener clickListener) {
-        button.addClickListener(clickListener);
+    @Override
+    public Collection<Rightsholder> loadBeans(String searchValue, int offset, int limit,
+                                              List<QuerySortOrder> sortOrders) {
+        return controller.loadBeans(searchValue, offset, limit, sortOrders);
     }
 
-    /**
-     * Adds filter save listener.
-     *
-     * @param listener {@link IRightsholderFilterSaveListener}
-     */
-    public void addFilterSaveListener(IRightsholderFilterSaveListener<Rightsholder> listener) {
-        saveListener = listener;
+    @Override
+    public int getBeansCount(String searchValue) {
+        return controller.getBeansCount(searchValue);
     }
 
-    /**
-     * Sets count label value to 0.
-     */
+    @Override
+    public ValueProvider<Rightsholder, String> getGridColumnValueProvider() {
+        return rightsholder -> String.format("%s - %s", rightsholder.getAccountNumber(),
+            StringUtils.defaultIfBlank(rightsholder.getName(), ForeignUi.getMessage("message.error.rro_not_found")));
+    }
+
+    @Override
+    public void onSave(FilterSaveEvent<Rightsholder> event) {
+        Set<Rightsholder> itemsIds = event.getSelectedItemsIds();
+        selectedItemsIds.clear();
+        if (CollectionUtils.isNotEmpty(itemsIds)) {
+            selectedItemsIds.addAll(itemsIds);
+        }
+    }
+
+    @Override
     public void reset() {
-        selectedItems = new HashSet<>();
-        setValue(0);
+        selectedItemsIds.clear();
+        super.reset();
     }
 
-    private void setValue(Integer value) {
-        label.setValue(String.format("(%s)", value));
-    }
-
-    private void initLabel() {
-        label = new Label();
-        label.setSizeUndefined();
-        setValue(0);
-    }
-
-    private void initButton(String caption) {
-        button = Buttons.createButton(caption);
-        button.addStyleName(ValoTheme.BUTTON_LINK);
-        VaadinUtils.setButtonsAutoDisabled(button);
-        addClickListener(event -> {
-            LazyRightsholderFilterWindow filterWindow = new LazyRightsholderFilterWindow(caption, controller);
-            filterWindow.setSelectedItemsIds(selectedItems);
-            Windows.showModalWindow(filterWindow);
-            filterWindow.addFilterSaveListener(saveListener);
-            filterWindow.addFilterSaveListener(saveEvent -> {
-                this.selectedItems = saveEvent.getSelectedItemsIds();
-                setValue(saveEvent.getSelectedItemsIds().size());
-            });
-        });
+    @Override
+    public CommonFilterWindow<Rightsholder> showFilterWindow() {
+        LazyFilterWindow<Rightsholder> filterWindow =
+            new LazyFilterWindow<>(ForeignUi.getMessage("window.filter_format", "Rightsholder"), this);
+        Windows.showModalWindow(filterWindow);
+        filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.rightsholder"));
+        VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
+        return filterWindow;
     }
 }

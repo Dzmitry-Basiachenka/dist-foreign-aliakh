@@ -12,10 +12,12 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.ValueProvider;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;

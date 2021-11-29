@@ -14,14 +14,16 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.CheckBoxGroup;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+
 import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;

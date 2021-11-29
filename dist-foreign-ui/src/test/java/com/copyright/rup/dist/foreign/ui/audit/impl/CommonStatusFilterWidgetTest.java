@@ -12,8 +12,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.aacl.AaclStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.fas.FasStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.impl.nts.NtsStatusFilterWidget;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;

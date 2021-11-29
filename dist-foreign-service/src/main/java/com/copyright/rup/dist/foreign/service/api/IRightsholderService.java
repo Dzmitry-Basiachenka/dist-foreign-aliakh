@@ -40,22 +40,20 @@ public interface IRightsholderService extends ICommonRightsholderService {
     /**
      * Gets list of unique {@link Rightsholder}s from all usages base on search value.
      *
-     * @param productFamily product family
-     * @param searchValue   value to search
-     * @param pageable      instance of {@link Pageable}
-     * @param sort          instance of {@link Sort}
+     * @param searchValue value to search
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
      * @return list of unique {@link Rightsholder}s from all usages
      */
-    List<Rightsholder> getFromUsages(String productFamily, String searchValue, Pageable pageable, Sort sort);
+    List<Rightsholder> getAllWithSearch(String searchValue, Pageable pageable, Sort sort);
 
     /**
      * Gets count of unique rightsholders from usages based on search value.
      *
-     * @param productFamily product family
-     * @param searchValue   value to search
+     * @param searchValue value to search
      * @return count of rightsholders
      */
-    int getCountFromUsages(String productFamily, String searchValue);
+    int getCountWithSearch(String searchValue);
 
     /**
      * Updates RHs information for account numbers absent in database based on PRM information.

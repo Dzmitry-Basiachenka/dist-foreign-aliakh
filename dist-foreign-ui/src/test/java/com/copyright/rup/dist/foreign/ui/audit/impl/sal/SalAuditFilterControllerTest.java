@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.audit.api.sal.ISalAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,10 +61,10 @@ public class SalAuditFilterControllerTest {
     public void testLoadBeans() {
         List<Rightsholder> rightsholders = Collections.emptyList();
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(rightsholderService.getFromUsages(eq(SAL_PRODUCT_FAMILY), eq(SEARCH_VALUE), capture(pageableCapture),
-            isNull())).andReturn(rightsholders).once();
+        expect(rightsholderService.getAllWithSearch(eq(SEARCH_VALUE), capture(pageableCapture), isNull()))
+            .andReturn(rightsholders).once();
         replay(rightsholderService);
-        assertSame(rightsholders, controller.loadBeans(SAL_PRODUCT_FAMILY, SEARCH_VALUE, 0, 10, null));
+        assertSame(rightsholders, controller.loadBeans(SEARCH_VALUE, 0, 10, null));
         assertEquals(10, pageableCapture.getValue().getLimit());
         assertEquals(0, pageableCapture.getValue().getOffset());
         verify(rightsholderService);
@@ -71,9 +72,9 @@ public class SalAuditFilterControllerTest {
 
     @Test
     public void testGetBeansCount() {
-        expect(rightsholderService.getCountFromUsages(SAL_PRODUCT_FAMILY, SEARCH_VALUE)).andReturn(10).once();
+        expect(rightsholderService.getCountWithSearch(SEARCH_VALUE)).andReturn(10).once();
         replay(rightsholderService);
-        assertEquals(10, controller.getBeansCount(SAL_PRODUCT_FAMILY, SEARCH_VALUE));
+        assertEquals(10, controller.getBeansCount(SEARCH_VALUE));
         verify(rightsholderService);
     }
 

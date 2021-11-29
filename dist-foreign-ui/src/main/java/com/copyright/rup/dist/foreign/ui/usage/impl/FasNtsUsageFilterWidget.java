@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterWidget;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
