@@ -500,10 +500,10 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(1, udmValueRepository.publishToBaseline(211112, USER_NAME));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_1.json"),
-            sqlSessionTemplate.selectList("IUdmValueBaselineMapper.findValuesByPeriod", 211012));
+            sqlSessionTemplate.selectList("IUdmBaselineValueMapper.findValuesByPeriod", 211012));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_2.json"),
-            sqlSessionTemplate.selectList("IUdmValueBaselineMapper.findValuesByPeriod", 211112));
+            sqlSessionTemplate.selectList("IUdmBaselineValueMapper.findValuesByPeriod", 211112));
     }
 
     private void verifyValueBaselineDto(List<UdmValueBaselineDto> expectedValues,

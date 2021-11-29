@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value.UdmValuePeriodFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmValuePeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
