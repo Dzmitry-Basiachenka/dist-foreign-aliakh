@@ -16,7 +16,7 @@ import java.util.List;
 public interface IUdmBaselineValueFilterController extends IFilterController<IUdmBaselineValueFilterWidget> {
 
     /**
-     * Gets all available periods for value.
+     * Gets all available periods for baseline value.
      *
      * @return list of periods
      */

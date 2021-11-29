@@ -125,7 +125,7 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmIneligibleReasonMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBaselineMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueMapper.xml"/>
-        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmValueBaselineMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBaselineValueMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmPriceTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmProxyValueMapper.xml"/>
     </mappers>

@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ import java.util.List;
 public class UdmBaselineValueFilterController extends CommonController<IUdmBaselineValueFilterWidget>
     implements IUdmBaselineValueFilterController {
 
+    @Autowired
+    private IUdmBaselineValueService udmBaselineValueService;
+
     @Override
     protected IUdmBaselineValueFilterWidget instantiateWidget() {
         return new UdmBaselineValueFilterWidget(this);
@@ -32,7 +36,6 @@ public class UdmBaselineValueFilterController extends CommonController<IUdmBasel
 
     @Override
     public List<Integer> getPeriods() {
-        //TODO will implement later
-        return Collections.emptyList();
+        return udmBaselineValueService.getPeriods();
     }
 }

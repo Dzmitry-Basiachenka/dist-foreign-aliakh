@@ -268,7 +268,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void assertUdmValuesBaseline() throws IOException {
             List<UdmValueBaselineDto> actualUdmValues = sqlSessionTemplate
-                .selectList("IUdmValueBaselineMapper.findValuesByPeriod", expectedUdmBatch.getPeriod())
+                .selectList("IUdmBaselineValueMapper.findValuesByPeriod", expectedUdmBatch.getPeriod())
                 .stream()
                 .map(udmValue -> (UdmValueBaselineDto) udmValue)
                 .sorted(Comparator.comparing(UdmValueBaselineDto::getWrWrkInst))
