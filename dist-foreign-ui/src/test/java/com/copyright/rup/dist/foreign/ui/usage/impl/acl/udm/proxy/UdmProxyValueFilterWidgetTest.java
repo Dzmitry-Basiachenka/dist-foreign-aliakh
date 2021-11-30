@@ -16,8 +16,10 @@ import com.google.common.collect.ImmutableSet;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Verifies {@link UdmProxyValueFilterWidget}.
@@ -111,8 +114,24 @@ public class UdmProxyValueFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(1, verticalLayout.getComponentCount());
+        assertEquals(3, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
+        verifyFilterLayout(verticalLayout.getComponent(1), "Periods");
+        verifyFilterLayout(verticalLayout.getComponent(2), "Pub Type Codes");
+    }
+
+    private void verifyFilterLayout(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals(caption, button.getCaption());
+        assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private void verifyFiltersLabel(Component component) {

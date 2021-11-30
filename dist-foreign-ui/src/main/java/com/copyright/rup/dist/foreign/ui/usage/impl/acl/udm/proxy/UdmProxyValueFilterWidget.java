@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.ui.Button;
@@ -25,6 +26,9 @@ import com.vaadin.ui.VerticalLayout;
 public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmProxyValueFilterWidget {
 
     private Button applyButton;
+    private UdmProxyValuePeriodFilterWidget periodFilterWidget;
+    private UdmProxyValuePubTypeCodeFilterWidget pubTypeCodeFilterWidget;
+    private IUdmProxyValueFilterController controller;
     private UdmProxyValueFilter udmValueFilter = new UdmProxyValueFilter();
     private UdmProxyValueFilter appliedUdmValueFilter = new UdmProxyValueFilter();
 
@@ -40,7 +44,7 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
 
     @Override
     public void setController(IUdmProxyValueFilterController controller) {
-        //TODO: set controller
+        this.controller = controller;
     }
 
     @Override
@@ -61,7 +65,8 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
 
     @Override
     public void clearFilter() {
-        // TODO: Clear filter values
+        periodFilterWidget.reset();
+        pubTypeCodeFilterWidget.reset();
         udmValueFilter = new UdmProxyValueFilter();
         applyFilter();
     }
@@ -71,10 +76,30 @@ public class UdmProxyValueFilterWidget extends VerticalLayout implements IUdmPro
     }
 
     private VerticalLayout initFiltersLayout() {
-        // TODO: Add filters for periods and pub type codes
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel());
+        VerticalLayout verticalLayout =
+            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), buildPubTypeCodeFilter());
         verticalLayout.setMargin(false);
         return verticalLayout;
+    }
+
+    private UdmProxyValuePeriodFilterWidget buildPeriodFilter() {
+        periodFilterWidget = new UdmProxyValuePeriodFilterWidget(controller);
+        periodFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<Integer>) saveEvent -> {
+            udmValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(periodFilterWidget, "udm-proxy-value-period-filter");
+        return periodFilterWidget;
+    }
+
+    private UdmProxyValuePubTypeCodeFilterWidget buildPubTypeCodeFilter() {
+        pubTypeCodeFilterWidget = new UdmProxyValuePubTypeCodeFilterWidget(controller);
+        pubTypeCodeFilterWidget.addFilterSaveListener((FilterWindow.IFilterSaveListener<String>) saveEvent -> {
+            udmValueFilter.setPubTypeNames(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(pubTypeCodeFilterWidget, "udm-proxy-value-pub-type-code-filter");
+        return pubTypeCodeFilterWidget;
     }
 
     private HorizontalLayout initButtonsLayout() {
