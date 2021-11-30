@@ -120,18 +120,6 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         VaadinUtils.addComponentStyle(this, "edit-udm-usage-window");
     }
 
-    /**
-     * Constructor.
-     *
-     * @param usageController  instance of {@link IUdmUsageController}
-     * @param selectedUdmUsage UDM usage to be displayed on the window
-     */
-    public UdmEditUsageWindow(IUdmUsageController usageController, UdmUsageDto selectedUdmUsage) {
-        this(usageController, selectedUdmUsage, null);
-        this.saveButton.setVisible(false);
-        setCaption(ForeignUi.getMessage("window.view_udm_usage"));
-    }
-
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
