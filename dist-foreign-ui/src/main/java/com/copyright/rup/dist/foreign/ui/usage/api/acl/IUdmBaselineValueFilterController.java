@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
@@ -21,4 +22,11 @@ public interface IUdmBaselineValueFilterController extends IFilterController<IUd
      * @return list of periods
      */
     List<Integer> getPeriods();
+
+    /**
+     * Gets list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}
+     */
+    List<PublicationType> getPublicationTypes();
 }

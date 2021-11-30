@@ -103,7 +103,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
             addColumn(UdmValueBaselineDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 120),
             addColumn(UdmValueBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 200),
             addColumn(UdmValueBaselineDto::getPublicationType, "table.column.publication_type", "pubType", 200),
-            addAmountColumn(UdmValueBaselineDto::getPrice, "table.column.price_in_usd", "priceInUsd", 120),
+            addAmountColumn(UdmValueBaselineDto::getPrice, "table.column.price", "price", 120),
             addBooleanColumn(UdmValueBaselineDto::getPriceFlag, "table.column.price_flag", "priceFlag", 120),
             addAmountColumn(UdmValueBaselineDto::getContent, "table.column.content", "content", 100),
             addBooleanColumn(UdmValueBaselineDto::getContentFlag, "table.column.content_flag", "contentFlag", 100),

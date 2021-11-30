@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterWidget;
@@ -28,6 +31,8 @@ public class UdmBaselineValueFilterController extends CommonController<IUdmBasel
 
     @Autowired
     private IUdmBaselineValueService udmBaselineValueService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     @Override
     protected IUdmBaselineValueFilterWidget instantiateWidget() {
@@ -37,5 +42,10 @@ public class UdmBaselineValueFilterController extends CommonController<IUdmBasel
     @Override
     public List<Integer> getPeriods() {
         return udmBaselineValueService.getPeriods();
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 }

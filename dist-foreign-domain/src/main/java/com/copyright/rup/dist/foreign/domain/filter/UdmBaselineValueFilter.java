@@ -25,7 +25,7 @@ public class UdmBaselineValueFilter {
     private Long wrWrkInst;
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private PublicationType pubType;
-    private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
+    private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private Boolean priceFlag;
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private Boolean contentFlag;
@@ -49,7 +49,7 @@ public class UdmBaselineValueFilter {
             setWrWrkInst(filter.getWrWrkInst());
             setSystemTitleExpression(filter.getSystemTitleExpression());
             setPubType(filter.getPubType());
-            setPriceInUsdExpression(filter.getPriceInUsdExpression());
+            setPriceExpression(filter.getPriceExpression());
             setPriceFlag(filter.getPriceFlag());
             setContentExpression(filter.getContentExpression());
             setContentFlag(filter.getContentFlag());
@@ -91,13 +91,13 @@ public class UdmBaselineValueFilter {
         this.pubType = pubType;
     }
 
-    public FilterExpression<Number> getPriceInUsdExpression() {
-        return priceInUsdExpression;
+    public FilterExpression<Number> getPriceExpression() {
+        return priceExpression;
     }
 
-    public void setPriceInUsdExpression(
-        FilterExpression<Number> priceInUsdExpression) {
-        this.priceInUsdExpression = priceInUsdExpression;
+    public void setPriceExpression(
+        FilterExpression<Number> priceExpression) {
+        this.priceExpression = priceExpression;
     }
 
     public Boolean getPriceFlag() {
@@ -150,7 +150,7 @@ public class UdmBaselineValueFilter {
             && null == wrWrkInst
             && systemTitleExpression.isEmpty()
             && null == pubType
-            && priceInUsdExpression.isEmpty()
+            && priceExpression.isEmpty()
             && null == priceFlag
             && contentExpression.isEmpty()
             && null == contentFlag
@@ -175,7 +175,7 @@ public class UdmBaselineValueFilter {
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(pubType, that.pubType)
-            .append(priceInUsdExpression, that.priceInUsdExpression)
+            .append(priceExpression, that.priceExpression)
             .append(priceFlag, that.priceFlag)
             .append(contentExpression, that.contentExpression)
             .append(contentFlag, that.contentFlag)
@@ -191,7 +191,7 @@ public class UdmBaselineValueFilter {
             .append(wrWrkInst)
             .append(systemTitleExpression)
             .append(pubType)
-            .append(priceInUsdExpression)
+            .append(priceExpression)
             .append(priceFlag)
             .append(contentExpression)
             .append(contentFlag)
@@ -207,7 +207,7 @@ public class UdmBaselineValueFilter {
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitleExpression", systemTitleExpression)
             .append("pubType", pubType)
-            .append("priceInUsdExpression", priceInUsdExpression)
+            .append("priceInUsdExpression", priceExpression)
             .append("priceFlag", priceFlag)
             .append("contentExpression", contentExpression)
             .append("contentFlag", contentFlag)
