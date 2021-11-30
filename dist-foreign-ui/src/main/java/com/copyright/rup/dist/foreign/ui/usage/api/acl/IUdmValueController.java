@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -167,4 +168,12 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
      * @return count of updated UDM values
      */
     int calculateProxyValues(Integer period);
+
+    /**
+     * Shows modal window with UDM value history.
+     *
+     * @param udmValueId    {@link com.copyright.rup.dist.foreign.domain.UdmValue} id
+     * @param closeListener listener to handle window close event
+     */
+    void showUdmValueHistory(String udmValueId, Window.CloseListener closeListener);
 }

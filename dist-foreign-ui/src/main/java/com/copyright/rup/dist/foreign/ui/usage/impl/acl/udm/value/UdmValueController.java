@@ -14,16 +14,20 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,6 +58,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     private IUdmBaselineService baselineService;
     @Autowired
     private IUdmValueService valueService;
+    @Autowired
+    private IUdmValueAuditService udmValueAuditService;
     @Autowired
     private IUdmProxyValueService udmProxyValueService;
     @Autowired
@@ -169,6 +175,14 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     @Override
     public int calculateProxyValues(Integer period) {
         return udmProxyValueService.calculateProxyValues(period);
+    }
+
+    @Override
+    public void showUdmValueHistory(String udmValueId, Window.CloseListener closeListener) {
+        UdmValueHistoryWindow historyWindow =
+            new UdmValueHistoryWindow(udmValueId, udmValueAuditService.getUdmValueAudit(udmValueId));
+        historyWindow.addCloseListener(closeListener);
+        Windows.showModalWindow(historyWindow);
     }
 
     private UdmValueFilter getFilter() {
