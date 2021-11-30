@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -13,10 +12,10 @@ import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmValueWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Range;
@@ -32,22 +31,17 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -59,14 +53,10 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmEditValueWindow extends Window {
+public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final Range<Integer> DECIMAL_SCALE_RANGE = Range.closed(0, 10);
-    private static final DateTimeFormatter DATE_TIME_FORMATTER =
-        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("0.00########",
-        CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
@@ -141,7 +131,7 @@ public class UdmEditValueWindow extends Window {
                 .setScale(10, BigDecimal.ROUND_HALF_UP);
             currencyExchangeRateField.setValue(exchangeRate.getInverseExchangeRateValue().toString());
             currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
-            priceInUsdField.setValue(CurrencyUtils.format(priceInUsd, MONEY_FORMATTER));
+            priceInUsdField.setValue(convertFromBigDecimalToMoneyString(priceInUsd));
         } else {
             currencyExchangeRateField.clear();
             currencyExchangeRateDateField.clear();
@@ -175,7 +165,7 @@ public class UdmEditValueWindow extends Window {
             BigDecimal priceInUsd = NumberUtils.createBigDecimal(priceInUsdField.getValue().trim());
             BigDecimal content = NumberUtils.createBigDecimal(contentField.getValue().trim());
             BigDecimal contentUnitPrice = priceInUsd.divide(content, 10, BigDecimal.ROUND_HALF_UP);
-            contentUnitPriceField.setValue(CurrencyUtils.format(contentUnitPrice, MONEY_FORMATTER));
+            contentUnitPriceField.setValue(convertFromBigDecimalToMoneyString(contentUnitPrice));
         } else {
             contentUnitPriceField.clear();
         }
@@ -208,12 +198,12 @@ public class UdmEditValueWindow extends Window {
     private VerticalLayout initLeftColumn() {
         return buildVerticalLayoutWithFixedWidth(
             new Panel(ForeignUi.getMessage("label.work_information"), new VerticalLayout(
-                buildReadOnlyLayout("label.system_title", UdmValueDto::getSystemTitle),
-                buildReadOnlyLayout("label.wr_wrk_inst", bean -> Objects.toString(bean.getWrWrkInst())),
-                buildReadOnlyLayout("label.system_standard_number", UdmValueDto::getSystemStandardNumber),
-                buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName),
+                buildReadOnlyLayout("label.system_title", UdmValueDto::getSystemTitle, binder),
+                buildReadOnlyLayout("label.wr_wrk_inst", bean -> Objects.toString(bean.getWrWrkInst()), binder),
+                buildReadOnlyLayout("label.system_standard_number", UdmValueDto::getSystemStandardNumber, binder),
+                buildReadOnlyLayout("label.rh_name", UdmValueDto::getRhName, binder),
                 buildReadOnlyLayout("label.rh_account_number",
-                    bean -> Objects.toString(bean.getRhAccountNumber()))
+                    bean -> Objects.toString(bean.getRhAccountNumber()), binder)
             )),
             new Panel(ForeignUi.getMessage("label.price"), new VerticalLayout(
                 buildPriceLayout(),
@@ -238,11 +228,11 @@ public class UdmEditValueWindow extends Window {
                     fromBooleanToYNString(UdmValueDto::isPriceFlag),
                     fromYNStringToBoolean(UdmValueDto::setPriceFlag)),
                 buildReadOnlyLayout("label.last_price_in_usd",
-                    fromBigDecimalToMoneyString(UdmValueDto::getLastPriceInUsd)),
-                buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource),
-                buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment),
+                    fromBigDecimalToMoneyString(UdmValueDto::getLastPriceInUsd), binder),
+                buildReadOnlyLayout("label.last_price_source", UdmValueDto::getLastPriceSource, binder),
+                buildReadOnlyLayout("label.last_price_comment", UdmValueDto::getLastPriceComment, binder),
                 buildReadOnlyLayout("label.last_price_flag",
-                    bean -> BooleanUtils.toYNString(bean.isLastPriceFlag()))
+                    bean -> BooleanUtils.toYNString(bean.isLastPriceFlag()), binder)
             ))
         );
     }
@@ -250,15 +240,15 @@ public class UdmEditValueWindow extends Window {
     private VerticalLayout initRightColumn() {
         return buildVerticalLayoutWithFixedWidth(
             new Panel(ForeignUi.getMessage("label.general"), new VerticalLayout(
-                buildReadOnlyLayout("label.value_period", bean -> Objects.toString(bean.getValuePeriod())),
+                buildReadOnlyLayout("label.value_period", bean -> Objects.toString(bean.getValuePeriod()), binder),
                 buildReadOnlyLayout("label.last_value_period",
-                    bean -> Objects.toString(bean.getLastValuePeriod(), StringUtils.EMPTY)),
-                buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee),
+                    bean -> Objects.toString(bean.getLastValuePeriod(), StringUtils.EMPTY), binder),
+                buildReadOnlyLayout("label.assignee", UdmValueDto::getAssignee, binder),
                 initValueStatusLayout()
             )),
             new Panel(ForeignUi.getMessage("label.publication_type"), new VerticalLayout(
                 buildPubTypeLayout(),
-                buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType)
+                buildReadOnlyLayout("label.last_pub_type", UdmValueDto::getLastPubType, binder)
             )),
             new Panel(ForeignUi.getMessage("label.content"), new VerticalLayout(
                 buildContentLayout(),
@@ -270,11 +260,11 @@ public class UdmEditValueWindow extends Window {
                     fromBooleanToYNString(UdmValueDto::isContentFlag),
                     fromYNStringToBoolean(UdmValueDto::setContentFlag)),
                 buildReadOnlyLayout("label.last_content",
-                    fromBigDecimalToMoneyString(UdmValueDto::getLastContent)),
-                buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource),
-                buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment),
+                    fromBigDecimalToMoneyString(UdmValueDto::getLastContent), binder),
+                buildReadOnlyLayout("label.last_content_source", UdmValueDto::getLastContentSource, binder),
+                buildReadOnlyLayout("label.last_content_comment", UdmValueDto::getLastContentComment, binder),
                 buildReadOnlyLayout("label.last_content_flag",
-                    bean -> BooleanUtils.toYNString(bean.isLastContentFlag())),
+                    bean -> BooleanUtils.toYNString(bean.isLastContentFlag()), binder),
                 buildReadOnlyLayout(contentUnitPriceField, "label.content_unit_price",
                     fromBigDecimalToMoneyString(UdmValueDto::getContentUnitPrice),
                     fromStringToBigDecimal(UdmValueDto::setContentUnitPrice))
@@ -285,9 +275,9 @@ public class UdmEditValueWindow extends Window {
                     "udm-value-edit-comment-field")
             )),
             new Panel(new VerticalLayout(
-                buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser),
+                buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
                 buildReadOnlyLayout("label.updated_date",
-                    bean -> DateUtils.format(bean.getUpdateDate()))
+                    bean -> DateUtils.format(bean.getUpdateDate()), binder)
             ))
         );
     }
@@ -307,14 +297,6 @@ public class UdmEditValueWindow extends Window {
         return buildCommonLayout(textField, ForeignUi.getMessage(caption));
     }
 
-    private HorizontalLayout buildReadOnlyLayout(String caption, ValueProvider<UdmValueDto, String> getter) {
-        TextField textField = new TextField();
-        textField.setReadOnly(true);
-        textField.setSizeFull();
-        binder.forField(textField).bind(getter, null);
-        return buildCommonLayout(textField, ForeignUi.getMessage(caption));
-    }
-
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmValueDto, String> getter,
                                                        Setter<UdmValueDto, String> setter, String styleName) {
@@ -325,16 +307,6 @@ public class UdmEditValueWindow extends Window {
             .bind(getter, setter);
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, ForeignUi.getMessage(caption));
-    }
-
-    private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {
-        Label label = new Label(labelCaption);
-        label.addStyleName(Cornerstone.LABEL_BOLD);
-        label.setWidth(175, Unit.PIXELS);
-        HorizontalLayout layout = new HorizontalLayout(label, component);
-        layout.setSizeFull();
-        layout.setExpandRatio(component, 1);
-        return layout;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -396,7 +368,7 @@ public class UdmEditValueWindow extends Window {
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
-            .bind(bean -> CurrencyUtils.format(bean.getPrice(), MONEY_FORMATTER),
+            .bind(fromBigDecimalToMoneyString(UdmValueDto::getPrice),
                 (bean, value) -> bean.setPrice(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         priceField.addValueChangeListener(event -> {
@@ -493,7 +465,7 @@ public class UdmEditValueWindow extends Window {
             .withValidator(value -> StringUtils.isBlank(value) ||
                     DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
-            .bind(bean -> CurrencyUtils.format(bean.getContent(), MONEY_FORMATTER),
+            .bind(fromBigDecimalToMoneyString(UdmValueDto::getContent),
                 (bean, value) -> bean.setContent(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         contentField.addValueChangeListener(event -> {
@@ -516,36 +488,5 @@ public class UdmEditValueWindow extends Window {
             .bind(UdmValueDto::getContentSource, UdmValueDto::setContentSource);
         VaadinUtils.addComponentStyle(contentSourceField, "udm-value-edit-content-source-field");
         return buildCommonLayout(contentSourceField, ForeignUi.getMessage("label.content_source"));
-    }
-
-    private ValueProvider<UdmValueDto, String> fromLocalDateToString(ValueProvider<UdmValueDto, LocalDate> getter) {
-        return bean -> DateUtils.format(getter.apply(bean));
-    }
-
-    private Setter<UdmValueDto, String> fromStringToLocalDate(Setter<UdmValueDto, LocalDate> setter) {
-        return (bean, value) -> setter.accept(bean, StringUtils.isNotEmpty(value)
-            ? LocalDate.parse(value, DATE_TIME_FORMATTER) : null);
-    }
-
-    private ValueProvider<UdmValueDto, String> fromBooleanToYNString(ValueProvider<UdmValueDto, Boolean> getter) {
-        return bean -> BooleanUtils.toYNString(getter.apply(bean));
-    }
-
-    private Setter<UdmValueDto, String> fromYNStringToBoolean(Setter<UdmValueDto, Boolean> setter) {
-        return (bean, value) -> setter.accept(bean, Objects.nonNull(value) ? "Y".equals(value) : null);
-    }
-
-    private ValueProvider<UdmValueDto, String> fromBigDecimalToString(ValueProvider<UdmValueDto, BigDecimal> getter) {
-        return bean -> Objects.toString(getter.apply(bean), StringUtils.EMPTY);
-    }
-
-    private ValueProvider<UdmValueDto, String> fromBigDecimalToMoneyString(
-        ValueProvider<UdmValueDto, BigDecimal> getter) {
-        return bean -> CurrencyUtils.format(getter.apply(bean), MONEY_FORMATTER);
-    }
-
-    private Setter<UdmValueDto, String> fromStringToBigDecimal(Setter<UdmValueDto, BigDecimal> setter) {
-        return (bean, value) -> setter.accept(bean,
-            StringUtils.isNotBlank(value) ? NumberUtils.createBigDecimal(value.trim()) : null);
     }
 }
