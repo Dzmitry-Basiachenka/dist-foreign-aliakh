@@ -170,49 +170,6 @@ public class UdmEditUsageWindowTest {
     }
 
     @Test
-    public void testConstructorSpecialistWithoutSaveButton() {
-        setSpecialistExpectations();
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
-            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditUsageWindow(controller, udmUsage);
-        binder = Whitebox.getInternalState(window, BINDER_NAME);
-        verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize("View UDM Usage");
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
-        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
-    }
-
-    @Test
-    public void testConstructorManagerWithoutSaveButton() {
-        setManagerExpectations();
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
-            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditUsageWindow(controller, udmUsage);
-        binder = Whitebox.getInternalState(window, BINDER_NAME);
-        verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize("View UDM Usage");
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
-        verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
-    }
-
-    @Test
-    public void testConstructorResearcherWithoutSaveButton() {
-        mockStatic(ForeignSecurityUtils.class);
-        setResearcherExpectations();
-        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
-            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditUsageWindow(controller, udmUsage);
-        binder = Whitebox.getInternalState(window, BINDER_NAME);
-        verify(controller, ForeignSecurityUtils.class);
-        verifyWindowSize("View UDM Usage");
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
-        verifyPanelResearcher(verticalLayout.getComponent(0));
-    }
-
-    @Test
     public void testUdmUsageDataBinding() {
         setSpecialistExpectations();
         initEditWindow();
