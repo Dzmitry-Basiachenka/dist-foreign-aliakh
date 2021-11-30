@@ -17,19 +17,19 @@ import java.util.List;
 public interface IUdmValueAuditService {
 
     /**
-     * Logs UDM usage action.
+     * Logs UDM value action.
      *
      * @param udmValueId   {@link com.copyright.rup.dist.foreign.domain.UdmValue} id
-     * @param actionType   usage action type
+     * @param actionType   action type
      * @param actionReason action reason
      */
     void logAction(String udmValueId, UsageActionTypeEnum actionType, String actionReason);
 
     /**
-     * Gets all actions for usage with given id.
+     * Gets all actions for UDM value with given id.
      *
      * @param udmValueId {@link com.copyright.rup.dist.foreign.domain.UdmValue} id
      * @return list of {@link UdmValueAuditItem}
      */
-    List<UdmValueAuditItem> getUdmUsageAudit(String udmValueId);
+    List<UdmValueAuditItem> getUdmValueAudit(String udmValueId);
 }
