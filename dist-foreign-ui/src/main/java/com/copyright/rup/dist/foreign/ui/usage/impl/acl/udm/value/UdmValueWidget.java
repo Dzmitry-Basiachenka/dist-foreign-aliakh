@@ -216,7 +216,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     }
 
     private void openEditWindow(Set<UdmValueDto> selectedValues, Supplier<Window> createWindow) {
-        if (checkHasValuesAssignee(selectedValues)) {
+        if (hasResearcherPermission && checkHasValuesAssignee(selectedValues) || hasSpecialistPermission
+            || hasManagerPermission) {
             Windows.showModalWindow(createWindow.get());
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.udm_value_edit_forbidden_unassigned"));
@@ -247,7 +248,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         addColumns();
         udmValuesGrid.setSizeFull();
         initSelectionMode();
-        initViewWindow();
+        initValueWindow();
         VaadinUtils.addComponentStyle(udmValuesGrid, "udm-value-grid");
     }
 
@@ -367,15 +368,23 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
         gridSelectionModel.beforeClientResponse(false);
     }
 
-    private void initViewWindow() {
+    private void initValueWindow() {
         udmValuesGrid.addItemClickListener(event -> {
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmValueDto udmValueDto = event.getItem();
-                UdmEditValueWindow window = new UdmEditValueWindow(controller, udmValueDto);
-                window.addCloseListener(Objects.nonNull(gridSelectionModel)
-                    ? closeEvent -> restoreSelection(selectedUdmValues, isAllSelected)
-                    : closeEvent -> udmValuesGrid.deselect(udmValueDto));
-                Windows.showModalWindow(window);
+                if (isNotViewOnlyPermission()) {
+                    Supplier<Window> windowSupplier = () -> {
+                        UdmEditValueWindow editWindow = new UdmEditValueWindow(controller, udmValueDto,
+                            saveEvent -> refresh());
+                        editWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmValues, isAllSelected));
+                        return editWindow;
+                    };
+                    openEditWindow(Collections.singleton(udmValueDto), windowSupplier);
+                } else {
+                    UdmViewValueWindow viewWindow = new UdmViewValueWindow(controller, udmValueDto);
+                    viewWindow.addCloseListener(closeEvent -> udmValuesGrid.deselect(udmValueDto));
+                    Windows.showModalWindow(viewWindow);
+                }
                 highlightSelectedValue(udmValueDto);
             }
         });

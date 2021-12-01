@@ -33,6 +33,7 @@ import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -48,6 +49,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,6 +85,9 @@ public class UdmValueWidgetTest {
     private static final String UNCHECKED = "unchecked";
     private static final int UDM_RECORD_THRESHOLD = 10000;
     private static final int EXCEEDED_UDM_RECORD_THRESHOLD = 10001;
+    private static final String INVALID_ASSIGNEE = "invalid_assignee";
+    private static final String VALUE_NOT_EDITED_ERROR_MESSAGE = "Selected UDM value cannot be edited. Please assign " +
+        "it to yourself first";
 
     private IUdmValueController controller;
     private UdmValueWidget valueWidget;
@@ -331,32 +336,48 @@ public class UdmValueWidgetTest {
     }
 
     @Test
-    public void testEditButtonClickListenerAllowed() throws Exception {
-        setSpecialistExpectations();
-        mockStatic(Windows.class);
-        UdmValueDto udmValueDto = buildUdmValueDto("5487ce2c-a833-4f60-af1d-beb5ff22b9da", USER);
-        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
-        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(Button.ClickListener.class))
-            .andReturn(mockWindow).once();
-        Windows.showModalWindow(mockWindow);
-        expectLastCall().once();
-        replay(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
-        initWidget();
-        Grid<UdmValueDto> grid =
-            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
-        grid.setItems(udmValueDto);
-        grid.select(udmValueDto);
-        Button editButton = (Button) getButtonsLayout().getComponent(2);
-        editButton.click();
-        verify(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    public void testEditButtonClickListenerSpecialistAllowedValidAssignee() throws Exception {
+        testEditButtonListenerSpecialistAllowed(USER);
     }
 
     @Test
-    public void testEditButtonClickListenerForbiddenInvalidAssignee() {
+    public void testEditButtonClickListenerSpecialistAllowedNullAssignee() throws Exception {
+        testEditButtonListenerSpecialistAllowed(null);
+    }
+
+    @Test
+    public void testEditButtonClickListenerSpecialistAllowedInvalidAssignee() throws Exception {
+        testEditButtonListenerSpecialistAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedValidAssignee() throws Exception {
+        testEditButtonListenerManagerAllowed(USER);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedNullAssignee() throws Exception {
+        testEditButtonListenerManagerAllowed(null);
+    }
+
+    @Test
+    public void testEditButtonClickListenerManagerAllowedInvalidAssignee() throws Exception {
+        testEditButtonListenerManagerAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testEditButtonClickListenerResearcherAllowedValidAssignee() throws Exception {
+        setResearcherExpectations();
+        testEditButtonListenerAllowed(USER);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testEditButtonClickListenerResearcherForbiddenInvalidAssignee() {
         mockStatic(Windows.class);
-        setSpecialistExpectations();
+        setResearcherExpectations();
         UdmValueDto udmValueDto = buildUdmValueDto("280de61e-82d5-42d6-b760-3fce41ba8d82", null);
-        Windows.showNotificationWindow("Selected UDM value cannot be edited. Please assign it to yourself first");
+        Windows.showNotificationWindow(VALUE_NOT_EDITED_ERROR_MESSAGE);
         expectLastCall().once();
         replay(controller, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
         initWidget();
@@ -400,17 +421,17 @@ public class UdmValueWidgetTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void testViewValueWindowByDoubleClick() throws Exception {
         mockStatic(Windows.class);
-        setSpecialistExpectations();
+        setViewOnlyExpectation();
         UdmValueDto udmValueDto = new UdmValueDto();
         udmValueDto.setId("121e005a-3fc0-4f65-bc91-1ec3932a86c8");
-        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
-        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto)).andReturn(mockWindow).once();
+        UdmViewValueWindow mockWindow = createMock(UdmViewValueWindow.class);
+        expectNew(UdmViewValueWindow.class, eq(controller), eq(udmValueDto)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class);
+        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class);
         initWidget();
         Grid<UdmValueDto> grid =
             (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
@@ -419,7 +440,64 @@ public class UdmValueWidgetTest {
         Grid.ItemClick<UdmValueDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmViewValueWindow.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testDoubleClickListenerResearcherForbiddenInvalidAssignee() {
+        mockStatic(Windows.class);
+        setResearcherExpectations();
+        Window confirmWindowMock = createMock(Window.class);
+        UdmValueDto udmValueDto = buildUdmValueDto("9b2e16b2-cce4-4286-8900-d8ccf4cce321", INVALID_ASSIGNEE);
+        Windows.showNotificationWindow(VALUE_NOT_EDITED_ERROR_MESSAGE);
+        EasyMock.expectLastCall().once();
+        replay(controller, Windows.class, confirmWindowMock, ForeignSecurityUtils.class, RupContextUtils.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmValueDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmValueDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, Windows.class, confirmWindowMock, ForeignSecurityUtils.class, RupContextUtils.class);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedValidAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(USER);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedNullAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(null);
+    }
+
+    @Test
+    public void testDoubleClickListenerSpecialistAllowedInvalidAssignee() throws Exception {
+        testDoubleClickListenerSpecialistAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedValidAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(USER);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedNullAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(null);
+    }
+
+    @Test
+    public void testDoubleClickListenerManagerAllowedInvalidAssignee() throws Exception {
+        testDoubleClickListenerManagerAllowed(INVALID_ASSIGNEE);
+    }
+
+    @Test
+    public void testDoubleClickListenerResearcherAllowedValidAssignee() throws Exception {
+        setResearcherExpectations();
+        testDoubleClickListenerAllowed(USER);
     }
 
     private void verifyGrid(Grid grid) {
@@ -489,8 +567,16 @@ public class UdmValueWidgetTest {
         setPermissionsExpectations(true, false, false);
     }
 
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true, false);
+    }
+
     private void setResearcherExpectations() {
         setPermissionsExpectations(false, false, true);
+    }
+
+    private void setViewOnlyExpectation() {
+        setPermissionsExpectations(false, false, false);
     }
 
     private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher) {
@@ -522,5 +608,67 @@ public class UdmValueWidgetTest {
         mouseEventDetails.setType(DOUBLE_CLICK);
         mouseEventDetails.setButton(MouseButton.LEFT);
         return mouseEventDetails;
+    }
+
+    private void testEditButtonListenerSpecialistAllowed(String user) throws Exception {
+        setSpecialistExpectations();
+        testEditButtonListenerAllowed(user);
+    }
+
+    private void testEditButtonListenerManagerAllowed(String user) throws Exception {
+        setManagerExpectations();
+        testEditButtonListenerAllowed(user);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testEditButtonListenerAllowed(String user) throws Exception {
+        setSpecialistExpectations();
+        mockStatic(Windows.class);
+        UdmValueDto udmValueDto = buildUdmValueDto("5487ce2c-a833-4f60-af1d-beb5ff22b9da", user);
+        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
+        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(Button.ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(udmValueDto);
+        grid.select(udmValueDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
+        editButton.click();
+        verify(controller, Windows.class, UdmEditValueWindow.class, RupContextUtils.class, ForeignSecurityUtils.class);
+    }
+
+    private void testDoubleClickListenerSpecialistAllowed(String user) throws Exception {
+        setSpecialistExpectations();
+        testDoubleClickListenerAllowed(user);
+    }
+
+    private void testDoubleClickListenerManagerAllowed(String user) throws Exception {
+        setManagerExpectations();
+        testDoubleClickListenerAllowed(user);
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testDoubleClickListenerAllowed(String user) throws Exception {
+        mockStatic(Windows.class);
+        UdmValueDto udmValueDto = buildUdmValueDto("c219bbe1-4dde-41aa-9d9a-31563997ab7d", user);
+        UdmEditValueWindow mockWindow = createMock(UdmEditValueWindow.class);
+        expectNew(UdmEditValueWindow.class, eq(controller), eq(udmValueDto), anyObject(ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class);
+        initWidget();
+        Grid<UdmValueDto> grid =
+            (Grid<UdmValueDto>) ((VerticalLayout) valueWidget.getSecondComponent()).getComponent(1);
+        ItemClickListener<UdmValueDto> listener =
+            (ItemClickListener) new ArrayList<>(grid.getListeners(ItemClick.class)).get(0);
+        Grid.ItemClick<UdmValueDto> usageDtoItemClick =
+            new ItemClick<>(grid, grid.getColumns().get(0), udmValueDto, createMouseEvent(), 0);
+        listener.itemClick(usageDtoItemClick);
+        verify(controller, Windows.class, ForeignSecurityUtils.class, UdmEditValueWindow.class, RupContextUtils.class);
     }
 }

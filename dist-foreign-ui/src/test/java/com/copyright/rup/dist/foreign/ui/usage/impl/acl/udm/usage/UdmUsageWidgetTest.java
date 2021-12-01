@@ -1156,8 +1156,8 @@ public class UdmUsageWidgetTest {
         udmUsageDto.setBaselineFlag(isBaseLineFlag);
         Windows.showNotificationWindow(message);
         expectLastCall().once();
-        replay(controller, streamSource, confirmWindowMock, Windows.class, UdmEditUsageWindow.class,
-            RupContextUtils.class, ForeignSecurityUtils.class);
+        replay(controller, streamSource, confirmWindowMock, Windows.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
         initWidget();
         Grid<UdmUsageDto> grid =
             (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
@@ -1166,7 +1166,7 @@ public class UdmUsageWidgetTest {
         Grid.ItemClick<UdmUsageDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmUsageDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, streamSource, confirmWindowMock, Windows.class, UdmViewUsageWindow.class,
-            RupContextUtils.class, ForeignSecurityUtils.class);
+        verify(controller, streamSource, confirmWindowMock, Windows.class, RupContextUtils.class,
+            ForeignSecurityUtils.class);
     }
 }

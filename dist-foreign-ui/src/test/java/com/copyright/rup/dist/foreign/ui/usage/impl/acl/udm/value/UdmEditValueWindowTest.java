@@ -164,22 +164,6 @@ public class UdmEditValueWindowTest {
     }
 
     @Test
-    public void testConstructorWithoutSaveButton() {
-        setSpecialistExpectations();
-        replay(controller, ForeignSecurityUtils.class);
-        window = new UdmEditValueWindow(controller, udmValue);
-        binder = Whitebox.getInternalState(window, "binder");
-        verify(controller, ForeignSecurityUtils.class);
-        assertEquals("View UDM Value", window.getCaption());
-        assertEquals(960, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
-        VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), false);
-        verifyPanel(verticalLayout.getComponent(0));
-    }
-
-    @Test
     public void testUdmValueDataBinding() {
         setSpecialistExpectations();
         initEditWindow();
