@@ -69,4 +69,10 @@
         join ${schema}.df_publication_type pt on pv.publication_type_uid = pt.df_publication_type_uid
         order by period, pub_type_name
     </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct period
+        from ${schema}.df_udm_proxy_value
+        order by period desc
+    </select>
 </mapper>

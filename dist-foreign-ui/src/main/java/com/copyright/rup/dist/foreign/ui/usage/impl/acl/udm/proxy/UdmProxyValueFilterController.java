@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +31,8 @@ public class UdmProxyValueFilterController extends CommonController<IUdmProxyVal
 
     @Autowired
     private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private IUdmProxyValueService udmProxyValueService;
 
     @Override
     public IUdmProxyValueFilterWidget instantiateWidget() {
@@ -39,8 +41,7 @@ public class UdmProxyValueFilterController extends CommonController<IUdmProxyVal
 
     @Override
     public List<Integer> getPeriods() {
-        // TODO: Use service logic to get proxy value periods
-        return new ArrayList<>();
+        return udmProxyValueService.findPeriods();
     }
 
     @Override

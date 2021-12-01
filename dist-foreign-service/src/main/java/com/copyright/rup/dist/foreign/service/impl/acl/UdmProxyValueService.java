@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Implementation of {@link IUdmProxyValueService}.
  * <p>
@@ -25,6 +27,11 @@ public class UdmProxyValueService implements IUdmProxyValueService {
     private IUdmProxyValueRepository udmProxyValueRepository;
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    @Override
+    public List<Integer> findPeriods() {
+        return udmProxyValueRepository.findPeriods();
+    }
 
     @Override
     @Transactional

@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterWidget;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,11 +33,14 @@ public class UdmProxyValueFilterControllerTest {
 
     private UdmProxyValueFilterController controller;
     private IPublicationTypeService publicationTypeService;
+    private IUdmProxyValueService udmProxyValueService;
 
     @Before
     public void setUp() {
         controller = new UdmProxyValueFilterController();
         publicationTypeService = createMock(IPublicationTypeService.class);
+        udmProxyValueService = createMock(IUdmProxyValueService.class);
+        Whitebox.setInternalState(controller, udmProxyValueService);
         Whitebox.setInternalState(controller, publicationTypeService);
     }
 
@@ -55,6 +59,15 @@ public class UdmProxyValueFilterControllerTest {
         replay(publicationTypeService);
         assertEquals(Arrays.asList("BK", "NL"), controller.getPublicationTypeCodes());
         verify(publicationTypeService);
+    }
+
+    @Test
+    public void testFindPeriods() {
+        List<Integer> periods = Arrays.asList(202012, 202112);
+        expect(udmProxyValueService.findPeriods()).andReturn(periods).once();
+        replay(udmProxyValueService);
+        assertEquals(periods, controller.getPeriods());
+        verify(udmProxyValueService);
     }
 
     private PublicationType buildPublicationType(String name, String description, String weight) {

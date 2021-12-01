@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import java.util.List;
+
 /**
  * Represents interface of repository for UDM proxy values.
  * <p>
@@ -10,6 +12,13 @@ package com.copyright.rup.dist.foreign.repository.api;
  * @author Aliaksandr Liakh
  */
 public interface IUdmProxyValueRepository {
+
+    /**
+     * Finds list of periods from UDM proxy values.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 
     /**
      * Deletes UDM proxy values.
