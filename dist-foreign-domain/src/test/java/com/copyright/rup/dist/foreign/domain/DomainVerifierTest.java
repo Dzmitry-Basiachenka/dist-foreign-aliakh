@@ -118,6 +118,7 @@ public class DomainVerifierTest {
             {UdmValueDto.class},
             {UdmValueFilter.class},
             {UdmValue.class},
+            {UdmValueAuditItem.class},
             {UdmValueBaselineDto.class},
             {UdmBaselineValueFilter.class},
             {UdmBaselineDto.class},

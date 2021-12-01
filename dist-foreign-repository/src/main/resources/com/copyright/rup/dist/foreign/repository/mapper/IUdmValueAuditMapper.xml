@@ -1,0 +1,45 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmValueAuditMapper">
+
+    <resultMap id="udmValueAuditItemResultMap" type="UdmValueAuditItem" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_udm_value_audit_uid"/>
+        <result property="valueId" column="df_udm_value_uid"/>
+        <result property="actionType" column="action_type_ind"/>
+        <result property="actionReason" column="action_reason"/>
+    </resultMap>
+
+    <sql id="UsageAuditItemColumns">
+        df_udm_value_audit_uid,
+        df_udm_value_uid,
+        action_type_ind,
+        action_reason,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="UsageAuditItem">
+        insert into ${schema}.df_udm_value_audit (
+            <include refid="UsageAuditItemColumns"/>
+        ) values (
+            #{id},
+            #{valueId},
+            #{actionType},
+            #{actionReason},
+            #{createDate},
+            #{updateDate},
+            #{createUser},
+            #{updateUser},
+            1
+        )
+    </insert>
+
+    <select id="findByUdmValueId" parameterType="string" resultMap="udmValueAuditItemResultMap">
+        select
+            <include refid="UsageAuditItemColumns"/>
+        from ${schema}.df_udm_value_audit
+        where df_udm_value_uid = #{valueId}
+        order by created_datetime desc
+    </select>
+</mapper>
