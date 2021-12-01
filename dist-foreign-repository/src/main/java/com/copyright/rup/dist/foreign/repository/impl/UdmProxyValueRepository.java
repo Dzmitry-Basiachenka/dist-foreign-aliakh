@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -19,6 +20,11 @@ import java.util.Objects;
  */
 @Repository
 public class UdmProxyValueRepository extends BaseRepository implements IUdmProxyValueRepository {
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IUdmProxyValueMapper.findPeriods");
+    }
 
     @Override
     public void deleteProxyValues(Integer period) {

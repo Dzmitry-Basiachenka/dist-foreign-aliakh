@@ -19,6 +19,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Verifies {@link UdmProxyValueService}.
  * <p>
@@ -57,5 +60,14 @@ public class UdmProxyValueServiceTest {
         replay(udmProxyValueRepository, RupContextUtils.class);
         assertEquals(2, udmProxyValueService.calculateProxyValues(PERIOD));
         verify(udmProxyValueRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testFindPeriods() {
+        List<Integer> periods = Arrays.asList(202012, 202112);
+        expect(udmProxyValueRepository.findPeriods()).andReturn(periods).once();
+        replay(udmProxyValueRepository);
+        assertEquals(periods, udmProxyValueService.findPeriods());
+        verify(udmProxyValueRepository);
     }
 }

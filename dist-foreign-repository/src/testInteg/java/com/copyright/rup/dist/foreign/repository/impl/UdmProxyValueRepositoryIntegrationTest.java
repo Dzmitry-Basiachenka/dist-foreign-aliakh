@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -84,6 +85,12 @@ public class UdmProxyValueRepositoryIntegrationTest {
         verifyValueDtos(
             loadExpectedValueDtos("json/udm/udm_value_dto_42c7bf99.json"),
             findAllValueDtos());
+    }
+
+    @Test
+    @TestData(fileName = "udm-proxy-value-repository-test-data-init-find-periods.groovy")
+    public void testFindPeriods() {
+        assertEquals(Arrays.asList(211012, 211006), udmProxyValueRepository.findPeriods());
     }
 
     private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues,
