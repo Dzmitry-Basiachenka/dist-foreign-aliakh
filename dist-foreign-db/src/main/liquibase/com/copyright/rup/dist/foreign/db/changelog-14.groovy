@@ -1064,4 +1064,63 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_proxy_value', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-12-01-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-70805 FDA: Audit Value Changes: create table df_udm_value_audit")
+
+        createTable(tableName: 'df_udm_value_audit', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing UDM value audit actions') {
+
+            column(name: 'df_udm_value_audit_uid', type: 'VARCHAR(255)', remarks: 'The identifier of UDM value audit action') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_udm_value_uid', type: 'VARCHAR(255)', remarks: 'The identifier of UDM value') {
+                constraints(nullable: false)
+            }
+            column(name: 'action_type_ind', type: 'VARCHAR(32)', remarks: 'Value action type index') {
+                constraints(nullable: false)
+            }
+            column(name: 'action_reason', type: 'VARCHAR(9000)', remarks: 'Value action reason') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_udm_value_audit',
+                columnNames: 'df_udm_value_audit_uid',
+                constraintName: 'pk_df_udm_value_audit_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_udm_value_audit',
+                baseColumnNames: 'df_udm_value_uid',
+                referencedTableName: 'df_udm_value',
+                referencedColumnNames: 'df_udm_value_uid',
+                constraintName: 'fk_df_udm_value_audit_2_df_udm_value')
+
+        rollback {
+            dropTable(tableName: 'df_udm_value_audit', schemaName: dbAppsSchema)
+        }
+    }
 }
