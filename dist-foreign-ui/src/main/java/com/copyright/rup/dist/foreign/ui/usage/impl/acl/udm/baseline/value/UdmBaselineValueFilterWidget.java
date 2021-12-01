@@ -109,10 +109,10 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
         moreFiltersButton.addClickListener(event -> {
             UdmBaselineValueFiltersWindow udmValueFiltersWindow =
-                new UdmBaselineValueFiltersWindow(udmBaselineValueFilter);
+                new UdmBaselineValueFiltersWindow(controller, udmBaselineValueFilter);
             Windows.showModalWindow(udmValueFiltersWindow);
             udmValueFiltersWindow.addCloseListener(closeEvent -> {
-                udmBaselineValueFilter = udmValueFiltersWindow.getAppliedValueFilter();
+                udmBaselineValueFilter = udmValueFiltersWindow.getBaselineValueFilter();
                 filterChanged();
             });
         });
