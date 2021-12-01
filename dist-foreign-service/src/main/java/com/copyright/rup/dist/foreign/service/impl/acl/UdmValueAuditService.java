@@ -35,7 +35,7 @@ public class UdmValueAuditService implements IUdmValueAuditService {
     }
 
     @Override
-    public List<UdmValueAuditItem> getUdmUsageAudit(String udmValueId) {
+    public List<UdmValueAuditItem> getUdmValueAudit(String udmValueId) {
         return udmValueAuditRepository.findByUdmValueId(udmValueId);
     }
 

@@ -64,7 +64,7 @@ public class UdmValueAuditServiceTest {
         List<UdmValueAuditItem> auditItems = Collections.emptyList();
         expect(udmValueAuditRepository.findByUdmValueId(UDM_VALUE_UID)).andReturn(auditItems).once();
         replay(udmValueAuditRepository);
-        assertSame(auditItems, udmValueAuditService.getUdmUsageAudit(UDM_VALUE_UID));
+        assertSame(auditItems, udmValueAuditService.getUdmValueAudit(UDM_VALUE_UID));
         verify(udmValueAuditRepository);
     }
 }
