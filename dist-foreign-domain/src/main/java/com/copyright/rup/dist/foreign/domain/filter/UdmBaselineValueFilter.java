@@ -207,7 +207,7 @@ public class UdmBaselineValueFilter {
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitleExpression", systemTitleExpression)
             .append("pubType", pubType)
-            .append("priceInUsdExpression", priceExpression)
+            .append("priceExpression", priceExpression)
             .append("priceFlag", priceFlag)
             .append("contentExpression", contentExpression)
             .append("contentFlag", contentFlag)
