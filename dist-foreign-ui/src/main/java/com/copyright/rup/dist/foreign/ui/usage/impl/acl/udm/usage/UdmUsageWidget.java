@@ -30,6 +30,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.CloseListener;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
@@ -161,8 +162,10 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
             UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
-            initSingleEditWindow(Collections.singleton(selectedUsage),
-                () -> new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh()));
+            Supplier<Window> editWindowSupplier = () ->
+                new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh());
+            Supplier<Window> viewWindowSupplier = () -> new UdmViewUsageWindow(selectedUsage);
+            initUsageWindow(selectedUsage, editWindowSupplier, viewWindowSupplier);
         });
         multipleEditButton.setEnabled(false);
         multipleEditButton.addClickListener(event -> {
@@ -179,18 +182,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             exportButton);
     }
 
-    private void initSingleEditWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
-        if (hasResearcherPermission) {
-            initEditResearcherWindow(selectedUsages, createWindow);
-        } else {
-            if (isUsagesProcessingCompleted(selectedUsages)) {
-                Windows.showModalWindow(createWindow.get());
-            } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage(USAGES_PROCESSING_ERROR_MESSAGE));
-            }
-        }
-    }
-
     private void initMultipleEditWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
         if (hasResearcherPermission) {
             initEditResearcherWindow(selectedUsages, createWindow);
@@ -204,7 +195,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void initEditResearcherWindow(Set<UdmUsageDto> selectedUsages, Supplier<Window> createWindow) {
-        if (isEditAllowedForResearcher(selectedUsages)) {
+        if (areUsageStatusesAllowedForResearcher(selectedUsages)) {
             if (areUsagesNonBaseline(selectedUsages)) {
                 openEditWindow(selectedUsages, createWindow);
             } else {
@@ -242,7 +233,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             || usageDto.getStatus().equals(UsageStatusEnum.WORK_FOUND));
     }
 
-    private boolean isEditAllowedForResearcher(Set<UdmUsageDto> udmUsages) {
+    private boolean areUsageStatusesAllowedForResearcher(Set<UdmUsageDto> udmUsages) {
         return udmUsages.stream()
             .allMatch(usageDto -> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER.contains(usageDto.getStatus()));
     }
@@ -321,7 +312,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         addColumns();
         udmUsagesGrid.setSizeFull();
         initSelectionMode();
-        initUsageWindow();
+        initUsageWindowByDoubleClick();
         VaadinUtils.addComponentStyle(udmUsagesGrid, "udm-usages-grid");
     }
 
@@ -443,18 +434,24 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         gridSelectionModel.beforeClientResponse(false);
     }
 
-    private void initUsageWindow() {
+    private void initUsageWindowByDoubleClick() {
         udmUsagesGrid.addItemClickListener(event -> {
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmUsageDto udmUsageDto = event.getItem();
                 if (isNotViewOnlyPermission()) {
-                    Supplier<Window> windowSupplier = () -> {
+                    CloseListener closeListener = closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected);
+                    Supplier<Window> editWindowSupplier = () -> {
                         UdmEditUsageWindow editWindow = new UdmEditUsageWindow(controller, udmUsageDto,
                             saveEvent -> refresh());
-                        editWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected));
+                        editWindow.addCloseListener(closeListener);
                         return editWindow;
                     };
-                    initSingleEditWindow(Collections.singleton(udmUsageDto), windowSupplier);
+                    Supplier<Window> viewWindowSupplier = () -> {
+                        UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(udmUsageDto);
+                        viewWindow.addCloseListener(closeListener);
+                        return viewWindow;
+                    };
+                    initUsageWindow(udmUsageDto, editWindowSupplier, viewWindowSupplier);
                 } else {
                     UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(udmUsageDto);
                     viewWindow.addCloseListener(closeEvent -> udmUsagesGrid.deselect(udmUsageDto));
@@ -463,6 +460,37 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 highlightSelectedUsage(udmUsageDto);
             }
         });
+    }
+
+    private void initUsageWindow(UdmUsageDto selectedUsage, Supplier<Window> editWindow, Supplier<Window> viewWindow) {
+        if (hasResearcherPermission) {
+            initUsageWindowForResearcher(selectedUsage, editWindow, viewWindow);
+        } else {
+            initSingleEditWindow(selectedUsage, editWindow);
+        }
+    }
+
+    private void initUsageWindowForResearcher(UdmUsageDto selectedUsage, Supplier<Window> editWindow,
+                                              Supplier<Window> viewWindow) {
+        if (isEditAllowedForResearcher(Collections.singleton(selectedUsage))) {
+            Windows.showModalWindow(editWindow.get());
+        } else {
+            Windows.showModalWindow(viewWindow.get());
+        }
+    }
+
+    private void initSingleEditWindow(UdmUsageDto selectedUsage, Supplier<Window> editWindow) {
+        if (isUsagesProcessingCompleted(Collections.singleton(selectedUsage))) {
+            Windows.showModalWindow(editWindow.get());
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage(USAGES_PROCESSING_ERROR_MESSAGE));
+        }
+    }
+
+    private boolean isEditAllowedForResearcher(Set<UdmUsageDto> selectedUsages) {
+        return areUsageStatusesAllowedForResearcher(selectedUsages)
+            && areUsagesNonBaseline(selectedUsages)
+            && checkHasUsagesAssignee(selectedUsages);
     }
 
     private Set<String> getSelectedUsageIds() {
