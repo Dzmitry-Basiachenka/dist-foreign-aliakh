@@ -154,7 +154,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true, true, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true, true);
         Grid grid = (Grid) layout.getComponent(1);
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
@@ -176,7 +176,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, true, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_MANAGER_AND_SPECIALIST);
@@ -198,7 +198,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, false, true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, true);
         Grid grid = (Grid) layout.getComponent(1);
         assertTrue(grid.getSelectionModel() instanceof SingleSelectionModel);
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_VIEW_ONLY);
@@ -220,8 +220,7 @@ public class UdmUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, true, false,
-            true);
+        verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         verifyGrid(grid, VISIBLE_COLUMNS_FOR_RESEARCHER);
@@ -345,131 +344,6 @@ public class UdmUsageWidgetTest {
         editButton.click();
         verify(controller, streamSource, confirmWindowMock, Windows.class, ForeignSecurityUtils.class,
             RupContextUtils.class);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedWorkNotFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistNullAssigneeAllowed() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, null);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistInvalidAssigneeAllowed() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedRhNotFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_NOT_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedRhFound() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.RH_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedEligible() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.ELIGIBLE, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedIneligible() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.INELIGIBLE, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedOpsReview() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.OPS_REVIEW, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerSpecialistAllowedSpecialistReview() throws Exception {
-        testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum.SPECIALIST_REVIEW, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedWorkNotFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerNullAssigneeAllowed() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, null);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerInvalidAssigneeAllowed() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedRhNotFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_NOT_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedRhFound() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.RH_FOUND, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedEligible() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.ELIGIBLE, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedIneligible() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.INELIGIBLE, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedOpsReview() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.OPS_REVIEW, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerManagerAllowedManagerReview() throws Exception {
-        testEditButtonClickListenerManagerAllowed(UsageStatusEnum.SPECIALIST_REVIEW, USER);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherAllowedWorkNotFound() throws Exception {
-        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.WORK_NOT_FOUND);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherAllowedRhNotFound() throws Exception {
-        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.RH_NOT_FOUND);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherRhFound() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.RH_FOUND, USER, false);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherEligible() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.ELIGIBLE, USER, false);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherIneligible() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.INELIGIBLE, USER, false);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherReview() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.SPECIALIST_REVIEW, USER, false);
-    }
-
-    @Test
-    public void testEditButtonClickListenerResearcherAllowedOpsReview() throws Exception {
-        testEditButtonClickListenerResearcherAllowed(UsageStatusEnum.OPS_REVIEW);
     }
 
     @Test
@@ -602,28 +476,10 @@ public class UdmUsageWidgetTest {
         grid.setItems(udmUsages);
         grid.select(udmUsageDtoFirst);
         grid.select(udmUsageDtoSecond);
-        Button editButton = (Button) getButtonsLayout().getComponent(3);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
         verify(controller, streamSource, Windows.class, UdmEditMultipleUsagesResearcherWindow.class,
             RupContextUtils.class, ForeignSecurityUtils.class);
-    }
-
-    @Test
-    @SuppressWarnings(UNCHECKED)
-    public void testEditButtonClickListenerBaselineResearcher() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.RH_NOT_FOUND, USER, true);
-    }
-
-    @Test
-    @SuppressWarnings(UNCHECKED)
-    public void testEditButtonClickListenerResearcherInvalidAssignee() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.RH_NOT_FOUND, INVALID_ASSIGNEE, false);
-    }
-
-    @Test
-    @SuppressWarnings(UNCHECKED)
-    public void testEditButtonClickListenerResearcherNullAssignee() throws Exception {
-        testResearcherViewWindowOnEditButtonClick(UsageStatusEnum.RH_NOT_FOUND, null, false);
     }
 
     @Test
@@ -669,7 +525,6 @@ public class UdmUsageWidgetTest {
         initWidget();
         verify(controller, streamSource, ForeignSecurityUtils.class);
         Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
-        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
         Button multipleEditButton = Whitebox.getInternalState(usagesWidget, "multipleEditButton");
         MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
         MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
@@ -678,7 +533,6 @@ public class UdmUsageWidgetTest {
         assertTrue(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
-        assertFalse(editButton.isEnabled());
         assertFalse(multipleEditButton.isEnabled());
         assertFalse(assignItem.isEnabled());
         assertFalse(unassignItem.isEnabled());
@@ -866,7 +720,6 @@ public class UdmUsageWidgetTest {
         UdmUsageDto udmUsageDto2 =
             buildUdmUsageDto("dd035171-8942-44e3-9eb2-829f1a9c6f76", "user@copyright.com");
         Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
-        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
         Button multipleEditButton = Whitebox.getInternalState(usagesWidget, "multipleEditButton");
         MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
         MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
@@ -876,7 +729,6 @@ public class UdmUsageWidgetTest {
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
         assertFalse(multipleEditButton.isEnabled());
-        assertFalse(editButton.isEnabled());
         assertFalse(assignItem.isEnabled());
         assertFalse(unassignItem.isEnabled());
         udmUsagesGrid.setItems(udmUsageDto1, udmUsageDto2);
@@ -884,7 +736,6 @@ public class UdmUsageWidgetTest {
         udmUsagesGrid.select(udmUsageDto2);
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
-        assertFalse(editButton.isEnabled());
         assertTrue(multipleEditButton.isEnabled());
         assertTrue(assignItem.isEnabled());
         assertTrue(unassignItem.isEnabled());
@@ -897,7 +748,6 @@ public class UdmUsageWidgetTest {
         UdmUsageDto udmUsageDto =
             buildUdmUsageDto("3ff90df9-4655-4bc5-838f-77a0e37db88d", "user_specialist@copyright.com");
         Grid<UdmUsageDto> udmUsagesGrid = Whitebox.getInternalState(usagesWidget, "udmUsagesGrid");
-        Button editButton = Whitebox.getInternalState(usagesWidget, "editButton");
         Button multipleEditButton = Whitebox.getInternalState(usagesWidget, "multipleEditButton");
         MenuBar assignmentMenuBar = Whitebox.getInternalState(usagesWidget, "assignmentMenuBar");
         MenuBar udmBatchMenuBar = Whitebox.getInternalState(usagesWidget, "udmBatchMenuBar");
@@ -906,7 +756,6 @@ public class UdmUsageWidgetTest {
         assertTrue(udmUsagesGrid.getSelectionModel().isUserSelectionAllowed());
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
-        assertFalse(editButton.isEnabled());
         assertFalse(multipleEditButton.isEnabled());
         assertFalse(assignItem.isEnabled());
         assertFalse(unassignItem.isEnabled());
@@ -914,7 +763,6 @@ public class UdmUsageWidgetTest {
         udmUsagesGrid.select(udmUsageDto);
         assertTrue(assignmentMenuBar.isEnabled());
         assertTrue(udmBatchMenuBar.isEnabled());
-        assertTrue(editButton.isEnabled());
         assertTrue(multipleEditButton.isEnabled());
         assertTrue(assignItem.isEnabled());
         assertTrue(unassignItem.isEnabled());
@@ -974,13 +822,12 @@ public class UdmUsageWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(false), layout.getMargin());
-        assertEquals(6, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "UDM Batch", buttonsVisibility[0], Arrays.asList("Load", "View"));
         verifyMenuBar(layout.getComponent(1), "Assignment", buttonsVisibility[1], Arrays.asList("Assign", "Unassign"));
-        verifyButton(layout.getComponent(2), "Edit Usage", buttonsVisibility[2]);
-        verifyButton(layout.getComponent(3), "Multiple Edit", buttonsVisibility[3]);
-        verifyButton(layout.getComponent(4), "Publish", buttonsVisibility[4]);
-        verifyButton(layout.getComponent(5), "Export", buttonsVisibility[5]);
+        verifyButton(layout.getComponent(2), "Multiple Edit", buttonsVisibility[2]);
+        verifyButton(layout.getComponent(3), "Publish", buttonsVisibility[3]);
+        verifyButton(layout.getComponent(4), "Export", buttonsVisibility[4]);
     }
 
     private void verifyButton(Component component, String name, boolean isVisible) {
@@ -1041,21 +888,6 @@ public class UdmUsageWidgetTest {
         return udmUsage;
     }
 
-    private void testEditButtonClickListenerSpecialistAllowed(UsageStatusEnum status, String user) throws Exception {
-        setSpecialistExpectations();
-        testEditButtonClickListenerAllowed(status, user);
-    }
-
-    private void testEditButtonClickListenerManagerAllowed(UsageStatusEnum status, String user) throws Exception {
-        setManagerExpectations();
-        testEditButtonClickListenerAllowed(status, user);
-    }
-
-    private void testEditButtonClickListenerResearcherAllowed(UsageStatusEnum status) throws Exception {
-        setResearcherExpectations();
-        testEditButtonClickListenerAllowed(status, USER);
-    }
-
     private void testMultipleEditButtonClickListenerSpecialistForbidden(UsageStatusEnum status, String user,
                                                                         String message) {
         setSpecialistExpectations();
@@ -1072,31 +904,6 @@ public class UdmUsageWidgetTest {
                                                                         boolean isBaselineFlag, String message) {
         setResearcherExpectations();
         testMultipleEditButtonClickListenerForbidden(status, user, isBaselineFlag, message);
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void testEditButtonClickListenerAllowed(UsageStatusEnum status, String user) throws Exception {
-        mockStatic(Windows.class);
-        UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("00ce418f-4a5d-459a-8e23-b164b83e2a60");
-        udmUsageDto.setAssignee(user);
-        udmUsageDto.setStatus(status);
-        UdmEditUsageWindow mockWindow = createMock(UdmEditUsageWindow.class);
-        expectNew(UdmEditUsageWindow.class, eq(controller), eq(udmUsageDto), anyObject(ClickListener.class))
-            .andReturn(mockWindow).once();
-        Windows.showModalWindow(mockWindow);
-        expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
-        initWidget();
-        Grid<UdmUsageDto> grid =
-            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
-        grid.setItems(udmUsageDto);
-        grid.select(udmUsageDto);
-        Button editButton = (Button) getButtonsLayout().getComponent(2);
-        editButton.click();
-        verify(controller, streamSource, Windows.class, UdmEditUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -1123,36 +930,9 @@ public class UdmUsageWidgetTest {
         grid.setItems(udmUsages);
         grid.select(udmUsageDtoFirst);
         grid.select(udmUsageDtoSecond);
-        Button editButton = (Button) getButtonsLayout().getComponent(3);
-        editButton.click();
-        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void testResearcherViewWindowOnEditButtonClick(UsageStatusEnum status, String user,
-                                                           boolean isBaselineFlag) throws Exception {
-        mockStatic(Windows.class);
-        setResearcherExpectations();
-        UdmUsageDto udmUsageDto = new UdmUsageDto();
-        udmUsageDto.setId("8020f228-c307-4c23-940d-5da727b9c80d");
-        udmUsageDto.setAssignee(user);
-        udmUsageDto.setStatus(status);
-        udmUsageDto.setBaselineFlag(isBaselineFlag);
-        UdmViewUsageWindow mockWindow = createMock(UdmViewUsageWindow.class);
-        expectNew(UdmViewUsageWindow.class, eq(udmUsageDto)).andReturn(mockWindow).once();
-        Windows.showModalWindow(mockWindow);
-        expectLastCall().once();
-        replay(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
-        initWidget();
-        Grid<UdmUsageDto> grid =
-            (Grid<UdmUsageDto>) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(1);
-        grid.setItems(udmUsageDto);
-        grid.select(udmUsageDto);
         Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
-        verify(controller, streamSource, Windows.class, UdmViewUsageWindow.class, RupContextUtils.class,
-            ForeignSecurityUtils.class);
+        verify(controller, streamSource, Windows.class, RupContextUtils.class, ForeignSecurityUtils.class);
     }
 
     private MouseEventDetails createMouseEvent() {
