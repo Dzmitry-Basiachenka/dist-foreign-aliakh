@@ -1123,4 +1123,19 @@ databaseChangeLog {
             dropTable(tableName: 'df_udm_value_audit', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2021-12-01-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-68257 [Value] FDA & UDM: View proxy values: drop not-null constraint from price, content columns " +
+                "in df_udm_value_baseline table")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline', columnName: 'price')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline', columnName: 'content')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline', columnName: 'price',
+                    columnDataType: 'NUMERIC(38,10)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline', columnName: 'content',
+                    columnDataType: 'NUMERIC(38,10)')
+        }
+    }
 }
