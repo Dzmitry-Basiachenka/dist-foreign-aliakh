@@ -9,9 +9,12 @@
     "systemTitle": "BIOCHEMISTRY (MOSCOW)",
     "systemStandardNumber": "978-0-271-01750-1",
     "price": 100.0000000000,
+    "priceInUsd": 150.0000000000,
+    "currency": "EUR",
+    "currencyExchangeRate": 1.5000000000,
     "priceFlag": true,
     "content": 10.0000000000,
-    "contentUnitPrice": 10.0000000000,
+    "contentUnitPrice": 15.0000000000,
     "contentFlag": true,
     "publicationType": {
       "name": "NP"
@@ -29,9 +32,12 @@
     "systemTitle": "Colloids and surfaces. B, Biointerfaces",
     "systemStandardNumber": "1873-2233",
     "price": 100.0000000000,
+    "priceInUsd": 150.0000000000,
+    "currency": "EUR",
+    "currencyExchangeRate": 1.5000000000,
     "priceFlag": true,
     "content": 10.0000000000,
-    "contentUnitPrice": 10.0000000000,
+    "contentUnitPrice": 15.0000000000,
     "contentFlag": true,
     "publicationType": {
       "name": "NP"
@@ -50,8 +56,11 @@
     "systemStandardNumber": "978-0-947731-91-5",
     "price": 100.0000000000,
     "priceFlag": true,
+    "priceInUsd": 150.0000000000,
+    "currency": "EUR",
+    "currencyExchangeRate": 1.5000000000,
     "content": 10.0000000000,
-    "contentUnitPrice": 10.0000000000,
+    "contentUnitPrice": 15.0000000000,
     "contentFlag": true,
     "publicationType": {
       "name": "NP"
@@ -69,9 +78,12 @@
     "systemTitle": "Paris tonique",
     "systemStandardNumber": "12345XX-79069",
     "price": 100.0000000000,
+    "priceInUsd": 150.0000000000,
+    "currency": "EUR",
+    "currencyExchangeRate": 1.5000000000,
     "priceFlag": true,
     "content": 10.0000000000,
-    "contentUnitPrice": 10.0000000000,
+    "contentUnitPrice": 15.0000000000,
     "contentFlag": true,
     "publicationType": {
       "name": "NP"

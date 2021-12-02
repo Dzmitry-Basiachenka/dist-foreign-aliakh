@@ -60,8 +60,6 @@ import java.util.stream.Collectors;
 @Component
 public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
-    private static final BigDecimal AMOUNT_100 = new BigDecimal(100);
-
     @Autowired
     private IUdmBatchService udmBatchService;
     @Autowired
@@ -239,11 +237,14 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     publicationType.setId("076f2c40-f524-405d-967a-3840df2b57df");
                     publicationType.setName("NP");
                     udmValueDto.setPublicationType(publicationType);
-                    udmValueDto.setPrice(AMOUNT_100);
+                    udmValueDto.setPrice(new BigDecimal("100"));
+                    udmValueDto.setPriceInUsd(new BigDecimal("150"));
+                    udmValueDto.setCurrency("EUR");
+                    udmValueDto.setCurrencyExchangeRate(new BigDecimal("1.5"));
                     udmValueDto.setPriceFlag(true);
                     udmValueDto.setContent(BigDecimal.TEN);
                     udmValueDto.setContentFlag(true);
-                    udmValueDto.setContentUnitPrice(BigDecimal.TEN);
+                    udmValueDto.setContentUnitPrice(new BigDecimal("15"));
                     udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
                     udmValueService.updateValue(udmValueDto);
                 });
@@ -275,7 +276,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .collect(Collectors.toList());
             List<UdmValueBaselineDto> expectedUdmValues =
                 testHelper.loadExpectedValueBaselineDto(pathToExpectedValuesBaseline);
-            testHelper.assertValueBaselineDtos(actualUdmValues, expectedUdmValues);
+            testHelper.assertValueBaselineDtos(expectedUdmValues, actualUdmValues);
         }
 
         private void assertUsageAudit() throws IOException {
