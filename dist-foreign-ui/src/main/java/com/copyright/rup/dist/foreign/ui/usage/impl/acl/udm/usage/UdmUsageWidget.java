@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
@@ -265,10 +264,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     .stream()
                     .allMatch(udmUsageDto -> userName.equals(udmUsageDto.getAssignee()));
                 if (isUnassignmentAllowed) {
-                    int usagesCount = udmUsagesGrid.getSelectedItems().size();
+                    Set<UdmUsageDto> udmUsages = udmUsagesGrid.getSelectedItems();
+                    int usagesCount = udmUsages.size();
                     Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
                         () -> {
-                            controller.unassignUsages(getSelectedUsageIds());
+                            controller.unassignUsages(udmUsages);
                             refresh();
                             Windows.showNotificationWindow(
                                 ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
@@ -479,13 +479,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         return areUsageStatusesAllowedForResearcher(selectedUsages)
             && areUsagesNonBaseline(selectedUsages)
             && checkHasUsagesAssignee(selectedUsages);
-    }
-
-    private Set<String> getSelectedUsageIds() {
-        return udmUsagesGrid.getSelectedItems()
-            .stream()
-            .map(BaseEntity::getId)
-            .collect(Collectors.toSet());
     }
 
     private IStreamSource getExportUdmUsagesStreamSourceForSpecificRole() {

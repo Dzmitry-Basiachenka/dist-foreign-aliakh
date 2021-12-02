@@ -78,6 +78,7 @@ public class UdmUsageServiceTest {
     private static final String UDM_BATCH_UID = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_USAGE_UID_1 = "85c8a2a6-1e9d-453b-947c-14dbd92c5e15";
     private static final String UDM_USAGE_UID_2 = "f9207059-af0a-440a-abc7-b6e016c64677";
+    private static final String UDM_USAGE_UID_3 = "2c2196c5-cfd7-4b8b-bade-9634dcba0f4f";
     private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB321";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB322";
     private static final String FAX_PHOTOCOPIES = "FAX_PHOTOCOPIES";
@@ -482,7 +483,10 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsage2 = new UdmUsageDto();
         udmUsage2.setId(UDM_USAGE_UID_2);
         udmUsage2.setAssignee(ASSIGNEE);
-        Set<UdmUsageDto> udmUsages = new LinkedHashSet<>(Arrays.asList(udmUsage1, udmUsage2));
+        UdmUsageDto udmUsage3 = new UdmUsageDto();
+        udmUsage3.setId(UDM_USAGE_UID_3);
+        udmUsage3.setAssignee(USER_NAME);
+        Set<UdmUsageDto> udmUsages = new LinkedHashSet<>(Arrays.asList(udmUsage1, udmUsage2, udmUsage3));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmUsageRepository.updateAssignee(new HashSet<>(Arrays.asList(udmUsage1.getId(), udmUsage2.getId())),
             USER_NAME, USER_NAME);
@@ -502,13 +506,19 @@ public class UdmUsageServiceTest {
     @Test
     public void testUnAssignUsages() {
         mockStatic(RupContextUtils.class);
-        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
+        UdmUsageDto udmUsage = new UdmUsageDto();
+        udmUsage.setId(UDM_USAGE_UID_1);
+        udmUsage.setAssignee(ASSIGNEE);
+        Set<UdmUsageDto> udmUsages = Collections.singleton(udmUsage);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmUsageRepository.updateAssignee(usageIds, null, USER_NAME);
+        udmUsageRepository.updateAssignee(Collections.singleton(udmUsage.getId()), null, USER_NAME);
         expectLastCall().once();
-        replay(udmUsageRepository, RupContextUtils.class);
-        udmUsageService.unassignUsages(usageIds);
-        verify(udmUsageRepository, RupContextUtils.class);
+        udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. Usage is not assigned to anyone");
+        expectLastCall().once();
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
+        udmUsageService.unassignUsages(udmUsages);
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     private UdmBatch buildUdmBatch() {

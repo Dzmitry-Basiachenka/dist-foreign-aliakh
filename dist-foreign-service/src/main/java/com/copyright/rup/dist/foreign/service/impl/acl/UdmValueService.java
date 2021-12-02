@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -9,10 +10,12 @@ import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.google.common.collect.ImmutableList;
 
@@ -46,6 +49,8 @@ public class UdmValueService implements IUdmValueService {
     private Map<String, String> currencyCodesToCurrencyNamesMap;
     @Autowired
     private IUdmValueRepository udmValueRepository;
+    @Autowired
+    private IUdmValueAuditService udmValueAuditService;
     @Autowired
     private IUdmBaselineRepository baselineRepository;
     @Autowired
@@ -91,14 +96,39 @@ public class UdmValueService implements IUdmValueService {
     }
 
     @Override
-    public void assignValues(Set<String> valueIds) {
+    public void assignValues(Set<UdmValueDto> udmValues) {
         String userName = RupContextUtils.getUserName();
-        udmValueRepository.updateAssignee(valueIds, userName, userName);
+        Set<String> udmValueIds = udmValues
+            .stream()
+            .filter(udmValue -> !userName.equals(udmValue.getAssignee()))
+            .peek(udmValue -> {
+                if (Objects.isNull(udmValue.getAssignee())) {
+                    udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                        String.format("Assignment was changed. Value was assigned to ‘%s’", userName));
+                } else {
+                    udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                        String.format("Assignment was changed. Old assignee is '%s'. New assignee is '%s'",
+                            udmValue.getAssignee(), userName));
+                }
+            })
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
+        if (!udmValueIds.isEmpty()) {
+            udmValueRepository.updateAssignee(udmValueIds, userName, userName);
+        }
     }
 
     @Override
-    public void unassignValues(Set<String> valueIds) {
-        udmValueRepository.updateAssignee(valueIds, null, RupContextUtils.getUserName());
+    public void unassignValues(Set<UdmValueDto> udmValues) {
+        String userName = RupContextUtils.getUserName();
+        Set<String> udmValueIds = udmValues
+            .stream()
+            .peek(udmValue -> udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                String.format("Assignment was changed. Old assignee is '%s'. Value is not assigned to anyone",
+                    udmValue.getAssignee())))
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
+        udmValueRepository.updateAssignee(udmValueIds, null, userName);
     }
 
     @Override

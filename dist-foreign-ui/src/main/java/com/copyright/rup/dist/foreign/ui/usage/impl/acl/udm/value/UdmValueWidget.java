@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -158,10 +157,11 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                                 .map(UdmValueStatusEnum::name)
                                 .collect(Collectors.joining(", "))));
                 } else {
-                    int valuesCount = udmValuesGrid.getSelectedItems().size();
+                    Set<UdmValueDto> udmValues = udmValuesGrid.getSelectedItems();
+                    int valuesCount = udmValues.size();
                     Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.value.assign", valuesCount),
                         () -> {
-                            controller.assignValues(getSelectedValueIds());
+                            controller.assignValues(udmValues);
                             refresh();
                             Windows.showNotificationWindow(
                                 ForeignUi.getMessage("message.notification.value.assignment_completed", valuesCount));
@@ -178,10 +178,11 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                     .stream()
                     .allMatch(udmValueDto -> userName.equals(udmValueDto.getAssignee()));
                 if (isUnassignmentAllowed) {
-                    int valuesCount = udmValuesGrid.getSelectedItems().size();
+                    Set<UdmValueDto> udmValues = udmValuesGrid.getSelectedItems();
+                    int valuesCount = udmValues.size();
                     Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.value.unassign", valuesCount),
                         () -> {
-                            controller.unassignValues(getSelectedValueIds());
+                            controller.unassignValues(udmValues);
                             refresh();
                             Windows.showNotificationWindow(
                                 ForeignUi.getMessage("message.notification.value.unassignment_completed", valuesCount));
@@ -403,13 +404,6 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 highlightSelectedValue(udmValueDto);
             }
         });
-    }
-
-    private Set<String> getSelectedValueIds() {
-        return udmValuesGrid.getSelectedItems()
-            .stream()
-            .map(BaseEntity::getId)
-            .collect(Collectors.toSet());
     }
 
     private boolean isAssignmentAllowedForResearcher(Set<UdmValueDto> udmValueDtos) {

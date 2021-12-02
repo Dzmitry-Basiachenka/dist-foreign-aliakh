@@ -128,13 +128,13 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     }
 
     @Override
-    public void assignValues(Set<String> valueIds) {
-        valueService.assignValues(valueIds);
+    public void assignValues(Set<UdmValueDto> udmValues) {
+        valueService.assignValues(udmValues);
     }
 
     @Override
-    public void unassignValues(Set<String> valueIds) {
-        valueService.unassignValues(valueIds);
+    public void unassignValues(Set<UdmValueDto> udmValues) {
+        valueService.unassignValues(udmValues);
     }
 
     @Override

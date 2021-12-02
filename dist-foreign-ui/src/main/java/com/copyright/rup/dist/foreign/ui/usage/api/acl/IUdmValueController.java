@@ -98,16 +98,16 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
     /**
      * Assigns provided values to logged in user.
      *
-     * @param valueIds set of value ids to assign to logged in user
+     * @param udmValues set of values to assign to logged in user
      */
-    void assignValues(Set<String> valueIds);
+    void assignValues(Set<UdmValueDto> udmValues);
 
     /**
      * Un-assigns provided values.
      *
-     * @param valueIds set of value ids to un-assign
+     * @param udmValues set of values to un-assign
      */
-    void unassignValues(Set<String> valueIds);
+    void unassignValues(Set<UdmValueDto> udmValues);
 
     /**
      * Handles changes of filter.

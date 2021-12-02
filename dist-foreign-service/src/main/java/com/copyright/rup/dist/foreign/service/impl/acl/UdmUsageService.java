@@ -237,25 +237,37 @@ public class UdmUsageService implements IUdmUsageService {
     @Transactional
     public void assignUsages(Set<UdmUsageDto> udmUsages) {
         String userName = RupContextUtils.getUserName();
-        udmUsages.forEach(usage -> {
-            if (Objects.isNull(usage.getAssignee())) {
-                udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
-                    String.format("Assignment was changed. Usage was assigned to ‘%s’", userName));
-            } else {
-                udmUsageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
-                    String.format("Assignment was changed. Old assignee is '%s'. " +
-                        "New assignee is '%s'", usage.getAssignee(), userName));
-            }
-        });
-        Set<String> udmUsageIds = udmUsages.stream()
+        Set<String> udmUsageIds = udmUsages
+            .stream()
+            .filter(udmUsage -> !userName.equals(udmUsage.getAssignee()))
+            .peek(udmUsage -> {
+                if (Objects.isNull(udmUsage.getAssignee())) {
+                    udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                        String.format("Assignment was changed. Usage was assigned to ‘%s’", userName));
+                } else {
+                    udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                        String.format("Assignment was changed. Old assignee is '%s'. New assignee is '%s'",
+                            udmUsage.getAssignee(), userName));
+                }
+            })
             .map(BaseEntity::getId)
             .collect(Collectors.toSet());
-        udmUsageRepository.updateAssignee(udmUsageIds, userName, userName);
+        if (!udmUsageIds.isEmpty()) {
+            udmUsageRepository.updateAssignee(udmUsageIds, userName, userName);
+        }
     }
 
     @Override
-    public void unassignUsages(Set<String> udmUsageIds) {
-        udmUsageRepository.updateAssignee(udmUsageIds, null, RupContextUtils.getUserName());
+    public void unassignUsages(Set<UdmUsageDto> udmUsages) {
+        String userName = RupContextUtils.getUserName();
+        Set<String> udmUsageIds = udmUsages
+            .stream()
+            .peek(udmUsage -> udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                String.format("Assignment was changed. Old assignee is '%s'. Usage is not assigned to anyone",
+                    udmUsage.getAssignee())))
+            .map(BaseEntity::getId)
+            .collect(Collectors.toSet());
+        udmUsageRepository.updateAssignee(udmUsageIds, null, userName);
     }
 
     @Override
