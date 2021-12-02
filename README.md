@@ -1,3 +1,17 @@
+14.1.33
+-
+* B-69757 FDA: Edit functionality modification (Usages and Values): remove edit button from UDM Usage tab
+* B-69757 FDA: Edit functionality modification (Usages and Values): implement view UDM value window
+* B-69757 FDA: Edit functionality modification (Usages and Values): remove notification windows for Researcher during usage single edit
+* B-69863 FDA: View baseline values: implement validators on baseline values filters window
+* B-70805 FDA: Audit Value Changes: implement frontend to show audit window
+* B-70805 FDA: Audit Value Changes: Implement audit window
+* B-70805 FDA: Audit Value Changes: Implement Liquibase script to create table df_udm_value_audit
+* B-68257 [Value] FDA & UDM: View proxy values: implement logic to get proxy values periods
+* B-68257 [Value] FDA & UDM: View proxy values: Implement UI filters
+* CDP-1030 FDA: Publish values to baseline: 'Price' instead of 'Price in USD' gets published as the 'Price' parameter to the baseline
+* CDP-1031 FDA: Publish values to baseline: Exception occurs after trying to publish values, for which proxies were applied
+
 14.1.32
 -
 * B-69863 FDA: View baseline values: implement logic to get baseline value periods
