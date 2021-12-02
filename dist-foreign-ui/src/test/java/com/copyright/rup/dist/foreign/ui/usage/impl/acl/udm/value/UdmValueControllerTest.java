@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationService;
@@ -27,12 +28,16 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.vaadin.ui.Window;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +63,7 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class})
+@PrepareForTest({ForeignSecurityUtils.class, Windows.class})
 public class UdmValueControllerTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
@@ -68,6 +73,7 @@ public class UdmValueControllerTest {
     private IUdmValueFilterController udmValueFilterController;
     private IUdmValueFilterWidget udmValueFilterWidget;
     private IUdmValueService valueService;
+    private IUdmValueAuditService udmValueAuditService;
     private IUdmProxyValueService udmProxyValueService;
     private IUdmValueWidget udmValueWidget;
     private IUdmBaselineService baselineService;
@@ -80,6 +86,7 @@ public class UdmValueControllerTest {
         udmValueFilterController = createMock(IUdmValueFilterController.class);
         udmValueFilterWidget = createMock(IUdmValueFilterWidget.class);
         valueService = createMock(IUdmValueService.class);
+        udmValueAuditService = createMock(IUdmValueAuditService.class);
         udmProxyValueService = createMock(IUdmProxyValueService.class);
         udmValueWidget = createMock(IUdmValueWidget.class);
         baselineService = createMock(IUdmBaselineService.class);
@@ -89,6 +96,7 @@ public class UdmValueControllerTest {
         Whitebox.setInternalState(controller, udmValueFilterController);
         Whitebox.setInternalState(controller, udmValueFilterWidget);
         Whitebox.setInternalState(controller, valueService);
+        Whitebox.setInternalState(controller, udmValueAuditService);
         Whitebox.setInternalState(controller, udmProxyValueService);
         Whitebox.setInternalState(controller, udmValueWidget);
         Whitebox.setInternalState(controller, baselineService);
@@ -277,6 +285,24 @@ public class UdmValueControllerTest {
         replay(udmProxyValueService);
         assertEquals(2, controller.calculateProxyValues(202106));
         verify(udmProxyValueService);
+    }
+
+    @Test
+    public void testShowUdmValueHistory() {
+        mockStatic(Windows.class);
+        Window.CloseListener closeListener = createMock(Window.CloseListener.class);
+        Capture<UdmValueHistoryWindow> windowCapture = newCapture();
+        String udmValueId = "432320b8-5029-47dd-8137-99007cb69bf1";
+        List<UdmValueAuditItem> auditItems = Collections.emptyList();
+        expect(udmValueAuditService.getUdmValueAudit(udmValueId)).andReturn(auditItems).once();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(Windows.class, closeListener, udmValueAuditService);
+        controller.showUdmValueHistory(udmValueId, closeListener);
+        UdmValueHistoryWindow window = windowCapture.getValue();
+        assertNotNull(window);
+        assertEquals("History for UDM value 432320b8-5029-47dd-8137-99007cb69bf1", window.getCaption());
+        verify(Windows.class, closeListener, udmValueAuditService);
     }
 
     private PublicationType buildPublicationType(String name, String weight) {

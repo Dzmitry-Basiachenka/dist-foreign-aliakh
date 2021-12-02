@@ -33,6 +33,7 @@ import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
+import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -241,7 +242,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
                 } else {
                     udmValuesGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
-                udmValuesGrid.getFooterRow(0).getCell("valuePeriod").setText(String.format(FOOTER_LABEL, size));
+                udmValuesGrid.getFooterRow(0).getCell("valueId").setText(String.format(FOOTER_LABEL, size));
                 return size;
             }, UdmValueDto::getId);
         udmValuesGrid = new Grid<>(dataProvider);
@@ -255,10 +256,24 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     private void addColumns() {
         FooterRow footer = udmValuesGrid.appendFooterRow();
         udmValuesGrid.setFooterVisible(true);
-        Column<UdmValueDto, ?> column = addColumn(UdmValueDto::getValuePeriod, "table.column.value_period",
-            "valuePeriod", 150);
+        Column<UdmValueDto, ?> column = udmValuesGrid.addComponentColumn(udmValue -> {
+            String udmValueId = udmValue.getId();
+            Button button = Buttons.createButton(udmValueId);
+            button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> {
+                controller.showUdmValueHistory(udmValueId, closeEvent ->
+                    restoreSelection(selectedUdmValues, isAllSelected));
+                highlightSelectedValue(udmValue);
+            });
+            return button;
+        })
+            .setCaption(ForeignUi.getMessage("table.column.value_id"))
+            .setId("valueId")
+            .setSortProperty("valueId")
+            .setWidth(200);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
+            addColumn(UdmValueDto::getValuePeriod, "table.column.value_period", "valuePeriod", 150),
             addColumn(UdmValueDto::getStatus, "table.column.status", "status", 100),
             addColumn(UdmValueDto::getAssignee, "table.column.assignee", "assignee", 100),
             addColumn(UdmValueDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 150),

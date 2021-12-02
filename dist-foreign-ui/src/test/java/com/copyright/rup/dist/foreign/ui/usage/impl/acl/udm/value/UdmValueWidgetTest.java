@@ -502,8 +502,8 @@ public class UdmValueWidgetTest {
 
     private void verifyGrid(Grid grid) {
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Value Period", "Status", "Assignee", "RH Account #", "RH Name", "Wr Wrk Inst",
-            "System Title", "System Standard Number", "Last Value Period", "Last Pub Type", "Pub Type",
+        assertEquals(Arrays.asList("Value ID", "Value Period", "Status", "Assignee", "RH Account #", "RH Name",
+            "Wr Wrk Inst", "System Title", "System Standard Number", "Last Value Period", "Last Pub Type", "Pub Type",
             "Last Price in USD", "Last Price Flag", "Last Price Source", "Price Source", "Last Price Comment", "Price",
             "Currency", "Price Type", "Price Access Type", "Price Year", "Price Comment", "Price in USD", "Price Flag",
             "Currency Exchange Rate", "Currency Exchange Rate Date", "Last Content", "Last Content Flag",
@@ -514,7 +514,7 @@ public class UdmValueWidgetTest {
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
-        assertEquals("Values Count: 0", footerRow.getCell("valuePeriod").getText());
+        assertEquals("Values Count: 0", footerRow.getCell("valueId").getText());
     }
 
     private void verifySize(Component component, float width, float height, Unit heightUnit) {
