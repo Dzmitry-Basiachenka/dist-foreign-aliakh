@@ -60,14 +60,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
-    private static final int EXPECTED_SELECTED_SIZE = 1;
     private static final List<UsageStatusEnum> USAGE_STATUSES_EDIT_ALLOWED_FOR_RESEARCHER = Arrays.asList(
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW);
     private static final String USAGES_PROCESSING_ERROR_MESSAGE = "message.error.processing_usages";
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final boolean hasManagerPermission = ForeignSecurityUtils.hasManagerPermission();
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
-    private final Button editButton = Buttons.createButton(ForeignUi.getMessage("button.edit_usage"));
     private final Button multipleEditButton = Buttons.createButton(ForeignUi.getMessage("button.edit_multiple_usage"));
     private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
     private final String userName = RupContextUtils.getUserName();
@@ -99,7 +97,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         UdmUsageMediator mediator = new UdmUsageMediator();
         mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
-        mediator.setEditButton(editButton);
         mediator.setMultipleEditButton(multipleEditButton);
         mediator.setPublishButton(publishButton);
         return mediator;
@@ -159,14 +156,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(getExportUdmUsagesStreamSourceForSpecificRole().getSource());
         fileDownloader.extend(exportButton);
-        editButton.setEnabled(false);
-        editButton.addClickListener(event -> {
-            UdmUsageDto selectedUsage = udmUsagesGrid.getSelectedItems().iterator().next();
-            Supplier<Window> editWindowSupplier = () ->
-                new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh());
-            Supplier<Window> viewWindowSupplier = () -> new UdmViewUsageWindow(selectedUsage);
-            initUsageWindow(selectedUsage, editWindowSupplier, viewWindowSupplier);
-        });
         multipleEditButton.setEnabled(false);
         multipleEditButton.addClickListener(event -> {
             Set<UdmUsageDto> selectedUsages = udmUsagesGrid.getSelectedItems();
@@ -177,8 +166,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     : () -> new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
         publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller)));
-        VaadinUtils.setButtonsAutoDisabled(editButton, multipleEditButton);
-        return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, editButton, multipleEditButton, publishButton,
+        VaadinUtils.setButtonsAutoDisabled(multipleEditButton);
+        return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, multipleEditButton, publishButton,
             exportButton);
     }
 
@@ -414,7 +403,6 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 boolean isSelected = CollectionUtils.isNotEmpty(usageDtos);
                 assignItem.setEnabled(isSelected);
                 unassignItem.setEnabled(isSelected);
-                editButton.setEnabled(EXPECTED_SELECTED_SIZE == usageDtos.size());
                 multipleEditButton.setEnabled(isSelected);
             });
         } else {

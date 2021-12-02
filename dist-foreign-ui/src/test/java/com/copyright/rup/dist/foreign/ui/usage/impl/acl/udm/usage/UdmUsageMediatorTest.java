@@ -35,7 +35,6 @@ public class UdmUsageMediatorTest {
     private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
 
-    private final Button editButton = new Button("Edit Usage");
     private final Button multipleEditButton = new Button("Multiple Edit");
     private final Button publishButton = new Button("Publish");
     private final MenuBar udmBatchMenuBar = new MenuBar();
@@ -47,7 +46,6 @@ public class UdmUsageMediatorTest {
         mediator = new UdmUsageMediator();
         mediator.setBatchMenuBar(udmBatchMenuBar);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
-        mediator.setEditButton(editButton);
         mediator.setMultipleEditButton(multipleEditButton);
         mediator.setPublishButton(publishButton);
     }
@@ -59,7 +57,6 @@ public class UdmUsageMediatorTest {
         mediator.applyPermissions();
         assertFalse(udmBatchMenuBar.isVisible());
         assertFalse(assignmentMenuBar.isVisible());
-        assertFalse(editButton.isVisible());
         assertFalse(multipleEditButton.isVisible());
         assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
@@ -73,7 +70,6 @@ public class UdmUsageMediatorTest {
         assertFalse(udmBatchMenuBar.isVisible());
         assertFalse(publishButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
@@ -85,7 +81,6 @@ public class UdmUsageMediatorTest {
         mediator.applyPermissions();
         assertTrue(udmBatchMenuBar.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
         assertTrue(publishButton.isVisible());
         verify(SecurityUtils.class);
@@ -99,7 +94,6 @@ public class UdmUsageMediatorTest {
         assertFalse(udmBatchMenuBar.isVisible());
         assertFalse(publishButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertTrue(multipleEditButton.isVisible());
         verify(SecurityUtils.class);
     }
