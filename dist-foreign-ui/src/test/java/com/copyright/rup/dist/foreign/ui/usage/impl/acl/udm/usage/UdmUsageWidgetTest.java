@@ -274,7 +274,7 @@ public class UdmUsageWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.unassignUsages(Collections.singleton("27bdc476-9cd8-44e0-ac50-597819f93f9a"));
+        controller.unassignUsages(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 usage(s) were successfully unassigned");
         expectLastCall().once();

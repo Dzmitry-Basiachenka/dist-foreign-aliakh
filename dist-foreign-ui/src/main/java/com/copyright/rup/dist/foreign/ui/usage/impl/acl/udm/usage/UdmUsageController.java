@@ -158,8 +158,8 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void unassignUsages(Set<String> usageIds) {
-        udmUsageService.unassignUsages(usageIds);
+    public void unassignUsages(Set<UdmUsageDto> udmUsages) {
+        udmUsageService.unassignUsages(udmUsages);
     }
 
     @Override

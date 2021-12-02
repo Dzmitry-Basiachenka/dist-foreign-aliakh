@@ -173,7 +173,7 @@ public class UdmValueWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.assignValues(Collections.singleton("a2f7d9a7-9665-4fb2-b3c1-1c87fe95bc8f"));
+        controller.assignValues(Collections.singleton(udmValueDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully assigned to you");
         expectLastCall().once();
@@ -226,7 +226,7 @@ public class UdmValueWidgetTest {
             capture(windowListenerCapture)))
             .andReturn(confirmWindowMock)
             .once();
-        controller.unassignValues(Collections.singleton("829ae9e7-38e4-48bc-a308-852ae0bf3888"));
+        controller.unassignValues(Collections.singleton(udmValueDto));
         expectLastCall().once();
         Windows.showNotificationWindow("1 value(s) were successfully unassigned");
         expectLastCall().once();

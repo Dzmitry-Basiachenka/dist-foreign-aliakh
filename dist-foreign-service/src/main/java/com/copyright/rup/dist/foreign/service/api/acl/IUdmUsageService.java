@@ -163,9 +163,9 @@ public interface IUdmUsageService {
     /**
      * Un-assigns provided usages.
      *
-     * @param udmUsageIds set of usage ids to un-assign
+     * @param udmUsages set of usages to un-assign
      */
-    void unassignUsages(Set<String> udmUsageIds);
+    void unassignUsages(Set<UdmUsageDto> udmUsages);
 
     /**
      * Updates UDM usages.

@@ -162,21 +162,21 @@ public class UdmValueControllerTest {
 
     @Test
     public void testAssignValues() {
-        Set<String> valueIds = Collections.singleton("303e2ed4-5ade-41e8-a989-2d73482209fd");
-        valueService.assignValues(valueIds);
+        Set<UdmValueDto> udmValues = Collections.singleton(new UdmValueDto());
+        valueService.assignValues(udmValues);
         expectLastCall().once();
         replay(valueService);
-        controller.assignValues(valueIds);
+        controller.assignValues(udmValues);
         verify(valueService);
     }
 
     @Test
     public void testUnassignValues() {
-        Set<String> valueIds = Collections.singleton("303e2ed4-5ade-41e8-a989-2d73482209fd");
-        valueService.unassignValues(valueIds);
+        Set<UdmValueDto> udmValues = Collections.singleton(new UdmValueDto());
+        valueService.unassignValues(udmValues);
         expectLastCall().once();
         replay(valueService);
-        controller.unassignValues(valueIds);
+        controller.unassignValues(udmValues);
         verify(valueService);
     }
 

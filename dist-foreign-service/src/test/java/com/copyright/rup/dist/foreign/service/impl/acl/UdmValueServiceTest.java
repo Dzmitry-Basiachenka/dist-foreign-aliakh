@@ -17,10 +17,12 @@ import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 
 import com.google.common.collect.ImmutableMap;
@@ -34,6 +36,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +55,13 @@ import java.util.Set;
 public class UdmValueServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final String UDM_VALUE_UID_1 = "15c8a2a6-1e9d-453b-947c-14dbd92c5e15";
+    private static final String UDM_VALUE_UID_2 = "29207059-af0a-440a-abc7-b6e016c64677";
+    private static final String UDM_VALUE_UID_3 = "33228700-ed0d-44ae-a3b7-2f1bb3440f8e";
 
     private IUdmValueRepository udmValueRepository;
+    private IUdmValueAuditService udmValueAuditService;
     private IUdmBaselineRepository udmBaselineRepository;
     private IRightsService rightsService;
     private IUdmValueService udmValueService;
@@ -60,12 +69,14 @@ public class UdmValueServiceTest {
     @Before
     public void setUp() {
         udmValueRepository = createMock(IUdmValueRepository.class);
+        udmValueAuditService = createMock(IUdmValueAuditService.class);
         udmBaselineRepository = createMock(IUdmBaselineRepository.class);
         rightsService = createMock(IRightsService.class);
         udmValueService = new UdmValueService();
         Whitebox.setInternalState(udmValueService, "currencyCodesToCurrencyNamesMap",
             ImmutableMap.of("USD", "US Dollar", "EUR", "Euro"));
         Whitebox.setInternalState(udmValueService, udmValueRepository);
+        Whitebox.setInternalState(udmValueService, udmValueAuditService);
         Whitebox.setInternalState(udmValueService, udmBaselineRepository);
         Whitebox.setInternalState(udmValueService, rightsService);
     }
@@ -118,25 +129,47 @@ public class UdmValueServiceTest {
     @Test
     public void testAssignValues() {
         mockStatic(RupContextUtils.class);
-        Set<String> valueIds = Collections.singleton("49efb6c9-acb8-43e5-912e-607597581713");
+        UdmValueDto udmValue1 = new UdmValueDto();
+        udmValue1.setId(UDM_VALUE_UID_1);
+        UdmValueDto udmValue2 = new UdmValueDto();
+        udmValue2.setId(UDM_VALUE_UID_2);
+        udmValue2.setAssignee(ASSIGNEE);
+        UdmValueDto udmValue3 = new UdmValueDto();
+        udmValue3.setId(UDM_VALUE_UID_3);
+        udmValue3.setAssignee(USER_NAME);
+        Set<UdmValueDto> udmValues = new LinkedHashSet<>(Arrays.asList(udmValue1, udmValue2, udmValue3));
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmValueRepository.updateAssignee(valueIds, USER_NAME, USER_NAME);
+        udmValueRepository.updateAssignee(new HashSet<>(Arrays.asList(udmValue1.getId(), udmValue2.getId())),
+            USER_NAME, USER_NAME);
         expectLastCall().once();
-        replay(udmValueRepository, RupContextUtils.class);
-        udmValueService.assignValues(valueIds);
-        verify(udmValueRepository, RupContextUtils.class);
+        udmValueAuditService.logAction(udmValue1.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Value was assigned to ‘user@copyright.com’");
+        expectLastCall().once();
+        udmValueAuditService.logAction(udmValue2.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. " +
+                "New assignee is 'user@copyright.com'");
+        expectLastCall().once();
+        replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
+        udmValueService.assignValues(udmValues);
+        verify(udmValueRepository, udmValueAuditService, RupContextUtils.class);
     }
 
     @Test
     public void testUnassignValues() {
         mockStatic(RupContextUtils.class);
-        Set<String> valueIds = Collections.singleton("49efb6c9-acb8-43e5-912e-607597581713");
+        UdmValueDto udmValue = new UdmValueDto();
+        udmValue.setId(UDM_VALUE_UID_1);
+        udmValue.setAssignee(ASSIGNEE);
+        Set<UdmValueDto> udmValues = Collections.singleton(udmValue);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        udmValueRepository.updateAssignee(valueIds, null, USER_NAME);
+        udmValueRepository.updateAssignee(Collections.singleton(udmValue.getId()), null, USER_NAME);
         expectLastCall().once();
-        replay(udmValueRepository, RupContextUtils.class);
-        udmValueService.unassignValues(valueIds);
-        verify(udmValueRepository, RupContextUtils.class);
+        udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. Value is not assigned to anyone");
+        expectLastCall().once();
+        replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
+        udmValueService.unassignValues(udmValues);
+        verify(udmValueRepository, udmValueAuditService, RupContextUtils.class);
     }
 
     @Test

@@ -294,11 +294,11 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testUnassignUsages() {
-        Set<String> usageIds = Collections.singleton("b60a726a-39e8-4303-abe1-6816da05b858");
-        udmUsageService.unassignUsages(usageIds);
+        Set<UdmUsageDto> udmUsages = Collections.singleton(new UdmUsageDto());
+        udmUsageService.unassignUsages(udmUsages);
         expectLastCall().once();
         replay(udmUsageService);
-        controller.unassignUsages(usageIds);
+        controller.unassignUsages(udmUsages);
         verify(udmUsageService);
     }
 

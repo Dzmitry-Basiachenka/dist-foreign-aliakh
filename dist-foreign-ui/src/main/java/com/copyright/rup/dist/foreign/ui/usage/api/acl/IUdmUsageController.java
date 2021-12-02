@@ -138,9 +138,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Un-assigns provided usages.
      *
-     * @param usageIds set of usage ids to un-assign
+     * @param udmUsages set of usage to un-assign
      */
-    void unassignUsages(Set<String> usageIds);
+    void unassignUsages(Set<UdmUsageDto> udmUsages);
 
     /**
      * Updates UDM usage.
