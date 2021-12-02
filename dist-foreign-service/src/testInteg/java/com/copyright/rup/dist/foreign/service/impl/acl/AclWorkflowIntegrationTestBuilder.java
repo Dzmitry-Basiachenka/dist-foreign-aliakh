@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -246,7 +247,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     udmValueDto.setContentFlag(true);
                     udmValueDto.setContentUnitPrice(new BigDecimal("15"));
                     udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
-                    udmValueService.updateValue(udmValueDto);
+                    // TODO verify audit
+                    udmValueService.updateValue(udmValueDto, new UdmValueAuditFieldToValuesMap(udmValueDto));
                 });
             assertEquals(expectedCountOfPublishedValues,
                 udmValueService.publishToBaseline(expectedUdmBatch.getPeriod()));

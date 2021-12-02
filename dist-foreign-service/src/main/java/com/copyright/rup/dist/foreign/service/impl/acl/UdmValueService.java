@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -61,11 +62,14 @@ public class UdmValueService implements IUdmValueService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
-    public void updateValue(UdmValueDto udmValueDto) {
+    @Transactional
+    public void updateValue(UdmValueDto udmValueDto, UdmValueAuditFieldToValuesMap fieldToValueChangesMap) {
         String userName = RupContextUtils.getUserName();
         LOGGER.debug("Update UDM value. Started. Value={}, UserName={}", udmValueDto, userName);
         udmValueDto.setUpdateUser(userName);
         udmValueRepository.update(udmValueDto);
+        fieldToValueChangesMap.getEditAuditReasons().forEach(reason ->
+            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.USAGE_EDIT, reason));
         LOGGER.debug("Update UDM value. Finished. Value={}, UserName={}", udmValueDto, userName);
     }
 

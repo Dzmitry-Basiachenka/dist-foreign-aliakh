@@ -29,6 +29,10 @@ public class Currency {
         this.description = description;
     }
 
+    public String getCodeAndDescription() {
+        return String.format("%s - %s", getCode(), getDescription());
+    }
+
     public String getCode() {
         return code;
     }

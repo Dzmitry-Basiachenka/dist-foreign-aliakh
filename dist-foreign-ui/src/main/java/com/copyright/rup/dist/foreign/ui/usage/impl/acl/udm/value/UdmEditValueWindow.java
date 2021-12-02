@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
@@ -84,6 +85,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private final TextField contentFlagField = new TextField();
     private final TextField contentUnitPriceField = new TextField();
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
+    private final UdmValueAuditFieldToValuesMap fieldToValueChangesMap;
 
     /**
      * Constructor.
@@ -97,6 +99,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         controller = valueController;
         udmValue = selectedUdmValue;
         saveButtonClickListener = clickListener;
+        fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValue);
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_value"));
         setResizable(false);
@@ -279,22 +282,28 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private HorizontalLayout buildReadOnlyLayout(TextField textField, String caption,
                                                  ValueProvider<UdmValueDto, String> getter,
                                                  Setter<UdmValueDto, String> setter) {
+        String fieldName = ForeignUi.getMessage(caption);
         textField.setReadOnly(true);
         textField.setSizeFull();
         binder.forField(textField).bind(getter, setter);
-        return buildCommonLayout(textField, ForeignUi.getMessage(caption));
+        textField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
+        return buildCommonLayout(textField, fieldName);
     }
 
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmValueDto, String> getter,
                                                        Setter<UdmValueDto, String> setter, String styleName) {
+        String fieldName = ForeignUi.getMessage(caption);
         textField.setSizeFull();
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
             .bind(getter, setter);
+        textField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         VaadinUtils.addComponentStyle(textField, styleName);
-        return buildCommonLayout(textField, ForeignUi.getMessage(caption));
+        return buildCommonLayout(textField, fieldName);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -303,7 +312,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmValue);
-                controller.updateValue(udmValue);
+                controller.updateValue(udmValue, fieldToValueChangesMap);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
@@ -318,6 +327,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     }
 
     private HorizontalLayout initValueStatusLayout() {
+        String fieldName = ForeignUi.getMessage("label.value_status");
         valueStatusComboBox.setSizeFull();
         valueStatusComboBox.setEmptySelectionAllowed(false);
         valueStatusComboBox.setItems(UdmValueStatusEnum.NEW,
@@ -326,28 +336,37 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
             UdmValueStatusEnum.RESEARCH_COMPLETE);
         valueStatusComboBox.setSelectedItem(udmValue.getStatus());
-        valueStatusComboBox.addValueChangeListener(event -> binder.validate());
+        valueStatusComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name());
+            binder.validate();
+        });
         binder.forField(valueStatusComboBox).bind(UdmValueDto::getStatus, UdmValueDto::setStatus);
         VaadinUtils.addComponentStyle(valueStatusComboBox, "udm-value-edit-value-status-combo-box");
-        return buildCommonLayout(valueStatusComboBox, ForeignUi.getMessage("label.value_status"));
+        return buildCommonLayout(valueStatusComboBox, fieldName);
     }
 
     private HorizontalLayout buildPubTypeLayout() {
+        String fieldName = ForeignUi.getMessage("label.pub_type");
         pubTypeComboBox.setSizeFull();
         List<PublicationType> pubTypes = controller.getAllPublicationTypes();
         pubTypeComboBox.setItems(pubTypes);
         pubTypeComboBox.setPageLength(12);
         pubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
-            ? String.format("%s - %s", value.getName(), value.getDescription())
+            ? value.getNameAndDescription()
             : StringUtils.EMPTY);
         pubTypeComboBox.setSelectedItem(udmValue.getPublicationType());
-        pubTypeComboBox.addValueChangeListener(event -> binder.validate());
+        pubTypeComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
+                ? event.getValue().getNameAndDescription() : null);
+            binder.validate();
+        });
         binder.forField(pubTypeComboBox).bind(UdmValueDto::getPublicationType, UdmValueDto::setPublicationType);
         VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-value-edit-pub-type-combo-box");
-        return buildCommonLayout(pubTypeComboBox, ForeignUi.getMessage("label.pub_type"));
+        return buildCommonLayout(pubTypeComboBox, fieldName);
     }
 
     private HorizontalLayout buildPriceLayout() {
+        String fieldName = ForeignUi.getMessage("label.price");
         priceField.setSizeFull();
         binder.forField(priceField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
@@ -360,21 +379,23 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (bean, value) -> bean.setPrice(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         priceField.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
                 recalculateFlag(priceField, priceFlagField);
             }
         });
         VaadinUtils.addComponentStyle(priceField, "udm-value-edit-price-field");
-        return buildCommonLayout(priceField, ForeignUi.getMessage("label.price"));
+        return buildCommonLayout(priceField, fieldName);
     }
 
     private HorizontalLayout buildCurrencyLayout() {
+        String fieldName = ForeignUi.getMessage("label.currency");
         currencyComboBox.setSizeFull();
         List<Currency> currencies = controller.getAllCurrencies();
         currencyComboBox.setItems(currencies);
         currencyComboBox.setItemCaptionGenerator(currency -> Objects.nonNull(currency)
-            ? String.format("%s - %s", currency.getCode(), currency.getDescription())
+            ? currency.getCodeAndDescription()
             : StringUtils.EMPTY);
         currencyComboBox.setSelectedItem(currencies
             .stream()
@@ -382,6 +403,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .findFirst()
             .orElse(null));
         currencyComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
+                ? event.getValue().getCodeAndDescription() : null);
             binder.validate();
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
@@ -397,31 +420,42 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                     .orElse(null),
                 (bean, value) -> bean.setCurrency(Objects.nonNull(value) ? value.getCode() : null));
         VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-edit-currency-combo-box");
-        return buildCommonLayout(currencyComboBox, ForeignUi.getMessage("label.currency"));
+        return buildCommonLayout(currencyComboBox, fieldName);
     }
 
     private HorizontalLayout buildPriceTypeLayout() {
+        String fieldName = ForeignUi.getMessage("label.price_type");
         priceTypeComboBox.setSizeFull();
         priceTypeComboBox.setItems(controller.getAllPriceTypes());
         priceTypeComboBox.setSelectedItem(udmValue.getPriceType());
-        priceTypeComboBox.addValueChangeListener(event -> binder.validate());
+        priceTypeComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue());
+            binder.validate();
+        });
         binder.forField(priceTypeComboBox).bind(UdmValueDto::getPriceType, UdmValueDto::setPriceType);
         VaadinUtils.addComponentStyle(priceTypeComboBox, "udm-value-edit-price-type-combo-box");
-        return buildCommonLayout(priceTypeComboBox, ForeignUi.getMessage("label.price_type"));
+        return buildCommonLayout(priceTypeComboBox, fieldName);
     }
 
     private HorizontalLayout buildPriceAccessTypeLayout() {
+        String fieldName = ForeignUi.getMessage("label.price_access_type");
         priceAccessTypeComboBox.setSizeFull();
         priceAccessTypeComboBox.setItems(controller.getAllPriceAccessTypes());
         priceAccessTypeComboBox.setSelectedItem(udmValue.getPriceAccessType());
-        priceAccessTypeComboBox.addValueChangeListener(event -> binder.validate());
+        priceAccessTypeComboBox.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue());
+            binder.validate();
+        });
         binder.forField(priceAccessTypeComboBox).bind(UdmValueDto::getPriceAccessType, UdmValueDto::setPriceAccessType);
         VaadinUtils.addComponentStyle(priceAccessTypeComboBox, "udm-value-edit-price-access-type-combo-box");
-        return buildCommonLayout(priceAccessTypeComboBox, ForeignUi.getMessage("label.price_access_type"));
+        return buildCommonLayout(priceAccessTypeComboBox, fieldName);
     }
 
     private HorizontalLayout buildPriceYearLayout() {
+        String fieldName = ForeignUi.getMessage("label.price_year");
         priceYearField.setSizeFull();
+        priceYearField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         binder.forField(priceYearField)
             .withValidator(value -> StringUtils.isBlank(value) || StringUtils.isNumeric(StringUtils.trim(value)),
                 ForeignUi.getMessage("field.error.not_numeric"))
@@ -429,11 +463,14 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .bind(bean -> Objects.toString(bean.getPriceYear(), StringUtils.EMPTY),
                 (bean, value) -> bean.setPriceYear(NumberUtils.createInteger(StringUtils.trimToNull(value))));
         VaadinUtils.addComponentStyle(priceYearField, "udm-value-edit-price-year-field");
-        return buildCommonLayout(priceYearField, ForeignUi.getMessage("label.price_year"));
+        return buildCommonLayout(priceYearField, fieldName);
     }
 
     private HorizontalLayout buildPriceSourceLayout() {
+        String fieldName = ForeignUi.getMessage("label.price_source");
         priceSourceField.setSizeFull();
+        priceSourceField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         binder.forField(priceSourceField)
             .withValidator(value -> StringUtils.isNotBlank(value) || StringUtils.isBlank(priceField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
@@ -441,10 +478,11 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
             .bind(UdmValueDto::getPriceSource, UdmValueDto::setPriceSource);
         VaadinUtils.addComponentStyle(priceSourceField, "udm-value-edit-price-source-field");
-        return buildCommonLayout(priceSourceField, ForeignUi.getMessage("label.price_source"));
+        return buildCommonLayout(priceSourceField, fieldName);
     }
 
     private HorizontalLayout buildContentLayout() {
+        String fieldName = ForeignUi.getMessage("label.content");
         contentField.setSizeFull();
         binder.forField(contentField)
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
@@ -457,17 +495,21 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (bean, value) -> bean.setContent(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         contentField.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             if (event.isUserOriginated()) {
                 recalculateContentUnitPrice();
                 recalculateFlag(contentField, contentFlagField);
             }
         });
         VaadinUtils.addComponentStyle(contentField, "udm-value-edit-content-field");
-        return buildCommonLayout(contentField, ForeignUi.getMessage("label.content"));
+        return buildCommonLayout(contentField, fieldName);
     }
 
     private HorizontalLayout buildContentSourceLayout() {
+        String fieldName = ForeignUi.getMessage("label.content_source");
         contentSourceField.setSizeFull();
+        contentSourceField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         binder.forField(contentSourceField)
             .withValidator(value -> StringUtils.isNotBlank(value) || StringUtils.isBlank(contentField.getValue()),
                 ForeignUi.getMessage("field.error.empty_if_content_specified"))
@@ -475,6 +517,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
             .bind(UdmValueDto::getContentSource, UdmValueDto::setContentSource);
         VaadinUtils.addComponentStyle(contentSourceField, "udm-value-edit-content-source-field");
-        return buildCommonLayout(contentSourceField, ForeignUi.getMessage("label.content_source"));
+        return buildCommonLayout(contentSourceField, fieldName);
     }
 }
