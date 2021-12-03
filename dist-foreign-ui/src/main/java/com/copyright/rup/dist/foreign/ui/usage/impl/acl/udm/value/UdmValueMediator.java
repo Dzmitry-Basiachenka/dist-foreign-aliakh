@@ -19,7 +19,6 @@ public class UdmValueMediator implements IMediator {
 
     private Button populateButton;
     private MenuBar assignmentMenuBar;
-    private Button editButton;
     private Button calculateProxyValuesButton;
     private Button publishButton;
 
@@ -30,7 +29,6 @@ public class UdmValueMediator implements IMediator {
         boolean isResearcher = ForeignSecurityUtils.hasResearcherPermission();
         populateButton.setVisible(isSpecialist);
         assignmentMenuBar.setVisible(isSpecialist || isManager || isResearcher);
-        editButton.setVisible(isSpecialist || isManager || isResearcher);
         calculateProxyValuesButton.setVisible(isSpecialist);
         publishButton.setVisible(isSpecialist);
     }
@@ -41,10 +39,6 @@ public class UdmValueMediator implements IMediator {
 
     public void setAssignmentMenuBar(MenuBar assignmentMenuBar) {
         this.assignmentMenuBar = assignmentMenuBar;
-    }
-
-    public void setEditButton(Button editButton) {
-        this.editButton = editButton;
     }
 
     public void setCalculateProxyValuesButton(Button calculateProxyValuesButton) {

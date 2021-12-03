@@ -37,7 +37,6 @@ public class UdmValueMediatorTest {
 
     private final Button populateButton = new Button("Populate Value Batch");
     private final MenuBar assignmentMenuBar = new MenuBar();
-    private final Button editButton = new Button("Edit Value");
     private final Button calculateProxyValuesButton = new Button("Calculate Proxies");
     private final Button publishButton = new Button("Publish");
     private UdmValueMediator mediator;
@@ -47,7 +46,6 @@ public class UdmValueMediatorTest {
         mediator = new UdmValueMediator();
         mediator.setPopulateButton(populateButton);
         mediator.setAssignmentMenuBar(assignmentMenuBar);
-        mediator.setEditButton(editButton);
         mediator.setCalculateProxyValuesButton(calculateProxyValuesButton);
         mediator.setPublishButton(publishButton);
     }
@@ -59,7 +57,6 @@ public class UdmValueMediatorTest {
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
         assertFalse(assignmentMenuBar.isVisible());
-        assertFalse(editButton.isVisible());
         assertFalse(calculateProxyValuesButton.isVisible());
         assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
@@ -72,7 +69,6 @@ public class UdmValueMediatorTest {
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertFalse(calculateProxyValuesButton.isVisible());
         assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
@@ -85,7 +81,6 @@ public class UdmValueMediatorTest {
         mediator.applyPermissions();
         assertTrue(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertTrue(calculateProxyValuesButton.isVisible());
         assertTrue(publishButton.isVisible());
         verify(SecurityUtils.class);
@@ -98,7 +93,6 @@ public class UdmValueMediatorTest {
         mediator.applyPermissions();
         assertFalse(populateButton.isVisible());
         assertTrue(assignmentMenuBar.isVisible());
-        assertTrue(editButton.isVisible());
         assertFalse(calculateProxyValuesButton.isVisible());
         assertFalse(publishButton.isVisible());
         verify(SecurityUtils.class);
