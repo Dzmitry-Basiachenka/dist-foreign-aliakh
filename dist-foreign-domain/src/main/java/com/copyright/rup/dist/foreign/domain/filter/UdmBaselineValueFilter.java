@@ -78,8 +78,7 @@ public class UdmBaselineValueFilter {
         return systemTitleExpression;
     }
 
-    public void setSystemTitleExpression(
-        FilterExpression<String> systemTitleExpression) {
+    public void setSystemTitleExpression(FilterExpression<String> systemTitleExpression) {
         this.systemTitleExpression = systemTitleExpression;
     }
 
@@ -112,8 +111,7 @@ public class UdmBaselineValueFilter {
         return contentExpression;
     }
 
-    public void setContentExpression(
-        FilterExpression<Number> contentExpression) {
+    public void setContentExpression(FilterExpression<Number> contentExpression) {
         this.contentExpression = contentExpression;
     }
 
