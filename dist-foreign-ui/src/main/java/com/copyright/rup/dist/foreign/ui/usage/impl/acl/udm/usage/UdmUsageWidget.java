@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -246,17 +247,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         assignmentMenuBar = new MenuBar();
         MenuBar.MenuItem item = assignmentMenuBar.addItem(ForeignUi.getMessage("menu.caption.assignment"), null, null);
         assignItem = item.addItem(ForeignUi.getMessage("menu.item.assign"), null,
-            selectedItem -> {
-                Set<UdmUsageDto> udmUsages = udmUsagesGrid.getSelectedItems();
-                int usagesCount = udmUsages.size();
-                Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.assign", usagesCount),
-                    () -> {
-                        controller.assignUsages(udmUsages);
-                        refresh();
-                        Windows.showNotificationWindow(
-                            ForeignUi.getMessage("message.notification.assignment_completed", usagesCount));
-                    });
-            });
+            selectedItem -> showAssignmentConfirmDialog(udmUsages -> controller.assignUsages(udmUsages),
+                "message.confirm.assign", "message.notification.assignment_completed"));
         assignItem.setEnabled(false);
         unassignItem = item.addItem(ForeignUi.getMessage("menu.item.unassign"), null,
             selectedItem -> {
@@ -264,15 +256,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     .stream()
                     .allMatch(udmUsageDto -> userName.equals(udmUsageDto.getAssignee()));
                 if (isUnassignmentAllowed) {
-                    Set<UdmUsageDto> udmUsages = udmUsagesGrid.getSelectedItems();
-                    int usagesCount = udmUsages.size();
-                    Windows.showConfirmDialog(ForeignUi.getMessage("message.confirm.unassign", usagesCount),
-                        () -> {
-                            controller.unassignUsages(udmUsages);
-                            refresh();
-                            Windows.showNotificationWindow(
-                                ForeignUi.getMessage("message.notification.unassignment_completed", usagesCount));
-                        });
+                    showAssignmentConfirmDialog(udmUsages -> controller.unassignUsages(udmUsages),
+                        "message.confirm.unassign", "message.notification.unassignment_completed");
                 } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.error.unassign"));
                 }
@@ -281,19 +266,29 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         VaadinUtils.addComponentStyle(assignmentMenuBar, "v-menubar-df");
     }
 
+    private void showAssignmentConfirmDialog(Consumer<Set<UdmUsageDto>> actionConsumer, String confirmMessage,
+                                             String completeMessage) {
+        Set<UdmUsageDto> udmUsages = udmUsagesGrid.getSelectedItems();
+        int usagesCount = udmUsages.size();
+        Windows.showConfirmDialog(ForeignUi.getMessage(confirmMessage, usagesCount),
+            () -> {
+                actionConsumer.accept(udmUsages);
+                refresh();
+                Windows.showNotificationWindow(ForeignUi.getMessage(completeMessage, usagesCount));
+            });
+    }
+
     private void initUsagesGrid() {
         dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> {
                 int size = controller.getBeansCount();
-                if (isNotViewOnlyPermission()) {
-                    switchSelectAllCheckBoxVisibility(size);
-                }
                 if (0 < size) {
                     udmUsagesGrid.removeStyleName(EMPTY_STYLE_NAME);
                 } else {
                     udmUsagesGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
+                switchSelectAllCheckBoxVisibility(size);
                 udmUsagesGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
                 return size;
             });
@@ -415,11 +410,13 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     }
 
     private void switchSelectAllCheckBoxVisibility(int beansCount) {
-        gridSelectionModel.setSelectAllCheckBoxVisibility(
-            0 == beansCount || beansCount > controller.getUdmRecordThreshold()
-                ? SelectAllCheckBoxVisibility.HIDDEN
-                : SelectAllCheckBoxVisibility.VISIBLE);
-        gridSelectionModel.beforeClientResponse(false);
+        if (isNotViewOnlyPermission()) {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(
+                0 == beansCount || beansCount > controller.getUdmRecordThreshold()
+                    ? SelectAllCheckBoxVisibility.HIDDEN
+                    : SelectAllCheckBoxVisibility.VISIBLE);
+            gridSelectionModel.beforeClientResponse(false);
+        }
     }
 
     private void initUsageWindowByDoubleClick() {
@@ -427,19 +424,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             if (event.getMouseEventDetails().isDoubleClick()) {
                 UdmUsageDto udmUsageDto = event.getItem();
                 if (isNotViewOnlyPermission()) {
-                    CloseListener closeListener = closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected);
-                    Supplier<Window> editWindowSupplier = () -> {
-                        UdmEditUsageWindow editWindow = new UdmEditUsageWindow(controller, udmUsageDto,
-                            saveEvent -> refresh());
-                        editWindow.addCloseListener(closeListener);
-                        return editWindow;
-                    };
-                    Supplier<Window> viewWindowSupplier = () -> {
-                        UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(udmUsageDto);
-                        viewWindow.addCloseListener(closeListener);
-                        return viewWindow;
-                    };
-                    initUsageWindow(udmUsageDto, editWindowSupplier, viewWindowSupplier);
+                    initUsageWindow(udmUsageDto);
                 } else {
                     UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(udmUsageDto);
                     viewWindow.addCloseListener(closeEvent -> udmUsagesGrid.deselect(udmUsageDto));
@@ -450,29 +435,36 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
         });
     }
 
-    private void initUsageWindow(UdmUsageDto selectedUsage, Supplier<Window> editWindow, Supplier<Window> viewWindow) {
+    private void initUsageWindow(UdmUsageDto selectedUsage) {
         if (hasResearcherPermission) {
-            initUsageWindowForResearcher(selectedUsage, editWindow, viewWindow);
+            initUsageWindowForResearcher(selectedUsage);
         } else {
-            initSingleEditWindow(selectedUsage, editWindow);
+            initSingleEditWindow(selectedUsage);
         }
     }
 
-    private void initUsageWindowForResearcher(UdmUsageDto selectedUsage, Supplier<Window> editWindow,
-                                              Supplier<Window> viewWindow) {
+    private void initUsageWindowForResearcher(UdmUsageDto selectedUsage) {
         if (isEditAllowedForResearcher(Collections.singleton(selectedUsage))) {
-            Windows.showModalWindow(editWindow.get());
+            showEditWindow(selectedUsage);
         } else {
-            Windows.showModalWindow(viewWindow.get());
+            UdmViewUsageWindow viewWindow = new UdmViewUsageWindow(selectedUsage);
+            viewWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected));
+            Windows.showModalWindow(viewWindow);
         }
     }
 
-    private void initSingleEditWindow(UdmUsageDto selectedUsage, Supplier<Window> editWindow) {
+    private void initSingleEditWindow(UdmUsageDto selectedUsage) {
         if (isUsagesProcessingCompleted(Collections.singleton(selectedUsage))) {
-            Windows.showModalWindow(editWindow.get());
+            showEditWindow(selectedUsage);
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage(USAGES_PROCESSING_ERROR_MESSAGE));
         }
+    }
+
+    private void showEditWindow(UdmUsageDto selectedUsage) {
+        UdmEditUsageWindow editWindow = new UdmEditUsageWindow(controller, selectedUsage, saveEvent -> refresh());
+        editWindow.addCloseListener(closeEvent -> restoreSelection(selectedUdmUsages, isAllSelected));
+        Windows.showModalWindow(editWindow);
     }
 
     private boolean isEditAllowedForResearcher(Set<UdmUsageDto> selectedUsages) {
