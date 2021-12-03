@@ -18,6 +18,180 @@
         <result property="comment" column="comment"/>
     </resultMap>
 
+    <sql id="selectDtosByFilterSql">
+        select
+            v.df_udm_value_baseline_uid,
+            v.period,
+            v.wr_wrk_inst,
+            v.system_title,
+            pt.name pub_type,
+            v.price,
+            v.price_flag,
+            v.content,
+            v.content_flag,
+            v.content_unit_price,
+            v.comment,
+            v.created_datetime,
+            v.updated_datetime,
+            v.created_by_user,
+            v.updated_by_user
+        from ${schema}.df_udm_value_baseline v
+        left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmBaselineValueMapper.udmBaselineValueFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUdmBaselineValueMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                v.updated_datetime desc
+            </otherwise>
+        </choose>,
+        v.df_udm_value_baseline_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_udm_value_baseline v
+        left join ${schema}.df_publication_type pt on v.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmBaselineValueMapper.udmBaselineValueFilter"/>
+    </sql>
+
+    <sql id="udmBaselineValueFilter">
+        <where>
+            <if test="filter.periods.size() > 0">
+                and
+                <foreach collection="filter.periods" item="period" open="(" separator=" or " close=")">
+                    v.period = #{period}
+                </foreach>
+            </if>
+            <if test="null != filter.wrWrkInst">
+                and v.wr_wrk_inst = #{filter.wrWrkInst}
+            </if>
+            <if test="null != filter.pubType">
+                <choose>
+                    <when test="null != filter.pubType.name">
+                        and pt.name = #{filter.pubType.name}
+                    </when>
+                </choose>
+            </if>
+            <if test="null != filter.priceFlag">
+                and v.price_flag = #{filter.priceFlag}
+            </if>
+            <if test="null != filter.contentFlag">
+                and content_flag = #{filter.contentFlag}
+            </if>
+            <if test="!filter.systemTitleExpression.isEmpty()">
+                <choose>
+                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemTitleExpression.operator">
+                        and v.system_title = #{filter.systemTitleExpression.fieldFirstValue}
+                    </when>
+                    <otherwise>
+                        and v.system_title ilike '%' || #{filter.systemTitleExpression.fieldFirstValue} || '%'
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="null != filter.comment">
+                and v.comment ilike '%' || #{filter.comment} || '%'
+            </if>
+            <if test="!filter.priceExpression.isEmpty()">
+                <include refid="IUdmBaselineValueMapper.filterExpression">
+                    <property name="column" value="v.price"/>
+                    <property name="operator" value="filter.priceExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.priceExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.priceExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.contentExpression.isEmpty()">
+                <include refid="IUdmBaselineValueMapper.filterExpression">
+                    <property name="column" value="v.content"/>
+                    <property name="operator" value="filter.contentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.contentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.contentExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.contentUnitPriceExpression.isEmpty()">
+                <include refid="IUdmBaselineValueMapper.filterExpression">
+                    <property name="column" value="v.content_unit_price"/>
+                    <property name="operator" value="filter.contentUnitPriceExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.contentUnitPriceExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.contentUnitPriceExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="filterExpression">
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
+            and ${column} &lt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
+            and ${column} &gt; ${fieldFirstValue}
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
+            and ${column} = '${fieldFirstValue}'
+        </if>
+        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
+            and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
+        </if>
+    </sql>
+
+    <sql id="chooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                v.df_udm_value_baseline_uid
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'period'">
+                v.period
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                v.wr_wrk_inst
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                v.system_title
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'pubType'">
+                pt.name
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'price'">
+                v.price
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'priceFlag'">
+                v.price_flag
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentFlag'">
+                v.content_flag
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'content'">
+                v.content
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPrice'">
+                v.content_unit_price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'comment'">
+                v.comment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateDate'">
+                v.updated_datetime
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateUser'">
+                v.updated_by_user
+                <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
     <!-- NOTE: Used for testing purposes only -->
     <select id="findValuesByPeriod" parameterType="int" resultMap="udmBaselineValueDtoResultMap">
         select
@@ -46,5 +220,14 @@
         select distinct period
         from ${schema}.df_udm_value_baseline
         order by period desc
+    </select>
+
+    <select id="findDtosByFilter" resultMap="udmBaselineValueDtoResultMap" parameterType="map"
+            fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmBaselineValueMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUdmBaselineValueMapper.selectCountByFilterSql"/>
     </select>
 </mapper>

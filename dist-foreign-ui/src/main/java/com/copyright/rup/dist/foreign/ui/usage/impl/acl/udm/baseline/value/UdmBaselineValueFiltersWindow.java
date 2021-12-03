@@ -79,7 +79,7 @@ public class UdmBaselineValueFiltersWindow extends Window {
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final Binder<UdmBaselineValueFilter> filterBinder = new Binder<>();
-    private final UdmBaselineValueFilter baselineValueFilter;
+    private UdmBaselineValueFilter baselineValueFilter;
     private final IUdmBaselineValueFilterController controller;
 
     /**
@@ -163,8 +163,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
         systemTitleOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.CONTAINS);
         filterBinder.forField(systemTitleField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
-            .bind(filter -> Objects.toString(filter.getSystemTitleExpression().getFieldFirstValue(), StringUtils.EMPTY),
-                (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(value.trim()));
+            .bind(filter -> Objects.toString(filter.getSystemTitleExpression().getFieldFirstValue(), null),
+                (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
         filterBinder.forField(systemTitleOperatorComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(
                     filter.getSystemTitleExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
@@ -282,8 +282,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
     private TextField initCommentLayout() {
         filterBinder.forField(commentField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
-            .bind(filter ->
-                Objects.toString(filter.getComment(), StringUtils.EMPTY), UdmBaselineValueFilter::setComment);
+            .bind(filter -> Objects.toString(filter.getComment(), null),
+                (filter, value) -> filter.setComment(StringUtils.trimToNull(value)));
         commentField.setSizeFull();
         VaadinUtils.addComponentStyle(commentField, "udm-baseline-value-comment-filter");
         return commentField;
@@ -294,7 +294,9 @@ public class UdmBaselineValueFiltersWindow extends Window {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             try {
-                filterBinder.writeBean(baselineValueFilter);
+                UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
+                filterBinder.writeBean(udmBaselineValueFilter);
+                this.baselineValueFilter = udmBaselineValueFilter;
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(

@@ -148,4 +148,9 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
             .setHidable(true)
             .setWidth(width);
     }
+
+    @Override
+    public void refresh() {
+        udmBaselineValueGrid.getDataProvider().refreshAll();
+    }
 }

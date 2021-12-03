@@ -3,9 +3,13 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 
@@ -42,6 +46,24 @@ public class UdmBaselineValueServiceTest {
         expect(baselineValueRepository.findPeriods()).andReturn(periods).once();
         replay(baselineValueRepository);
         assertEquals(periods, udmBaselineValueService.getPeriods());
+        verify(baselineValueRepository);
+    }
+
+    @Test
+    public void testGetValuesDtosEmptyFilter() {
+        List<UdmValueBaselineDto> result =
+            udmBaselineValueService.getValueDtos(new UdmBaselineValueFilter(), null, null);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testGetValuesCount() {
+        UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
+        filter.setComment("Comment");
+        expect(baselineValueRepository.findCountByFilter(filter)).andReturn(1).once();
+        replay(baselineValueRepository);
+        assertEquals(1, udmBaselineValueService.getBaselineValueCount(filter));
         verify(baselineValueRepository);
     }
 }

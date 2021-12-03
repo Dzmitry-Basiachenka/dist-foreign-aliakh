@@ -1,0 +1,17 @@
+[
+  {
+    "id": "123c31cc-4be5-41b6-9ab3-c36b0ff85d8d",
+    "period": 211112,
+    "wrWrkInst": 569856369,
+    "systemTitle": "Malcolm Gruel Jr",
+    "publicationType": "NP",
+    "priceFlag": false,
+    "price": 50.0000000000,
+    "content": 2.0000000000,
+    "contentUnitPrice": 25.0000000000,
+    "contentFlag": true,
+    "comment": "Comment",
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com"
+  }
+]
