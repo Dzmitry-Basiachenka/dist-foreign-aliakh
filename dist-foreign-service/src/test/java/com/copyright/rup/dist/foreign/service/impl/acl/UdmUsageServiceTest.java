@@ -224,6 +224,39 @@ public class UdmUsageServiceTest {
     }
 
     @Test
+    public void testUpdateBaselineUsageSpecialistOrManager() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
+        udmUsageDto.setAssignee(ASSIGNEE);
+        udmUsageDto.setBaselineFlag(true);
+        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        fieldToValueChangesMap.updateFieldValue("Action Reason", "Misc - see comments");
+        fieldToValueChangesMap.updateFieldValue("Reported Standard Number", null);
+        fieldToValueChangesMap.updateFieldValue("Reported Title", "Technical Journal");
+        baselineService.removeFromBaselineById(USAGE_UID);
+        expectLastCall().once();
+        udmUsageRepository.update(udmUsageDto);
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Reported Title' was edited. Old Value is 'Colloids and surfaces. B, Biointerfaces'. " +
+                "New Value is 'Technical Journal'");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Action Reason' was edited. Old Value is not specified. New Value is 'Misc - see comments'");
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Reported Standard Number' was edited. Old Value is '0927-7765'. New Value is not specified");
+        expectLastCall().once();
+        replay(udmUsageRepository, baselineService, udmUsageAuditService, RupContextUtils.class);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
+        assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
+        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, udmUsageDto.getStatus());
+        verify(udmUsageRepository, baselineService, udmUsageAuditService, RupContextUtils.class);
+    }
+
+    @Test
     public void testUpdateUsageResearcherStatusNew() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();

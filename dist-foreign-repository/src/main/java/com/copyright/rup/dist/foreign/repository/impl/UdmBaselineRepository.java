@@ -83,4 +83,9 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
             });
         return populatedValuesCount.get();
     }
+
+    @Override
+    public void removeUdmUsageFromBaselineById(String udmUsageId) {
+        update("IUdmBaselineMapper.removeUdmUsageFromBaselineById", Objects.requireNonNull(udmUsageId));
+    }
 }

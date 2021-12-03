@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -99,6 +100,15 @@ public class UdmBaselineServeTest {
         expect(baselineRepository.findPeriods()).andReturn(periods).once();
         replay(baselineRepository);
         assertEquals(periods, udmBaselineService.getPeriods());
+        verify(baselineRepository);
+    }
+
+    @Test
+    public void testRemoveFromBaselineById() {
+        baselineRepository.removeUdmUsageFromBaselineById("12d363a4-01b2-44cf-9ee6-55f045676915");
+        expectLastCall().once();
+        replay(baselineRepository);
+        udmBaselineService.removeFromBaselineById("12d363a4-01b2-44cf-9ee6-55f045676915");
         verify(baselineRepository);
     }
 }

@@ -274,4 +274,13 @@
         select count(*)
         from updated_usages_uids
     </select>
+
+    <update id="removeUdmUsageFromBaselineById" parameterType="string">
+        update ${schema}.df_udm_usage
+        set
+            is_baseline_flag = false,
+            baseline_created_by_user = null,
+            baseline_created_datetime = null
+        where df_udm_usage_uid = #{udmUsageId}
+    </update>
 </mapper>

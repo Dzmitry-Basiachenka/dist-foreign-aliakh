@@ -50,4 +50,9 @@ public class UdmBaselineService implements IUdmBaselineService {
     public List<Integer> getPeriods() {
         return baselineRepository.findPeriods();
     }
+
+    @Override
+    public void removeFromBaselineById(String udmUsageId) {
+        baselineRepository.removeUdmUsageFromBaselineById(udmUsageId);
+    }
 }

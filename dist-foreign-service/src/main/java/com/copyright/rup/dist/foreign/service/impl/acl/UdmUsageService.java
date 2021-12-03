@@ -138,6 +138,9 @@ public class UdmUsageService implements IUdmUsageService {
         if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
             udmUsageDto.setAssignee(null);
         }
+        if (!isResearcher && udmUsageDto.isBaselineFlag()) {
+            baselineService.removeFromBaselineById(udmUsageDto.getId());
+        }
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
         getUdmUsageEditAuditReasons(fieldToValueChangesMap).forEach(reason ->

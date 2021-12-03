@@ -78,4 +78,11 @@ public interface IUdmBaselineRepository {
      * @return count of updated usages
      */
     int populateValueId(Integer period, Map<Long, String> wrWrkInstToValueIdMap, String userName);
+
+    /**
+     * Removes UDM usage from baseline by id. Sets is_baseline_flag {@code false}.
+     *
+     * @param udmUsageId UDM usage id
+     */
+    void removeUdmUsageFromBaselineById(String udmUsageId);
 }
