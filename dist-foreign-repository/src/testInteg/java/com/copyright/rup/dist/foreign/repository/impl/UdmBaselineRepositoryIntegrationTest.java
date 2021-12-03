@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -11,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
@@ -25,6 +27,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -250,6 +253,19 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setPeriod(211412);
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211412.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
+    }
+
+    @Test
+    @TestData(fileName = "udm-baseline-repository-test-data-init-remove-udm-usage-from-baseline-by-id.groovy")
+    public void testRemoveUdmUsageFromBaselineById() {
+        List<UdmUsage> udmUsages =
+            udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
+        assertEquals(1, udmUsages.size());
+        assertTrue(udmUsages.get(0).isBaselineFlag());
+        baselineRepository.removeUdmUsageFromBaselineById("38ac4213-0515-42f5-a1bc-d4794f4eea8f");
+        udmUsages = udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
+        assertEquals(1, udmUsages.size());
+        assertFalse(udmUsages.get(0).isBaselineFlag());
     }
 
     private void verifyUdmBaselineDto(List<UdmBaselineDto> expectedUsages, List<UdmBaselineDto> actualUsages) {
