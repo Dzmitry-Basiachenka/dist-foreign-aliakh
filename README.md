@@ -1,3 +1,12 @@
+14.1.34
+-
+* B-70805 FDA: Audit Value Changes: Implement backend to write assign/unassign audit
+* B-69757 FDA: Edit functionality modification (Usages and Values): remove UDM usage from baseline after single edit
+* B-69757 FDA: Edit functionality modification (Usages and Values): remove edit button from UDM Value tab
+* B-69863 FDA: View baseline values: implement query to filter UDM baseline values and implement service and controller logic
+* B-68257 [Value] FDA & UDM: View proxy values: implement logic to retrieve proxy values
+* B-65868 Tech Debt: FDA: refine assign logic in UdmUsageWidget
+
 14.1.33
 -
 * B-69757 FDA: Edit functionality modification (Usages and Values): remove edit button from UDM Usage tab
