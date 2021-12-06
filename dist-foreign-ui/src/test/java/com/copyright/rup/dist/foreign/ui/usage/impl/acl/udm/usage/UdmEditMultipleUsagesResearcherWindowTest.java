@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -135,14 +135,14 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
             UsageStatusEnum.INELIGIBLE.name());
         fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", "122825347", "1234567");
         fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_REASON);
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
         UdmUsageDto udmUsageDto = buildExpectedUdmUsageDto();
-        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(udmUsageDto, fieldToValuesMap);
         udmUsages = Collections.singleton(buildUdmUsageDto());
         binder = createMock(Binder.class);

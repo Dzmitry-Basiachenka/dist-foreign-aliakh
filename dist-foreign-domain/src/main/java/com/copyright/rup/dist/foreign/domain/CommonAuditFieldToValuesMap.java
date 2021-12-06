@@ -102,7 +102,7 @@ class CommonAuditFieldToValuesMap {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("fieldToPairOfValuesMap", fieldToValueChangesMap)
+            .append("fieldToValueChangesMap", fieldToValueChangesMap)
             .toString();
     }
 }

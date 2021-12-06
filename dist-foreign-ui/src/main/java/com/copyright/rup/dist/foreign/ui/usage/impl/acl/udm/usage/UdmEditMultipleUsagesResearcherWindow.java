@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -64,7 +64,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
     private final Set<UdmUsageDto> selectedUdmUsages;
     private final ClickListener saveButtonClickListener;
     private final UdmUsageDto bindedUsageDto;
-    private Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
+    private Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap;
 
     /**
      * Constructor.
@@ -181,7 +181,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         udmUsageDtoToFieldValuesMap = new HashMap<>();
         checkStatusAndUpdateIneligibleReason();
         selectedUdmUsages.forEach(usageDto -> {
-            UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap();
+            UdmUsageAuditFieldToValuesMap valuesMap = new UdmUsageAuditFieldToValuesMap();
             setFieldAndAddAudit(usageDto::setStatus, UdmUsageDto::getStatus, bindedUsageDto, usageDto,
                 "label.detail_status", valuesMap);
             setFieldAndAddAudit(usageDto::setWrWrkInst, UdmUsageDto::getWrWrkInst, bindedUsageDto, usageDto,
@@ -204,14 +204,14 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
 
     private <T> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
                                          UdmUsageDto newUsage, UdmUsageDto oldUsage, String fieldName,
-                                         UdmAuditFieldToValuesMap valuesMap) {
+                                         UdmUsageAuditFieldToValuesMap valuesMap) {
         setFieldAndAddAudit(usageConsumer, usageFunction, usageFunction, newUsage, oldUsage, fieldName, valuesMap);
     }
 
     private <T, K> void setFieldAndAddAudit(Consumer<T> usageConsumer, Function<UdmUsageDto, T> usageFunction,
                                             Function<UdmUsageDto, K> auditFunction, UdmUsageDto newUsage,
                                             UdmUsageDto oldUsage, String fieldName,
-                                            UdmAuditFieldToValuesMap valuesMap) {
+                                            UdmUsageAuditFieldToValuesMap valuesMap) {
         T newUsageValue = usageFunction.apply(newUsage);
         K oldAuditValue = auditFunction.apply(oldUsage);
         K newAuditValue = auditFunction.apply(newUsage);

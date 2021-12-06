@@ -15,13 +15,12 @@ import java.util.function.Function;
  *
  * @author Uladzislau Shalamitski
  */
-// TODO rename to UdmUsageAuditFieldToValuesMap
-public class UdmAuditFieldToValuesMap extends CommonAuditFieldToValuesMap {
+public class UdmUsageAuditFieldToValuesMap extends CommonAuditFieldToValuesMap {
 
     /**
      * Constructor.
      */
-    public UdmAuditFieldToValuesMap() {
+    public UdmUsageAuditFieldToValuesMap() {
     }
 
     /**
@@ -29,7 +28,7 @@ public class UdmAuditFieldToValuesMap extends CommonAuditFieldToValuesMap {
      *
      * @param usageDto instance of {@link UdmUsageDto}
      */
-    public UdmAuditFieldToValuesMap(UdmUsageDto usageDto) {
+    public UdmUsageAuditFieldToValuesMap(UdmUsageDto usageDto) {
         getFieldToValueChangesMap().put("Detail Status", Objects.nonNull(usageDto.getStatus())
             ? buildPair(usageDto, usage -> usage.getStatus().name())
             : EMPTY_PAIR);
