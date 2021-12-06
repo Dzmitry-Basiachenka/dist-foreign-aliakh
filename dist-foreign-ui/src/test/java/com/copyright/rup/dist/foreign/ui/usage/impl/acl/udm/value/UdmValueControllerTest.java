@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
@@ -183,10 +184,11 @@ public class UdmValueControllerTest {
     @Test
     public void testUpdateValue() {
         UdmValueDto udmValueDto = new UdmValueDto();
-        valueService.updateValue(udmValueDto);
+        UdmValueAuditFieldToValuesMap fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValueDto);
+        valueService.updateValue(udmValueDto, fieldToValueChangesMap);
         expectLastCall().once();
         replay(valueService);
-        controller.updateValue(udmValueDto);
+        controller.updateValue(udmValueDto, fieldToValueChangesMap);
         verify(valueService);
     }
 

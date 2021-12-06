@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -105,7 +106,7 @@ public class UdmEditValueWindowTest {
     private static final boolean LAST_CONTENT_FLAG = true;
     private static final String LAST_CONTENT_SOURCE = "last content source";
     private static final String LAST_CONTENT_COMMENT = "last content comment";
-    private static final BigDecimal CONTENT = new BigDecimal("3");
+    private static final BigDecimal CONTENT = new BigDecimal("3.00");
     private static final String CONTENT_SOURCE = "content source";
     private static final String CONTENT_COMMENT = "content comment";
     private static final boolean CONTENT_FLAG = false;
@@ -499,7 +500,7 @@ public class UdmEditValueWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmValue);
         expectLastCall().once();
-        controller.updateValue(udmValue);
+        controller.updateValue(udmValue, new UdmValueAuditFieldToValuesMap(udmValue));
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

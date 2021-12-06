@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +59,6 @@ public class UdmUsageService implements IUdmUsageService {
     private static final BigDecimal DEFAULT_STATISTICAL_MULTIPLIER =
         BigDecimal.ONE.setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final Logger LOGGER = RupLogUtils.getLogger();
-    private static final String USAGE_EDIT_REASON = "The field '%s' was edited. Old Value is %s. New Value is %s";
-    private static final String NOT_SPECIFIED = "not specified";
 
     @Autowired
     private IUdmUsageRepository udmUsageRepository;
@@ -143,7 +139,7 @@ public class UdmUsageService implements IUdmUsageService {
         }
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
-        getUdmUsageEditAuditReasons(fieldToValueChangesMap).forEach(reason ->
+        fieldToValueChangesMap.getEditAuditReasons().forEach(reason ->
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, reason));
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
     }
@@ -322,20 +318,5 @@ public class UdmUsageService implements IUdmUsageService {
         int year = Integer.parseInt(stringPeriod.substring(0, 4));
         int month = Integer.parseInt(stringPeriod.substring(4, 6));
         return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
-    }
-
-    private List<String> getUdmUsageEditAuditReasons(UdmAuditFieldToValuesMap fieldToValueChangesMap) {
-        List<String> result = new ArrayList<>();
-        fieldToValueChangesMap.entrySet().forEach(fieldToValueChangesMapEntry -> {
-            Pair<String, String> valuePair = fieldToValueChangesMapEntry.getValue();
-            if (!Objects.equals(valuePair.getLeft(), valuePair.getRight())) {
-                String oldValue = StringUtils.isBlank(valuePair.getLeft())
-                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
-                String newValue = StringUtils.isBlank(valuePair.getRight())
-                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
-                result.add(String.format(USAGE_EDIT_REASON, fieldToValueChangesMapEntry.getKey(), oldValue, newValue));
-            }
-        });
-        return result;
     }
 }

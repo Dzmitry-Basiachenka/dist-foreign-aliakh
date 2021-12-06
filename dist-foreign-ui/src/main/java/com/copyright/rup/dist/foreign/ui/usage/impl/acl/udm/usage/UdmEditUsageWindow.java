@@ -234,13 +234,14 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private HorizontalLayout buildEditableStringLayout(TextField textField, String caption, int maxLength,
                                                        ValueProvider<UdmUsageDto, String> getter,
                                                        Setter<UdmUsageDto, String> setter, String styleName) {
-        textField.setSizeFull();
         String fieldName = ForeignUi.getMessage(caption);
+        textField.setSizeFull();
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
             .bind(getter, setter);
-        textField.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
+        textField.addValueChangeListener(event ->
+            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, fieldName);
     }
@@ -411,6 +412,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     }
 
     private HorizontalLayout initDetailStatusLayout() {
+        String fieldName = ForeignUi.getMessage("label.detail_status");
         usageStatusComboBox.setSizeFull();
         usageStatusComboBox.setEmptySelectionAllowed(false);
         HashSet<UsageStatusEnum> statuses = new LinkedHashSet<>();
@@ -418,7 +420,6 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         statuses.addAll(hasResearcherPermission
             ? EDIT_AVAILABLE_STATUSES_RESEARCHER : EDIT_AVAILABLE_STATUSES_SPECIALIST_AND_MANAGER);
         usageStatusComboBox.setItems(statuses);
-        String fieldName = ForeignUi.getMessage("label.detail_status");
         usageStatusComboBox.addValueChangeListener(event -> {
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name());
             binder.validate();

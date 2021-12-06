@@ -15,6 +15,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -86,12 +87,28 @@ public class UdmValueServiceTest {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmValueDto udmValueDto = new UdmValueDto();
+        udmValueDto.setId(UDM_VALUE_UID_1);
+        udmValueDto.setPriceComment("old price comment");
+        udmValueDto.setContentComment("old content comment");
+        UdmValueAuditFieldToValuesMap fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValueDto);
+        fieldToValueChangesMap.updateFieldValue("Price Comment", "new price comment");
+        fieldToValueChangesMap.updateFieldValue("Content Comment", null);
+        fieldToValueChangesMap.updateFieldValue("Comment", "new comment");
         udmValueRepository.update(udmValueDto);
         expectLastCall().once();
-        replay(udmValueRepository, RupContextUtils.class);
-        udmValueService.updateValue(udmValueDto);
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Price Comment' was edited. Old Value is 'old price comment'. New Value is 'new price comment'");
+        expectLastCall().once();
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Content Comment' was edited. Old Value is 'old content comment'. New Value is not specified");
+        expectLastCall().once();
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+            "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
+        expectLastCall().once();
+        replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
+        udmValueService.updateValue(udmValueDto, fieldToValueChangesMap);
         assertEquals(USER_NAME, udmValueDto.getUpdateUser());
-        verify(udmValueRepository, RupContextUtils.class);
+        verify(udmValueRepository, udmValueAuditService, RupContextUtils.class);
     }
 
     @Test

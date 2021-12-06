@@ -43,6 +43,10 @@ public class PublicationType extends StoredEntity<String> {
         this.weight = pubType.getWeight();
     }
 
+    public String getNameAndDescription() {
+        return String.format("%s - %s", getName(), getDescription());
+    }
+
     public String getName() {
         return name;
     }
