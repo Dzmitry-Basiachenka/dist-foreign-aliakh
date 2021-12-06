@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +31,12 @@ public class UdmProxyValueController extends CommonController<IUdmProxyValueWidg
 
     @Autowired
     private IUdmProxyValueFilterController udmProxyValueFilterController;
+    @Autowired
+    private IUdmProxyValueService udmProxyValueService;
 
     @Override
     public List<UdmProxyValueDto> getProxyValues() {
-        // TODO: Use service logic to get proxy values
-        return new ArrayList<>();
+        return udmProxyValueService.getDtosByFilter(udmProxyValueFilterController.getWidget().getAppliedFilter());
     }
 
     @Override

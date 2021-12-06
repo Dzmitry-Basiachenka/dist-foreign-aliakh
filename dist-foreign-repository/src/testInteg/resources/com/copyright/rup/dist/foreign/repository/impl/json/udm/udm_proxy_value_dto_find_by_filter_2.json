@@ -1,0 +1,14 @@
+[
+  {
+    "pubTypeName": "BK",
+    "period": 211006,
+    "contentUnitPrice": 500.0000000000,
+    "contentUnitPriceCount": 1
+  },
+  {
+    "pubTypeName": "NP",
+    "period": 211012,
+    "contentUnitPrice": 175.0000000000,
+    "contentUnitPriceCount": 2
+  }
+]

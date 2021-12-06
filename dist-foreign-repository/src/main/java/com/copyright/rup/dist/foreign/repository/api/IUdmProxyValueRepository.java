@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+
 import java.util.List;
 
 /**
@@ -43,4 +46,12 @@ public interface IUdmProxyValueRepository {
      * @return count of updated UDM values
      */
     int applyProxyValues(Integer period, String userName);
+
+    /**
+     * Finds list of {@link UdmProxyValueDto}s by UDM proxy value filter.
+     *
+     * @param filter instance of {@link UdmProxyValueFilter}
+     * @return the list of {@link UdmProxyValueDto}
+     */
+    List<UdmProxyValueDto> findDtosByFilter(UdmProxyValueFilter filter);
 }
