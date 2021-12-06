@@ -7,12 +7,14 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -64,18 +67,22 @@ public class UdmProxyValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = "udm-proxy-value-repository-test-data-init-delete-proxy-values.groovy")
     public void testDeleteProxyValues() {
-        assertEquals(1, findAllProxyValueDtos().size());
+        UdmProxyValueFilter filter = new UdmProxyValueFilter();
+        filter.setPeriods(ImmutableSet.of(PERIOD));
+        assertEquals(1, udmProxyValueRepository.findDtosByFilter(filter).size());
         udmProxyValueRepository.deleteProxyValues(PERIOD);
-        assertEquals(0, findAllProxyValueDtos().size());
+        assertEquals(0, udmProxyValueRepository.findDtosByFilter(filter).size());
     }
 
     @Test
     @TestData(fileName = "udm-proxy-value-repository-test-data-init-insert-proxy-values.groovy")
     public void testInsertProxyValues() {
+        UdmProxyValueFilter filter = new UdmProxyValueFilter();
+        filter.setPeriods(ImmutableSet.of(PERIOD));
         udmProxyValueRepository.insertProxyValues(PERIOD, USER_NAME);
         verifyProxyValueDtos(
             loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto.json"),
-            findAllProxyValueDtos());
+            udmProxyValueRepository.findDtosByFilter(filter));
     }
 
     @Test
@@ -91,6 +98,22 @@ public class UdmProxyValueRepositoryIntegrationTest {
     @TestData(fileName = "udm-proxy-value-repository-test-data-init-find-periods.groovy")
     public void testFindPeriods() {
         assertEquals(Arrays.asList(211012, 211006), udmProxyValueRepository.findPeriods());
+    }
+
+    @Test
+    @TestData(fileName = "udm-proxy-value-repository-test-data-init-find-dtos-by-filter.groovy")
+    public void testFindDtosByFilter() {
+        UdmProxyValueFilter filter = new UdmProxyValueFilter();
+        filter.setPeriods(ImmutableSet.of(211012, 211006));
+        verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto_find_by_filter_1.json"),
+            udmProxyValueRepository.findDtosByFilter(filter));
+        filter.setPubTypeNames(ImmutableSet.of("NP", "BK"));
+        verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto_find_by_filter_1.json"),
+            udmProxyValueRepository.findDtosByFilter(filter));
+        filter.setPeriods(Collections.emptySet());
+        verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto_find_by_filter_2.json"),
+            udmProxyValueRepository.findDtosByFilter(filter));
+        filter.setPubTypeNames(Collections.emptySet());
     }
 
     private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues,
@@ -116,10 +139,6 @@ public class UdmProxyValueRepositoryIntegrationTest {
             throw new AssertionError(e);
         }
         return proxyValues;
-    }
-
-    private List<UdmProxyValueDto> findAllProxyValueDtos() {
-        return sqlSessionTemplate.selectList("IUdmProxyValueMapper.findAllDtos");
     }
 
     private void verifyValueDtos(List<UdmValueDto> expectedValues,

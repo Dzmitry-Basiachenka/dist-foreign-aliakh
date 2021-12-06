@@ -11,6 +11,23 @@
         <result property="contentUnitPriceCount" column="content_unit_price_count"/>
     </resultMap>
 
+    <sql id="udmProxyValueFilter">
+        <where>
+            <if test="filter.periods.size() > 0">
+                and
+                <foreach collection="filter.periods" item="period" open="(" separator=" or " close=")">
+                    period = #{period}
+                </foreach>
+            </if>
+            <if test="filter.pubTypeNames.size() > 0">
+                and
+                <foreach collection="filter.pubTypeNames" item="pubTypeName" open="(" separator=" or " close=")">
+                    pt.name = #{pubTypeName}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
     <delete id="deleteProxyValues" parameterType="int">
         delete from ${schema}.df_udm_proxy_value
         where period = #{period}
@@ -57,9 +74,7 @@
         from updated_usages_uids
     </select>
 
-    <!-- NOTE: Used for testing purposes only -->
-    <!-- TODO try to replace with findByFilter when implemented -->
-    <select id="findAllDtos" resultMap="udmProxyValueDtoResultMap">
+    <select id="findDtosByFilter" resultMap="udmProxyValueDtoResultMap" parameterType="map">
         select
             pt.name pub_type_name,
             period,
@@ -67,6 +82,7 @@
             content_unit_price_count
         from ${schema}.df_udm_proxy_value pv
         join ${schema}.df_publication_type pt on pv.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmProxyValueMapper.udmProxyValueFilter"/>
         order by period, pub_type_name
     </select>
 

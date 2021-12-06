@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+
 import java.util.List;
 
 /**
@@ -27,4 +30,12 @@ public interface IUdmProxyValueService {
      * @return count of updated UDM values
      */
     int calculateProxyValues(Integer period);
+
+    /**
+     * Gets list of {@link UdmProxyValueDto}s by UDM proxy value filter.
+     *
+     * @param filter instance of {@link UdmProxyValueFilter}
+     * @return the list of {@link UdmProxyValueDto}
+     */
+    List<UdmProxyValueDto> getDtosByFilter(UdmProxyValueFilter filter);
 }

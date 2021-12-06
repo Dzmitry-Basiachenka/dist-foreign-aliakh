@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
@@ -46,5 +48,12 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
         parameters.put("period", Objects.requireNonNull(period));
         parameters.put("updateUser", userName);
         return selectOne("IUdmProxyValueMapper.applyProxyValues", parameters);
+    }
+
+    @Override
+    public List<UdmProxyValueDto> findDtosByFilter(UdmProxyValueFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        return selectList("IUdmProxyValueMapper.findDtosByFilter", parameters);
     }
 }

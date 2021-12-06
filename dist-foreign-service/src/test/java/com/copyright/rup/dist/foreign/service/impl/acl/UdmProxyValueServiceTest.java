@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -10,6 +11,8 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import org.junit.Before;
@@ -20,6 +23,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,6 +72,24 @@ public class UdmProxyValueServiceTest {
         expect(udmProxyValueRepository.findPeriods()).andReturn(periods).once();
         replay(udmProxyValueRepository);
         assertEquals(periods, udmProxyValueService.findPeriods());
+        verify(udmProxyValueRepository);
+    }
+
+    @Test
+    public void testGetDtosByFilter() {
+        UdmProxyValueFilter filter = new UdmProxyValueFilter();
+        filter.setPeriods(Collections.singleton(202012));
+        List<UdmProxyValueDto> valueDtos = Arrays.asList(new UdmProxyValueDto(), new UdmProxyValueDto());
+        expect(udmProxyValueRepository.findDtosByFilter(filter)).andReturn(valueDtos).once();
+        replay(udmProxyValueRepository);
+        assertEquals(valueDtos, udmProxyValueService.getDtosByFilter(filter));
+        verify(udmProxyValueRepository);
+    }
+
+    @Test
+    public void testGetDtosByEmptyFilter() {
+        replay(udmProxyValueRepository);
+        assertTrue(udmProxyValueService.getDtosByFilter(new UdmProxyValueFilter()).isEmpty());
         verify(udmProxyValueRepository);
     }
 }

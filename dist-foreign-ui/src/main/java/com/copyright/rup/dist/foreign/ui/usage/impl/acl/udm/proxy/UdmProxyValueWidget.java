@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -17,7 +18,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.collections.CollectionUtils;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Implementation of {@link IUdmProxyValueWidget}.
@@ -31,6 +35,8 @@ import java.util.List;
 public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmProxyValueWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
+    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
+        CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private IUdmProxyValueController controller;
     private Grid<UdmProxyValueDto> udmValuesGrid;
@@ -95,7 +101,7 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
             addColumn(UdmProxyValueDto::getPeriod, "table.column.value_period", "period");
         footer.getCell(column).setText(ForeignUi.getMessage("label.footer.proxy_values_count", 0));
         addColumn(UdmProxyValueDto::getPubTypeName, "table.column.publication_type_code", "pubTypeName");
-        addColumn(UdmProxyValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice");
+        addAmountColumn(UdmProxyValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice");
         addColumn(UdmProxyValueDto::getContentUnitPriceCount, "table.column.content_unit_price_count",
             "contentUnitPriceCount");
     }
@@ -107,6 +113,15 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
             .setId(columnId)
             .setSortable(true)
             .setSortProperty(columnId);
+    }
+
+    private void addAmountColumn(Function<UdmProxyValueDto, BigDecimal> function, String captionProperty,
+                                 String columnId) {
+        udmValuesGrid.addColumn(value -> CurrencyUtils.format(function.apply(value), MONEY_FORMATTER))
+            .setStyleGenerator(item -> "v-align-right")
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true);
     }
 
     private void updateGridStyle(List<UdmProxyValueDto> proxyValueDtos) {
