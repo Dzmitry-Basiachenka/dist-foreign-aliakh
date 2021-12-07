@@ -500,7 +500,6 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     }
 
     private String buildDetailLicenseeClassString(DetailLicenseeClass detailLicenseeClass) {
-        return Objects.nonNull(detailLicenseeClass)
-            ? String.format("%s - %s", detailLicenseeClass.getId(), detailLicenseeClass.getDescription()) : null;
+        return Objects.nonNull(detailLicenseeClass) ? detailLicenseeClass.getIdAndDescription() : null;
     }
 }
