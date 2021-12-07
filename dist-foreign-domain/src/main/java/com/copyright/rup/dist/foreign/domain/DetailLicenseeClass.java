@@ -57,6 +57,10 @@ public class DetailLicenseeClass extends StoredEntity<Integer> {
         this.description = description;
     }
 
+    public String getIdAndDescription() {
+        return String.format("%s - %s", getId(), getDescription());
+    }
+
     public String getEnrollmentProfile() {
         return enrollmentProfile;
     }

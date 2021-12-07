@@ -46,8 +46,7 @@ public class UdmUsageAuditFieldToValuesMap extends CommonAuditFieldToValuesMap {
         getFieldToValueChangesMap().put("Company ID", buildPair(usageDto, UdmUsageDto::getCompanyId));
         getFieldToValueChangesMap().put("Company Name", buildPair(usageDto, UdmUsageDto::getCompanyName));
         getFieldToValueChangesMap().put("Detail Licensee Class", Objects.nonNull(usageDto.getDetailLicenseeClass())
-            ? buildPair(usageDto, usage -> String.format("%s - %s", usage.getDetailLicenseeClass().getId(),
-            usage.getDetailLicenseeClass().getDescription()))
+            ? buildPair(usageDto, usage -> usage.getDetailLicenseeClass().getIdAndDescription())
             : EMPTY_PAIR);
         getFieldToValueChangesMap().put("Annual Multiplier", buildPair(usageDto, UdmUsageDto::getAnnualMultiplier));
         getFieldToValueChangesMap().put("Statistical Multiplier",

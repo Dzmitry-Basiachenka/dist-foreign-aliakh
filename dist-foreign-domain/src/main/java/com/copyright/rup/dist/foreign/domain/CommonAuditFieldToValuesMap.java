@@ -61,14 +61,13 @@ class CommonAuditFieldToValuesMap {
      */
     public List<String> getEditAuditReasons() {
         List<String> result = new ArrayList<>();
-        fieldToValueChangesMap.entrySet().forEach(fieldToValueChangesMapEntry -> {
-            Pair<String, String> valuePair = fieldToValueChangesMapEntry.getValue();
-            if (!Objects.equals(valuePair.getLeft(), valuePair.getRight())) {
-                String oldValue = StringUtils.isBlank(valuePair.getLeft())
-                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getLeft());
-                String newValue = StringUtils.isBlank(valuePair.getRight())
-                    ? NOT_SPECIFIED : String.format("'%s'", valuePair.getRight());
-                result.add(String.format(USAGE_EDIT_REASON, fieldToValueChangesMapEntry.getKey(), oldValue, newValue));
+        fieldToValueChangesMap.forEach((key, value) -> {
+            if (!Objects.equals(value.getLeft(), value.getRight())) {
+                String oldValue = StringUtils.isBlank(value.getLeft())
+                    ? NOT_SPECIFIED : String.format("'%s'", value.getLeft());
+                String newValue = StringUtils.isBlank(value.getRight())
+                    ? NOT_SPECIFIED : String.format("'%s'", value.getRight());
+                result.add(String.format(USAGE_EDIT_REASON, key, oldValue, newValue));
             }
         });
         return result;
