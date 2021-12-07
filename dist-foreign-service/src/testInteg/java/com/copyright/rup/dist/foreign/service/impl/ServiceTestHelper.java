@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
@@ -79,6 +81,8 @@ public class ServiceTestHelper {
     private RestTemplate restTemplate;
     @Autowired
     private IUdmUsageAuditService udmUsageAuditService;
+    @Autowired
+    private IUdmValueAuditService udmValueAuditService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -247,13 +251,25 @@ public class ServiceTestHelper {
             });
     }
 
-    public void assertUdmAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
+    public void assertUdmUsageAudit(String entityId, List<UsageAuditItem> expectedAuditItems) {
         List<UsageAuditItem> actualAuditItems = udmUsageAuditService.getUdmUsageAudit(entityId);
         assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
         IntStream.range(0, expectedAuditItems.size())
             .forEach(index -> {
                 UsageAuditItem expectedItem = expectedAuditItems.get(index);
                 UsageAuditItem actualItem = actualAuditItems.get(index);
+                assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
+                assertEquals(expectedItem.getActionType(), actualItem.getActionType());
+            });
+    }
+
+    public void assertUdmValueAudit(String entityId, List<UdmValueAuditItem> expectedAuditItems) {
+        List<UdmValueAuditItem> actualAuditItems = udmValueAuditService.getUdmValueAudit(entityId);
+        assertEquals(CollectionUtils.size(expectedAuditItems), CollectionUtils.size(actualAuditItems));
+        IntStream.range(0, expectedAuditItems.size())
+            .forEach(index -> {
+                UdmValueAuditItem expectedItem = expectedAuditItems.get(index);
+                UdmValueAuditItem actualItem = actualAuditItems.get(index);
                 assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
                 assertEquals(expectedItem.getActionType(), actualItem.getActionType());
             });
@@ -425,6 +441,15 @@ public class ServiceTestHelper {
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
         return mapper.readValue(content, new TypeReference<List<UsageAuditItem>>() {
+        });
+    }
+
+    public List<UdmValueAuditItem> loadExpectedUdmValueAuditItems(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UdmValueAuditItem>>() {
         });
     }
 

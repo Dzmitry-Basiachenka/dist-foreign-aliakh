@@ -75,13 +75,18 @@ public class AclWorkflowIntegrationTest {
             .withExpectedUsages("acl/usage/udm_usages_workflow.json")
             .withExpectedValues("acl/value/udm_value_dto_workflow.json")
             .withExpectedValuesBaseline("acl/value/udm_value_dto_baseline_workflow.json")
-            .withUsageAuditItems(Arrays.asList(
+            .withUdmUsageAuditItems(Arrays.asList(
                 "acl/audit/udm_usages_audit_workflow_1.json",
                 "acl/audit/udm_usages_audit_workflow_2.json",
                 "acl/audit/udm_usages_audit_workflow_3.json",
                 "acl/audit/udm_usages_audit_workflow_4.json",
                 "acl/audit/udm_usages_audit_workflow_5.json",
                 "acl/audit/udm_usages_audit_workflow_6.json"))
+            .withUdmValueAuditItems(Arrays.asList(
+                "acl/audit/udm_values_audit_workflow_1.json",
+                "acl/audit/udm_values_audit_workflow_2.json",
+                "acl/audit/udm_values_audit_workflow_3.json",
+                "acl/audit/udm_values_audit_workflow_4.json"))
             .build()
             .run();
     }

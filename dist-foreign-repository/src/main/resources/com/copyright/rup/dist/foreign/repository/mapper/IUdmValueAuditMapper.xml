@@ -40,6 +40,6 @@
             <include refid="UsageAuditItemColumns"/>
         from ${schema}.df_udm_value_audit
         where df_udm_value_uid = #{valueId}
-        order by created_datetime desc
+        order by created_datetime desc, action_reason asc
     </select>
 </mapper>

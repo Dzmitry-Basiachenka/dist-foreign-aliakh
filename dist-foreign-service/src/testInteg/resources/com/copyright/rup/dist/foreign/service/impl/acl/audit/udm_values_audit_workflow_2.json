@@ -1,0 +1,10 @@
+[
+  {
+    "actionType": "USAGE_EDIT",
+    "actionReason": "The field 'Currency' was edited. Old Value is not specified. New Value is 'EUR'"
+  },
+  {
+    "actionType": "USAGE_EDIT",
+    "actionReason": "The field 'Price' was edited. Old Value is not specified. New Value is '100'"
+  }
+]
