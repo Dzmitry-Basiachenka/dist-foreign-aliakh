@@ -168,6 +168,7 @@ public class UdmBaselineValueFiltersWindowTest {
     public void testSaveButtonClickListener() {
         UdmBaselineValueFilter appliedUsageFilter = window.getBaselineValueFilter();
         assertTrue(appliedUsageFilter.isEmpty());
+        appliedUsageFilter.setPeriods(Collections.singleton(202012));
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
@@ -408,6 +409,7 @@ public class UdmBaselineValueFiltersWindowTest {
 
     private UdmBaselineValueFilter buildExpectedFilter() {
         UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
+        udmBaselineValueFilter.setPeriods(Collections.singleton(202012));
         udmBaselineValueFilter.setWrWrkInst(WR_WRK_INST);
         udmBaselineValueFilter.setPubType(buildPublicationType());
         udmBaselineValueFilter.setSystemTitleExpression(
