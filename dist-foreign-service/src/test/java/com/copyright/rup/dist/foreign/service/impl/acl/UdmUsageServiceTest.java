@@ -20,11 +20,11 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -199,7 +199,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
-        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
         fieldToValueChangesMap.updateFieldValue("Action Reason", "Misc - see comments");
         fieldToValueChangesMap.updateFieldValue("Reported Standard Number", null);
         fieldToValueChangesMap.updateFieldValue("Reported Title", "Technical Journal");
@@ -230,7 +230,7 @@ public class UdmUsageServiceTest {
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageDto.setBaselineFlag(true);
-        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
         fieldToValueChangesMap.updateFieldValue("Action Reason", "Misc - see comments");
         fieldToValueChangesMap.updateFieldValue("Reported Standard Number", null);
         fieldToValueChangesMap.updateFieldValue("Reported Title", "Technical Journal");
@@ -262,7 +262,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(null);
-        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
         fieldToValueChangesMap.updateFieldValue("Detail Status", "NEW");
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
         udmUsageRepository.update(udmUsageDto);
@@ -285,7 +285,7 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(ASSIGNEE);
-        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
         fieldToValueChangesMap.updateFieldValue("Detail Status", "OPS_REVIEW");
         udmUsageDto.setStatus(UsageStatusEnum.OPS_REVIEW);
         udmUsageRepository.update(udmUsageDto);

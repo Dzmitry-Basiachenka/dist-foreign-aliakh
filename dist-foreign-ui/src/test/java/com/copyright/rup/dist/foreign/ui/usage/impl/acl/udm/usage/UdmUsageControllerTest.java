@@ -22,10 +22,10 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -305,7 +305,7 @@ public class UdmUsageControllerTest {
     @Test
     public void testUpdateUsage() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        UdmAuditFieldToValuesMap fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
         udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
@@ -318,8 +318,8 @@ public class UdmUsageControllerTest {
     @Test
     public void testUpdateUsages() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
-            ImmutableMap.of(udmUsageDto, new UdmAuditFieldToValuesMap());
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+            ImmutableMap.of(udmUsageDto, new UdmUsageAuditFieldToValuesMap());
         udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, false);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));

@@ -9,9 +9,9 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
@@ -210,12 +210,12 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void publishUsagesToBaseline() {
-            Map<UdmUsageDto, UdmAuditFieldToValuesMap> usageToAuditMap = udmUsageDtos.stream()
+            Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> usageToAuditMap = udmUsageDtos.stream()
                 .collect(Collectors.toMap(udmUsageDto -> {
                     udmUsageDto.setStatus(UsageStatusEnum.ELIGIBLE);
                     return udmUsageDto;
                 }, udmUsageDto -> {
-                    UdmAuditFieldToValuesMap valuesMap = new UdmAuditFieldToValuesMap(udmUsageDto);
+                    UdmUsageAuditFieldToValuesMap valuesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
                     valuesMap.updateFieldValue("Detail Status", UsageStatusEnum.ELIGIBLE.name());
                     return valuesMap;
                 }));

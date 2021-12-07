@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
@@ -96,7 +96,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final ClickListener saveButtonClickListener;
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
-    private final UdmAuditFieldToValuesMap fieldToValueChangesMap;
+    private final UdmUsageAuditFieldToValuesMap fieldToValueChangesMap;
 
     /**
      * Constructor.
@@ -109,7 +109,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
                               ClickListener clickListener) {
         controller = usageController;
         udmUsage = selectedUdmUsage;
-        fieldToValueChangesMap = new UdmAuditFieldToValuesMap(udmUsage);
+        fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
         setContent(initRootLayout());

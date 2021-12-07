@@ -17,9 +17,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -305,7 +305,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testSaveButtonClickListener() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
             UsageStatusEnum.INELIGIBLE.name());
         fieldToValuesMap.putFieldWithValues("Company ID", COMPANY_ID.toString(), NEW_COMPANY_ID.toString());
@@ -325,7 +325,7 @@ public class UdmEditMultipleUsagesWindowTest {
             NEW_INELIGIBLE_REASON.getReason());
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
         UdmUsageDto udmUsageDto = buildActualUdmUsageDto();
-        Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(udmUsageDto, fieldToValuesMap);
         CompanyInformation companyInformation = buildCompanyInformation();
         udmUsages = Collections.singleton(buildUdmUsageDto());
@@ -356,7 +356,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdatePeriod() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Period", PERIOD.toString(), "206812");
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
         usageToCaptureChanges.setPeriod(206812);
@@ -375,7 +375,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdateQuantity() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Quantity", QUANTITY.toString(), NEW_QUANTITY.toString());
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
         usageToCaptureChanges.setQuantity(NEW_QUANTITY);
@@ -394,7 +394,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdateAnnualMultiplier() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Annual Multiplier", ANNUAL_MULTIPLIER.toString(),
             NEW_ANNUAL_MULTIPLIER.toString());
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
@@ -414,7 +414,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdateStatisticalMultiplier() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Statistical Multiplier", STATISTICAL_MULTIPLIER.toString(),
             NEW_STATISTICAL_MULTIPLIER.toString());
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
@@ -434,7 +434,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdateReportedTitle() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Reported Title", REPORTED_TITLE, NEW_REPORTED_TITLE);
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
         usageToCaptureChanges.setReportedTitle(NEW_REPORTED_TITLE);
@@ -451,7 +451,7 @@ public class UdmEditMultipleUsagesWindowTest {
 
     @Test
     public void testUpdateReportedStandardNumber() throws Exception {
-        UdmAuditFieldToValuesMap fieldToValuesMap = new UdmAuditFieldToValuesMap();
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Reported Standard Number", REPORTED_STANDARD_NUMBER,
             NEW_REPORTED_STANDARD_NUMBER);
         UdmUsageDto usageToCaptureChanges = new UdmUsageDto();
@@ -784,7 +784,7 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     private void setExpectedData(UdmUsageDto actualUsage, UdmUsageDto newUsage,
-                                 UdmAuditFieldToValuesMap fieldToValuesMap)
+                                 UdmUsageAuditFieldToValuesMap fieldToValuesMap)
         throws ValidationException {
         udmUsages = Collections.singleton(actualUsage);
         mockStatic(ForeignSecurityUtils.class);

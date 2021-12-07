@@ -7,10 +7,10 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -127,7 +127,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsage(UdmUsageDto udmUsageDto, UdmAuditFieldToValuesMap fieldToValueChangesMap,
+    public void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
                             boolean isResearcher) {
         String userName = RupContextUtils.getUserName();
         LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
@@ -271,7 +271,7 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
+    public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
                              boolean isResearcher) {
         udmUsageDtoToFieldValuesMap.forEach((udmUsageDto, udmAuditFieldToValuesMap) ->
             updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher));

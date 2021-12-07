@@ -10,10 +10,10 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
+import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
@@ -163,14 +163,14 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsage(UdmUsageDto newUsageDto, UdmAuditFieldToValuesMap fieldToValueChangesMap,
+    public void updateUsage(UdmUsageDto newUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
                             boolean isResearcher) {
         udmUsageService.updateUsage(newUsageDto, fieldToValueChangesMap, isResearcher);
         udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
     }
 
     @Override
-    public void updateUsages(Map<UdmUsageDto, UdmAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
+    public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
                              boolean isResearcher) {
         udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher);
         udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
