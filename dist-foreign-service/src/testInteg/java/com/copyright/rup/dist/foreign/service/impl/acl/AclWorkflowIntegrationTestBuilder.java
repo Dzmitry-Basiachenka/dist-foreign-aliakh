@@ -219,7 +219,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     valuesMap.updateFieldValue("Detail Status", UsageStatusEnum.ELIGIBLE.name());
                     return valuesMap;
                 }));
-            udmUsageService.updateUsages(usageToAuditMap, false);
+            udmUsageService.updateUsages(usageToAuditMap, false, "Reason");
             assertEquals(Pair.of(expectedCountOfPublishedUsages, 0),
                 udmUsageService.publishUdmUsagesToBaseline(expectedUdmBatch.getPeriod()));
         }

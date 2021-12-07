@@ -148,7 +148,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmUsageDto);
         expectLastCall();
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, true);
+        controller.updateUsages(udmUsageDtoToFieldValuesMap, true, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

@@ -148,9 +148,10 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * @param udmUsageDto            {@link UdmUsageDto} to update
      * @param fieldToValueChangesMap map of field name to its values (old and new)
      * @param isResearcher           {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason                 reason
      */
     void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                     boolean isResearcher);
+                     boolean isResearcher, String reason);
 
     /**
      * @return list of {@link UdmActionReason}.
@@ -214,9 +215,10 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      *
      * @param udmUsageDtoToFieldValuesMap {@link UdmUsageDto} map of usages to update with audit changes
      * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason                      reason
      */
     void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                      boolean isResearcher);
+                      boolean isResearcher, String reason);
 
     /**
      * Gets all available periods.

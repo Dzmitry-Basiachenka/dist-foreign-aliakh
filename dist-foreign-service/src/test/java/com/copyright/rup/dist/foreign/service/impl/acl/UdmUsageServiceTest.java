@@ -42,6 +42,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -90,6 +91,7 @@ public class UdmUsageServiceTest {
     private static final BigDecimal ANNUALIZED_COPIES = new BigDecimal(175).setScale(5, BigDecimal.ROUND_HALF_UP);
     private static final String NO_REPORTED_USE_UID = "18fbee56-2f5c-450a-999e-54903c0bfb23";
     private static final String USAGE_UID = "a40e5ab4-7591-4e7f-8cab-34a9ff893e15";
+    private static final String REASON = "Reason";
 
     private final UdmUsageService udmUsageService = new UdmUsageService();
     private IUdmUsageRepository udmUsageRepository;
@@ -216,7 +218,7 @@ public class UdmUsageServiceTest {
             "The field 'Reported Standard Number' was edited. Old Value is '0927-7765'. New Value is not specified");
         expectLastCall().once();
         replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false, StringUtils.EMPTY);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, udmUsageDto.getStatus());
@@ -224,10 +226,10 @@ public class UdmUsageServiceTest {
     }
 
     @Test
-    public void testUpdateBaselineUsageSpecialistOrManager() {
+    public void testUpdateBaselineUsage() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
+        UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.ELIGIBLE);
         udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageDto.setBaselineFlag(true);
         UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
@@ -237,6 +239,8 @@ public class UdmUsageServiceTest {
         baselineService.removeFromBaselineById(USAGE_UID);
         expectLastCall().once();
         udmUsageRepository.update(udmUsageDto);
+        expectLastCall().once();
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.REMOVE_FROM_BASELINE, REASON);
         expectLastCall().once();
         udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT,
             "The field 'Reported Title' was edited. Old Value is 'Colloids and surfaces. B, Biointerfaces'. " +
@@ -249,10 +253,10 @@ public class UdmUsageServiceTest {
             "The field 'Reported Standard Number' was edited. Old Value is '0927-7765'. New Value is not specified");
         expectLastCall().once();
         replay(udmUsageRepository, baselineService, udmUsageAuditService, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false, REASON);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
-        assertEquals(UsageStatusEnum.WORK_NOT_FOUND, udmUsageDto.getStatus());
+        assertEquals(UsageStatusEnum.ELIGIBLE, udmUsageDto.getStatus());
         verify(udmUsageRepository, baselineService, udmUsageAuditService, RupContextUtils.class);
     }
 
@@ -272,7 +276,7 @@ public class UdmUsageServiceTest {
         expectLastCall().once();
         replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
         udmUsageDto.setAssignee(ASSIGNEE);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true, StringUtils.EMPTY);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertNull(udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
@@ -294,7 +298,7 @@ public class UdmUsageServiceTest {
             "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'OPS_REVIEW'");
         expectLastCall().once();
         replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, true, StringUtils.EMPTY);
         assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
         assertEquals(ASSIGNEE, udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.OPS_REVIEW, udmUsageDto.getStatus());

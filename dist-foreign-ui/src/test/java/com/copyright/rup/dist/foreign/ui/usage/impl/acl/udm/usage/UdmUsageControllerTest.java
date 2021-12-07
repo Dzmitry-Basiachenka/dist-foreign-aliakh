@@ -94,6 +94,7 @@ public class UdmUsageControllerTest {
     private static final String UDM_USAGE_ORIGIN_UID_1 = "OGN674GHHSB291";
     private static final String UDM_USAGE_ORIGIN_UID_2 = "OGN674GHHSB293";
     private static final OffsetDateTime DATE = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
+    private static final String REASON = "Reason";
 
     private final UdmUsageController controller = new UdmUsageController();
     private final UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
@@ -306,12 +307,12 @@ public class UdmUsageControllerTest {
     public void testUpdateUsage() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
+        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false, REASON);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsage(udmUsageDto, fieldToValueChangesMap, false);
+        controller.updateUsage(udmUsageDto, fieldToValueChangesMap, false, REASON);
         verify(udmUsageService);
     }
 
@@ -320,12 +321,12 @@ public class UdmUsageControllerTest {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(udmUsageDto, new UdmUsageAuditFieldToValuesMap());
-        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, false);
+        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, false, REASON);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
+        controller.updateUsages(udmUsageDtoToFieldValuesMap, false, REASON);
         verify(udmUsageService);
     }
 

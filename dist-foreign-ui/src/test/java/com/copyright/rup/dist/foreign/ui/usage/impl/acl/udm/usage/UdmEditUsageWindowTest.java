@@ -3,10 +3,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyLong;
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -26,6 +28,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableMap;
@@ -46,9 +49,11 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -125,6 +130,7 @@ public class UdmEditUsageWindowTest {
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
+    private static final String REASON = "Reason";
 
     private CommonUdmUsageWindow window;
     private Binder<UdmUsageDto> binder;
@@ -372,7 +378,8 @@ public class UdmEditUsageWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmUsage);
         expectLastCall().once();
-        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage), false);
+        expect(binder.isValid()).andReturn(true).once();
+        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage), false, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
@@ -383,6 +390,39 @@ public class UdmEditUsageWindowTest {
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testSaveButtonClickListenerBaselineUsage() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        Button.ClickEvent clickEvent = PowerMock.createMock(Button.ClickEvent.class);
+        udmUsage.setBaselineFlag(true);
+        expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
+            anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
+        binder = createMock(Binder.class);
+        binder.writeBean(udmUsage);
+        expectLastCall().once();
+        Capture<ConfirmActionDialogWindow.IListener> actionDialogListenerCapture = newCapture();
+        expect(binder.isValid()).andReturn(true).once();
+        Windows.showConfirmDialogWithReason(eq("Confirm action"),
+            eq("The usage will be removed from baseline if you save changes.<br>Are you sure you want to confirm " +
+                "action?"), eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(List.class));
+        expectLastCall().once();
+        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage), false, REASON);
+        expectLastCall().once();
+        saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(clickEvent, controller, binder, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
+        window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
+        Whitebox.setInternalState(window, binder);
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        Collection<?> listeners = saveButton.getListeners(Button.ClickEvent.class);
+        assertEquals(1, listeners.size());
+        Button.ClickListener clickListener = (Button.ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        actionDialogListenerCapture.getValue().onActionConfirmed(REASON);
+        verify(clickEvent, controller, binder, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
     }
 
     @Test

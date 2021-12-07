@@ -27,6 +27,7 @@ import com.vaadin.server.Setter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -468,21 +469,48 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            try {
-                binder.writeBean(udmUsage);
-                controller.updateUsage(udmUsage, fieldToValueChangesMap, hasResearcherPermission);
-                saveButtonClickListener.buttonClick(event);
-                close();
-            } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(usageStatusComboBox, wrWrkInstField, reportedTitleField,
-                    reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField,
-                    companyIdField, companyNameField, detailLicenseeClassComboBox, annualMultiplierField,
-                    statisticalMultiplierField, quantityField, annualizedCopiesField, ineligibleReasonComboBox));
+            if (binder.isValid()) {
+                if (udmUsage.isBaselineFlag()) {
+                    saveBaselineUsage(event);
+                } else {
+                    saveUsage(event, StringUtils.EMPTY);
+                }
+            } else {
+                showValidationErrorWindow();
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> binder.readBean(udmUsage));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private void saveBaselineUsage(ClickEvent event) {
+        Windows.showConfirmDialogWithReason(
+            ForeignUi.getMessage("window.confirm"),
+            ForeignUi.getMessage("message.confirm.remove_usage_from_baseline"),
+            ForeignUi.getMessage("button.yes"),
+            ForeignUi.getMessage("button.cancel"),
+            reason -> saveUsage(event, reason),
+            Arrays.asList(new RequiredValidator(),
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
+    }
+
+    private void saveUsage(ClickEvent event, String reason) {
+        try {
+            binder.writeBean(udmUsage);
+            controller.updateUsage(udmUsage, fieldToValueChangesMap, hasResearcherPermission, reason.trim());
+            saveButtonClickListener.buttonClick(event);
+            close();
+        } catch (ValidationException e) {
+            showValidationErrorWindow();
+        }
+    }
+
+    private void showValidationErrorWindow() {
+        Windows.showValidationErrorWindow(Arrays.asList(usageStatusComboBox, wrWrkInstField, reportedTitleField,
+            reportedStandardNumberField, reportedPubTypeField, commentField, researchUrlField,
+            companyIdField, companyNameField, detailLicenseeClassComboBox, annualMultiplierField,
+            statisticalMultiplierField, quantityField, annualizedCopiesField, ineligibleReasonComboBox));
     }
 
     private void recalculateAnnualizedCopies() {
