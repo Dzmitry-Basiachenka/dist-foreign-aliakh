@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
@@ -16,6 +17,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -121,7 +123,8 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
-            .setSortable(true);
+            .setSortable(true)
+            .setSortProperty(columnId);
     }
 
     private void updateGridStyle(List<UdmProxyValueDto> proxyValueDtos) {
