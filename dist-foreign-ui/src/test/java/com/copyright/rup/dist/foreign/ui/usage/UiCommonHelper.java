@@ -45,6 +45,8 @@ import java.util.stream.IntStream;
  */
 public final class UiCommonHelper {
 
+    private static final String EXPORT_BUTTON = "Export";
+
     private UiCommonHelper() {
         throw new IllegalStateException("Constructor shouldn't be called directly");
     }
@@ -167,8 +169,12 @@ public final class UiCommonHelper {
 
     private static void verifyButtonClickListener(Button button) {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
-        assertTrue(CollectionUtils.isNotEmpty(listeners));
-        assertEquals(1, listeners.size());
-        assertNotNull(listeners.iterator().next());
+        if (!EXPORT_BUTTON.equals(button.getCaption())) {
+            assertTrue(CollectionUtils.isNotEmpty(listeners));
+            assertEquals(1, listeners.size());
+            assertNotNull(listeners.iterator().next());
+        } else {
+            assertTrue(CollectionUtils.isEmpty(listeners));
+        }
     }
 }

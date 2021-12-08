@@ -6,10 +6,10 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -45,6 +45,17 @@ public class UdmReportServiceTest {
         expectLastCall().once();
         replay(udmReportRepository);
         udmReportService.writeUdmUsageCsvReportSpecialistManager(filter, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteUdmProxyValueCsvReport() {
+        UdmProxyValueFilter filter = createMock(UdmProxyValueFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        udmReportRepository.writeUdmProxyValueCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmProxyValueCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 

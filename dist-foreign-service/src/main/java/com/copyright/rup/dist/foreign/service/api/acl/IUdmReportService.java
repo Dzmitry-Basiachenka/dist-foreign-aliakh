@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.io.PipedOutputStream;
@@ -15,6 +16,14 @@ import java.io.PipedOutputStream;
  * @author Dzmitry Basiachenka
  */
 public interface IUdmReportService {
+
+    /**
+     * Writes UDM proxy values found by filter into csv output stream.
+     *
+     * @param filter            instance of {@link UdmProxyValueFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeUdmProxyValueCsvReport(UdmProxyValueFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes UDM usages found by filter into csv output stream for Specialist and Manager roles.
