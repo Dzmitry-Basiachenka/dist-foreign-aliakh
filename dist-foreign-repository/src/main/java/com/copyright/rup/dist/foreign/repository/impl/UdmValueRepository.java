@@ -92,12 +92,12 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
     }
 
     @Override
-    public int publishToBaseline(Integer period, String userName) {
+    public List<String> publishToBaseline(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("period", Objects.requireNonNull(period));
         parameters.put("updateUser", Objects.requireNonNull(userName));
         parameters.put("createUser", userName);
-        return selectOne("IUdmValueMapper.publishToBaseline", parameters);
+        return selectList("IUdmValueMapper.publishToBaseline", parameters);
     }
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {

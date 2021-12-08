@@ -240,7 +240,8 @@ public class UdmValueServiceTest {
     public void testPublishToBaseline() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(udmValueRepository.publishToBaseline(202012, USER_NAME)).andReturn(1).once();
+        expect(udmValueRepository.publishToBaseline(202012, USER_NAME))
+            .andReturn(Collections.singletonList("c1e388e9-6571-46df-9982-11b849b92424")).once();
         replay(udmValueRepository, RupContextUtils.class);
         assertEquals(1, udmValueService.publishToBaseline(202012));
         verify(udmValueRepository, RupContextUtils.class);
