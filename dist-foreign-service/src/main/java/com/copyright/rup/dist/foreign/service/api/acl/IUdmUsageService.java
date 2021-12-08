@@ -42,9 +42,10 @@ public interface IUdmUsageService {
      * @param udmUsageDto            {@link UdmUsageDto} to update
      * @param fieldToValueChangesMap map of field name to its values (old and new)
      * @param isResearcher           {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason                 reason
      */
     void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                     boolean isResearcher);
+                     boolean isResearcher, String reason);
 
     /**
      * Checks whether UDM usage with provided original detail id exists.
@@ -173,9 +174,10 @@ public interface IUdmUsageService {
      *
      * @param udmUsageDtoToFieldValuesMap {@link UdmUsageDto} map of usages to update with audit changes
      * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason                      reason
      */
     void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                      boolean isResearcher);
+                      boolean isResearcher, String reason);
 
     /**
      * Publishes UDM usages to baseline.

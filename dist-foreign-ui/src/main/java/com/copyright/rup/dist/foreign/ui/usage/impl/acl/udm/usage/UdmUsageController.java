@@ -164,15 +164,15 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public void updateUsage(UdmUsageDto newUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                            boolean isResearcher) {
-        udmUsageService.updateUsage(newUsageDto, fieldToValueChangesMap, isResearcher);
+                            boolean isResearcher, String reason) {
+        udmUsageService.updateUsage(newUsageDto, fieldToValueChangesMap, isResearcher, reason);
         udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
     }
 
     @Override
     public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                             boolean isResearcher) {
-        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher);
+                             boolean isResearcher, String reason) {
+        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher, reason);
         udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
     }
 

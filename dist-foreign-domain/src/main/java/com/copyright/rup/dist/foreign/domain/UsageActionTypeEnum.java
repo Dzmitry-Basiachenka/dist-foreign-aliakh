@@ -88,6 +88,11 @@ public enum UsageActionTypeEnum {
     PUBLISH_TO_BASELINE,
 
     /**
+     * Action type for UDM baseline usage remove.
+     */
+    REMOVE_FROM_BASELINE,
+
+    /**
      * Action type for eligible usages.
      */
     ELIGIBLE,

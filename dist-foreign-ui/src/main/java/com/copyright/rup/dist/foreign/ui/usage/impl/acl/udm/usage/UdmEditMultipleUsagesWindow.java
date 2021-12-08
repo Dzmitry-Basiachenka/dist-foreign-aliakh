@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -23,6 +24,7 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -31,6 +33,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -342,24 +345,62 @@ public class UdmEditMultipleUsagesWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
-            try {
-                binder.writeBean(bindedUsageDto);
-                setPeriodEndDate(bindedUsageDto);
-                updateUsagesFields();
-                controller.updateUsages(udmUsageDtoToFieldValuesMap, false);
-                saveButtonClickListener.buttonClick(event);
-                close();
-            } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(
-                    Arrays.asList(statusComboBox, periodField, detailLicenseeClassComboBox, companyIdField,
-                        companyNameField, wrWrkInstField, reportedStandardNumberField, reportedTitleField,
-                        annualMultiplierField, statisticalMultiplierField, quantityField, ineligibleReasonComboBox,
-                        commentField));
+            if (binder.isValid()) {
+                if (hasBaselineUsage()) {
+                    saveBaselineUsages(event);
+                } else {
+                    saveUsages(event, StringUtils.EMPTY);
+                }
+            } else {
+                showValidationErrorWindow();
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
         discardButton.addClickListener(event -> binder.readBean(null));
         return new HorizontalLayout(saveButton, discardButton, closeButton);
+    }
+
+    private boolean hasBaselineUsage() {
+        return Objects.nonNull(selectedUdmUsages
+            .stream()
+            .filter(UdmUsageDto::isBaselineFlag)
+            .findFirst()
+            .orElse(null));
+    }
+
+    private void saveBaselineUsages(ClickEvent event) {
+        Windows.showConfirmDialogWithReason(
+            ForeignUi.getMessage("window.confirm"),
+            ForeignUi.getMessage("message.confirm.remove_usages_from_baseline", selectedUdmUsages
+                .stream()
+                .filter(UdmUsageDto::isBaselineFlag)
+                .count()),
+            ForeignUi.getMessage("button.yes"),
+            ForeignUi.getMessage("button.cancel"),
+            reason -> saveUsages(event, reason),
+            Arrays.asList(new RequiredValidator(),
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
+    }
+
+    private void saveUsages(ClickEvent event, String reason) {
+        try {
+            binder.writeBean(bindedUsageDto);
+            setPeriodEndDate(bindedUsageDto);
+            updateUsagesFields();
+            controller.updateUsages(udmUsageDtoToFieldValuesMap, false, reason.trim());
+            saveButtonClickListener.buttonClick(event);
+            close();
+        } catch (ValidationException e) {
+            showValidationErrorWindow();
+        }
+    }
+
+    private void showValidationErrorWindow() {
+        Windows.showValidationErrorWindow(
+            Arrays.asList(statusComboBox, periodField, detailLicenseeClassComboBox, companyIdField,
+                companyNameField, wrWrkInstField, reportedStandardNumberField, reportedTitleField,
+                annualMultiplierField, statisticalMultiplierField, quantityField, ineligibleReasonComboBox,
+                commentField));
     }
 
     private void checkStatusAndUpdateIneligibleReason() {

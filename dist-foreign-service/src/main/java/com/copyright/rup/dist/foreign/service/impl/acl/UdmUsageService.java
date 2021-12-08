@@ -128,20 +128,21 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     @Transactional
     public void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                            boolean isResearcher) {
+                            boolean isResearcher, String reason) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}", udmUsageDto, userName);
+        LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}, Reason={}", udmUsageDto, userName, reason);
         if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
             udmUsageDto.setAssignee(null);
         }
-        if (!isResearcher && udmUsageDto.isBaselineFlag()) {
-            baselineService.removeFromBaselineById(udmUsageDto.getId());
-        }
         udmUsageDto.setUpdateUser(userName);
+        if (udmUsageDto.isBaselineFlag()) {
+            baselineService.removeFromBaselineById(udmUsageDto.getId());
+            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.REMOVE_FROM_BASELINE, reason);
+        }
         udmUsageRepository.update(udmUsageDto);
-        fieldToValueChangesMap.getEditAuditReasons().forEach(reason ->
-            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, reason));
-        LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}", udmUsageDto, userName);
+        fieldToValueChangesMap.getEditAuditReasons().forEach(actionReason ->
+            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));
+        LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}, Reason={}", udmUsageDto, userName, reason);
     }
 
     @Override
@@ -272,9 +273,9 @@ public class UdmUsageService implements IUdmUsageService {
     @Override
     @Transactional
     public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                             boolean isResearcher) {
+                             boolean isResearcher, String reason) {
         udmUsageDtoToFieldValuesMap.forEach((udmUsageDto, udmAuditFieldToValuesMap) ->
-            updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher));
+            updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher, reason));
     }
 
     @Override

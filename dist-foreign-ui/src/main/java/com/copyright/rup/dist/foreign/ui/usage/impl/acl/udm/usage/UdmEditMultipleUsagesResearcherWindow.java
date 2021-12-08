@@ -165,7 +165,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             try {
                 binder.writeBean(bindedUsageDto);
                 updateUsagesFields();
-                controller.updateUsages(udmUsageDtoToFieldValuesMap, true);
+                controller.updateUsages(udmUsageDtoToFieldValuesMap, true, StringUtils.EMPTY);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
