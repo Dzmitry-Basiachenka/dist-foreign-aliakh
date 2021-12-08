@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
+import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
@@ -85,8 +86,10 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String pathToExpectedUsages;
     private String pathToExpectedValues;
     private String pathToExpectedValuesBaseline;
-    private List<String> uploadedUsagesIds = new ArrayList<>();
-    private List<String> pathsToExpectedAuditItems = new ArrayList<>();
+    private List<String> uploadedUdmUsagesIds = new ArrayList<>();
+    private final List<String> uploadedUdmValuesIds = new ArrayList<>();
+    private List<String> pathsToExpectedUdmUsageAuditItems = new ArrayList<>();
+    private List<String> pathsToExpectedUdmValueAuditItems = new ArrayList<>();
     private Map<String, String> expectedRmsRequestToResponseMap = new HashMap<>();
     private Map<Long, String> expectedPrmAccountNumberToResponseMap = new HashMap<>();
 
@@ -140,8 +143,13 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public AclWorkflowIntegrationTestBuilder withUsageAuditItems(List<String> pathsToAuditItems) {
-        this.pathsToExpectedAuditItems = pathsToAuditItems;
+    public AclWorkflowIntegrationTestBuilder withUdmUsageAuditItems(List<String> pathsToAuditItems) {
+        this.pathsToExpectedUdmUsageAuditItems = pathsToAuditItems;
+        return this;
+    }
+
+    public AclWorkflowIntegrationTestBuilder withUdmValueAuditItems(List<String> pathsToAuditItems) {
+        this.pathsToExpectedUdmValueAuditItems = pathsToAuditItems;
         return this;
     }
 
@@ -154,10 +162,12 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         this.pathToExpectedUsages = null;
         this.pathToExpectedValues = null;
         this.pathToExpectedValuesBaseline = null;
-        this.uploadedUsagesIds.clear();
+        this.uploadedUdmUsagesIds.clear();
+        this.uploadedUdmValuesIds.clear();
         this.expectedRmsRequestToResponseMap.clear();
         this.expectedPrmAccountNumberToResponseMap.clear();
-        this.pathsToExpectedAuditItems.clear();
+        this.pathsToExpectedUdmUsageAuditItems.clear();
+        this.pathsToExpectedUdmValueAuditItems.clear();
         this.sqsClientMock.reset();
     }
 
@@ -184,7 +194,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertUdmUsages();
             assertUdmValues();
             assertUdmValuesBaseline();
-            assertUsageAudit();
+            assertUdmUsageAudit();
+            assertUdmValueAudit();
             testHelper.verifyRestServer();
         }
 
@@ -195,7 +206,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             List<UdmUsage> udmUsages = result.get();
             udmBatchService.insertUdmBatch(expectedUdmBatch, udmUsages);
             udmUsageService.sendForMatching(udmUsages);
-            uploadedUsagesIds = udmUsages.stream().map(BaseEntity::getId).collect(Collectors.toList());
+            uploadedUdmUsagesIds = udmUsages.stream().map(BaseEntity::getId).collect(Collectors.toList());
         }
 
         private void assignUsages() {
@@ -234,9 +245,12 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             filter.setPeriods(ImmutableSet.of(expectedUdmBatch.getPeriod()));
             udmValueService.getValueDtos(filter, null, null)
                 .forEach(udmValueDto -> {
+                    uploadedUdmValuesIds.add(udmValueDto.getId());
                     PublicationType publicationType = new PublicationType();
                     publicationType.setId("076f2c40-f524-405d-967a-3840df2b57df");
                     publicationType.setName("NP");
+                    UdmValueAuditFieldToValuesMap fieldToValueChangesMap =
+                        new UdmValueAuditFieldToValuesMap(udmValueDto);
                     udmValueDto.setPublicationType(publicationType);
                     udmValueDto.setPrice(new BigDecimal("100"));
                     udmValueDto.setPriceInUsd(new BigDecimal("150"));
@@ -247,15 +261,16 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     udmValueDto.setContentFlag(true);
                     udmValueDto.setContentUnitPrice(new BigDecimal("15"));
                     udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
-                    // TODO verify audit
-                    udmValueService.updateValue(udmValueDto, new UdmValueAuditFieldToValuesMap(udmValueDto));
+                    fieldToValueChangesMap.updateFieldValue("Price", udmValueDto.getPrice().toString());
+                    fieldToValueChangesMap.updateFieldValue("Currency", udmValueDto.getCurrency());
+                    udmValueService.updateValue(udmValueDto, fieldToValueChangesMap);
                 });
             assertEquals(expectedCountOfPublishedValues,
                 udmValueService.publishToBaseline(expectedUdmBatch.getPeriod()));
         }
 
         private void assertUdmUsages() throws IOException {
-            List<UdmUsage> actualUsages = udmUsageService.getUdmUsagesByIds(uploadedUsagesIds);
+            List<UdmUsage> actualUsages = udmUsageService.getUdmUsagesByIds(uploadedUdmUsagesIds);
             List<UdmUsage> expectedUsages = testHelper.loadExpectedUdmUsages(pathToExpectedUsages);
             testHelper.assertUdmUsages(expectedUsages, actualUsages);
         }
@@ -281,12 +296,21 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             testHelper.assertValueBaselineDtos(expectedUdmValues, actualUdmValues);
         }
 
-        private void assertUsageAudit() throws IOException {
-            assertEquals(pathsToExpectedAuditItems.size(), uploadedUsagesIds.size());
-            for (int index = 0; index < pathsToExpectedAuditItems.size(); index++) {
+        private void assertUdmUsageAudit() throws IOException {
+            assertEquals(pathsToExpectedUdmUsageAuditItems.size(), uploadedUdmUsagesIds.size());
+            for (int index = 0; index < pathsToExpectedUdmUsageAuditItems.size(); index++) {
                 List<UsageAuditItem> usageAuditItems =
-                    testHelper.loadExpectedUsageAuditItems(pathsToExpectedAuditItems.get(index));
-                testHelper.assertUdmAudit(uploadedUsagesIds.get(index), usageAuditItems);
+                    testHelper.loadExpectedUsageAuditItems(pathsToExpectedUdmUsageAuditItems.get(index));
+                testHelper.assertUdmUsageAudit(uploadedUdmUsagesIds.get(index), usageAuditItems);
+            }
+        }
+
+        private void assertUdmValueAudit() throws IOException {
+            assertEquals(pathsToExpectedUdmValueAuditItems.size(), uploadedUdmValuesIds.size());
+            for (int index = 0; index < pathsToExpectedUdmValueAuditItems.size(); index++) {
+                List<UdmValueAuditItem> udmValueAuditItems =
+                    testHelper.loadExpectedUdmValueAuditItems(pathsToExpectedUdmValueAuditItems.get(index));
+                testHelper.assertUdmValueAudit(uploadedUdmValuesIds.get(index), udmValueAuditItems);
             }
         }
 

@@ -40,7 +40,7 @@
             <include refid="usageAuditItemColumns"/>
         from ${schema}.df_udm_audit
         where df_udm_usage_uid = #{usageId}
-        order by created_datetime desc
+        order by created_datetime desc, action_reason asc
     </select>
 
     <delete id="deleteByBatchId" parameterType="string">
