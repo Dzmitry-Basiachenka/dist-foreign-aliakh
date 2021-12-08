@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -280,18 +279,17 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period) {
+    public int publishUdmUsagesToBaseline(Integer period) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Publish to baseline UDM usages. Started. Period={}. UserName={}", period, userName);
+        LOGGER.info("Publish to baseline UDM usages. Started. Period={}, UserName={}", period, userName);
         Set<String> publishedUsageIds = udmUsageRepository.publishUdmUsagesToBaseline(period, userName);
         int publishedCount = publishedUsageIds.size();
         publishedUsageIds.forEach(usageId ->
             udmUsageAuditService.logAction(usageId, UsageActionTypeEnum.PUBLISH_TO_BASELINE,
                 String.format("UDM usage was published to baseline by '%s'", userName)));
-        int removedCount = baselineService.removeFromBaseline(period);
-        LOGGER.info("Publish to baseline UDM usages. Finished. PublishedCount={}, RemovedCount={}",
-            publishedCount, removedCount);
-        return Pair.of(publishedCount, removedCount);
+        LOGGER.info("Publish to baseline UDM usages. Finished. Period={}, UserName={}, PublishedCount={}", period,
+            userName, publishedCount);
+        return publishedCount;
     }
 
     @Override

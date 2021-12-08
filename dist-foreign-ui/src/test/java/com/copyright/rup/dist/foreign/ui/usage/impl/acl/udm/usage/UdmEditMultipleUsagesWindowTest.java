@@ -407,8 +407,9 @@ public class UdmEditMultipleUsagesWindowTest {
         Capture<IListener> actionDialogListenerCapture = newCapture();
         expect(binder.isValid()).andReturn(true).once();
         Windows.showConfirmDialogWithReason(eq("Confirm action"),
-            eq("1 usages will be removed from baseline if you save changes.<br>Are you sure you want to confirm " +
-                "action?"), eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(List.class));
+            eq("1 usage(s) will be removed from baseline if you save changes.<br>Are you sure you want to " +
+                "confirm action?"), eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture),
+            anyObject(List.class));
         expectLastCall().once();
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),

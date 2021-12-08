@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
@@ -39,11 +38,6 @@ public class UdmBaselineService implements IUdmBaselineService {
     @Override
     public int getBaselineUsagesCount(UdmBaselineFilter filter) {
         return !filter.isEmpty() ? baselineRepository.findCountByFilter(filter) : 0;
-    }
-
-    @Override
-    public int removeFromBaseline(Integer period) {
-        return baselineRepository.removeUdmUsagesFromBaseline(period, RupContextUtils.getUserName()).size();
     }
 
     @Override

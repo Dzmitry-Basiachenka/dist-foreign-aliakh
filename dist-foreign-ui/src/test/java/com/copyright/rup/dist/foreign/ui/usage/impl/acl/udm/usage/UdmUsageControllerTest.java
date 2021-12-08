@@ -51,7 +51,6 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -190,11 +189,9 @@ public class UdmUsageControllerTest {
 
     @Test
     public void testPublishUdmUsagesToBaseline() {
-        expect(udmUsageService.publishUdmUsagesToBaseline(202106)).andReturn(Pair.of(5, 3)).once();
+        expect(udmUsageService.publishUdmUsagesToBaseline(202106)).andReturn(5).once();
         replay(udmUsageService);
-        Pair<Integer, Integer> integerIntegerPair = controller.publishUdmUsagesToBaseline(202106);
-        assertEquals(Integer.valueOf(5), integerIntegerPair.getLeft());
-        assertEquals(Integer.valueOf(3), integerIntegerPair.getRight());
+        assertEquals(5, controller.publishUdmUsagesToBaseline(202106));
         verify(udmUsageService);
     }
 

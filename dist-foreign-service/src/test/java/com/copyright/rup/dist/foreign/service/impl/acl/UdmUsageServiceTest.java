@@ -43,7 +43,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -138,12 +137,9 @@ public class UdmUsageServiceTest {
         udmUsageAuditService.logAction("367233a7-702f-4a88-82b4-b95a5508ab52", UsageActionTypeEnum.PUBLISH_TO_BASELINE,
             "UDM usage was published to baseline by 'user@copyright.com'");
         expectLastCall().once();
-        expect(baselineService.removeFromBaseline(202106)).andReturn(5).once();
-        replay(udmUsageRepository, baselineService, RupContextUtils.class);
-        Pair<Integer, Integer> publishedRemovedUsagesPair = udmUsageService.publishUdmUsagesToBaseline(202106);
-        verify(udmUsageRepository, baselineService, RupContextUtils.class);
-        assertEquals(Integer.valueOf(1), publishedRemovedUsagesPair.getLeft());
-        assertEquals(Integer.valueOf(5), publishedRemovedUsagesPair.getRight());
+        replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
+        assertEquals(1, udmUsageService.publishUdmUsagesToBaseline(202106));
+        verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
     }
 
     @Test

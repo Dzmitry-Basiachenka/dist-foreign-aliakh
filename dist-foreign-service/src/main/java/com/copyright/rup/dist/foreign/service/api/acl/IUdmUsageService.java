@@ -11,8 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,9 +181,9 @@ public interface IUdmUsageService {
      * Publishes UDM usages to baseline.
      *
      * @param period period of usage
-     * @return pair of count of published to baseline and count of removed from baseline
+     * @return count of published usages to baseline
      */
-    Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
+    int publishUdmUsagesToBaseline(Integer period);
 
     /**
      * @return threshold value for size of UDM records.

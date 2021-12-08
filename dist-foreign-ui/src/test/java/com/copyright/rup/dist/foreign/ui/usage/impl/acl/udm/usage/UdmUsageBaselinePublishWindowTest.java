@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +20,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,20 +66,18 @@ public class UdmUsageBaselinePublishWindowTest {
 
     @Test
     public void testClickPublishButton() {
-        Pair<Integer, Integer> expectedPair = Pair.of(10, 5);
         expect(controller.getPeriods()).andReturn(Collections.singletonList(202106)).once();
-        expect(controller.publishUdmUsagesToBaseline(202106)).andReturn(expectedPair).once();
-        Windows.showNotificationWindow(
-            "Publish completed: 10 record(s) were published, 5 record(s) were deleted from baseline");
+        expect(controller.publishUdmUsagesToBaseline(202106)).andReturn(10).once();
+        Windows.showNotificationWindow(eq("Publish completed: 10 record(s) were published to baseline"));
         expectLastCall().once();
-        replay(controller);
+        replay(controller, Windows.class);
         window = new UdmUsageBaselinePublishWindow(controller);
         ComboBox<Integer> comboBox = (ComboBox<Integer>) ((VerticalLayout) window.getContent()).getComponent(0);
         comboBox.setSelectedItem(202106);
         Button publishButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1)).getComponent(0);
         publishButton.click();
-        verify(controller);
+        verify(controller, Windows.class);
     }
 
     private void verifyRootLayout(Component component) {

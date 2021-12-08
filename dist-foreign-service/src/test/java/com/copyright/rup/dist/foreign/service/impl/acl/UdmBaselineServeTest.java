@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -37,7 +36,6 @@ import java.util.List;
 @PrepareForTest(RupContextUtils.class)
 public class UdmBaselineServeTest {
 
-    private static final String USER_NAME = "user@copyright.com";
     private final UdmBaselineService udmBaselineService = new UdmBaselineService();
     private IUdmBaselineRepository baselineRepository;
 
@@ -45,17 +43,6 @@ public class UdmBaselineServeTest {
     public void setUp() {
         baselineRepository = createMock(IUdmBaselineRepository.class);
         Whitebox.setInternalState(udmBaselineService, baselineRepository);
-    }
-
-    @Test
-    public void testRemoveFromBaseline() {
-        mockStatic(RupContextUtils.class);
-        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(baselineRepository.removeUdmUsagesFromBaseline(202106, USER_NAME)).andReturn(Collections.EMPTY_SET)
-            .once();
-        replay(baselineRepository, RupContextUtils.class);
-        udmBaselineService.removeFromBaseline(202106);
-        verify(baselineRepository, RupContextUtils.class);
     }
 
     @Test

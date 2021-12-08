@@ -13,13 +13,11 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
-import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
@@ -42,7 +40,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -83,23 +80,6 @@ public class UdmBaselineRepositoryIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
     @Autowired
     private IUdmBaselineRepository baselineRepository;
-
-    @Test
-    @TestData(fileName = "udm-baseline-repository-test-data-init-remove-udm-usages-from-baseline.groovy")
-    public void testRemoveUdmUsagesFromBaseline() {
-        UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(Collections.singleton("201f42dc-7f13-4449-97b0-725aa5a339e0"));
-        List<UdmUsageDto> usageDtos = udmUsageRepository.findDtosByFilter(filter, null, null);
-        assertEquals(3, usageDtos.size());
-        usageDtos.forEach(usageDto -> assertTrue(usageDto.isBaselineFlag()));
-        Set<String> removedUsageIds = baselineRepository.removeUdmUsagesFromBaseline(202106, USER_NAME);
-        assertEquals(2, removedUsageIds.size());
-        filter.setPeriod(202106);
-        assertEquals(2, udmUsageRepository.findDtosByFilter(filter, null, null)
-            .stream()
-            .filter(usageDto -> !usageDto.isBaselineFlag())
-            .count());
-    }
 
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)

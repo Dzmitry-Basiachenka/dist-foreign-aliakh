@@ -18,8 +18,6 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.List;
@@ -231,9 +229,9 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
      * Publishes UDM usages to baseline.
      *
      * @param period period of usage
-     * @return pair of count of published to baseline and count of removed from baseline
+     * @return count of published usages to baseline
      */
-    Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period);
+    int publishUdmUsagesToBaseline(Integer period);
 
     /**
      * Returns true if selected UDM batch doesn't have usages in baseline.
