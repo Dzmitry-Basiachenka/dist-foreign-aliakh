@@ -18,4 +18,8 @@
     <select id="findUdmBaselineUsageDtosByFilter" resultMap="IUdmBaselineMapper.udmBaselineDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IUdmBaselineMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="findUdmProxyValueDtosByFilter" resultMap="IUdmProxyValueMapper.udmProxyValueDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
+    </select>
 </mapper>

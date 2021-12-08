@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmProxyValueDto {
+public class UdmProxyValueDto extends StoredEntity<String> {
 
     private String pubTypeName;
     private Integer period;
@@ -64,6 +65,7 @@ public class UdmProxyValueDto {
         }
         UdmProxyValueDto that = (UdmProxyValueDto) obj;
         return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
             .append(pubTypeName, that.pubTypeName)
             .append(period, that.period)
             .append(contentUnitPrice, that.contentUnitPrice)
@@ -74,6 +76,7 @@ public class UdmProxyValueDto {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
             .append(pubTypeName)
             .append(period)
             .append(contentUnitPrice)
@@ -84,6 +87,7 @@ public class UdmProxyValueDto {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("pubTypeName", pubTypeName)
             .append("period", period)
             .append("contentUnitPrice", contentUnitPrice)

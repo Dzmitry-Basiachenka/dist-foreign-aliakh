@@ -4,15 +4,15 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
-
 import com.google.common.collect.Maps;
-
 import org.springframework.stereotype.Repository;
 
 import java.io.PipedOutputStream;
@@ -34,6 +34,18 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
 
     private static final int REPORT_UDM_BATCH_SIZE = 100000;
     private static final String PAGEABLE_KEY = "pageable";
+
+    @Override
+    public void writeUdmProxyValueCsvReport(UdmProxyValueFilter filter, PipedOutputStream pipedOutputStream) {
+        try (UdmProxyValueCsvReportHandler handler =
+                 new UdmProxyValueCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+                parameters.put("filter", filter);
+                getTemplate().select("IUdmReportMapper.findUdmProxyValueDtosByFilter", parameters, handler);
+            }
+        }
+    }
 
     @Override
     public void writeUdmUsageCsvReportSpecialistManager(UdmUsageFilter filter, PipedOutputStream pipedOutputStream) {

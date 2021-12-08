@@ -8,6 +8,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
@@ -26,7 +27,9 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link UdmProxyValueWidget}.
@@ -44,21 +47,26 @@ public class UdmProxyValueWidgetTest {
 
     private IUdmProxyValueController controller;
     private UdmProxyValueWidget valueWidget;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         mockStatic(RupContextUtils.class);
         controller = createMock(IUdmProxyValueController.class);
+        streamSource = createMock(IStreamSource.class);
         UdmProxyValueFilterWidget filterWidget = new UdmProxyValueFilterWidget();
         expect(controller.initProxyValueFilterWidget()).andReturn(filterWidget).once();
+        expect(controller.getExportUdmProxyValuesStreamSource()).andReturn(streamSource).once();
+        expect(streamSource.getSource()).andReturn(new AbstractMap.SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
     }
 
     @Test
     public void testWidgetStructure() {
-        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class);
+        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         initWidget();
-        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class);
+        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(valueWidget.isLocked());
         assertEquals(200, valueWidget.getSplitPosition(), 0);
         verifySize(valueWidget);
@@ -68,8 +76,7 @@ public class UdmProxyValueWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
-        //TODO: Uncomment line when click listener will be added
-        //UiCommonHelper.verifyButtonsLayout(layout.getComponent(0), "Export");
+        UiCommonHelper.verifyButtonsLayout(layout.getComponent(0), "Export");
         Grid grid = (Grid) layout.getComponent(1);
         UiCommonHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Value Period", -1.0, -1),

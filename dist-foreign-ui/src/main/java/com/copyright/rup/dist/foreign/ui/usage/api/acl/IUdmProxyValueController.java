@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -45,4 +46,9 @@ public interface IUdmProxyValueController extends IController<IUdmProxyValueWidg
      * @return initialized {@link IUdmProxyValueFilterWidget}
      */
     IUdmProxyValueFilterWidget initProxyValueFilterWidget();
+
+    /**
+     * @return instance of {@link IStreamSource} for export UDM proxy values.
+     */
+    IStreamSource getExportUdmProxyValuesStreamSource();
 }

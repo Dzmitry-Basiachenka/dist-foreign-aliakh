@@ -1,7 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
@@ -33,10 +37,14 @@ public class UdmProxyValueController extends CommonController<IUdmProxyValueWidg
     private IUdmProxyValueFilterController udmProxyValueFilterController;
     @Autowired
     private IUdmProxyValueService udmProxyValueService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IUdmReportService udmReportService;
 
     @Override
     public List<UdmProxyValueDto> getProxyValues() {
-        return udmProxyValueService.getDtosByFilter(udmProxyValueFilterController.getWidget().getAppliedFilter());
+        return udmProxyValueService.getDtosByFilter(getFilter());
     }
 
     @Override
@@ -47,6 +55,12 @@ public class UdmProxyValueController extends CommonController<IUdmProxyValueWidg
     }
 
     @Override
+    public IStreamSource getExportUdmProxyValuesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_udm_proxy_value_",
+            pos -> udmReportService.writeUdmProxyValueCsvReport(getFilter(), pos));
+    }
+
+    @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
     }
@@ -54,5 +68,9 @@ public class UdmProxyValueController extends CommonController<IUdmProxyValueWidg
     @Override
     public IUdmProxyValueWidget instantiateWidget() {
         return new UdmProxyValueWidget();
+    }
+
+    private UdmProxyValueFilter getFilter() {
+        return udmProxyValueFilterController.getWidget().getAppliedFilter();
     }
 }

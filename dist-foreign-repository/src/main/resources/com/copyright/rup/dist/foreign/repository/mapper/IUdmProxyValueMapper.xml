@@ -28,6 +28,18 @@
         </where>
     </sql>
 
+    <sql id="selectDtosByFilterSql">
+        select
+            pt.name pub_type_name,
+            period,
+            content_unit_price,
+            content_unit_price_count
+        from ${schema}.df_udm_proxy_value pv
+        join ${schema}.df_publication_type pt on pv.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IUdmProxyValueMapper.udmProxyValueFilter"/>
+        order by period, pub_type_name
+    </sql>
+
     <delete id="deleteProxyValues" parameterType="int">
         delete from ${schema}.df_udm_proxy_value
         where period = #{period}
@@ -75,15 +87,7 @@
     </select>
 
     <select id="findDtosByFilter" resultMap="udmProxyValueDtoResultMap" parameterType="map">
-        select
-            pt.name pub_type_name,
-            period,
-            content_unit_price,
-            content_unit_price_count
-        from ${schema}.df_udm_proxy_value pv
-        join ${schema}.df_publication_type pt on pv.publication_type_uid = pt.df_publication_type_uid
-        <include refid="IUdmProxyValueMapper.udmProxyValueFilter"/>
-        order by period, pub_type_name
+        <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
     </select>
 
     <select id="findPeriods" resultType="int">

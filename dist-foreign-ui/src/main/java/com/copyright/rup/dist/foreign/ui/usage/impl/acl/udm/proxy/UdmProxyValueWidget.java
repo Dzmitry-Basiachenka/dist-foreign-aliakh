@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -82,6 +83,9 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
 
     private HorizontalLayout initButtonsLayout() {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportUdmProxyValuesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-proxy-value-buttons");
