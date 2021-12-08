@@ -496,8 +496,10 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = "udm-value-repository-test-data-init-publish-to-baseline.groovy")
     public void testPublishToBaseline() {
-        assertEquals(2, udmValueRepository.publishToBaseline(211012, USER_NAME));
-        assertEquals(1, udmValueRepository.publishToBaseline(211112, USER_NAME));
+        assertEquals(Arrays.asList("81226f4a-6a21-4529-97ad-5dab5c92bcce", "97226f4a-ca11-4529-bb59-5dab5c92b8ce"),
+            udmValueRepository.publishToBaseline(211012, USER_NAME));
+        assertEquals(Collections.singletonList("fc3e7747-3d3b-4f07-93fb-f66c97d9f737"),
+            udmValueRepository.publishToBaseline(211112, USER_NAME));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_1.json"),
             sqlSessionTemplate.selectList("IUdmBaselineValueMapper.findValuesByPeriod", 211012));

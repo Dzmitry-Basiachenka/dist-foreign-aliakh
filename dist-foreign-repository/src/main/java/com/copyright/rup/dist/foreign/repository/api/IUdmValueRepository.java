@@ -97,7 +97,7 @@ public interface IUdmValueRepository {
      *
      * @param period   period of value batch to publish
      * @param userName name of the user who publishes to baseline
-     * @return count of published values
+     * @return published values ids
      */
-    int publishToBaseline(Integer period, String userName);
+    List<String> publishToBaseline(Integer period, String userName);
 }

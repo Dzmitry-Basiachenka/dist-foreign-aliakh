@@ -1,10 +1,18 @@
 [
   {
+    "actionType": "PUBLISH_TO_BASELINE",
+    "actionReason": "UDM Value batch for period '202006' was published to baseline"
+  },
+  {
     "actionType": "USAGE_EDIT",
     "actionReason": "The field 'Currency' was edited. Old Value is not specified. New Value is 'EUR'"
   },
   {
     "actionType": "USAGE_EDIT",
     "actionReason": "The field 'Price' was edited. Old Value is not specified. New Value is '100'"
+  },
+  {
+    "actionType": "CREATED",
+    "actionReason": "UDM Value batch for period '202006' was populated"
   }
 ]

@@ -542,7 +542,7 @@
         )
     </select>
 
-    <select id="publishToBaseline" parameterType="map" resultType="int">
+    <select id="publishToBaseline" parameterType="map" resultType="string">
         with existent_baseline_values_uids as (
             update ${schema}.df_udm_value_baseline vb
             set
@@ -562,41 +562,37 @@
             where v.df_udm_value_uid = vb.df_udm_value_baseline_uid
                 and v.period = #{period}
             returning v.df_udm_value_uid
-        ),
-        inserted_values as (
-            insert into ${schema}.df_udm_value_baseline (
-                df_udm_value_baseline_uid,
-                period,
-                wr_wrk_inst,
-                system_title,
-                publication_type_uid,
-                price,
-                price_flag,
-                content,
-                content_flag,
-                content_unit_price,
-                comment,
-                <include refid="StoredEntityMapper.additionalColumns"/>
-            )
-            select
-                df_udm_value_uid,
-                period,
-                wr_wrk_inst,
-                system_title,
-                publication_type_uid,
-                price_in_usd,
-                price_flag,
-                content,
-                content_flag,
-                content_unit_price,
-                comment,
-                <include refid="StoredEntityMapper.insert"/>
-            from apps.df_udm_value
-            where period = #{period}
-                and df_udm_value_uid not in (select * from existent_baseline_values_uids)
-            returning df_udm_value_baseline_uid
         )
-        select count(*)
-        from inserted_values
+        insert into ${schema}.df_udm_value_baseline (
+            df_udm_value_baseline_uid,
+            period,
+            wr_wrk_inst,
+            system_title,
+            publication_type_uid,
+            price,
+            price_flag,
+            content,
+            content_flag,
+            content_unit_price,
+            comment,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            df_udm_value_uid,
+            period,
+            wr_wrk_inst,
+            system_title,
+            publication_type_uid,
+            price_in_usd,
+            price_flag,
+            content,
+            content_flag,
+            content_unit_price,
+            comment,
+            <include refid="StoredEntityMapper.insert"/>
+        from apps.df_udm_value
+        where period = #{period}
+            and df_udm_value_uid not in (select * from existent_baseline_values_uids)
+        returning df_udm_value_baseline_uid
     </select>
 </mapper>

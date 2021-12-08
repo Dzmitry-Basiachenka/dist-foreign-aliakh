@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
+
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.collections4.MapUtils;
@@ -152,6 +154,7 @@ public class UdmValueService implements IUdmValueService {
         LOGGER.info("Populate UDM Value batch. Started. Period={}, UserName={}", period, userName);
         List<UdmValue> allNotPopulatedValues = baselineRepository.findNotPopulatedValuesFromBaseline(period);
         rightsService.updateUdmValuesRights(allNotPopulatedValues, period);
+        String auditReason = String.format("UDM Value batch for period '%s' was populated", period);
         Map<Long, String> wrWrkInstToValueIdMap = allNotPopulatedValues.stream()
             .filter(value -> Objects.nonNull(value.getRhAccountNumber()))
             .peek(value -> {
@@ -160,6 +163,7 @@ public class UdmValueService implements IUdmValueService {
                 value.setCreateUser(userName);
                 value.setUpdateUser(userName);
                 udmValueRepository.insert(value);
+                udmValueAuditService.logAction(value.getId(), UsageActionTypeEnum.CREATED, auditReason);
             })
             .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
         int updatedUsagesCount = 0;
@@ -185,9 +189,12 @@ public class UdmValueService implements IUdmValueService {
     public int publishToBaseline(Integer period) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Publish UDM Values to baseline. Started. Period={}, UserName={}", period, userName);
-        int publishedValuesCount = udmValueRepository.publishToBaseline(period, userName);
+        List<String> publishedIds = udmValueRepository.publishToBaseline(period, userName);
+        String actionReason = String.format("UDM Value batch for period '%s' was published to baseline", period);
+        publishedIds.forEach(
+            valueId -> udmValueAuditService.logAction(valueId, UsageActionTypeEnum.PUBLISH_TO_BASELINE, actionReason));
         LOGGER.info("Publish UDM Values to baseline. Finished. Period={}, UserName={}, PublishedValuesCount={}",
-            period, userName, publishedValuesCount);
-        return publishedValuesCount;
+            period, userName, LogUtils.size(publishedIds));
+        return publishedIds.size();
     }
 }
