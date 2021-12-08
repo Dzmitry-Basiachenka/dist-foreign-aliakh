@@ -71,7 +71,7 @@ public class UdmValueService implements IUdmValueService {
         udmValueDto.setUpdateUser(userName);
         udmValueRepository.update(udmValueDto);
         fieldToValueChangesMap.getEditAuditReasons().forEach(reason ->
-            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.USAGE_EDIT, reason));
+            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.VALUE_EDIT, reason));
         LOGGER.debug("Update UDM value. Finished. Value={}, UserName={}", udmValueDto, userName);
     }
 
