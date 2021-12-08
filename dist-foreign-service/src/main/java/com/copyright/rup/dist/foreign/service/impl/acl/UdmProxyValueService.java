@@ -26,10 +26,10 @@ import java.util.List;
 @Service
 public class UdmProxyValueService implements IUdmProxyValueService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IUdmProxyValueRepository udmProxyValueRepository;
-
-    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
     public List<Integer> findPeriods() {

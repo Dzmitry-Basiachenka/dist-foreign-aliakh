@@ -24,7 +24,7 @@ public interface IUdmProxyValueService {
     List<Integer> findPeriods();
 
     /**
-     * Calculates and applies content unit price of UDM proxy values to UDM proxy values.
+     * Calculates and applies content unit price of UDM proxy values to UDM values.
      *
      * @param period period of usage
      * @return count of updated UDM values

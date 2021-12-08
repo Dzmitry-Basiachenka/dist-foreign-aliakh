@@ -39,7 +39,7 @@ public interface IUdmProxyValueRepository {
     void insertProxyValues(Integer period, String userName);
 
     /**
-     * Applies content unit price of UDM proxy values to UDM proxy values.
+     * Applies content unit price of UDM proxy values to UDM values.
      *
      * @param period   period of UDM values
      * @param userName name of user

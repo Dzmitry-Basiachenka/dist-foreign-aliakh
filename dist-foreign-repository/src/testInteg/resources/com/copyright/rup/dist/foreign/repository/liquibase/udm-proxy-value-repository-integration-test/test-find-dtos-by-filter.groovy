@@ -1,20 +1,20 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-    changeSet(id: '2021-11-24-01', author: 'Alaiksandr Liakh <aliakh@copyright.com>') {
-        comment('Inserts test data for testInsertProxyValues')
+    changeSet(id: '2021-11-24-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment('Inserts test data for testFindDtosByFilter')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '81226f4a-6a21-4529-97ad-5dab5c92bcce')
-            column(name: 'period', value: 211012)
+            column(name: 'df_udm_value_uid', value: 'fa145273-781e-43b8-8e2c-1eb0b555479a')
+            column(name: 'period', value: 211512)
             column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 100006859)
             column(name: 'wr_wrk_inst', value: 823333789)
             column(name: 'system_title', value: 'Redfords and Mitchells')
             column(name: 'standard_number', value: '1873-7773')
             column(name: 'assignee', value: 'jjohn@copyright.com')
-            column(name: 'price', value: 100)
-            column(name: 'price_in_usd', value: 100)
+            column(name: 'price', value: 150)
+            column(name: 'price_in_usd', value: 150)
             column(name: 'price_year', value: 2021)
             column(name: 'price_type', value: 'Individual')
             column(name: 'price_source', value: 'http://google.com')
@@ -23,8 +23,8 @@ databaseChangeLog {
             column(name: 'content_flag', value: true)
             column(name: 'currency_exchange_rate', value: 1)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
-            column(name: 'content_unit_price', value: 100)
-            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 150)
+            column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
             column(name: 'comment', value: 'Comment')
             column(name: 'content_source', value: 'Book')
             column(name: 'content_comment', value: 'Content comment')
@@ -34,8 +34,15 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_proxy_value') {
+            column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
+            column(name: 'period', value: 211512)
+            column(name: 'content_unit_price', value: 150)
+            column(name: 'content_unit_price_count', value: 1)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '97226f4a-ca11-4529-bb59-5dab5c92b8ce')
+            column(name: 'df_udm_value_uid', value: '1cc3dac1-2843-4c3f-87d4-b914f85b37b3')
             column(name: 'period', value: 211012)
             column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 100006859)
@@ -43,8 +50,8 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Bread and Butter')
             column(name: 'standard_number', value: '1822-7773')
             column(name: 'assignee', value: 'jjohn@copyright.com')
-            column(name: 'price', value: 200)
-            column(name: 'price_in_usd', value: 200)
+            column(name: 'price', value: 50)
+            column(name: 'price_in_usd', value: 50)
             column(name: 'price_year', value: 2021)
             column(name: 'price_type', value: 'Individual')
             column(name: 'price_source', value: 'http://google.com')
@@ -53,8 +60,8 @@ databaseChangeLog {
             column(name: 'content_flag', value: true)
             column(name: 'currency_exchange_rate', value: 1)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
-            column(name: 'content_unit_price', value: 200)
-            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 50)
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
             column(name: 'comment', value: 'Comment')
             column(name: 'content_source', value: 'Book')
             column(name: 'content_comment', value: 'Content comment')
@@ -65,7 +72,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: 'fc3e7747-3d3b-4f07-93fb-f66c97d9f737')
+            column(name: 'df_udm_value_uid', value: '624c4f68-a099-475d-a233-b662d5cd1cc0')
             column(name: 'period', value: 211012)
             column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 100006859)
@@ -94,38 +101,15 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '2e07c041-79e8-48e5-a875-229d5e0f5259')
-            column(name: 'period', value: 211012)
-            column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
-            column(name: 'rh_account_number', value: 100006859)
-            column(name: 'wr_wrk_inst', value: 569856369)
-            column(name: 'system_title', value: 'Malcolm Gruel Jr')
-            column(name: 'standard_number', value: '1722-7773')
-            column(name: 'assignee', value: 'jjohn@copyright.com')
-            column(name: 'price', value: 400)
-            column(name: 'price_in_usd', value: 400)
-            column(name: 'price_year', value: 2021)
-            column(name: 'price_type', value: 'Individual')
-            column(name: 'price_source', value: 'http://google.com')
-            column(name: 'price_flag', value: true)
-            column(name: 'content', value: 1)
-            column(name: 'content_flag', value: true)
-            column(name: 'currency_exchange_rate', value: 1)
-            column(name: 'currency_exchange_rate_date', value: '2021-09-10')
-            column(name: 'content_unit_price', value: 400)
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_proxy_value') {
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'comment', value: 'Comment')
-            column(name: 'content_source', value: 'Newspaper')
-            column(name: 'content_comment', value: 'Content comment')
-            column(name: 'updated_datetime', value: '2021-09-17T00:00:00-04:00')
-            column(name: 'updated_by_user', value: 'jjohn@copyright.com')
-            column(name: 'created_datetime', value: '2021-09-17T00:00:00-04:00')
-            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'period', value: 211012)
+            column(name: 'content_unit_price', value: 175)
+            column(name: 'content_unit_price_count', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
-            column(name: 'df_udm_value_uid', value: '3d34e6f8-1a5d-4ffb-9f43-7fefddd970bf')
+            column(name: 'df_udm_value_uid', value: 'a9576f4f-4879-4aae-a8af-8ebc986df751')
             column(name: 'period', value: 211006)
             column(name: 'status_ind', value: 'RESEARCH_COMPLETE')
             column(name: 'rh_account_number', value: 100006859)
@@ -144,7 +128,7 @@ databaseChangeLog {
             column(name: 'currency_exchange_rate', value: 1)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
             column(name: 'content_unit_price', value: 500)
-            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
             column(name: 'comment', value: 'Comment')
             column(name: 'content_source', value: 'Newspaper')
             column(name: 'content_comment', value: 'Content comment')
@@ -152,6 +136,13 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'jjohn@copyright.com')
             column(name: 'created_datetime', value: '2021-09-16T00:00:00-04:00')
             column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_proxy_value') {
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'period', value: 211006)
+            column(name: 'content_unit_price', value: 500)
+            column(name: 'content_unit_price_count', value: 1)
         }
 
         rollback {

@@ -1,6 +1,6 @@
 [
   {
-    "id": "42c7bf99-3ccd-4ab0-a3e2-f84f021d635b",
+    "id": "43699543-3287-40e1-a4b8-553e7547deb9",
     "version": 2,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com",
@@ -38,7 +38,7 @@
     "comment": "Comment"
   },
   {
-    "id": "c0e3ae8c-55d6-4603-8dab-47644c0fbc32",
+    "id": "cf03b058-6189-4885-b2a6-a6de04b2de88",
     "version": 2,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com",
@@ -75,7 +75,7 @@
     "comment": "Comment"
   },
   {
-    "id": "81226f4a-6a21-4529-97ad-5dab5c92bcce",
+    "id": "813cefd6-d3db-4ea2-951b-8295f6266cb2",
     "version": 1,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com",
@@ -100,6 +100,7 @@
     "priceYear": 2021,
     "priceInUsd": 100.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
@@ -114,7 +115,7 @@
     "comment": "Comment"
   },
   {
-    "id": "97226f4a-ca11-4529-bb59-5dab5c92b8ce",
+    "id": "957eef4f-9d36-4d91-a054-2d0bf8f62013",
     "version": 1,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com",
@@ -153,7 +154,7 @@
     "comment": "Comment"
   },
   {
-    "id": "fc3e7747-3d3b-4f07-93fb-f66c97d9f737",
+    "id": "f8c85f19-7153-4cac-b98a-7193d329eb43",
     "version": 1,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com",
@@ -192,7 +193,7 @@
     "comment": "Comment"
   },
   {
-    "id": "2e07c041-79e8-48e5-a875-229d5e0f5259",
+    "id": "2143c3c2-ca06-4dc3-ae58-5e9895a15f68",
     "version": 1,
     "createUser": "user@copyright.com",
     "updateUser": "jjohn@copyright.com",
@@ -240,7 +241,7 @@
     "comment": "Comment"
   },
   {
-    "id": "3d34e6f8-1a5d-4ffb-9f43-7fefddd970bf",
+    "id": "32720420-8f58-4d3b-8202-7658c4c80458",
     "version": 1,
     "createUser": "user@copyright.com",
     "updateUser": "jjohn@copyright.com",

@@ -65,7 +65,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-test-data-init-delete-proxy-values.groovy")
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-delete-proxy-values.groovy")
     public void testDeleteProxyValues() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(PERIOD));
@@ -75,33 +75,31 @@ public class UdmProxyValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-test-data-init-insert-proxy-values.groovy")
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-insert-proxy-values.groovy")
     public void testInsertProxyValues() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(PERIOD));
         udmProxyValueRepository.insertProxyValues(PERIOD, USER_NAME);
-        verifyProxyValueDtos(
-            loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto.json"),
+        verifyProxyValueDtos(loadExpectedProxyValueDtos("json/udm/udm_proxy_value_dto.json"),
             udmProxyValueRepository.findDtosByFilter(filter));
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-test-data-init-apply-proxy-values.groovy")
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-apply-proxy-values.groovy")
     public void testApplyProxyValues() {
         assertEquals(2, udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME));
-        verifyValueDtos(
-            loadExpectedValueDtos("json/udm/udm_value_dto_42c7bf99.json"),
+        verifyValueDtos(loadExpectedValueDtos("json/udm/udm_value_dto_43699543.json"),
             findAllValueDtos());
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-test-data-init-find-periods.groovy")
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-find-periods.groovy")
     public void testFindPeriods() {
         assertEquals(Arrays.asList(211012, 211006), udmProxyValueRepository.findPeriods());
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-test-data-init-find-dtos-by-filter.groovy")
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-find-dtos-by-filter.groovy")
     public void testFindDtosByFilter() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(211012, 211006));
@@ -116,8 +114,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
         filter.setPubTypeNames(Collections.emptySet());
     }
 
-    private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues,
-                                      List<UdmProxyValueDto> actualValues) {
+    private void verifyProxyValueDtos(List<UdmProxyValueDto> expectedValues, List<UdmProxyValueDto> actualValues) {
         assertEquals(expectedValues.size(), actualValues.size());
         IntStream.range(0, expectedValues.size()).forEach(index -> {
             UdmProxyValueDto expectedValue = expectedValues.get(index);
@@ -141,8 +138,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
         return proxyValues;
     }
 
-    private void verifyValueDtos(List<UdmValueDto> expectedValues,
-                                 List<UdmValueDto> actualValues) {
+    private void verifyValueDtos(List<UdmValueDto> expectedValues, List<UdmValueDto> actualValues) {
         assertEquals(expectedValues.size(), actualValues.size());
         IntStream.range(0, expectedValues.size()).forEach(index -> {
             UdmValueDto expectedValue = expectedValues.get(index);
