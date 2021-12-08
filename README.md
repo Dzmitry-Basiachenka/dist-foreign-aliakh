@@ -1,3 +1,14 @@
+14.1.35
+-
+* B-70805 FDA: Audit Value Changes: Implement backend to write edit audit
+* B-70805 FDA: Audit Value Changes: add unit and integration tests
+* B-70805 FDA: Audit Value Changes: introduce audit for value batch creation and publishing to baseline
+* B-69863 FDA: View baseline values: fix clear periods value when applied additional filters
+* B-68257 FDA: View proxy values: fix sorting by Content Unit Price on Proxy tab
+* B-68257 FDA: View proxy values: implement logic to generate exports
+* B-69757 FDA: Edit functionality modification (Usages and Values): apply confirmation window for UDM baseline usage remove and write a reason to audit
+* B-69757 FDA: Edit functionality modification (Usages and Values): exclude remove from baseline for publish to baseline logic
+
 14.1.34
 -
 * B-70805 FDA: Audit Value Changes: Implement backend to write assign/unassign audit
