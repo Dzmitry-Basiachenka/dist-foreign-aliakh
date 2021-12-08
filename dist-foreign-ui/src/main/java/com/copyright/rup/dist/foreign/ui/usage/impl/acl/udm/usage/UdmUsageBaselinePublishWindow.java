@@ -14,8 +14,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 /**
  * Window for publish to baseline.
  * <p>
@@ -60,12 +58,9 @@ public class UdmUsageBaselinePublishWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         publishButton.setEnabled(false);
         publishButton.addClickListener(event -> {
-            Pair<Integer, Integer> publishedRemovedUdmUsages =
-                controller.publishUdmUsagesToBaseline(periodComboBox.getValue());
+            int publishedCount = controller.publishUdmUsagesToBaseline(periodComboBox.getValue());
             close();
-            Windows.showNotificationWindow(
-                ForeignUi.getMessage("message.udm_usage.publish", publishedRemovedUdmUsages.getLeft(),
-                    publishedRemovedUdmUsages.getRight()));
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_usage.publish", publishedCount));
         });
         horizontalLayout.addComponents(publishButton, closeButton);
         return horizontalLayout;

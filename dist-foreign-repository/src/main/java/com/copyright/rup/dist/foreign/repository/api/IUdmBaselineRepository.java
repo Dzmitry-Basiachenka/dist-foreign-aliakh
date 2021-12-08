@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Interface for Baseline usage repository.
@@ -38,15 +37,6 @@ public interface IUdmBaselineRepository {
      * @return the count of usages
      */
     int findCountByFilter(UdmBaselineFilter filter);
-
-    /**
-     * Removes UDM usages from baseline. Sets is_baseline_flag {@code false}.
-     *
-     * @param period   usage period
-     * @param userName name of user
-     * @return set of UDM usage ids
-     */
-    Set<String> removeUdmUsagesFromBaseline(Integer period, String userName);
 
     /**
      * Finds list of periods from UDM baseline usages.

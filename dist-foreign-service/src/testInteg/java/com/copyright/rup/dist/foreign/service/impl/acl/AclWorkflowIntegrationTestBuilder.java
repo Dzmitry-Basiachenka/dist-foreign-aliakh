@@ -31,9 +31,9 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
-import org.apache.commons.lang3.tuple.Pair;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -231,7 +231,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     return valuesMap;
                 }));
             udmUsageService.updateUsages(usageToAuditMap, false, "Reason");
-            assertEquals(Pair.of(expectedCountOfPublishedUsages, 0),
+            assertEquals(expectedCountOfPublishedUsages,
                 udmUsageService.publishUdmUsagesToBaseline(expectedUdmBatch.getPeriod()));
         }
 

@@ -37,14 +37,6 @@ public interface IUdmBaselineService {
     int getBaselineUsagesCount(UdmBaselineFilter filter);
 
     /**
-     * Removes usages from baseline.
-     *
-     * @param period baseline period
-     * @return count of removed from baselines
-     */
-    int removeFromBaseline(Integer period);
-
-    /**
      * Gets all available baseline periods.
      *
      * @return list of periods

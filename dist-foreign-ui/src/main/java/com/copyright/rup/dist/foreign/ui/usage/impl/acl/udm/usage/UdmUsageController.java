@@ -40,7 +40,6 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -218,7 +217,7 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public Pair<Integer, Integer> publishUdmUsagesToBaseline(Integer period) {
+    public int publishUdmUsagesToBaseline(Integer period) {
         return udmUsageService.publishUdmUsagesToBaseline(period);
     }
 

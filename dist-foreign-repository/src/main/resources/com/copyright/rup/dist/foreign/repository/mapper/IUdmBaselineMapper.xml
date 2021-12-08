@@ -200,18 +200,6 @@
         <include refid="IUdmBaselineMapper.selectCountByFilterSql"/>
     </select>
 
-    <select id="removeFromBaseline" parameterType="map" resultType="string">
-        update ${schema}.df_udm_usage
-        set
-            is_baseline_flag = false,
-            baseline_created_by_user = null,
-            baseline_created_datetime = null
-        where status_ind != 'ELIGIBLE'
-            and period = #{period}
-            and is_baseline_flag = true
-        returning df_udm_usage_uid
-    </select>
-
     <select id="findPeriods" resultType="int">
         select distinct period
         from ${schema}.df_udm_usage

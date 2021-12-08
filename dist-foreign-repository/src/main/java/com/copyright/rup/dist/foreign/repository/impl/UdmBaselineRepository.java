@@ -11,13 +11,12 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -50,14 +49,6 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     public int findCountByFilter(UdmBaselineFilter filter) {
         return selectOne("IUdmBaselineMapper.findCountByFilter",
             ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
-    }
-
-    @Override
-    public Set<String> removeUdmUsagesFromBaseline(Integer period, String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("period", Objects.requireNonNull(period));
-        parameters.put("createUser", Objects.requireNonNull(userName));
-        return new HashSet<>(selectList("IUdmBaselineMapper.removeFromBaseline", parameters));
     }
 
     @Override
