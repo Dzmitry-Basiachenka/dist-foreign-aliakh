@@ -25,6 +25,7 @@
     "priceYear": 2021,
     "priceInUsd": 200.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
@@ -140,6 +141,7 @@
     "priceYear": 2021,
     "priceInUsd": 200.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
@@ -179,6 +181,7 @@
     "priceYear": 2021,
     "priceInUsd": 300.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
@@ -223,6 +226,7 @@
     "priceYear": 2021,
     "priceInUsd": 400.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
@@ -266,6 +270,7 @@
     "priceYear": 2021,
     "priceInUsd": 500.0000000000,
     "priceFlag": true,
+    "currency": "USD",
     "currencyExchangeRate": 1.0000000000,
     "currencyExchangeRateDate": [
       2021,
