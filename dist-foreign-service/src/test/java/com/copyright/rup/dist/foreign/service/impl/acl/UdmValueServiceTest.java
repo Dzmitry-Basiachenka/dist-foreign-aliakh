@@ -96,13 +96,13 @@ public class UdmValueServiceTest {
         fieldToValueChangesMap.updateFieldValue("Comment", "new comment");
         udmValueRepository.update(udmValueDto);
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
             "The field 'Price Comment' was edited. Old Value is 'old price comment'. New Value is 'new price comment'");
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
             "The field 'Content Comment' was edited. Old Value is 'old content comment'. New Value is not specified");
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.USAGE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
             "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
         expectLastCall().once();
         replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
