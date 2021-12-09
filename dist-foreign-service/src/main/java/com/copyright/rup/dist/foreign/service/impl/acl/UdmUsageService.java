@@ -134,13 +134,13 @@ public class UdmUsageService implements IUdmUsageService {
             udmUsageDto.setAssignee(null);
         }
         udmUsageDto.setUpdateUser(userName);
+        udmUsageRepository.update(udmUsageDto);
+        fieldToValueChangesMap.getEditAuditReasons().forEach(actionReason ->
+            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));
         if (udmUsageDto.isBaselineFlag()) {
             baselineService.removeFromBaselineById(udmUsageDto.getId());
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.REMOVE_FROM_BASELINE, reason);
         }
-        udmUsageRepository.update(udmUsageDto);
-        fieldToValueChangesMap.getEditAuditReasons().forEach(actionReason ->
-            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));
         LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}, Reason={}", udmUsageDto, userName, reason);
     }
 
