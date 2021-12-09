@@ -18,7 +18,9 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -30,7 +32,6 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -102,7 +103,7 @@ public class UdmValueRepositoryIntegrationTest {
     @Autowired
     private IUdmValueRepository udmValueRepository;
     @Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
+    private IUdmBaselineValueRepository udmBaselineValueRepository;
 
     @Test
     @TestData(fileName = "rollback-only.groovy")
@@ -500,12 +501,15 @@ public class UdmValueRepositoryIntegrationTest {
             udmValueRepository.publishToBaseline(211012, USER_NAME));
         assertEquals(Collections.singletonList("fc3e7747-3d3b-4f07-93fb-f66c97d9f737"),
             udmValueRepository.publishToBaseline(211112, USER_NAME));
+        UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
+        filter.setPeriods(Collections.singleton(211012));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_1.json"),
-            sqlSessionTemplate.selectList("IUdmBaselineValueMapper.findValuesByPeriod", 211012));
+            udmBaselineValueRepository.findDtosByFilter(filter, null, null));
+        filter.setPeriods(Collections.singleton(211112));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_2.json"),
-            sqlSessionTemplate.selectList("IUdmBaselineValueMapper.findValuesByPeriod", 211112));
+            udmBaselineValueRepository.findDtosByFilter(filter, null, null));
     }
 
     private void verifyValueBaselineDto(List<UdmValueBaselineDto> expectedValues,

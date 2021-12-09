@@ -20,8 +20,10 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
@@ -34,7 +36,6 @@ import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +63,7 @@ import java.util.stream.Collectors;
 @Component
 public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
+    private final List<String> uploadedUdmValuesIds = new ArrayList<>();
     @Autowired
     private IUdmBatchService udmBatchService;
     @Autowired
@@ -69,14 +71,13 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IUdmValueService udmValueService;
     @Autowired
+    private IUdmBaselineValueService udmBaselineValueService;
+    @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
     private SqsClientMock sqsClientMock;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
-    @Autowired
-    private SqlSessionTemplate sqlSessionTemplate;
-
     private List<UdmUsageDto> udmUsageDtos;
     private UdmBatch expectedUdmBatch;
     private int expectedCountOfPublishedUsages;
@@ -87,7 +88,6 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String pathToExpectedValues;
     private String pathToExpectedValuesBaseline;
     private List<String> uploadedUdmUsagesIds = new ArrayList<>();
-    private final List<String> uploadedUdmValuesIds = new ArrayList<>();
     private List<String> pathsToExpectedUdmUsageAuditItems = new ArrayList<>();
     private List<String> pathsToExpectedUdmValueAuditItems = new ArrayList<>();
     private Map<String, String> expectedRmsRequestToResponseMap = new HashMap<>();
@@ -285,12 +285,10 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertUdmValuesBaseline() throws IOException {
-            List<UdmValueBaselineDto> actualUdmValues = sqlSessionTemplate
-                .selectList("IUdmBaselineValueMapper.findValuesByPeriod", expectedUdmBatch.getPeriod())
-                .stream()
-                .map(udmValue -> (UdmValueBaselineDto) udmValue)
-                .sorted(Comparator.comparing(UdmValueBaselineDto::getWrWrkInst))
-                .collect(Collectors.toList());
+            UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
+            filter.setPeriods(Collections.singleton(expectedUdmBatch.getPeriod()));
+            List<UdmValueBaselineDto> actualUdmValues = udmBaselineValueService.getValueDtos(filter, null,
+                new Sort("wrWrkInst", Sort.Direction.ASC));
             List<UdmValueBaselineDto> expectedUdmValues =
                 testHelper.loadExpectedValueBaselineDto(pathToExpectedValuesBaseline);
             testHelper.assertValueBaselineDtos(expectedUdmValues, actualUdmValues);
