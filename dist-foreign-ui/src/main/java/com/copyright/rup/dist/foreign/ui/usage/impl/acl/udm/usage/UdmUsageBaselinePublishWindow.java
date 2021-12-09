@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
@@ -28,14 +29,17 @@ public class UdmUsageBaselinePublishWindow extends Window {
     private final IUdmUsageController controller;
     private final Button publishButton = Buttons.createButton(ForeignUi.getMessage("button.publish"));
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
+    private final ClickListener publishButtonClickListener;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUdmUsageController}
+     * @param controller    instance of {@link IUdmUsageController}
+     * @param clickListener action that should be performed after Publish button was clicked
      */
-    public UdmUsageBaselinePublishWindow(IUdmUsageController controller) {
+    public UdmUsageBaselinePublishWindow(IUdmUsageController controller, ClickListener clickListener) {
         this.controller = controller;
+        this.publishButtonClickListener = clickListener;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.publish_baseline"));
         setResizable(false);
@@ -58,9 +62,10 @@ public class UdmUsageBaselinePublishWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         publishButton.setEnabled(false);
         publishButton.addClickListener(event -> {
-            int publishedCount = controller.publishUdmUsagesToBaseline(periodComboBox.getValue());
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_usage.publish",
+                controller.publishUdmUsagesToBaseline(periodComboBox.getValue())));
+            publishButtonClickListener.buttonClick(event);
             close();
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_usage.publish", publishedCount));
         });
         horizontalLayout.addComponents(publishButton, closeButton);
         return horizontalLayout;
