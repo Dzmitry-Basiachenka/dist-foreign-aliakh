@@ -1,3 +1,11 @@
+14.1.36
+-
+* B-65964 FDA: Calculate and apply proxy values: make changes based on comments in code review
+* B-70805 FDA: Audit Value Changes: Implement backend to write edit audit
+* B-65868 Tech Debt: FDA: adjust ACL integration tests
+* B-65868 Tech Debt: FDA: add refresh step after usage and value publishing to baseline
+* B-65868 Tech Debt: FDA: fix validate message on multiple edit usage window
+
 14.1.35
 -
 * B-70805 FDA: Audit Value Changes: Implement backend to write edit audit
