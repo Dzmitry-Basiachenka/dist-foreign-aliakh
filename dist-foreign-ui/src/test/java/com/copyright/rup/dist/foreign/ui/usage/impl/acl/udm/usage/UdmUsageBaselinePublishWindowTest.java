@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -15,6 +16,8 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -43,10 +46,12 @@ public class UdmUsageBaselinePublishWindowTest {
 
     private IUdmUsageController controller;
     private UdmUsageBaselinePublishWindow window;
+    private ClickListener publishButtonClickListener;
 
     @Before
     public void setUp() {
         controller = createMock(IUdmUsageController.class);
+        publishButtonClickListener = createMock(ClickListener.class);
         mockStatic(Windows.class);
     }
 
@@ -54,7 +59,7 @@ public class UdmUsageBaselinePublishWindowTest {
     public void testConstructor() {
         expect(controller.getPeriods()).andReturn(Collections.emptyList()).once();
         replay(controller);
-        window = new UdmUsageBaselinePublishWindow(controller);
+        window = new UdmUsageBaselinePublishWindow(controller, publishButtonClickListener);
         verify(controller);
         assertEquals("Publish to Baseline", window.getCaption());
         assertEquals(280, window.getWidth(), 0);
@@ -70,14 +75,16 @@ public class UdmUsageBaselinePublishWindowTest {
         expect(controller.publishUdmUsagesToBaseline(202106)).andReturn(10).once();
         Windows.showNotificationWindow(eq("Publish completed: 10 record(s) were published to baseline"));
         expectLastCall().once();
-        replay(controller, Windows.class);
-        window = new UdmUsageBaselinePublishWindow(controller);
+        publishButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(controller, Windows.class, publishButtonClickListener);
+        window = new UdmUsageBaselinePublishWindow(controller, publishButtonClickListener);
         ComboBox<Integer> comboBox = (ComboBox<Integer>) ((VerticalLayout) window.getContent()).getComponent(0);
         comboBox.setSelectedItem(202106);
         Button publishButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1)).getComponent(0);
         publishButton.click();
-        verify(controller, Windows.class);
+        verify(controller, Windows.class, publishButtonClickListener);
     }
 
     private void verifyRootLayout(Component component) {

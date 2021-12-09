@@ -164,7 +164,8 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                     saveEvent -> refresh())
                     : () -> new UdmEditMultipleUsagesWindow(controller, selectedUsages, saveEvent -> refresh()));
         });
-        publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller)));
+        publishButton.addClickListener(event -> Windows.showModalWindow(new UdmUsageBaselinePublishWindow(controller,
+            publishEvent -> refresh())));
         VaadinUtils.setButtonsAutoDisabled(multipleEditButton);
         return new HorizontalLayout(udmBatchMenuBar, assignmentMenuBar, multipleEditButton, publishButton,
             exportButton);
@@ -290,7 +291,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 switchSelectAllCheckBoxVisibility(size);
                 udmUsagesGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
                 return size;
-            });
+            }, UdmUsageDto::getId);
         udmUsagesGrid = new Grid<>(dataProvider);
         addColumns();
         udmUsagesGrid.setSizeFull();

@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
@@ -28,14 +29,17 @@ public class UdmPublishToBaselineWindow extends Window {
     private final IUdmValueController controller;
     private final ComboBox<Integer> periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
     private final Button continueButton = Buttons.createButton(ForeignUi.getMessage("button.continue"));
+    private final ClickListener publishButtonClickListener;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUdmValueController}
+     * @param controller    instance of {@link IUdmValueController}
+     * @param clickListener action that should be performed after Publish button was clicked
      */
-    public UdmPublishToBaselineWindow(IUdmValueController controller) {
+    public UdmPublishToBaselineWindow(IUdmValueController controller, ClickListener clickListener) {
         this.controller = controller;
+        this.publishButtonClickListener = clickListener;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.publish_baseline"));
         setResizable(false);
@@ -61,6 +65,7 @@ public class UdmPublishToBaselineWindow extends Window {
             if (controller.isAllowedForPublishing(periodComboBox.getValue())) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.udm_value.publish",
                     controller.publishToBaseline(periodComboBox.getValue())));
+                publishButtonClickListener.buttonClick(event);
                 close();
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.udm_value.publish"));
