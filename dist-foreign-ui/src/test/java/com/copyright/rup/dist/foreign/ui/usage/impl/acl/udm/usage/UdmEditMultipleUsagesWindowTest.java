@@ -345,6 +345,7 @@ public class UdmEditMultipleUsagesWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         binder = createMock(Binder.class);
+        expect(binder.validate()).andReturn(anyObject()).once();
         binder.writeBean(buildActualUdmUsageDto());
         expectLastCall();
         expect(binder.isValid()).andReturn(true).once();
@@ -418,6 +419,7 @@ public class UdmEditMultipleUsagesWindowTest {
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         replay(clickEvent, controller, binder, saveButtonClickListener, ForeignSecurityUtils.class, Windows.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
         Whitebox.setInternalState(window, "bindedUsageDto", udmUsageDto);
@@ -443,6 +445,7 @@ public class UdmEditMultipleUsagesWindowTest {
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         udmUsageDto.setPeriodEndDate(LocalDate.of(2068, 12, 31));
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
@@ -462,6 +465,7 @@ public class UdmEditMultipleUsagesWindowTest {
         usageToCaptureChanges.setQuantity(NEW_QUANTITY);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
@@ -483,6 +487,7 @@ public class UdmEditMultipleUsagesWindowTest {
         usageToCaptureChanges.setAnnualMultiplier(NEW_ANNUAL_MULTIPLIER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
@@ -504,6 +509,7 @@ public class UdmEditMultipleUsagesWindowTest {
         usageToCaptureChanges.setStatisticalMultiplier(NEW_STATISTICAL_MULTIPLIER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
@@ -524,6 +530,7 @@ public class UdmEditMultipleUsagesWindowTest {
         usageToCaptureChanges.setReportedTitle(NEW_REPORTED_TITLE);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);
@@ -543,6 +550,7 @@ public class UdmEditMultipleUsagesWindowTest {
         usageToCaptureChanges.setReportedStandardNumber(NEW_REPORTED_STANDARD_NUMBER);
         UdmUsageDto udmUsageDto = buildUdmUsageDto();
         setExpectedData(udmUsageDto, usageToCaptureChanges, fieldToValuesMap);
+        expect(binder.validate()).andReturn(createMock(BinderValidationStatus.class)).once();
         expect(binder.isValid()).andReturn(true).once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesWindow(controller, udmUsages, saveButtonClickListener);

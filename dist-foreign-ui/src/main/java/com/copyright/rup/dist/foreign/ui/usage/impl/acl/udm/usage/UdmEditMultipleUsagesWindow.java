@@ -345,6 +345,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         saveButton.setEnabled(false);
         saveButton.addClickListener(event -> {
+            binder.validate();
             if (binder.isValid()) {
                 if (hasBaselineUsage()) {
                     saveBaselineUsages(event);
