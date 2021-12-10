@@ -107,7 +107,7 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
             addColumn(UdmProxyValueDto::getPeriod, "table.column.value_period", "period");
         footer.getCell(column).setText(ForeignUi.getMessage("label.footer.proxy_values_count", 0));
         addColumn(UdmProxyValueDto::getPubTypeName, "table.column.publication_type_code", "pubTypeName");
-        addAmountColumn(UdmProxyValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice");
+        addContentUnitPriceColumn(UdmProxyValueDto::getContentUnitPrice);
         addColumn(UdmProxyValueDto::getContentUnitPriceCount, "table.column.content_unit_price_count",
             "contentUnitPriceCount");
     }
@@ -121,14 +121,15 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
             .setSortProperty(columnId);
     }
 
-    private void addAmountColumn(Function<UdmProxyValueDto, BigDecimal> function, String captionProperty,
-                                 String columnId) {
+    private void addContentUnitPriceColumn(Function<UdmProxyValueDto, BigDecimal> function) {
         udmValuesGrid.addColumn(value -> CurrencyUtils.format(function.apply(value), MONEY_FORMATTER))
             .setStyleGenerator(item -> "v-align-right")
-            .setCaption(ForeignUi.getMessage(captionProperty))
-            .setId(columnId)
+            .setCaption(ForeignUi.getMessage("table.column.content_unit_price"))
+            .setId("contentUnitPrice")
             .setSortable(true)
-            .setSortProperty(columnId);
+            .setSortProperty("contentUnitPrice")
+            .setComparator((proxyValueDto1, proxyValueDto2) ->
+                proxyValueDto1.getContentUnitPrice().compareTo(proxyValueDto2.getContentUnitPrice()));
     }
 
     private void updateGridStyle(List<UdmProxyValueDto> proxyValueDtos) {
