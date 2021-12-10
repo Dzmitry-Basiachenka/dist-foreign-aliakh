@@ -1,13 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -20,7 +20,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.function.Function;
 
 /**
@@ -36,8 +35,6 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
-        CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private IUdmBaselineValueController controller;
     private Grid<UdmValueBaselineDto> udmBaselineValueGrid;
@@ -128,7 +125,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
 
     private Column<UdmValueBaselineDto, ?> addAmountColumn(Function<UdmValueBaselineDto, BigDecimal> function,
                                                            String captionProperty, String columnId, double width) {
-        return udmBaselineValueGrid.addColumn(value -> CurrencyUtils.format(function.apply(value), MONEY_FORMATTER))
+        return udmBaselineValueGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
