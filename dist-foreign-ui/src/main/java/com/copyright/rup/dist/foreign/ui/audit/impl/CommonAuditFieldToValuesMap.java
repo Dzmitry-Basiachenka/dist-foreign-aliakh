@@ -1,9 +1,6 @@
-package com.copyright.rup.dist.foreign.domain;
+package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -11,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Domain object for holding map of field names and its old and new values.
@@ -19,9 +17,10 @@ import java.util.Objects;
  * <p>
  * Date: 12/06/2021
  *
+ * @param <T> type of domain objects
  * @author Aliaksandr Liakh
  */
-class CommonAuditFieldToValuesMap {
+public class CommonAuditFieldToValuesMap<T> {
 
     /**
      * Empty old and new values pair.
@@ -55,11 +54,11 @@ class CommonAuditFieldToValuesMap {
     }
 
     /**
-     * Gets list of audit reasons.
+     * Gets list of audit action reasons.
      *
-     * @return list of audit reasons
+     * @return list of audit action reasons
      */
-    public List<String> getEditAuditReasons() {
+    public List<String> getActionReasons() {
         List<String> result = new ArrayList<>();
         fieldToValueChangesMap.forEach((key, value) -> {
             if (!Objects.equals(value.getLeft(), value.getRight())) {
@@ -73,35 +72,22 @@ class CommonAuditFieldToValuesMap {
         return result;
     }
 
+    /**
+     * Gets maps of DTOs to list of audit action reasons.
+     *
+     * @param commonAuditFieldToValuesMap instance of {@link CommonAuditFieldToValuesMap}
+     * @param <T>                         type of domain objects
+     * @return list of audit action reasons
+     */
+    public static <T> Map<T, List<String>> getDtoToAuditReasonsMap(
+        Map<T, ? extends CommonAuditFieldToValuesMap<T>> commonAuditFieldToValuesMap) {
+        return commonAuditFieldToValuesMap
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getActionReasons()));
+    }
+
     protected Map<String, Pair<String, String>> getFieldToValueChangesMap() {
         return fieldToValueChangesMap;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (null == obj || getClass() != obj.getClass()) {
-            return false;
-        }
-        CommonAuditFieldToValuesMap that = (CommonAuditFieldToValuesMap) obj;
-        return new EqualsBuilder()
-            .append(fieldToValueChangesMap, that.fieldToValueChangesMap)
-            .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-            .append(fieldToValueChangesMap)
-            .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("fieldToValueChangesMap", fieldToValueChangesMap)
-            .toString();
     }
 }

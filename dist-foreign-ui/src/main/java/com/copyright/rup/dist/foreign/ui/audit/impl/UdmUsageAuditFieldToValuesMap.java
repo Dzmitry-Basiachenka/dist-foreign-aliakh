@@ -1,5 +1,6 @@
-package com.copyright.rup.dist.foreign.domain;
+package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -15,7 +16,7 @@ import java.util.function.Function;
  *
  * @author Uladzislau Shalamitski
  */
-public class UdmUsageAuditFieldToValuesMap extends CommonAuditFieldToValuesMap {
+public class UdmUsageAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<UdmUsageDto> {
 
     /**
      * Constructor.

@@ -9,7 +9,6 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -65,14 +64,16 @@ public class UdmValueService implements IUdmValueService {
 
     @Override
     @Transactional
-    public void updateValue(UdmValueDto udmValueDto, UdmValueAuditFieldToValuesMap fieldToValueChangesMap) {
+    public void updateValue(UdmValueDto udmValueDto, List<String> actionReasons) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.debug("Update UDM value. Started. Value={}, UserName={}", udmValueDto, userName);
+        LOGGER.debug("Update UDM value. Started. Value={}, Reasons={}, UserName={}", udmValueDto, actionReasons,
+            userName);
         udmValueDto.setUpdateUser(userName);
         udmValueRepository.update(udmValueDto);
-        fieldToValueChangesMap.getEditAuditReasons().forEach(reason ->
-            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.VALUE_EDIT, reason));
-        LOGGER.debug("Update UDM value. Finished. Value={}, UserName={}", udmValueDto, userName);
+        actionReasons.forEach(actionReason ->
+            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.VALUE_EDIT, actionReason));
+        LOGGER.debug("Update UDM value. Finished. Value={}, Reasons={}, UserName={}", udmValueDto, actionReasons,
+            userName);
     }
 
     @Override

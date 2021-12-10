@@ -15,7 +15,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -90,10 +89,10 @@ public class UdmValueServiceTest {
         udmValueDto.setId(UDM_VALUE_UID_1);
         udmValueDto.setPriceComment("old price comment");
         udmValueDto.setContentComment("old content comment");
-        UdmValueAuditFieldToValuesMap fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValueDto);
-        fieldToValueChangesMap.updateFieldValue("Price Comment", "new price comment");
-        fieldToValueChangesMap.updateFieldValue("Content Comment", null);
-        fieldToValueChangesMap.updateFieldValue("Comment", "new comment");
+        List<String> actionReasons = Arrays.asList(
+            "The field 'Price Comment' was edited. Old Value is 'old price comment'. New Value is 'new price comment'",
+            "The field 'Content Comment' was edited. Old Value is 'old content comment'. New Value is not specified",
+            "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
         udmValueRepository.update(udmValueDto);
         expectLastCall().once();
         udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
@@ -106,7 +105,7 @@ public class UdmValueServiceTest {
             "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
         expectLastCall().once();
         replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
-        udmValueService.updateValue(udmValueDto, fieldToValueChangesMap);
+        udmValueService.updateValue(udmValueDto, actionReasons);
         assertEquals(USER_NAME, udmValueDto.getUpdateUser());
         verify(udmValueRepository, udmValueAuditService, RupContextUtils.class);
     }

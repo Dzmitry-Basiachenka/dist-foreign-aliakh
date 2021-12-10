@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.Currency;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 
@@ -24,10 +23,10 @@ public interface IUdmValueService {
     /**
      * Updates UDM value.
      *
-     * @param udmValueDto {@link UdmValueDto} to update
-     * @param fieldToValueChangesMap map of field name to its values (old and new)
+     * @param udmValueDto   {@link UdmValueDto} to update
+     * @param actionReasons list of audit action reasons
      */
-    void updateValue(UdmValueDto udmValueDto, UdmValueAuditFieldToValuesMap fieldToValueChangesMap);
+    void updateValue(UdmValueDto udmValueDto, List<String> actionReasons);
 
     /**
      * Gets list of all currencies.

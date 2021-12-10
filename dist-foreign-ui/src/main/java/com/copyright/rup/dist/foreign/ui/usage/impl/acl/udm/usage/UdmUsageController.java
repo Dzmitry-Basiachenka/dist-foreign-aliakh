@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
@@ -162,17 +161,16 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
     }
 
     @Override
-    public void updateUsage(UdmUsageDto newUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                            boolean isResearcher, String reason) {
-        udmUsageService.updateUsage(newUsageDto, fieldToValueChangesMap, isResearcher, reason);
+    public void updateUsage(UdmUsageDto newUsageDto, List<String> actionReasons, boolean isResearcher, String reason) {
+        udmUsageService.updateUsage(newUsageDto, actionReasons, isResearcher, reason);
         udmUsageService.sendForMatching(Collections.singleton(newUsageDto));
     }
 
     @Override
-    public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                             boolean isResearcher, String reason) {
-        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, isResearcher, reason);
-        udmUsageService.sendForMatching(udmUsageDtoToFieldValuesMap.keySet());
+    public void updateUsages(Map<UdmUsageDto, List<String>> dtoToActionReasonsMap, boolean isResearcher,
+                             String reason) {
+        udmUsageService.updateUsages(dtoToActionReasonsMap, isResearcher, reason);
+        udmUsageService.sendForMatching(dtoToActionReasonsMap.keySet());
     }
 
     public List<UdmActionReason> getAllActionReasons() {

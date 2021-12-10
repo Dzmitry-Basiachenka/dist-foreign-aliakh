@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -126,22 +125,23 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                            boolean isResearcher, String reason) {
+    public void updateUsage(UdmUsageDto udmUsageDto, List<String> actionReasons, boolean isResearcher, String reason) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.debug("Update UDM usage. Started. Usage={}, UserName={}, Reason={}", udmUsageDto, userName, reason);
+        LOGGER.debug("Update UDM usage. Started. Usage={}, Reasons={}, IsResearcher={}, Reason={}, UserName={}",
+            udmUsageDto, actionReasons, isResearcher, reason, userName);
         if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
             udmUsageDto.setAssignee(null);
         }
         udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
-        fieldToValueChangesMap.getEditAuditReasons().forEach(actionReason ->
+        actionReasons.forEach(actionReason ->
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));
         if (udmUsageDto.isBaselineFlag()) {
             baselineService.removeFromBaselineById(udmUsageDto.getId());
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.REMOVE_FROM_BASELINE, reason);
         }
-        LOGGER.debug("Update UDM usage. Finished. Usage={}, UserName={}, Reason={}", udmUsageDto, userName, reason);
+        LOGGER.debug("Update UDM usage. Finished. Usage={}, Reasons={}, IsResearcher={}, Reason={}, UserName={}",
+            udmUsageDto, actionReasons, isResearcher, reason, userName);
     }
 
     @Override
@@ -271,10 +271,10 @@ public class UdmUsageService implements IUdmUsageService {
 
     @Override
     @Transactional
-    public void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                             boolean isResearcher, String reason) {
-        udmUsageDtoToFieldValuesMap.forEach((udmUsageDto, udmAuditFieldToValuesMap) ->
-            updateUsage(udmUsageDto, udmAuditFieldToValuesMap, isResearcher, reason));
+    public void updateUsages(Map<UdmUsageDto, List<String>> dtoToActionReasonsMap, boolean isResearcher,
+                             String reason) {
+        dtoToActionReasonsMap.forEach((udmUsageDto, actionReasons) ->
+            updateUsage(udmUsageDto, actionReasons, isResearcher, reason));
     }
 
     @Override

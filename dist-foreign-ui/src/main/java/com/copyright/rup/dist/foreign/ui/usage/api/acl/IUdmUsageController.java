@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -143,13 +142,12 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Updates UDM usage.
      *
-     * @param udmUsageDto            {@link UdmUsageDto} to update
-     * @param fieldToValueChangesMap map of field name to its values (old and new)
-     * @param isResearcher           {@code true} if the user has Researcher role, {@code false} otherwise
-     * @param reason                 reason
+     * @param udmUsageDto   {@link UdmUsageDto} to update
+     * @param actionReasons list of audit action reasons
+     * @param isResearcher  {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason        reason
      */
-    void updateUsage(UdmUsageDto udmUsageDto, UdmUsageAuditFieldToValuesMap fieldToValueChangesMap,
-                     boolean isResearcher, String reason);
+    void updateUsage(UdmUsageDto udmUsageDto, List<String> actionReasons, boolean isResearcher, String reason);
 
     /**
      * @return list of {@link UdmActionReason}.
@@ -211,12 +209,11 @@ public interface IUdmUsageController extends IController<IUdmUsageWidget> {
     /**
      * Updates UDM usages.
      *
-     * @param udmUsageDtoToFieldValuesMap {@link UdmUsageDto} map of usages to update with audit changes
-     * @param isResearcher                {@code true} if the user has Researcher role, {@code false} otherwise
-     * @param reason                      reason
+     * @param dtoToActionReasonsMap map of {@link UdmUsageDto} to list of audit action reasons
+     * @param isResearcher          {@code true} if the user has Researcher role, {@code false} otherwise
+     * @param reason                reason
      */
-    void updateUsages(Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap,
-                      boolean isResearcher, String reason);
+    void updateUsages(Map<UdmUsageDto, List<String>> dtoToActionReasonsMap, boolean isResearcher, String reason);
 
     /**
      * Gets all available periods.

@@ -21,10 +21,10 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
@@ -379,7 +379,8 @@ public class UdmEditUsageWindowTest {
         binder.writeBean(udmUsage);
         expectLastCall().once();
         expect(binder.isValid()).andReturn(true).once();
-        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage), false, StringUtils.EMPTY);
+        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage).getActionReasons(),
+            false, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
@@ -409,7 +410,7 @@ public class UdmEditUsageWindowTest {
             eq("The usage will be removed from baseline if you save changes.<br>Are you sure you want to confirm " +
                 "action?"), eq("Yes"), eq("Cancel"), capture(actionDialogListenerCapture), anyObject(List.class));
         expectLastCall().once();
-        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage), false, REASON);
+        controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage).getActionReasons(), false, REASON);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

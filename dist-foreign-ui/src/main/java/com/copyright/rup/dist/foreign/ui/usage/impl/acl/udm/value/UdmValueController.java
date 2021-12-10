@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.integration.rfex.api.IRfexIntegrationService;
@@ -139,8 +138,8 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
     }
 
     @Override
-    public void updateValue(UdmValueDto udmValueDto, UdmValueAuditFieldToValuesMap fieldToValueChangesMap) {
-        valueService.updateValue(udmValueDto, fieldToValueChangesMap);
+    public void updateValue(UdmValueDto udmValueDto, List<String> actionReasons) {
+        valueService.updateValue(udmValueDto, actionReasons);
     }
 
     @Override

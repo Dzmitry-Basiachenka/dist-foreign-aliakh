@@ -4,9 +4,9 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -498,7 +498,8 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private void saveUsage(ClickEvent event, String reason) {
         try {
             binder.writeBean(udmUsage);
-            controller.updateUsage(udmUsage, fieldToValueChangesMap, hasResearcherPermission, reason.trim());
+            controller.updateUsage(udmUsage, fieldToValueChangesMap.getActionReasons(),
+                hasResearcherPermission, reason.trim());
             saveButtonClickListener.buttonClick(event);
             close();
         } catch (ValidationException e) {

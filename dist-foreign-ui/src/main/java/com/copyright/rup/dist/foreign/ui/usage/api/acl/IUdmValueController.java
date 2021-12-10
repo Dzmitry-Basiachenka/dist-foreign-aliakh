@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -120,10 +119,10 @@ public interface IUdmValueController extends IController<IUdmValueWidget> {
     /**
      * Updates UDM value.
      *
-     * @param udmValueDto            {@link UdmValueDto} to update
-     * @param fieldToValueChangesMap map of field name to its values (old and new)
+     * @param udmValueDto   {@link UdmValueDto} to update
+     * @param actionReasons list of audit action reasons
      */
-    void updateValue(UdmValueDto udmValueDto, UdmValueAuditFieldToValuesMap fieldToValueChangesMap);
+    void updateValue(UdmValueDto udmValueDto, List<String> actionReasons);
 
     /**
      * Gets list of all currencies.
