@@ -147,8 +147,7 @@ public class UdmBaselineValueFiltersWindow extends Window {
         List<PublicationType> publicationTypes = controller.getPublicationTypes();
         pubTypeComboBox.setItems(publicationTypes);
         pubTypeComboBox.setPageLength(11);
-        pubTypeComboBox.setItemCaptionGenerator(
-            value -> String.format("%s - %s", value.getName(), value.getDescription()));
+        pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
         pubTypeComboBox.setSelectedItem(baselineValueFilter.getPubType());
         filterBinder.forField(pubTypeComboBox)
             .bind(UdmBaselineValueFilter::getPubType, UdmBaselineValueFilter::setPubType);
