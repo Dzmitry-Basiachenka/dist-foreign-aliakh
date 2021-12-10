@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -12,7 +13,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
@@ -36,7 +36,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -56,8 +55,6 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
-        CurrencyUtils.getParameterizedDecimalFormatSymbols());
     private static final Set<UdmValueStatusEnum> VALUE_STATUSES_ASSIGNEE_ALLOWED_FOR_RESEARCHER =
         ImmutableSet.of(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD);
 
@@ -109,16 +106,6 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     public void refresh() {
         udmValuesGrid.deselectAll();
         dataProvider.refreshAll();
-    }
-
-    /**
-     * Formats decimal amount without trailing zeros after the second digit after the decimal point.
-     *
-     * @param amount instance of {@link BigDecimal}
-     * @return formatted string or empty string in case if amount is null
-     */
-    String formatAmount(BigDecimal amount) {
-        return CurrencyUtils.format(amount, MONEY_FORMATTER);
     }
 
     private VerticalLayout initValuesLayout() {
@@ -314,7 +301,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
 
     private Column<UdmValueDto, ?> addAmountColumn(Function<UdmValueDto, BigDecimal> function, String captionProperty,
                                                    String columnId, double width) {
-        return udmValuesGrid.addColumn(value -> formatAmount(function.apply(value)))
+        return udmValuesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)

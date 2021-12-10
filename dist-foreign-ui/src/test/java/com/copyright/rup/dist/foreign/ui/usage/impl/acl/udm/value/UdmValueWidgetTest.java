@@ -55,7 +55,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -78,8 +77,6 @@ import java.util.stream.IntStream;
 public class UdmValueWidgetTest {
 
     private static final int DOUBLE_CLICK = 0x00002;
-    private static final String FORMATTED_PLUS_THOUSAND = "1,000.00";
-    private static final String FORMATTED_MINUS_THOUSAND = "-1,000.00";
     private static final String USER = "user@copyright.com";
     private static final String UNCHECKED = "unchecked";
     private static final int UDM_RECORD_THRESHOLD = 10000;
@@ -117,44 +114,6 @@ public class UdmValueWidgetTest {
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         verifyGrid((Grid) layout.getComponent(1));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
-    }
-
-    @Test
-    public void testFormatAmount() {
-        setSpecialistExpectations();
-        replay(controller, ForeignSecurityUtils.class, RupContextUtils.class);
-        initWidget();
-        verify(controller, ForeignSecurityUtils.class, RupContextUtils.class);
-        assertEquals(FORMATTED_PLUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("1000")));
-        assertEquals(FORMATTED_PLUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("1000.")));
-        assertEquals(FORMATTED_PLUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("1000.0")));
-        assertEquals(FORMATTED_PLUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("1000.00")));
-        assertEquals(FORMATTED_PLUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("1000.000")));
-        assertEquals("1,000.10", valueWidget.formatAmount(new BigDecimal("1000.100")));
-        assertEquals("1,000.01", valueWidget.formatAmount(new BigDecimal("1000.010")));
-        assertEquals("1,000.001", valueWidget.formatAmount(new BigDecimal("1000.001")));
-        assertEquals("1,000.0001", valueWidget.formatAmount(new BigDecimal("1000.0001")));
-        assertEquals("1,000.00001", valueWidget.formatAmount(new BigDecimal("1000.00001")));
-        assertEquals("1,000.000001", valueWidget.formatAmount(new BigDecimal("1000.000001")));
-        assertEquals("1,000.0000001", valueWidget.formatAmount(new BigDecimal("1000.0000001")));
-        assertEquals("1,000.00000001", valueWidget.formatAmount(new BigDecimal("1000.00000001")));
-        assertEquals("1,000.000000001", valueWidget.formatAmount(new BigDecimal("1000.000000001")));
-        assertEquals("1,000.0000000001", valueWidget.formatAmount(new BigDecimal("1000.0000000001")));
-        assertEquals(FORMATTED_MINUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("-1000")));
-        assertEquals(FORMATTED_MINUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("-1000.")));
-        assertEquals(FORMATTED_MINUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("-1000.0")));
-        assertEquals(FORMATTED_MINUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("-1000.00")));
-        assertEquals(FORMATTED_MINUS_THOUSAND, valueWidget.formatAmount(new BigDecimal("-1000.000")));
-        assertEquals("-1,000.10", valueWidget.formatAmount(new BigDecimal("-1000.100")));
-        assertEquals("-1,000.01", valueWidget.formatAmount(new BigDecimal("-1000.010")));
-        assertEquals("-1,000.001", valueWidget.formatAmount(new BigDecimal("-1000.001")));
-        assertEquals("-1,000.0001", valueWidget.formatAmount(new BigDecimal("-1000.0001")));
-        assertEquals("-1,000.00001", valueWidget.formatAmount(new BigDecimal("-1000.00001")));
-        assertEquals("-1,000.000001", valueWidget.formatAmount(new BigDecimal("-1000.000001")));
-        assertEquals("-1,000.0000001", valueWidget.formatAmount(new BigDecimal("-1000.0000001")));
-        assertEquals("-1,000.00000001", valueWidget.formatAmount(new BigDecimal("-1000.00000001")));
-        assertEquals("-1,000.000000001", valueWidget.formatAmount(new BigDecimal("-1000.000000001")));
-        assertEquals("-1,000.0000000001", valueWidget.formatAmount(new BigDecimal("-1000.0000000001")));
     }
 
     @Test

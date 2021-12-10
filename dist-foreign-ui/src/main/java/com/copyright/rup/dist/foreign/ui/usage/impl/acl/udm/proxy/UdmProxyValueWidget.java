@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
@@ -22,7 +22,6 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.function.Function;
 
@@ -38,8 +37,6 @@ import java.util.function.Function;
 public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmProxyValueWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("#,##0.00########",
-        CurrencyUtils.getParameterizedDecimalFormatSymbols());
 
     private IUdmProxyValueController controller;
     private Grid<UdmProxyValueDto> udmValuesGrid;
@@ -122,7 +119,7 @@ public class UdmProxyValueWidget extends HorizontalSplitPanel implements IUdmPro
     }
 
     private void addContentUnitPriceColumn(Function<UdmProxyValueDto, BigDecimal> function) {
-        udmValuesGrid.addColumn(value -> CurrencyUtils.format(function.apply(value), MONEY_FORMATTER))
+        udmValuesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage("table.column.content_unit_price"))
             .setId("contentUnitPrice")

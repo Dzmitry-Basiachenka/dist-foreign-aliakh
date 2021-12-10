@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
-import com.copyright.rup.vaadin.util.CurrencyUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -38,8 +37,6 @@ import java.util.Objects;
  */
 public abstract class CommonUdmValueWindow extends Window {
 
-    private static final DecimalFormat MONEY_FORMATTER = new DecimalFormat("0.00########",
-        CurrencyUtils.getParameterizedDecimalFormatSymbols());
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
 
@@ -136,7 +133,7 @@ public abstract class CommonUdmValueWindow extends Window {
      */
     protected ValueProvider<UdmValueDto, String> fromBigDecimalToMoneyString(
         ValueProvider<UdmValueDto, BigDecimal> getter) {
-        return bean -> CurrencyUtils.format(getter.apply(bean), MONEY_FORMATTER);
+        return bean -> BigDecimalUtils.formatCurrencyForDialog(getter.apply(bean));
     }
 
     /**
@@ -157,6 +154,6 @@ public abstract class CommonUdmValueWindow extends Window {
      * @return converted value
      */
     protected String convertFromBigDecimalToMoneyString(BigDecimal value) {
-        return CurrencyUtils.format(value, MONEY_FORMATTER);
+        return BigDecimalUtils.formatCurrencyForDialog(value);
     }
 }
