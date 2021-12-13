@@ -1,3 +1,9 @@
+14.1.37
+-
+* CDP-1032 FDA: ACL: Value Audit: Value audit contains redundant entries related to trimming zero values in decimal part after editing
+* B-70805 FDA: Audit Value Changes: extract class for formatting currency fields
+* B-68257 FDA: View proxy values: apply amount sorting by Content Unit Price
+
 14.1.36
 -
 * B-65964 FDA: Calculate and apply proxy values: make changes based on comments in code review
