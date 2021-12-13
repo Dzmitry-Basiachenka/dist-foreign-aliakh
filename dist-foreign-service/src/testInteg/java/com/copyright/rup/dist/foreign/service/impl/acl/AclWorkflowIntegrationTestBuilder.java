@@ -11,9 +11,7 @@ import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
@@ -44,6 +42,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -221,16 +220,12 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void publishUsagesToBaseline() {
-            Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> usageToAuditMap = udmUsageDtos.stream()
+            Map<UdmUsageDto, List<String>> dtoToActionReasonsMap = udmUsageDtos.stream()
                 .collect(Collectors.toMap(udmUsageDto -> {
                     udmUsageDto.setStatus(UsageStatusEnum.ELIGIBLE);
                     return udmUsageDto;
-                }, udmUsageDto -> {
-                    UdmUsageAuditFieldToValuesMap valuesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
-                    valuesMap.updateFieldValue("Detail Status", UsageStatusEnum.ELIGIBLE.name());
-                    return valuesMap;
-                }));
-            udmUsageService.updateUsages(usageToAuditMap, false, "Reason");
+                }, udmUsageDto -> Collections.emptyList()));
+            udmUsageService.updateUsages(dtoToActionReasonsMap, false, "Reason");
             assertEquals(expectedCountOfPublishedUsages,
                 udmUsageService.publishUdmUsagesToBaseline(expectedUdmBatch.getPeriod()));
         }
@@ -249,8 +244,6 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     PublicationType publicationType = new PublicationType();
                     publicationType.setId("076f2c40-f524-405d-967a-3840df2b57df");
                     publicationType.setName("NP");
-                    UdmValueAuditFieldToValuesMap fieldToValueChangesMap =
-                        new UdmValueAuditFieldToValuesMap(udmValueDto);
                     udmValueDto.setPublicationType(publicationType);
                     udmValueDto.setPrice(new BigDecimal("100"));
                     udmValueDto.setPriceInUsd(new BigDecimal("150"));
@@ -261,9 +254,10 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     udmValueDto.setContentFlag(true);
                     udmValueDto.setContentUnitPrice(new BigDecimal("15"));
                     udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
-                    fieldToValueChangesMap.updateFieldValue("Price", udmValueDto.getPrice().toString());
-                    fieldToValueChangesMap.updateFieldValue("Currency", udmValueDto.getCurrency());
-                    udmValueService.updateValue(udmValueDto, fieldToValueChangesMap);
+                    List<String> actionReasons = Arrays.asList(
+                        "The field 'Price' was edited. Old Value is not specified. New Value is '100'",
+                        "The field 'Currency' was edited. Old Value is not specified. New Value is 'EUR'");
+                    udmValueService.updateValue(udmValueDto, actionReasons);
                 });
             assertEquals(expectedCountOfPublishedValues,
                 udmValueService.publishToBaseline(expectedUdmBatch.getPeriod()));

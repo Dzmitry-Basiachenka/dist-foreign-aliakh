@@ -21,10 +21,10 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
@@ -332,11 +332,11 @@ public class UdmEditMultipleUsagesWindowTest {
         fieldToValuesMap.putFieldWithValues(STATISTICAL_MULTIPLIER_FIELD, STATISTICAL_MULTIPLIER.toString(),
             NEW_STATISTICAL_MULTIPLIER.toString());
         fieldToValuesMap.putFieldWithValues(QUANTITY_FIELD, QUANTITY.toString(), NEW_QUANTITY.toString());
-        fieldToValuesMap.putFieldWithValues("Annualized Copies", ANNUALIZED_COPIES.toString(), "1");
         fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_ACTION_REASON.getReason());
         fieldToValuesMap.putFieldWithValues("Ineligible Reason", INELIGIBLE_REASON.getReason(),
             NEW_INELIGIBLE_REASON.getReason());
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
+        fieldToValuesMap.putFieldWithValues("Annualized Copies", ANNUALIZED_COPIES.toString(), "1");
         UdmUsageDto udmUsageDto = buildActualUdmUsageDto();
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
             ImmutableMap.of(udmUsageDto, fieldToValuesMap);
@@ -352,7 +352,8 @@ public class UdmEditMultipleUsagesWindowTest {
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, false, StringUtils.EMPTY);
+        controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+            false, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
@@ -385,11 +386,11 @@ public class UdmEditMultipleUsagesWindowTest {
         fieldToValuesMap.putFieldWithValues(STATISTICAL_MULTIPLIER_FIELD, STATISTICAL_MULTIPLIER.toString(),
             NEW_STATISTICAL_MULTIPLIER.toString());
         fieldToValuesMap.putFieldWithValues(QUANTITY_FIELD, QUANTITY.toString(), NEW_QUANTITY.toString());
-        fieldToValuesMap.putFieldWithValues("Annualized Copies", ANNUALIZED_COPIES.toString(), "1");
         fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_ACTION_REASON.getReason());
         fieldToValuesMap.putFieldWithValues("Ineligible Reason", INELIGIBLE_REASON.getReason(),
             NEW_INELIGIBLE_REASON.getReason());
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
+        fieldToValuesMap.putFieldWithValues("Annualized Copies", ANNUALIZED_COPIES.toString(), "1");
         UdmUsageDto udmUsageDto = buildActualUdmUsageDto();
         udmUsageDto.setBaselineFlag(true);
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
@@ -415,7 +416,8 @@ public class UdmEditMultipleUsagesWindowTest {
         expect(controller.getCompanyInformation(1136L)).andReturn(companyInformation).once();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, false, "Reason");
+        controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+            false, "Reason");
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
@@ -886,7 +888,8 @@ public class UdmEditMultipleUsagesWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(newUsage);
         expectLastCall();
-        controller.updateUsages(ImmutableMap.of(actualUsage, fieldToValuesMap), false, StringUtils.EMPTY);
+        controller.updateUsages(ImmutableMap.of(actualUsage, fieldToValuesMap.getActionReasons()),
+            false, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

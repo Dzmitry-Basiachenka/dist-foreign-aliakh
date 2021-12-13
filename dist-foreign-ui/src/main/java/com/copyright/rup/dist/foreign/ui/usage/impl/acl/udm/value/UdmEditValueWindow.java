@@ -3,9 +3,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
@@ -312,7 +312,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         saveButton.addClickListener(event -> {
             try {
                 binder.writeBean(udmValue);
-                controller.updateValue(udmValue, fieldToValueChangesMap);
+                controller.updateValue(udmValue, fieldToValueChangesMap.getActionReasons());
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {

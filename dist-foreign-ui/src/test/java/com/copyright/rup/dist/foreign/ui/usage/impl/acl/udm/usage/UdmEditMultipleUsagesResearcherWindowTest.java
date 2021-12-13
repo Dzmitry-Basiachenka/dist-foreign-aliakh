@@ -11,10 +11,10 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -148,7 +148,8 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         binder = createMock(Binder.class);
         binder.writeBean(udmUsageDto);
         expectLastCall();
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, true, StringUtils.EMPTY);
+        controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+            true, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();

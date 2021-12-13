@@ -20,7 +20,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.ExchangeRate;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
@@ -31,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmPriceTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
@@ -185,10 +185,10 @@ public class UdmValueControllerTest {
     public void testUpdateValue() {
         UdmValueDto udmValueDto = new UdmValueDto();
         UdmValueAuditFieldToValuesMap fieldToValueChangesMap = new UdmValueAuditFieldToValuesMap(udmValueDto);
-        valueService.updateValue(udmValueDto, fieldToValueChangesMap);
+        valueService.updateValue(udmValueDto, fieldToValueChangesMap.getActionReasons());
         expectLastCall().once();
         replay(valueService);
-        controller.updateValue(udmValueDto, fieldToValueChangesMap);
+        controller.updateValue(udmValueDto, fieldToValueChangesMap.getActionReasons());
         verify(valueService);
     }
 

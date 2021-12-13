@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -39,6 +38,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.acl.UdmAnnualizedCopiesCalculator;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UsageHistoryWindow;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
@@ -66,6 +66,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -303,27 +304,27 @@ public class UdmUsageControllerTest {
     @Test
     public void testUpdateUsage() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        UdmUsageAuditFieldToValuesMap fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsageDto);
-        udmUsageService.updateUsage(udmUsageDto, fieldToValueChangesMap, false, REASON);
+        List<String> actionReasons = new ArrayList<>();
+        udmUsageService.updateUsage(udmUsageDto, actionReasons, false, REASON);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsage(udmUsageDto, fieldToValueChangesMap, false, REASON);
+        controller.updateUsage(udmUsageDto, actionReasons, false, REASON);
         verify(udmUsageService);
     }
 
     @Test
     public void testUpdateUsages() {
         UdmUsageDto udmUsageDto = new UdmUsageDto();
-        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
-            ImmutableMap.of(udmUsageDto, new UdmUsageAuditFieldToValuesMap());
-        udmUsageService.updateUsages(udmUsageDtoToFieldValuesMap, false, REASON);
+        Map<UdmUsageDto, List<String>> dtoToActionReasonsMap =
+            ImmutableMap.of(udmUsageDto, new UdmUsageAuditFieldToValuesMap().getActionReasons());
+        udmUsageService.updateUsages(dtoToActionReasonsMap, false, REASON);
         expectLastCall().once();
         udmUsageService.sendForMatching(Collections.singleton(udmUsageDto));
         expectLastCall().once();
         replay(udmUsageService);
-        controller.updateUsages(udmUsageDtoToFieldValuesMap, false, REASON);
+        controller.updateUsages(dtoToActionReasonsMap, false, REASON);
         verify(udmUsageService);
     }
 

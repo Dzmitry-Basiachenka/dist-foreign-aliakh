@@ -4,9 +4,9 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -388,7 +388,8 @@ public class UdmEditMultipleUsagesWindow extends Window {
             binder.writeBean(bindedUsageDto);
             setPeriodEndDate(bindedUsageDto);
             updateUsagesFields();
-            controller.updateUsages(udmUsageDtoToFieldValuesMap, false, reason.trim());
+            controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+                false, reason.trim());
             saveButtonClickListener.buttonClick(event);
             close();
         } catch (ValidationException e) {

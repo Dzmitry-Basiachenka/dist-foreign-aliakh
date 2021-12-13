@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.foreign.domain.UdmActionReason;
 import com.copyright.rup.dist.foreign.domain.UdmIneligibleReason;
-import com.copyright.rup.dist.foreign.domain.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -165,7 +165,9 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             try {
                 binder.writeBean(bindedUsageDto);
                 updateUsagesFields();
-                controller.updateUsages(udmUsageDtoToFieldValuesMap, true, StringUtils.EMPTY);
+                controller.updateUsages(
+                    UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+                    true, StringUtils.EMPTY);
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
