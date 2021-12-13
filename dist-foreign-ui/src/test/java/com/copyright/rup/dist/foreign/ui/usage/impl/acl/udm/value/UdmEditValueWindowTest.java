@@ -86,7 +86,7 @@ public class UdmEditValueWindowTest {
     private static final Integer LAST_VALUE_PERIOD = 202012;
     private static final String LAST_PUB_TYPE = "BK2";
     private static final PublicationType PUBLICATION_TYPE;
-    private static final BigDecimal LAST_PRICE_IN_USD = new BigDecimal("4651.21");
+    private static final BigDecimal LAST_PRICE_IN_USD = new BigDecimal("4519.308297");
     private static final boolean LAST_PRICE_FLAG = false;
     private static final String LAST_PRICE_SOURCE = "last price source";
     private static final String LAST_PRICE_COMMENT = "last price comment";
@@ -98,9 +98,9 @@ public class UdmEditValueWindowTest {
     private static final String PRICE_ACCESS_TYPE = "Print";
     private static final Integer PRICE_YEAR = 2021;
     private static final String PRICE_COMMENT = "price comment";
-    private static final BigDecimal PRICE_IN_USD = new BigDecimal("4651.20");
+    private static final BigDecimal PRICE_IN_USD = new BigDecimal("4519.308296");
     private static final boolean PRICE_FLAG = true;
-    private static final BigDecimal CURRENCY_EXCHANGE_RATE = new BigDecimal("1.1628");
+    private static final BigDecimal CURRENCY_EXCHANGE_RATE = new BigDecimal("1.1298270740");
     private static final LocalDate CURRENCY_EXCHANGE_RATE_DATE = LocalDate.of(2020, 12, 31);
     private static final BigDecimal LAST_CONTENT = new BigDecimal("4.00");
     private static final boolean LAST_CONTENT_FLAG = true;
@@ -302,17 +302,17 @@ public class UdmEditValueWindowTest {
         Currency currency = new Currency("GBP", "Pound Sterling");
         LocalDate date = LocalDate.now();
         ExchangeRate exchangeRate = new ExchangeRate();
-        exchangeRate.setInverseExchangeRateValue(new BigDecimal("1.3773"));
+        exchangeRate.setInverseExchangeRateValue(new BigDecimal("1.3250680610"));
         exchangeRate.setExchangeRateUpdateDate(date);
         expect(controller.getExchangeRate(currency.getCode(), date)).andReturn(exchangeRate).once();
         replay(controller);
         priceField.setValue(PRICE.toString());
         currencyComboBox.setValue(currency);
         window.recalculatePriceInUsd();
-        assertEquals("1.3773", currencyExchangeRateField.getValue());
+        assertEquals("1.3250680610", currencyExchangeRateField.getValue());
         assertEquals(date.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US)),
             currencyExchangeRateDateField.getValue());
-        assertEquals("5509.20", priceInUsdField.getValue());
+        assertEquals("5300.272244", priceInUsdField.getValue());
         verify(controller);
         priceField.setValue(INVALID_NUMBER);
         currencyComboBox.setValue(CURRENCY);
@@ -473,7 +473,7 @@ public class UdmEditValueWindowTest {
         priceInUsdField.setValue(PRICE_IN_USD.toString());
         contentField.setValue("2");
         window.recalculateContentUnitPrice();
-        assertEquals("2325.60", contentUnitPriceField.getValue());
+        assertEquals("2259.654148", contentUnitPriceField.getValue());
         priceInUsdField.setValue(StringUtils.EMPTY);
         contentField.setValue(VALID_DECIMAL);
         window.recalculateContentUnitPrice();
