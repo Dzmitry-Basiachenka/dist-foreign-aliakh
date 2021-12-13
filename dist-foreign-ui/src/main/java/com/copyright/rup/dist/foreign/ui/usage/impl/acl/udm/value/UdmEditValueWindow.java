@@ -118,9 +118,11 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             ExchangeRate exchangeRate = controller.getExchangeRate(currencyComboBox.getValue().getCode(),
                 LocalDate.now());
             BigDecimal price = NumberUtils.createBigDecimal(priceField.getValue().trim());
-            BigDecimal priceInUsd = price.multiply(exchangeRate.getInverseExchangeRateValue())
+            BigDecimal currencyExchangeRate = exchangeRate.getInverseExchangeRateValue()
                 .setScale(10, BigDecimal.ROUND_HALF_UP);
-            currencyExchangeRateField.setValue(exchangeRate.getInverseExchangeRateValue().toString());
+            BigDecimal priceInUsd = price.multiply(currencyExchangeRate)
+                .setScale(10, BigDecimal.ROUND_HALF_UP);
+            currencyExchangeRateField.setValue(currencyExchangeRate.toString());
             currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
             priceInUsdField.setValue(convertFromBigDecimalToMoneyString(priceInUsd));
         } else {

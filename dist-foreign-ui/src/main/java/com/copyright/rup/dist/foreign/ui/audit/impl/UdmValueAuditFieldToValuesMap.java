@@ -37,7 +37,7 @@ public class UdmValueAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<U
             value -> BigDecimalUtils.formatCurrencyForDialog(value.getPrice())));
         getFieldToValueChangesMap().put("Currency", buildPair(valueDto, UdmValueDto::getCurrency));
         getFieldToValueChangesMap().put("Currency Exchange Rate", buildPair(valueDto,
-            value -> BigDecimalUtils.formatCurrencyForDialog(value.getCurrencyExchangeRate())));
+            UdmValueDto::getCurrencyExchangeRate));
         getFieldToValueChangesMap().put("Currency Exchange Rate Date", buildPair(valueDto,
             value -> DateUtils.format(value.getCurrencyExchangeRateDate())));
         getFieldToValueChangesMap().put("Price in USD", buildPair(valueDto,
