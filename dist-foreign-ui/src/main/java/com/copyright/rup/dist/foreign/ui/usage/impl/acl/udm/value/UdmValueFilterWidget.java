@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import com.copyright.rup.dist.foreign.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -23,6 +23,8 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IUdmValueFilterWidget}.
@@ -36,7 +38,7 @@ import java.util.LinkedHashSet;
 public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFilterWidget {
 
     private ComboBox<UdmValueStatusEnum> statusComboBox;
-    private ComboBox<Currency> currencyComboBox;
+    private ComboBox<PublicationType> pubTypeComboBox;
     private Button moreFiltersButton;
     private Button applyButton;
     private UdmValueFilter udmValueFilter = new UdmValueFilter();
@@ -101,7 +103,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private void clearFilterValues() {
         periodFilterWidget.reset();
         statusComboBox.clear();
-        currencyComboBox.clear();
+        pubTypeComboBox.clear();
     }
 
     private void refreshFilter() {
@@ -110,10 +112,10 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     private VerticalLayout initFiltersLayout() {
         initStatusFilter();
-        initCurrencyFilter();
+        initPubTypeFilter();
         initMoreFiltersButton();
         VerticalLayout verticalLayout =
-            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), statusComboBox, currencyComboBox,
+            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), statusComboBox, pubTypeComboBox,
                 moreFiltersButton);
         verticalLayout.setMargin(false);
         VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
@@ -130,17 +132,21 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
         return periodFilterWidget;
     }
 
-    private void initCurrencyFilter() {
-        currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
-        currencyComboBox.setItems(controller.getAllCurrencies());
-        currencyComboBox.setItemCaptionGenerator(
-            value -> String.format("%s - %s", value.getCode(), value.getDescription()));
-        currencyComboBox.addValueChangeListener(event -> {
-            udmValueFilter.setCurrency(currencyComboBox.getValue());
+    private void initPubTypeFilter() {
+        pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
+        List<PublicationType> publicationTypes = controller.getPublicationTypes();
+        publicationTypes.add(0, new PublicationType());
+        pubTypeComboBox.setItems(publicationTypes);
+        pubTypeComboBox.setPageLength(12);
+        pubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
+            ? value.getNameAndDescription()
+            : "NULL");
+        pubTypeComboBox.addValueChangeListener(event -> {
+            udmValueFilter.setPubType(pubTypeComboBox.getValue());
             filterChanged();
         });
-        VaadinUtils.setMaxComponentsWidth(currencyComboBox);
-        VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-currency-filter");
+        VaadinUtils.setMaxComponentsWidth(pubTypeComboBox);
+        VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-value-pub-type-filter");
     }
 
     private void initStatusFilter() {

@@ -16,7 +16,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -49,9 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmValueFilterWidget}.
@@ -70,13 +68,6 @@ public class UdmValueFilterWidgetTest {
         new LinkedHashSet<>(Arrays.asList(UdmValueStatusEnum.NEW,
             UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD, UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW, UdmValueStatusEnum.RESEARCH_COMPLETE));
-    private static final List<Currency> CURRENCIES =
-        Arrays.asList(new Currency("USD", "US Dollar"), new Currency("AUD", "Australian Dollar"),
-            new Currency("CAD", "Canadian Dollar"), new Currency("EUR", "Euro"), new Currency("GBP", "Pound Sterling"),
-            new Currency("JPY", "Yen"), new Currency("BRL", "Brazilian Real"), new Currency("CNY", "Yuan Renminbi"),
-            new Currency("CZK", "Czech Koruna"), new Currency("DKK", "Danish Krone"),
-            new Currency("NZD", "New Zealand Dollar"), new Currency("NOK", "Norwegian Kron"),
-            new Currency("ZAR", "Rand"), new Currency("CHF", "Swiss Franc"), new Currency("INR", "Indian Rupee"));
 
     private UdmValueFilterWidget widget;
     private IUdmValueFilterController controller;
@@ -84,7 +75,8 @@ public class UdmValueFilterWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
+        expect(controller.getPublicationTypes()).andReturn(
+            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
         replay(controller);
         widget = new UdmValueFilterWidget(controller);
         widget.setController(controller);
@@ -145,15 +137,15 @@ public class UdmValueFilterWidgetTest {
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
         assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "statusComboBox").getValue());
-        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "currencyComboBox").getValue());
+        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "pubTypeComboBox").getValue());
         verify(controller);
     }
 
     @Test
     public void verifyMoreFiltersButtonClickListener() {
         reset(controller);
-        expect(controller.getAllCurrencies()).andReturn(CURRENCIES).once();
-        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).once();
+        expect(controller.getAllCurrencies()).andReturn(new ArrayList<>()).once();
+        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).times(2);
         replay(controller);
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
@@ -211,7 +203,7 @@ public class UdmValueFilterWidgetTest {
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
         verifyValuesStatusComboBox(verticalLayout.getComponent(2));
-        verifyCurrencyComboBox(verticalLayout.getComponent(3));
+        verifyPubTypeComboBox(verticalLayout.getComponent(3));
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
     }
 
@@ -230,17 +222,18 @@ public class UdmValueFilterWidgetTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void verifyCurrencyComboBox(Component component) {
+    private void verifyPubTypeComboBox(Component component) {
         assertTrue(component instanceof ComboBox);
         ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals("Currency", comboBox.getCaption());
+        assertEquals("Pub Type", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Currency> listDataProvider =
-            (ListDataProvider<Currency>) comboBox.getDataProvider();
-        Object[] items = listDataProvider.getItems().toArray();
-        assertEquals(CURRENCIES.size(), items.length);
-        IntStream.range(0, CURRENCIES.size()).forEach(i -> verifyCurrencies(CURRENCIES.get(i), (Currency) items[i]));
+        ListDataProvider<PublicationType> listDataProvider =
+            (ListDataProvider<PublicationType>) comboBox.getDataProvider();
+        Object[] publicationTypes = listDataProvider.getItems().toArray();
+        PublicationType expectedPublicationType = buildPublicationType();
+        assertEquals(Arrays.asList(new PublicationType(), expectedPublicationType).size(), publicationTypes.length);
+        assertEquals(expectedPublicationType, publicationTypes[1]);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -294,12 +287,14 @@ public class UdmValueFilterWidgetTest {
         assertNotNull(listeners.iterator().next());
     }
 
-    private void verifyCurrencies(Currency expectedCurrency, Currency actualCurrency) {
-        assertEquals(expectedCurrency.getCode(), actualCurrency.getCode());
-        assertEquals(expectedCurrency.getDescription(), actualCurrency.getDescription());
-    }
-
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton");
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName("BK");
+        publicationType.setDescription("Book");
+        return publicationType;
     }
 }
