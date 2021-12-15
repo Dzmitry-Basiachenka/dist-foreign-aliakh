@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -14,7 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmReportService}.
@@ -89,6 +96,23 @@ public class UdmReportServiceTest {
         expectLastCall().once();
         replay(udmReportRepository);
         udmReportService.writeUdmBaselineUsageCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteUdmWeeklySurveyCsvReport() {
+        Set<String> channels = Collections.singleton(UdmChannelEnum.CCC.name());
+        Set<String> usageOrigins = Collections.singleton(UdmUsageOriginEnum.RFA.name());
+        Set<Integer> periods = Collections.singleton(202112);
+        LocalDate dateReceivedFrom = LocalDate.of(2021, 11, 21);
+        LocalDate dateReceivedTo = LocalDate.of(2021, 11, 28);
+        OutputStream outputStream = new ByteArrayOutputStream();
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+            dateReceivedTo, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+            dateReceivedTo, outputStream);
         verify(udmReportRepository);
     }
 }

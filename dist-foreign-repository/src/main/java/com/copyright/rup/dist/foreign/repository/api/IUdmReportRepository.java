@@ -65,7 +65,7 @@ public interface IUdmReportRepository {
     void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes UDM Weekly Survey Report into the output stream.
+     * Writes UDM Weekly Survey Report into csv output stream.
      *
      * @param channels         set of channels
      * @param usageOrigins     set of usage origins
@@ -75,6 +75,5 @@ public interface IUdmReportRepository {
      * @param outputStream     instance of {@link OutputStream}
      */
     void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
-                                       LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
-                                       OutputStream outputStream);
+                                       LocalDate dateReceivedFrom, LocalDate dateReceivedTo, OutputStream outputStream);
 }
