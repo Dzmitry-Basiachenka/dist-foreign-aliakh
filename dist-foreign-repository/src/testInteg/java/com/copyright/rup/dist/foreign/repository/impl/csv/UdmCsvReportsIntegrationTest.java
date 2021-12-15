@@ -153,4 +153,9 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
                 udmReportRepository.writeUdmBaselineUsageCsvReport(new UdmBaselineFilter(), outputStream),
             "baseline_usages_report_udm_empty.csv");
     }
+
+    @Test
+    public void testWriteUdmWeeklySurveyCsvReport() {
+        // TODO implement when MyBatis SELECT is implemented
+    }
 }
