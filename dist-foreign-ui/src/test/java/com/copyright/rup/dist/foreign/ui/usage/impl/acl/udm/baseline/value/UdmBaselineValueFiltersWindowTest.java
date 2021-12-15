@@ -4,18 +4,13 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFie
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
 
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
@@ -30,11 +25,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -79,13 +72,8 @@ public class UdmBaselineValueFiltersWindowTest {
 
     @Before
     public void setUp() {
-        IUdmBaselineValueFilterController controller = PowerMock.createMock(IUdmBaselineValueFilterController.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
-        replay(controller);
-        window = new UdmBaselineValueFiltersWindow(controller, new UdmBaselineValueFilter());
+        window = new UdmBaselineValueFiltersWindow(new UdmBaselineValueFilter());
         binder = Whitebox.getInternalState(window, "filterBinder");
-        verify(controller);
     }
 
     @Test
@@ -98,7 +86,6 @@ public class UdmBaselineValueFiltersWindowTest {
     public void testConstructorWithPopulatedFilter() {
         UdmBaselineValueFilter valueFilter = buildExpectedFilter();
         valueFilter.setWrWrkInst(WR_WRK_INST);
-        valueFilter.setPubType(buildPublicationType());
         valueFilter.setPriceFlag(PRICE_FLAG);
         valueFilter.setContentFlag(CONTENT_FLAG);
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
@@ -107,19 +94,13 @@ public class UdmBaselineValueFiltersWindowTest {
         valueFilter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_FROM, PRICE_TO));
         valueFilter.setComment(COMMENT);
-        IUdmBaselineValueFilterController controller = PowerMock.createMock(IUdmBaselineValueFilterController.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
-        replay(controller);
-        window = new UdmBaselineValueFiltersWindow(controller, valueFilter);
-        verify(controller);
+        window = new UdmBaselineValueFiltersWindow(valueFilter);
         verifyFiltersData();
     }
 
     @SuppressWarnings(UNCHECKED)
     private void verifyFiltersData() {
         assertTextFieldValue("wrWrkInstField", WR_WRK_INST.toString());
-        assertComboBoxValue("pubTypeComboBox", buildPublicationType());
         assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
         assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
@@ -250,8 +231,7 @@ public class UdmBaselineValueFiltersWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(8, verticalLayout.getComponentCount());
-        verifyTextFieldLayout(
-            verticalLayout.getComponent(0), TextField.class, "Wr Wrk Inst", ComboBox.class, "Pub Type");
+        verifySizedTextField(verticalLayout.getComponent(0), "Wr Wrk Inst");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(1), "System Title");
         verifyTextFieldLayout(verticalLayout.getComponent(2), ComboBox.class, "Price Flag",
             ComboBox.class, "Content Flag");
@@ -262,6 +242,13 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(5), "Content Unit Price From",
             "Content Unit Price To");
         verifyTextField(verticalLayout.getComponent(6), "Comment");
+    }
+
+    private void verifySizedTextField(Component component, String caption) {
+        assertTrue(component instanceof TextField);
+        assertEquals(260, component.getWidth(), 0);
+        assertEquals(Unit.PIXELS, component.getWidthUnits());
+        assertEquals(component.getCaption(), caption);
     }
 
     private void verifyLayoutWithOperatorComponent(Component component, String caption) {
@@ -385,7 +372,6 @@ public class UdmBaselineValueFiltersWindowTest {
         populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("priceFlagComboBox", PRICE_FLAG_STRING);
         populateComboBox("contentFlagComboBox", CONTENT_FLAG_STRING);
-        populateComboBox("pubTypeComboBox", buildPublicationType());
         populateTextField("priceFromField", PRICE_FROM.toString());
         populateTextField("priceToField", PRICE_TO.toString());
         populateComboBox("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
@@ -411,7 +397,6 @@ public class UdmBaselineValueFiltersWindowTest {
         UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
         udmBaselineValueFilter.setPeriods(Collections.singleton(202012));
         udmBaselineValueFilter.setWrWrkInst(WR_WRK_INST);
-        udmBaselineValueFilter.setPubType(buildPublicationType());
         udmBaselineValueFilter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         udmBaselineValueFilter.setPriceFlag(PRICE_FLAG);
@@ -424,12 +409,5 @@ public class UdmBaselineValueFiltersWindowTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_FROM, PRICE_TO));
         udmBaselineValueFilter.setComment(COMMENT);
         return udmBaselineValueFilter;
-    }
-
-    private PublicationType buildPublicationType() {
-        PublicationType publicationType = new PublicationType();
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
-        return publicationType;
     }
 }

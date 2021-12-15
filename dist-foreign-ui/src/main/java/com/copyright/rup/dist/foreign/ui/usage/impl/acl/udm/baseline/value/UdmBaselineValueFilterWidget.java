@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -13,6 +14,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -34,7 +36,7 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
     private UdmValuePeriodFilterWidget periodFilterWidget;
     private Button moreFiltersButton;
     private Button applyButton;
-    @SuppressWarnings("unused")
+    private ComboBox<PublicationType> pubTypeComboBox;
     private IUdmBaselineValueFilterController controller;
 
     /**
@@ -76,6 +78,7 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
 
     private void clearFilterValues() {
         periodFilterWidget.reset();
+        pubTypeComboBox.clear();
     }
 
     private void filterChanged() {
@@ -87,9 +90,10 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
     }
 
     private VerticalLayout initFiltersLayout() {
+        initPubTypeFilter();
         initMoreFiltersButton();
         VerticalLayout verticalLayout =
-            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), moreFiltersButton);
+            new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(), pubTypeComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
         VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
         return verticalLayout;
@@ -105,12 +109,25 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
         return periodFilterWidget;
     }
 
+    private void initPubTypeFilter() {
+        pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
+        pubTypeComboBox.setItems(controller.getPublicationTypes());
+        pubTypeComboBox.setPageLength(11);
+        pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
+        pubTypeComboBox.addValueChangeListener(event -> {
+            udmBaselineValueFilter.setPubType(pubTypeComboBox.getValue());
+            filterChanged();
+        });
+        VaadinUtils.setMaxComponentsWidth(pubTypeComboBox);
+        VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-baseline-value-pub-type-filter");
+    }
+
     private void initMoreFiltersButton() {
         moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
         moreFiltersButton.addClickListener(event -> {
             UdmBaselineValueFiltersWindow udmValueFiltersWindow =
-                new UdmBaselineValueFiltersWindow(controller, udmBaselineValueFilter);
+                new UdmBaselineValueFiltersWindow(udmBaselineValueFilter);
             Windows.showModalWindow(udmValueFiltersWindow);
             udmValueFiltersWindow.addCloseListener(closeEvent -> {
                 udmBaselineValueFilter = udmValueFiltersWindow.getBaselineValueFilter();
