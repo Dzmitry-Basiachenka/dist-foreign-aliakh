@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UdmWeeklySurveyReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
@@ -123,7 +124,8 @@ public class DomainVerifierTest {
             {UdmBaselineValueFilter.class},
             {UdmBaselineDto.class},
             {ExchangeRate.class},
-            {UdmProxyValueFilter.class}
+            {UdmProxyValueFilter.class},
+            {UdmWeeklySurveyReportDto.class}
         };
         return Arrays.asList(testData);
     }
