@@ -6,8 +6,9 @@ dependencies {
     compile("com.copyright.rup.aws:rup-aws-sns:${rupAwsVersion}")
     compile("com.copyright.rup.aws:rup-aws-sqs:${rupAwsVersion}")
     compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}") 
-    //transitive dependency of rup-es-api to avoid CVE-2020-9488
+    //transitive dependency of rup-es-api to avoid CVE-2020-9488, CVE-2020-21913
     compile("org.apache.logging.log4j:log4j-api:${log4jVersion}")
+    compile("com.ibm.icu:icu4j:${icu4jVersion}")
     compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}")
     //updated jackson-databind version due to vulnerabilities CVE-2020-9546, CVE-2020-9547, CVE-2020-9548 in com.fasterxml.jackson.core:jackson-databind:2.9.10.3
     compile("com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}")
