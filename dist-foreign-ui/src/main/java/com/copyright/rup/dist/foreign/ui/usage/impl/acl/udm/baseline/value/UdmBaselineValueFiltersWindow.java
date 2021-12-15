@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -61,7 +59,6 @@ public class UdmBaselineValueFiltersWindow extends Window {
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
     private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildOperatorComboBox();
-    private final ComboBox<PublicationType> pubTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.pub_type"));
     private final TextField priceFromField = new TextField(ForeignUi.getMessage("label.price_from"));
     private final TextField priceToField = new TextField(ForeignUi.getMessage("label.price_to"));
     private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildOperatorComboBox();
@@ -79,17 +76,14 @@ public class UdmBaselineValueFiltersWindow extends Window {
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final Binder<UdmBaselineValueFilter> filterBinder = new Binder<>();
-    private final IUdmBaselineValueFilterController controller;
     private UdmBaselineValueFilter baselineValueFilter;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUdmBaselineValueFilterController}
      * @param filter     instance of {@link UdmBaselineValueFilter}
      */
-    public UdmBaselineValueFiltersWindow(IUdmBaselineValueFilterController controller, UdmBaselineValueFilter filter) {
-        this.controller = controller;
+    public UdmBaselineValueFiltersWindow(UdmBaselineValueFilter filter) {
         this.baselineValueFilter = filter;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_baseline_values_additional_filters"));
@@ -109,9 +103,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initWrWrkInstPubTypeLayout(), initSystemTitleLayout(), initFlagsLayout(),
-            initPriceLayout(), initContentLayout(), initContentUnitPriceLayout(), initCommentLayout(),
-            buttonsLayout);
+        rootLayout.addComponents(initWrWrkInstLayout(), initSystemTitleLayout(), initFlagsLayout(), initPriceLayout(),
+            initContentLayout(), initContentUnitPriceLayout(), initCommentLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         filterBinder.readBean(baselineValueFilter);
@@ -138,24 +131,15 @@ public class UdmBaselineValueFiltersWindow extends Window {
         return horizontalLayout;
     }
 
-    private HorizontalLayout initWrWrkInstPubTypeLayout() {
+    private TextField initWrWrkInstLayout() {
         filterBinder.forField(wrWrkInstField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
             .bind(filter -> Objects.toString(filter.getWrWrkInst(), StringUtils.EMPTY),
                 (filter, value) -> filter.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
-        List<PublicationType> publicationTypes = controller.getPublicationTypes();
-        pubTypeComboBox.setItems(publicationTypes);
-        pubTypeComboBox.setPageLength(11);
-        pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
-        pubTypeComboBox.setSelectedItem(baselineValueFilter.getPubType());
-        filterBinder.forField(pubTypeComboBox)
-            .bind(UdmBaselineValueFilter::getPubType, UdmBaselineValueFilter::setPubType);
-        HorizontalLayout horizontalLayout = new HorizontalLayout(wrWrkInstField, pubTypeComboBox);
-        setComponentsFullSize(wrWrkInstField, pubTypeComboBox, horizontalLayout);
+        wrWrkInstField.setWidth(260, Unit.PIXELS);
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-baseline-value-wr-wrk-inst-filter");
-        VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-baseline-value-pub-type-filter");
-        return horizontalLayout;
+        return wrWrkInstField;
     }
 
     private HorizontalLayout initSystemTitleLayout() {
