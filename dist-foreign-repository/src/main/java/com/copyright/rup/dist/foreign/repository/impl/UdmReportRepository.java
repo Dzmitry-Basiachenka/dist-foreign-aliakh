@@ -12,12 +12,16 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvRe
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -71,6 +75,22 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         writeCsvReportByParts("IUdmReportMapper.findUdmBaselineUsagesCountByFilter",
             "IUdmReportMapper.findUdmBaselineUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new UdmBaselineUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
+                                              LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
+                                              OutputStream outputStream) {
+        try (UdmWeeklySurveyReportHandler handler =
+                 new UdmWeeklySurveyReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+            parameters.put("channels", Objects.requireNonNull(channels));
+            parameters.put("usageOrigins", Objects.requireNonNull(usageOrigins));
+            parameters.put("periods", Objects.requireNonNull(periods));
+            parameters.put("dateReceivedFrom", Objects.requireNonNull(dateReceivedFrom));
+            parameters.put("dateReceivedTo", Objects.requireNonNull(dateReceivedTo));
+            getTemplate().select("IUdmReportMapper.findUdmWeeklySurveyReportDtos", parameters, handler);
+        }
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
