@@ -9,7 +9,10 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * Implements {@link IUdmReportService}.
@@ -49,5 +52,13 @@ public class UdmReportService implements IUdmReportService {
     @Override
     public void writeUdmBaselineUsageCsvReport(UdmBaselineFilter filter, PipedOutputStream pipedOutputStream) {
         udmReportRepository.writeUdmBaselineUsageCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
+                                              LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
+                                              OutputStream outputStream) {
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+            dateReceivedTo, outputStream);
     }
 }
