@@ -338,10 +338,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
             UdmValueStatusEnum.RESEARCH_COMPLETE);
         valueStatusComboBox.setSelectedItem(udmValue.getStatus());
-        valueStatusComboBox.addValueChangeListener(event -> {
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name());
-            binder.validate();
-        });
+        valueStatusComboBox.addValueChangeListener(
+            event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name()));
         binder.forField(valueStatusComboBox).bind(UdmValueDto::getStatus, UdmValueDto::setStatus);
         VaadinUtils.addComponentStyle(valueStatusComboBox, "udm-value-edit-value-status-combo-box");
         return buildCommonLayout(valueStatusComboBox, fieldName);
@@ -357,11 +355,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             ? value.getNameAndDescription()
             : StringUtils.EMPTY);
         pubTypeComboBox.setSelectedItem(udmValue.getPublicationType());
-        pubTypeComboBox.addValueChangeListener(event -> {
-            fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
-                ? event.getValue().getNameAndDescription() : null);
-            binder.validate();
-        });
+        pubTypeComboBox.addValueChangeListener(event -> fieldToValueChangesMap.updateFieldValue(fieldName,
+            Objects.nonNull(event.getValue()) ? event.getValue().getNameAndDescription() : null));
         binder.forField(pubTypeComboBox).bind(UdmValueDto::getPublicationType, UdmValueDto::setPublicationType);
         VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-value-edit-pub-type-combo-box");
         return buildCommonLayout(pubTypeComboBox, fieldName);
@@ -381,6 +376,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (bean, value) -> bean.setPrice(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         priceField.addValueChangeListener(event -> {
+            binder.validate();
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
@@ -405,9 +401,9 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .findFirst()
             .orElse(null));
         currencyComboBox.addValueChangeListener(event -> {
+            binder.validate();
             fieldToValueChangesMap.updateFieldValue(fieldName, Objects.nonNull(event.getValue())
                 ? event.getValue().getCodeAndDescription() : null);
-            binder.validate();
             if (event.isUserOriginated()) {
                 recalculatePriceInUsd();
             }
@@ -430,10 +426,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         priceTypeComboBox.setSizeFull();
         priceTypeComboBox.setItems(controller.getAllPriceTypes());
         priceTypeComboBox.setSelectedItem(udmValue.getPriceType());
-        priceTypeComboBox.addValueChangeListener(event -> {
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue());
-            binder.validate();
-        });
+        priceTypeComboBox.addValueChangeListener(
+            event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         binder.forField(priceTypeComboBox).bind(UdmValueDto::getPriceType, UdmValueDto::setPriceType);
         VaadinUtils.addComponentStyle(priceTypeComboBox, "udm-value-edit-price-type-combo-box");
         return buildCommonLayout(priceTypeComboBox, fieldName);
@@ -444,10 +438,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         priceAccessTypeComboBox.setSizeFull();
         priceAccessTypeComboBox.setItems(controller.getAllPriceAccessTypes());
         priceAccessTypeComboBox.setSelectedItem(udmValue.getPriceAccessType());
-        priceAccessTypeComboBox.addValueChangeListener(event -> {
-            fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue());
-            binder.validate();
-        });
+        priceAccessTypeComboBox.addValueChangeListener(
+            event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue()));
         binder.forField(priceAccessTypeComboBox).bind(UdmValueDto::getPriceAccessType, UdmValueDto::setPriceAccessType);
         VaadinUtils.addComponentStyle(priceAccessTypeComboBox, "udm-value-edit-price-access-type-combo-box");
         return buildCommonLayout(priceAccessTypeComboBox, fieldName);
@@ -497,6 +489,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 (bean, value) -> bean.setContent(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
         contentField.addValueChangeListener(event -> {
+            binder.validate();
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim());
             if (event.isUserOriginated()) {
                 recalculateContentUnitPrice();
