@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
 import com.vaadin.ui.TabSheet;
@@ -30,6 +32,8 @@ import com.vaadin.ui.TabSheet;
  * @author Nikita Levyankov
  */
 public class MainWidget extends TabSheet implements IMainWidget {
+
+    private static final String UDM_REPORT_MENU_CSS_POSITION = "left: 540px; top: 29px;";
 
     private IMainWidgetController controller;
 
@@ -70,6 +74,10 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void updateProductFamily() {
         udmTab.setVisible(udmWidget.updateProductFamily());
+        if (udmTab.isVisible() && ForeignSecurityUtils.hasSpecialistPermission()) {
+            ((RootWidget) this.getUI().getContent()).getAbsoluteLayout().addComponent(
+                controller.getUdmReportController().initWidget(), UDM_REPORT_MENU_CSS_POSITION);
+        }
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());

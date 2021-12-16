@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
 import com.copyright.rup.dist.foreign.ui.main.api.IControllerProvider;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -49,6 +50,8 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Autowired
     @Qualifier("dist.foreign.batchStatusControllerProvider")
     private IControllerProvider<ICommonBatchStatusController> batchStatusControllerProvider;
+    @Autowired
+    private IUdmReportController udmReportController;
 
     @Override
     public IControllerProvider<IUdmController> getUdmControllerProvider() {
@@ -73,6 +76,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider() {
         return batchStatusControllerProvider;
+    }
+
+    @Override
+    public IUdmReportController getUdmReportController() {
+        return udmReportController;
     }
 
     @Override
