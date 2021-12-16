@@ -83,7 +83,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     @Override
     @SuppressWarnings("unchecked")
     public IUdmUsageWidget init() {
-        setSplitPosition(200, Unit.PIXELS);
+        setSplitPosition(270, Unit.PIXELS);
         setFirstComponent(controller.initUsagesFilterWidget());
         setSecondComponent(initUsagesLayout());
         setLocked(true);

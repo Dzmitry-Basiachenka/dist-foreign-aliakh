@@ -70,11 +70,13 @@ public class UdmUsageFilterWidgetTest {
 
     private IUdmUsageFilterController udmUsageFilterController;
     private UdmUsageFilterWidget widget;
+    private UdmUsageAppliedFilterWidget appliedFilterWidget;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         udmUsageFilterController = createMock(IUdmUsageFilterController.class);
+        appliedFilterWidget = createMock(UdmUsageAppliedFilterWidget.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         widget = new UdmUsageFilterWidget(udmUsageFilterController);
         widget.setController(udmUsageFilterController);
@@ -85,7 +87,7 @@ public class UdmUsageFilterWidgetTest {
         expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
         replay(udmUsageFilterController);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
@@ -95,10 +97,12 @@ public class UdmUsageFilterWidgetTest {
     @Test
     public void testApplyFilter() {
         expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
-        replay(udmUsageFilterController, ForeignSecurityUtils.class);
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall();
+        replay(udmUsageFilterController, appliedFilterWidget, ForeignSecurityUtils.class);
         widget.init();
         widget.clearFilter();
-        verify(udmUsageFilterController, ForeignSecurityUtils.class);
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -111,6 +115,7 @@ public class UdmUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().isEmpty());
+        verify(udmUsageFilterController, appliedFilterWidget, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -128,8 +133,11 @@ public class UdmUsageFilterWidgetTest {
     @Test
     public void testClearFilter() {
         expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
-        replay(udmUsageFilterController, ForeignSecurityUtils.class);
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall().times(2);
+        replay(udmUsageFilterController,appliedFilterWidget, ForeignSecurityUtils.class);
         widget.init();
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -144,7 +152,7 @@ public class UdmUsageFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         ComboBox periodComboBox = Whitebox.getInternalState(widget, "periodComboBox");
         assertNull(periodComboBox.getValue());
-        verify(udmUsageFilterController, ForeignSecurityUtils.class);
+        verify(udmUsageFilterController,appliedFilterWidget, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -167,10 +175,12 @@ public class UdmUsageFilterWidgetTest {
     @Test
     public void verifyApplyButtonClickListener() {
         expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
-        replay(udmUsageFilterController);
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall().times(1);
+        replay(udmUsageFilterController, appliedFilterWidget);
         widget.init();
         widget.clearFilter();
-        verify(udmUsageFilterController);
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
@@ -184,6 +194,7 @@ public class UdmUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
+        verify(udmUsageFilterController, appliedFilterWidget);
     }
 
     @Test
