@@ -4,9 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueAuditRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UdmValueAuditRepositoryIntegrationTest {
         UdmValueAuditItem auditItem = auditItems.get(0);
         assertEquals(UDM_VALUE_AUDIT_UID_2, auditItem.getId());
         assertEquals(UDM_VALUE_UID, auditItem.getValueId());
-        assertEquals(UsageActionTypeEnum.CREATED, auditItem.getActionType());
+        assertEquals(UdmValueActionTypeEnum.CREATED, auditItem.getActionType());
         assertEquals("UDM Value batch for period '2021' was populated", auditItem.getActionReason());
     }
 
@@ -64,13 +65,13 @@ public class UdmValueAuditRepositoryIntegrationTest {
         UdmValueAuditItem auditItem1 = auditItems.get(0);
         assertEquals(UDM_VALUE_AUDIT_UID_1, auditItem1.getId());
         assertEquals(UDM_VALUE_UID, auditItem1.getValueId());
-        assertEquals(UsageActionTypeEnum.WORK_FOUND, auditItem1.getActionType());
+        assertEquals(UdmValueActionTypeEnum.ASSIGNEE_CHANGE, auditItem1.getActionType());
         assertEquals("Assignment was changed. Usage was assigned to ‘wjohn@copyright.com’",
             auditItem1.getActionReason());
         UdmValueAuditItem auditItem2 = auditItems.get(1);
         assertEquals(UDM_VALUE_AUDIT_UID_2, auditItem2.getId());
         assertEquals(UDM_VALUE_UID, auditItem2.getValueId());
-        assertEquals(UsageActionTypeEnum.CREATED, auditItem2.getActionType());
+        assertEquals(UdmValueActionTypeEnum.CREATED, auditItem2.getActionType());
         assertEquals("UDM Value batch for period '2021' was populated", auditItem2.getActionReason());
     }
 
@@ -78,7 +79,7 @@ public class UdmValueAuditRepositoryIntegrationTest {
         UdmValueAuditItem auditItem = new UdmValueAuditItem();
         auditItem.setId(UDM_VALUE_AUDIT_UID_1);
         auditItem.setValueId(UDM_VALUE_UID);
-        auditItem.setActionType(UsageActionTypeEnum.WORK_FOUND);
+        auditItem.setActionType(UdmValueActionTypeEnum.ASSIGNEE_CHANGE);
         auditItem.setActionReason("Assignment was changed. Usage was assigned to ‘wjohn@copyright.com’");
         return auditItem;
     }

@@ -52,7 +52,7 @@ public interface IUdmProxyValueRepository {
      * @param userName name of user
      * @return count of updated UDM values
      */
-    int applyProxyValues(Integer period, String userName);
+    List<String> applyProxyValues(Integer period, String userName);
 
     /**
      * Finds list of {@link UdmProxyValueDto}s by UDM proxy value filter.

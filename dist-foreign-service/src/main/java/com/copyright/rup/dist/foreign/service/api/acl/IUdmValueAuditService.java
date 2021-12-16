@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface IUdmValueAuditService {
      * @param actionType   action type
      * @param actionReason action reason
      */
-    void logAction(String udmValueId, UsageActionTypeEnum actionType, String actionReason);
+    void logAction(String udmValueId, UdmValueActionTypeEnum actionType, String actionReason);
 
     /**
      * Gets all actions for UDM value with given id.

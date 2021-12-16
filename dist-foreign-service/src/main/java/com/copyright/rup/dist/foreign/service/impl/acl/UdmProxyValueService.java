@@ -2,10 +2,14 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +34,8 @@ public class UdmProxyValueService implements IUdmProxyValueService {
 
     @Autowired
     private IUdmProxyValueRepository udmProxyValueRepository;
+    @Autowired
+    private IUdmValueAuditService udmValueAuditService;
 
     @Override
     public List<Integer> findPeriods() {
@@ -44,10 +50,14 @@ public class UdmProxyValueService implements IUdmProxyValueService {
         udmProxyValueRepository.deleteProxyValues(period);
         udmProxyValueRepository.clearProxyValues(period, userName);
         udmProxyValueRepository.insertProxyValues(period, userName);
-        int updatedValuesCount = udmProxyValueRepository.applyProxyValues(period, userName);
+        List<String> updatedValuesIds = udmProxyValueRepository.applyProxyValues(period, userName);
+        String actionReason =
+            String.format("Proxy value was applied based on proxy calculation for '%s' period", period);
+        updatedValuesIds.forEach(
+            id -> udmValueAuditService.logAction(id, UdmValueActionTypeEnum.PROXY_CALCULATION, actionReason));
         LOGGER.info("Calculate UDM proxy values. Finished. Period={}, UserName={}, UpdatedValuesCount={}",
-            period, userName, updatedValuesCount);
-        return updatedValuesCount;
+            period, userName, LogUtils.size(updatedValuesIds));
+        return updatedValuesIds.size();
     }
 
     @Override

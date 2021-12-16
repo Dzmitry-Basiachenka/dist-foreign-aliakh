@@ -15,9 +15,9 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
@@ -95,13 +95,13 @@ public class UdmValueServiceTest {
             "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
         udmValueRepository.update(udmValueDto);
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UdmValueActionTypeEnum.VALUE_EDIT,
             "The field 'Price Comment' was edited. Old Value is 'old price comment'. New Value is 'new price comment'");
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UdmValueActionTypeEnum.VALUE_EDIT,
             "The field 'Content Comment' was edited. Old Value is 'old content comment'. New Value is not specified");
         expectLastCall().once();
-        udmValueAuditService.logAction(UDM_VALUE_UID_1, UsageActionTypeEnum.VALUE_EDIT,
+        udmValueAuditService.logAction(UDM_VALUE_UID_1, UdmValueActionTypeEnum.VALUE_EDIT,
             "The field 'Comment' was edited. Old Value is not specified. New Value is 'new comment'");
         expectLastCall().once();
         replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
@@ -158,10 +158,10 @@ public class UdmValueServiceTest {
         udmValueRepository.updateAssignee(new HashSet<>(Arrays.asList(udmValue1.getId(), udmValue2.getId())),
             USER_NAME, USER_NAME);
         expectLastCall().once();
-        udmValueAuditService.logAction(udmValue1.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+        udmValueAuditService.logAction(udmValue1.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
             "Assignment was changed. Value was assigned to ‘user@copyright.com’");
         expectLastCall().once();
-        udmValueAuditService.logAction(udmValue2.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+        udmValueAuditService.logAction(udmValue2.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
             "Assignment was changed. Old assignee is 'wjohn@copyright.com'. " +
                 "New assignee is 'user@copyright.com'");
         expectLastCall().once();
@@ -180,7 +180,7 @@ public class UdmValueServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmValueRepository.updateAssignee(Collections.singleton(udmValue.getId()), null, USER_NAME);
         expectLastCall().once();
-        udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+        udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
             "Assignment was changed. Old assignee is 'wjohn@copyright.com'. Value is not assigned to anyone");
         expectLastCall().once();
         replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);

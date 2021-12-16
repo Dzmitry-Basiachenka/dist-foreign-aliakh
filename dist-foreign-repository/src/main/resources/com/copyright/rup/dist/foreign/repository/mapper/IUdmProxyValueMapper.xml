@@ -77,24 +77,20 @@
             and period = #{period}
     </select>
 
-    <select id="applyProxyValues" parameterType="map" resultType="int">
-        with updated_usages_uids as (
-            update ${schema}.df_udm_value v
-            set
-                content_unit_price = pv.content_unit_price,
-                updated_by_user = #{updateUser},
-                updated_datetime = now(),
-                record_version = v.record_version + 1
-            from
-                ${schema}.df_udm_proxy_value pv
-            where v.publication_type_uid = pv.publication_type_uid
-                and (price_flag = false or content_flag = false)
-                and v.period = #{period}
-                and pv.period = #{period}
-            returning df_udm_value_uid
-        )
-        select count(*)
-        from updated_usages_uids
+    <select id="applyProxyValues" parameterType="map" resultType="string">
+        update ${schema}.df_udm_value v
+        set
+            content_unit_price = pv.content_unit_price,
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = v.record_version + 1
+        from
+            ${schema}.df_udm_proxy_value pv
+        where v.publication_type_uid = pv.publication_type_uid
+            and (price_flag = false or content_flag = false)
+            and v.period = #{period}
+            and pv.period = #{period}
+        returning df_udm_value_uid
     </select>
 
     <select id="findDtosByFilter" resultMap="udmProxyValueDtoResultMap" parameterType="map">

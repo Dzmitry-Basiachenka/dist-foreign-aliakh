@@ -9,9 +9,9 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
@@ -71,7 +71,7 @@ public class UdmValueService implements IUdmValueService {
         udmValueDto.setUpdateUser(userName);
         udmValueRepository.update(udmValueDto);
         actionReasons.forEach(actionReason ->
-            udmValueAuditService.logAction(udmValueDto.getId(), UsageActionTypeEnum.VALUE_EDIT, actionReason));
+            udmValueAuditService.logAction(udmValueDto.getId(), UdmValueActionTypeEnum.VALUE_EDIT, actionReason));
         LOGGER.debug("Update UDM value. Finished. Value={}, Reasons={}, UserName={}", udmValueDto, actionReasons,
             userName);
     }
@@ -110,10 +110,10 @@ public class UdmValueService implements IUdmValueService {
             .filter(udmValue -> !userName.equals(udmValue.getAssignee()))
             .peek(udmValue -> {
                 if (Objects.isNull(udmValue.getAssignee())) {
-                    udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                    udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
                         String.format("Assignment was changed. Value was assigned to ‘%s’", userName));
                 } else {
-                    udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+                    udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
                         String.format("Assignment was changed. Old assignee is '%s'. New assignee is '%s'",
                             udmValue.getAssignee(), userName));
                 }
@@ -130,7 +130,7 @@ public class UdmValueService implements IUdmValueService {
         String userName = RupContextUtils.getUserName();
         Set<String> udmValueIds = udmValues
             .stream()
-            .peek(udmValue -> udmValueAuditService.logAction(udmValue.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
+            .peek(udmValue -> udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
                 String.format("Assignment was changed. Old assignee is '%s'. Value is not assigned to anyone",
                     udmValue.getAssignee())))
             .map(BaseEntity::getId)
@@ -164,7 +164,7 @@ public class UdmValueService implements IUdmValueService {
                 value.setCreateUser(userName);
                 value.setUpdateUser(userName);
                 udmValueRepository.insert(value);
-                udmValueAuditService.logAction(value.getId(), UsageActionTypeEnum.CREATED, auditReason);
+                udmValueAuditService.logAction(value.getId(), UdmValueActionTypeEnum.CREATED, auditReason);
             })
             .collect(Collectors.toMap(UdmValue::getWrWrkInst, UdmValue::getId));
         int updatedUsagesCount = 0;
@@ -193,7 +193,8 @@ public class UdmValueService implements IUdmValueService {
         List<String> publishedIds = udmValueRepository.publishToBaseline(period, userName);
         String actionReason = String.format("UDM Value batch for period '%s' was published to baseline", period);
         publishedIds.forEach(
-            valueId -> udmValueAuditService.logAction(valueId, UsageActionTypeEnum.PUBLISH_TO_BASELINE, actionReason));
+            valueId -> udmValueAuditService.logAction(valueId, UdmValueActionTypeEnum.PUBLISH_TO_BASELINE,
+                actionReason));
         LOGGER.info("Publish UDM Values to baseline. Finished. Period={}, UserName={}, PublishedValuesCount={}",
             period, userName, LogUtils.size(publishedIds));
         return publishedIds.size();

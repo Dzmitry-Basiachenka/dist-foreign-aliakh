@@ -2,10 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class UdmValueAuditService implements IUdmValueAuditService {
     private IUdmValueAuditRepository udmValueAuditRepository;
 
     @Override
-    public void logAction(String udmValueId, UsageActionTypeEnum actionType, String actionReason) {
+    public void logAction(String udmValueId, UdmValueActionTypeEnum actionType, String actionReason) {
         udmValueAuditRepository.insert(buildUdmValueAuditItem(udmValueId, actionType, actionReason));
     }
 
@@ -39,7 +40,7 @@ public class UdmValueAuditService implements IUdmValueAuditService {
         return udmValueAuditRepository.findByUdmValueId(udmValueId);
     }
 
-    private UdmValueAuditItem buildUdmValueAuditItem(String udmValueId, UsageActionTypeEnum actionType,
+    private UdmValueAuditItem buildUdmValueAuditItem(String udmValueId, UdmValueActionTypeEnum actionType,
                                                      String actionReason) {
         UdmValueAuditItem auditItem = new UdmValueAuditItem();
         auditItem.setId(RupPersistUtils.generateUuid());
