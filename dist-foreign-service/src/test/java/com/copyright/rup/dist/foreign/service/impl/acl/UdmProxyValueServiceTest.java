@@ -60,6 +60,8 @@ public class UdmProxyValueServiceTest {
         expectLastCall().once();
         udmProxyValueRepository.insertProxyValues(PERIOD, USER_NAME);
         expectLastCall().once();
+        udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
+        expectLastCall().once();
         expect(udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME)).andReturn(2).once();
         replay(udmProxyValueRepository, RupContextUtils.class);
         assertEquals(2, udmProxyValueService.calculateProxyValues(PERIOD));

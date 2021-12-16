@@ -42,6 +42,7 @@ public class UdmProxyValueService implements IUdmProxyValueService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Calculate UDM proxy values. Started. Period={}, UserName={}", period, userName);
         udmProxyValueRepository.deleteProxyValues(period);
+        udmProxyValueRepository.clearProxyValues(period, userName);
         udmProxyValueRepository.insertProxyValues(period, userName);
         int updatedValuesCount = udmProxyValueRepository.applyProxyValues(period, userName);
         LOGGER.info("Calculate UDM proxy values. Finished. Period={}, UserName={}, UpdatedValuesCount={}",

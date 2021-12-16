@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
@@ -10,12 +11,15 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -30,6 +34,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -72,6 +78,18 @@ public class UdmProxyValueRepositoryIntegrationTest {
         assertEquals(1, udmProxyValueRepository.findDtosByFilter(filter).size());
         udmProxyValueRepository.deleteProxyValues(PERIOD);
         assertEquals(0, udmProxyValueRepository.findDtosByFilter(filter).size());
+    }
+
+    @Test
+    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-clear-proxy-values.groovy")
+    public void testClearProxyValues() {
+        findAllValueDtos().forEach(udmValueDto -> assertNotNull(udmValueDto.getContentUnitPrice()));
+        udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
+        assertEquals(Sets.newHashSet("e6b6588f-df06-4c63-b9c0-4b4f1e711945", "57f0198d-0366-4a8e-a833-e40986a37981"),
+            findAllValueDtos().stream()
+                .filter(udmValueDto -> Objects.isNull(udmValueDto.getContentUnitPrice()))
+                .map(UdmValueDto::getId)
+                .collect(Collectors.toSet()));
     }
 
     @Test

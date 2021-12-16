@@ -31,6 +31,13 @@ public interface IUdmProxyValueRepository {
     void deleteProxyValues(Integer period);
 
     /**
+     * Clears content unit price of UDM proxy values to UDM values.
+     * @param period   period of UDM values
+     * @param userName name of user
+     */
+    void clearProxyValues(Integer period, String userName);
+
+    /**
      * Inserts UDM proxy values.
      *
      * @param period   period of UDM values
