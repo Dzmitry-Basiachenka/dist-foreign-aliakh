@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -130,10 +131,17 @@ public class UdmBaselineValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
-    public void testFindDtosByAdditionalFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(569856369L), UDM_BASELINE_VALUE_UID_2);
+    public void testFindDtosByBasicFilter() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(ImmutableSet.of(211012, 211212)),
+            UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)),
             UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByAdditionalFilter() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(569856369L), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(

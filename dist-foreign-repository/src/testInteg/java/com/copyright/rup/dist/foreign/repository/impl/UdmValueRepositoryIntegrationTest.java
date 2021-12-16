@@ -87,6 +87,9 @@ public class UdmValueRepositoryIntegrationTest {
         "Colloids and  libero !@#$%^&*()_+-=?/\\'\"}{][<>convallis. B, Biointerfaces";
     private static final String STANDARD_NUMBER = "1873-7773";
     private static final String RH_NAME_PART = "John Wiley";
+    private static final String COMMENT_WITH_METASYMBOLS = "Comment !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String PRICE_COMMENT_FRAGMENT = "riCE COmmen";
+    private static final String CONTENT_COMMENT_FRAGMENT = "onteNT Commen";
     private static final String LAST_PRICE_COMMENT_FRAGMENT = "rice commen";
     private static final String LAST_CONTENT_COMMENT_FRAGMENT = "ontent commen";
     private static final String COMMENT_FRAGMENT = "ommen";
@@ -174,9 +177,13 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
+        filter.setPriceFlag(true);
+        filter.setPriceComment(PRICE_COMMENT_FRAGMENT);
         filter.setLastPriceFlag(null);
         filter.setLastPriceComment(null);
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null));
+        filter.setContentFlag(true);
+        filter.setContentComment(CONTENT_COMMENT_FRAGMENT);
         filter.setLastContentFlag(null);
         filter.setLastContentComment(null);
         filter.setPubType(null);
@@ -202,9 +209,13 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
+        filter.setPriceFlag(true);
+        filter.setPriceComment(PRICE_COMMENT_FRAGMENT);
         filter.setLastPriceFlag(null);
         filter.setLastPriceComment(null);
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null));
+        filter.setContentFlag(true);
+        filter.setContentComment(CONTENT_COMMENT_FRAGMENT);
         filter.setLastContentFlag(null);
         filter.setLastContentComment(null);
         filter.setPubType(null);
@@ -238,6 +249,50 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(306985899L), UDM_VALUE_UID_2, UDM_VALUE_UID_4,
             UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumber(1000002859L), UDM_VALUE_UID_1,
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(null),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(true), UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(false), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
+            UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceComment(PRICE_COMMENT_FRAGMENT), UDM_VALUE_UID_4,
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceComment(COMMENT_WITH_METASYMBOLS), UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(null),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(true), UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(false), UDM_VALUE_UID_1, UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceComment(LAST_PRICE_COMMENT_FRAGMENT),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(null),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(true), UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(false), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
+            UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentComment(CONTENT_COMMENT_FRAGMENT), UDM_VALUE_UID_1,
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentComment(COMMENT_WITH_METASYMBOLS), UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(null),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(true), UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(false), UDM_VALUE_UID_1, UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastContentComment(LAST_CONTENT_COMMENT_FRAGMENT),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("BK", BOOK)), UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType(null, null)), UDM_VALUE_UID_1,
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType("BK", BOOK)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
+            UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByAdditionalFilterWithOperators() {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), UDM_VALUE_UID_2, UDM_VALUE_UID_3,
             UDM_VALUE_UID_4);
@@ -250,8 +305,6 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.CONTAINS, PART_SYSTEM_TITLE, null)), UDM_VALUE_UID_2,
             UDM_VALUE_UID_3, UDM_VALUE_UID_4);
-        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumber(1000002859L), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null)), UDM_VALUE_UID_1, UDM_VALUE_UID_3,
             UDM_VALUE_UID_4);
@@ -282,13 +335,6 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceInUsdExpression(new FilterExpression<>(
             FilterOperatorEnum.IS_NULL, PRICE_IN_USD, null)), UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(null),
-            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(true));
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceFlag(false), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPriceComment(LAST_PRICE_COMMENT_FRAGMENT),
-            UDM_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null)),
             UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
@@ -298,22 +344,6 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 20, null)), UDM_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, 20, null)), UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(null),
-            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(true));
-        assertFilteringFindDtosByFilter(filter -> filter.setLastContentFlag(false),
-            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastContentComment(LAST_CONTENT_COMMENT_FRAGMENT),
-            UDM_VALUE_UID_1, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType(null, null)), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("BK", BOOK)), UDM_VALUE_UID_4);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType(null, null)), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType("BK", BOOK)),
-            UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_3, UDM_VALUE_UID_4);
     }
 
     @Test
@@ -323,8 +353,8 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
             UDM_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
-            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType(null, null)), UDM_VALUE_UID_1,
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
     }
 
     @Test
@@ -377,10 +407,15 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, PRICE_IN_USD, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, PRICE_IN_USD, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(null), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(true), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(false), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceComment(PRICE_COMMENT_FRAGMENT), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceComment(COMMENT_WITH_METASYMBOLS), 1);
         assertFilteringFindCountByFilter(filter -> filter.setLastPriceFlag(null), 5);
-        assertFilteringFindCountByFilter(filter -> filter.setLastPriceFlag(true), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setLastPriceFlag(false), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setLastPriceComment(LAST_PRICE_COMMENT_FRAGMENT), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastPriceFlag(true), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastPriceFlag(false), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLastPriceComment(LAST_PRICE_COMMENT_FRAGMENT), 2);
         assertFilteringFindCountByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setContentExpression(
@@ -389,9 +424,14 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20, null)), 1);
         assertFilteringFindCountByFilter(
             filter -> filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.IS_NULL, 20, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlag(null), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlag(true), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlag(false), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setContentComment(CONTENT_COMMENT_FRAGMENT), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setContentComment(COMMENT_WITH_METASYMBOLS), 1);
         assertFilteringFindCountByFilter(filter -> filter.setLastContentFlag(null), 5);
-        assertFilteringFindCountByFilter(filter -> filter.setLastContentFlag(true), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setLastContentFlag(false), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setLastContentFlag(true), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastContentFlag(false), 2);
         assertFilteringFindCountByFilter(filter -> filter.setLastContentComment(LAST_CONTENT_COMMENT_FRAGMENT), 2);
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType(null, null)), 4);
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("BK", BOOK)), 1);

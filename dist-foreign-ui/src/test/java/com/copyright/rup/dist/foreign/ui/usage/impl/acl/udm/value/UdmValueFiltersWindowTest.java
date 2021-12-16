@@ -70,10 +70,16 @@ public class UdmValueFiltersWindowTest {
     private static final String RH_NAME = "Rothchild Consultants";
     private static final BigDecimal PRICE = new BigDecimal("100.00");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("200.00");
+    private static final Boolean PRICE_FLAG = true;
+    private static final String PRICE_FLAG_STRING = "Y";
+    private static final String PRICE_COMMENT = "price comment";
     private static final Boolean LAST_PRICE_FLAG = true;
     private static final String LAST_PRICE_FLAG_STRING = "Y";
     private static final String LAST_PRICE_COMMENT = "last price comment";
     private static final BigDecimal CONTENT = new BigDecimal("70");
+    private static final Boolean CONTENT_FLAG = true;
+    private static final String CONTENT_FLAG_STRING = "Y";
+    private static final String CONTENT_COMMENT = "content comment";
     private static final Boolean LAST_CONTENT_FLAG = false;
     private static final String LAST_CONTENT_FLAG_STRING = "N";
     private static final String LAST_CONTENT_COMMENT = "last content comment";
@@ -83,10 +89,11 @@ public class UdmValueFiltersWindowTest {
     private static final String INVALID_NUMBER = "a12345678";
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
+    private static final Currency USD_CURRENCY = new Currency("USD", "US Dollar");
     private static final List<Currency> CURRENCIES =
-        Arrays.asList(new Currency("USD", "US Dollar"), new Currency("AUD", "Australian Dollar"),
-            new Currency("CAD", "Canadian Dollar"), new Currency("EUR", "Euro"), new Currency("GBP", "Pound Sterling"),
-            new Currency("JPY", "Yen"), new Currency("BRL", "Brazilian Real"), new Currency("CNY", "Yuan Renminbi"),
+        Arrays.asList(USD_CURRENCY, new Currency("AUD", "Australian Dollar"), new Currency("CAD", "Canadian Dollar"),
+            new Currency("EUR", "Euro"), new Currency("GBP", "Pound Sterling"), new Currency("JPY", "Yen"),
+            new Currency("BRL", "Brazilian Real"), new Currency("CNY", "Yuan Renminbi"),
             new Currency("CZK", "Czech Koruna"), new Currency("DKK", "Danish Krone"),
             new Currency("NZD", "New Zealand Dollar"), new Currency("NOK", "Norwegian Kron"),
             new Currency("ZAR", "Rand"), new Currency("CHF", "Swiss Franc"), new Currency("INR", "Indian Rupee"));
@@ -128,11 +135,16 @@ public class UdmValueFiltersWindowTest {
             SYSTEM_STANDARD_NUMBER, null));
         valueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
+        valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         valueFilter.setPriceInUsdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
+        valueFilter.setPriceFlag(PRICE_FLAG);
+        valueFilter.setPriceComment(PRICE_COMMENT);
         valueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
         valueFilter.setLastPriceComment(LAST_PRICE_COMMENT);
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
+        valueFilter.setContentFlag(CONTENT_FLAG);
+        valueFilter.setContentComment(CONTENT_COMMENT);
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
         valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
         valueFilter.setLastPubType(buildPublicationType());
@@ -174,7 +186,7 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testContentFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(10);
+        testFilterOperatorChangeListener(11);
     }
 
     @Test
@@ -271,30 +283,28 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testPriceCommentValidation() {
+        validateCommentField("priceCommentField");
+    }
+
+    @Test
+    public void testContentCommentValidation() {
+        validateCommentField("contentCommentField");
+    }
+
+    @Test
     public void testLastPriceCommentValidation() {
-        TextField lastPriceCommentField = Whitebox.getInternalState(window, "lastPriceCommentField");
-        validateFieldAndVerifyErrorMessage(lastPriceCommentField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(lastPriceCommentField, buildStringWithExpectedLength(1024), null, true);
-        validateFieldAndVerifyErrorMessage(lastPriceCommentField, buildStringWithExpectedLength(1025),
-            "Field value should not exceed 1024 characters", false);
+        validateCommentField("lastPriceCommentField");
     }
 
     @Test
     public void testLastContentCommentValidation() {
-        TextField lastContentCommentField = Whitebox.getInternalState(window, "lastContentCommentField");
-        validateFieldAndVerifyErrorMessage(lastContentCommentField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(lastContentCommentField, buildStringWithExpectedLength(1024), null, true);
-        validateFieldAndVerifyErrorMessage(lastContentCommentField, buildStringWithExpectedLength(1025),
-            "Field value should not exceed 1024 characters", false);
+        validateCommentField("lastContentCommentField");
     }
 
     @Test
     public void testCommentValidation() {
-        TextField commentField = Whitebox.getInternalState(window, "commentField");
-        validateFieldAndVerifyErrorMessage(commentField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1024), null, true);
-        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1025),
-            "Field value should not exceed 1024 characters", false);
+        validateCommentField("commentField");
     }
 
     private VerticalLayout verifyRootLayout(Component component) {
@@ -310,7 +320,7 @@ public class UdmValueFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(14, verticalLayout.getComponentCount());
+        assertEquals(16, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
         verifySizedTextField(verticalLayout.getComponent(1), "Wr Wrk Inst");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(2), "System Title");
@@ -321,15 +331,21 @@ public class UdmValueFiltersWindowTest {
         assertComboboxItems("currencyComboBox", CURRENCIES);
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Price");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Price in USD");
-        verifyTextFieldLayout(verticalLayout.getComponent(9), ComboBox.class, "Last Price Flag",
+        verifyTextFieldLayout(verticalLayout.getComponent(9), ComboBox.class, "Price Flag",
+            TextField.class, "Price Comment");
+        assertComboboxItems("priceFlagComboBox", Y_N_ITEMS);
+        verifyTextFieldLayout(verticalLayout.getComponent(10), ComboBox.class, "Last Price Flag",
             TextField.class, "Last Price Comment");
         assertComboboxItems("lastPriceFlagComboBox", Y_N_ITEMS);
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(10), "Content");
-        verifyTextFieldLayout(verticalLayout.getComponent(11), ComboBox.class, "Last Content Flag",
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(11), "Content");
+        verifyTextFieldLayout(verticalLayout.getComponent(12), ComboBox.class, "Content Flag",
+            TextField.class, "Content Comment");
+        assertComboboxItems("contentFlagComboBox", Y_N_ITEMS);
+        verifyTextFieldLayout(verticalLayout.getComponent(13), ComboBox.class, "Last Content Flag",
             TextField.class, "Last Content Comment");
         assertComboboxItems("lastContentFlagComboBox", Y_N_ITEMS);
-        verifySizedComboBox(verticalLayout.getComponent(12), "Last Pub Type");
-        verifyTextField(verticalLayout.getComponent(13), "Comment");
+        verifySizedComboBox(verticalLayout.getComponent(14), "Last Pub Type");
+        verifyTextField(verticalLayout.getComponent(15), "Comment");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -463,6 +479,14 @@ public class UdmValueFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(textField, "99999999999", errorMessage, false);
     }
 
+    private void validateCommentField(String fieldName) {
+        TextField commentField = Whitebox.getInternalState(window, fieldName);
+        validateFieldAndVerifyErrorMessage(commentField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1024), null, true);
+        validateFieldAndVerifyErrorMessage(commentField, buildStringWithExpectedLength(1025),
+            "Field value should not exceed 1024 characters", false);
+    }
+
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
         valueFilter.setWrWrkInst(WR_WRK_INST);
@@ -471,11 +495,16 @@ public class UdmValueFiltersWindowTest {
             SYSTEM_STANDARD_NUMBER, null));
         valueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
+        valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         valueFilter.setPriceInUsdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
+        valueFilter.setPriceFlag(PRICE_FLAG);
+        valueFilter.setPriceComment(PRICE_COMMENT);
         valueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
         valueFilter.setLastPriceComment(LAST_PRICE_COMMENT);
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
+        valueFilter.setContentFlag(CONTENT_FLAG);
+        valueFilter.setContentComment(CONTENT_COMMENT);
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
         valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
         valueFilter.setLastPubType(buildPublicationType());
@@ -495,15 +524,19 @@ public class UdmValueFiltersWindowTest {
         assertTextFieldValue("rhAccountNumberField", RH_ACCOUNT_NUMBER.toString());
         assertTextFieldValue("rhNameField", RH_NAME);
         assertComboBoxValue("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertComboboxItems("currencyComboBox", CURRENCIES);
+        assertComboBoxValue("currencyComboBox", USD_CURRENCY);
         assertTextFieldValue("priceField", PRICE.toString());
         assertComboBoxValue("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("priceInUsdField", PRICE_IN_USD.toString());
         assertComboBoxValue("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertComboBoxValue("priceFlagComboBox", PRICE_FLAG_STRING);
+        assertTextFieldValue("priceCommentField", PRICE_COMMENT);
         assertComboBoxValue("lastPriceFlagComboBox", LAST_PRICE_FLAG_STRING);
         assertTextFieldValue("lastPriceCommentField", LAST_PRICE_COMMENT);
         assertTextFieldValue("contentField", CONTENT.toString());
         assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
+        assertTextFieldValue("contentCommentField", CONTENT_COMMENT);
         assertComboBoxValue("lastContentFlagComboBox", LAST_CONTENT_FLAG_STRING);
         assertTextFieldValue("lastContentCommentField", LAST_CONTENT_COMMENT);
         assertComboBoxValue("lastPubTypeComboBox", buildPublicationType());
@@ -552,14 +585,19 @@ public class UdmValueFiltersWindowTest {
         populateTextField("rhAccountNumberField", String.valueOf(RH_ACCOUNT_NUMBER));
         populateTextField("rhNameField", RH_NAME);
         populateComboBox("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateComboBox("currencyComboBox", USD_CURRENCY);
         populateTextField("priceField", PRICE.toString());
         populateComboBox("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("priceInUsdField", PRICE_IN_USD.toString());
         populateComboBox("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateComboBox("priceFlagComboBox", PRICE_FLAG_STRING);
+        populateTextField("priceCommentField", PRICE_COMMENT);
         populateComboBox("lastPriceFlagComboBox", LAST_PRICE_FLAG_STRING);
         populateTextField("lastPriceCommentField", LAST_PRICE_COMMENT);
         populateTextField("contentField", String.valueOf(CONTENT));
         populateComboBox("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateComboBox("contentFlagComboBox", CONTENT_FLAG_STRING);
+        populateTextField("contentCommentField", CONTENT_COMMENT);
         populateComboBox("lastContentFlagComboBox", LAST_CONTENT_FLAG_STRING);
         populateTextField("lastContentCommentField", LAST_CONTENT_COMMENT);
         populateComboBox("lastPubTypeComboBox", buildPublicationType());

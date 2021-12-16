@@ -266,6 +266,12 @@
                     <property name="fieldSecondValue" value="${filter.priceInUsdExpression.fieldSecondValue}"/>
                 </include>
             </if>
+            <if test="null != filter.priceFlag">
+                and v.price_flag = #{filter.priceFlag}
+            </if>
+            <if test="null != filter.priceComment">
+                and v.price_comment ilike '%' || #{filter.priceComment} || '%'
+            </if>
             <if test="null != filter.lastPriceFlag">
                 and last_value.last_price_flag = #{filter.lastPriceFlag}
             </if>
@@ -276,6 +282,12 @@
                     <property name="fieldFirstValue" value="${filter.contentExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.contentExpression.fieldSecondValue}"/>
                 </include>
+            </if>
+            <if test="null != filter.contentFlag">
+                and v.content_flag = #{filter.contentFlag}
+            </if>
+            <if test="null != filter.contentComment">
+                and v.content_comment ilike '%' || #{filter.contentComment} || '%'
             </if>
             <if test="null != filter.lastContentFlag">
                 and last_value.last_content_flag = #{filter.lastContentFlag}
