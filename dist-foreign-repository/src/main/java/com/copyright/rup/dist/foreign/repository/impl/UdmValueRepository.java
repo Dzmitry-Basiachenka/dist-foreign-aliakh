@@ -110,6 +110,8 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
         filterCopy.setLastPriceComment(escapeSqlLikePattern(filterCopy.getLastPriceComment()));
         filterCopy.setLastContentComment(escapeSqlLikePattern(filterCopy.getLastContentComment()));
         filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
+        filterCopy.setPriceComment(escapeSqlLikePattern(filterCopy.getPriceComment()));
+        filterCopy.setContentComment(escapeSqlLikePattern(filterCopy.getContentComment()));
         return filterCopy;
     }
 
