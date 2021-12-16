@@ -4,7 +4,9 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
+
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,6 +33,14 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
     @Override
     public void deleteProxyValues(Integer period) {
         delete("IUdmProxyValueMapper.deleteProxyValues", Objects.requireNonNull(period));
+    }
+
+    @Override
+    public void clearProxyValues(Integer period, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("updateUser", userName);
+        update("IUdmProxyValueMapper.clearProxyValues", parameters);
     }
 
     @Override

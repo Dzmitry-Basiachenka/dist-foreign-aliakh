@@ -66,6 +66,17 @@
         group by publication_type_uid
     </insert>
 
+    <select id="clearProxyValues" parameterType="map">
+        update ${schema}.df_udm_value
+        set
+            content_unit_price = null,
+            updated_by_user = #{updateUser},
+            updated_datetime = now(),
+            record_version = record_version + 1
+        where (price_flag = false or content_flag = false)
+            and period = #{period}
+    </select>
+
     <select id="applyProxyValues" parameterType="map" resultType="int">
         with updated_usages_uids as (
             update ${schema}.df_udm_value v
