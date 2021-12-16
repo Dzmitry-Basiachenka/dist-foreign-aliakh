@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
@@ -54,6 +55,11 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * @return instance of {@link IControllerProvider} for {@link ICommonAuditController}.
      */
     IControllerProvider<ICommonBatchStatusController> getBatchStatusControllerProvider();
+
+    /**
+     * @return instance of {@link IUdmReportController}.
+     */
+    IUdmReportController getUdmReportController();
 
     /**
      * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.
