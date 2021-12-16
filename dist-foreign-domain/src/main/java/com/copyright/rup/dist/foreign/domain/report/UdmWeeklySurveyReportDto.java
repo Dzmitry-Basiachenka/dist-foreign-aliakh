@@ -30,11 +30,11 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
     private Integer numberOfUsableRows;
     private Integer percentUsable;
     private Integer numberOfRegisteredUsers;
-    private Integer numberOfRowsReportedByRegisteredUsers;
-    private Integer numberOfUsableRowsReportedByRegisteredUsers;
+    private Integer numberOfRowsByRegisteredUsers;
+    private Integer numberOfUsableRowsByRegisteredUsers;
     private Integer percentUsableFromRegisteredUsers;
-    private Integer numberOfRowsReportedByUnregisteredUsers;
-    private Integer numberOfUsableRowsReportedByUnregisteredUsers;
+    private Integer numberOfRowsByUnregisteredUsers;
+    private Integer numberOfUsableRowsByUnregisteredUsers;
     private Integer percentUsableFromUnregisteredUsers;
 
     public Integer getPeriod() {
@@ -133,20 +133,20 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
         this.numberOfRegisteredUsers = numberOfRegisteredUsers;
     }
 
-    public Integer getNumberOfRowsReportedByRegisteredUsers() {
-        return numberOfRowsReportedByRegisteredUsers;
+    public Integer getNumberOfRowsByRegisteredUsers() {
+        return numberOfRowsByRegisteredUsers;
     }
 
-    public void setNumberOfRowsReportedByRegisteredUsers(Integer numberOfRowsReportedByRegisteredUsers) {
-        this.numberOfRowsReportedByRegisteredUsers = numberOfRowsReportedByRegisteredUsers;
+    public void setNumberOfRowsByRegisteredUsers(Integer numberOfRowsByRegisteredUsers) {
+        this.numberOfRowsByRegisteredUsers = numberOfRowsByRegisteredUsers;
     }
 
-    public Integer getNumberOfUsableRowsReportedByRegisteredUsers() {
-        return numberOfUsableRowsReportedByRegisteredUsers;
+    public Integer getNumberOfUsableRowsByRegisteredUsers() {
+        return numberOfUsableRowsByRegisteredUsers;
     }
 
-    public void setNumberOfUsableRowsReportedByRegisteredUsers(Integer numberOfUsableRowsReportedByRegisteredUsers) {
-        this.numberOfUsableRowsReportedByRegisteredUsers = numberOfUsableRowsReportedByRegisteredUsers;
+    public void setNumberOfUsableRowsByRegisteredUsers(Integer numberOfUsableRowsByRegisteredUsers) {
+        this.numberOfUsableRowsByRegisteredUsers = numberOfUsableRowsByRegisteredUsers;
     }
 
     public Integer getPercentUsableFromRegisteredUsers() {
@@ -157,21 +157,20 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
         this.percentUsableFromRegisteredUsers = percentUsableFromRegisteredUsers;
     }
 
-    public Integer getNumberOfRowsReportedByUnregisteredUsers() {
-        return numberOfRowsReportedByUnregisteredUsers;
+    public Integer getNumberOfRowsByUnregisteredUsers() {
+        return numberOfRowsByUnregisteredUsers;
     }
 
-    public void setNumberOfRowsReportedByUnregisteredUsers(Integer numberOfRowsReportedByUnregisteredUsers) {
-        this.numberOfRowsReportedByUnregisteredUsers = numberOfRowsReportedByUnregisteredUsers;
+    public void setNumberOfRowsByUnregisteredUsers(Integer numberOfRowsByUnregisteredUsers) {
+        this.numberOfRowsByUnregisteredUsers = numberOfRowsByUnregisteredUsers;
     }
 
-    public Integer getNumberOfUsableRowsReportedByUnregisteredUsers() {
-        return numberOfUsableRowsReportedByUnregisteredUsers;
+    public Integer getNumberOfUsableRowsByUnregisteredUsers() {
+        return numberOfUsableRowsByUnregisteredUsers;
     }
 
-    public void setNumberOfUsableRowsReportedByUnregisteredUsers(
-        Integer numberOfUsableRowsReportedByUnregisteredUsers) {
-        this.numberOfUsableRowsReportedByUnregisteredUsers = numberOfUsableRowsReportedByUnregisteredUsers;
+    public void setNumberOfUsableRowsByUnregisteredUsers(Integer numberOfUsableRowsByUnregisteredUsers) {
+        this.numberOfUsableRowsByUnregisteredUsers = numberOfUsableRowsByUnregisteredUsers;
     }
 
     public Integer getPercentUsableFromUnregisteredUsers() {
@@ -205,11 +204,11 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
             .append(numberOfUsableRows, that.numberOfUsableRows)
             .append(percentUsable, that.percentUsable)
             .append(numberOfRegisteredUsers, that.numberOfRegisteredUsers)
-            .append(numberOfRowsReportedByRegisteredUsers, that.numberOfRowsReportedByRegisteredUsers)
-            .append(numberOfUsableRowsReportedByRegisteredUsers, that.numberOfUsableRowsReportedByRegisteredUsers)
+            .append(numberOfRowsByRegisteredUsers, that.numberOfRowsByRegisteredUsers)
+            .append(numberOfUsableRowsByRegisteredUsers, that.numberOfUsableRowsByRegisteredUsers)
             .append(percentUsableFromRegisteredUsers, that.percentUsableFromRegisteredUsers)
-            .append(numberOfRowsReportedByUnregisteredUsers, that.numberOfRowsReportedByUnregisteredUsers)
-            .append(numberOfUsableRowsReportedByUnregisteredUsers, that.numberOfUsableRowsReportedByUnregisteredUsers)
+            .append(numberOfRowsByUnregisteredUsers, that.numberOfRowsByUnregisteredUsers)
+            .append(numberOfUsableRowsByUnregisteredUsers, that.numberOfUsableRowsByUnregisteredUsers)
             .append(percentUsableFromUnregisteredUsers, that.percentUsableFromUnregisteredUsers)
             .isEquals();
     }
@@ -230,11 +229,11 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
             .append(numberOfUsableRows)
             .append(percentUsable)
             .append(numberOfRegisteredUsers)
-            .append(numberOfRowsReportedByRegisteredUsers)
-            .append(numberOfUsableRowsReportedByRegisteredUsers)
+            .append(numberOfRowsByRegisteredUsers)
+            .append(numberOfUsableRowsByRegisteredUsers)
             .append(percentUsableFromRegisteredUsers)
-            .append(numberOfRowsReportedByUnregisteredUsers)
-            .append(numberOfUsableRowsReportedByUnregisteredUsers)
+            .append(numberOfRowsByUnregisteredUsers)
+            .append(numberOfUsableRowsByUnregisteredUsers)
             .append(percentUsableFromUnregisteredUsers)
             .toHashCode();
     }
@@ -255,11 +254,11 @@ public class UdmWeeklySurveyReportDto extends StoredEntity<String> {
             .append("numberOfUsableRows", numberOfUsableRows)
             .append("percentUsable", percentUsable)
             .append("numberOfRegisteredUsers", numberOfRegisteredUsers)
-            .append("numberOfRowsReportedByRegisteredUsers", numberOfRowsReportedByRegisteredUsers)
-            .append("numberOfUsableRowsReportedByRegisteredUsers", numberOfUsableRowsReportedByRegisteredUsers)
+            .append("numberOfRowsByRegisteredUsers", numberOfRowsByRegisteredUsers)
+            .append("numberOfUsableRowsByRegisteredUsers", numberOfUsableRowsByRegisteredUsers)
             .append("percentUsableFromRegisteredUsers", percentUsableFromRegisteredUsers)
-            .append("numberOfRowsReportedByUnregisteredUsers", numberOfRowsReportedByUnregisteredUsers)
-            .append("numberOfUsableRowsReportedByUnregisteredUsers", numberOfUsableRowsReportedByUnregisteredUsers)
+            .append("numberOfRowsByUnregisteredUsers", numberOfRowsByUnregisteredUsers)
+            .append("numberOfUsableRowsByUnregisteredUsers", numberOfUsableRowsByUnregisteredUsers)
             .append("percentUsableFromUnregisteredUsers", percentUsableFromUnregisteredUsers)
             .toString();
     }

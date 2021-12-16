@@ -90,7 +90,7 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         dateReceivedFromWidget.addValueChangeListener(event -> this.updateExportButtonState());
         VaadinUtils.addComponentStyle(dateReceivedFromWidget, "date-received-from-filter");
         dateReceivedToWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_to"));
-        dateReceivedFromWidget.addValueChangeListener(event -> this.updateExportButtonState());
+        dateReceivedToWidget.addValueChangeListener(event -> this.updateExportButtonState());
         VaadinUtils.addComponentStyle(dateReceivedToWidget, "date-received-to-filter");
     }
 

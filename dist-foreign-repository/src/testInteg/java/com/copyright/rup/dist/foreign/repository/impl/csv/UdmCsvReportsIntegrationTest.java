@@ -20,7 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Integration tests for csv reports for UDM product family.
@@ -155,7 +157,12 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testWriteUdmWeeklySurveyCsvReport() {
-        // TODO implement when MyBatis SELECT is implemented
+    @TestData(fileName = "udm-csv-reports/udm-csv-reports-test-data-init-write-udm-weekly-survey-csv-report.groovy")
+    // TODO test filtering when implemented
+    public void testWriteUdmWeeklySurveyCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+                udmReportRepository.writeUdmWeeklySurveyCsvReport(new HashSet<>(), new HashSet<>(), new HashSet<>(),
+                    LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1), outputStream),
+            "udm_weekly_survey_report.csv");
     }
 }

@@ -4,7 +4,6 @@
 
 <mapper namespace="IUdmReportMapper">
     <resultMap id="udmWeeklySurveyReportDtoResultMap" type="UdmWeeklySurveyReportDto">
-        <result property="id" column="df_udm_usage_uid"/>
         <result property="period" column="period"/>
         <result property="dateReceived" column="date_received"/>
         <result property="channel" column="channel"/>
@@ -17,11 +16,11 @@
         <result property="numberOfUsableRows" column="number_of_usable_rows"/>
         <result property="percentUsable" column="percent_usable"/>
         <result property="numberOfRegisteredUsers" column="number_of_registered_users"/>
-        <result property="numberOfRowsReportedByRegisteredUsers" column="number_of_rows_reported_by_registered_users"/>
-        <result property="numberOfUsableRowsReportedByRegisteredUsers" column="number_of_usable_rows_reported_by_registered_users"/>
+        <result property="numberOfRowsByRegisteredUsers" column="number_of_rows_by_registered_users"/>
+        <result property="numberOfUsableRowsByRegisteredUsers" column="number_of_usable_rows_by_registered_users"/>
         <result property="percentUsableFromRegisteredUsers" column="percent_usable_from_registered_users"/>
-        <result property="numberOfRowsReportedByUnregisteredUsers" column="number_of_rows_reported_by_unregistered_users"/>
-        <result property="numberOfUsableRowsReportedByUnregisteredUsers" column="number_of_usable_rows_reported_by_unregistered_users"/>
+        <result property="numberOfRowsByUnregisteredUsers" column="number_of_rows_by_unregistered_users"/>
+        <result property="numberOfUsableRowsByUnregisteredUsers" column="number_of_usable_rows_by_unregistered_users"/>
         <result property="percentUsableFromUnregisteredUsers" column="percent_usable_from_unregistered_users"/>
     </resultMap>
 
@@ -45,31 +44,50 @@
         <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
     </select>
 
-    <!-- TODO implement the MyBatis SELECT -->
+    <!-- TODO implement WHERE in the MyBatis SELECT -->
     <select id="findUdmWeeklySurveyReportDtos" parameterType="map" resultMap="udmWeeklySurveyReportDtoResultMap">
         select
-            df_udm_usage_uid,
-            u.period,
-            u.created_datetime as date_received,
-            ub.channel,
-            ub.usage_origin,
+            period,
+            date_received,
+            channel,
+            usage_origin,
             company_id,
-            company_name,
-            u.detail_licensee_class_id,
-            dlc.description detail_licensee_class_name,
-            0 as number_of_total_rows,
-            0 as number_of_usable_rows,
-            0 as percent_usable,
-            0 as number_of_registered_users,
-            0 as number_of_rows_reported_by_registered_users,
-            0 as number_of_usable_rows_reported_by_registered_users,
-            0 as percent_usable_from_registered_users,
-            0 as number_of_rows_reported_by_unregistered_users,
-            0 as number_of_usable_rows_reported_by_unregistered_users,
-            0 as percent_usable_from_unregistered_users
-        from ${schema}.df_udm_usage u
-        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
-        where u.created_datetime::date between #{dateReceivedFrom} and #{dateReceivedTo}
+            company_name,            
+            detail_licensee_class_id,
+            detail_licensee_class_name,            
+            number_of_total_rows,
+            number_of_usable_rows,
+            100 * number_of_usable_rows / number_of_total_rows as percent_usable,
+            number_of_registered_users,
+            number_of_rows_by_registered_users,
+            number_of_usable_rows_by_registered_users,
+            case when (number_of_rows_by_registered_users != 0) then 100 * number_of_usable_rows_by_registered_users / number_of_rows_by_registered_users else 0 end as percent_usable_from_registered_users,
+            number_of_rows_by_unregistered_users,
+            number_of_usable_rows_by_unregistered_users,
+            case when (number_of_rows_by_unregistered_users != 0) then 100 * number_of_usable_rows_by_unregistered_users / number_of_rows_by_unregistered_users else 0 end as percent_usable_from_unregistered_users
+        from (
+            select
+                u.period,
+                u.created_datetime as date_received,
+                ub.channel,
+                ub.usage_origin,
+                company_id,
+                company_name,
+                u.detail_licensee_class_id,
+                dlc.description detail_licensee_class_name,
+                count(1) as number_of_total_rows,
+                sum(case when reported_title = 'None' then 0 else 1 end) as number_of_usable_rows,
+                count(distinct survey_respondent) as number_of_registered_users,
+                sum(case when survey_respondent is not null then 1 else 0 end) as number_of_rows_by_registered_users,
+                sum(case when survey_respondent is not null and reported_title != 'None' then 1 else 0 end) as number_of_usable_rows_by_registered_users,
+                sum(case when survey_respondent is null then 1 else 0 end) as number_of_rows_by_unregistered_users,
+                sum(case when survey_respondent is null and reported_title != 'None' then 1 else 0 end) as number_of_usable_rows_by_unregistered_users
+            from ${schema}.df_udm_usage u
+            join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+            join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+            where u.created_datetime::date between #{dateReceivedFrom} and #{dateReceivedTo}
+            group by u.period, u.created_datetime, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name
+            order by u.period desc, u.created_datetime desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name
+        ) as nested_report
     </select>
 </mapper>
