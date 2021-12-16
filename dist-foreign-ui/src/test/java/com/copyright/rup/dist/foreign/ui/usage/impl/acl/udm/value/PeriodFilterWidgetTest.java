@@ -12,7 +12,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmValuePeriodFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link UdmValuePeriodFilterWidget}.
+ * Verifies {@link PeriodFilterWidget}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -39,27 +39,27 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class UdmValuePeriodFilterWidgetTest {
+public class PeriodFilterWidgetTest {
 
     private static final Integer PERIOD = 202106;
-    private final UdmValuePeriodFilterWidget valuePeriodFilterWidget =
-        new UdmValuePeriodFilterWidget(() -> Collections.singletonList(PERIOD));
+    private final PeriodFilterWidget periodFilterWidget =
+        new PeriodFilterWidget(() -> Collections.singletonList(PERIOD));
 
     @Test
     public void testLoadBeans() {
-        List<Integer> periods = valuePeriodFilterWidget.loadBeans();
+        List<Integer> periods = periodFilterWidget.loadBeans();
         assertEquals(1, periods.size());
         assertEquals(PERIOD, periods.get(0));
     }
 
     @Test
     public void testGetBeanClass() {
-        assertEquals(Integer.class, valuePeriodFilterWidget.getBeanClass());
+        assertEquals(Integer.class, periodFilterWidget.getBeanClass());
     }
 
     @Test
     public void testGetBeanItemCaption() {
-        assertEquals(String.valueOf(PERIOD), valuePeriodFilterWidget.getBeanItemCaption(PERIOD));
+        assertEquals(String.valueOf(PERIOD), periodFilterWidget.getBeanItemCaption(PERIOD));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class UdmValuePeriodFilterWidgetTest {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(PERIOD)).once();
         replay(filterSaveEvent);
-        valuePeriodFilterWidget.onSave(filterSaveEvent);
+        periodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
     }
 
@@ -76,7 +76,7 @@ public class UdmValuePeriodFilterWidgetTest {
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<Integer, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Periods filter"), same(valuePeriodFilterWidget),
+        expect(Windows.showFilterWindow(eq("Periods filter"), same(periodFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
@@ -86,7 +86,7 @@ public class UdmValuePeriodFilterWidgetTest {
         filterWindow.setSearchPromptString("Enter Period");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
-        valuePeriodFilterWidget.showFilterWindow();
+        periodFilterWidget.showFilterWindow();
         assertEquals(Collections.singletonList(String.valueOf(PERIOD)),
             providerCapture.getValue().apply(PERIOD));
         verify(filterWindow, Windows.class);

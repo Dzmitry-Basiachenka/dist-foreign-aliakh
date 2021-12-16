@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmValuePeriodFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -44,7 +44,7 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
     private UdmValueFilter udmValueFilter = new UdmValueFilter();
     private UdmValueFilter appliedUdmValueFilter = new UdmValueFilter();
     private IUdmValueFilterController controller;
-    private UdmValuePeriodFilterWidget periodFilterWidget;
+    private PeriodFilterWidget periodFilterWidget;
 
     /**
      * Constructor.
@@ -122,8 +122,8 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
         return verticalLayout;
     }
 
-    private UdmValuePeriodFilterWidget buildPeriodFilter() {
-        periodFilterWidget = new UdmValuePeriodFilterWidget(() -> controller.getPeriods());
+    private PeriodFilterWidget buildPeriodFilter() {
+        periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
         periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
             udmValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
             filterChanged();
