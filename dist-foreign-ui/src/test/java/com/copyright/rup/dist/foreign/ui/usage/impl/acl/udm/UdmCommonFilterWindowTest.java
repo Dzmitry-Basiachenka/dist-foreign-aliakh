@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
+package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -16,7 +17,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
@@ -27,8 +27,10 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Verifies {@link UdmCommonProxyValueFilterWindow}.
+ * Verifies {@link UdmCommonFilterWindow}.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -44,20 +46,19 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class UdmCommonProxyValueFilterWindowTest {
+public class UdmCommonFilterWindowTest {
 
     private static final String UNCHECKED = "unchecked";
-    private static final String[] PUB_TYPE_CODES = new String[]{"BK", "PK", "LM"};
 
-    private UdmCommonProxyValueFilterWindow<String> filterWindow;
+    private UdmCommonFilterWindow<String> filterWindow;
 
     @Before
     @SuppressWarnings(UNCHECKED)
     public void setUp() {
         IFilterWindowController<String> controllerMock = createMock(IFilterWindowController.class);
-        expect(controllerMock.loadBeans()).andReturn(Arrays.asList(PUB_TYPE_CODES)).once();
+        expect(controllerMock.loadBeans()).andReturn(Arrays.asList("BK", "PK", "LM")).once();
         replay(controllerMock);
-        filterWindow = new UdmCommonProxyValueFilterWindow<>("Filter window", controllerMock,
+        filterWindow = new UdmCommonFilterWindow<>("Filter window", controllerMock,
             (ValueProvider<String, List<String>>) bean -> Collections.singletonList(bean.toString()));
         verify(controllerMock);
         reset(controllerMock);
@@ -87,13 +88,6 @@ public class UdmCommonProxyValueFilterWindowTest {
     }
 
     @Test
-    public void testSetSelectedItemsIdsWithEmptySet() {
-        assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
-        assertEquals(Sets.newHashSet(PUB_TYPE_CODES), filterWindow.getSelectedItemsIds());
-    }
-
-    @Test
     public void testSetSearchPromptString() {
         String promptString = "Enter some value";
         filterWindow.setSearchPromptString(promptString);
@@ -111,5 +105,35 @@ public class UdmCommonProxyValueFilterWindowTest {
         assertNull(optionGroup.getCaption());
         assertFalse(iterator.hasNext());
         assertNull(((ListDataProvider<String>) optionGroup.getDataProvider()).getFilter());
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testPerformSearch() {
+        ListDataProvider<String> listDataProvider = createMock(ListDataProvider.class);
+        SearchWidget searchWidgetMock = createMock(SearchWidget.class);
+        Whitebox.setInternalState(filterWindow, "searchWidget", searchWidgetMock);
+        Whitebox.setInternalState(filterWindow, "listDataProvider", listDataProvider);
+        listDataProvider.clearFilters();
+        expectLastCall().once();
+        expect(searchWidgetMock.getSearchValue()).andReturn("value").once();
+        replay(listDataProvider, searchWidgetMock);
+        filterWindow.performSearch();
+        verify(listDataProvider, searchWidgetMock);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testPerformSearchEmptySearchValue() {
+        ListDataProvider<String> listDataProvider = createMock(ListDataProvider.class);
+        SearchWidget searchWidgetMock = createMock(SearchWidget.class);
+        Whitebox.setInternalState(filterWindow, "searchWidget", searchWidgetMock);
+        Whitebox.setInternalState(filterWindow, "listDataProvider", listDataProvider);
+        listDataProvider.clearFilters();
+        expectLastCall().once();
+        expect(searchWidgetMock.getSearchValue()).andReturn(StringUtils.EMPTY).once();
+        replay(listDataProvider, searchWidgetMock);
+        filterWindow.performSearch();
+        verify(listDataProvider, searchWidgetMock);
     }
 }
