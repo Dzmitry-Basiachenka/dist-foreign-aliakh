@@ -42,7 +42,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         UsageStatusEnum.INELIGIBLE, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND,
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW,
         UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.ELIGIBLE);
-
+    private final UdmUsageAppliedFilterWidget appliedFilterWidget;
     private Button applyButton;
     private Button moreFiltersButton;
     private UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
@@ -60,6 +60,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
      */
     public UdmUsageFilterWidget(IUdmUsageFilterController controller) {
         this.controller = controller;
+        this.appliedFilterWidget = new UdmUsageAppliedFilterWidget(this.controller);
     }
 
     @Override
@@ -80,8 +81,11 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     @Override
     @SuppressWarnings("unchecked")
     public IUdmUsageFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
         refreshFilter();
+        setExpandRatio(appliedFilterWidget, 1f);
+        setSizeFull();
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-usages-filter-widget");
         return this;
@@ -90,6 +94,7 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     @Override
     public void applyFilter() {
         appliedUdmUsageFilter = new UdmUsageFilter(udmUsageFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedUdmUsageFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -153,6 +158,12 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label("Applied Filters:");
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "udm-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 
     private void initMoreFiltersButton() {

@@ -146,7 +146,7 @@ public class UdmUsageWidgetTest {
         initWidget();
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
-        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
@@ -168,7 +168,7 @@ public class UdmUsageWidgetTest {
         initWidget();
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
-        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
@@ -190,7 +190,7 @@ public class UdmUsageWidgetTest {
         initWidget();
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
-        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
@@ -212,7 +212,7 @@ public class UdmUsageWidgetTest {
         initWidget();
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
-        assertEquals(200, usagesWidget.getSplitPosition(), 0);
+        assertEquals(270, usagesWidget.getSplitPosition(), 0);
         verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
