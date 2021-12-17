@@ -12,9 +12,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmProxyValueDto;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmProxyValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,12 +47,15 @@ public class UdmProxyValueServiceTest {
 
     private IUdmProxyValueRepository udmProxyValueRepository;
     private IUdmProxyValueService udmProxyValueService;
+    private IUdmValueAuditService udmValueAuditService;
 
     @Before
     public void setUp() {
         udmProxyValueRepository = createMock(IUdmProxyValueRepository.class);
+        udmValueAuditService = createMock(IUdmValueAuditService.class);
         udmProxyValueService = new UdmProxyValueService();
         Whitebox.setInternalState(udmProxyValueService, udmProxyValueRepository);
+        Whitebox.setInternalState(udmProxyValueService, udmValueAuditService);
     }
 
     @Test
@@ -62,10 +68,18 @@ public class UdmProxyValueServiceTest {
         expectLastCall().once();
         udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
         expectLastCall().once();
-        expect(udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME)).andReturn(2).once();
-        replay(udmProxyValueRepository, RupContextUtils.class);
+        expect(udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME))
+            .andReturn(Arrays.asList("db9e6182-cf80-4179-ae77-6d9c7d6d1d0d", "e80c332b-068a-4ea0-889a-5f2a89b31035"))
+            .once();
+        udmValueAuditService.logAction("db9e6182-cf80-4179-ae77-6d9c7d6d1d0d", UdmValueActionTypeEnum.PROXY_CALCULATION,
+            "Proxy value was applied based on proxy calculation for '202012' period");
+        expectLastCall().once();
+        udmValueAuditService.logAction("e80c332b-068a-4ea0-889a-5f2a89b31035", UdmValueActionTypeEnum.PROXY_CALCULATION,
+            "Proxy value was applied based on proxy calculation for '202012' period");
+        expectLastCall().once();
+        replay(udmProxyValueRepository, udmValueAuditService, RupContextUtils.class);
         assertEquals(2, udmProxyValueService.calculateProxyValues(PERIOD));
-        verify(udmProxyValueRepository, RupContextUtils.class);
+        verify(udmProxyValueRepository, udmValueAuditService, RupContextUtils.class);
     }
 
     @Test

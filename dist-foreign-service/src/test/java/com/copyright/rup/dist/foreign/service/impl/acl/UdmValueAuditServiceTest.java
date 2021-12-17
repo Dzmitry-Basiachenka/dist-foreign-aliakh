@@ -10,9 +10,10 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.impl.UdmValueAuditRepository;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,10 +52,10 @@ public class UdmValueAuditServiceTest {
         udmValueAuditRepository.insert(capture(auditItemCapture));
         expectLastCall().once();
         replay(udmValueAuditRepository);
-        udmValueAuditService.logAction(UDM_VALUE_UID, UsageActionTypeEnum.CREATED, REASON);
+        udmValueAuditService.logAction(UDM_VALUE_UID, UdmValueActionTypeEnum.CREATED, REASON);
         UdmValueAuditItem auditItem = auditItemCapture.getValue();
         assertEquals(UDM_VALUE_UID, auditItem.getValueId());
-        assertEquals(UsageActionTypeEnum.CREATED, auditItem.getActionType());
+        assertEquals(UdmValueActionTypeEnum.CREATED, auditItem.getActionType());
         assertEquals(REASON, auditItem.getActionReason());
         verify(udmValueAuditRepository);
     }

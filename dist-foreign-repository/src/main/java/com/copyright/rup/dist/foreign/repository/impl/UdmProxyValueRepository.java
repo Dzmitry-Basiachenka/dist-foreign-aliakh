@@ -53,11 +53,11 @@ public class UdmProxyValueRepository extends BaseRepository implements IUdmProxy
     }
 
     @Override
-    public int applyProxyValues(Integer period, String userName) {
+    public List<String> applyProxyValues(Integer period, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("period", Objects.requireNonNull(period));
         parameters.put("updateUser", userName);
-        return selectOne("IUdmProxyValueMapper.applyProxyValues", parameters);
+        return selectList("IUdmProxyValueMapper.applyProxyValues", parameters);
     }
 
     @Override

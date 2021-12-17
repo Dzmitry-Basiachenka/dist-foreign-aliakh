@@ -17,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class UdmValueAuditItem extends StoredEntity<String> {
 
     private String valueId;
-    private UsageActionTypeEnum actionType;
+    private UdmValueActionTypeEnum actionType;
     private String actionReason;
 
     public String getValueId() {
@@ -28,11 +28,11 @@ public class UdmValueAuditItem extends StoredEntity<String> {
         this.valueId = valueId;
     }
 
-    public UsageActionTypeEnum getActionType() {
+    public UdmValueActionTypeEnum getActionType() {
         return actionType;
     }
 
-    public void setActionType(UsageActionTypeEnum actionType) {
+    public void setActionType(UdmValueActionTypeEnum actionType) {
         this.actionType = actionType;
     }
 

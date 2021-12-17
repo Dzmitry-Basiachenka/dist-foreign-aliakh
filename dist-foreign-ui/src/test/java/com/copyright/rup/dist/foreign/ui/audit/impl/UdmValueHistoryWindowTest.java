@@ -7,8 +7,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.UdmValueActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -16,6 +17,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 
@@ -38,7 +40,7 @@ public class UdmValueHistoryWindowTest {
         UdmValueAuditItem auditItem = new UdmValueAuditItem();
         auditItem.setId(RupPersistUtils.generateUuid());
         auditItem.setActionReason("Action reason");
-        auditItem.setActionType(UsageActionTypeEnum.LOADED);
+        auditItem.setActionType(UdmValueActionTypeEnum.CREATED);
         String udmValueId = RupPersistUtils.generateUuid();
         UdmValueHistoryWindow window = new UdmValueHistoryWindow(udmValueId, Collections.singletonList(auditItem));
         verifyWindow(window, "History for UDM value " + udmValueId, 700, 300, Sizeable.Unit.PIXELS);

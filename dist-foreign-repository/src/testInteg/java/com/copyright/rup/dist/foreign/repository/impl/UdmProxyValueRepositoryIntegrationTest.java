@@ -105,7 +105,8 @@ public class UdmProxyValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = "udm-proxy-value-repository-integration-test/test-apply-proxy-values.groovy")
     public void testApplyProxyValues() {
-        assertEquals(2, udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME));
+        assertEquals(Arrays.asList("43699543-3287-40e1-a4b8-553e7547deb9", "cf03b058-6189-4885-b2a6-a6de04b2de88"),
+            udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME));
         verifyValueDtos(loadExpectedValueDtos("json/udm/udm_value_dto_43699543.json"),
             findAllValueDtos());
     }
