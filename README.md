@@ -1,3 +1,25 @@
+14.1.38
+-
+* B-68257 [Value] FDA & UDM: View proxy values: make changes based on code review comments 
+* B-68617 FDA: Filter functionality modification - Part 2: move currency filter to more filters, pub type filter to main filters on Values tab 
+* B-70072 Tech Debt: FDA: fix security vulnerabilities CVE-2020-21913, CVE-2021-44228 
+* B-68617 FDA: Filter functionality modification - Part 2: move pub type filter to main filters on Baseline Values tab 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement domain object 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement repository 
+* B-70072 Tech Debt: FDA: refine logic to highlight invalid fields on Value edit window 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement service 
+* B-69779 FDA: View filters improvements: implement common filter panel for applied filters 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement controller and widget, without filters Channels, Usage Origins, Periods 
+* B-70072 Tech Debt: clear proxy value if publication type was removed 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement Reports tab and the report menu item 
+* B-68617 FDA: Filter functionality modification - Part 2: add Price Flag, Content Flag, Price Comment, Content Comment filters to more filters window on Values tab 
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: rename widget UdmValuePeriodFilterWidget  to PeriodFilterWidget 
+* B-69779 FDA: View filters improvements: inplement applied filter widget for UDM usages tab 
+* B-68617 FDA: Filter functionality modification - Part 2: implement common filter window for multi-select filters 
+* B-69878 FDA & UDM: Delete usages from Baseline: implement UI components to delete baseline usages 
+* B-70072 Tech Debt: add value audit for proxy calculation action
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement MyBatis mapping
+
 14.1.37
 -
 * CDP-1032 FDA: ACL: Value Audit: Value audit contains redundant entries related to trimming zero values in decimal part after editing
