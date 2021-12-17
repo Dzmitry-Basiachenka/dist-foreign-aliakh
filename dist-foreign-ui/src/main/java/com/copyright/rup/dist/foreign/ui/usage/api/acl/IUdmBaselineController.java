@@ -4,12 +4,12 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
-
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for UDM baseline controller.
@@ -61,4 +61,17 @@ public interface IUdmBaselineController extends IController<IUdmBaselineWidget> 
      * @return instance of {@link IStreamSource} for export.
      */
     IStreamSource getExportUdmBaselineUsagesStreamSource();
+
+    /**
+     * Deletes selected usages from baseline.
+     *
+     * @param usageIds usage ids to delete
+     * @param reason reason
+     */
+    void deleteFromBaseline(Set<String> usageIds, String reason);
+
+    /**
+     * @return threshold value for size of UDM records.
+     */
+    int getUdmRecordThreshold();
 }
