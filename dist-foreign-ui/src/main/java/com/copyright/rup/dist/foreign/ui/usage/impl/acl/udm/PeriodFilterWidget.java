@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  *
  * @author Anton Azarenka
  */
-public class UdmValuePeriodFilterWidget extends BaseItemsFilterWidget<Integer>
+public class PeriodFilterWidget extends BaseItemsFilterWidget<Integer>
     implements IFilterWindowController<Integer> {
 
     private final Supplier<List<Integer>> supplier;
@@ -38,7 +38,7 @@ public class UdmValuePeriodFilterWidget extends BaseItemsFilterWidget<Integer>
      *
      * @param supplier period supplier
      */
-    public UdmValuePeriodFilterWidget(Supplier<List<Integer>> supplier) {
+    public PeriodFilterWidget(Supplier<List<Integer>> supplier) {
         super(ForeignUi.getMessage("label.periods"));
         this.supplier = supplier;
     }
