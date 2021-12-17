@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterControl
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
-
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmBaselineController}.
@@ -84,6 +84,17 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
     public IStreamSource getExportUdmBaselineUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_udm_baseline_usage_",
             pos -> udmReportService.writeUdmBaselineUsageCsvReport(getFilter(), pos));
+    }
+
+    @Override
+    public void deleteFromBaseline(Set<String> usageIds, String reason) {
+        //TODO: use service method to delete usages from baseline
+    }
+
+    @Override
+    public int getUdmRecordThreshold() {
+        //TODO: use service method to get threshold
+        return 1000;
     }
 
     private UdmBaselineFilter getFilter() {

@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -10,9 +13,10 @@ import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataPr
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-
+import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -21,12 +25,18 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModel;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUdmBaselineWidget}.
@@ -41,17 +51,23 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
 
     private static final String EMPTY_STYLE_NAME = "empty-baseline-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
+
+    private boolean hasSpecialistPermission;
     private IUdmBaselineController controller;
     private Grid<UdmBaselineDto> udmBaselineGrid;
+    private MultiSelectionModelImpl<UdmBaselineDto> gridSelectionModel;
+    private Button deleteButton;
 
     @Override
     public void refresh() {
+        udmBaselineGrid.deselectAll();
         udmBaselineGrid.getDataProvider().refreshAll();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public UdmBaselineWidget init() {
+        hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
         setSplitPosition(200, Unit.PIXELS);
         setFirstComponent(controller.initBaselineFilterWidget());
         setSecondComponent(initBaselineLayout());
@@ -63,6 +79,13 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     @Override
     public void setController(IUdmBaselineController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        UdmBaselineMediator mediator = new UdmBaselineMediator();
+        mediator.setDeleteButton(deleteButton);
+        return mediator;
     }
 
     private VerticalLayout initBaselineLayout() {
@@ -86,12 +109,13 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
                 } else {
                     udmBaselineGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
+                switchSelectAllCheckBoxVisibility(size);
                 udmBaselineGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
                 return size;
             });
         udmBaselineGrid = new Grid<>(dataProvider);
         addColumns();
-        udmBaselineGrid.setSelectionMode(SelectionMode.SINGLE);
+        initSelectionMode();
         udmBaselineGrid.setSizeFull();
         initViewWindow();
         VaadinUtils.addComponentStyle(udmBaselineGrid, "udm-baseline-grid");
@@ -146,11 +170,14 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     }
 
     private HorizontalLayout initButtonsLayout() {
+        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+        deleteButton.addClickListener(event -> showConfirmationWindow());
+        deleteButton.setEnabled(false);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportUdmBaselineUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(exportButton);
+        HorizontalLayout layout = new HorizontalLayout(deleteButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "udm-baseline-buttons");
         return layout;
@@ -166,5 +193,44 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
                 udmBaselineGrid.select(udmBaselineDto);
             }
         });
+    }
+
+    private void initSelectionMode() {
+        if (hasSpecialistPermission) {
+            gridSelectionModel = (MultiSelectionModelImpl<UdmBaselineDto>)
+                udmBaselineGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+            udmBaselineGrid.addSelectionListener(event ->
+                deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+        } else {
+            udmBaselineGrid.setSelectionMode(SelectionMode.SINGLE);
+        }
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        if (hasSpecialistPermission) {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(
+                0 == beansCount || beansCount > controller.getUdmRecordThreshold()
+                    ? MultiSelectionModel.SelectAllCheckBoxVisibility.HIDDEN
+                    : MultiSelectionModel.SelectAllCheckBoxVisibility.VISIBLE);
+            gridSelectionModel.beforeClientResponse(false);
+        }
+    }
+
+    private void showConfirmationWindow() {
+        Windows.showConfirmDialogWithReason(
+            ForeignUi.getMessage("window.confirm"),
+            ForeignUi.getMessage("message.confirm.remove_from_baseline"),
+            ForeignUi.getMessage("button.yes"),
+            ForeignUi.getMessage("button.cancel"),
+            reason -> {
+                Set<String> usageIds = udmBaselineGrid.getSelectedItems()
+                    .stream()
+                    .map(BaseEntity::getId)
+                    .collect(Collectors.toSet());
+                controller.deleteFromBaseline(usageIds, reason);
+                refresh();
+            },
+            Arrays.asList(new RequiredValidator(),
+                new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000)));
     }
 }

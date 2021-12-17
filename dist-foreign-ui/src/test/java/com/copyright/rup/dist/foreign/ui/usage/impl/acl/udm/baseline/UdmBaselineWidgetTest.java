@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -13,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -20,15 +23,13 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.shared.MouseEventDetails.MouseButton;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.Grid.ItemClick;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.ItemClickListener;
+import org.apache.commons.lang3.tuple.Triple;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,9 +42,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmBaselineWidget}.
@@ -55,7 +54,7 @@ import java.util.stream.Collectors;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UdmBaselineWidget.class, Windows.class})
+@PrepareForTest({UdmBaselineWidget.class, Windows.class, ForeignSecurityUtils.class})
 public class UdmBaselineWidgetTest {
 
     private static final int DOUBLE_CLICK = 0x00002;
@@ -65,6 +64,8 @@ public class UdmBaselineWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         controller = createMock(IUdmBaselineController.class);
         UdmBaselineFilterWidget filterWidget =
             new UdmBaselineFilterWidget(createMock(IUdmBaselineFilterController.class));
@@ -79,9 +80,9 @@ public class UdmBaselineWidgetTest {
 
     @Test
     public void testWidgetStructure() {
-        replay(controller, streamSource);
+        replay(controller, streamSource, ForeignSecurityUtils.class);
         udmBaselineWidget.init();
-        verify(controller, streamSource);
+        verify(controller, streamSource, ForeignSecurityUtils.class);
         assertTrue(udmBaselineWidget.isLocked());
         assertEquals(200, udmBaselineWidget.getSplitPosition(), 0);
         verifySize(udmBaselineWidget);
@@ -91,8 +92,27 @@ public class UdmBaselineWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
-        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
+        verifyButtonsLayout(layout.getComponent(0), "Delete", "Export");
+        verifyGrid((Grid) layout.getComponent(1), Arrays.asList(
+            Triple.of("Detail ID", 200.0, -1),
+            Triple.of("Period", 100.0, -1),
+            Triple.of("Usage Origin", 100.0, -1),
+            Triple.of("Usage Detail ID", 130.0, -1),
+            Triple.of("Wr Wrk Inst", 100.0, -1),
+            Triple.of("System Title", 200.0, -1),
+            Triple.of("Det LC ID", 100.0, -1),
+            Triple.of("Det LC Name", 100.0, -1),
+            Triple.of("Agg LC ID", 100.0, -1),
+            Triple.of("Agg LC Name", 100.0, -1),
+            Triple.of("Survey Country", 120.0, -1),
+            Triple.of("Channel", 100.0, -1),
+            Triple.of("TOU", 100.0, -1),
+            Triple.of("Annualized Copies", 130.0, -1),
+            Triple.of("Created By", 150.0, -1),
+            Triple.of("Created Date", 110.0, -1),
+            Triple.of("Updated By", 150.0, -1),
+            Triple.of("Updated Date", 110.0, -1)));
+        verifyGridFooter((Grid) layout.getComponent(1));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -106,7 +126,7 @@ public class UdmBaselineWidgetTest {
         expectNew(ViewBaselineWindow.class, eq(udmBaselineDto)).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, streamSource, Windows.class, ViewBaselineWindow.class);
+        replay(controller, streamSource, Windows.class, ViewBaselineWindow.class, ForeignSecurityUtils.class);
         udmBaselineWidget.init();
         Grid<UdmBaselineDto> grid =
             (Grid<UdmBaselineDto>) ((VerticalLayout) udmBaselineWidget.getSecondComponent()).getComponent(1);
@@ -115,16 +135,10 @@ public class UdmBaselineWidgetTest {
         Grid.ItemClick<UdmBaselineDto> usageDtoItemClick =
             new ItemClick<>(grid, grid.getColumns().get(0), udmBaselineDto, createMouseEvent(), 0);
         listener.itemClick(usageDtoItemClick);
-        verify(controller, streamSource, Windows.class, ViewBaselineWindow.class);
+        verify(controller, streamSource, Windows.class, ViewBaselineWindow.class, ForeignSecurityUtils.class);
     }
 
-    private void verifyGrid(Grid grid) {
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Period", "Usage Origin", "Usage Detail ID", "Wr Wrk Inst",
-            "System Title", "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Survey Country", "Channel",
-            "TOU", "Annualized Copies", "Created By", "Created Date", "Updated By", "Updated Date"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        verifySize(grid);
+    private void verifyGridFooter(Grid grid) {
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Usages Count: 0", footerRow.getCell("detailId").getText());
@@ -135,14 +149,6 @@ public class UdmBaselineWidgetTest {
         assertEquals(100, component.getHeight(), 0);
         assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertTrue(layout.isSpacing());
-        assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
-        Component component = layout.getComponent(0);
-        assertEquals("Export", component.getCaption());
     }
 
     private MouseEventDetails createMouseEvent() {
