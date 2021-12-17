@@ -52,11 +52,11 @@ public class UdmWeeklySurveyReportHandler extends BaseCsvReportHandler<UdmWeekly
         beanProperties.add(getBeanPropertyAsString(bean.getNumberOfUsableRows()));
         beanProperties.add(getBeanPercent(bean.getPercentUsable()));
         beanProperties.add(getBeanPropertyAsString(bean.getNumberOfRegisteredUsers()));
-        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfRowsReportedByRegisteredUsers()));
-        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfUsableRowsReportedByRegisteredUsers()));
+        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfRowsByRegisteredUsers()));
+        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfUsableRowsByRegisteredUsers()));
         beanProperties.add(getBeanPercent(bean.getPercentUsableFromRegisteredUsers()));
-        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfRowsReportedByUnregisteredUsers()));
-        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfUsableRowsReportedByUnregisteredUsers()));
+        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfRowsByUnregisteredUsers()));
+        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfUsableRowsByUnregisteredUsers()));
         beanProperties.add(getBeanPercent(bean.getPercentUsableFromUnregisteredUsers()));
         return beanProperties;
     }

@@ -1,0 +1,7 @@
+Period,Date Received,Channel,Usage Origin,Company ID,Company Name,Det LC ID,Det LC Name,Total Details,Usable Details,% Usable Data,# of registered users,# of rows reported by registered users,# of usable rows reported by registered users,% Usable from registered users,# of rows reported by unregistered users,# of usable rows reported by unregistered users,% Usable from unregistered users
+202206,02/14/2022,CCC,RFA,1136,Albany International Corp.,3,"Lumber, Paper, etc.",5,2,40%,3,3,1,33%,2,1,50%
+202112,02/14/2021,CCC,SS,1136,Albany International Corp.,3,"Lumber, Paper, etc.",5,3,60%,2,4,3,75%,1,0,0%
+202006,02/14/2020,Rightsdirect,RFA,1136,Albany International Corp.,3,"Lumber, Paper, etc.",5,3,60%,4,5,3,60%,0,0,0%
+202006,02/14/2020,Rightsdirect,SS,1136,Albany International Corp.,3,"Lumber, Paper, etc.",3,3,100%,0,0,0,0%,3,3,100%
+202006,02/14/2020,Rightsdirect,SS,1136,Albany International Corp.,2,"Textiles, Apparel, etc.",1,1,100%,0,0,0,0%,1,1,100%
+202006,02/14/2020,Rightsdirect,SS,1137,Alberto-Culver Company,3,"Lumber, Paper, etc.",1,0,0%,0,0,0,0%,1,0,0%
