@@ -65,7 +65,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(23, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches", "Udm Batch 2021, Udm Batch 2022");
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "2021");
+        verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees", "user@copyright.com");
@@ -73,10 +73,10 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(6), "Publication Formats", "Digital");
         verifyLabel(((VerticalLayout) component).getComponent(7), "Detail Licensee Classes", "22 - Book series");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Types of Use", "COPY_FOR_MYSELF");
-        verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "2020-04-12");
-        verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "2020-06-20");
-        verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "2020-03-12");
-        verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date From", "2020-05-20");
+        verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "04/12/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
+        verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date To", "05/20/2020");
         verifyLabel(((VerticalLayout) component).getComponent(13), "Channel", "CCC");
         verifyLabel(((VerticalLayout) component).getComponent(14), "Wr Wrk Inst", "254327612");
         verifyLabel(((VerticalLayout) component).getComponent(15), "Company ID", "1136");
@@ -108,7 +108,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(new HashSet<>(
             Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df", "a8711022-8b30-4fa9-be39-c3e25378fd9a")));
-        filter.setPeriod(2021);
+        filter.setPeriod(202106);
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setAssignees(Collections.singleton("user@copyright.com"));
