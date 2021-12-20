@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
@@ -88,13 +89,12 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
 
     @Override
     public void deleteFromBaseline(Set<String> usageIds, String reason) {
-        //TODO: use service method to delete usages from baseline
+        udmBaselineService.deleteFromBaseline(usageIds, reason, RupContextUtils.getUserName());
     }
 
     @Override
     public int getUdmRecordThreshold() {
-        //TODO: use service method to get threshold
-        return 1000;
+        return udmBaselineService.getUdmRecordThreshold();
     }
 
     private UdmBaselineFilter getFilter() {

@@ -41,6 +41,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.ImmutableMap;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -227,11 +228,9 @@ public class UdmUsageServiceTest {
         udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageDto.setBaselineFlag(true);
         List<String> actionReasons = Arrays.asList(ACTION_REASON_1, ACTION_REASON_2, ACTION_REASON_3);
-        baselineService.removeFromBaselineById(USAGE_UID);
+        baselineService.deleteFromBaseline(ImmutableSet.of(USAGE_UID), REASON, USER_NAME);
         expectLastCall().once();
         udmUsageRepository.update(udmUsageDto);
-        expectLastCall().once();
-        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.REMOVE_FROM_BASELINE, REASON);
         expectLastCall().once();
         udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.USAGE_EDIT, ACTION_REASON_1);
         expectLastCall().once();

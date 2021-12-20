@@ -9,9 +9,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
-
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +40,17 @@ public class UdmBaselineServeTest {
 
     private final UdmBaselineService udmBaselineService = new UdmBaselineService();
     private IUdmBaselineRepository baselineRepository;
+    private IUdmUsageAuditService udmUsageAuditService;
+    private int udmRecordsThreshold;
 
     @Before
     public void setUp() {
+        udmRecordsThreshold = 1000;
         baselineRepository = createMock(IUdmBaselineRepository.class);
+        udmUsageAuditService = createMock(IUdmUsageAuditService.class);
         Whitebox.setInternalState(udmBaselineService, baselineRepository);
+        Whitebox.setInternalState(udmBaselineService, udmUsageAuditService);
+        Whitebox.setInternalState(udmBaselineService, udmRecordsThreshold);
     }
 
     @Test
@@ -91,11 +99,19 @@ public class UdmBaselineServeTest {
     }
 
     @Test
-    public void testRemoveFromBaselineById() {
-        baselineRepository.removeUdmUsageFromBaselineById("12d363a4-01b2-44cf-9ee6-55f045676915");
+    public void testGetUdmRecordThreshold() {
+        assertEquals(1000, udmRecordsThreshold);
+    }
+
+    @Test
+    public void testDeleteFromBaseline() {
+        String usageId = "f6e201bf-7b34-470f-937c-7e3bdeac0efe";
+        baselineRepository.removeUdmUsageFromBaselineById(usageId);
         expectLastCall().once();
-        replay(baselineRepository);
-        udmBaselineService.removeFromBaselineById("12d363a4-01b2-44cf-9ee6-55f045676915");
-        verify(baselineRepository);
+        udmUsageAuditService.logAction(usageId, UsageActionTypeEnum.REMOVE_FROM_BASELINE, "Reason to delete");
+        expectLastCall().once();
+        replay(baselineRepository, udmUsageAuditService);
+        udmBaselineService.deleteFromBaseline(ImmutableSet.of(usageId), "Reason to delete", "user@copyright.com");
+        verify(baselineRepository, udmUsageAuditService);
     }
 }

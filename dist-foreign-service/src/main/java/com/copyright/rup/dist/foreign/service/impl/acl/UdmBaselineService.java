@@ -1,17 +1,23 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
-
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUdmBaselineService}.
@@ -25,6 +31,12 @@ import java.util.List;
 @Service
 public class UdmBaselineService implements IUdmBaselineService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    private int udmRecordsThreshold;
+    @Autowired
+    private IUdmUsageAuditService udmUsageAuditService;
     @Autowired
     private IUdmBaselineRepository baselineRepository;
 
@@ -46,7 +58,20 @@ public class UdmBaselineService implements IUdmBaselineService {
     }
 
     @Override
-    public void removeFromBaselineById(String udmUsageId) {
-        baselineRepository.removeUdmUsageFromBaselineById(udmUsageId);
+    public int getUdmRecordThreshold() {
+        return udmRecordsThreshold;
+    }
+
+    @Override
+    @Transactional
+    public void deleteFromBaseline(Set<String> usageIds, String reason, String userName) {
+        LOGGER.info("Delete UDM usages from baseline. Started. UsageIds={}, Reason={}, UserName={}", usageIds, reason,
+            userName);
+        usageIds.forEach(usageId -> {
+            baselineRepository.removeUdmUsageFromBaselineById(usageId);
+            udmUsageAuditService.logAction(usageId, UsageActionTypeEnum.REMOVE_FROM_BASELINE, reason);
+        });
+        LOGGER.info("Delete UDM usages from baseline. Finished. UsageIds={}, Reason={}, UserName={}", usageIds, reason,
+            userName);
     }
 }
