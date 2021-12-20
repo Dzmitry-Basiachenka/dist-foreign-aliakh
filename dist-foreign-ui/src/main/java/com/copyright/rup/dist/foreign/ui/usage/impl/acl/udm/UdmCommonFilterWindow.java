@@ -114,6 +114,13 @@ public class UdmCommonFilterWindow<T> extends CommonFilterWindow<T> {
     }
 
     /**
+     * @return collection of items
+     */
+    protected Collection<T> getFilterItems() {
+        return filterItems;
+    }
+
+    /**
      * Fires an {@link FilterSaveEvent} with selected values.
      */
     void fireFilterSaveEvent() {

@@ -1,30 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.newCapture;
-import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.vaadin.data.ValueProvider;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.CheckBoxGroup;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 
-import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -80,28 +69,6 @@ public class LastValuePeriodFilterWidgetTest {
         replay(filterSaveEvent);
         lastValuePeriodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
-    }
-
-    @Test
-    public void testShowFilterWindow() {
-        mockStatic(Windows.class);
-        FilterWindow<String> filterWindow = createMock(FilterWindow.class);
-        Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Last Value Periods filter"), same(lastValuePeriodFilterWidget),
-            capture(providerCapture))).andReturn(filterWindow).once();
-        VerticalLayout verticalLayout = new VerticalLayout(new Panel(), new Panel(new CheckBoxGroup<>()));
-        expect(filterWindow.getContent()).andReturn(verticalLayout).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
-        expectLastCall().once();
-        expect(filterWindow.getId()).andReturn("id").once();
-        filterWindow.addStyleName("last-value-period-filter-window");
-        expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter Last Value Period");
-        expectLastCall().once();
-        replay(filterWindow, Windows.class);
-        lastValuePeriodFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(LAST_VALUE_PERIOD), providerCapture.getValue().apply(LAST_VALUE_PERIOD));
-        verify(filterWindow, Windows.class);
     }
 
     @Test
