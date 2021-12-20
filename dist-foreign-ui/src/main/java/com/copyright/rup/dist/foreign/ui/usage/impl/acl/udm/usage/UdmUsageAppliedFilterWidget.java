@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -12,8 +13,10 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -66,14 +69,14 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 DetailLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithMultipleValues(filter.getReportedTypeOfUses(), "label.types_of_use",
                 String::valueOf), layout);
-            addLabel(
-                createLabelWithSingleValue(UdmUsageFilter::getUsageDateFrom, filter, "label.usage_date_from"), layout);
-            addLabel(
-                createLabelWithSingleValue(UdmUsageFilter::getUsageDateTo, filter, "label.usage_date_to"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getSurveyStartDateFrom, filter,
-                "label.survey_start_date_from"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getSurveyStartDateTo, filter,
-                "label.survey_start_date_from"), layout);
+            addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateFrom, filter), filter,
+                "label.usage_date_from"), layout);
+            addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateTo, filter), filter,
+                "label.usage_date_to"), layout);
+            addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getSurveyStartDateFrom, filter),
+                filter, "label.survey_start_date_from"), layout);
+            addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getSurveyStartDateTo, filter),
+                filter, "label.survey_start_date_to"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getWrWrkInst, filter, "label.wr_wrk_inst"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getCompanyId, filter, "label.company_id"), layout);
@@ -99,6 +102,13 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             .filter(udmBatch -> batchesIds.contains(udmBatch.getId()))
             .map(UdmBatch::getName)
             .collect(Collectors.toSet());
+    }
+
+    private Function<UdmUsageFilter, ?> getFunctionForDate(Function<UdmUsageFilter, LocalDate> function,
+                                                           UdmUsageFilter filter) {
+        return Objects.nonNull(function.apply(filter))
+            ? value -> DateUtils.format(function.apply(filter))
+            : function;
     }
 
     private void addLabel(Label label, VerticalLayout verticalLayout) {

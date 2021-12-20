@@ -103,7 +103,7 @@ public class UdmValueWidgetTest {
         initWidget();
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class);
         assertTrue(valueWidget.isLocked());
-        assertEquals(200, valueWidget.getSplitPosition(), 0);
+        assertEquals(270, valueWidget.getSplitPosition(), 0);
         verifySize(valueWidget, 100, 100, Unit.PERCENTAGE);
         assertTrue(valueWidget.getFirstComponent() instanceof UdmValueFilterWidget);
         Component secondComponent = valueWidget.getSecondComponent();

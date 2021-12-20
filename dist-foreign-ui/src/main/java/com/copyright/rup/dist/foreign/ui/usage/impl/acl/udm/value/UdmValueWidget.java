@@ -79,7 +79,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
     @Override
     @SuppressWarnings("unchecked")
     public IUdmValueWidget init() {
-        setSplitPosition(200, Unit.PIXELS);
+        setSplitPosition(270, Unit.PIXELS);
         setFirstComponent(controller.initValuesFilterWidget());
         setSecondComponent(initValuesLayout());
         setLocked(true);
