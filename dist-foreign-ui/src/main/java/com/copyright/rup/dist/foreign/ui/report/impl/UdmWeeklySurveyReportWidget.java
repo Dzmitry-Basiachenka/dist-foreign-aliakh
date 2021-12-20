@@ -4,10 +4,13 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
+
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -31,7 +34,8 @@ import java.util.Set;
 public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySurveyReportWidget {
 
     private IUdmWeeklySurveyReportController controller;
-    // TODO define the Channels, Usage Origins, Periods widgets
+    // TODO define the Channels, Usage Origins
+    private PeriodFilterWidget periodFilterWidget;
     private LocalDateWidget dateReceivedFromWidget;
     private LocalDateWidget dateReceivedToWidget;
     private Button exportButton;
@@ -44,8 +48,8 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     public IUdmWeeklySurveyReportWidget init() {
         initFilters();
         VerticalLayout content = new VerticalLayout(
-            // TODO add the Channels, Usage Origins, Periods widgets
-            dateReceivedFromWidget, dateReceivedToWidget, getButtonsLayout());
+            // TODO add the Channels, Usage Origins
+            periodFilterWidget, dateReceivedFromWidget, dateReceivedToWidget, getButtonsLayout());
         VaadinUtils.setMaxComponentsWidth(content);
         setContent(content);
         setWidth(300, Unit.PIXELS);
@@ -85,7 +89,13 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     }
 
     private void initFilters() {
-        // TODO initialize the Channels, Usage Origins, Periods widgets
+        // TODO initialize the Channels, Usage Origins
+        periodFilterWidget = new PeriodFilterWidget(controller::getAllPeriods);
+        periodFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<Integer>) saveEvent -> {
+            periods.clear();
+            periods.addAll(saveEvent.getSelectedItemsIds());
+            updateExportButtonState();
+        });
         dateReceivedFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_from"));
         dateReceivedFromWidget.addValueChangeListener(event -> this.updateExportButtonState());
         VaadinUtils.addComponentStyle(dateReceivedFromWidget, "date-received-from-filter");
@@ -108,8 +118,8 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         return layout;
     }
 
-    // TODO implement: data range or period
     private void updateExportButtonState() {
-        exportButton.setEnabled(!dateReceivedFromWidget.isEmpty() && !dateReceivedToWidget.isEmpty());
+        exportButton.setEnabled(!periods.isEmpty()
+            || !dateReceivedFromWidget.isEmpty() && !dateReceivedToWidget.isEmpty());
     }
 }

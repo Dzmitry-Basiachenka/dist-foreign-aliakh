@@ -87,8 +87,8 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
             parameters.put("channels", Objects.requireNonNull(channels));
             parameters.put("usageOrigins", Objects.requireNonNull(usageOrigins));
             parameters.put("periods", Objects.requireNonNull(periods));
-            parameters.put("dateReceivedFrom", Objects.requireNonNull(dateReceivedFrom));
-            parameters.put("dateReceivedTo", Objects.requireNonNull(dateReceivedTo));
+            parameters.put("dateReceivedFrom", dateReceivedFrom);
+            parameters.put("dateReceivedTo", dateReceivedTo);
             getTemplate().select("IUdmReportMapper.findUdmWeeklySurveyReportDtos", parameters, handler);
         }
     }

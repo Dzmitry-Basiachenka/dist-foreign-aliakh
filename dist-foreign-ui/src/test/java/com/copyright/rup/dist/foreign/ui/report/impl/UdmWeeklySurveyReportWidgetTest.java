@@ -8,17 +8,29 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
+
 import com.vaadin.server.Sizeable;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmWeeklySurveyReportWidget}.
@@ -46,18 +58,27 @@ public class UdmWeeklySurveyReportWidgetTest {
         assertEquals("report-udm-weekly-survey-window", widget.getId());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
-        assertEquals(3, content.getComponentCount());
-        // TODO add tests for Channels, Usage Origins, Periods widgets
+        assertEquals(4, content.getComponentCount());
+        // TODO add tests for Channels, Usage Origins widgets
         Component component1 = content.getComponent(0);
-        assertEquals(LocalDateWidget.class, component1.getClass());
-        assertEquals("Date Received From", component1.getCaption());
+        assertEquals(PeriodFilterWidget.class, component1.getClass());
+        verifyItemsFilterWidget(content.getComponent(0), "Periods");
         Component component2 = content.getComponent(1);
         assertEquals(LocalDateWidget.class, component2.getClass());
-        assertEquals("Date Received To", component2.getCaption());
-        verifyButtonsLayout(content.getComponent(2), "Export", "Close");
+        assertEquals("Date Received From", component2.getCaption());
+        Component component3 = content.getComponent(2);
+        assertEquals(LocalDateWidget.class, component3.getClass());
+        assertEquals("Date Received To", component3.getCaption());
+        verifyButtonsLayout(content.getComponent(3), "Export", "Close");
     }
 
-    // TODO add tests for the getChannels, getUsageOrigin, getPeriods methods
+    // TODO add tests for the getChannels, getUsageOrigin methods
+    @Test
+    public void testGetPeriods() {
+        Set<Integer> periods = Collections.singleton(2021012);
+        Whitebox.setInternalState(widget, "periods", periods);
+        assertEquals(periods, widget.getPeriods());
+    }
 
     @Test
     public void testGetDateReceivedFrom() {
@@ -79,5 +100,20 @@ public class UdmWeeklySurveyReportWidgetTest {
         replay(dateReceivedToWidget);
         assertEquals(dateReceivedTo, widget.getDateReceivedTo());
         verify(dateReceivedToWidget);
+    }
+
+    private void verifyItemsFilterWidget(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isEnabled());
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals(caption, button.getCaption());
+        assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 }
