@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
@@ -20,6 +21,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -44,6 +46,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
 
     private Tab udmTab;
+    private IUdmReportWidget udmReportWidget;
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
@@ -75,8 +78,12 @@ public class MainWidget extends TabSheet implements IMainWidget {
     public void updateProductFamily() {
         udmTab.setVisible(udmWidget.updateProductFamily());
         if (udmTab.isVisible() && ForeignSecurityUtils.hasSpecialistPermission()) {
-            ((RootWidget) this.getUI().getContent()).getAbsoluteLayout().addComponent(
-                controller.getUdmReportController().initWidget(), UDM_REPORT_MENU_CSS_POSITION);
+            udmReportWidget = controller.getUdmReportController().initWidget();
+            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION);
+        } else {
+            if (null != udmReportWidget) {
+                getAbsoluteLayout().removeComponent(udmReportWidget);
+            }
         }
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
@@ -87,5 +94,9 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void setController(IMainWidgetController controller) {
         this.controller = controller;
+    }
+
+    private AbsoluteLayout getAbsoluteLayout() {
+        return ((RootWidget) this.getUI().getContent()).getAbsoluteLayout();
     }
 }
