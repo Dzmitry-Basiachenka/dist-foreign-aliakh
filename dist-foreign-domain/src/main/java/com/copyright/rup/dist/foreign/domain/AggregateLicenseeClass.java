@@ -39,6 +39,10 @@ public class AggregateLicenseeClass extends StoredEntity<Integer> {
         description = aggregateLicenseeClass.getDescription();
     }
 
+    public String getIdAndDescription() {
+        return String.format("%s - %s", getId(), getDescription());
+    }
+
     public String getEnrollmentProfile() {
         return enrollmentProfile;
     }

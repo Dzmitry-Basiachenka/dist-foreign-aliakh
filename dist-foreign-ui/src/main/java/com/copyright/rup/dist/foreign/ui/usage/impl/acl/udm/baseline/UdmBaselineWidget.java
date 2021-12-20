@@ -14,6 +14,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -27,8 +28,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.MultiSelectionModel;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
-import org.apache.commons.collections.CollectionUtils;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
@@ -68,7 +69,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
     @SuppressWarnings("unchecked")
     public UdmBaselineWidget init() {
         hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
-        setSplitPosition(200, Unit.PIXELS);
+        setSplitPosition(270, Unit.PIXELS);
         setFirstComponent(controller.initBaselineFilterWidget());
         setSecondComponent(initBaselineLayout());
         setLocked(true);

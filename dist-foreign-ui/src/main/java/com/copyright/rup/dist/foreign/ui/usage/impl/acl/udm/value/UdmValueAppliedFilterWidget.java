@@ -1,18 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Widget for applied udm value filters.
@@ -29,10 +28,7 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
      * Constructor.
      */
     public UdmValueAppliedFilterWidget() {
-        setWidth(265, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
-        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        setSizeFull();
+        super();
         VaadinUtils.addComponentStyle(this, "udm-values-filter-panel-widget");
     }
 
@@ -42,15 +38,12 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
      * @param filter instance of {@link UdmValueFilter}
      */
     public void refreshFilterPanel(UdmValueFilter filter) {
-        VerticalLayout layout = initFiltersPanelLayout();
+        VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getStatus, filter, "label.status"), layout);
-            addLabel(createLabelWithSingleValue(
-                Objects.nonNull(filter.getPubType())
-                    ? valueFilter -> valueFilter.getPubType().getNameAndDescription()
-                    : UdmValueFilter::getPubType,
-                filter, "label.pub_type"), layout);
+            addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getPubType, filter), filter,
+                "label.pub_type"), layout);
             addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getLastValuePeriods(), "label.last_value_periods",
                 String::valueOf), layout);
@@ -95,27 +88,21 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                     "label.last_content_flag"), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getLastContentComment, filter,
                 "label.last_content_comment"), layout);
-            addLabel(createLabelWithSingleValue(
-                Objects.nonNull(filter.getLastPubType())
-                    ? udmValueFilter -> udmValueFilter.getLastPubType().getNameAndDescription()
-                    : UdmValueFilter::getLastPubType,
-                filter, "label.last_pub_type"), layout);
+            addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getLastPubType, filter), filter,
+                "label.last_pub_type"), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getComment, filter, "label.comment"), layout);
         }
         setContent(layout);
     }
 
-    private void addLabel(Label label, VerticalLayout verticalLayout) {
-        if (Objects.nonNull(label)) {
-            label.setStyleName("v-label-white-space-normal");
-            verticalLayout.addComponent(label);
+    private Function<UdmValueFilter, ?> getPubTypeFunction(Function<UdmValueFilter, PublicationType> function,
+                                                           UdmValueFilter filter) {
+        PublicationType publicationType = function.apply(filter);
+        if (Objects.nonNull(publicationType)) {
+            return Objects.nonNull(publicationType.getId())
+                ? udmValueFilter -> publicationType.getNameAndDescription()
+                : udmValueFilter -> "NULL";
         }
-    }
-
-    private VerticalLayout initFiltersPanelLayout() {
-        VerticalLayout filtersPanelLayout = new VerticalLayout();
-        filtersPanelLayout.setMargin(new MarginInfo(false, true, false, true));
-        VaadinUtils.setMaxComponentsWidth(filtersPanelLayout);
-        return filtersPanelLayout;
+        return udmValueFilter -> publicationType;
     }
 }

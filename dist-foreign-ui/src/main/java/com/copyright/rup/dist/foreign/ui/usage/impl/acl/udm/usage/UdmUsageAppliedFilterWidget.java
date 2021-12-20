@@ -6,11 +6,8 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import java.time.LocalDate;
@@ -38,12 +35,9 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
      * @param controller instance of {@link IUdmUsageFilterController}.
      */
     public UdmUsageAppliedFilterWidget(IUdmUsageFilterController controller) {
+        super();
         this.controller = controller;
-        setWidth(265, Unit.PIXELS);
-        setHeight(700, Unit.PIXELS);
-        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        setSizeFull();
-        VaadinUtils.addComponentStyle(this, "udm-usages-filter-panel-widget");
+        VaadinUtils.addComponentStyle(this, "udm-usage-filter-panel-widget");
     }
 
     /**
@@ -52,7 +46,7 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
      * @param filter instance of {@link UdmUsageFilter}
      */
     public void refreshFilterPanel(UdmUsageFilter filter) {
-        VerticalLayout layout = initFiltersPanelLayout();
+        VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getUdmBatchesIds()),
                 "label.batches", String::valueOf), layout);
@@ -109,19 +103,5 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
         return Objects.nonNull(function.apply(filter))
             ? value -> DateUtils.format(function.apply(filter))
             : function;
-    }
-
-    private void addLabel(Label label, VerticalLayout verticalLayout) {
-        if (Objects.nonNull(label)) {
-            label.setStyleName("v-label-white-space-normal");
-            verticalLayout.addComponent(label);
-        }
-    }
-
-    private VerticalLayout initFiltersPanelLayout() {
-        VerticalLayout filtersPanelLayout = new VerticalLayout();
-        filtersPanelLayout.setMargin(new MarginInfo(false, true, false, true));
-        VaadinUtils.setMaxComponentsWidth(filtersPanelLayout);
-        return filtersPanelLayout;
     }
 }

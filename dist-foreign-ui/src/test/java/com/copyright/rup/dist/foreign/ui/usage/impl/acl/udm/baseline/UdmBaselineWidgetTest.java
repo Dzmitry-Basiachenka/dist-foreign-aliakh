@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -29,8 +30,8 @@ import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 import com.vaadin.ui.components.grid.ItemClickListener;
-import org.apache.commons.lang3.tuple.Triple;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,7 +85,7 @@ public class UdmBaselineWidgetTest {
         udmBaselineWidget.init();
         verify(controller, streamSource, ForeignSecurityUtils.class);
         assertTrue(udmBaselineWidget.isLocked());
-        assertEquals(200, udmBaselineWidget.getSplitPosition(), 0);
+        assertEquals(270, udmBaselineWidget.getSplitPosition(), 0);
         verifySize(udmBaselineWidget);
         assertTrue(udmBaselineWidget.getFirstComponent() instanceof VerticalLayout);
         Component secondComponent = udmBaselineWidget.getSecondComponent();
