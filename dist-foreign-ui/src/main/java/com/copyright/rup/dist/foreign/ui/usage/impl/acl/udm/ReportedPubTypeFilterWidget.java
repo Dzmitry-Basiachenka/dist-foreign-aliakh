@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -76,13 +76,14 @@ public class ReportedPubTypeFilterWidget extends BaseUdmItemsFilterWidget<String
     }
 
     @Override
-    public FilterWindow<String> showFilterWindow() {
-        FilterWindow<String> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.reported_pub_types_filter"), this,
+    public CommonFilterWindow<String> showFilterWindow() {
+        UdmCommonFilterWindow<String> filterWindow =
+            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.reported_pub_types_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.reported_pub_type"));
         VaadinUtils.addComponentStyle(filterWindow, "reported-pub-type-filter-window");
+        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }

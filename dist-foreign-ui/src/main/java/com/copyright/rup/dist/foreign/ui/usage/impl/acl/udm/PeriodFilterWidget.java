@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -74,13 +74,14 @@ public class PeriodFilterWidget extends BaseItemsFilterWidget<Integer>
     }
 
     @Override
-    public FilterWindow<Integer> showFilterWindow() {
-        FilterWindow<Integer> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.periods_filter"), this,
+    public CommonFilterWindow<Integer> showFilterWindow() {
+        UdmCommonFilterWindow<Integer> filterWindow =
+            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.periods_filter"), this,
                 (ValueProvider<Integer, List<String>>) bean -> Collections.singletonList(String.valueOf(bean)));
         filterWindow.setSelectedItemsIds(periods);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.period"));
         VaadinUtils.addComponentStyle(filterWindow, "udm-values-periods-filter-window");
+        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }

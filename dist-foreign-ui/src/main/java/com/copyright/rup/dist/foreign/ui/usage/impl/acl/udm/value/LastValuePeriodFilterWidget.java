@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -86,9 +86,9 @@ public class LastValuePeriodFilterWidget extends BaseUdmItemsFilterWidget<String
     }
 
     @Override
-    public FilterWindow<String> showFilterWindow() {
-        FilterWindow<String> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.last_value_periods_filter"), this,
+    public CommonFilterWindow<String> showFilterWindow() {
+        UdmLastValuePeriodFilterWindow filterWindow =
+            new UdmLastValuePeriodFilterWindow(ForeignUi.getMessage("window.last_value_periods_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.last_value_period"));
@@ -98,6 +98,7 @@ public class LastValuePeriodFilterWidget extends BaseUdmItemsFilterWidget<String
         setItemEnabledProvider(checkBoxGroup, selectedItemsIds);
         checkBoxGroup.addValueChangeListener(event -> setItemEnabledProvider(checkBoxGroup, event.getValue()));
         VaadinUtils.addComponentStyle(filterWindow, "last-value-period-filter-window");
+        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 

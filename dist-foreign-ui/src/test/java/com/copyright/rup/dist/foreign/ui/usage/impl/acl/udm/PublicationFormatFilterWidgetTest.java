@@ -1,24 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.newCapture;
-import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.vaadin.data.ValueProvider;
-
-import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -68,26 +58,5 @@ public class PublicationFormatFilterWidgetTest {
         replay(filterSaveEvent);
         publicationFormatFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
-    }
-
-    @Test
-    public void testShowFilterWindow() {
-        mockStatic(Windows.class);
-        FilterWindow filterWindow = createMock(FilterWindow.class);
-        Capture<ValueProvider<String, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Publication Formats filter"), same(publicationFormatFilterWidget),
-            capture(providerCapture))).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(Collections.emptySet());
-        expectLastCall().once();
-        expect(filterWindow.getId()).andReturn("id").once();
-        filterWindow.addStyleName("publication-format-filter-window");
-        expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter Publication Format");
-        expectLastCall().once();
-        replay(filterWindow, Windows.class);
-        publicationFormatFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(PUBLICATION_FORMAT),
-            providerCapture.getValue().apply(PUBLICATION_FORMAT));
-        verify(filterWindow, Windows.class);
     }
 }
