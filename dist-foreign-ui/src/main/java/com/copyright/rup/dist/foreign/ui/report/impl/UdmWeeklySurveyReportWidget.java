@@ -10,7 +10,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
-
+import com.vaadin.data.Binder;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -20,6 +20,7 @@ import com.vaadin.ui.Window;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -38,6 +39,7 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     private PeriodFilterWidget periodFilterWidget;
     private LocalDateWidget dateReceivedFromWidget;
     private LocalDateWidget dateReceivedToWidget;
+    private Binder<LocalDate> dateReceivedBinder;
     private Button exportButton;
     private final Set<String> channels = new HashSet<>();
     private final Set<String> usageOrigins = new HashSet<>();
@@ -96,12 +98,29 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
             periods.addAll(saveEvent.getSelectedItemsIds());
             updateExportButtonState();
         });
+        dateReceivedBinder = new Binder<>();
         dateReceivedFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_from"));
-        dateReceivedFromWidget.addValueChangeListener(event -> this.updateExportButtonState());
+        dateReceivedFromWidget.addValueChangeListener(event -> {
+            dateReceivedBinder.validate();
+            updateExportButtonState();
+        });
         VaadinUtils.addComponentStyle(dateReceivedFromWidget, "date-received-from-filter");
         dateReceivedToWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_to"));
-        dateReceivedToWidget.addValueChangeListener(event -> this.updateExportButtonState());
+        dateReceivedToWidget.addValueChangeListener(event -> {
+            dateReceivedBinder.validate();
+            updateExportButtonState();
+        });
         VaadinUtils.addComponentStyle(dateReceivedToWidget, "date-received-to-filter");
+        dateReceivedBinder.forField(dateReceivedToWidget)
+            .withValidator(value -> {
+                LocalDate dateReceivedFrom = dateReceivedFromWidget.getValue();
+                LocalDate dateReceivedTo = dateReceivedToWidget.getValue();
+                return Objects.isNull(dateReceivedFrom) && Objects.isNull(dateReceivedTo)
+                    || 0 <= dateReceivedTo.compareTo(dateReceivedFrom);
+            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
+                ForeignUi.getMessage("label.date_received_from")))
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .validate();
     }
 
     private HorizontalLayout getButtonsLayout() {
@@ -120,6 +139,6 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
 
     private void updateExportButtonState() {
         exportButton.setEnabled(!periods.isEmpty()
-            || !dateReceivedFromWidget.isEmpty() && !dateReceivedToWidget.isEmpty());
+            || dateReceivedBinder.isValid() && !dateReceivedFromWidget.isEmpty() && !dateReceivedToWidget.isEmpty());
     }
 }
