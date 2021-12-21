@@ -24,7 +24,7 @@ import java.util.Set;
 public class UdmUsageFilterTest {
 
     private static final Set<String> USAGE_BATCH_IDS = Collections.singleton("Usage Batch Id");
-    private static final Integer PERIOD = 202012;
+    private static final Set<Integer> PERIODS = Collections.singleton(202012);
 
     @Test
     public void testIsEmpty() {
@@ -37,9 +37,9 @@ public class UdmUsageFilterTest {
         assertFalse(udmUsageFilter.isEmpty());
         udmUsageFilter.setUsageStatus(null);
         assertTrue(udmUsageFilter.isEmpty());
-        udmUsageFilter.setPeriod(PERIOD);
+        udmUsageFilter.setPeriods(PERIODS);
         assertFalse(udmUsageFilter.isEmpty());
-        udmUsageFilter.setPeriod(null);
+        udmUsageFilter.setPeriods(null);
         assertTrue(udmUsageFilter.isEmpty());
         udmUsageFilter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         assertFalse(udmUsageFilter.isEmpty());
@@ -53,12 +53,12 @@ public class UdmUsageFilterTest {
     public void testConstructor() {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(USAGE_BATCH_IDS);
-        udmUsageFilter.setPeriod(PERIOD);
+        udmUsageFilter.setPeriods(PERIODS);
         udmUsageFilter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA);
         udmUsageFilter.setUsageStatus(UsageStatusEnum.NEW);
         UdmUsageFilter udmUsageFilterCopy = new UdmUsageFilter(udmUsageFilter);
         assertEquals(USAGE_BATCH_IDS, udmUsageFilterCopy.getUdmBatchesIds());
-        assertEquals(PERIOD, udmUsageFilterCopy.getPeriod());
+        assertEquals(PERIODS, udmUsageFilterCopy.getPeriods());
         assertEquals(UdmUsageOriginEnum.RFA, udmUsageFilterCopy.getUdmUsageOrigin());
         assertEquals(UsageStatusEnum.NEW, udmUsageFilterCopy.getUsageStatus());
     }

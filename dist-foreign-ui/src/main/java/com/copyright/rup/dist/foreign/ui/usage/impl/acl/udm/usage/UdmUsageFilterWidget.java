@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -48,8 +49,8 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     private UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
     private UdmUsageFilter appliedUdmUsageFilter = new UdmUsageFilter();
     private UdmBatchFilterWidget udmBatchFilterWidget;
+    private PeriodFilterWidget periodFilterWidget;
     private ComboBox<UsageStatusEnum> statusComboBox;
-    private ComboBox<Integer> periodComboBox;
     private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
     private IUdmUsageFilterController controller;
 
@@ -114,12 +115,11 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     }
 
     private VerticalLayout initFiltersLayout() {
-        initPeriodFilter();
         initStatusFilter();
         initUsageOriginFilter();
         initMoreFiltersButton();
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUdmUsageBatchFilter(),
-            periodComboBox, statusComboBox, usageOriginComboBox, moreFiltersButton);
+            buildPeriodFilter(), statusComboBox, usageOriginComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -142,15 +142,14 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
     }
 
     private void refreshFilterValues() {
-        periodComboBox.setItems(controller.getPeriods());
         statusComboBox.setItems(ACL_STATUSES);
         usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
     }
 
     private void clearFilterValues() {
         udmBatchFilterWidget.reset();
+        periodFilterWidget.reset();
         statusComboBox.clear();
-        periodComboBox.clear();
         usageOriginComboBox.clear();
     }
 
@@ -190,14 +189,14 @@ public class UdmUsageFilterWidget extends VerticalLayout implements IUdmUsageFil
         return udmBatchFilterWidget;
     }
 
-    private void initPeriodFilter() {
-        periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
-        VaadinUtils.setMaxComponentsWidth(periodComboBox);
-        periodComboBox.addValueChangeListener(event -> {
-            udmUsageFilter.setPeriod(periodComboBox.getValue());
+    private PeriodFilterWidget buildPeriodFilter() {
+        periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
+        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
+            udmUsageFilter.setPeriods(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
-        VaadinUtils.addComponentStyle(periodComboBox, "udm-period-filter");
+        VaadinUtils.addComponentStyle(periodFilterWidget, "udm-periods-filter");
+        return periodFilterWidget;
     }
 
     private void initStatusFilter() {

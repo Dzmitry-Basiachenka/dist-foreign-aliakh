@@ -28,9 +28,9 @@ import java.util.Set;
 public class UdmUsageFilter {
 
     private Set<String> udmBatchesIds = new HashSet<>();
+    private Set<Integer> periods = new HashSet<>();
     private UsageStatusEnum usageStatus;
     private UdmUsageOriginEnum udmUsageOrigin;
-    private Integer period;
     private Set<String> assignees = new HashSet<>();
     private Set<String> reportedPubTypes = new HashSet<>();
     private Set<String> pubFormats = new HashSet<>();
@@ -66,9 +66,9 @@ public class UdmUsageFilter {
     public UdmUsageFilter(UdmUsageFilter filter) {
         if (null != filter) {
             setUdmBatchesIds(filter.getUdmBatchesIds());
+            setPeriods(filter.getPeriods());
             setUsageStatus(filter.getUsageStatus());
             setUdmUsageOrigin(filter.getUdmUsageOrigin());
-            setPeriod(filter.getPeriod());
             setAssignees(filter.getAssignees());
             setReportedPubTypes(filter.getReportedPubTypes());
             setPubFormats(filter.getPubFormats());
@@ -100,6 +100,14 @@ public class UdmUsageFilter {
         this.udmBatchesIds = udmBatchesIds;
     }
 
+    public Set<Integer> getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(Set<Integer> periods) {
+        this.periods = periods;
+    }
+
     public UsageStatusEnum getUsageStatus() {
         return usageStatus;
     }
@@ -114,14 +122,6 @@ public class UdmUsageFilter {
 
     public void setUdmUsageOrigin(UdmUsageOriginEnum udmUsageOrigin) {
         this.udmUsageOrigin = udmUsageOrigin;
-    }
-
-    public Integer getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(Integer period) {
-        this.period = period;
     }
 
     public Set<String> getAssignees() {
@@ -289,9 +289,9 @@ public class UdmUsageFilter {
      */
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(udmBatchesIds)
+            && CollectionUtils.isEmpty(periods)
             && null == usageStatus
             && null == udmUsageOrigin
-            && null == period
             && null == channel
             && null == usageDateFrom
             && null == usageDateTo
@@ -325,9 +325,9 @@ public class UdmUsageFilter {
         UdmUsageFilter that = (UdmUsageFilter) o;
         return new EqualsBuilder()
             .append(udmBatchesIds, that.udmBatchesIds)
+            .append(periods, that.periods)
             .append(usageStatus, that.usageStatus)
             .append(udmUsageOrigin, that.udmUsageOrigin)
-            .append(period, that.period)
             .append(assignees, that.assignees)
             .append(reportedPubTypes, that.reportedPubTypes)
             .append(pubFormats, that.pubFormats)
@@ -355,9 +355,9 @@ public class UdmUsageFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(udmBatchesIds)
+            .append(periods)
             .append(usageStatus)
             .append(udmUsageOrigin)
-            .append(period)
             .append(assignees)
             .append(reportedPubTypes)
             .append(pubFormats)
@@ -385,9 +385,9 @@ public class UdmUsageFilter {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("udmBatchesIds", udmBatchesIds)
+            .append("periods", periods)
             .append("usageStatus", usageStatus)
             .append("udmUsageOrigin", udmUsageOrigin)
-            .append("period", period)
             .append("assignees", assignees)
             .append("reportedPubTypes", reportedPubTypes)
             .append("pubFormats", pubFormats)
