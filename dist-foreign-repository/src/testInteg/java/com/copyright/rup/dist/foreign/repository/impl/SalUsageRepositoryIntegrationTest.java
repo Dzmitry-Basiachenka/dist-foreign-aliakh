@@ -63,8 +63,8 @@ import java.util.stream.IntStream;
 )
 public class SalUsageRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_FOR_AUDIT =
-        "sal-usage-repository-test-data-init-find-for-audit.groovy";
+    private static final String FOLDER_NAME = "sal-usage-repository-integration-test/";
+    private static final String FIND_FOR_AUDIT = FOLDER_NAME + "find-for-audit.groovy";
     private static final String USAGE_BATCH_ID_1 = "6aa46f9f-a0c2-4b61-97bc-aa35b7ce6e64";
     private static final String USAGE_BATCH_ID_2 = "56069b44-10b1-42d6-9a44-a3fae0029171";
     private static final String USAGE_BATCH_ID_3 = "09cc64a7-171a-4921-8d99-500768137cb8";
@@ -145,7 +145,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-insert-item-bank-detail.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-item-bank-detail.groovy")
     public void testInsertItemBankDetail() throws IOException {
         Usage expectedUsage = loadExpectedUsages("json/sal/sal_usage_3883a15d.json").get(0);
         salUsageRepository.insertItemBankDetail(expectedUsage);
@@ -156,7 +156,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-insert-usage-data-detail.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-usage-data-detail.groovy")
     public void testInsertUsageDataDetail() throws IOException {
         Usage usageToInsert = loadExpectedUsages("json/sal/sal_usage_e42e0321.json").get(0);
         Usage expectedUsage = loadExpectedUsages("json/sal/expected_sal_usage_e42e0321.json").get(0);
@@ -168,14 +168,14 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-dtos-by-filter.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindCountByFilter() {
         assertEquals(1, salUsageRepository.findCountByFilter(buildUsageFilter(
             Collections.singleton(USAGE_BATCH_ID_1), UsageStatusEnum.NEW, SAL_PRODUCT_FAMILY, SalDetailTypeEnum.IB)));
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-dtos-by-filter.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindDtosByFilter() throws IOException {
         verifyUsageDtos(loadExpectedUsageDtos("json/sal/sal_usage_dto_5ab5e80b.json"),
             salUsageRepository.findDtosByFilter(buildUsageFilter(
@@ -184,7 +184,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-dtos-by-filter.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindDtosByFilterSort() {
         assertFindDtosByFilterSort(USAGE_ID_3, DETAIL_ID_KEY, Direction.ASC);
         assertFindDtosByFilterSort(USAGE_ID_1, DETAIL_ID_KEY, Direction.DESC);
@@ -257,7 +257,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-work-portion-id-exists.groovy")
+    @TestData(fileName = FOLDER_NAME + "work-portion-id-exists.groovy")
     public void testWorkPortionIdExists() {
         assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1));
         assertTrue(salUsageRepository.workPortionIdExists("1101024IB2192"));
@@ -265,28 +265,28 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-work-portion-id-exists.groovy")
+    @TestData(fileName = FOLDER_NAME + "work-portion-id-exists.groovy")
     public void testWorkPortionIdExistsInBatch() {
         assertTrue(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1, USAGE_BATCH_ID_1));
         assertFalse(salUsageRepository.workPortionIdExists(WORK_PORTION_ID_1, USAGE_BATCH_ID_2));
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-usage-data-exist.groovy")
+    @TestData(fileName = FOLDER_NAME + "usage-data-exist.groovy")
     public void testUsageDetailsExist() {
         assertTrue(salUsageRepository.usageDataExist("cb932497-086d-4a7e-9b34-e9a62f17adab4"));
         assertFalse(salUsageRepository.usageDataExist("b0e669d2-68d0-4add-9946-34215011f74b"));
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-work-portion-id-exists.groovy")
+    @TestData(fileName = FOLDER_NAME + "work-portion-id-exists.groovy")
     public void testFindItemBankDetailGradeByWorkPortionId() {
         assertEquals("5", salUsageRepository.findItemBankDetailGradeByWorkPortionId(WORK_PORTION_ID_1));
         assertNull(salUsageRepository.findItemBankDetailGradeByWorkPortionId("1201064IB2200"));
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-delete-usage-data.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-usage-data.groovy")
     public void testDeleteUsageData() {
         assertTrue(salUsageRepository.usageDataExist(USAGE_BATCH_ID_3));
         UsageFilter usageFilter =
@@ -299,7 +299,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-delete-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton("b54293db-bfb9-478a-bc13-d70aef5d3ecb"));
@@ -309,7 +309,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-usage-data-grade-groups.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-data-grade-groups.groovy")
     public void testFindUsageDataGradeGroups() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
@@ -321,7 +321,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-update-payee-by-account-number.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-payee-by-account-number.groovy")
     public void testUpdatePayeeByAccountNumber() {
         List<String> usageIds =
             Arrays.asList("d7764071-935f-4281-a643-656354ccf690", "ad4caa00-c95a-453e-9253-f9810d84d269");
@@ -332,7 +332,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-add-to-scenario.groovy")
+    @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToScenario() {
         List<String> usageIds =
             Arrays.asList("e823d079-3e82-4a5c-bdad-a8707b47b665", "9439530a-d7a9-40a9-a881-f892d13eaf9f");
@@ -352,7 +352,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-delete-from-scenario.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
         List<Usage> usages = salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_4));
         assertEquals(1, usages.size());
@@ -382,7 +382,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-calculate-amounts.groovy")
+    @TestData(fileName = FOLDER_NAME + "calculate-amounts.groovy")
     public void testCalculateAmounts() {
         salUsageRepository.calculateAmounts(SCENARIO_ID_2, USER_NAME);
         List<Usage> actualUsages = salUsageRepository.findByScenarioId(SCENARIO_ID_2);
@@ -397,14 +397,14 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-by-scenario-id-and-rh-account-number.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy")
     public void testFindCountByScenarioIdAndRhAccountNumber() {
         assertEquals(1, salUsageRepository
             .findCountByScenarioIdAndRhAccountNumber("bafc8277-d9f2-44b6-a68c-9e46165175f8", 1000000026L, null));
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-find-by-scenario-id-and-rh-account-number.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy")
     public void testFindByScenarioIdAndRhAccountNumber() throws IOException {
         List<UsageDto> expectedUsageDtos =
             loadExpectedUsageDtos("json/sal/sal_usage_dto_1d437cb1.json");
@@ -415,7 +415,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "sal-usage-repository-test-data-init-update-rh-account-number-and-status-by-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-rh-account-number-and-status-by-id.groovy")
     public void testUpdateRhAccountNumberAndStatusById() {
         salUsageRepository.findByIds(Collections.singletonList(USAGE_ID_5)).forEach(usage -> {
             assertNull(usage.getRightsholder().getAccountNumber());
@@ -431,7 +431,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAudit() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_7);
@@ -440,7 +440,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditArchived() throws IOException {
         AuditFilter filter = new AuditFilter();
         filter.setSearchValue(USAGE_ID_8);
@@ -449,7 +449,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByRightsholder() {
         AuditFilter filter = new AuditFilter();
         filter.setRhAccountNumbers(Collections.singleton(2000173934L));
@@ -459,7 +459,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByLicensee() {
         AuditFilter filter = new AuditFilter();
         filter.setLicenseeAccountNumbers(Collections.singleton(2000017003L));
@@ -469,7 +469,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByBatch() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
@@ -479,7 +479,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByStatus() {
         AuditFilter filter = new AuditFilter();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.ARCHIVED));
@@ -489,7 +489,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditBySalDetailType() {
         AuditFilter filter = new AuditFilter();
         filter.setSalDetailType(SalDetailTypeEnum.UD);
@@ -499,7 +499,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByUsagePeriod() {
         AuditFilter filter = new AuditFilter();
         filter.setUsagePeriod(2018);
@@ -509,7 +509,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByCccEventId() {
         assertFindForAuditByCccEventId("53258", USAGE_ID_8);
         assertFindForAuditByCccEventId(PERCENT);
@@ -517,7 +517,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditByDistributionName() {
         assertFindForAuditByDistributionName("SAL_March_2018", USAGE_ID_9);
         assertFindForAuditByDistributionName(PERCENT);
@@ -525,7 +525,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSearch() {
         assertFindForAuditSearch(USAGE_ID_6, USAGE_ID_6);
         assertFindForAuditSearch("f82f654-d906-4cc3-83cf-0409c69a089", USAGE_ID_6);
@@ -538,7 +538,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByCommonUsageInfo() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
@@ -575,7 +575,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingBySalUsageInfo() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
@@ -622,7 +622,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByBatchInfo() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(USAGE_BATCH_ID_4));
@@ -633,7 +633,7 @@ public class SalUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FOR_AUDIT)
+    @TestData(fileName = FIND_FOR_AUDIT)
     public void testFindForAuditSortingByPaidInfo() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton("a375c049-1289-4c85-994b-b2bd8ac043cf"));
