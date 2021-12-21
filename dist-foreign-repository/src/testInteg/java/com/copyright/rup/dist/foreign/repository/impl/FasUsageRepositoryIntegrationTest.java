@@ -60,8 +60,9 @@ import java.util.stream.IntStream;
 )
 public class FasUsageRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS =
-        "fas-usage-repository-test-data-init-find-with-amounts-and-rightsholders.groovy";
+    private static final String FOLDER_NAME = "fas-usage-repository-integration-test/";
+    private static final String FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS =
+        FOLDER_NAME + "find-with-amounts-and-rightsholders.groovy";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final String USAGE_BATCH_ID_1 = "7b8beb5d-1fc8-47bf-8e06-3ac85457ac5b";
     private static final String SCENARIO_ID_1 = "e726496d-aca1-46d8-b393-999827cc6dda";
@@ -91,7 +92,7 @@ public class FasUsageRepositoryIntegrationTest {
     private IFasUsageRepository fasUsageRepository;
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-insert.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() throws IOException {
         Usage expectedUsage = loadExpectedUsages().get(0);
         expectedUsage.setNetAmount(expectedUsage.getNetAmount().setScale(10, RoundingMode.HALF_UP));
@@ -102,7 +103,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-delete-from-scenario-by-payees.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-from-scenario-by-payees.groovy")
     public void testDeleteFromScenarioByPayees() {
         List<Usage> usagesBeforeExclude = usageRepository.findByIds(
             Arrays.asList("7234feb4-a59e-483b-985a-e8de2e3eb190", "582c86e2-213e-48ad-a885-f9ff49d48a69",
@@ -126,7 +127,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-redesignate-to-nts-withdrawn-by-payees.groovy")
+    @TestData(fileName = FOLDER_NAME + "redesignate-to-nts-withdrawn-by-payees.groovy")
     public void testRedisignateToNtsWithdrawnByPayees() {
         List<Usage> usagesBeforeExclude = usageRepository.findByIds(
             Arrays.asList("209a960f-5896-43da-b020-fc52981b9633", "1ae671ca-ed5a-4d92-8ab6-a10a53d9884a",
@@ -151,7 +152,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-find-account-numbers-invalid-for-exclude.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-account-numbers-invalid-for-exclude.groovy")
     public void testFindAccountNumbersInvalidForExclude() {
         assertEquals(Collections.singleton(7000813806L), fasUsageRepository.findAccountNumbersInvalidForExclude(
             Sets.newHashSet(SCENARIO_ID_2, SCENARIO_ID_3), Sets.newHashSet(7000813806L, 1000002859L)));
@@ -160,7 +161,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-update-researched-usages.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-researched-usages.groovy")
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
@@ -175,7 +176,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-update-nts-withdrawn-usages-and-get-ids.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-nts-withdrawn-usages-and-get-ids.groovy")
     public void testUpdateNtsWithdrawnUsagesAndGetIds() {
         List<String> ids = fasUsageRepository.updateNtsWithdrawnUsagesAndGetIds();
         assertEquals(3, ids.size());
@@ -188,7 +189,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-find-for-reconcile.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-for-reconcile.groovy")
     public void testFindForReconcile() {
         List<Usage> usages = fasUsageRepository.findForReconcile(SCENARIO_ID_1);
         assertEquals(2, usages.size());
@@ -202,7 +203,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "fas-usage-repository-test-data-init-find-rightsholders-information.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-rightsholders-information.groovy")
     public void testFindRightsholdersInformation() {
         Map<Long, Usage> rhInfo = fasUsageRepository.findRightsholdersInformation(SCENARIO_ID_1);
         assertEquals(1, rhInfo.size());
@@ -214,7 +215,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
@@ -223,7 +224,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testVerifyFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
@@ -248,7 +249,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
             UsageStatusEnum.ELIGIBLE, null, null);
@@ -256,7 +257,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
@@ -264,7 +265,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
@@ -273,7 +274,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, null);
@@ -282,7 +283,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
@@ -291,7 +292,7 @@ public class FasUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
+    @TestData(fileName = FIND_WITH_AMOUNTS_AND_RIGHTSHOLDERS)
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
