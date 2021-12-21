@@ -60,7 +60,7 @@ public class UdmBaselineValueFilterWidgetTest {
     public void testInit() {
         replay(controller);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");

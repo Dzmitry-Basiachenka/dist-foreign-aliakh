@@ -44,7 +44,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
     public UdmBaselineValueWidget init() {
         setFirstComponent(controller.initBaselineValuesFilterWidget());
         setSecondComponent(initBaselineLayout());
-        setSplitPosition(200, Unit.PIXELS);
+        setSplitPosition(270, Unit.PIXELS);
         setLocked(true);
         setSizeFull();
         return this;

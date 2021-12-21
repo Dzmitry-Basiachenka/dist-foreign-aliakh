@@ -53,7 +53,7 @@ public class UdmBaselineValueWidgetTest {
         initWidget();
         verify(controller);
         assertTrue(udmBaselineValueWidget.isLocked());
-        assertEquals(200, udmBaselineValueWidget.getSplitPosition(), 0);
+        assertEquals(270, udmBaselineValueWidget.getSplitPosition(), 0);
         verifyWindow(udmBaselineValueWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(udmBaselineValueWidget.getFirstComponent() instanceof VerticalLayout);
         Component secondComponent = udmBaselineValueWidget.getSecondComponent();
