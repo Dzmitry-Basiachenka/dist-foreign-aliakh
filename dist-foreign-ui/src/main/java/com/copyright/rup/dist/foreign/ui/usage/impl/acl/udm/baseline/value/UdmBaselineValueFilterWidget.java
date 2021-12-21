@@ -31,6 +31,7 @@ import com.vaadin.ui.themes.ValoTheme;
  */
 public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdmBaselineValueFilterWidget {
 
+    private final UdmBaselineValueAppliedFilterWidget appliedFilterWidget;
     private UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
     private UdmBaselineValueFilter appliedBaselineValueFilter = new UdmBaselineValueFilter();
     private PeriodFilterWidget periodFilterWidget;
@@ -46,12 +47,14 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
      */
     public UdmBaselineValueFilterWidget(IUdmBaselineValueFilterController controller) {
         this.controller = controller;
+        this.appliedFilterWidget = new UdmBaselineValueAppliedFilterWidget();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public IUdmBaselineValueFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "udm-baseline-values-filter-widget");
         return this;
@@ -60,6 +63,7 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
     @Override
     public void applyFilter() {
         appliedBaselineValueFilter = new UdmBaselineValueFilter(udmBaselineValueFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedBaselineValueFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -79,6 +83,11 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
     private void clearFilterValues() {
         periodFilterWidget.reset();
         pubTypeComboBox.clear();
+    }
+
+    @Override
+    public UdmBaselineValueFilter getAppliedFilter() {
+        return appliedBaselineValueFilter;
     }
 
     private void filterChanged() {
@@ -154,8 +163,9 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
         return horizontalLayout;
     }
 
-    @Override
-    public UdmBaselineValueFilter getAppliedFilter() {
-        return appliedBaselineValueFilter;
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label("Applied Filters:");
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "udm-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }
