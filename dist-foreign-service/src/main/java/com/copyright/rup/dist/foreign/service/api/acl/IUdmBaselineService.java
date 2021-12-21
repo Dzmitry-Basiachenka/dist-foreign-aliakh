@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for UDM baseline business logic.
@@ -44,9 +45,16 @@ public interface IUdmBaselineService {
     List<Integer> getPeriods();
 
     /**
-     * Removes UDM usage from baseline by id. Sets is_baseline_flag {@code false}.
-     *
-     * @param udmUsageId UDM usage id
+     * @return threshold value for size of UDM records.
      */
-    void removeFromBaselineById(String udmUsageId);
+    int getUdmRecordThreshold();
+
+    /**
+     * Deletes selected usages from baseline by their ids.
+     *
+     * @param usageIds usage ids to delete
+     * @param reason   reason
+     * @param userName user name
+     */
+    void deleteFromBaseline(Set<String> usageIds, String reason, String userName);
 }

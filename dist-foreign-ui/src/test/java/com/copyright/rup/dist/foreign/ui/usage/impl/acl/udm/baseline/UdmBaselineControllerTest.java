@@ -17,12 +17,13 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
-
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -40,6 +41,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -53,11 +55,11 @@ import java.util.function.Supplier;
  * @author Dzmitry Basiachenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({StreamSource.class})
+@PrepareForTest({StreamSource.class, RupContextUtils.class})
 public class UdmBaselineControllerTest {
 
     private final UdmBaselineFilter baselineFilter = new UdmBaselineFilter();
-    private final UdmBaselineController udmBaselineController = new UdmBaselineController();;
+    private final UdmBaselineController udmBaselineController = new UdmBaselineController();
     private IUdmBaselineService udmBaselineService;
     private IUdmBaselineFilterWidget udmBaselineFilterWidget;
     private IUdmBaselineFilterController udmBaselineFilterController;
@@ -133,5 +135,25 @@ public class UdmBaselineControllerTest {
         assertNotNull(posConsumer);
         verify(OffsetDateTime.class, udmBaselineFilterWidget, udmBaselineFilterController, streamSourceHandler,
             udmReportService);
+    }
+
+    @Test
+    public void testDeleteFromBaseline() {
+        mockStatic(RupContextUtils.class);
+        Set<String> usageIds = ImmutableSet.of("f6e201bf-7b34-470f-937c-7e3bdeac0efe");
+        expect(RupContextUtils.getUserName()).andReturn("user@copyright.com").once();
+        udmBaselineService.deleteFromBaseline(usageIds, "Reason to delete", "user@copyright.com");
+        expectLastCall().once();
+        replay(udmBaselineService, RupContextUtils.class);
+        udmBaselineController.deleteFromBaseline(usageIds, "Reason to delete");
+        verify(udmBaselineService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testGetUdmRecordThreshold() {
+        expect(udmBaselineService.getUdmRecordThreshold()).andReturn(1000).once();
+        replay(udmBaselineService);
+        assertEquals(1000, udmBaselineController.getUdmRecordThreshold());
+        verify(udmBaselineService);
     }
 }
