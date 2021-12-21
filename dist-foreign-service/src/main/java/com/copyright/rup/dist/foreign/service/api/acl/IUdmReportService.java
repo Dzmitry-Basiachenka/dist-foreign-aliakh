@@ -63,13 +63,13 @@ public interface IUdmReportService {
     /**
      * Writes UDM Weekly Survey Report into csv output stream.
      *
-     * @param channels         set of channels
-     * @param usageOrigins     set of usage origins
+     * @param channel          channel or {@code null}
+     * @param usageOrigin      usage origin or {@code null}
      * @param periods          set of periods
      * @param dateReceivedFrom date received from
      * @param dateReceivedTo   date received to
      * @param outputStream     instance of {@link OutputStream}
      */
-    void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
+    void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
                                        LocalDate dateReceivedFrom, LocalDate dateReceivedTo, OutputStream outputStream);
 }

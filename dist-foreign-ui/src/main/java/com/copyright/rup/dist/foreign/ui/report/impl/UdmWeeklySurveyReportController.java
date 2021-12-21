@@ -42,7 +42,7 @@ public class UdmWeeklySurveyReportController extends CommonController<IUdmWeekly
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("weekly_survey_report_",
             os -> udmReportService.writeUdmWeeklySurveyCsvReport(
-                getWidget().getChannels(), getWidget().getUsageOrigin(), getWidget().getPeriods(),
+                getWidget().getChannel(), getWidget().getUsageOrigin(), getWidget().getPeriods(),
                 getWidget().getDateReceivedFrom(), getWidget().getDateReceivedTo(), os));
     }
 

@@ -11,14 +11,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -30,6 +34,8 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -59,26 +65,40 @@ public class UdmWeeklySurveyReportWidgetTest {
 
     @Test
     public void testInit() {
-        verifyWindow(widget, StringUtils.EMPTY, 300, -1, Sizeable.Unit.PIXELS);
+        verifyWindow(widget, StringUtils.EMPTY, 200, -1, Sizeable.Unit.PIXELS);
         assertEquals("report-udm-weekly-survey-window", widget.getStyleName());
         assertEquals("report-udm-weekly-survey-window", widget.getId());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
-        assertEquals(4, content.getComponentCount());
-        // TODO add tests for Channels, Usage Origins widgets
-        Component component1 = content.getComponent(0);
-        assertEquals(PeriodFilterWidget.class, component1.getClass());
-        verifyItemsFilterWidget(content.getComponent(0), "Periods");
-        Component component2 = content.getComponent(1);
-        assertEquals(LocalDateWidget.class, component2.getClass());
-        assertEquals("Date Received From", component2.getCaption());
-        Component component3 = content.getComponent(2);
-        assertEquals(LocalDateWidget.class, component3.getClass());
-        assertEquals("Date Received To", component3.getCaption());
-        verifyButtonsLayout(content.getComponent(3), "Export", "Close");
+        assertEquals(6, content.getComponentCount());
+        verifyComboBox(content.getComponent(0), "Channel", UdmChannelEnum.values());
+        verifyComboBox(content.getComponent(1), "Usage Origin", UdmUsageOriginEnum.values());
+        Component periods = content.getComponent(2);
+        assertEquals(PeriodFilterWidget.class, periods.getClass());
+        verifyItemsFilterWidget(content.getComponent(2), "Periods");
+        Component dateReceivedFrom = content.getComponent(3);
+        assertEquals(LocalDateWidget.class, dateReceivedFrom.getClass());
+        assertEquals("Date Received From", dateReceivedFrom.getCaption());
+        Component dateReceivedTo = content.getComponent(4);
+        assertEquals(LocalDateWidget.class, dateReceivedTo.getClass());
+        assertEquals("Date Received To", dateReceivedTo.getCaption());
+        verifyButtonsLayout(content.getComponent(5), "Export", "Close");
     }
 
-    // TODO add tests for the getChannels, getUsageOrigin methods
+    @Test
+    public void testGetChannel() {
+        String channel = UdmChannelEnum.CCC.name();
+        Whitebox.setInternalState(widget, "channel", channel);
+        assertEquals(channel, widget.getChannel());
+    }
+
+    @Test
+    public void testGetUsageOrigin() {
+        String usageOrigin = UdmUsageOriginEnum.RFA.name();
+        Whitebox.setInternalState(widget, "usageOrigin", usageOrigin);
+        assertEquals(usageOrigin, widget.getUsageOrigin());
+    }
+
     @Test
     public void testGetPeriods() {
         Set<Integer> periods = Collections.singleton(2021012);
@@ -136,6 +156,19 @@ public class UdmWeeklySurveyReportWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void verifyComboBox(Component component, String caption, T... arrayValues) {
+        assertTrue(component instanceof ComboBox);
+        ComboBox<?> comboBox = (ComboBox<?>) component;
+        assertEquals(caption, comboBox.getCaption());
+        assertEquals(100, comboBox.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
+        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
+        Collection<?> actualItems = listDataProvider.getItems();
+        assertEquals(arrayValues.length, actualItems.size());
+        assertEquals(Arrays.asList(arrayValues), actualItems);
     }
 
     private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,

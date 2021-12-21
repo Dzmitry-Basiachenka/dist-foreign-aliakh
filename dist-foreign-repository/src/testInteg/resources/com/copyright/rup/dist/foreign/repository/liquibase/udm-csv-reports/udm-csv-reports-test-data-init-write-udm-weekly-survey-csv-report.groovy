@@ -4,12 +4,6 @@ databaseChangeLog {
     changeSet(id: '2021-12-17-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment('Insert test data for testWriteUdmWeeklySurveyCsvReport')
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '087f523f-182d-4ff3-a890-5377206bbb94')
-            column(name: 'rh_account_number', value: 1000002859)
-            column(name: 'name', value: 'John Wiley & Sons - Books')
-        }
-
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: 'b23681ae-1cf7-44ee-b09b-6fc06779e05c')
             column(name: 'name', value: 'UDM Batch 2020 June')

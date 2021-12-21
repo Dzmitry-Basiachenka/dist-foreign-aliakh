@@ -101,17 +101,17 @@ public class UdmReportServiceTest {
 
     @Test
     public void testWriteUdmWeeklySurveyCsvReport() {
-        Set<String> channels = Collections.singleton(UdmChannelEnum.CCC.name());
-        Set<String> usageOrigins = Collections.singleton(UdmUsageOriginEnum.RFA.name());
+        String channel = UdmChannelEnum.CCC.name();
+        String usageOrigin = UdmUsageOriginEnum.RFA.name();
         Set<Integer> periods = Collections.singleton(202112);
         LocalDate dateReceivedFrom = LocalDate.of(2021, 11, 21);
         LocalDate dateReceivedTo = LocalDate.of(2021, 11, 28);
         OutputStream outputStream = new ByteArrayOutputStream();
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
             dateReceivedTo, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
             dateReceivedTo, outputStream);
         verify(udmReportRepository);
     }

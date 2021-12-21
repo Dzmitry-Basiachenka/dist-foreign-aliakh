@@ -55,10 +55,10 @@ public class UdmReportService implements IUdmReportService {
     }
 
     @Override
-    public void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
+    public void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
                                               LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
                                               OutputStream outputStream) {
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channels, usageOrigins, periods, dateReceivedFrom,
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
             dateReceivedTo, outputStream);
     }
 }

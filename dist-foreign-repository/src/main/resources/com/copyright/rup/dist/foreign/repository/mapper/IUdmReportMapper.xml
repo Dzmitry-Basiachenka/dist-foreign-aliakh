@@ -44,7 +44,6 @@
         <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
     </select>
 
-    <!-- TODO implement WHERE in the MyBatis SELECT -->
     <select id="findUdmWeeklySurveyReportDtos" parameterType="map" resultMap="udmWeeklySurveyReportDtoResultMap">
         select
             period,
@@ -86,6 +85,12 @@
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
             <where>
+                <if test="null != channel">
+                    and ub.channel = #{channel}
+                </if>
+                <if test="null != usageOrigin">
+                    and ub.usage_origin = #{usageOrigin}
+                </if>
                 <if test="periods.size() > 0">
                     and
                     <foreach collection="periods" item="period" open="(" separator=" or " close=")">

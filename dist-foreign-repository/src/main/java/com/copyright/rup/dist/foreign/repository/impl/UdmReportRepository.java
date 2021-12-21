@@ -78,14 +78,14 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
     }
 
     @Override
-    public void writeUdmWeeklySurveyCsvReport(Set<String> channels, Set<String> usageOrigins, Set<Integer> periods,
+    public void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
                                               LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
                                               OutputStream outputStream) {
         try (UdmWeeklySurveyReportHandler handler =
                  new UdmWeeklySurveyReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-            parameters.put("channels", Objects.requireNonNull(channels));
-            parameters.put("usageOrigins", Objects.requireNonNull(usageOrigins));
+            parameters.put("channel", channel);
+            parameters.put("usageOrigin", usageOrigin);
             parameters.put("periods", Objects.requireNonNull(periods));
             parameters.put("dateReceivedFrom", dateReceivedFrom);
             parameters.put("dateReceivedTo", dateReceivedTo);
