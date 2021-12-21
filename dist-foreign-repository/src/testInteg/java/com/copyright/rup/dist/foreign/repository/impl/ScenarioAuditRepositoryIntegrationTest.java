@@ -39,13 +39,14 @@ import java.util.List;
 )
 public class ScenarioAuditRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "scenario-audit-repository-integration-test/";
     private static final String SCENARIO_UID = "3210b236-1239-4a60-9fab-888b84199321";
 
     @Autowired
     private IScenarioAuditRepository scenarioAuditRepository;
 
     @Test
-    @TestData(fileName = "scenario-audit-repository-test-data-init-insert.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
         assertEquals(0, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
         ScenarioAuditItem scenarioAuditItem = buildScenarioAuditItem(SCENARIO_UID);
@@ -56,7 +57,7 @@ public class ScenarioAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-audit-repository-test-data-init-find-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id.groovy")
     public void testFindByScenarioId() {
         assertEquals(0, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
         ScenarioAuditItem scenarioAuditItem = buildScenarioAuditItem(SCENARIO_UID);
@@ -68,7 +69,7 @@ public class ScenarioAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-audit-repository-test-data-init-find-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         scenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID));
         assertEquals(1, CollectionUtils.size(scenarioAuditRepository.findByScenarioId(SCENARIO_UID)));
@@ -77,7 +78,7 @@ public class ScenarioAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-audit-repository-test-data-init-is-audit-item-exist.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-audit-item-exist.groovy")
     public void testIsAuditItemExist() {
         assertFalse(scenarioAuditRepository.isAuditItemExist(SCENARIO_UID, ScenarioActionTypeEnum.SUBMITTED));
         scenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID));
