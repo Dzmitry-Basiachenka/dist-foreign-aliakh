@@ -56,6 +56,7 @@ import java.util.stream.IntStream;
 )
 public class UdmProxyValueRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "udm-proxy-value-repository-integration-test/";
     private static final int PERIOD = 211012;
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -71,7 +72,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-delete-proxy-values.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-proxy-values.groovy")
     public void testDeleteProxyValues() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(PERIOD));
@@ -81,7 +82,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-clear-proxy-values.groovy")
+    @TestData(fileName = FOLDER_NAME + "clear-proxy-values.groovy")
     public void testClearProxyValues() {
         findAllValueDtos().forEach(udmValueDto -> assertNotNull(udmValueDto.getContentUnitPrice()));
         udmProxyValueRepository.clearProxyValues(PERIOD, USER_NAME);
@@ -93,7 +94,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-insert-proxy-values.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-proxy-values.groovy")
     public void testInsertProxyValues() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(PERIOD));
@@ -103,7 +104,7 @@ public class UdmProxyValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-apply-proxy-values.groovy")
+    @TestData(fileName = FOLDER_NAME + "apply-proxy-values.groovy")
     public void testApplyProxyValues() {
         assertEquals(Arrays.asList("43699543-3287-40e1-a4b8-553e7547deb9", "cf03b058-6189-4885-b2a6-a6de04b2de88"),
             udmProxyValueRepository.applyProxyValues(PERIOD, USER_NAME));
@@ -112,13 +113,13 @@ public class UdmProxyValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-find-periods.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testFindPeriods() {
         assertEquals(Arrays.asList(211012, 211006), udmProxyValueRepository.findPeriods());
     }
 
     @Test
-    @TestData(fileName = "udm-proxy-value-repository-integration-test/test-find-dtos-by-filter.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-dtos-by-filter.groovy")
     public void testFindDtosByFilter() {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(211012, 211006));
