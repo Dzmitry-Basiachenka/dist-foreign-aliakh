@@ -85,7 +85,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
@@ -134,7 +134,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
@@ -227,10 +227,10 @@ public class UdmBaselineRepositoryIntegrationTest {
             38908778L, "436be73d-82c9-4e53-bda6-b882e528bed7");
         assertEquals(3, baselineRepository.populateValueId(211512, wrWrkInstToValueIdMap, USER_NAME));
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(211512);
+        filter.setPeriods(Collections.singleton(211512));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211512.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
-        filter.setPeriod(211412);
+        filter.setPeriods(Collections.singleton(211412));
         verifyUdmBaselineDto(loadExpectedBaselineDto("json/udm/udm_baseline_dto_211412.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
     }
@@ -276,7 +276,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifyFilteringFindCountByFilter(Consumer<UdmBaselineFilter> consumer, int count) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         consumer.accept(filter);
         int usagesCount = baselineRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);
@@ -284,7 +284,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifyFilteringFindDtosByFilter(Consumer<UdmBaselineFilter> consumer, String... usageIds) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         consumer.accept(filter);
         List<UdmBaselineDto> usages = baselineRepository.findDtosByFilter(filter, null, null);
         assertEquals(usageIds.length, usages.size());
@@ -294,7 +294,7 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     private void verifySortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(201906);
+        filter.setPeriods(Collections.singleton(201906));
         List<UdmBaselineDto> usageDtos =
             baselineRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.ASC));
         assertEquals(detailIdAsc, usageDtos.get(0).getId());

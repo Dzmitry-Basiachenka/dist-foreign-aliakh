@@ -217,7 +217,7 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(6, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyPeriodsFilterLayout(verticalLayout.getComponent(2));
+        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Periods");
         verifyUsageStatusComboBox(verticalLayout.getComponent(3));
         verifyUsageOriginComboBox(verticalLayout.getComponent(4));
         verifyMoreFiltersButton(verticalLayout.getComponent(5));
@@ -238,20 +238,6 @@ public class UdmUsageFilterWidgetTest {
         assertEquals("(0)", ((Label) iterator.next()).getValue());
         Button button = (Button) iterator.next();
         assertEquals(buttonCaption, button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
-    }
-
-    private void verifyPeriodsFilterLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Periods", button.getCaption());
         assertEquals(2, button.getListeners(ClickEvent.class).size());
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));

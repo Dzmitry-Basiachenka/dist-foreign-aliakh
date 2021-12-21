@@ -78,7 +78,7 @@ public class UdmBaselineAppliedFilterWidgetTest {
 
     private UdmBaselineFilter buildUdmFilter() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
