@@ -13,7 +13,9 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+
 import com.google.common.collect.ImmutableSet;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +38,7 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(RupContextUtils.class)
-public class UdmBaselineServeTest {
+public class UdmBaselineServiceTest {
 
     private final UdmBaselineService udmBaselineService = new UdmBaselineService();
     private IUdmBaselineRepository baselineRepository;
@@ -56,7 +58,7 @@ public class UdmBaselineServeTest {
     @Test
     public void testGetBaselineUsageDtos() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         List<UdmBaselineDto> udmBaselineDtos = Collections.singletonList(new UdmBaselineDto());
         expect(baselineRepository.findDtosByFilter(filter, null, null)).andReturn(udmBaselineDtos).once();
         replay(baselineRepository);
@@ -75,7 +77,7 @@ public class UdmBaselineServeTest {
     @Test
     public void testGetBaselineUsagesCount() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriod(202012);
+        filter.setPeriods(Collections.singleton(202012));
         expect(baselineRepository.findCountByFilter(filter)).andReturn(10).once();
         replay(baselineRepository);
         assertEquals(10, udmBaselineService.getBaselineUsagesCount(filter));

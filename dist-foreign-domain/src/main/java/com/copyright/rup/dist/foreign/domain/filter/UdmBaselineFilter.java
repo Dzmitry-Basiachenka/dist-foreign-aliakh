@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class UdmBaselineFilter {
 
-    private Integer period;
+    private Set<Integer> periods = new HashSet<>();
     private UdmChannelEnum channel;
     private UdmUsageOriginEnum udmUsageOrigin;
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
@@ -49,7 +49,7 @@ public class UdmBaselineFilter {
      */
     public UdmBaselineFilter(UdmBaselineFilter filter) {
         if (null != filter) {
-            setPeriod(filter.getPeriod());
+            setPeriods(filter.getPeriods());
             setUdmUsageOrigin(filter.getUdmUsageOrigin());
             setChannel(filter.getChannel());
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
@@ -63,12 +63,12 @@ public class UdmBaselineFilter {
         }
     }
 
-    public Integer getPeriod() {
-        return period;
+    public Set<Integer> getPeriods() {
+        return periods;
     }
 
-    public void setPeriod(Integer period) {
-        this.period = period;
+    public void setPeriods(Set<Integer> periods) {
+        this.periods = periods;
     }
 
     public UdmChannelEnum getChannel() {
@@ -155,8 +155,8 @@ public class UdmBaselineFilter {
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return null == udmUsageOrigin
-            && null == period
+        return CollectionUtils.isEmpty(periods)
+            && null == udmUsageOrigin
             && null == channel
             && null == wrWrkInst
             && null == systemTitle
@@ -178,7 +178,7 @@ public class UdmBaselineFilter {
         }
         UdmBaselineFilter that = (UdmBaselineFilter) obj;
         return new EqualsBuilder()
-            .append(period, that.period)
+            .append(periods, that.periods)
             .append(channel, that.channel)
             .append(udmUsageOrigin, that.udmUsageOrigin)
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
@@ -195,7 +195,7 @@ public class UdmBaselineFilter {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(period)
+            .append(periods)
             .append(channel)
             .append(udmUsageOrigin)
             .append(detailLicenseeClasses)
@@ -212,7 +212,7 @@ public class UdmBaselineFilter {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("period", period)
+            .append("periods", periods)
             .append("channel", channel)
             .append("udmUsageOrigin", udmUsageOrigin)
             .append("detailLicenseeClasses", detailLicenseeClasses)

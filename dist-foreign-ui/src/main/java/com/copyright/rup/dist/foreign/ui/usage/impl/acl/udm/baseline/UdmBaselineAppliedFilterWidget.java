@@ -35,7 +35,7 @@ public class UdmBaselineAppliedFilterWidget extends CommonUdmAppliedFilterPanel 
     public void refreshFilterPanel(UdmBaselineFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithSingleValue(UdmBaselineFilter::getPeriod, filter, "label.periods"), layout);
+            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getUdmUsageOrigin, filter, "label.usage_origin"),
                 layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getChannel, filter, "label.channel"), layout);

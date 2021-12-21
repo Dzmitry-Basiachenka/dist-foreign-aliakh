@@ -7,7 +7,9 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -34,7 +36,7 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
     private IUdmBaselineFilterController controller;
     private Button applyButton;
     private Button moreFiltersButton;
-    private ComboBox<Integer> periodComboBox;
+    private PeriodFilterWidget periodFilterWidget;
     private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
     private ComboBox<UdmChannelEnum> channelComboBox;
     private UdmBaselineFilter baselineFilter = new UdmBaselineFilter();
@@ -101,23 +103,21 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
     }
 
     private void refreshFilterValues() {
-        periodComboBox.setItems(controller.getPeriods());
         usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
         channelComboBox.setItems(UdmChannelEnum.values());
     }
 
     private void clearFilterValues() {
-        periodComboBox.clear();
+        periodFilterWidget.reset();
         usageOriginComboBox.clear();
         channelComboBox.clear();
     }
 
     private VerticalLayout initFiltersLayout() {
-        initPeriodFilter();
         initUsageOriginFilter();
         initChannelFilter();
         initMoreFiltersButton();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), periodComboBox,
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildPeriodFilter(),
             usageOriginComboBox, channelComboBox, moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
@@ -135,14 +135,14 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
         return horizontalLayout;
     }
 
-    private void initPeriodFilter() {
-        periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
-        VaadinUtils.setMaxComponentsWidth(periodComboBox);
-        periodComboBox.addValueChangeListener(event -> {
-            baselineFilter.setPeriod(periodComboBox.getValue());
+    private PeriodFilterWidget buildPeriodFilter() {
+        periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
+        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
+            baselineFilter.setPeriods(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
-        VaadinUtils.addComponentStyle(periodComboBox, "udm-baseline-period-filter");
+        VaadinUtils.addComponentStyle(periodFilterWidget, "udm-baseline-periods-filter");
+        return periodFilterWidget;
     }
 
     private void initUsageOriginFilter() {

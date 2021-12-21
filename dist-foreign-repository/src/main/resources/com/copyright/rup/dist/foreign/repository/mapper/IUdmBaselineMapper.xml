@@ -23,8 +23,11 @@
     </resultMap>
 
     <sql id="udmBaselineFilter">
-        <if test="null != filter.period">
-            and <![CDATA[u.period = #{filter.period}]]>
+        <if test="filter.periods.size() > 0">
+            and
+            <foreach collection="filter.periods" item="period" open="(" separator=" or " close=")">
+                u.period = #{period}
+            </foreach>
         </if>
         <if test="null != filter.channel">
             and ub.channel = #{filter.channel}

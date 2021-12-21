@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -25,6 +24,7 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -42,7 +42,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Verifies {@link UdmBaselineFilterWidget}.
@@ -57,35 +57,28 @@ import java.util.Collections;
 @PrepareForTest({Windows.class})
 public class UdmBaselineFilterWidgetTest {
 
-    private IUdmBaselineFilterController controller;
     private UdmBaselineFilterWidget widget;
 
     @Before
     public void setUp() {
-        controller = createMock(IUdmBaselineFilterController.class);
+        IUdmBaselineFilterController controller = createMock(IUdmBaselineFilterController.class);
         widget = new UdmBaselineFilterWidget(controller);
         widget.setController(controller);
     }
 
     @Test
     public void testInit() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        replay(controller);
         assertSame(widget, widget.init());
         assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
-        verify(controller);
     }
 
     @Test
     public void testApplyFilter() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
-        replay(controller);
         widget.init();
         widget.clearFilter();
-        verify(controller);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
@@ -102,8 +95,6 @@ public class UdmBaselineFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
-        replay(controller);
         widget.init();
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
@@ -117,20 +108,16 @@ public class UdmBaselineFilterWidgetTest {
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
-        ComboBox<?> periodComboBox = Whitebox.getInternalState(widget, "periodComboBox");
-        assertNull(periodComboBox.getValue());
-        verify(controller);
+        ComboBox<?> usageOriginComboBox = Whitebox.getInternalState(widget, "usageOriginComboBox");
+        assertNull(usageOriginComboBox.getValue());
     }
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        replay(controller);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.applyFilter();
-        verify(controller);
         assertFalse(applyButton.isEnabled());
     }
 
@@ -138,16 +125,15 @@ public class UdmBaselineFilterWidgetTest {
     public void verifyMoreFiltersButtonClickListener() {
         mockStatic(Windows.class);
         Button.ClickEvent clickEvent = createMock(Button.ClickEvent.class);
-        expect(controller.getPeriods()).andReturn(Collections.singletonList(202012)).once();
         Windows.showModalWindow(anyObject(UdmBaselineFiltersWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class, controller);
+        replay(clickEvent, Windows.class);
         widget.init();
         Button.ClickListener clickListener =
             (Button.ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
                 .getListeners(Button.ClickEvent.class).iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, controller);
+        verify(clickEvent, Windows.class);
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -155,7 +141,7 @@ public class UdmBaselineFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyComboBox(verticalLayout.getComponent(1), "Period", 202012);
+        verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
         verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", UdmUsageOriginEnum.values());
         verifyComboBox(verticalLayout.getComponent(3), "Channel", UdmChannelEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
@@ -166,6 +152,20 @@ public class UdmBaselineFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
+    }
+
+    private void verifyPeriodsFilterLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals("Periods", button.getCaption());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     @SuppressWarnings("unchecked")
