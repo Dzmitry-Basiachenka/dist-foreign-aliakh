@@ -17,14 +17,14 @@ import java.util.Set;
 public interface IUdmWeeklySurveyReportWidget extends IWidget<IUdmWeeklySurveyReportController> {
 
     /**
-     * @return set of channels.
+     * @return channel or {@code null}.
      */
-    Set<String> getChannels();
+    String getChannel();
 
     /**
-     * @return set of usage origins.
+     * @return usage origin or {@code null}.
      */
-    Set<String> getUsageOrigin();
+    String getUsageOrigin();
 
     /**
      * @return set of periods.

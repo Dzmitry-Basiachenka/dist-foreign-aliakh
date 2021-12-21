@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportWidget;
@@ -10,10 +12,12 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
+
 import com.vaadin.data.Binder;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -35,26 +39,29 @@ import java.util.Set;
 public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySurveyReportWidget {
 
     private IUdmWeeklySurveyReportController controller;
-    // TODO define the Channels, Usage Origins
+    private ComboBox<UdmChannelEnum> channelComboBox;
+    private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
     private PeriodFilterWidget periodFilterWidget;
     private LocalDateWidget dateReceivedFromWidget;
     private LocalDateWidget dateReceivedToWidget;
     private Binder<LocalDate> dateReceivedBinder;
     private Button exportButton;
-    private final Set<String> channels = new HashSet<>();
-    private final Set<String> usageOrigins = new HashSet<>();
+    private String channel;
+    private String usageOrigin;
     private final Set<Integer> periods = new HashSet<>();
 
     @Override
     @SuppressWarnings("unchecked")
     public IUdmWeeklySurveyReportWidget init() {
-        initFilters();
-        VerticalLayout content = new VerticalLayout(
-            // TODO add the Channels, Usage Origins
-            periodFilterWidget, dateReceivedFromWidget, dateReceivedToWidget, getButtonsLayout());
+        initChannelFilter();
+        initUsageOriginFilter();
+        initPeriodFilter();
+        initDateReceivedFilter();
+        VerticalLayout content = new VerticalLayout(channelComboBox, usageOriginComboBox, periodFilterWidget,
+            dateReceivedFromWidget, dateReceivedToWidget, getButtonsLayout());
         VaadinUtils.setMaxComponentsWidth(content);
         setContent(content);
-        setWidth(300, Unit.PIXELS);
+        setWidth(200, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "report-udm-weekly-survey-window");
         return this;
@@ -66,13 +73,13 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     }
 
     @Override
-    public Set<String> getChannels() {
-        return channels;
+    public String getChannel() {
+        return channel;
     }
 
     @Override
-    public Set<String> getUsageOrigin() {
-        return usageOrigins;
+    public String getUsageOrigin() {
+        return usageOrigin;
     }
 
     @Override
@@ -90,14 +97,38 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         return dateReceivedToWidget.getValue();
     }
 
-    private void initFilters() {
-        // TODO initialize the Channels, Usage Origins
+    private void initChannelFilter() {
+        channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
+        channelComboBox.setItems(UdmChannelEnum.values());
+        VaadinUtils.setMaxComponentsWidth(channelComboBox);
+        channelComboBox.addValueChangeListener(event -> {
+            channel = Objects.nonNull(channelComboBox.getValue())
+                ? channelComboBox.getValue().name() : null;
+        });
+        VaadinUtils.addComponentStyle(channelComboBox, "channel-filter");
+    }
+
+    private void initUsageOriginFilter() {
+        usageOriginComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
+        usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
+        VaadinUtils.setMaxComponentsWidth(usageOriginComboBox);
+        usageOriginComboBox.addValueChangeListener(event -> {
+            usageOrigin = Objects.nonNull(usageOriginComboBox.getValue())
+                ? usageOriginComboBox.getValue().name() : null;
+        });
+        VaadinUtils.addComponentStyle(usageOriginComboBox, "usage-origin-filter");
+    }
+
+    private void initPeriodFilter() {
         periodFilterWidget = new PeriodFilterWidget(controller::getAllPeriods);
         periodFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<Integer>) saveEvent -> {
             periods.clear();
             periods.addAll(saveEvent.getSelectedItemsIds());
             updateExportButtonState();
         });
+    }
+
+    private void initDateReceivedFilter() {
         dateReceivedBinder = new Binder<>();
         dateReceivedFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_from"));
         dateReceivedFromWidget.addValueChangeListener(event -> {
