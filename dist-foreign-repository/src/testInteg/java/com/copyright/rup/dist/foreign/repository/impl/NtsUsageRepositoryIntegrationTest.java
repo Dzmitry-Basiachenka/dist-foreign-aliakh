@@ -56,6 +56,7 @@ import java.util.stream.Collectors;
 )
 public class NtsUsageRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "nts-usage-repository-integration-test/";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
@@ -96,7 +97,7 @@ public class NtsUsageRepositoryIntegrationTest {
     private NtsUsageRepository ntsUsageRepository;
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-delete-from-scenario-by-rightsholder.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-from-scenario-by-rightsholder.groovy")
     public void testDeleteFromScenarioByRightsholder() {
         List<Usage> usageList = usageRepository.findByScenarioId(SCENARIO_ID_2);
         assertEquals(4, usageList.size());
@@ -126,7 +127,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-recalculate-amounts-from-excluded-rightshoders.groovy")
+    @TestData(fileName = FOLDER_NAME + "recalculate-amounts-from-excluded-rightshoders.groovy")
     public void testRecalculateAmountsFromExcludedRightshoders() {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID_3);
         assertEquals(3, usages.size());
@@ -166,7 +167,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-insert-usages.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-usages.groovy")
     public void testInsertUsages() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
@@ -184,7 +185,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-insert-usages.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-usages.groovy")
     public void testInsertUsagesZeroFundPoolAmount() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(BATCH_ID);
@@ -198,13 +199,13 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-find-count-for-batch.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-count-for-batch.groovy")
     public void testFindCountForBatch() {
         assertEquals(2, ntsUsageRepository.findCountForBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-find-unclassified-usages-count-by-wr-wrk-insts.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-unclassified-usages-count-by-wr-wrk-insts.groovy")
     public void testFindUnclassifiedUsagesCountByWrWrkInsts() {
         assertEquals(2,
             ntsUsageRepository.findUnclassifiedUsagesCountByWrWrkInsts(
@@ -214,8 +215,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(
-        fileName = "nts-usage-repository-test-data-init-calculate-amounts-and-update-payee-by-account-number.groovy")
+    @TestData(fileName = FOLDER_NAME + "calculate-amounts-and-update-payee-by-account-number.groovy")
     public void testCalculateAmountsAndUpdatePayeeByAccountNumber() {
         assertUsageAfterServiceFeeCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210",
             new BigDecimal("256.0000000000"), ZERO_AMOUNT, null,
@@ -240,7 +240,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-apply-post-service-fee-amount.groovy")
+    @TestData(fileName = FOLDER_NAME + "apply-post-service-fee-amount.groovy")
     public void testApplyPostServiceFeeAmount() {
         // Post Service Fee Amount = 100
         ntsUsageRepository.applyPostServiceFeeAmount("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
@@ -254,7 +254,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-delete-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-scenario-id.groovy")
     public void testDeleteByScenarioIdScenarioExcluded() {
         assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED).size());
         assertEquals(1, usageRepository.findReferencedUsagesCountByIds(USAGE_ID_4));
@@ -264,7 +264,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-delete-from-nts-fund-pool.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-from-nts-fund-pool.groovy")
     public void testDeleteFromNtsFundPool() {
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1));
@@ -279,7 +279,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-delete-belletristic-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-belletristic-by-scenario-id.groovy")
     public void testDeleteBelletristicByScenarioId() {
         String scenarioId = "dd4fca1d-eac8-4b76-85e4-121b7971d049";
         verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
@@ -291,7 +291,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-delete-from-scenario.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-from-scenario.groovy")
     public void testDeleteFromScenario() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_2, USAGE_ID_3));
         assertEquals(2, usages.size());
@@ -310,7 +310,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-update-usages-status-to-unclassified.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-usages-status-to-unclassified.groovy")
     public void testFindUsageIdsForClassificationUpdate() {
         List<String> actualUsageIds = ntsUsageRepository.findUsageIdsForClassificationUpdate();
         assertNotNull(actualUsageIds);
@@ -319,7 +319,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-update-usages-status-to-unclassified.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-usages-status-to-unclassified.groovy")
     public void testUpdateUsagesStatusToUnclassified() {
         ArrayList<String> usageIds = Lists.newArrayList(USAGE_ID_5, USAGE_ID_6);
         List<Usage> usages = usageRepository.findByIds(usageIds);
@@ -335,7 +335,7 @@ public class NtsUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "nts-usage-repository-test-data-init-add-withdrawn-usages-to-nts-fund-pool.groovy")
+    @TestData(fileName = FOLDER_NAME + "add-withdrawn-usages-to-nts-fund-pool.groovy")
     public void testAddWithdrawnUsagesToNtsFundPool() {
         List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
         List<Usage> usages = usageRepository.findByIds(usageIds);
