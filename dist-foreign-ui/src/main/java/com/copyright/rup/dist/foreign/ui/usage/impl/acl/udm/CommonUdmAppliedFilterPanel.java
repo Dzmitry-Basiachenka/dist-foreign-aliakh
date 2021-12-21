@@ -2,10 +2,14 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +30,16 @@ import java.util.stream.Collectors;
 public abstract class CommonUdmAppliedFilterPanel extends Panel {
 
     private static final String LIST_SEPARATOR = ", ";
+
+    /**
+     * Constructor.
+     */
+    public CommonUdmAppliedFilterPanel() {
+        setWidth(265, Unit.PIXELS);
+        setHeight(700, Unit.PIXELS);
+        setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        setSizeFull();
+    }
 
     /**
      * Creates label for filter field with single value.
@@ -86,6 +100,31 @@ public abstract class CommonUdmAppliedFilterPanel extends Panel {
             label.setValue(stringBuilder.toString());
         }
         return label;
+    }
+
+    /**
+     * Adds label to layout.
+     *
+     * @param label instance of {@link Label}
+     * @param verticalLayout instance of {@link VerticalLayout}
+     */
+    protected void addLabel(Label label, VerticalLayout verticalLayout) {
+        if (Objects.nonNull(label)) {
+            label.setStyleName("v-label-white-space-normal");
+            verticalLayout.addComponent(label);
+        }
+    }
+
+    /**
+     * Initialize layout.
+     *
+     * @return instance of {@link VerticalLayout}
+     */
+    protected VerticalLayout initLayout() {
+        VerticalLayout filtersPanelLayout = new VerticalLayout();
+        filtersPanelLayout.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.setMaxComponentsWidth(filtersPanelLayout);
+        return filtersPanelLayout;
     }
 
     private <T> String formatMultipleSelectToString(Collection<T> values, Function<T, String> formatFunction) {

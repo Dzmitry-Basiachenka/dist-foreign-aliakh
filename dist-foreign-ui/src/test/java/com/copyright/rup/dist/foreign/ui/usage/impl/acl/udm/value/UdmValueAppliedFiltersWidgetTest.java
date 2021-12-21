@@ -128,6 +128,7 @@ public class UdmValueAppliedFiltersWidgetTest {
 
     private PublicationType buildPubType() {
         PublicationType publicationType = new PublicationType();
+        publicationType.setId("ce650157-3dbf-4385-938c-f3f1e10f4577");
         publicationType.setName("BK");
         publicationType.setDescription("Book");
         return publicationType;
