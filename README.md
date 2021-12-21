@@ -1,3 +1,17 @@
+14.1.39
+-
+* B-69779 FDA: FDA & UDM: View filters improvements: implement applied filter panel for UDM values tab and fix display date on usage tab
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: hide UDM Reports tab after switching to another product family
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: add period filter widget
+* B-68617 FDA: Filter functionality modification - Part 2: apply SelectAll button to all multi-select filters
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement validation
+* B-69878 FDA & UDM: Delete usages from Baseline: implement backend logic to delete baseline usages
+* B-69779 FDA: FDA & UDM: View filters improvements: implement applied filter panel for UDM baseline tab
+* B-68617 FDA: Filter functionality modification - Part 2: replace period filter to multi-select period filter on Usages tab
+* B-70072 FDA: Tech Debt: move Liquibase scripts for repository integration tests into a separate folder
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: implement Channel, Usage Origin filters
+* B-69779 FDA: FDA & UDM: View filters improvements: implement applied filter panel for UDM baseline values
+
 14.1.38
 -
 * B-68257 [Value] FDA & UDM: View proxy values: make changes based on code review comments 
