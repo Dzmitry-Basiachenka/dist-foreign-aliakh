@@ -442,8 +442,8 @@ public class UdmValueFiltersWindow extends Window {
             } else {
                 Windows.showValidationErrorWindow(
                     Arrays.asList(wrWrkInstField, systemTitleField, systemStandardNumberField, rhAccountNumberField,
-                        rhNameField, priceField, priceInUsdField, lastPriceCommentField, contentField,
-                        lastContentCommentField, commentField));
+                        rhNameField, priceField, priceInUsdField, priceCommentField, lastPriceCommentField,
+                        contentField, contentCommentField, lastContentCommentField, commentField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -496,7 +496,6 @@ public class UdmValueFiltersWindow extends Window {
         valueFilter.setContentComment(null);
         valueFilter.setLastContentFlag(null);
         valueFilter.setLastContentComment(null);
-        valueFilter.setPubType(null);
         valueFilter.setLastPubType(null);
         valueFilter.setComment(null);
     }

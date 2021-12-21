@@ -227,8 +227,8 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPeriod(202106), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
-            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
@@ -322,7 +322,7 @@ public class UdmUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
-        assertFilteringFindCountByFilter(filter -> filter.setPeriod(202106), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 2);
         assertFilteringFindCountByFilter(
@@ -664,7 +664,7 @@ public class UdmUsageRepositoryIntegrationTest {
         usageDtos.forEach(usageDto -> assertFalse(usageDto.isBaselineFlag()));
         Set<String> udmUsageIds = udmUsageRepository.publishUdmUsagesToBaseline(202106, USER_NAME);
         assertEquals(1, udmUsageIds.size());
-        filter.setPeriod(202106);
+        filter.setPeriods(Collections.singleton(202106));
         assertEquals(1, udmUsageRepository.findDtosByFilter(filter, null, null)
             .stream()
             .filter(UdmUsageDto::isBaselineFlag)

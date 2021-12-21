@@ -50,7 +50,7 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(convertBatchIdsToBatchNames(filter.getUdmBatchesIds()),
                 "label.batches", String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getPeriod, filter, "label.periods"), layout);
+            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getUsageStatus, filter, "label.status"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getUdmUsageOrigin, filter, "label.usage_origin"),
                 layout);

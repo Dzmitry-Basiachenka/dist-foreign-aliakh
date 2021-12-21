@@ -68,14 +68,13 @@ public class UdmUsageFilterWidgetTest {
         UsageStatusEnum.RH_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.OPS_REVIEW,
         UsageStatusEnum.SPECIALIST_REVIEW, UsageStatusEnum.ELIGIBLE);
 
-    private IUdmUsageFilterController udmUsageFilterController;
     private UdmUsageFilterWidget widget;
     private UdmUsageAppliedFilterWidget appliedFilterWidget;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
-        udmUsageFilterController = createMock(IUdmUsageFilterController.class);
+        IUdmUsageFilterController udmUsageFilterController = createMock(IUdmUsageFilterController.class);
         appliedFilterWidget = createMock(UdmUsageAppliedFilterWidget.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         widget = new UdmUsageFilterWidget(udmUsageFilterController);
@@ -84,22 +83,18 @@ public class UdmUsageFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        replay(udmUsageFilterController);
         assertSame(widget, widget.init());
         assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
-        verify(udmUsageFilterController);
     }
 
     @Test
     public void testApplyFilter() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
         appliedFilterWidget.refreshFilterPanel(anyObject());
         expectLastCall();
-        replay(udmUsageFilterController, appliedFilterWidget, ForeignSecurityUtils.class);
+        replay(appliedFilterWidget, ForeignSecurityUtils.class);
         widget.init();
         widget.clearFilter();
         Whitebox.setInternalState(widget, appliedFilterWidget);
@@ -115,27 +110,25 @@ public class UdmUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().isEmpty());
-        verify(udmUsageFilterController, appliedFilterWidget, ForeignSecurityUtils.class);
+        verify(appliedFilterWidget, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
-        replay(udmUsageFilterController, ForeignSecurityUtils.class);
+        replay(ForeignSecurityUtils.class);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.applyFilter();
-        verify(udmUsageFilterController, ForeignSecurityUtils.class);
+        verify(ForeignSecurityUtils.class);
         assertFalse(applyButton.isEnabled());
     }
 
     @Test
     public void testClearFilter() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
         appliedFilterWidget.refreshFilterPanel(anyObject());
         expectLastCall().times(2);
-        replay(udmUsageFilterController,appliedFilterWidget, ForeignSecurityUtils.class);
+        replay(appliedFilterWidget, ForeignSecurityUtils.class);
         widget.init();
         Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
@@ -150,34 +143,32 @@ public class UdmUsageFilterWidgetTest {
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
-        ComboBox periodComboBox = Whitebox.getInternalState(widget, "periodComboBox");
-        assertNull(periodComboBox.getValue());
-        verify(udmUsageFilterController,appliedFilterWidget, ForeignSecurityUtils.class);
+        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "statusComboBox").getValue());
+        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "usageOriginComboBox").getValue());
+        verify(appliedFilterWidget, ForeignSecurityUtils.class);
     }
 
     @Test
     public void verifyMoreFiltersButtonClickListener() {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).times(2);
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Windows.showModalWindow(anyObject(UdmFiltersWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class, udmUsageFilterController, ForeignSecurityUtils.class);
+        replay(clickEvent, Windows.class, ForeignSecurityUtils.class);
         widget.init();
         ClickListener clickListener = (ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
             .getListeners(ClickEvent.class).iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, udmUsageFilterController, ForeignSecurityUtils.class);
+        verify(clickEvent, Windows.class, ForeignSecurityUtils.class);
     }
 
     @Test
     public void verifyApplyButtonClickListener() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
         appliedFilterWidget.refreshFilterPanel(anyObject());
         expectLastCall().times(1);
-        replay(udmUsageFilterController, appliedFilterWidget);
+        replay(appliedFilterWidget);
         widget.init();
         widget.clearFilter();
         Whitebox.setInternalState(widget, appliedFilterWidget);
@@ -186,22 +177,27 @@ public class UdmUsageFilterWidgetTest {
         assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
         assertTrue(widget.getFilter().getUdmBatchesIds().isEmpty());
         widget.getFilter().setUdmBatchesIds(Collections.singleton("87a2f5f4-5663-4ae7-8765-3515c2a82918"));
+        assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
+        assertTrue(widget.getFilter().getPeriods().isEmpty());
+        widget.getFilter().setPeriods(Collections.singleton(202106));
         assertNotEquals(widget.getFilter(), widget.getAppliedFilter());
         applyButton.setEnabled(true);
         assertTrue(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
         assertFalse(widget.getFilter().getUdmBatchesIds().isEmpty());
+        assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
+        assertFalse(widget.getFilter().getPeriods().isEmpty());
         assertTrue(applyButton.isEnabled());
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().getUdmBatchesIds().isEmpty());
-        verify(udmUsageFilterController, appliedFilterWidget);
+        assertFalse(widget.getAppliedFilter().getPeriods().isEmpty());
+        verify(appliedFilterWidget);
     }
 
     @Test
     public void verifyButtonClickListener() {
-        expect(udmUsageFilterController.getPeriods()).andReturn(Collections.singletonList(202012)).times(2);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        replay(clickEvent, udmUsageFilterController, ForeignSecurityUtils.class);
+        replay(clickEvent, ForeignSecurityUtils.class);
         widget.init();
         Button applyButton = getApplyButton();
         widget.getFilter().setUsageStatus(UsageStatusEnum.NEW);
@@ -212,7 +208,7 @@ public class UdmUsageFilterWidgetTest {
         clickListener.buttonClick(clickEvent);
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
-        verify(clickEvent, udmUsageFilterController, ForeignSecurityUtils.class);
+        verify(clickEvent, ForeignSecurityUtils.class);
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -221,7 +217,7 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(6, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyPeriodComboBox(verticalLayout.getComponent(2));
+        verifyPeriodsFilterLayout(verticalLayout.getComponent(2));
         verifyUsageStatusComboBox(verticalLayout.getComponent(3));
         verifyUsageOriginComboBox(verticalLayout.getComponent(4));
         verifyMoreFiltersButton(verticalLayout.getComponent(5));
@@ -248,16 +244,18 @@ public class UdmUsageFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyPeriodComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Period", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualPeriods = listDataProvider.getItems();
-        assertEquals(1, actualPeriods.size());
-        assertEquals(Collections.singletonList(202012), actualPeriods);
+    private void verifyPeriodsFilterLayout(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals("Periods", button.getCaption());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private void verifyUsageStatusComboBox(Component component) {

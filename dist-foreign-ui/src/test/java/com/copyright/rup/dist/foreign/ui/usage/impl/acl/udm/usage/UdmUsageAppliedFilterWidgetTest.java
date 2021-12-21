@@ -108,7 +108,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(new HashSet<>(
             Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df", "a8711022-8b30-4fa9-be39-c3e25378fd9a")));
-        filter.setPeriod(202106);
+        filter.setPeriods(Collections.singleton(202106));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setAssignees(Collections.singleton("user@copyright.com"));

@@ -210,7 +210,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void assignUsages() {
             UdmUsageFilter filter = new UdmUsageFilter();
-            filter.setPeriod(expectedUdmBatch.getPeriod());
+            filter.setPeriods(Collections.singleton(expectedUdmBatch.getPeriod()));
             filter.setUsageStatus(UsageStatusEnum.RH_FOUND);
             udmUsageDtos = udmUsageService.getUsageDtos(filter, null, null)
                 .stream()
