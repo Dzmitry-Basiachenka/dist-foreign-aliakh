@@ -68,12 +68,10 @@ import java.util.stream.IntStream;
 )
 public class UdmUsageRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
-        "udm-usage-repository-test-data-init-find-dtos-by-filter.groovy";
-    private static final String TEST_DATA_INIT_FIND_FIELDS =
-        "udm-usage-repository-test-data-init-find-fields.groovy";
-    private static final String TEST_DATA_INIT_FIND_BY_SEARCH_VALUE =
-        "udm-usage-repository-test-data-init-find-by-search-value.groovy";
+    private static final String FOLDER_NAME = "udm-usage-repository-integration-test/";
+    private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
+    private static final String FIND_FIELDS = FOLDER_NAME + "find-fields.groovy";
+    private static final String FIND_BY_SEARCH_VALUE = FOLDER_NAME + "find-by-search-value.groovy";
     private static final String UDM_USAGE_ORIGINAL_DETAIL_UID = "OGN674GHHSB0025";
     private static final String UDM_USAGE_UID_1 = "92cf072e-d6d7-4a23-9652-5ee7bca71313";
     private static final String UDM_USAGE_UID_2 = "0dfba00c-6d72-4a0e-8f84-f7c365432f85";
@@ -132,7 +130,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private IUdmUsageRepository udmUsageRepository;
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-insert.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
         UdmUsage usageToInsert = buildUdmUsage();
         udmUsageRepository.insert(usageToInsert);
@@ -144,7 +142,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-update.groovy")
+    @TestData(fileName = FOLDER_NAME + "update.groovy")
     public void testUpdate() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
@@ -177,7 +175,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-find-ids-by-status.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-ids-by-status.groovy")
     public void testFindIdsByStatus() {
         List<String> udmUsageIds = udmUsageRepository.findIdsByStatus(UsageStatusEnum.WORK_FOUND);
         assertEquals(2, udmUsageIds.size());
@@ -186,7 +184,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-find-by-ids.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-ids.groovy")
     public void testFindByIds() {
         UdmUsage usageToInsert = loadExpectedUsage("json/udm/udm_usage_587dfefd.json").get(0);
         List<UdmUsage> actualUsages =
@@ -196,7 +194,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
@@ -225,7 +223,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
@@ -320,7 +318,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
@@ -385,7 +383,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-is-original-detail-id-exist.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-original-detail-id-exist.groovy")
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_USAGE_UID_4, UDM_USAGE_UID_3, "detailId");
         assertSortingFindDtosByFilter(UDM_USAGE_UID_3, UDM_USAGE_UID_4, "period");
@@ -430,7 +428,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton(UDM_BATCH_UID_4));
@@ -457,14 +455,14 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-is-original-detail-id-exist.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-original-detail-id-exist.groovy")
     public void testIsOriginalDetailIdExist() {
         assertTrue(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB001"));
         assertFalse(udmUsageRepository.isOriginalDetailIdExist("OGN674GHHSB101"));
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-update-processed-usage.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-processed-usage.groovy")
     public void testUpdateProcessedUsage() {
         List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Collections.singletonList(UDM_USAGE_UID_2));
         assertEquals(1, CollectionUtils.size(udmUsages));
@@ -485,7 +483,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FIELDS)
+    @TestData(fileName = FIND_FIELDS)
     public void testFindPeriods() {
         List<Integer> expectedPeriods = Arrays.asList(202106, 202012, 202006);
         List<Integer> actualPeriods = udmUsageRepository.findPeriods();
@@ -494,26 +492,26 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FIELDS)
+    @TestData(fileName = FIND_FIELDS)
     public void testFindAssignees() {
         assertEquals(Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com"),
             udmUsageRepository.findAssignees());
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FIELDS)
+    @TestData(fileName = FIND_FIELDS)
     public void testFindPublicationTypes() {
         assertEquals(Arrays.asList("Book", PUB_TYPE_NOT_SHARED), udmUsageRepository.findPublicationTypes());
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_FIELDS)
+    @TestData(fileName = FIND_FIELDS)
     public void testFindPublicationFormats() {
         assertEquals(Arrays.asList("Digital", "Not Specified"), udmUsageRepository.findPublicationFormats());
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchByReportedTitle() {
         verifyFindBySearchValue("Brain surgery", UDM_USAGE_UID_8);
         verifyFindBySearchValue("ain surg", UDM_USAGE_UID_8);
@@ -525,7 +523,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchBySystemTitle() {
         verifyFindBySearchValue("Castanea and surgery. C, Biointerfaces", UDM_USAGE_UID_8);
         verifyFindBySearchValue("Castanea an", UDM_USAGE_UID_8);
@@ -537,7 +535,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchByUsageDetailId() {
         verifyFindBySearchValue("OGN674GHHSB0110", UDM_USAGE_UID_8);
         verifyFindBySearchValue("OGN674GHHSB011", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
@@ -548,7 +546,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchByStandardNumber() {
         verifyFindBySearchValue("100891123776UXX", UDM_USAGE_UID_8);
         verifyFindBySearchValue("23776UXX", UDM_USAGE_UID_8);
@@ -560,7 +558,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchByArticle() {
         verifyFindBySearchValue("Appendix: The Principles of Newspeak", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
         verifyFindBySearchValue("Appendix: The", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
@@ -572,7 +570,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchBySurveyRespondent() {
         verifyFindBySearchValue("c986xxxx-19c3-4530-8ffc-zzzzzz000000", UDM_USAGE_UID_8);
         verifyFindBySearchValue("c986xxxx-19c3-4530-8ffc", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
@@ -584,7 +582,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BY_SEARCH_VALUE)
+    @TestData(fileName = FIND_BY_SEARCH_VALUE)
     public void testSearchByComment() {
         verifyFindBySearchValue("UDM search comment 1", UDM_USAGE_UID_8);
         verifyFindBySearchValue("UDM searc", UDM_USAGE_UID_8, UDM_USAGE_UID_9);
@@ -596,7 +594,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-update-status-by-ids.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-status-by-ids.groovy")
     public void testUpdateStatusByIds() {
         List<UdmUsage> udmUsages = udmUsageRepository.findByIds(Arrays.asList(UDM_USAGE_UID_10, UDM_USAGE_UID_11));
         assertEquals(2, udmUsages.size());
@@ -619,7 +617,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-delete-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton("2e92041d-42d1-44f2-b6bd-2e6e8a131831"));
@@ -629,7 +627,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-update-assignee.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-assignee.groovy")
     public void testUpdateAssignee() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setSearchValue("OGN674GHHHB0117");
@@ -642,7 +640,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-update-assignee.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-assignee.groovy")
     public void testUpdateAssigneeToNull() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setSearchValue("OGN674GHHHB0116");
@@ -655,7 +653,7 @@ public class UdmUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-repository-test-data-init-publish-udm-usages-to-baseline.groovy")
+    @TestData(fileName = FOLDER_NAME + "publish-udm-usages-to-baseline.groovy")
     public void testPublishUdmUsageToBaseline() {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(Collections.singleton("9608ee69-ea5d-4a80-b31d-399514a4f51e"));
