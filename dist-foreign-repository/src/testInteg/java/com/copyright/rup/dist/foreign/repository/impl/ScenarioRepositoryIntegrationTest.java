@@ -71,6 +71,7 @@ import java.util.stream.IntStream;
 )
 public class ScenarioRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "scenario-repository-integration-test/";
     private static final String SCENARIO_NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
@@ -112,7 +113,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-by-product-family.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-product-family.groovy")
     public void testFindByProductFamily() {
         List<Scenario> fasScenarios = scenarioRepository.findByProductFamily(FAS_PRODUCT_FAMILY);
         assertEquals(2, fasScenarios.size());
@@ -133,7 +134,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-by-product-families-and-statuses.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-product-families-and-statuses.groovy")
     public void testFindByProductFamiliesAndStatuses() {
         List<Scenario> scenarios =
             scenarioRepository.findByProductFamiliesAndStatuses(Sets.newHashSet(NTS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
@@ -150,7 +151,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-fas.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action-fas.groovy")
     public void testFindWithAmountsAndLastActionForFasScenario() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_2);
         verifyScenario(scenario, SCENARIO_ID_2, "Scenario name 9",
@@ -174,7 +175,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-fas.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action-fas.groovy")
     public void testFindArchivedWithAmountsAndLastActionForFasScenario() {
         Scenario scenario =
             scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_5);
@@ -190,7 +191,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-with-amounts-and-last-action-nts.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action-nts.groovy")
     public void testFindWithAmountsAndLastActionForNtsScenario() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID_3);
         verifyScenario(scenario, SCENARIO_ID_3, "Rejected NTS scenario with audit",
@@ -220,7 +221,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-archived-with-amounts-and-last-action-nts.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-archived-with-amounts-and-last-action-nts.groovy")
     public void testFindArchivedWithAmountsAndLastActionForNtsScenario() {
         Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_4);
         verifyScenario(scenario, SCENARIO_ID_4, SENT_TO_LM_AUDIT, "The description of scenario 8", NTS_PRODUCT_FAMILY,
@@ -241,7 +242,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchId() {
         List<String> scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
@@ -255,7 +256,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchIdForArchiveUsage() {
         List<String> scenariosNames =
             scenarioRepository.findNamesByUsageBatchId("56282cac-2468-48d4-b346-93d3458a656a");
@@ -265,7 +266,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-names-by-usage-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-names-by-usage-batch-id.groovy")
     public void testFindNamesByUsageBatchIdAssociatedWithFilterOnly() {
         List<String> scenariosNames =
             scenarioRepository.findNamesByUsageBatchId("4eff2685-4895-45a1-a886-c41a0f98204b");
@@ -275,7 +276,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-nts-fund-pool-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-name-by-nts-fund-pool-id.groovy")
     public void testFindNameByNtsFundPoolId() {
         assertEquals(SENT_TO_LM_AUDIT,
             scenarioRepository.findNameByNtsFundPoolId("815d6736-a34e-4fc8-96c3-662a114fa7f2"));
@@ -283,7 +284,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-aacl-fund-pool-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-name-by-aacl-fund-pool-id.groovy")
     public void testFindNameByAaclFundPoolId() {
         assertEquals("AACL Scenario 1",
             scenarioRepository.findNameByAaclFundPoolId("39548ee4-7929-477e-b9d2-bcb1e76f8037"));
@@ -291,7 +292,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-name-by-sal-fund-pool-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-name-by-sal-fund-pool-id.groovy")
     public void testFindNameBySalFundPoolId() {
         assertEquals("SAL Scenario 1",
             scenarioRepository.findNameBySalFundPoolId("462111b6-5d30-4a43-a35b-14796d34d847"));
@@ -308,7 +309,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-update-status.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-status.groovy")
     public void testUpdateStatus() {
         Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_6);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
@@ -324,7 +325,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-update-name-by-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "update-name-by-id.groovy")
     public void testUpdateNameById() {
         Scenario scenario = scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID_6);
         assertEquals("Scenario name 3", scenario.getName());
@@ -339,7 +340,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-source-rros.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-source-rros.groovy")
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario());
         fasUsageRepository.insert(buildUsage());
@@ -361,7 +362,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-rightsholders-by-scenario-id-and-source-rro.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-rightsholders-by-scenario-id-and-source-rro.groovy")
     public void testFindRightsholdersByScenarioIdAndSourceRro() {
         scenarioRepository.insert(buildScenario());
         // build one usage with different pair of rh and payee
@@ -395,7 +396,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-find-ids-for-archiving.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-ids-for-archiving.groovy")
     public void testFindIdsForArchiving() {
         List<String> scenariosIds = scenarioRepository.findIdsForArchiving();
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
@@ -404,7 +405,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-insert-aacl-scenario.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-aacl-scenario.groovy")
     public void testInsertAaclScenario() {
         Scenario scenario = buildScenario();
         scenario.setProductFamily(AACL_PRODUCT_FAMILY);
@@ -456,7 +457,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-repository-test-data-init-insert-nts-scenario-and-add-usages.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-nts-scenario-and-add-usages.groovy")
     public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario();
         NtsFields ntsFields = new NtsFields();
