@@ -78,9 +78,9 @@
                 sum(case when reported_title = 'None' then 0 else 1 end) as number_of_usable_rows,
                 count(distinct survey_respondent) as number_of_registered_users,
                 sum(case when survey_respondent is not null then 1 else 0 end) as number_of_rows_by_registered_users,
-                sum(case when survey_respondent is not null and reported_title != 'None' then 1 else 0 end) as number_of_usable_rows_by_registered_users,
+                sum(case when survey_respondent is not null and (reported_title != 'None' or reported_title is null) then 1 else 0 end) as number_of_usable_rows_by_registered_users,
                 sum(case when survey_respondent is null then 1 else 0 end) as number_of_rows_by_unregistered_users,
-                sum(case when survey_respondent is null and reported_title != 'None' then 1 else 0 end) as number_of_usable_rows_by_unregistered_users
+                sum(case when survey_respondent is null and (reported_title != 'None' or reported_title is null) then 1 else 0 end) as number_of_usable_rows_by_unregistered_users
             from ${schema}.df_udm_usage u
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
