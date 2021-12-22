@@ -76,12 +76,12 @@ public class UdmBaselineValueFiltersWindow extends Window {
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final Binder<UdmBaselineValueFilter> filterBinder = new Binder<>();
-    private UdmBaselineValueFilter baselineValueFilter;
+    private final UdmBaselineValueFilter baselineValueFilter;
 
     /**
      * Constructor.
      *
-     * @param filter     instance of {@link UdmBaselineValueFilter}
+     * @param filter instance of {@link UdmBaselineValueFilter}
      */
     public UdmBaselineValueFiltersWindow(UdmBaselineValueFilter filter) {
         this.baselineValueFilter = filter;
@@ -277,10 +277,7 @@ public class UdmBaselineValueFiltersWindow extends Window {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             try {
-                UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
-                udmBaselineValueFilter.setPeriods(this.baselineValueFilter.getPeriods());
-                filterBinder.writeBean(udmBaselineValueFilter);
-                this.baselineValueFilter = udmBaselineValueFilter;
+                filterBinder.writeBean(baselineValueFilter);
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(

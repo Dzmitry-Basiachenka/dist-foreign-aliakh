@@ -105,7 +105,7 @@ public abstract class CommonUdmAppliedFilterPanel extends Panel {
     /**
      * Adds label to layout.
      *
-     * @param label instance of {@link Label}
+     * @param label          instance of {@link Label}
      * @param verticalLayout instance of {@link VerticalLayout}
      */
     protected void addLabel(Label label, VerticalLayout verticalLayout) {

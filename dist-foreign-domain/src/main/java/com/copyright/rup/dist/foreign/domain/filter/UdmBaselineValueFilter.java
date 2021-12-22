@@ -49,11 +49,11 @@ public class UdmBaselineValueFilter {
             setWrWrkInst(filter.getWrWrkInst());
             setSystemTitleExpression(filter.getSystemTitleExpression());
             setPubType(filter.getPubType());
-            setPriceExpression(filter.getPriceExpression());
+            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
             setPriceFlag(filter.getPriceFlag());
-            setContentExpression(filter.getContentExpression());
+            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentFlag(filter.getContentFlag());
-            setContentUnitPriceExpression(filter.getContentUnitPriceExpression());
+            setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
             setComment(filter.getComment());
         }
     }
