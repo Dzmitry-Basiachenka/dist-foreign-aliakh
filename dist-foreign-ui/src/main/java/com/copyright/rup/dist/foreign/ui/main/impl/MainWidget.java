@@ -35,7 +35,9 @@ import com.vaadin.ui.TabSheet;
  */
 public class MainWidget extends TabSheet implements IMainWidget {
 
-    private static final String UDM_REPORT_MENU_CSS_POSITION = "left: 540px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 415px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 540px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 415px; top: 29px;";
 
     private IMainWidgetController controller;
 
@@ -77,9 +79,15 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void updateProductFamily() {
         udmTab.setVisible(udmWidget.updateProductFamily());
-        if (udmTab.isVisible() && ForeignSecurityUtils.hasSpecialistPermission()) {
+        if (udmTab.isVisible()) {
             udmReportWidget = controller.getUdmReportController().initWidget();
-            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION);
+            if (ForeignSecurityUtils.hasManagerPermission()) {
+                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_MANAGER);
+            } else if (ForeignSecurityUtils.hasSpecialistPermission()) {
+                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_SPECIALIST);
+            } else if (ForeignSecurityUtils.hasViewOnlyPermission()) {
+                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY);
+            }
         } else {
             if (null != udmReportWidget) {
                 getAbsoluteLayout().removeComponent(udmReportWidget);

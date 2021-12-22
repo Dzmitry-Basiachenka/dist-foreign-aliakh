@@ -4,12 +4,14 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
@@ -18,9 +20,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import com.vaadin.server.DownloadStream;
-import com.vaadin.server.Page;
-import com.vaadin.server.ResourceReference;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar.MenuItem;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -47,7 +46,7 @@ import java.util.function.Supplier;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Windows.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class UdmReportWidgetTest {
 
     private UdmReportWidget udmReportWidget;
@@ -55,10 +54,8 @@ public class UdmReportWidgetTest {
 
     @Before
     public void setUp() {
-        mockStatic(Page.class);
         mockStatic(Windows.class);
-        mockStatic(VaadinSession.class);
-        mockStatic(ResourceReference.class);
+        mockStatic(ForeignSecurityUtils.class);
         udmReportController = createMock(IUdmReportController.class);
         udmReportWidget = new UdmReportWidget();
         udmReportWidget.setController(udmReportController);
@@ -66,6 +63,7 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testInit() {
+        setSpecialistExpectations();
         replayAll();
         udmReportWidget.init();
         assertEquals("reports-menu", udmReportWidget.getStyleName());
@@ -73,7 +71,36 @@ public class UdmReportWidgetTest {
     }
 
     @Test
-    public void testRefresh() {
+    public void testRefreshSpecialist() {
+        setSpecialistExpectations();
+        replayAll();
+        udmReportWidget.refresh();
+        verifyAll();
+        assertReportsMenu();
+    }
+
+    @Test
+    public void testRefreshManager() {
+        setManagerExpectations();
+        replayAll();
+        udmReportWidget.refresh();
+        verifyAll();
+        assertReportsMenu();
+    }
+
+    @Test
+    public void testRefreshResearcher() {
+        setResearcherExpectations();
+        replayAll();
+        udmReportWidget.refresh();
+        verifyAll();
+        assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
+        assertNull(udmReportWidget.getItems().get(0).getChildren());
+    }
+
+    @Test
+    public void testRefreshViewOnly() {
+        setViewOnlyExpectations();
         replayAll();
         udmReportWidget.refresh();
         verifyAll();
@@ -82,6 +109,7 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testUdmWeeklySurveyReportSelected() {
+        setSpecialistExpectations();
         IUdmWeeklySurveyReportController controller = createMock(IUdmWeeklySurveyReportController.class);
         expect(udmReportController.getUdmWeeklySurveyReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(new UdmWeeklySurveyReportWidget()).once();
@@ -94,6 +122,7 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testOpenReportWindow() throws Exception {
+        setSpecialistExpectations();
         mockStatic(Windows.class);
         IController controller = createMock(IController.class);
         UdmWeeklySurveyReportWidget widget = createMock(UdmWeeklySurveyReportWidget.class);
@@ -109,6 +138,7 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testReportStreamSource() {
+        setSpecialistExpectations();
         String fileName = "weekly_survey_report_01_02_2021_03_04.csv";
         InputStream is = createMock(InputStream.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
@@ -137,5 +167,29 @@ public class UdmReportWidgetTest {
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
         assertEquals(1, menuItems.size());
         assertEquals("Weekly Survey Report", menuItems.get(0).getText());
+    }
+
+    private void setSpecialistExpectations() {
+        setPermissionsExpectations(true, false, false, false);
+    }
+
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true, false, false);
+    }
+
+    private void setResearcherExpectations() {
+        setPermissionsExpectations(false, false, true, false);
+    }
+
+    private void setViewOnlyExpectations() {
+        setPermissionsExpectations(false, false, false, true);
+    }
+
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isResearcher,
+                                            boolean isViewOnly) {
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(isResearcher);
+        expect(ForeignSecurityUtils.hasViewOnlyPermission()).andStubReturn(isViewOnly);
     }
 }

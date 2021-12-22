@@ -201,4 +201,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasSpecialistPermission() {
         return SecurityUtils.hasPermission("FDA_SPECIALIST_PERMISSION");
     }
+
+    /**
+     * @return {@code true} if user has view only permission, {@code false} - otherwise.
+     */
+    public static boolean hasViewOnlyPermission() {
+        return SecurityUtils.hasPermission("FDA_VIEW_ONLY_PERMISSION");
+    }
 }
