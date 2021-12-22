@@ -51,7 +51,8 @@ import java.util.stream.Collectors;
 )
 public class RightsholderRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND = "rightsholder-repository-test-data-init-find.groovy";
+    private static final String FOLDER_NAME = "rightsholder-repository-integration-test/";
+    private static final String FIND = FOLDER_NAME + "find.groovy";
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
     private static final String RH_NAME_7000813806 =
         "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
@@ -65,7 +66,7 @@ public class RightsholderRepositoryIntegrationTest {
     private RightsholderRepository rightsholderRepository;
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-rh-payee-pair-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-rh-payee-pair-by-scenario-id.groovy")
     public void testFindRhPayeePairByScenarioId() {
         Usage expectedUsage1 = buildUsage();
         Usage expectedUsage2 = buildUsage();
@@ -101,7 +102,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND)
+    @TestData(fileName = FIND)
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
         assertEquals(10, accountNumbers.size());
@@ -110,7 +111,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-delete.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete.groovy")
     public void testDeleteAll() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
         assertEquals(2, rightsholders.size());
@@ -120,7 +121,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-delete.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete.groovy")
     public void testDeleteByAccountNumber() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
         assertEquals(2, rightsholders.size());
@@ -133,7 +134,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND)
+    @TestData(fileName = FIND)
     public void testFindRros() {
         List<Rightsholder> rros = rightsholderRepository.findRros(FAS_PRODUCT_FAMILY);
         assertNotNull(rros);
@@ -151,7 +152,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND)
+    @TestData(fileName = FIND)
     public void testFindRightsholdersByAccountNumbers() {
         List<Rightsholder> actualResult = rightsholderRepository.findByAccountNumbers(
             Sets.newHashSet(7000813806L, 2000017004L));
@@ -165,13 +166,13 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND)
+    @TestData(fileName = FIND)
     public void testFindByAccountNumbersEmptyResult() {
         assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Sets.newHashSet(1111111111L))));
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-all-with-search.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-all-with-search.groovy")
     public void testFindAllWithSearch() {
         List<Rightsholder> rightsholders =
             rightsholderRepository.findAllWithSearch(null, null, null);
@@ -190,7 +191,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-all-with-search.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-all-with-search.groovy")
     public void testFindCountWithSearch() {
         assertEquals(7, rightsholderRepository.findCountWithSearch(StringUtils.EMPTY));
         assertEquals(7, rightsholderRepository.findCountWithSearch(null));
@@ -199,7 +200,7 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rightsholder-repository-test-data-init-find-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id.groovy")
     public void testFindByScenarioId() {
         List<Rightsholder> rightsholders =
             rightsholderRepository.findByScenarioId("d7e9bae8-6b10-4675-9668-8e3605a47dad");
