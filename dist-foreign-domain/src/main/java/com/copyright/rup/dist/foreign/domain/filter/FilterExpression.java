@@ -39,6 +39,15 @@ public class FilterExpression<T> {
         this.fieldSecondValue = fieldSecondValue;
     }
 
+    /**
+     * @param expression base filter expression
+     */
+    public FilterExpression(FilterExpression<T> expression) {
+        this.operator = expression.getOperator();
+        this.fieldFirstValue = expression.getFieldFirstValue();
+        this.fieldSecondValue = expression.getFieldSecondValue();
+    }
+
     public FilterOperatorEnum getOperator() {
         return operator;
     }

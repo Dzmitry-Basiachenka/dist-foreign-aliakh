@@ -123,10 +123,7 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
         pubTypeComboBox.setItems(controller.getPublicationTypes());
         pubTypeComboBox.setPageLength(11);
         pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
-        pubTypeComboBox.addValueChangeListener(event -> {
-            udmBaselineValueFilter.setPubType(pubTypeComboBox.getValue());
-            filterChanged();
-        });
+        pubTypeComboBox.addValueChangeListener(event -> filterChanged());
         VaadinUtils.setMaxComponentsWidth(pubTypeComboBox);
         VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-baseline-value-pub-type-filter");
     }
