@@ -91,11 +91,16 @@ public abstract class CommonUdmAppliedFilterPanel extends Panel {
         Label label = null;
         StringBuilder stringBuilder = new StringBuilder();
         if (!expression.isEmpty()) {
-            stringBuilder.append(formatLabel(filterFromLabel, expression.getFieldFirstValue()));
+            stringBuilder.append(
+                Objects.isNull(expression.getFieldFirstValue())
+                    ? formatLabel(filterFromLabel, expression.getOperator())
+                    : formatLabel(filterFromLabel, expression.getFieldFirstValue()));
             if (Objects.nonNull(expression.getFieldSecondValue())) {
                 stringBuilder.append(formatLabel(filterToLabel, expression.getFieldSecondValue()));
             }
-            stringBuilder.append(formatLabel("label.operator", expression.getOperator()));
+            if (Objects.nonNull(expression.getFieldFirstValue())) {
+                stringBuilder.append(formatLabel("label.operator", expression.getOperator()));
+            }
             label = new Label(StringUtils.EMPTY, ContentMode.HTML);
             label.setValue(stringBuilder.toString());
         }
