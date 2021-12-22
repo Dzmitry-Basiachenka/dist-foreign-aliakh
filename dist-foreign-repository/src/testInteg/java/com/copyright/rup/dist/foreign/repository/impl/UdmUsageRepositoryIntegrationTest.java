@@ -97,7 +97,13 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String PUBLICATION_FORMAT = "Digital";
     private static final String ARTICLE = "Green chemistry";
     private static final String LANGUAGE = "English";
+    private static final String LANGUAGE_DIFFERENT_CASE = "EngLISH";
+    private static final String LANGUAGE_FRAGMENT = "EnG";
+    private static final String LANGUAGE_WITH_METASYMBOLS = "EngLISH !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String SURVEY_COUNTRY = "United States";
+    private static final String SURVEY_COUNTRY_DIFFERENT_CASE = "UnITed StaTES";
+    private static final String SURVEY_COUNTRY_FRAGMENT = "Ted StaT";
+    private static final String SURVEY_COUNTRY_WITH_METASUMBOLS = "PortuGAL !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final LocalDate PERIOD_END_DATE = LocalDate.of(2021, 12, 31);
     private static final LocalDate USAGE_DATE = LocalDate.of(2020, 12, 12);
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
@@ -106,6 +112,9 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME_1 = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String COMPANY_NAME_2 = "Albany International Corp.";
+    private static final String COMPANY_NAME_2_DIFFERENT_CASE = "AlbanY IntErNationAL CoRP.";
+    private static final String COMPANY_NAME_2_FRAGMENT = "AlbanY IntEr";
+    private static final String COMPANY_NAME_WITH_METASYMBOLS = "AlcoN LabORAtorIEs, Inc. !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final Long QUANTITY = 10L;
     private static final Integer ANNUAL_MULTIPLIER = 1;
     private static final BigDecimal STATISTICAL_MULTIPLIER = new BigDecimal("1.00000");
@@ -261,13 +270,31 @@ public class UdmUsageRepositoryIntegrationTest {
         }, UDM_USAGE_UID_5, UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT));
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASUMBOLS),
             UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_DIFFERENT_CASE), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT));
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_DIFFERENT_CASE), UDM_USAGE_UID_5,
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_FRAGMENT));
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS),
+            UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setCompanyId(1136L), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(254327612L), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
             UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWithOperators() {
         assertFilteringFindDtosByFilter(filter ->
                 filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
@@ -344,10 +371,24 @@ public class UdmUsageRepositoryIntegrationTest {
             filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         }, 2);
         assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASUMBOLS), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_DIFFERENT_CASE), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_DIFFERENT_CASE), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_FRAGMENT), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCompanyId(1136L), 2);
         assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(254327612L), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWithOperators() {
         assertFilteringFindCountByFilter(filter ->
             filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)), 2);
         assertFilteringFindCountByFilter(filter ->
