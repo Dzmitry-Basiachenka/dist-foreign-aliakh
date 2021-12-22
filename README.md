@@ -1,3 +1,19 @@
+14.1.40
+-
+* B-70072 FDA: Tech Debt: move Liquibase scripts for SalUsageRepositoryIntegrationTest into a separate folder
+* B-70072 FDA: Tech Debt: move Liquibase scripts for FundPoolRepositoryIntegrationTest into a separate folder
+* Revving up build version and update release notes for 14.1.39 version
+* B-68617 FDA: Filter functionality modification - Part 2: replace period filter to multi-select period filter on Baseline tab
+* B-70072 FDA: Tech Debt: move Liquibase scripts for ScenarioRepositoryIntegrationTest into a separate folder
+* B-70072 FDA: Tech Debt: move Liquibase scripts for RightsholderRepositoryIntegrationTest, RightsholderDiscrepancyRepositoryIntegrationTest into separate folders
+* B-70072 FDA: Tech Debt: move Liquibase scripts for ScenarioAuditRepositoryIntegrationTest, ScenarioUsageFilterRepositoryIntegrationTest into separate folders
+* B-70072 FDA: Tech Debt: move Liquibase scripts for UdmUsageRepositoryIntegrationTest into a separate folder
+* B-70072 FDA: Tech Debt: move Liquibase scripts for UdmValueRepositoryIntegrationTest into a separate folder
+* CDP-1033 FDA: ACL: Baseline Values: applied ‘Pub Type’ filter is ignored when applying additional filters
+* B-70072 FDA: Tech Debt: move Liquibase scripts for UsageBatchStatusRepositoryIntegrationTest, WorkClassificationRepositoryIntegrationTest into separate folders
+* B-68617 FDA: Filter functionality modification - Part 2: apply case insensitive find of records for Usage filters
+* B-69779 FDA: FDA & UDM: View filters improvements: fix display of filter fields with IS_NULL operator
+
 14.1.39
 -
 * B-69779 FDA: FDA & UDM: View filters improvements: implement applied filter panel for UDM values tab and fix display date on usage tab
