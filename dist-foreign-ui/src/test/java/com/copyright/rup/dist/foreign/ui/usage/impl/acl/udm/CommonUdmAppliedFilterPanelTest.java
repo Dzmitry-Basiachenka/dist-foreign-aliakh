@@ -78,6 +78,15 @@ public class CommonUdmAppliedFilterPanelTest {
         verifyLabel(actualLabel);
     }
 
+    @Test
+    public void testCreateLabelWithOperatorIsNull() {
+        expectedLabel.setValue("<li><b><i>Price: </i></b>IS_NULL</li>");
+        FilterExpression<Number> filterExpression = new FilterExpression<>();
+        filterExpression.setOperator(FilterOperatorEnum.IS_NULL);
+        Label actualLabel = filterPanel.createLabelWithOperator(filterExpression, "label.price", StringUtils.EMPTY);
+        verifyLabel(actualLabel);
+    }
+
     private void verifyLabel(Label actualLabel) {
         assertNotNull(actualLabel);
         assertEquals(expectedLabel.getValue(), actualLabel.getValue());
