@@ -40,6 +40,7 @@ import java.util.Set;
 )
 public class ScenarioUsageFilterRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "scenario-usage-filter-repository-integration-test/";
     private static final String SCENARIO_ID = "2bb64bac-8526-438c-8676-974dd9305bac";
     private static final String FILTER_ID = RupPersistUtils.generateUuid();
     private static final String PRODUCT_FAMILY = "FAS";
@@ -54,7 +55,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     private IScenarioUsageFilterRepository scenarioUsageFilterRepository;
 
     @Test
-    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-insert.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);
@@ -65,7 +66,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-find-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id.groovy")
     public void testFindByScenarioId() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);
@@ -80,7 +81,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "scenario-usage-filter-repository-test-data-init-find-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         ScenarioUsageFilter actualUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insert(actualUsageFilter);
