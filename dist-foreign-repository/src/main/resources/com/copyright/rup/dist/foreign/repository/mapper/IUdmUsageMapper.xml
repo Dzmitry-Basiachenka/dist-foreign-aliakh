@@ -154,13 +154,13 @@
                 and <![CDATA[u.survey_start_date::date <= #{filter.surveyStartDateTo}]]>
             </if>
             <if test="null != filter.surveyCountry">
-                and u.survey_country = #{filter.surveyCountry}
+                and u.survey_country ilike #{filter.surveyCountry}
             </if>
             <if test="null != filter.language">
-                and u.language = #{filter.language}
+                and u.language ilike #{filter.language}
             </if>
             <if test="null != filter.companyName">
-                and u.company_name = #{filter.companyName}
+                and u.company_name ilike #{filter.companyName}
             </if>
             <if test="null != filter.companyId">
                 and u.company_id = #{filter.companyId}
