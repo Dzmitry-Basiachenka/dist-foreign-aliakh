@@ -48,6 +48,7 @@ import java.util.stream.IntStream;
 )
 public class WorkClassificationRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "work-classification-repository-integration-test/";
     private static final String BATCH_UID = "e17ebc80-e74e-436d-ba6e-acf3d355b7ff";
     private static final String NON_STM = "NON-STM";
     private static final String STM = "STM";
@@ -59,19 +60,19 @@ public class WorkClassificationRepositoryIntegrationTest {
     private WorkClassificationRepository workClassificationRepository;
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-classification-by-work.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-classification-by-work.groovy")
     public void testFindClassificationByWrWrkInst() {
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-classification-by-missing-work.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-classification-by-missing-work.groovy")
     public void testFindClassificationByWrWrkInstWithNoClassification() {
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-insert-or-update-existing-classification.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-or-update-existing-classification.groovy")
     public void testInsertOrUpdateWithExistingClassification() {
         WorkClassification classification = buildClassification(BELLETRISTIC, WR_WRK_INST_1);
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
@@ -82,7 +83,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-insert-or-update-with-new-classification.groovy")
+    @TestData(fileName = FOLDER_NAME + "insert-or-update-with-new-classification.groovy")
     public void testInsertOrUpdateWithNewClassification() {
         WorkClassification classification = buildClassification(STM, WR_WRK_INST_2);
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
@@ -93,7 +94,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-delete-by-work.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-work.groovy")
     public void testDeleteByWrWkrInst() {
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
@@ -103,7 +104,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-by-batch-ids.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-batch-ids.groovy")
     public void testFindByBatchIds() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_batch_ids.json");
@@ -114,7 +115,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-by-batch-ids.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-batch-ids.groovy")
     public void testFindCountByBatchIds() {
         assertEquals(3,
             workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY));
@@ -125,7 +126,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-by-search.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-search.groovy")
     public void testFindBySearch() throws IOException {
         List<WorkClassification> expectedClassifications =
             loadExpectedClassifications("json/work_classifications_find_by_search.json");
@@ -137,7 +138,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "work-classification-repository-test-find-by-search.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-search.groovy")
     public void testFindCountBySearch() {
         assertEquals(5, workClassificationRepository.findCountBySearch(StringUtils.EMPTY));
         assertEquals(1, workClassificationRepository.findCountBySearch("243904752"));
