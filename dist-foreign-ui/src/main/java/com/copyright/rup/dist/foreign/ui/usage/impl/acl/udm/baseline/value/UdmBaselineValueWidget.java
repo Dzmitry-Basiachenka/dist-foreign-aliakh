@@ -89,6 +89,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
     private void addColumns() {
         FooterRow footer = udmBaselineValueGrid.appendFooterRow();
         udmBaselineValueGrid.setFooterVisible(true);
+        //TODO  should be value_id as sort property
         Column<UdmValueBaselineDto, ?> column = udmBaselineValueGrid.addColumn(UdmValueBaselineDto::getId)
             .setCaption(ForeignUi.getMessage("table.column.value_id"))
             .setId("detailId")
