@@ -16,6 +16,10 @@ public enum FilterOperatorEnum {
      */
     EQUALS(1),
     /**
+     * 'Does Not Equals' filter operator.
+     */
+    DOES_NOT_EQUALS(1),
+    /**
      * 'Greater than' filter operator.
      */
     GREATER_THAN(1),

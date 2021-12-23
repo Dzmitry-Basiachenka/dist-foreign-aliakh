@@ -251,7 +251,7 @@
                 </choose>
             </if>
             <if test="!filter.priceExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="v.price"/>
                     <property name="operator" value="filter.priceExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.priceExpression.fieldFirstValue}"/>
@@ -259,7 +259,7 @@
                 </include>
             </if>
             <if test="!filter.priceInUsdExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="v.price_in_usd"/>
                     <property name="operator" value="filter.priceInUsdExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.priceInUsdExpression.fieldFirstValue}"/>
@@ -276,7 +276,7 @@
                 and last_value.last_price_flag = #{filter.lastPriceFlag}
             </if>
             <if test="!filter.contentExpression.isEmpty()">
-                <include refid="IUdmValueMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="content"/>
                     <property name="operator" value="filter.contentExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.contentExpression.fieldFirstValue}"/>
@@ -293,33 +293,6 @@
                 and last_value.last_content_flag = #{filter.lastContentFlag}
             </if>
         </where>
-    </sql>
-
-    <sql id="filterExpression">
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
-            and ${column} &lt; ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN_OR_EQUALS_TO == ${operator}">
-            and ${column} &lt;= ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
-            and ${column} &gt; ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN_OR_EQUALS_TO == ${operator}">
-            and ${column} &gt;= ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
-            and ${column} = '${fieldFirstValue}'
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
-            and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
-            and ${column} is null
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NOT_NULL == ${operator}">
-            and ${column} is not null
-        </if>
     </sql>
 
     <sql id="chooseSortProperty">
