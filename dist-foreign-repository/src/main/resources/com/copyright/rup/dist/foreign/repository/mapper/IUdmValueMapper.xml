@@ -223,7 +223,7 @@
             <if test="!filter.systemTitleExpression.isEmpty()">
                 <choose>
                     <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemTitleExpression.operator">
-                        and v.system_title = #{filter.systemTitleExpression.fieldFirstValue}
+                        and v.system_title ilike #{filter.systemTitleExpression.fieldFirstValue}
                     </when>
                     <otherwise>
                         and v.system_title ilike '%' || #{filter.systemTitleExpression.fieldFirstValue} || '%'
@@ -233,7 +233,7 @@
             <if test="!filter.systemStandardNumberExpression.isEmpty()">
                 <choose>
                     <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemStandardNumberExpression.operator">
-                        and v.standard_number = #{filter.systemStandardNumberExpression.fieldFirstValue}
+                        and v.standard_number ilike #{filter.systemStandardNumberExpression.fieldFirstValue}
                     </when>
                     <otherwise>
                         and v.standard_number ilike '%' || #{filter.systemStandardNumberExpression.fieldFirstValue} || '%'
@@ -243,7 +243,7 @@
             <if test="!filter.rhNameExpression.isEmpty()">
                 <choose>
                     <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.rhNameExpression.operator">
-                        and r.name = #{filter.rhNameExpression.fieldFirstValue}
+                        and r.name ilike #{filter.rhNameExpression.fieldFirstValue}
                     </when>
                     <otherwise>
                         and r.name ilike '%' || #{filter.rhNameExpression.fieldFirstValue} || '%'
