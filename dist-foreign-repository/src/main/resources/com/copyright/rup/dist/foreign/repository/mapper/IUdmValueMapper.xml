@@ -324,8 +324,8 @@
 
     <sql id="chooseSortProperty">
         <choose>
-            <when test="sort.property == 'detailId'">
-                df_udm_value_uid <include refid="IUsageMapper.direction"/>
+            <when test="sort.property == 'valueId'">
+                v.df_udm_value_uid <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'valuePeriod'">
                 period <include refid="IUsageMapper.direction"/>

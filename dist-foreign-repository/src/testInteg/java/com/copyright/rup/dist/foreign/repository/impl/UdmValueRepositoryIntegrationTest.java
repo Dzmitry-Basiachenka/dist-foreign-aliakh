@@ -482,7 +482,7 @@ public class UdmValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
-        assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "detailId");
+        assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "valueId");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "valuePeriod");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "assignee");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "status");
@@ -663,19 +663,18 @@ public class UdmValueRepositoryIntegrationTest {
         assertEquals(count, usagesCount);
     }
 
-    private void assertSortingFindDtosByFilter(String detailIdAsc, String detailIdDesc, String sortProperty) {
+    private void assertSortingFindDtosByFilter(String valueIdAsc, String valueIdDesc, String sortProperty) {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setAssignees(new HashSet<>(Arrays.asList("djohn@copyright.com", "ejohn@copyright.com")));
         List<UdmValueDto> usageDtos =
             udmValueRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.ASC));
-        assertEquals(detailIdAsc, usageDtos.get(0).getId());
-        usageDtos =
-            udmValueRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.DESC));
-        assertEquals(detailIdDesc, usageDtos.get(0).getId());
+        assertEquals(valueIdAsc, usageDtos.get(0).getId());
+        usageDtos = udmValueRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Direction.DESC));
+        assertEquals(valueIdDesc, usageDtos.get(0).getId());
     }
 
     private Sort buildSort() {
-        return new Sort("detailId", Sort.Direction.ASC);
+        return new Sort("valueId", Sort.Direction.ASC);
     }
 
     private UdmValue buildUdmValue() {
