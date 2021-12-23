@@ -123,7 +123,10 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
         pubTypeComboBox.setItems(controller.getPublicationTypes());
         pubTypeComboBox.setPageLength(11);
         pubTypeComboBox.setItemCaptionGenerator(PublicationType::getNameAndDescription);
-        pubTypeComboBox.addValueChangeListener(event -> filterChanged());
+        pubTypeComboBox.addValueChangeListener(event -> {
+            udmBaselineValueFilter.setPubType(pubTypeComboBox.getValue());
+            filterChanged();
+        });
         VaadinUtils.setMaxComponentsWidth(pubTypeComboBox);
         VaadinUtils.addComponentStyle(pubTypeComboBox, "udm-baseline-value-pub-type-filter");
     }
@@ -135,10 +138,7 @@ public class UdmBaselineValueFilterWidget extends VerticalLayout implements IUdm
             UdmBaselineValueFiltersWindow udmValueFiltersWindow =
                 new UdmBaselineValueFiltersWindow(udmBaselineValueFilter);
             Windows.showModalWindow(udmValueFiltersWindow);
-            udmValueFiltersWindow.addCloseListener(closeEvent -> {
-                udmBaselineValueFilter = udmValueFiltersWindow.getBaselineValueFilter();
-                filterChanged();
-            });
+            udmValueFiltersWindow.addCloseListener(closeEvent -> filterChanged());
         });
     }
 
