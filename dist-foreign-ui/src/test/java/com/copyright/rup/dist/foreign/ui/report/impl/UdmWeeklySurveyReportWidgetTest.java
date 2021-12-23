@@ -65,38 +65,39 @@ public class UdmWeeklySurveyReportWidgetTest {
 
     @Test
     public void testInit() {
-        verifyWindow(widget, StringUtils.EMPTY, 200, -1, Sizeable.Unit.PIXELS);
+        verifyWindow(widget, StringUtils.EMPTY, 300, -1, Sizeable.Unit.PIXELS);
         assertEquals("report-udm-weekly-survey-window", widget.getStyleName());
         assertEquals("report-udm-weekly-survey-window", widget.getId());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
-        assertEquals(6, content.getComponentCount());
-        verifyComboBox(content.getComponent(0), "Channel", UdmChannelEnum.values());
-        verifyComboBox(content.getComponent(1), "Usage Origin", UdmUsageOriginEnum.values());
-        Component periods = content.getComponent(2);
+        assertEquals(5, content.getComponentCount());
+        Component periods = content.getComponent(0);
         assertEquals(PeriodFilterWidget.class, periods.getClass());
-        verifyItemsFilterWidget(content.getComponent(2), "Periods");
-        Component dateReceivedFrom = content.getComponent(3);
+        verifyItemsFilterWidget(content.getComponent(0), "Periods");
+        HorizontalLayout multiFiltersLayout = (HorizontalLayout) content.getComponent(1);
+        verifyComboBox(multiFiltersLayout.getComponent(0), "Channel", UdmChannelEnum.values());
+        verifyComboBox(multiFiltersLayout.getComponent(1), "Usage Origin", UdmUsageOriginEnum.values());
+        Component dateReceivedFrom = content.getComponent(2);
         assertEquals(LocalDateWidget.class, dateReceivedFrom.getClass());
         assertEquals("Date Received From", dateReceivedFrom.getCaption());
-        Component dateReceivedTo = content.getComponent(4);
+        Component dateReceivedTo = content.getComponent(3);
         assertEquals(LocalDateWidget.class, dateReceivedTo.getClass());
         assertEquals("Date Received To", dateReceivedTo.getCaption());
-        verifyButtonsLayout(content.getComponent(5), "Export", "Close");
+        verifyButtonsLayout(content.getComponent(4), "Export", "Close");
     }
 
     @Test
     public void testGetChannel() {
-        String channel = UdmChannelEnum.CCC.name();
-        Whitebox.setInternalState(widget, "channel", channel);
-        assertEquals(channel, widget.getChannel());
+        ComboBox<UdmChannelEnum> channelComboBox = Whitebox.getInternalState(widget, "channelComboBox");
+        channelComboBox.setSelectedItem(UdmChannelEnum.CCC);
+        assertEquals("CCC", widget.getChannel());
     }
 
     @Test
     public void testGetUsageOrigin() {
-        String usageOrigin = UdmUsageOriginEnum.RFA.name();
-        Whitebox.setInternalState(widget, "usageOrigin", usageOrigin);
-        assertEquals(usageOrigin, widget.getUsageOrigin());
+        ComboBox<UdmUsageOriginEnum> usageOriginComboBox = Whitebox.getInternalState(widget, "usageOriginComboBox");
+        usageOriginComboBox.setSelectedItem(UdmUsageOriginEnum.RFA);
+        assertEquals("RFA", widget.getUsageOrigin());
     }
 
     @Test

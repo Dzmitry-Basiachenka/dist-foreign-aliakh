@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -46,24 +45,15 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     private LocalDateWidget dateReceivedToWidget;
     private Binder<LocalDate> dateReceivedBinder;
     private Button exportButton;
-    private String channel;
-    private String usageOrigin;
     private final Set<Integer> periods = new HashSet<>();
 
     @Override
     @SuppressWarnings("unchecked")
     public IUdmWeeklySurveyReportWidget init() {
-        initChannelFilter();
-        initUsageOriginFilter();
-        initPeriodFilter();
-        initDateReceivedFilter();
-        VerticalLayout content = new VerticalLayout(channelComboBox, usageOriginComboBox, periodFilterWidget,
-            dateReceivedFromWidget, dateReceivedToWidget, getButtonsLayout());
-        VaadinUtils.setMaxComponentsWidth(content);
-        setContent(content);
-        setWidth(200, Unit.PIXELS);
+        setWidth(300, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "report-udm-weekly-survey-window");
+        initContent();
         return this;
     }
 
@@ -74,12 +64,12 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
 
     @Override
     public String getChannel() {
-        return channel;
+        return Objects.nonNull(channelComboBox.getValue()) ? channelComboBox.getValue().name() : null;
     }
 
     @Override
     public String getUsageOrigin() {
-        return usageOrigin;
+        return Objects.nonNull(usageOriginComboBox.getValue()) ? usageOriginComboBox.getValue().name() : null;
     }
 
     @Override
@@ -97,14 +87,23 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         return dateReceivedToWidget.getValue();
     }
 
+    private void initContent() {
+        initChannelFilter();
+        initUsageOriginFilter();
+        initPeriodFilter();
+        initDateReceivedFilter();
+        HorizontalLayout multipleFiltersLayout = new HorizontalLayout(channelComboBox, usageOriginComboBox);
+        multipleFiltersLayout.setSizeFull();
+        VerticalLayout content = new VerticalLayout(periodFilterWidget, multipleFiltersLayout, dateReceivedFromWidget,
+            dateReceivedToWidget, getButtonsLayout());
+        setContent(content);
+        VaadinUtils.setMaxComponentsWidth(content);
+    }
+
     private void initChannelFilter() {
         channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
         channelComboBox.setItems(UdmChannelEnum.values());
         VaadinUtils.setMaxComponentsWidth(channelComboBox);
-        channelComboBox.addValueChangeListener(event -> {
-            channel = Objects.nonNull(channelComboBox.getValue())
-                ? channelComboBox.getValue().name() : null;
-        });
         VaadinUtils.addComponentStyle(channelComboBox, "channel-filter");
     }
 
@@ -112,10 +111,6 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         usageOriginComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
         usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
         VaadinUtils.setMaxComponentsWidth(usageOriginComboBox);
-        usageOriginComboBox.addValueChangeListener(event -> {
-            usageOrigin = Objects.nonNull(usageOriginComboBox.getValue())
-                ? usageOriginComboBox.getValue().name() : null;
-        });
         VaadinUtils.addComponentStyle(usageOriginComboBox, "usage-origin-filter");
     }
 
@@ -163,7 +158,6 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
         HorizontalLayout layout = new HorizontalLayout(exportButton, closeButton);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
         layout.setComponentAlignment(exportButton, Alignment.MIDDLE_LEFT);
-        layout.setMargin(new MarginInfo(true, false, false, false));
         layout.setSizeFull();
         return layout;
     }
