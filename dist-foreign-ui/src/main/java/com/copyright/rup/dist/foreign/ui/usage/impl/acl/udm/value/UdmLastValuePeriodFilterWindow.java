@@ -6,7 +6,10 @@ import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
 import com.vaadin.data.ValueProvider;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents filter window for UDM last value periods.
@@ -34,11 +37,13 @@ public class UdmLastValuePeriodFilterWindow extends UdmCommonFilterWindow<String
 
     @Override
     protected void selectAll() {
-        getFilterItems().forEach(item -> {
-            if (!item.equals(FilterOperatorEnum.IS_NULL.name())
-                && !item.equals(FilterOperatorEnum.IS_NOT_NULL.name())) {
-                getCheckBoxGroup().select(item);
-            }
-        });
+        Set<String> items = getSelectedItemsIds();
+        if (!items.contains(FilterOperatorEnum.IS_NULL.name())
+            && !items.contains(FilterOperatorEnum.IS_NOT_NULL.name())) {
+            getFilterItems()
+                .stream()
+                .filter(NumberUtils::isDigits)
+                .forEach(item -> getCheckBoxGroup().select(item));
+        }
     }
 }

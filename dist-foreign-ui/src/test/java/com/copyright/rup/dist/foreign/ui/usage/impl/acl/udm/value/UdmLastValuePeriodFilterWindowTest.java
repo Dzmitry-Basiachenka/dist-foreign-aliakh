@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UdmLastValuePeriodFilterWindow}.
@@ -46,6 +47,9 @@ import java.util.List;
 public class UdmLastValuePeriodFilterWindowTest {
 
     private static final String UNCHECKED = "unchecked";
+    private static final String IS_NULL = "IS_NULL";
+    private static final String IS_NOT_NULL = "IS_NOT_NULL";
+    private static final Set<String> EXPECTED_FILTER_ITEMS = ImmutableSet.of("202112", "202206");
 
     private UdmLastValuePeriodFilterWindow filterWindow;
 
@@ -53,8 +57,7 @@ public class UdmLastValuePeriodFilterWindowTest {
     @SuppressWarnings(UNCHECKED)
     public void setUp() {
         IFilterWindowController<String> controllerMock = createMock(IFilterWindowController.class);
-        expect(controllerMock.loadBeans()).andReturn(
-            Arrays.asList("202112", "202206", "IS_NULL", "IS_NOT_NULL")).once();
+        expect(controllerMock.loadBeans()).andReturn(Arrays.asList("202112", "202206", IS_NULL, IS_NOT_NULL)).once();
         replay(controllerMock);
         filterWindow = new UdmLastValuePeriodFilterWindow("Filter window", controllerMock,
             (ValueProvider<String, List<String>>) bean -> Collections.singletonList(bean.toString()));
@@ -80,16 +83,17 @@ public class UdmLastValuePeriodFilterWindowTest {
     @Test
     public void testGetSelectedItemsIds() {
         assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
-        ImmutableSet<String> selectedItemsIds = ImmutableSet.of("202112", "202206");
-        filterWindow.setSelectedItemsIds(selectedItemsIds);
-        assertEquals(selectedItemsIds, filterWindow.getSelectedItemsIds());
+        filterWindow.setSelectedItemsIds(EXPECTED_FILTER_ITEMS);
+        assertEquals(EXPECTED_FILTER_ITEMS, filterWindow.getSelectedItemsIds());
     }
 
     @Test
     public void testSelectAll() {
         assertTrue(filterWindow.getSelectedItemsIds().isEmpty());
-        filterWindow.selectAll();
-        assertEquals(ImmutableSet.of("202112", "202206"), filterWindow.getSelectedItemsIds());
+        validateFilterItems(Collections.singleton(IS_NULL), Collections.singleton(IS_NULL));
+        validateFilterItems(Collections.singleton(IS_NOT_NULL), Collections.singleton(IS_NOT_NULL));
+        validateFilterItems(Collections.singleton("202112"), EXPECTED_FILTER_ITEMS);
+        validateFilterItems(Collections.emptySet(), EXPECTED_FILTER_ITEMS);
     }
 
     @Test
@@ -110,5 +114,11 @@ public class UdmLastValuePeriodFilterWindowTest {
         assertNull(optionGroup.getCaption());
         assertFalse(iterator.hasNext());
         assertNull(((ListDataProvider<String>) optionGroup.getDataProvider()).getFilter());
+    }
+
+    private void validateFilterItems(Set<String> actualItems, Set<String> expectedItems) {
+        filterWindow.setSelectedItemsIds(actualItems);
+        filterWindow.selectAll();
+        assertEquals(expectedItems, filterWindow.getSelectedItemsIds());
     }
 }

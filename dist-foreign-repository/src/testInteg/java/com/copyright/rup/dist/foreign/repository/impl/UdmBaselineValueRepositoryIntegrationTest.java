@@ -63,6 +63,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
 
     private static final String SYSTEM_TITLE = "Malcolm Gruel Jr";
     private static final String PART_SYSTEM_TITLE = "ruel";
+    private static final String SYSTEM_TITLE_DIFFERENT_CASE = "MalcoLM GRueL JR";
     private static final String SYSTEM_TITLE_WITH_METASYMBOLS =
         "Colloids and  libero !@#$%^&*()_+-=?/\\'\"}{][<>convallis. B, Biointerfaces";
     private static final BigDecimal PRICE = new BigDecimal("50.0000000000");
@@ -70,6 +71,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
     private static final String NEWSPAPER = "Newspaper";
     private static final String COMMENT_FRAGMENT = "ommen";
+    private static final String COMMENT_WITH_METASYMBOLS = "Comment !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -147,10 +149,16 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PART_SYSTEM_TITLE, null)));
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
-                new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
             UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
-                new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
             UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.CONTAINS, PART_SYSTEM_TITLE, null)), UDM_BASELINE_VALUE_UID_2);
@@ -161,10 +169,10 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(false), UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceExpression(
-                new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("60.0000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("60.0000000000"), null)),
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceExpression(
-                new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("55.2000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("55.2000000000"), null)),
             UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null)), UDM_BASELINE_VALUE_UID_2);
@@ -172,10 +180,10 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("45.0000000000"),
                 new BigDecimal("55.0000000000"))), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
-                new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("3.1000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("3.1000000000"), null)),
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
-                new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("4.0000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("4.0000000000"), null)),
             UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null)), UDM_BASELINE_VALUE_UID_2);
@@ -183,10 +191,10 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("1.0000000000"),
                 new BigDecimal("3.0000000000"))), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
-                new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("10.0000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("10.0000000000"), null)),
             UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
-                new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("22.1000000000"), null)),
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, new BigDecimal("22.1000000000"), null)),
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null)), UDM_BASELINE_VALUE_UID_2);
@@ -195,6 +203,8 @@ public class UdmBaselineValueRepositoryIntegrationTest {
                 new BigDecimal("41.0000000000"))), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_BASELINE_VALUE_UID_2,
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_WITH_METASYMBOLS),
+            UDM_BASELINE_VALUE_UID_3);
     }
 
     @Test
@@ -206,6 +216,10 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PART_SYSTEM_TITLE, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
@@ -244,6 +258,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("22.0000000000"),
                 new BigDecimal("41.0000000000"))), 1);
         assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_WITH_METASYMBOLS), 1);
     }
 
     @Test
@@ -259,7 +274,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "content");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "contentFlag");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_2, "contentUnitPrice");
-        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_2, "comment");
+        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "comment");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "updateDate");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "updateUser");
     }
