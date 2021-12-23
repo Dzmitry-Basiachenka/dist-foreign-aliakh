@@ -65,15 +65,26 @@ public class UdmBaselineRepositoryIntegrationTest {
         "udm-baseline-repository-test-data-init-find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
     private static final String SURVEY_COUNTRY = "Portugal";
+    private static final String SURVEY_COUNTRY_FRAGMENT = "Portu";
+    private static final String SURVEY_COUNTRY_DIFFERENT_CASE = "PoRtUgaL";
+    private static final String SURVEY_COUNTRY_WITH_METASYMBOLS = "Portugal !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String TYPE_OF_USE_1 = "EMAIL_COPY";
     private static final String TYPE_OF_USE_2 = "PRINT_COPIES";
     private static final String USAGE_DETAIL_ID_1 = "OGN554GHHSG008";
+    private static final String USAGE_DETAIL_ID_1_FRAGMENT = "HSG008";
+    private static final String USAGE_DETAIL_ID_1_DIFFERENT_CASE = "Ogn554GHhSg008";
     private static final String USAGE_DETAIL_ID_2 = "OGN554GHHSG777";
+    private static final String USAGE_DETAIL_ID_3_WITH_METASYMBOLS = "OGN554GHHSG010 !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String SYSTEM_TITLE_1 = "Colloids and surfaces. B, Biointerfaces";
+    private static final String SYSTEM_TITLE_1_FRAGMENT = "Colloids and surfaces. B,";
+    private static final String SYSTEM_TITLE_1_DIFFERENT_CASE = "ColLoIds aND SurfaceS. B, BiointerfacES";
     private static final String SYSTEM_TITLE_2 = "Colloids and surfaces. C, Biointerfaces";
+    private static final String SYSTEM_TITLE_3_WITH_METASYMBOLS =
+        "Colloids and surfaces. B, Biointerfaces !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String USAGE_ID_1 = "4a1522d3-9dfe-4884-b314-cd6f87922936";
     private static final String USAGE_ID_2 = "1a1522d3-9dfe-4884-58aa-caaf8792112c";
     private static final String USAGE_ID_3 = "771522d3-ccfe-2189-b314-cd6f87ab6689";
+    private static final String USAGE_ID_4 = "5c795dfc-94fb-4296-997c-6f36e0a673dc";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Autowired
@@ -102,22 +113,31 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
-        verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 2);
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), 2);
         verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASYMBOLS), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry("USA"), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_FRAGMENT), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_DIFFERENT_CASE), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setWrWrkInst(20008506L), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setWrWrkInst(20008506L), 2);
         verifyFilteringFindCountByFilter(filter -> filter.setWrWrkInst(20008525L), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_FRAGMENT), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_DIFFERENT_CASE), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2), 0);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 1);
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
         verifyFilteringFindCountByFilter(filter ->
             filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 0);
         verifyFilteringFindCountByFilter(filter ->
@@ -152,23 +172,35 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
-        verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1, USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect));
-        verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), USAGE_ID_1,
+            USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA));
         verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)),
             USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)));
         verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASYMBOLS), USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry("USA"));
         verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_FRAGMENT));
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_DIFFERENT_CASE),
+            USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS),
+            USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2));
-        verifyFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(20008506L), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(20008506L), USAGE_ID_1, USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(20008525L));
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_FRAGMENT));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_DIFFERENT_CASE), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2));
         verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1);
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1, USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter ->
             filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)));
         verifyFilteringFindDtosByFilter(filter ->
