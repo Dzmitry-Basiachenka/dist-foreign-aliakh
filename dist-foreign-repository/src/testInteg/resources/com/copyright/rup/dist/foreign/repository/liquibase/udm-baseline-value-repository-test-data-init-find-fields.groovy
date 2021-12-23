@@ -144,7 +144,7 @@ databaseChangeLog {
             column(name: 'content_flag', value: false)
             column(name: 'content_unit_price', value: 20)
             column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
-            column(name: 'comment', value: 'Comment')
+            column(name: 'comment', value: 'Comment !@#$%^&*()_+-=?/\\\'"}{][<>')
             column(name: 'updated_datetime', value: '2021-09-12T00:00:00-04:00')
             column(name: 'updated_by_user', value: '1user@copyright.com')
             column(name: 'created_datetime', value: '12021-09-11T00:00:00-04:00')

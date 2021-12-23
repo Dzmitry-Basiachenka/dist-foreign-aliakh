@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
-import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository;
 
@@ -61,7 +60,6 @@ public class UdmBaselineValueRepository extends BaseRepository implements IUdmBa
     private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
         FilterExpression<String> filterExpression) {
         return Objects.nonNull(filterExpression.getOperator())
-            && filterExpression.getOperator().equals(FilterOperatorEnum.CONTAINS)
             ? new FilterExpression<>(filterExpression.getOperator(),
             escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue())
             : filterExpression;
