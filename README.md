@@ -1,3 +1,15 @@
+14.1.41
+-
+* B-67668 FDA: 'By Date Received' Survey Report by Date Range: refactor main report window
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: adjust visibility of the tab and the menu item
+* B-68617 FDA: Filter functionality modification - Part 2: apply case-insensitive find of records for Value filters
+* CDP-1034  FDA: Weekly Survey Report: '# of usable rows reported by registered users' and '# of usable rows reported by unregistered users' columns don't comprise rows with Reported Title = NULL
+* B-69779 FDA: FDA & UDM: View filters improvements: fix Pub Type filter on Baseline Values tab
+* B-68617 FDA: Filter functionality modification - Part 2: apply case-insensitive find of records for Baseline filters
+* B-67668 FDA: "By Date Received" Survey Report by Date Range: make changes based on comments in code review
+* CDP-1035 FDA: ACL: UDM Values: exception occurs when sorting Value ID column
+* B-68617 FDA: Filter functionality modification - Part 2: apply case-insensitive find of records for Baseline Values filters
+
 14.1.40
 -
 * B-70072 FDA: Tech Debt: move Liquibase scripts for SalUsageRepositoryIntegrationTest into a separate folder
