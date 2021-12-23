@@ -53,20 +53,17 @@
                 u.reported_type_of_use = #{reportedTypeOfUse}
             </foreach>
         </if>
-        <if test="null != filter.surveyCountry">
-            and u.survey_country = #{filter.surveyCountry}
-        </if>
         <if test="null != filter.wrWrkInst">
             and u.wr_wrk_inst = #{filter.wrWrkInst}
         </if>
         <if test="null != filter.systemTitle">
-            and u.system_title = #{filter.systemTitle}
+            and u.system_title ilike #{filter.systemTitle}
         </if>
         <if test="null != filter.surveyCountry">
-            and u.survey_country = #{filter.surveyCountry}
+            and u.survey_country ilike #{filter.surveyCountry}
         </if>
         <if test="null != filter.usageDetailId">
-            and u.original_detail_id = #{filter.usageDetailId}
+            and u.original_detail_id ilike #{filter.usageDetailId}
         </if>
         <if test="!filter.annualizedCopiesExpression.isEmpty()">
             <include refid="IUdmUsageMapper.filterExpression">

@@ -39,7 +39,7 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     @Override
     public List<UdmBaselineDto> findDtosByFilter(UdmBaselineFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUdmBaselineMapper.findDtosByFilter", parameters);
@@ -48,7 +48,7 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     @Override
     public int findCountByFilter(UdmBaselineFilter filter) {
         return selectOne("IUdmBaselineMapper.findCountByFilter",
-            ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+            ImmutableMap.of(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter))));
     }
 
     @Override
@@ -78,5 +78,13 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     @Override
     public void removeUdmUsageFromBaselineById(String udmUsageId) {
         update("IUdmBaselineMapper.removeUdmUsageFromBaselineById", Objects.requireNonNull(udmUsageId));
+    }
+
+    private UdmBaselineFilter escapeSqlLikePattern(UdmBaselineFilter udmBaselineFilter) {
+        UdmBaselineFilter filterCopy = new UdmBaselineFilter(udmBaselineFilter);
+        filterCopy.setSystemTitle(escapeSqlLikePattern(filterCopy.getSystemTitle()));
+        filterCopy.setUsageDetailId(escapeSqlLikePattern(filterCopy.getUsageDetailId()));
+        filterCopy.setSurveyCountry(escapeSqlLikePattern(filterCopy.getSurveyCountry()));
+        return filterCopy;
     }
 }
