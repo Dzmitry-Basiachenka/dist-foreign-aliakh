@@ -5,8 +5,6 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
-import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
@@ -18,10 +16,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.RootWidget;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
-import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -35,10 +31,6 @@ import com.vaadin.ui.TabSheet;
  */
 public class MainWidget extends TabSheet implements IMainWidget {
 
-    private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 415px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 540px; top: 29px;";
-    private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 415px; top: 29px;";
-
     private IMainWidgetController controller;
 
     private SwitchableWidget<IUdmWidget, IUdmController> udmWidget;
@@ -48,7 +40,6 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
 
     private Tab udmTab;
-    private IUdmReportWidget udmReportWidget;
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
@@ -79,20 +70,6 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void updateProductFamily() {
         udmTab.setVisible(udmWidget.updateProductFamily());
-        if (udmTab.isVisible()) {
-            udmReportWidget = controller.getUdmReportController().initWidget();
-            if (ForeignSecurityUtils.hasManagerPermission()) {
-                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_MANAGER);
-            } else if (ForeignSecurityUtils.hasSpecialistPermission()) {
-                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_SPECIALIST);
-            } else if (ForeignSecurityUtils.hasViewOnlyPermission()) {
-                getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY);
-            }
-        } else {
-            if (null != udmReportWidget) {
-                getAbsoluteLayout().removeComponent(udmReportWidget);
-            }
-        }
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());
@@ -102,9 +79,5 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void setController(IMainWidgetController controller) {
         this.controller = controller;
-    }
-
-    private AbsoluteLayout getAbsoluteLayout() {
-        return ((RootWidget) this.getUI().getContent()).getAbsoluteLayout();
     }
 }

@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -24,6 +26,18 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
 
     @Autowired
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
+    @Autowired
+    private IProductFamilyProvider productFamilyProvider;
+
+    @Override
+    public void onProductFamilyChanged() {
+        refreshWidget();
+    }
+
+    @Override
+    public IProductFamilyProvider getProductFamilyProvider() {
+        return productFamilyProvider;
+    }
 
     @Override
     public IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController() {

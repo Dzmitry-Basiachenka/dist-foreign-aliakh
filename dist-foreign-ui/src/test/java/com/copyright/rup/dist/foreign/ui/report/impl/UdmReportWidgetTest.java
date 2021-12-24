@@ -11,16 +11,19 @@ import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
+
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.ui.MenuBar.MenuItem;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,20 +52,24 @@ import java.util.function.Supplier;
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class UdmReportWidgetTest {
 
+    private static final String ACL_PRODUCT_FAMILY = "ACL";
+
+    private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
+    private final IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
     private UdmReportWidget udmReportWidget;
-    private IUdmReportController udmReportController;
 
     @Before
     public void setUp() {
         mockStatic(Windows.class);
         mockStatic(ForeignSecurityUtils.class);
-        udmReportController = createMock(IUdmReportController.class);
         udmReportWidget = new UdmReportWidget();
         udmReportWidget.setController(udmReportController);
     }
 
     @Test
     public void testInit() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         replayAll();
         udmReportWidget.init();
@@ -72,6 +79,8 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshSpecialist() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -81,6 +90,8 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshManager() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setManagerExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -90,6 +101,8 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshResearcher() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setResearcherExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -100,6 +113,8 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshViewOnly() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setViewOnlyExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -109,6 +124,8 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testUdmWeeklySurveyReportSelected() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         IUdmWeeklySurveyReportController controller = createMock(IUdmWeeklySurveyReportController.class);
         expect(udmReportController.getUdmWeeklySurveyReportController()).andReturn(controller).once();
