@@ -63,29 +63,23 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price", StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getPriceInUsdExpression(), "label.price_in_usd", StringUtils.EMPTY),
                 layout);
-            addLabel(
-                createLabelWithSingleValue(udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getPriceFlag()),
-                    filter, "label.price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter ->
+                BooleanUtils.toYNString(udmValueFilter.getPriceFlag()), filter, "label.price_flag"), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getPriceComment, filter, "label.price_comment"),
                 layout);
-            addLabel(
-                createLabelWithSingleValue(udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getLastPriceFlag()),
-                    filter, "label.last_price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter ->
+                BooleanUtils.toYNString(udmValueFilter.getLastPriceFlag()), filter, "label.last_price_flag"), layout);
             addLabel(
                 createLabelWithSingleValue(UdmValueFilter::getLastPriceComment, filter, "label.last_price_comment"),
                 layout);
             addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content", StringUtils.EMPTY),
                 layout);
-            addLabel(
-                createLabelWithSingleValue(
-                    udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter,
-                    "label.content_flag"), layout);
-            addLabel(createLabelWithSingleValue(
-                UdmValueFilter::getContentComment, filter, "label.content_comment"), layout);
-            addLabel(
-                createLabelWithSingleValue(
-                    udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getLastContentFlag()), filter,
-                    "label.last_content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter ->
+                BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter, "label.content_flag"), layout);
+            addLabel(createLabelWithSingleValue(UdmValueFilter::getContentComment, filter, "label.content_comment"),
+                layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> BooleanUtils.toYNString(
+                udmValueFilter.getLastContentFlag()), filter, "label.last_content_flag"), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getLastContentComment, filter,
                 "label.last_content_comment"), layout);
             addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getLastPubType, filter), filter,
@@ -103,6 +97,6 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 ? udmValueFilter -> publicationType.getNameAndDescription()
                 : udmValueFilter -> "NULL";
         }
-        return udmValueFilter -> publicationType;
+        return function;
     }
 }

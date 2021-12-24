@@ -47,13 +47,10 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterP
                 layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
                 StringUtils.EMPTY), layout);
-            addLabel(
-                createLabelWithSingleValue(udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getPriceFlag()),
-                    filter, "label.price_flag"), layout);
-            addLabel(
-                createLabelWithSingleValue(
-                    udmValueFilter -> BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter,
-                    "label.content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter ->
+                BooleanUtils.toYNString(udmValueFilter.getPriceFlag()), filter, "label.price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter ->
+                BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter, "label.content_flag"), layout);
             addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price_from", "label.price_to"),
                 layout);
             addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content_from", "label.content_to"),
