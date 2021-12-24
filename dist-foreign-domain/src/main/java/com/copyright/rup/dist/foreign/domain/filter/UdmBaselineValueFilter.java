@@ -47,7 +47,7 @@ public class UdmBaselineValueFilter {
         if (null != filter) {
             setPeriods(filter.getPeriods());
             setWrWrkInst(filter.getWrWrkInst());
-            setSystemTitleExpression(filter.getSystemTitleExpression());
+            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setPubType(filter.getPubType());
             setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
             setPriceFlag(filter.getPriceFlag());
