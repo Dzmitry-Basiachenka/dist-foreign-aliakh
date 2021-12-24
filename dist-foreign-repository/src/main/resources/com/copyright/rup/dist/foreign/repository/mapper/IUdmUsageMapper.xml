@@ -169,7 +169,7 @@
                 and u.wr_wrk_inst = #{filter.wrWrkInst}
             </if>
             <if test="!filter.annualMultiplierExpression.isEmpty()">
-                <include refid="IUdmUsageMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="u.annual_multiplier"/>
                     <property name="operator" value="filter.annualMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualMultiplierExpression.fieldFirstValue}"/>
@@ -177,7 +177,7 @@
                 </include>
             </if>
             <if test="!filter.annualizedCopiesExpression.isEmpty()">
-                <include refid="IUdmUsageMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="u.annualized_copies"/>
                     <property name="operator" value="filter.annualizedCopiesExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>
@@ -185,7 +185,7 @@
                 </include>
             </if>
             <if test="!filter.statisticalMultiplierExpression.isEmpty()">
-                <include refid="IUdmUsageMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="u.statistical_multiplier"/>
                     <property name="operator" value="filter.statisticalMultiplierExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.statisticalMultiplierExpression.fieldFirstValue}"/>
@@ -193,7 +193,7 @@
                 </include>
             </if>
             <if test="!filter.quantityExpression.isEmpty()">
-                <include refid="IUdmUsageMapper.filterExpression">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="u.quantity"/>
                     <property name="operator" value="filter.quantityExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.quantityExpression.fieldFirstValue}"/>
@@ -211,21 +211,6 @@
                 comment ilike '%' || #{filter.searchValue} || '%')
             </if>
         </where>
-    </sql>
-
-    <sql id="filterExpression">
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
-            and ${column} &lt; ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
-            and ${column} &gt; ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
-            and ${column} = ${fieldFirstValue}
-        </if>
-        <if test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
-            and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
-        </if>
     </sql>
 
     <sql id="selectDtosByFilterSql">

@@ -66,7 +66,7 @@
             and u.original_detail_id ilike #{filter.usageDetailId}
         </if>
         <if test="!filter.annualizedCopiesExpression.isEmpty()">
-            <include refid="IUdmUsageMapper.filterExpression">
+            <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                 <property name="column" value="u.annualized_copies"/>
                 <property name="operator" value="filter.annualizedCopiesExpression.operator"/>
                 <property name="fieldFirstValue" value="${filter.annualizedCopiesExpression.fieldFirstValue}"/>

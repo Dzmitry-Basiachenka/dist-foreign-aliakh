@@ -1,0 +1,58 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUdmCommonMapper">
+
+    <sql id="numericFieldFilterExpression">
+        <choose>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
+                and ${column} = '${fieldFirstValue}'
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUALS == ${operator}">
+                and (${column} is null or ${column} != '${fieldFirstValue}')
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
+                and ${column} &gt; ${fieldFirstValue}
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN_OR_EQUALS_TO == ${operator}">
+                and ${column} &gt;= ${fieldFirstValue}
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN == ${operator}">
+                and ${column} &lt; ${fieldFirstValue}
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@LESS_THAN_OR_EQUALS_TO == ${operator}">
+                and ${column} &lt;= ${fieldFirstValue}
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@BETWEEN == ${operator}">
+                and ${column} between ${fieldFirstValue} and ${fieldSecondValue}
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
+                and ${column} is null
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NOT_NULL == ${operator}">
+                and ${column} is not null
+            </when>
+        </choose>
+    </sql>
+
+    <sql id="textFieldFilterExpression">
+        <choose>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
+                and ${column} ilike '${fieldFirstValue}'
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUALS == ${operator}">
+                and (${column} is null or ${column} != '${fieldFirstValue}')
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@CONTAINS == ${operator}">
+                and ${column} ilike '%' || #{fieldFirstValue} || '%'
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
+                and ${column} is null
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NOT_NULL == ${operator}">
+                and ${column} is not null
+            </when>
+        </choose>
+    </sql>
+</mapper>
