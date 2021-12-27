@@ -54,5 +54,51 @@
     "contentFlag": true,
     "createUser": "SYSTEM",
     "updateUser": "SYSTEM"
+  },
+  {
+    "id": "89b7259e-39e0-4281-9fed-860c24932b78",
+    "period": 202006,
+    "wrWrkInst": 876543211,
+    "systemTitle": "Grishka & the Bear",
+    "publicationType": "BK",
+    "priceFlag": true,
+    "price": 150.0000000000,
+    "content": 10.0000000000,
+    "contentUnitPrice": 15.0000000000,
+    "contentFlag": true,
+    "version": 8,
+    "createUser": "SYSTEM",
+    "createDate": "2021-12-26",
+    "updateUser": "SYSTEM",
+    "updateDate": "2021-12-27"
+  },
+  {
+    "id": "9a2dadaa-0a8e-4930-af48-4306929d500c",
+    "period": 202006,
+    "wrWrkInst": 876543212,
+    "systemTitle": "Grishka & the Bear",
+    "publicationType": "BK",
+    "priceFlag": true,
+    "price": 0.0000000000,
+    "content": 1.0000000000,
+    "contentUnitPrice": 0.0000000000,
+    "contentFlag": true,
+    "version": 8,
+    "createUser": "SYSTEM",
+    "createDate": "2021-12-26",
+    "updateUser": "SYSTEM",
+    "updateDate": "2021-12-27"
+  },
+  {
+    "id": "ec33affb-a120-493f-8f7a-e2934aee74e9",
+    "period": 202006,
+    "wrWrkInst": 876543213,
+    "systemTitle": "Grishka & the Bear",
+    "publicationType": "BK",
+    "priceFlag": false,
+    "contentUnitPrice": 7.5000000000,
+    "contentFlag": false,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
   }
 ]

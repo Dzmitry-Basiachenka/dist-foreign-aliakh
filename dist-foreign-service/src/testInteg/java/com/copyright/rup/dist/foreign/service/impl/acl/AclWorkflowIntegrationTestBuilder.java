@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmProxyValueService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
@@ -48,6 +49,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +79,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private SqsClientMock sqsClientMock;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private IUdmProxyValueService udmProxyValueService;
     private List<UdmUsageDto> udmUsageDtos;
     private UdmBatch expectedUdmBatch;
     private int expectedCountOfPublishedUsages;
@@ -239,6 +243,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             UdmValueFilter filter = new UdmValueFilter();
             filter.setPeriods(ImmutableSet.of(expectedUdmBatch.getPeriod()));
             udmValueService.getValueDtos(filter, null, null)
+                .stream()
+                .filter(udmValueDto -> Objects.isNull(udmValueDto.getPublicationType()))
                 .forEach(udmValueDto -> {
                     uploadedUdmValuesIds.add(udmValueDto.getId());
                     PublicationType publicationType = new PublicationType();
@@ -259,6 +265,7 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                         "The field 'Currency' was edited. Old Value is not specified. New Value is 'EUR'");
                     udmValueService.updateValue(udmValueDto, actionReasons);
                 });
+            udmProxyValueService.calculateProxyValues(202006);
             assertEquals(expectedCountOfPublishedValues,
                 udmValueService.publishToBaseline(expectedUdmBatch.getPeriod()));
         }
