@@ -71,7 +71,7 @@ public class AclWorkflowIntegrationTest {
             ))
             .withExpectedCountOfPublishedUsages(4)
             .withExpectedCountOfPopulatedValues(4)
-            .withExpectedCountOfPublishedValues(4)
+            .withExpectedCountOfPublishedValues(7)
             .withExpectedUsages("acl/usage/udm_usages_workflow.json")
             .withExpectedValues("acl/value/udm_value_dto_workflow.json")
             .withExpectedValuesBaseline("acl/value/udm_value_dto_baseline_workflow.json")
