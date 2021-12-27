@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -238,16 +238,8 @@ public class UsageDataUploadWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(3, verticalLayout.getComponentCount());
         verifyUploadComponent(verticalLayout.getComponent(0));
-        verifyItemBankComboBox(verticalLayout.getComponent(1));
+        verifyComboBox(verticalLayout.getComponent(1), "Item Bank", true, buildUsageBatch());
         verifyButtonsLayout(verticalLayout.getComponent(2));
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyItemBankComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<UsageBatch> comboBox = (ComboBox<UsageBatch>) component;
-        assertEquals(100, component.getWidth(), 0);
-        assertNull(comboBox.getValue());
     }
 
     private void verifyUploadComponent(Component component) {

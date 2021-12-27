@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -14,11 +15,14 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Represents verifier of UI components.
@@ -145,6 +150,49 @@ public final class UiCommonHelper {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
+    }
+
+    /**
+     * Verifies combobox.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @return instance of {@link ComboBox}
+     */
+    @SafeVarargs
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
+                                                 T... expectedItems) {
+        return verifyComboBox(component, caption, emptySelectionAllowed,
+            Stream.of(expectedItems).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies combobox.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @return instance of {@link ComboBox}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
+                                                 Collection<T> expectedItems) {
+        assertTrue(component instanceof ComboBox);
+        ComboBox<T> comboBox = (ComboBox<T>) component;
+        assertFalse(comboBox.isReadOnly());
+        assertTrue(comboBox.isTextInputAllowed());
+        assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
+        assertEquals(caption, comboBox.getCaption());
+        assertEquals(100, comboBox.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
+        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
+        Collection<T> actualItems = listDataProvider.getItems();
+        assertEquals(expectedItems.size(), actualItems.size());
+        assertEquals(expectedItems, actualItems);
+        return comboBox;
     }
 
     /**

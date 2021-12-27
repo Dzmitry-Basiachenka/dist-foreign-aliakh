@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +23,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -202,8 +202,8 @@ public class UdmValueFilterWidgetTest {
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
-        verifyValuesStatusComboBox(verticalLayout.getComponent(2));
-        verifyPubTypeComboBox(verticalLayout.getComponent(3));
+        verifyComboBox(verticalLayout.getComponent(2), "Status", true, VALUE_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(3), "Pub Type", true, new PublicationType(), buildPublicationType());
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
     }
 
@@ -221,38 +221,11 @@ public class UdmValueFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    @SuppressWarnings("unchecked")
-    private void verifyPubTypeComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals("Pub Type", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<PublicationType> listDataProvider =
-            (ListDataProvider<PublicationType>) comboBox.getDataProvider();
-        Object[] publicationTypes = listDataProvider.getItems().toArray();
-        PublicationType expectedPublicationType = buildPublicationType();
-        assertEquals(Arrays.asList(new PublicationType(), expectedPublicationType).size(), publicationTypes.length);
-        assertEquals(expectedPublicationType, publicationTypes[1]);
-    }
-
     private void verifyFiltersLabel(Component component) {
         assertTrue(component instanceof Label);
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private void verifyValuesStatusComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals("Status", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals("220px", comboBox.getPopupWidth());
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<UdmValueStatusEnum> listDataProvider =
-            (ListDataProvider<UdmValueStatusEnum>) comboBox.getDataProvider();
-        assertEquals(VALUE_STATUSES, listDataProvider.getItems());
     }
 
     private void verifyMoreFiltersButton(Component component) {

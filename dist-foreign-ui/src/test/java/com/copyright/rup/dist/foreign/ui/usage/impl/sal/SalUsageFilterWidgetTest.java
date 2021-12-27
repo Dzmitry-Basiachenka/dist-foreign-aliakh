@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,7 +23,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -43,7 +43,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -192,8 +191,8 @@ public class SalUsageFilterWidgetTest {
         assertEquals(4, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyUsageStatusCombobox(verticalLayout.getComponent(2));
-        verifyDetailTypeCombobox(verticalLayout.getComponent(3));
+        verifyComboBox(verticalLayout.getComponent(2), "Status", true, SAL_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(3), "Detail Type", true, SalDetailTypeEnum.values());
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -215,32 +214,6 @@ public class SalUsageFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    private void verifyUsageStatusCombobox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Status", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<UsageStatusEnum> listDataProvider =
-            (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(7, actualStatuses.size());
-        assertEquals(SAL_STATUSES, actualStatuses);
-    }
-
-    private void verifyDetailTypeCombobox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Detail Type", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<SalDetailTypeEnum> listDataProvider =
-            (ListDataProvider<SalDetailTypeEnum>) comboBox.getDataProvider();
-        Collection<?> actualTypes = listDataProvider.getItems();
-        assertEquals(2, actualTypes.size());
-        assertEquals(Arrays.asList(SalDetailTypeEnum.values()), actualTypes);
     }
 
     private void verifyButtonsLayout(Component component) {

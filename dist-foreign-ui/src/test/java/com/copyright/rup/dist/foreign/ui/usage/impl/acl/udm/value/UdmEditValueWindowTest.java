@@ -1,12 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +28,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -555,12 +555,13 @@ public class UdmEditValueWindowTest {
         VerticalLayout priceContent = (VerticalLayout) pricePanel.getContent();
         assertEquals(15, priceContent.getComponentCount());
         verifyTextFieldLayout(priceContent.getComponent(0), "Price", false, true);
-        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, Collections.singletonList(CURRENCY));
+        verifyComboBoxLayout(priceContent.getComponent(1), "Currency", true, true, Collections.singletonList(CURRENCY));
         verifyTextFieldLayout(priceContent.getComponent(2), "Currency Exchange Rate", true, false);
         verifyTextFieldLayout(priceContent.getComponent(3), "Currency Exchange Rate Date", true, false);
         verifyTextFieldLayout(priceContent.getComponent(4), "Price in USD", true, false);
-        verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, Collections.singletonList(PRICE_TYPE));
-        verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true,
+        verifyComboBoxLayout(priceContent.getComponent(5), "Price Type", true, true,
+            Collections.singletonList(PRICE_TYPE));
+        verifyComboBoxLayout(priceContent.getComponent(6), "Price Access Type", true, true,
             Collections.singletonList(PRICE_ACCESS_TYPE));
         verifyTextFieldLayout(priceContent.getComponent(7), "Price Year", false, true);
         verifyTextFieldLayout(priceContent.getComponent(8), "Price Source", false, true);
@@ -582,7 +583,7 @@ public class UdmEditValueWindowTest {
         verifyTextFieldLayout(generalContent.getComponent(0), "Value Period", true, false);
         verifyTextFieldLayout(generalContent.getComponent(1), "Last Value Period", true, false);
         verifyTextFieldLayout(generalContent.getComponent(2), "Assignee", true, false);
-        verifyComboBoxLayout(generalContent.getComponent(3), "Value Status", true,
+        verifyComboBoxLayout(generalContent.getComponent(3), "Value Status", true, false,
             Arrays.asList(UdmValueStatusEnum.NEW, UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
                 UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE, UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
                 UdmValueStatusEnum.RESEARCH_COMPLETE));
@@ -590,7 +591,7 @@ public class UdmEditValueWindowTest {
         assertEquals("Publication Type", pubTypePanel.getCaption());
         VerticalLayout pubTypeContent = (VerticalLayout) pubTypePanel.getContent();
         assertEquals(2, pubTypeContent.getComponentCount());
-        verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true,
+        verifyComboBoxLayout(pubTypeContent.getComponent(0), "Pub Type", true, true,
             Collections.singletonList(PUBLICATION_TYPE));
         verifyTextFieldLayout(pubTypeContent.getComponent(1), "Last Pub Type", true, false);
         Panel contentPanel = (Panel) row2.getComponent(2);
@@ -637,21 +638,13 @@ public class UdmEditValueWindowTest {
         assertEquals(expectedValue, ((ComboBox<?>) layout.getComponent(1)).getValue());
     }
 
-    private <T> ComboBox<T> verifyComboBoxLayout(Component component, String caption, boolean isValidated) {
+    private <T> void verifyComboBoxLayout(Component component, String caption, boolean isValidated,
+                                          boolean emptySelectionAllowed, Collection<T> expectedItems) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption);
-        return verifyComboBoxField(layout.getComponent(1), isValidated ? caption : null);
-    }
-
-    private <T> void verifyComboBoxLayout(Component component, String caption, boolean isValidated,
-                                          Collection<T> expectedItems) {
-        ComboBox<T> comboBox = verifyComboBoxLayout(component, caption, isValidated);
-        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
-        Collection<T> actualItems = listDataProvider.getItems();
-        assertEquals(expectedItems.size(), actualItems.size());
-        assertEquals(expectedItems, actualItems);
+        verifyComboBox(layout.getComponent(1), isValidated ? caption : null, emptySelectionAllowed, expectedItems);
     }
 
     private void verifyLabel(Component component, String caption) {
@@ -667,16 +660,6 @@ public class UdmEditValueWindowTest {
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(caption, component.getCaption());
         assertEquals(isReadOnly, ((TextField) component).isReadOnly());
-    }
-
-    private <T> ComboBox<T> verifyComboBoxField(Component component, String caption) {
-        assertTrue(component instanceof ComboBox);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
-        ComboBox<T> comboBox = (ComboBox<T>) component;
-        assertFalse(comboBox.isReadOnly());
-        return comboBox;
     }
 
     private void verifyButtonsLayout(Component component, boolean isVisible) {
