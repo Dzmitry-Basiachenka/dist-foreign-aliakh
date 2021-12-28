@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -15,12 +17,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilter
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableMap;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -33,9 +33,9 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -61,8 +61,10 @@ public class FasExcludePayeeFilterWidgetTest {
 
     @Test
     public void testStructure() {
+        Map<String, Boolean> participatingStatuses = ImmutableMap.of("Participating", Boolean.TRUE,
+            "Not Participating", Boolean.FALSE);
         expect(controller.getParticipatingStatuses())
-            .andReturn(ImmutableMap.of("Participating", Boolean.TRUE, "Not Participating", Boolean.FALSE))
+            .andReturn(participatingStatuses)
             .once();
         replay(controller);
         assertSame(widget, widget.init());
@@ -70,7 +72,7 @@ public class FasExcludePayeeFilterWidgetTest {
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLabel(widget.getComponent(0));
         verifyScenariosItemsFilterLayout(widget.getComponent(1));
-        verifyParticipatingStatusCombobox(widget.getComponent(2));
+        verifyComboBox(widget.getComponent(2), "Participating Status", true, participatingStatuses.keySet());
         verifyMinimumNetThresholdComponent(widget.getComponent(3));
         verifyButtonsLayout(widget.getComponent(4));
         verify(controller);
@@ -122,16 +124,6 @@ public class FasExcludePayeeFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    private void verifyParticipatingStatusCombobox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Participating Status", comboBox.getCaption());
-        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
-        Collection<String> items = ((ListDataProvider<String>) comboBox.getDataProvider()).getItems();
-        assertEquals(2, CollectionUtils.size(items));
-        assertTrue(items.containsAll(Arrays.asList("Participating", "Not Participating")));
     }
 
     private void verifyFiltersLabel(Component component) {

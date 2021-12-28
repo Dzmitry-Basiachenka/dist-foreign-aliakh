@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -22,8 +23,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -42,7 +41,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
@@ -60,6 +58,7 @@ import java.util.Set;
 @PrepareForTest(Windows.class)
 public class AaclUsageFilterWidgetTest {
 
+    private static final int USAGE_PERIOD = 2020;
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String AACL_PRODUCT_FAMILY = "AACL";
 
@@ -79,7 +78,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
@@ -92,7 +91,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -116,7 +115,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         replay(usagesFilterController);
         widget.init();
@@ -129,7 +128,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         replay(usagesFilterController);
         widget.init();
@@ -159,7 +158,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyApplyButtonClickListener() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).once();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
@@ -174,7 +173,7 @@ public class AaclUsageFilterWidgetTest {
 
     @Test
     public void verifyButtonClickListener() {
-        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).times(2);
+        expect(usagesFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).times(2);
         expect(usagesFilterController.getSelectedProductFamily()).andReturn(AACL_PRODUCT_FAMILY).times(2);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         replay(clickEvent, usagesFilterController);
@@ -198,8 +197,8 @@ public class AaclUsageFilterWidgetTest {
         assertEquals(4, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyUsageStatusCombobox(verticalLayout.getComponent(2));
-        verifyUsagePeriodCombobox(verticalLayout.getComponent(3));
+        verifyComboBox(verticalLayout.getComponent(2), "Status", true, AACL_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(3), "Usage Period", true, USAGE_PERIOD);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -221,31 +220,6 @@ public class AaclUsageFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    private void verifyUsageStatusCombobox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Status", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<UsageStatusEnum> listDataProvider =
-            (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(7, actualStatuses.size());
-        assertEquals(AACL_STATUSES, actualStatuses);
-    }
-
-    private void verifyUsagePeriodCombobox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Usage Period", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualUsagePeriods = listDataProvider.getItems();
-        assertEquals(1, actualUsagePeriods.size());
-        assertEquals(Collections.singletonList(2020), actualUsagePeriods);
     }
 
     private Button getApplyButton() {

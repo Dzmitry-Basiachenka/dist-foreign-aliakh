@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -19,13 +20,11 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -35,8 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -88,9 +85,8 @@ public class SalAuditFilterWidgetTest {
         component = widget.getComponent(4);
         assertTrue(component instanceof CommonStatusFilterWidget);
         verifyFilterWidget((CommonStatusFilterWidget) component, "Status");
-        verifyComboBox(widget.getComponent(5), "Detail Type", Arrays.asList(SalDetailTypeEnum.IB,
-            SalDetailTypeEnum.UD));
-        verifyComboBox(widget.getComponent(6), "Usage Period", buildUsagePeriods());
+        verifyComboBox(widget.getComponent(5), "Detail Type", true, SalDetailTypeEnum.values());
+        verifyComboBox(widget.getComponent(6), "Usage Period", true, buildUsagePeriods());
         verifyTextField(widget.getComponent(7), "Event ID");
         verifyTextField(widget.getComponent(8), "Dist. Name");
         component = widget.getComponent(9);
@@ -135,18 +131,6 @@ public class SalAuditFilterWidgetTest {
         assertEquals(caption, textField.getCaption());
         assertEquals(100, textField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
-    }
-
-    private void verifyComboBox(Component component, String caption, Collection<?> expectedItems) {
-        assertEquals(ComboBox.class, component.getClass());
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals(caption, comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        assertTrue(comboBox.isEmptySelectionAllowed());
-        assertTrue(comboBox.isTextInputAllowed());
-        ListDataProvider<?> listDataProvider = (ListDataProvider<?>) comboBox.getDataProvider();
-        assertEquals(expectedItems, listDataProvider.getItems());
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

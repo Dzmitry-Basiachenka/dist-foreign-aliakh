@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -18,14 +19,12 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSa
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -35,7 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -49,13 +47,15 @@ import java.util.Collections;
  */
 public class AaclAuditFilterWidgetTest {
 
+    private static final int USAGE_PERIOD = 2020;
+
     private CommonAuditFilterWidget widget;
 
     @Before
     public void setUp() {
         IAaclAuditFilterController auditFilterController = createMock(IAaclAuditFilterController.class);
         expect(auditFilterController.getProductFamily()).andReturn("AACL").times(2);
-        expect(auditFilterController.getUsagePeriods()).andReturn(Collections.singletonList(2020)).once();
+        expect(auditFilterController.getUsagePeriods()).andReturn(Collections.singletonList(USAGE_PERIOD)).once();
         replay(auditFilterController);
         widget = new AaclAuditFilterWidget(auditFilterController);
         widget.setController(auditFilterController);
@@ -82,7 +82,7 @@ public class AaclAuditFilterWidgetTest {
         component = widget.getComponent(3);
         assertTrue(component instanceof CommonStatusFilterWidget);
         verifyFilterWidget((CommonStatusFilterWidget) component, "Status");
-        verifyUsagePeriodCombobox(widget.getComponent(4), "Usage Period");
+        verifyComboBox(widget.getComponent(4), "Usage Period", true, USAGE_PERIOD);
         verifyTextField(widget.getComponent(5), "Event ID");
         verifyTextField(widget.getComponent(6), "Dist. Name");
         component = widget.getComponent(7);
@@ -97,7 +97,7 @@ public class AaclAuditFilterWidgetTest {
         auditFilter.setProductFamily("AACL");
         assertEquals(auditFilter, widget.getAppliedFilter());
         auditFilter.setCccEventId("53256");
-        auditFilter.setUsagePeriod(2020);
+        auditFilter.setUsagePeriod(USAGE_PERIOD);
         Whitebox.setInternalState(widget, "filter", auditFilter);
         widget.applyFilter();
         assertEquals(auditFilter, widget.getAppliedFilter());
@@ -120,18 +120,6 @@ public class AaclAuditFilterWidgetTest {
         assertEquals(caption, textField.getCaption());
         assertEquals(100, textField.getWidth(), 0);
         assertEquals(Sizeable.Unit.PERCENTAGE, textField.getWidthUnits());
-    }
-
-    private void verifyUsagePeriodCombobox(Component component, String caption) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals(caption, comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualUsagePeriods = listDataProvider.getItems();
-        assertEquals(1, actualUsagePeriods.size());
-        assertEquals(Collections.singletonList(2020), actualUsagePeriods);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

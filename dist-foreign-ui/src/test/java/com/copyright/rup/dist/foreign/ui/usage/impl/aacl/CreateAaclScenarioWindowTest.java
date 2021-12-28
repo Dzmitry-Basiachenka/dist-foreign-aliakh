@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -29,7 +30,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -50,7 +50,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
@@ -125,7 +124,7 @@ public class CreateAaclScenarioWindowTest {
         assertTrue(content.isSpacing());
         assertEquals(7, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        verifyFundPoolComboBox(content.getComponent(1), fundPool);
+        verifyComboBox(content.getComponent(1), "Fund Pool", true, fundPool);
         verifyScenarioParameterWidget(content.getComponent(2), "Usage Age Weights");
         verifyScenarioParameterWidget(content.getComponent(3), "Pub Type Weights");
         verifyScenarioParameterWidget(content.getComponent(4), "Licensee Class Mapping");
@@ -249,16 +248,6 @@ public class CreateAaclScenarioWindowTest {
         assertEquals("Scenario name", scenarioNameField.getCaption());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
-    }
-
-    private void verifyFundPoolComboBox(Component component, FundPool expectedFundPool) {
-        assertNotNull(component);
-        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) component;
-        assertEquals("Fund Pool", fundPoolComboBox.getCaption());
-        ListDataProvider<FundPool> listDataProvider = (ListDataProvider<FundPool>) fundPoolComboBox.getDataProvider();
-        Collection<?> actualFundPool = listDataProvider.getItems();
-        assertEquals(1, actualFundPool.size());
-        assertEquals(expectedFundPool.getName(), fundPoolComboBox.getItemCaptionGenerator().apply(expectedFundPool));
     }
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {
