@@ -1,3 +1,10 @@
+14.1.42
+-
+* B-69779 FDA: FDA & UDM: View filters improvements: fix System Title filter on Baseline Values tab
+* B-70072 Tech Debt: FDA: introduce common UDM mapper for filtering
+* B-69779 FDA: FDA & UDM: View filters improvements: make changes based on code review
+* B-70072: FDA: Tech Debt: Refactor ACL workflow integration test
+
 14.1.41
 -
 * B-67668 FDA: 'By Date Received' Survey Report by Date Range: refactor main report window
