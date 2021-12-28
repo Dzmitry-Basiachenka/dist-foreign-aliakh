@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -78,15 +78,15 @@ public class DetailLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget<De
     }
 
     @Override
-    public CommonFilterWindow<DetailLicenseeClass> showFilterWindow() {
-        UdmCommonFilterWindow<DetailLicenseeClass> filterWindow =
-            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.detail_licensee_class_filter"), this,
+    public FilterWindow<DetailLicenseeClass> showFilterWindow() {
+        FilterWindow<DetailLicenseeClass> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.detail_licensee_class_filter"), this,
                 (ValueProvider<DetailLicenseeClass, List<String>>) licenseeClass ->
                     Arrays.asList(licenseeClass.getId().toString(), licenseeClass.getDescription()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.detail_licensee_class"));
         VaadinUtils.addComponentStyle(filterWindow, "detail-licensee-class-filter-window");
-        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }

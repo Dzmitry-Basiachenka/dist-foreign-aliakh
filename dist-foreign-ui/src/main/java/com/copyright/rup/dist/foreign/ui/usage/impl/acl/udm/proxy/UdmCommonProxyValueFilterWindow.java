@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmCommonFilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
 import com.vaadin.data.ValueProvider;
@@ -20,7 +20,7 @@ import java.util.Set;
  * @param <T> type of items
  * @author Uladzislau Shalamitski
  */
-public class UdmCommonProxyValueFilterWindow<T> extends UdmCommonFilterWindow<T> {
+public class UdmCommonProxyValueFilterWindow<T> extends FilterWindow<T> {
 
     /**
      * Constructor.

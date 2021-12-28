@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmCommonFilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
 import com.vaadin.data.ValueProvider;
@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public class UdmLastValuePeriodFilterWindow extends UdmCommonFilterWindow<String> {
+public class UdmLastValuePeriodFilterWindow extends FilterWindow<String> {
 
     /**
      * Constructor.

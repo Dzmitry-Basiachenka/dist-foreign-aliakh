@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -76,14 +76,14 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
     }
 
     @Override
-    public CommonFilterWindow<String> showFilterWindow() {
-        UdmCommonFilterWindow<String> filterWindow =
-            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.assignees_filter"), this,
+    public FilterWindow<String> showFilterWindow() {
+        FilterWindow<String> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.assignees_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.assignee"));
         VaadinUtils.addComponentStyle(filterWindow, "assignee-filter-window");
-        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }

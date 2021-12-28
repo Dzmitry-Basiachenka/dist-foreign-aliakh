@@ -91,6 +91,7 @@ public class LastValuePeriodFilterWidget extends BaseUdmItemsFilterWidget<String
             new UdmLastValuePeriodFilterWindow(ForeignUi.getMessage("window.last_value_periods_filter"), this,
                 (ValueProvider<String, List<String>>) Arrays::asList);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.last_value_period"));
         VerticalLayout verticalLayout = (VerticalLayout) filterWindow.getContent();
         Panel panel = (Panel) verticalLayout.getComponent(1);

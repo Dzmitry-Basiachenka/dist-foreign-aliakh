@@ -2,9 +2,8 @@ package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.UdmCommonFilterWindow;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -76,14 +75,14 @@ public class UdmBatchFilterWidget extends BaseItemsFilterWidget<UdmBatch>
     }
 
     @Override
-    public CommonFilterWindow<UdmBatch> showFilterWindow() {
-        UdmCommonFilterWindow<UdmBatch> filterWindow =
-            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.batches_filter"), this,
+    public FilterWindow<UdmBatch> showFilterWindow() {
+        FilterWindow<UdmBatch> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
                 (ValueProvider<UdmBatch, List<String>>) bean -> Arrays.asList(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(filterWindow, "udm-batches-filter-window");
-        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }
