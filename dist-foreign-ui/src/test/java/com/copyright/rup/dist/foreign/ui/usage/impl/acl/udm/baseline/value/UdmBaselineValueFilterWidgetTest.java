@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
-
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -14,12 +14,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -73,7 +70,7 @@ public class UdmBaselineValueFilterWidgetTest {
         assertEquals(4, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
-        verifyPubTypeComboBox(verticalLayout.getComponent(2));
+        verifyComboBox(verticalLayout.getComponent(2), "Pub Type", true, buildPublicationTypes());
         verifyMoreFiltersButton(verticalLayout.getComponent(3));
     }
 
@@ -89,21 +86,6 @@ public class UdmBaselineValueFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyPubTypeComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals("Pub Type", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<PublicationType> listDataProvider =
-            (ListDataProvider<PublicationType>) comboBox.getDataProvider();
-        Collection<PublicationType> actualPublicationTypes = listDataProvider.getItems();
-        List<PublicationType> expectedPublicationTypes = buildPublicationTypes();
-        assertEquals(expectedPublicationTypes.size(), actualPublicationTypes.size());
-        assertEquals(expectedPublicationTypes, actualPublicationTypes);
     }
 
     private void verifyFiltersLabel(Component component) {

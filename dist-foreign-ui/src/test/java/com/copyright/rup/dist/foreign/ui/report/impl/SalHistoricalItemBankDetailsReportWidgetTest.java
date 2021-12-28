@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -14,13 +15,11 @@ import com.copyright.rup.dist.foreign.ui.report.api.ISalHistoricalItemBankDetail
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -60,10 +59,7 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         ISalHistoricalItemBankDetailsReportController controller = new SalHistoricalItemBankDetailsReportController();
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, usageBatchService);
-        SalLicensee licensee = new SalLicensee();
-        licensee.setAccountNumber(1114L);
-        licensee.setName("Agway, Inc.");
-        List<SalLicensee> licensees = Collections.singletonList(licensee);
+        List<SalLicensee> licensees = Collections.singletonList(buildSalLicensee());
         expect(usageBatchService.getSalLicensees()).andReturn(licensees).once();
         replay(usageBatchService);
         SalHistoricalItemBankDetailsReportWidget widget =
@@ -117,26 +113,9 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         assertEquals(VerticalLayout.class, component.getClass());
         VerticalLayout content = (VerticalLayout) component;
         assertEquals(3, content.getComponentCount());
-        verifyLicenseeCombobox(content.getComponent(0));
+        verifyComboBox(content.getComponent(0), "Licensee", true, buildSalLicensee());
         verifyPeriodEndDate(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
-    }
-
-    private void verifyLicenseeCombobox(Component component) {
-        assertEquals(ComboBox.class, component.getClass());
-        ComboBox<SalLicensee> licenseeComboBox = (ComboBox<SalLicensee>) component;
-        assertEquals("Licensee", licenseeComboBox.getCaption());
-        assertEquals(100, licenseeComboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, licenseeComboBox.getWidthUnits());
-        assertTrue(licenseeComboBox.isEmptySelectionAllowed());
-        assertTrue(licenseeComboBox.isTextInputAllowed());
-        ListDataProvider<SalLicensee> listDataProvider =
-            (ListDataProvider<SalLicensee>) licenseeComboBox.getDataProvider();
-        Collection<SalLicensee> licensees = listDataProvider.getItems();
-        assertEquals(1, licensees.size());
-        SalLicensee licensee = licensees.iterator().next();
-        assertEquals(1114L, licensee.getAccountNumber().longValue());
-        assertEquals("Agway, Inc.", licensee.getName());
     }
 
     private void verifyPeriodEndDate(Component component) {
@@ -190,5 +169,12 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
             .map(ValidationResult::getErrorMessage)
             .collect(Collectors.toList());
         assertEquals(!isValid, errorMessages.contains(message));
+    }
+
+    private SalLicensee buildSalLicensee() {
+        SalLicensee licensee = new SalLicensee();
+        licensee.setAccountNumber(1114L);
+        licensee.setName("Agway, Inc.");
+        return licensee;
     }
 }

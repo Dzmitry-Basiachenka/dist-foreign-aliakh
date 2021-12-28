@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -19,7 +20,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -34,8 +34,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -75,8 +73,8 @@ public class UdmWeeklySurveyReportWidgetTest {
         assertEquals(PeriodFilterWidget.class, periods.getClass());
         verifyItemsFilterWidget(content.getComponent(0), "Periods");
         HorizontalLayout multiFiltersLayout = (HorizontalLayout) content.getComponent(1);
-        verifyComboBox(multiFiltersLayout.getComponent(0), "Channel", UdmChannelEnum.values());
-        verifyComboBox(multiFiltersLayout.getComponent(1), "Usage Origin", UdmUsageOriginEnum.values());
+        verifyComboBox(multiFiltersLayout.getComponent(0), "Channel", true, UdmChannelEnum.values());
+        verifyComboBox(multiFiltersLayout.getComponent(1), "Usage Origin", true,  UdmUsageOriginEnum.values());
         Component dateReceivedFrom = content.getComponent(2);
         assertEquals(LocalDateWidget.class, dateReceivedFrom.getClass());
         assertEquals("Date Received From", dateReceivedFrom.getCaption());
@@ -157,19 +155,6 @@ public class UdmWeeklySurveyReportWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> void verifyComboBox(Component component, String caption, T... arrayValues) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals(caption, comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(arrayValues.length, actualItems.size());
-        assertEquals(Arrays.asList(arrayValues), actualItems);
     }
 
     private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
