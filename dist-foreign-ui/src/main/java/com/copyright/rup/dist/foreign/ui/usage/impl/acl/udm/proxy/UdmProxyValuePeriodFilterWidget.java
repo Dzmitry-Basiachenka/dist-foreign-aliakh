@@ -8,7 +8,9 @@ import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
 import com.vaadin.data.ValueProvider;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
@@ -78,6 +80,7 @@ public class UdmProxyValuePeriodFilterWidget extends BaseItemsFilterWidget<Integ
             new UdmCommonProxyValueFilterWindow<>(ForeignUi.getMessage("window.periods_filter"), this,
                 (ValueProvider<Integer, List<String>>) bean -> Collections.singletonList(String.valueOf(bean)));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.period"));
         VaadinUtils.addComponentStyle(filterWindow, "udm-proxy-value-period-filter-window");
         Windows.showModalWindow(filterWindow);

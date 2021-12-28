@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -159,11 +160,17 @@ public class NtsUsageBatchSelectorWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         Button saveButton = verifyButton(layout.getComponent(0), "Continue");
-        Button clearButton = verifyButton(layout.getComponent(1), "Clear");
-        Button closeButton = verifyButton(layout.getComponent(2), "Close");
+        Button selectAllButton = verifyButton(layout.getComponent(1), "Select All");
+        Button clearButton = verifyButton(layout.getComponent(2), "Clear");
+        Button closeButton = verifyButton(layout.getComponent(3), "Close");
+        assertTrue(saveButton.isVisible());
+        assertFalse(selectAllButton.isVisible());
+        assertTrue(clearButton.isVisible());
+        assertTrue(closeButton.isVisible());
         assertEquals(1, saveButton.getListeners(ClickEvent.class).size());
+        assertEquals(1, selectAllButton.getListeners(ClickEvent.class).size());
         assertEquals(1, clearButton.getListeners(ClickEvent.class).size());
         assertEquals(1, closeButton.getListeners(ClickEvent.class).size());
     }

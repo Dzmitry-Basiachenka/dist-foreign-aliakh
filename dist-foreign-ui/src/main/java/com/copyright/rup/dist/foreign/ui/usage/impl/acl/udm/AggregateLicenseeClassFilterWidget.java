@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -78,15 +78,15 @@ public class AggregateLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget
     }
 
     @Override
-    public CommonFilterWindow<AggregateLicenseeClass> showFilterWindow() {
-        UdmCommonFilterWindow<AggregateLicenseeClass> filterWindow =
-            new UdmCommonFilterWindow<>(ForeignUi.getMessage("window.aggregate_licensee_class_filter"), this,
+    public FilterWindow<AggregateLicenseeClass> showFilterWindow() {
+        FilterWindow<AggregateLicenseeClass> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.aggregate_licensee_class_filter"), this,
                 (ValueProvider<AggregateLicenseeClass, List<String>>) licenseeClass ->
                     Arrays.asList(licenseeClass.getId().toString(), licenseeClass.getDescription()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.aggregate_licensee_class"));
         VaadinUtils.addComponentStyle(filterWindow, "baseline-aggregate-licensee-class-filter-window");
-        Windows.showModalWindow(filterWindow);
         return filterWindow;
     }
 }

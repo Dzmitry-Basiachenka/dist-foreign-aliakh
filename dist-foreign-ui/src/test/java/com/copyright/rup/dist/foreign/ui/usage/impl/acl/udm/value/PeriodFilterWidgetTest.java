@@ -1,15 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
+import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.ValueProvider;
+
+import org.easymock.Capture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -59,5 +69,28 @@ public class PeriodFilterWidgetTest {
         replay(filterSaveEvent);
         periodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
+    }
+
+    @Test
+    public void testShowFilterWindow() {
+        mockStatic(Windows.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
+        Capture<ValueProvider<Integer, List<String>>> providerCapture = newCapture();
+        expect(Windows.showFilterWindow(eq("Periods filter"), same(periodFilterWidget),
+            capture(providerCapture))).andReturn(filterWindow).once();
+        filterWindow.setSelectedItemsIds(Collections.emptySet());
+        expectLastCall().once();
+        expect(filterWindow.getId()).andReturn("id").once();
+        filterWindow.addStyleName("udm-values-periods-filter-window");
+        expectLastCall().once();
+        filterWindow.setSelectAllButtonVisible();
+        expectLastCall().once();
+        filterWindow.setSearchPromptString("Enter Period");
+        expectLastCall().once();
+        replay(filterWindow, Windows.class);
+        periodFilterWidget.showFilterWindow();
+        assertEquals(Collections.singletonList(String.valueOf(PERIOD)),
+            providerCapture.getValue().apply(PERIOD));
+        verify(filterWindow, Windows.class);
     }
 }

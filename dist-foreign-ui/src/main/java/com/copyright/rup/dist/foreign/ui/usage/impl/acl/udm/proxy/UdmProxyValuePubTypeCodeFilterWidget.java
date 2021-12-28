@@ -4,11 +4,14 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
 import com.vaadin.data.ValueProvider;
+
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collection;
@@ -73,11 +76,12 @@ public class UdmProxyValuePubTypeCodeFilterWidget extends BaseItemsFilterWidget<
     }
 
     @Override
-    public CommonFilterWindow<String> showFilterWindow() {
+    public FilterWindow<String> showFilterWindow() {
         UdmCommonProxyValueFilterWindow<String> filterWindow =
             new UdmCommonProxyValueFilterWindow<>(ForeignUi.getMessage("window.pub_type_codes_filter"), this,
                 (ValueProvider<String, List<String>>) bean -> Collections.singletonList(String.valueOf(bean)));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
+        filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.pub_type_code"));
         VaadinUtils.addComponentStyle(filterWindow, "udm-proxy-value-pub-type-code-filter-window");
         Windows.showModalWindow(filterWindow);
