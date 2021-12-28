@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -103,7 +105,7 @@ public class CreateSalScenarioWindowTest {
         assertTrue(content.isSpacing());
         assertEquals(4, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        verifyFundPoolComboBox(content.getComponent(1));
+        verifyComboBox(content.getComponent(1), "Fund Pool", true, fundPool);
         verifyDescriptionArea(content.getComponent(2));
         verifyButtonsLayout(content.getComponent(3));
     }
@@ -219,12 +221,6 @@ public class CreateSalScenarioWindowTest {
         assertEquals("Scenario name", scenarioNameField.getCaption());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
-    }
-
-    private void verifyFundPoolComboBox(Component component) {
-        assertNotNull(component);
-        ComboBox<FundPool> fundPoolComboBox = (ComboBox<FundPool>) component;
-        assertEquals("Fund Pool", fundPoolComboBox.getCaption());
     }
 
     private void verifyDescriptionArea(Component component) {

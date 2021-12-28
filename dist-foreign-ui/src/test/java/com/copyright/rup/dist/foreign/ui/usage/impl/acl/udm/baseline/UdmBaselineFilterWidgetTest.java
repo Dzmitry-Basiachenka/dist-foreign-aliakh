@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +21,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterControl
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -40,7 +40,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -142,8 +141,8 @@ public class UdmBaselineFilterWidgetTest {
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
-        verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", UdmUsageOriginEnum.values());
-        verifyComboBox(verticalLayout.getComponent(3), "Channel", UdmChannelEnum.values());
+        verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", true, UdmUsageOriginEnum.values());
+        verifyComboBox(verticalLayout.getComponent(3), "Channel", true, UdmChannelEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
     }
 
@@ -166,19 +165,6 @@ public class UdmBaselineFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> void verifyComboBox(Component component, String caption, T... arrayValues) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<?> comboBox = (ComboBox<?>) component;
-        assertEquals(caption, comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(arrayValues.length, actualItems.size());
-        assertEquals(Arrays.asList(arrayValues), actualItems);
     }
 
     private void verifyButtonsLayout(Component component) {

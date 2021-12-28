@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +24,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -44,7 +44,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -218,8 +217,8 @@ public class UdmUsageFilterWidgetTest {
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "Periods");
-        verifyUsageStatusComboBox(verticalLayout.getComponent(3));
-        verifyUsageOriginComboBox(verticalLayout.getComponent(4));
+        verifyComboBox(verticalLayout.getComponent(3), "Status", true, ACL_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(4), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(5));
     }
 
@@ -244,17 +243,6 @@ public class UdmUsageFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyUsageStatusComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Status", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<UsageStatusEnum> listDataProvider =
-            (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        assertEquals(ACL_STATUSES, listDataProvider.getItems());
-    }
-
     private void verifyMoreFiltersButton(Component component) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
@@ -263,18 +251,6 @@ public class UdmUsageFilterWidgetTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(1, listeners.size());
-    }
-
-    private void verifyUsageOriginComboBox(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Usage Origin", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<Integer> listDataProvider = (ListDataProvider<Integer>) comboBox.getDataProvider();
-        Collection<?> actualUsageOrigins = listDataProvider.getItems();
-        assertEquals(2, actualUsageOrigins.size());
-        assertEquals(Arrays.asList(UdmUsageOriginEnum.values()), actualUsageOrigins);
     }
 
     private void verifyButtonsLayout(Component component) {

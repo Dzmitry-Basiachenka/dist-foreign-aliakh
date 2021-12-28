@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -19,11 +20,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
@@ -37,7 +36,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
@@ -94,7 +92,7 @@ public class CreateNtsScenarioWindowTest {
         verifyRhMinimumAmountField(content.getComponent(1));
         verifyPreServiceFeeAmountField(content.getComponent(2));
         verifyPostServiceFeeAmountField(content.getComponent(3));
-        verifyFundsComboBox(content.getComponent(4), preServiceFeeFund);
+        verifyComboBox(content.getComponent(4), "Pre-Service Fee Funds", true, preServiceFeeFund);
         verifyDescriptionArea(content.getComponent(5));
         verifyButtonsLayout(content.getComponent(6));
     }
@@ -233,17 +231,6 @@ public class CreateNtsScenarioWindowTest {
         TextField postServiceFeeAmountField = (TextField) component;
         assertEquals("Post-Service Fee Amount", postServiceFeeAmountField.getCaption());
         assertEquals("0", postServiceFeeAmountField.getValue());
-    }
-
-    private void verifyFundsComboBox(Component component, FundPool preServiceFeeFunds) {
-        assertNotNull(component);
-        ComboBox<FundPool> fundsComboBox = (ComboBox<FundPool>) component;
-        assertEquals("Pre-Service Fee Funds", fundsComboBox.getCaption());
-        ListDataProvider<FundPool> listDataProvider =
-            (ListDataProvider<FundPool>) fundsComboBox.getDataProvider();
-        Collection<?> actualFeeFund = listDataProvider.getItems();
-        assertEquals(1, actualFeeFund.size());
-        assertEquals(preServiceFeeFunds.getName(), fundsComboBox.getItemCaptionGenerator().apply(preServiceFeeFunds));
     }
 
     private void verifyDescriptionArea(Component component) {

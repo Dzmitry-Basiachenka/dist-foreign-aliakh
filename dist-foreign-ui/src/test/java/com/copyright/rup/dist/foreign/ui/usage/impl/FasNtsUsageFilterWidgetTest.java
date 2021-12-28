@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,7 +24,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -224,8 +223,8 @@ public class FasNtsUsageFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
         verifyDateWidget(verticalLayout.getComponent(3));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(4));
-        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(5), Collections.singletonList(FISCAL_YEAR));
+        verifyComboBox(verticalLayout.getComponent(4), "Status", true, FAS_FAS2_STATUSES);
+        verifyComboBox(verticalLayout.getComponent(5), "Fiscal Year To", true, FISCAL_YEAR);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -247,28 +246,6 @@ public class FasNtsUsageFilterWidgetTest {
         assertTrue(button.isDisableOnClick());
         assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
-    }
-
-    private void verifyStatusComboboxComponent(Component component) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Status", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        ListDataProvider<UsageStatusEnum> listDataProvider =
-            (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        Collection<?> actualStatuses = listDataProvider.getItems();
-        assertEquals(10, actualStatuses.size());
-        assertEquals(FAS_FAS2_STATUSES, actualStatuses);
-    }
-
-    private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) component;
-        assertEquals("Fiscal Year To", comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        assertEquals(values, ((ListDataProvider<Integer>) comboBox.getDataProvider()).getItems());
     }
 
     private void verifyDateWidget(Component component) {
