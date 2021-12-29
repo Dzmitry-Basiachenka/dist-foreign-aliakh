@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

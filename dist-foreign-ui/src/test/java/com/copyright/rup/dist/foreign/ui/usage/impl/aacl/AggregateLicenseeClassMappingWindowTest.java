@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsVisibility;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
 
@@ -155,7 +155,7 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
-        UiCommonHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Det LC ID", -1.0, 1),
             Triple.of("Det LC Enrollment", -1.0, 2),
             Triple.of("Det LC Discipline", -1.0, 3),

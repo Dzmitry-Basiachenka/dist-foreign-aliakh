@@ -48,11 +48,11 @@ import java.util.stream.Stream;
  *
  * @author Anton Azarenka
  */
-public final class UiCommonHelper {
+public final class UiTestHelper {
 
     private static final String EXPORT_BUTTON = "Export";
 
-    private UiCommonHelper() {
+    private UiTestHelper() {
         throw new IllegalStateException("Constructor shouldn't be called directly");
     }
 

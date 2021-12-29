@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.validateFieldAndVerifyErrorMessage;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyTextField;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyButtonsLayout;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyComboBox;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;

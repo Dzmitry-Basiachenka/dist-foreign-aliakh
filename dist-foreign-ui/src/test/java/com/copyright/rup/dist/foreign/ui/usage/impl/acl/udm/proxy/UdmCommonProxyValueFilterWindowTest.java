@@ -10,7 +10,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -65,7 +65,7 @@ public class UdmCommonProxyValueFilterWindowTest {
 
     @Test
     public void testWindowStructure() {
-        UiCommonHelper.verifyWindow(filterWindow, "Filter window", 450, 400, Sizeable.Unit.PIXELS);
+        UiTestHelper.verifyWindow(filterWindow, "Filter window", 450, 400, Sizeable.Unit.PIXELS);
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) filterWindow.getContent();
         assertTrue(content.isSpacing());
@@ -74,7 +74,7 @@ public class UdmCommonProxyValueFilterWindowTest {
         Component component = iterator.next();
         assertTrue(component instanceof SearchWidget);
         verifyPanel((Panel) iterator.next());
-        UiCommonHelper.verifyButtonsLayout(iterator.next(), "Save", "Select All", "Clear", "Close");
+        UiTestHelper.verifyButtonsLayout(iterator.next(), "Save", "Select All", "Clear", "Close");
         assertFalse(iterator.hasNext());
     }
 
@@ -103,7 +103,7 @@ public class UdmCommonProxyValueFilterWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void verifyPanel(Panel panel) {
-        UiCommonHelper.verifyWindow(panel, null, 100, 100, Sizeable.Unit.PERCENTAGE);
+        UiTestHelper.verifyWindow(panel, null, 100, 100, Sizeable.Unit.PERCENTAGE);
         assertEquals(Cornerstone.LABEL_LIGHT, panel.getStyleName());
         Iterator<Component> iterator = panel.iterator();
         CheckBoxGroup<String> optionGroup = (CheckBoxGroup<String>) iterator.next();

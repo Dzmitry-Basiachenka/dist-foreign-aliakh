@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

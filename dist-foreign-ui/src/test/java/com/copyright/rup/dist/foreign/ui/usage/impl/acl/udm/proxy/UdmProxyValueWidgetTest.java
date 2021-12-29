@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.server.Sizeable.Unit;
@@ -76,9 +76,9 @@ public class UdmProxyValueWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
-        UiCommonHelper.verifyButtonsLayout(layout.getComponent(0), "Export");
+        UiTestHelper.verifyButtonsLayout(layout.getComponent(0), "Export");
         Grid grid = (Grid) layout.getComponent(1);
-        UiCommonHelper.verifyGrid(grid, Arrays.asList(
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Value Period", -1.0, -1),
             Triple.of("Pub Type Code", -1.0, -1),
             Triple.of("Content Unit Price", -1.0, -1),
