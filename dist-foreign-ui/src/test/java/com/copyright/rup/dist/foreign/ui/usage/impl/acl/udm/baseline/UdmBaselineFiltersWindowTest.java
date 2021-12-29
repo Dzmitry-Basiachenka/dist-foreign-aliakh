@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -20,7 +21,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -38,7 +38,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -149,7 +148,7 @@ public class UdmBaselineFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesTo");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
-        assertOperatorComboboxItems(annualizedCopiesOperatorComboBox);
+        assertOperatorComboBoxItems(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox);
     }
@@ -336,13 +335,9 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    private void assertOperatorComboboxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        ListDataProvider<FilterOperatorEnum> listDataProvider =
-            (ListDataProvider<FilterOperatorEnum>) operatorComboBox.getDataProvider();
-        Collection<?> actualOperators = listDataProvider.getItems();
-        assertEquals(4, actualOperators.size());
-        assertEquals(Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN), actualOperators);
+    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
     }
 
     @SuppressWarnings(UNCHECKED)

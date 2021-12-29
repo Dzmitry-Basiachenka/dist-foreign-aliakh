@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -13,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -29,7 +29,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -191,7 +190,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField priceToField = Whitebox.getInternalState(window, "priceToField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
-        assertOperatorComboboxItems(priceOperatorComboBox);
+        assertOperatorComboBoxItems(priceOperatorComboBox);
         verifyBigDecimalOperationValidations(priceFromField, priceToField,
             priceOperatorComboBox, "Field value should be greater or equal to Price From");
     }
@@ -202,7 +201,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField contentToField = Whitebox.getInternalState(window, "contentToField");
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
-        assertOperatorComboboxItems(contentOperatorComboBox);
+        assertOperatorComboBoxItems(contentOperatorComboBox);
         verifyBigDecimalOperationValidations(contentFromField, contentToField,
             contentOperatorComboBox, "Field value should be greater or equal to Content From");
     }
@@ -213,7 +212,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField contentUnitPriceToField = Whitebox.getInternalState(window, "contentUnitPriceToField");
         ComboBox<FilterOperatorEnum> contentUnitPriceComboBox =
             Whitebox.getInternalState(window, "contentUnitPriceComboBox");
-        assertOperatorComboboxItems(contentUnitPriceComboBox);
+        assertOperatorComboBoxItems(contentUnitPriceComboBox);
         verifyBigDecimalOperationValidations(contentUnitPriceFromField, contentUnitPriceToField,
             contentUnitPriceComboBox, "Field value should be greater or equal to Content Unit Price From");
     }
@@ -235,8 +234,8 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(1), "System Title");
         verifyTextFieldLayout(verticalLayout.getComponent(2), ComboBox.class, "Price Flag",
             ComboBox.class, "Content Flag");
-        assertComboboxItems("priceFlagComboBox", Y_N_ITEMS);
-        assertComboboxItems("contentFlagComboBox", Y_N_ITEMS);
+        assertComboBoxItems("priceFlagComboBox", "Price Flag", true, Y_N_ITEMS);
+        assertComboBoxItems("contentFlagComboBox", "Content Flag", true, Y_N_ITEMS);
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(3), "Price From", "Price To");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(4), "Content From", "Content To");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(5), "Content Unit Price From",
@@ -318,21 +317,14 @@ public class UdmBaselineValueFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    @SuppressWarnings(UNCHECKED)
-    private <T> void assertComboboxItems(String fieldName, List<T> expectedItems) {
-        assertComboboxItems((ComboBox<T>) Whitebox.getInternalState(window, fieldName), expectedItems);
+    private <T> void assertComboBoxItems(String fieldName, String caption, boolean emptySelectionAllowed,
+                                         List<T> expectedItems) {
+        verifyComboBox(Whitebox.getInternalState(window, fieldName), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private <T> void assertComboboxItems(ComboBox<T> comboBox, List<T> expectedItems) {
-        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(expectedItems.size(), actualItems.size());
-        assertEquals(expectedItems, actualItems);
-    }
-
-    private void assertOperatorComboboxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        assertComboboxItems(operatorComboBox, Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
+    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
     }
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
