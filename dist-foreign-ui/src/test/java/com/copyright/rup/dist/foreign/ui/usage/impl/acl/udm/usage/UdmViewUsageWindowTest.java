@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -22,9 +23,9 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -352,18 +353,11 @@ public class UdmViewUsageWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyLabel(layout.getComponent(0), caption);
+        verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
         Component textField = layout.getComponent(1);
         assertTrue(textField instanceof TextField);
         assertEquals(100, textField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
         assertTrue(((TextField) textField).isReadOnly());
-    }
-
-    private void verifyLabel(Component component, String caption) {
-        assertTrue(component instanceof Label);
-        assertEquals(165, component.getWidth(), 0);
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
-        assertEquals(caption, ((Label) component).getValue());
     }
 }
