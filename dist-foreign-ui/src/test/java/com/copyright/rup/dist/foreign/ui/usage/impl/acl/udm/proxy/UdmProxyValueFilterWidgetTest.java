@@ -8,7 +8,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -60,7 +60,7 @@ public class UdmProxyValueFilterWidgetTest {
         assertEquals(2, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
-        UiCommonHelper.verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
+        UiTestHelper.verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
         verify(controller);
     }
 

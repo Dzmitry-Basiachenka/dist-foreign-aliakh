@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyGrid;
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;

@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiCommonHelper.verifyWindow;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
