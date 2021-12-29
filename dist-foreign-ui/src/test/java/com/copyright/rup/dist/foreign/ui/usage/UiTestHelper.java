@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
@@ -26,12 +27,15 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -51,6 +55,7 @@ import java.util.stream.Stream;
 public final class UiTestHelper {
 
     private static final String EXPORT_BUTTON = "Export";
+    private static final String UNCHECKED = "unchecked";
 
     private UiTestHelper() {
         throw new IllegalStateException("Constructor shouldn't be called directly");
@@ -98,7 +103,7 @@ public final class UiTestHelper {
      * @param message error message
      * @param isValid <code>true</code> if valid otherwise <code>false</code>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
                                                           String message, boolean isValid) {
         field.setValue(value);
@@ -177,7 +182,7 @@ public final class UiTestHelper {
      * @param expectedItems         expected items of combobox
      * @return instance of {@link ComboBox}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
                                                  Collection<T> expectedItems) {
         assertTrue(component instanceof ComboBox);
@@ -202,7 +207,7 @@ public final class UiTestHelper {
      * @param grid                        grid
      * @param columnsToWidthToExpandRatio list of {@link Triple}'s
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public static void verifyGrid(Grid grid,
                                 List<Triple<String, ? extends Number, ? extends Number>> columnsToWidthToExpandRatio) {
         assertNull(grid.getCaption());
@@ -213,6 +218,28 @@ public final class UiTestHelper {
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
         assertEquals(columnsToWidthToExpandRatio.stream().map(Triple::getRight).collect(Collectors.toList()),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies filter widget.
+     *
+     * @param component UI component
+     * @param caption  caption of filter widget
+     */
+    @SuppressWarnings(UNCHECKED)
+    public static void verifyItemsFilterWidget(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertTrue(layout.isEnabled());
+        assertTrue(layout.isSpacing());
+        Iterator<Component> iterator = layout.iterator();
+        assertEquals("(0)", ((Label) iterator.next()).getValue());
+        Button button = (Button) iterator.next();
+        assertEquals(caption, button.getCaption());
+        assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        assertFalse(iterator.hasNext());
     }
 
     private static void verifyButtonClickListener(Button button) {

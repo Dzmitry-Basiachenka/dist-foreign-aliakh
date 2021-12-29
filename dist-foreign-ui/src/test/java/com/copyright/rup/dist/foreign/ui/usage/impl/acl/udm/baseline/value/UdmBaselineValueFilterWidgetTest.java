@@ -2,10 +2,11 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -18,7 +19,6 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -69,23 +68,9 @@ public class UdmBaselineValueFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(4, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
+        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyComboBox(verticalLayout.getComponent(2), "Pub Type", true, buildPublicationTypes());
         verifyMoreFiltersButton(verticalLayout.getComponent(3));
-    }
-
-    private void verifyPeriodsFilterLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Periods", button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyFiltersLabel(Component component) {

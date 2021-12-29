@@ -1,13 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableMap;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -34,7 +33,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -71,7 +69,7 @@ public class FasExcludePayeeFilterWidgetTest {
         assertEquals(5, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLabel(widget.getComponent(0));
-        verifyScenariosItemsFilterLayout(widget.getComponent(1));
+        verifyItemsFilterWidget(widget.getComponent(1), "Scenarios");
         verifyComboBox(widget.getComponent(2), "Participating Status", true, participatingStatuses.keySet());
         verifyMinimumNetThresholdComponent(widget.getComponent(3));
         verifyButtonsLayout(widget.getComponent(4));
@@ -110,20 +108,6 @@ public class FasExcludePayeeFilterWidgetTest {
         }
         assertEquals(applyEnabled, applyButton.isEnabled());
         assertEquals(filterValue, filter.getNetAmountMinThreshold());
-    }
-
-    private void verifyScenariosItemsFilterLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Scenarios", button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyFiltersLabel(Component component) {

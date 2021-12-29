@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -19,10 +21,8 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageBatch.NtsFields;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.MarketFilterWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
@@ -35,7 +35,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -52,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -356,7 +354,7 @@ public class FundPoolLoadWindowTest {
         verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
         verifyRightsholdersComponents(verticalLayout.getComponent(1));
         verifyDateComponents(verticalLayout.getComponent(2));
-        verifyMarketsWidget(verticalLayout.getComponent(3));
+        verifyItemsFilterWidget(verticalLayout.getComponent(3), "Markets");
         verifyAmountsComponent(verticalLayout.getComponent(4));
         verifyMinAmountsComponent(verticalLayout.getComponent(5));
         verifyExcludeStmCheckBox(verticalLayout.getComponent(6));
@@ -449,20 +447,6 @@ public class FundPoolLoadWindowTest {
         numberField.setValue("20000170");
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, nameField.getValue());
-    }
-
-    private void verifyMarketsWidget(Component component) {
-        assertTrue(component instanceof MarketFilterWidget);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Markets", button.getCaption());
-        assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyDateComponents(Component component) {
