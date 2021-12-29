@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyLong;
 import static org.easymock.EasyMock.anyObject;
@@ -10,7 +11,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -59,6 +59,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -699,9 +700,12 @@ public class UdmEditMultipleUsagesWindowTest {
     private void verifyRootLayout(Component component) {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(15, verticalLayout.getComponentCount());
-        verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status");
+        verifyComboBoxLayout(verticalLayout.getComponent(0), "Detail Status", false,
+            Arrays.asList(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE,
+                UsageStatusEnum.OPS_REVIEW, UsageStatusEnum.SPECIALIST_REVIEW));
         verifyTextFieldLayout(verticalLayout.getComponent(1), "Period (YYYYMM)");
-        verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class");
+        verifyComboBoxLayout(verticalLayout.getComponent(2), "Detail Licensee Class", true,
+            Collections.singleton(LICENSEE_CLASS));
         verifyCompanyIdLayout(verticalLayout.getComponent(3));
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Company Name");
         verifyTextFieldLayout(verticalLayout.getComponent(5), "Wr Wrk Inst");
@@ -710,18 +714,21 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(8), ANNUAL_MULTIPLIER_FIELD);
         verifyTextFieldLayout(verticalLayout.getComponent(9), STATISTICAL_MULTIPLIER_FIELD);
         verifyTextFieldLayout(verticalLayout.getComponent(10), QUANTITY_FIELD);
-        verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason");
-        verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason");
+        verifyComboBoxLayout(verticalLayout.getComponent(11), "Action Reason", true,
+            Collections.singletonList(ACTION_REASON));
+        verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason", true,
+            Collections.singletonList(INELIGIBLE_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment");
         verifyButtonsLayout(verticalLayout.getComponent(14));
     }
 
-    private void verifyComboBoxLayout(Component component, String caption) {
+    private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,
+                                          Collection<T> expectedItems) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption);
-        verifyComboBoxField(layout.getComponent(1), caption);
+        verifyComboBox(layout.getComponent(1), caption, emptySelectionAllowed, expectedItems);
     }
 
     private void verifyTextFieldLayout(Component component, String caption) {
@@ -744,14 +751,6 @@ public class UdmEditMultipleUsagesWindowTest {
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(caption, component.getCaption());
-    }
-
-    private void verifyComboBoxField(Component component, String caption) {
-        assertTrue(component instanceof ComboBox);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
-        assertFalse(((ComboBox) component).isReadOnly());
     }
 
     private void verifyButtonsLayout(Component component) {

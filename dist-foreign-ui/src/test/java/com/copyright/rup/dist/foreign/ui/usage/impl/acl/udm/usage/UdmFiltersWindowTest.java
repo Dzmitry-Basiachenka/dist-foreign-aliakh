@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,7 +26,6 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -47,7 +47,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -224,7 +223,7 @@ public class UdmFiltersWindowTest {
         TextField annualMultiplierToField = Whitebox.getInternalState(window, "annualMultiplierToField");
         ComboBox<FilterOperatorEnum> annualMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "annualMultiplierOperatorComboBox");
-        assertOperatorComboboxItems(annualMultiplierOperatorComboBox);
+        assertOperatorComboBoxItems(annualMultiplierOperatorComboBox);
         verifyIntegerOperationValidations(annualMultiplierFromField, annualMultiplierToField,
             annualMultiplierOperatorComboBox, "Field value should be greater or equal to Annual Multiplier From");
     }
@@ -235,7 +234,7 @@ public class UdmFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesToField");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
-        assertOperatorComboboxItems(annualizedCopiesOperatorComboBox);
+        assertOperatorComboBoxItems(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox, "Field value should be greater or equal to Annualized Copies From");
     }
@@ -246,7 +245,7 @@ public class UdmFiltersWindowTest {
         TextField statisticalMultiplierToField = Whitebox.getInternalState(window, "statisticalMultiplierToField");
         ComboBox<FilterOperatorEnum> statisticalMultiplierOperatorComboBox =
             Whitebox.getInternalState(window, "statisticalMultiplierOperatorComboBox");
-        assertOperatorComboboxItems(statisticalMultiplierOperatorComboBox);
+        assertOperatorComboBoxItems(statisticalMultiplierOperatorComboBox);
         verifyBigDecimalOperationValidations(statisticalMultiplierFromField, statisticalMultiplierToField,
             statisticalMultiplierOperatorComboBox,
             "Field value should be greater or equal to Statistical Multiplier From");
@@ -258,7 +257,7 @@ public class UdmFiltersWindowTest {
         TextField quantityToField = Whitebox.getInternalState(window, "quantityToField");
         ComboBox<FilterOperatorEnum> quantityOperatorComboBox =
             Whitebox.getInternalState(window, "quantityOperatorComboBox");
-        assertOperatorComboboxItems(quantityOperatorComboBox);
+        assertOperatorComboBoxItems(quantityOperatorComboBox);
         verifyIntegerOperationValidations(quantityFromField, quantityToField, quantityOperatorComboBox,
             "Field value should be greater or equal to Quantity From");
     }
@@ -379,7 +378,7 @@ public class UdmFiltersWindowTest {
         assertTrue(layout.isEnabled());
         assertEquals(2, layout.getComponentCount());
         ComboBox<UdmChannelEnum> channelComboBox = (ComboBox<UdmChannelEnum>) layout.getComponent(0);
-        assertComboboxItems(channelComboBox, Arrays.asList(UdmChannelEnum.values()));
+        verifyComboBox(channelComboBox, "Channel", true, Arrays.asList(UdmChannelEnum.values()));
         assertEquals(100, channelComboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
         assertEquals(channelComboBox.getCaption(), "Channel");
@@ -560,16 +559,9 @@ public class UdmFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    private <T> void assertComboboxItems(ComboBox<T> comboBox, List<T> expectedItems) {
-        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(expectedItems.size(), actualItems.size());
-        assertEquals(expectedItems, actualItems);
-    }
-
-    private void assertOperatorComboboxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        assertComboboxItems(operatorComboBox, Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
+    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
     }
 
     @SuppressWarnings(UNCHECKED)
