@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,7 +13,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -65,7 +67,7 @@ public class UdmCommonProxyValueFilterWindowTest {
 
     @Test
     public void testWindowStructure() {
-        UiTestHelper.verifyWindow(filterWindow, "Filter window", 450, 400, Sizeable.Unit.PIXELS);
+        verifyWindow(filterWindow, "Filter window", 450, 400, Sizeable.Unit.PIXELS);
         assertFalse(filterWindow.isResizable());
         VerticalLayout content = (VerticalLayout) filterWindow.getContent();
         assertTrue(content.isSpacing());
@@ -74,7 +76,7 @@ public class UdmCommonProxyValueFilterWindowTest {
         Component component = iterator.next();
         assertTrue(component instanceof SearchWidget);
         verifyPanel((Panel) iterator.next());
-        UiTestHelper.verifyButtonsLayout(iterator.next(), "Save", "Select All", "Clear", "Close");
+        verifyButtonsLayout(iterator.next(), "Save", "Select All", "Clear", "Close");
         assertFalse(iterator.hasNext());
     }
 
@@ -103,7 +105,7 @@ public class UdmCommonProxyValueFilterWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void verifyPanel(Panel panel) {
-        UiTestHelper.verifyWindow(panel, null, 100, 100, Sizeable.Unit.PERCENTAGE);
+        verifyWindow(panel, null, 100, 100, Sizeable.Unit.PERCENTAGE);
         assertEquals(Cornerstone.LABEL_LIGHT, panel.getStyleName());
         Iterator<Component> iterator = panel.iterator();
         CheckBoxGroup<String> optionGroup = (CheckBoxGroup<String>) iterator.next();

@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,15 +14,16 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,9 +80,9 @@ public class UdmProxyValueWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
-        UiTestHelper.verifyButtonsLayout(layout.getComponent(0), "Export");
+        verifyButtonsLayout(layout.getComponent(0), "Export");
         Grid grid = (Grid) layout.getComponent(1);
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, Arrays.asList(
             Triple.of("Value Period", -1.0, -1),
             Triple.of("Pub Type Code", -1.0, -1),
             Triple.of("Content Unit Price", -1.0, -1),
