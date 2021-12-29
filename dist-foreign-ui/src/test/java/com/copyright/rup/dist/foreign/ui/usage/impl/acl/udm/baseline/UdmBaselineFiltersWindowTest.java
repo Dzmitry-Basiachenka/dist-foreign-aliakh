@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -17,13 +19,11 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -39,7 +39,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -189,7 +188,7 @@ public class UdmBaselineFiltersWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
         verifyFilterLayout(verticalLayout.getComponent(0), "Detail Licensee Classes", "Aggregate Licensee Classes");
-        verifyFilterWidget(verticalLayout.getComponent(1), "Types of Use");
+        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Types of Use");
         verifyTextFieldLayout(verticalLayout.getComponent(2), "Wr Wrk Inst", "System Title");
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", "Survey Country");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(4), "Annualized Copies From",
@@ -202,22 +201,7 @@ public class UdmBaselineFiltersWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(captions.length, layout.getComponentCount());
         IntStream.range(0, captions.length)
-            .forEach(index -> verifyFilterWidget(layout.getComponent(index), captions[index]));
-    }
-
-    private void verifyFilterWidget(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isEnabled());
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals(caption, button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
+            .forEach(index -> verifyItemsFilterWidget(layout.getComponent(index), captions[index]));
     }
 
     private void verifyFieldWithOperatorComponent(Component component, String captionFrom, String captionTo) {

@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,7 +21,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Sets;
@@ -28,7 +29,6 @@ import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -48,7 +48,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -343,21 +342,6 @@ public class UdmFiltersWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyItemsFilterWidget(layout.getComponent(0), firstCaption);
         verifyItemsFilterWidget(layout.getComponent(1), secondCaption);
-    }
-
-    private void verifyItemsFilterWidget(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isEnabled());
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals(caption, button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyDateFieldComponent(Component component, String captionFrom, String captionTo) {

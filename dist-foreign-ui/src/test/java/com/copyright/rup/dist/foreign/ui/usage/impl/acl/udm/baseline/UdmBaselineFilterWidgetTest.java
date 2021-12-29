@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
@@ -24,7 +26,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -41,7 +42,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Verifies {@link UdmBaselineFilterWidget}.
@@ -140,7 +140,7 @@ public class UdmBaselineFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
+        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyComboBox(verticalLayout.getComponent(3), "Channel", true, UdmChannelEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
@@ -151,20 +151,6 @@ public class UdmBaselineFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private void verifyPeriodsFilterLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Periods", button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyButtonsLayout(Component component) {

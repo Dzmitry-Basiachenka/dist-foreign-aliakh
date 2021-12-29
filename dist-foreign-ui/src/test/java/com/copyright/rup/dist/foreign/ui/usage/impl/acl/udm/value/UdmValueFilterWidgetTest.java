@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -47,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -201,24 +202,10 @@ public class UdmValueFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyPeriodsFilterLayout(verticalLayout.getComponent(1));
+        verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyComboBox(verticalLayout.getComponent(2), "Status", true, VALUE_STATUSES);
         verifyComboBox(verticalLayout.getComponent(3), "Pub Type", true, new PublicationType(), buildPublicationType());
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
-    }
-
-    private void verifyPeriodsFilterLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        Iterator<Component> iterator = layout.iterator();
-        assertEquals("(0)", ((Label) iterator.next()).getValue());
-        Button button = (Button) iterator.next();
-        assertEquals("Periods", button.getCaption());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-        assertTrue(button.isDisableOnClick());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        assertFalse(iterator.hasNext());
     }
 
     private void verifyFiltersLabel(Component component) {
