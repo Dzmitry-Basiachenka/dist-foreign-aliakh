@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -20,7 +21,6 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -69,16 +69,10 @@ public class ErrorUploadWindowTest {
         assertEquals(new MarginInfo(true), content.getMargin());
         assertTrue(content.isSpacing());
         assertEquals(2, content.getComponentCount());
-        verifyLabel(content.getComponent(0));
+        verifyLabel(content.getComponent(0),
+            "The file could not be uploaded.<br>Press Download button to see detailed list of errors",
+            ContentMode.HTML, -1.0f);
         verifyButtons(content.getComponent(1));
-    }
-
-    private void verifyLabel(Component component) {
-        assertEquals(Label.class, component.getClass());
-        Label label = (Label) component;
-        assertEquals("The file could not be uploaded.<br>Press Download button to see detailed list of errors",
-            label.getValue());
-        assertEquals(ContentMode.HTML, label.getContentMode());
     }
 
     private void verifyButtons(Component component) {

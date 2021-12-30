@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -29,13 +30,13 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -624,7 +625,7 @@ public class UdmEditValueWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyLabel(layout.getComponent(0), caption);
+        verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
         verifyTextField(layout.getComponent(1), isValidated ? caption : null, isReadOnly);
     }
 
@@ -643,15 +644,8 @@ public class UdmEditValueWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyLabel(layout.getComponent(0), caption);
+        verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
         verifyComboBox(layout.getComponent(1), isValidated ? caption : null, emptySelectionAllowed, expectedItems);
-    }
-
-    private void verifyLabel(Component component, String caption) {
-        assertTrue(component instanceof Label);
-        assertEquals(175, component.getWidth(), 0);
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
-        assertEquals(caption, ((Label) component).getValue());
     }
 
     private void verifyTextField(Component component, String caption, boolean isReadOnly) {

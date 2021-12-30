@@ -19,6 +19,7 @@ import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -76,6 +77,23 @@ public final class UiTestHelper {
         assertEquals(unit, window.getWidthUnits());
         assertEquals(height, window.getHeight(), 0);
         assertEquals(unit, window.getHeightUnits());
+    }
+
+    /**
+     * Verifies label.
+     *
+     * @param component   UI component
+     * @param caption     caption
+     * @param contentMode content mode
+     * @param width       width
+     */
+    public static void verifyLabel(Component component, String caption, ContentMode contentMode, float width) {
+        assertTrue(component instanceof Label);
+        assertEquals(width, component.getWidth(), 0);
+        assertEquals(Unit.PIXELS, component.getWidthUnits());
+        Label label = (Label) component;
+        assertEquals(caption, label.getValue());
+        assertEquals(contentMode, label.getContentMode());
     }
 
     /**
