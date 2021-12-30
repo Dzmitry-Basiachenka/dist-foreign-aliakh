@@ -7,8 +7,10 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -75,10 +77,7 @@ public class LazyRightsholderFilterWidgetTest {
     }
 
     private void verifyLabel(Component component) {
-        assertNotNull(component);
-        assertEquals(Label.class, component.getClass());
-        Label label = (Label) component;
-        assertEquals(ZERO_ITEMS_SELECTED_LABEL, label.getValue());
+        UiTestHelper.verifyLabel(component, ZERO_ITEMS_SELECTED_LABEL, ContentMode.TEXT, -1.0f);
     }
 
     private void verifyButton(Component component) {

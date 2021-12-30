@@ -17,11 +17,12 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
@@ -95,13 +96,12 @@ public class UdmUsageAppliedFilterWidgetTest {
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
-        Label label = (Label) component;
-        assertEquals(String.format("<li><b><i>%s: </i></b>%s</li>", labelName, labelValue), label.getValue());
+        UiTestHelper.verifyLabel(component, String.format("<li><b><i>%s: </i></b>%s</li>", labelName, labelValue),
+            ContentMode.HTML, -1.0f);
     }
 
-    private void verifyLabelWithOperator(Component component, String expectedValue) {
-        Label label = (Label) component;
-        assertEquals(expectedValue, label.getValue());
+    private void verifyLabelWithOperator(Component component, String caption) {
+        UiTestHelper.verifyLabel(component, caption, ContentMode.HTML, -1.0f);
     }
 
     private UdmUsageFilter buildUdmFilter() {
