@@ -18,7 +18,9 @@ import com.copyright.rup.dist.foreign.ui.main.impl.MainWidget;
 import com.copyright.rup.dist.foreign.ui.main.impl.MainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.impl.UdmReportWidget;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
@@ -113,39 +115,46 @@ public class ForeignUiTest {
 
     @Test
     public void testInitUi() {
+        mockStatic(ForeignSecurityUtils.class);
         MockSecurityContext context = new MockSecurityContext();
         SecurityContextHolder.setContext(context);
         IMainWidgetController controller = createMock(IMainWidgetController.class);
         IReportController reportController = createMock(IReportController.class);
-        mockStatic(ForeignSecurityUtils.class);
+        IUdmReportController udmReportController = createMock(IUdmReportController.class);
         MainWidget mainWidget = new MainWidget();
         Whitebox.setInternalState(foreignUi, controller);
         Whitebox.setInternalState(foreignUi, reportController);
+        Whitebox.setInternalState(foreignUi, udmReportController);
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
+        expect(udmReportController.initWidget()).andReturn(new UdmReportWidget()).once();
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).times(2);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         controller.refreshWidget();
         expectLastCall().once();
-        replay(controller, reportController, ForeignSecurityUtils.class);
+        replay(controller, reportController, udmReportController, ForeignSecurityUtils.class);
         foreignUi.initUi();
-        verify(controller, reportController, ForeignSecurityUtils.class);
+        verify(controller, reportController, udmReportController, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testInitUiForResearcherRole() {
+        mockStatic(ForeignSecurityUtils.class);
         MockSecurityContext context = new MockSecurityContext();
         SecurityContextHolder.setContext(context);
         IMainWidgetController controller = createMock(IMainWidgetController.class);
         IReportController reportController = createMock(IReportController.class);
-        mockStatic(ForeignSecurityUtils.class);
+        IUdmReportController udmReportController = createMock(IUdmReportController.class);
         MainWidget mainWidget = new MainWidget();
         IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
         Whitebox.setInternalState(foreignUi, controller);
         Whitebox.setInternalState(foreignUi, reportController);
+        Whitebox.setInternalState(foreignUi, udmReportController);
         Whitebox.setInternalState(foreignUi, productFamilyProvider);
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
+        expect(udmReportController.initWidget()).andReturn(new UdmReportWidget()).once();
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).times(2);
         controller.onProductFamilyChanged();
         expectLastCall().once();
         reportController.onProductFamilyChanged();
@@ -154,9 +163,9 @@ public class ForeignUiTest {
         expectLastCall().once();
         controller.refreshWidget();
         expectLastCall().once();
-        replay(controller, reportController, productFamilyProvider, ForeignSecurityUtils.class);
+        replay(controller, reportController, udmReportController, productFamilyProvider, ForeignSecurityUtils.class);
         foreignUi.initUi();
-        verify(controller, reportController, productFamilyProvider, ForeignSecurityUtils.class);
+        verify(controller, reportController, udmReportController, productFamilyProvider, ForeignSecurityUtils.class);
     }
 
     @Test

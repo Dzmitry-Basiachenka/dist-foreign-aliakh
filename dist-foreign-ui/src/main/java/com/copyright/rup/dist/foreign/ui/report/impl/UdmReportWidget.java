@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
@@ -8,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
+
 import com.vaadin.server.Page;
 import com.vaadin.server.ResourceReference;
 import com.vaadin.server.VaadinSession;
@@ -30,13 +32,16 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
     @Override
     public void refresh() {
         removeItems();
-        MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
-        rootItem.setStyleName("reports-menu-root");
-        if (ForeignSecurityUtils.hasManagerPermission() || ForeignSecurityUtils.hasSpecialistPermission()
-            || ForeignSecurityUtils.hasViewOnlyPermission()) {
-            String weeklySurveyReport = ForeignUi.getMessage("menu.report.weekly_survey_report");
-            rootItem.addItem(weeklySurveyReport, menuItem ->
-                this.openReportWindow(weeklySurveyReport, controller.getUdmWeeklySurveyReportController()));
+        String productFamily = controller.getProductFamilyProvider().getSelectedProductFamily();
+        if (productFamily.equals(FdaConstants.ACL_PRODUCT_FAMILY)) {
+            MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
+            rootItem.setStyleName("reports-menu-root");
+            if (ForeignSecurityUtils.hasManagerPermission() || ForeignSecurityUtils.hasSpecialistPermission()
+                || ForeignSecurityUtils.hasViewOnlyPermission()) {
+                String weeklySurveyReport = ForeignUi.getMessage("menu.report.weekly_survey_report");
+                rootItem.addItem(weeklySurveyReport, menuItem ->
+                    this.openReportWindow(weeklySurveyReport, controller.getUdmWeeklySurveyReportController()));
+            }
         }
     }
 

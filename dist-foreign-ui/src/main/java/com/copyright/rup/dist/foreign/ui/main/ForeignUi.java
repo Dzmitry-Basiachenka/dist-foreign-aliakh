@@ -4,6 +4,8 @@ import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.CommonUi;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -17,6 +19,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
 import com.vaadin.spring.annotation.EnableVaadin;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.ui.AbsoluteLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -45,6 +48,10 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
         ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages");
 
     private static final String REPORT_MENU_CSS_POSITION = "left: 385px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_MANAGER = "left: 415px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_SPECIALIST = "left: 540px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY = "left: 415px; top: 29px;";
+    private static final String UDM_REPORT_MENU_CSS_POSITION_RESEARCHER = "left: 165px; top: 29px;";
 
     @Autowired
     private IMainWidgetController controller;
@@ -52,6 +59,8 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
     private IReportController reportController;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
+    @Autowired
+    private IUdmReportController udmReportController;
 
     private ComboBox<String> productFamilyComboBox;
 
@@ -126,6 +135,7 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
             productFamilyProvider.setProductFamily(event.getValue());
             controller.onProductFamilyChanged();
             reportController.onProductFamilyChanged();
+            udmReportController.onProductFamilyChanged();
         });
         VaadinUtils.setMaxComponentsWidth(productFamilyComboBox);
         VaadinUtils.addComponentStyle(productFamilyComboBox, "global-product-family-combo-box");
@@ -139,7 +149,20 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
     }
 
     private void addReportMenu() {
-        ((RootWidget) getContent()).getAbsoluteLayout().addComponent(reportController.initWidget(),
-            REPORT_MENU_CSS_POSITION);
+        IUdmReportWidget udmReportWidget = udmReportController.initWidget();
+        if (ForeignSecurityUtils.hasResearcherPermission()) {
+            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_RESEARCHER);
+        } else if (ForeignSecurityUtils.hasSpecialistPermission()) {
+            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_SPECIALIST);
+        } else if (ForeignSecurityUtils.hasManagerPermission()) {
+            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_MANAGER);
+        } else if (ForeignSecurityUtils.hasViewOnlyPermission()) {
+            getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_VIEW_ONLY);
+        }
+        getAbsoluteLayout().addComponent(reportController.initWidget(), REPORT_MENU_CSS_POSITION);
+    }
+
+    private AbsoluteLayout getAbsoluteLayout() {
+        return ((RootWidget) this.getUI().getContent()).getAbsoluteLayout();
     }
 }
