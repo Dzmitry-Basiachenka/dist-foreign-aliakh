@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.anyObject;
@@ -234,7 +235,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         verifyComboBoxLayout(verticalLayout.getComponent(2), "Action Reason", true,
             Collections.singletonList(ACTION_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Comment");
-        verifyButtonsLayout(verticalLayout.getComponent(4));
+        verifyButtonsLayout(verticalLayout.getComponent(4), "Save", "Discard", "Close");
     }
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,
@@ -261,25 +262,11 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         assertEquals(caption, component.getCaption());
     }
 
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(3, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Save");
-        verifyButton(layout.getComponent(1), "Discard");
-        verifyButton(layout.getComponent(2), "Close");
-    }
-
     private void initEditWindow() {
         replay(controller, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
         binder = Whitebox.getInternalState(window, "binder");
         verify(controller, ForeignSecurityUtils.class);
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
     }
 
     private UdmUsageDto buildUdmUsageDto() {

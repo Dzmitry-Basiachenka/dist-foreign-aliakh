@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,10 +18,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -77,7 +76,7 @@ public class CreateAdditionalFundWindowTest {
         assertEquals(3, content.getComponentCount());
         verifyPreServiceFeeFundNameField(content.getComponent(0));
         verifyCommentArea(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyButtonsLayout(content.getComponent(2), "Confirm", "Cancel", "Close");
     }
 
     @Test
@@ -138,25 +137,6 @@ public class CreateAdditionalFundWindowTest {
         TextArea commentArea = (TextArea) component;
         assertEquals("Comment", commentArea.getCaption());
         assertEquals(StringUtils.EMPTY, commentArea.getValue());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        assertEquals(3, layout.getComponentCount());
-        Button confirmButton = verifyButton(layout.getComponent(0), "Confirm");
-        Button cancelButton = verifyButton(layout.getComponent(1), "Cancel");
-        Button closeButton = verifyButton(layout.getComponent(2), "Close");
-        assertEquals(1, confirmButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, cancelButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, closeButton.getListeners(ClickEvent.class).size());
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
     }
 
     private void verifySize(Component component) {

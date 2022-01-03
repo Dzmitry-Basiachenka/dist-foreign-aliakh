@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -26,8 +28,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -161,7 +161,7 @@ public class UdmBatchUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(0));
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyChannelAndUsageOriginComponents(verticalLayout.getComponent(2));
-        verifyButtonsLayout(verticalLayout.getComponent(3));
+        verifyButtonsLayout(verticalLayout.getComponent(3), "Upload", "Close");
     }
 
     private void verifyUploadComponent(Component component) {
@@ -201,21 +201,6 @@ public class UdmBatchUploadWindowTest {
         assertEquals("Channel", channelComboBox.getCaption());
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        Button loadButton = verifyButton(layout.getComponent(0), "Upload");
-        verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
     }
 
     private ProcessingResult<UdmUsage> buildCsvProcessingResult() {

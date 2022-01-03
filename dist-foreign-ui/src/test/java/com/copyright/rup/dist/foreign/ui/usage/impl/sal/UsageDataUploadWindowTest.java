@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -26,11 +28,8 @@ import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -239,28 +238,13 @@ public class UsageDataUploadWindowTest {
         assertEquals(3, verticalLayout.getComponentCount());
         verifyUploadComponent(verticalLayout.getComponent(0));
         verifyComboBox(verticalLayout.getComponent(1), "Item Bank", true, buildUsageBatch());
-        verifyButtonsLayout(verticalLayout.getComponent(2));
+        verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
     }
 
     private void verifyUploadComponent(Component component) {
         assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        Button loadButton = verifyButton(layout.getComponent(0), "Upload");
-        verifyButton(layout.getComponent(1), "Close");
-        assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
