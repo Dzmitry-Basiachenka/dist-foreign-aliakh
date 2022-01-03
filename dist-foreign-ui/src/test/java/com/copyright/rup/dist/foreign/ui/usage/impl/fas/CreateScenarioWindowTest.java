@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -77,7 +79,7 @@ public class CreateScenarioWindowTest {
         assertEquals(3, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
         verifyDescriptionArea(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyButtonsLayout(content.getComponent(2), "Confirm", "Cancel");
     }
 
     @Test
@@ -176,15 +178,6 @@ public class CreateScenarioWindowTest {
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
         assertEquals("scenario-description", descriptionArea.getId());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        assertTrue(buttonsLayout.isSpacing());
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Confirm");
-        verifyButton(buttonsLayout.getComponent(1), "Cancel");
     }
 
     private Button verifyButton(Component component, String caption) {

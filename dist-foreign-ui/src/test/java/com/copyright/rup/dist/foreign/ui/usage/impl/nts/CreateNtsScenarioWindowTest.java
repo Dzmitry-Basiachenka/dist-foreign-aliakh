@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -94,7 +96,7 @@ public class CreateNtsScenarioWindowTest {
         verifyPostServiceFeeAmountField(content.getComponent(3));
         verifyComboBox(content.getComponent(4), "Pre-Service Fee Funds", true, preServiceFeeFund);
         verifyDescriptionArea(content.getComponent(5));
-        verifyButtonsLayout(content.getComponent(6));
+        verifyButtonsLayout(content.getComponent(6), "Confirm", "Cancel");
     }
 
     @Test
@@ -238,15 +240,6 @@ public class CreateNtsScenarioWindowTest {
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
         assertEquals("scenario-description", descriptionArea.getId());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        assertTrue(buttonsLayout.isSpacing());
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Confirm");
-        verifyButton(buttonsLayout.getComponent(1), "Cancel");
     }
 
     private Button verifyButton(Component component, String caption) {

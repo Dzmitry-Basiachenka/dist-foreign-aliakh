@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -114,7 +116,7 @@ public class UdmPublishToBaselineWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyPeriodComponent(verticalLayout.getComponent(0));
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), "Continue", "Cancel");
     }
 
     @SuppressWarnings("unchecked")
@@ -123,18 +125,5 @@ public class UdmPublishToBaselineWindowTest {
         assertEquals("Period", comboBox.getCaption());
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Continue");
-        verifyButton(layout.getComponent(1), "Cancel");
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
     }
 }

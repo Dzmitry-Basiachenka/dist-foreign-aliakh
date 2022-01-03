@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
@@ -193,7 +194,7 @@ public class UdmBaselineFiltersWindowTest {
         verifyTextFieldLayout(verticalLayout.getComponent(3), "Usage Detail ID", "Survey Country");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(4), "Annualized Copies From",
             "Annualized Copies To");
-        verifyButtonsLayout(verticalLayout.getComponent(5));
+        verifyButtonsLayout(verticalLayout.getComponent(5), "Save", "Clear", "Close");
     }
 
     private void verifyFilterLayout(Component component, String... captions) {
@@ -230,20 +231,6 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
         assertTrue(component.isEnabled());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(3, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Save");
-        verifyButton(layout.getComponent(1), "Clear");
-        verifyButton(layout.getComponent(2), "Close");
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
     }
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,

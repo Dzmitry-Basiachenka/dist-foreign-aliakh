@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 
 import static org.easymock.EasyMock.expect;
@@ -107,7 +108,7 @@ public class CreateSalScenarioWindowTest {
         verifyScenarioNameField(content.getComponent(0));
         verifyComboBox(content.getComponent(1), "Fund Pool", true, fundPool);
         verifyDescriptionArea(content.getComponent(2));
-        verifyButtonsLayout(content.getComponent(3));
+        verifyButtonsLayout(content.getComponent(3), "Confirm", "Cancel");
     }
 
     @Test
@@ -228,22 +229,6 @@ public class CreateSalScenarioWindowTest {
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
         assertEquals("scenario-description", descriptionArea.getId());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        assertTrue(buttonsLayout.isSpacing());
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Confirm");
-        verifyButton(buttonsLayout.getComponent(1), "Cancel");
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertNotNull(component);
-        Button button = (Button) component;
-        assertEquals(caption, button.getCaption());
-        return button;
     }
 
     private UsageBatch buildUsageBatch(Long licenseeAccountNumber) {

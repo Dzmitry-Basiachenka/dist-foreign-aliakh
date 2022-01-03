@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -79,15 +80,7 @@ public class ViewBaselineWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(17, verticalLayout.getComponentCount());
-        verifyButtonsLayout(verticalLayout.getComponent(16));
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(1, layout.getComponentCount());
-        Button button = (Button) layout.getComponent(0);
-        assertEquals("Close", button.getCaption());
+        verifyButtonsLayout(verticalLayout.getComponent(16), "Close");
     }
 
     private void buildUdmBaselineDto() {

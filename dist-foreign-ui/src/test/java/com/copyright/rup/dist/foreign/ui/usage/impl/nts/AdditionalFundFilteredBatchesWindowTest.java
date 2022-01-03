@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -11,15 +13,12 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
+
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
@@ -74,7 +73,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
         verifyGrid(verticalLayout.getComponent(0));
-        verifyButtonsLayout(verticalLayout.getComponent(1));
+        verifyButtonsLayout(verticalLayout.getComponent(1), "Export", "Continue", "Cancel");
     }
 
     private void verifyGrid(Component component) {
@@ -96,24 +95,6 @@ public class AdditionalFundFilteredBatchesWindowTest {
         assertNotNull(amountCell);
         assertEquals("1.00", amountCell.getText());
         assertEquals("v-align-right", amountCell.getStyleName());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(3, layout.getComponentCount());
-        Button exportButton = verifyButton(layout.getComponent(0), "Export");
-        Button continueButton = verifyButton(layout.getComponent(1), "Continue");
-        Button cancelButton = verifyButton(layout.getComponent(2), "Cancel");
-        assertEquals(0, exportButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, continueButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, cancelButton.getListeners(ClickEvent.class).size());
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
     }
 
     private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {

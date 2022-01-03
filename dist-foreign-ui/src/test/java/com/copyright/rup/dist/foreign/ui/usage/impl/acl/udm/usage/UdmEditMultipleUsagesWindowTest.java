@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static org.easymock.EasyMock.anyInt;
@@ -720,7 +721,7 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyComboBoxLayout(verticalLayout.getComponent(12), "Ineligible Reason", true,
             Collections.singletonList(INELIGIBLE_REASON));
         verifyTextFieldLayout(verticalLayout.getComponent(13), "Comment");
-        verifyButtonsLayout(verticalLayout.getComponent(14));
+        verifyButtonsLayout(verticalLayout.getComponent(14), "Save", "Discard", "Close");
     }
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,
@@ -745,15 +746,6 @@ public class UdmEditMultipleUsagesWindowTest {
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(caption, component.getCaption());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(3, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "Save");
-        verifyButton(layout.getComponent(1), "Discard");
-        verifyButton(layout.getComponent(2), "Close");
     }
 
     private void verifyButton(Component component, String caption) {
