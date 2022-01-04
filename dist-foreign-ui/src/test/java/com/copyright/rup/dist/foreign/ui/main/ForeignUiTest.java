@@ -20,7 +20,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.UdmReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmReportWidget;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;

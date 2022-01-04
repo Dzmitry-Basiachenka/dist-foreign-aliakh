@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * Implements {@link IUdmReportService}.
@@ -55,10 +54,7 @@ public class UdmReportService implements IUdmReportService {
     }
 
     @Override
-    public void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
-                                              LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
-                                              OutputStream outputStream) {
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
-            dateReceivedTo, outputStream);
+    public void writeUdmWeeklySurveyCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream);
     }
 }

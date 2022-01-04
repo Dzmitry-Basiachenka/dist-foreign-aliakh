@@ -7,9 +7,12 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
+
 import com.google.common.collect.ImmutableSet;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -158,18 +161,23 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @Test
     @TestData(fileName = "udm-csv-reports/udm-csv-reports-test-data-init-write-udm-weekly-survey-csv-report.groovy")
     public void testWriteUdmWeeklySurveyCsvReport() throws IOException {
-        assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmWeeklySurveyCsvReport(null, null, Collections.emptySet(),
-                    LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1), outputStream),
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setDateFrom(LocalDate.of(1900, 1, 1));
+        reportFilter.setDateTo(LocalDate.of(2100, 1, 1));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream),
             "udm_weekly_survey_report.csv");
     }
 
     @Test
     @TestData(fileName = "udm-csv-reports/udm-csv-reports-test-data-init-write-udm-weekly-survey-csv-report.groovy")
     public void testWriteUdmWeeklySurveyCsvEmptyReport() throws IOException {
-        assertFilesWithExecutor(outputStream ->
-                udmReportRepository.writeUdmWeeklySurveyCsvReport(UdmChannelEnum.Rightsdirect.name(),
-                    UdmUsageOriginEnum.RFA.name(), Collections.singleton(202112), null, null, outputStream),
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
+        reportFilter.setPeriods(Collections.singleton(202112));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream),
             "udm_weekly_survey_empty_report.csv");
     }
 }

@@ -1,12 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
-import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
-import com.copyright.rup.vaadin.widget.api.IController;
-
-import java.util.List;
-
 /**
- * Interface for widget for UDM Weekly Survey Report.
+ * Interface for controller for UDM Weekly Survey Report.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -14,11 +9,6 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public interface IUdmWeeklySurveyReportController extends IController<IUdmWeeklySurveyReportWidget>,
-    ICsvReportProvider {
+public interface IUdmWeeklySurveyReportController extends IUdmCommonReportController {
 
-    /**
-     * @return list of all periods.
-     */
-    List<Integer> getAllPeriods();
 }

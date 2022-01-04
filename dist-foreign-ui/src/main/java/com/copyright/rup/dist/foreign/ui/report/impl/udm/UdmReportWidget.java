@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;

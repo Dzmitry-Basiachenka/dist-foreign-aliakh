@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UdmReportController extends CommonController<IUdmReportWidget> implements IUdmReportController {
+public class UdmCommonReportController extends CommonController<IUdmReportWidget> implements IUdmReportController {
 
     @Autowired
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;

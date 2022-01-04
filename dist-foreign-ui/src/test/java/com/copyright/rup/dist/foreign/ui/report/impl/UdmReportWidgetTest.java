@@ -16,6 +16,8 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmReportWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -129,7 +131,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         IUdmWeeklySurveyReportController controller = createMock(IUdmWeeklySurveyReportController.class);
         expect(udmReportController.getUdmWeeklySurveyReportController()).andReturn(controller).once();
-        expect(controller.initWidget()).andReturn(new UdmWeeklySurveyReportWidget()).once();
+        expect(controller.initWidget()).andReturn(new UdmCommonReportWidget("Received")).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
@@ -142,7 +144,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         mockStatic(Windows.class);
         IController controller = createMock(IController.class);
-        UdmWeeklySurveyReportWidget widget = createMock(UdmWeeklySurveyReportWidget.class);
+        UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
         expect(controller.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
         expectLastCall().once();

@@ -9,9 +9,11 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -21,7 +23,6 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Set;
 
 /**
  * Verifies {@link UdmReportService}.
@@ -101,18 +102,17 @@ public class UdmReportServiceTest {
 
     @Test
     public void testWriteUdmWeeklySurveyCsvReport() {
-        String channel = UdmChannelEnum.CCC.name();
-        String usageOrigin = UdmUsageOriginEnum.RFA.name();
-        Set<Integer> periods = Collections.singleton(202112);
-        LocalDate dateReceivedFrom = LocalDate.of(2021, 11, 21);
-        LocalDate dateReceivedTo = LocalDate.of(2021, 11, 28);
         OutputStream outputStream = new ByteArrayOutputStream();
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
-            dateReceivedTo, outputStream);
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setDateTo(LocalDate.of(2021, 11, 28));
+        filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        filter.setDateFrom(LocalDate.of(2021, 11, 21));
+        filter.setChannel(UdmChannelEnum.CCC);
+        filter.setPeriods(Collections.singleton(202112));
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(channel, usageOrigin, periods, dateReceivedFrom,
-            dateReceivedTo, outputStream);
+        udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 }

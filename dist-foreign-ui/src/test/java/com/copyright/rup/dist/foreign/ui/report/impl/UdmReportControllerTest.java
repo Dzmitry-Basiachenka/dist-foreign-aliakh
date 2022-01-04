@@ -5,6 +5,8 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportController;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +17,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.OffsetDateTime;
 
 /**
- * Verifies {@link UdmReportController}.
+ * Verifies {@link UdmCommonReportController}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -28,11 +30,11 @@ import java.time.OffsetDateTime;
 public class UdmReportControllerTest {
 
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
-    private UdmReportController udmReportController;
+    private UdmCommonReportController udmReportController;
 
     @Before
     public void setUp() {
-        udmReportController = new UdmReportController();
+        udmReportController = new UdmCommonReportController();
         udmWeeklySurveyReportController = createMock(IUdmWeeklySurveyReportController.class);
         Whitebox.setInternalState(udmReportController, udmWeeklySurveyReportController);
     }

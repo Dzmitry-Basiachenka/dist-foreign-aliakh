@@ -1,12 +1,13 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UdmWeeklySurveyReportController extends CommonController<IUdmWeeklySurveyReportWidget>
+public class UdmWeeklySurveyReportController extends CommonController<IUdmCommonReportWidget>
     implements IUdmWeeklySurveyReportController {
 
     @Autowired
@@ -41,13 +42,11 @@ public class UdmWeeklySurveyReportController extends CommonController<IUdmWeekly
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("weekly_survey_report_",
-            os -> udmReportService.writeUdmWeeklySurveyCsvReport(
-                getWidget().getChannel(), getWidget().getUsageOrigin(), getWidget().getPeriods(),
-                getWidget().getDateReceivedFrom(), getWidget().getDateReceivedTo(), os));
+            os -> udmReportService.writeUdmWeeklySurveyCsvReport(getWidget().getReportFilter(), os));
     }
 
     @Override
-    protected IUdmWeeklySurveyReportWidget instantiateWidget() {
-        return new UdmWeeklySurveyReportWidget();
+    public IUdmCommonReportWidget instantiateWidget() {
+        return new UdmCommonReportWidget("Received");
     }
 }
