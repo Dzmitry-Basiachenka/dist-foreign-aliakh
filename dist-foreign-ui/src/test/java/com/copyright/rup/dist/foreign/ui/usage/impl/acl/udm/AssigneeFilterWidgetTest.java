@@ -41,14 +41,17 @@ import java.util.List;
 public class AssigneeFilterWidgetTest {
 
     private static final String ASSIGNEE = "user@copyright.com";
+    private static final String UNASSIGNED = "Unassigned";
+
     private final AssigneeFilterWidget assigneeFilterWidget =
         new AssigneeFilterWidget(() -> Collections.singletonList(ASSIGNEE), Collections.emptySet());
 
     @Test
     public void testLoadBeans() {
         List<String> assignees = assigneeFilterWidget.loadBeans();
-        assertEquals(1, assignees.size());
+        assertEquals(2, assignees.size());
         assertEquals(ASSIGNEE, assignees.get(0));
+        assertEquals(UNASSIGNED, assignees.get(1));
     }
 
     @Test
@@ -63,7 +66,7 @@ public class AssigneeFilterWidgetTest {
 
     @Test
     public void testOnSave() {
-        FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
+        FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(ASSIGNEE)).once();
         replay(filterSaveEvent);
         assigneeFilterWidget.onSave(filterSaveEvent);

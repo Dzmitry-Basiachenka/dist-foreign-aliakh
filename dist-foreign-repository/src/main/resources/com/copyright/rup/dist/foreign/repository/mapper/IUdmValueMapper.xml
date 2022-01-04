@@ -170,7 +170,14 @@
             <if test="null != filter.assignees and filter.assignees.size() > 0">
                 and
                 <foreach collection="filter.assignees" item="assignee" open="(" separator=" or " close=")">
-                    v.assignee = #{assignee}
+                    <choose>
+                        <when test="assignee == 'Unassigned'">
+                            v.assignee is null
+                        </when>
+                        <otherwise>
+                            v.assignee = #{assignee}
+                        </otherwise>
+                    </choose>
                 </foreach>
             </if>
             <if test="null != filter.pubType">

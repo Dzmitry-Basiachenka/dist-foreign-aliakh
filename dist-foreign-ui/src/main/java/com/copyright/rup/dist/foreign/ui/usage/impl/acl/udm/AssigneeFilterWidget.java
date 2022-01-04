@@ -11,6 +11,7 @@ import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,8 @@ import java.util.function.Supplier;
  */
 public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
     implements IFilterWindowController<String> {
+
+    private static final String UNASSIGNED = ForeignUi.getMessage("label.unassigned");
 
     private final Supplier<List<String>> supplier;
     private final Set<String> selectedItemsIds = new HashSet<>();
@@ -53,7 +56,9 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
 
     @Override
     public List<String> loadBeans() {
-        return supplier.get();
+        List<String> assignees = new ArrayList<>(supplier.get());
+        assignees.add(UNASSIGNED);
+        return assignees;
     }
 
     @Override

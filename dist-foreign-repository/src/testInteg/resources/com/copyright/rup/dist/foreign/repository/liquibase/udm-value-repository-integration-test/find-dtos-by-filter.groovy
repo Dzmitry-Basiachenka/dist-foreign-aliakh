@@ -131,7 +131,6 @@ databaseChangeLog {
             column(name: 'system_title', value: 'As Tinside, surfactants, detergents')
             column(name: 'standard_number', value: '1008902112377654XX !@#$%^&*()_+-=?/\\\'"}{][<>')
             column(name: 'content', value: 'null')
-            column(name: 'assignee', value: 'ajohn@copyright.com')
             column(name: 'price_year', value: 2021)
             column(name: 'price_comment', value: 'Price comment')
             column(name: 'content_unit_price', value: 10.0000000000)
