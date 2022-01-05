@@ -86,6 +86,11 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         }
     }
 
+    @Override
+    public void writeUdmSurveyLicenseeCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        //TODO will be implement later
+    }
+
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));

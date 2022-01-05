@@ -16,7 +16,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.OffsetDateTime;
 
 /**
- * Verifies {@link UdmCommonReportController}.
+ * Verifies {@link UdmReportController}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -29,11 +29,11 @@ import java.time.OffsetDateTime;
 public class UdmReportControllerTest {
 
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
-    private UdmCommonReportController udmReportController;
+    private UdmReportController udmReportController;
 
     @Before
     public void setUp() {
-        udmReportController = new UdmCommonReportController();
+        udmReportController = new UdmReportController();
         udmWeeklySurveyReportController = createMock(IUdmWeeklySurveyReportController.class);
         Whitebox.setInternalState(udmReportController, udmWeeklySurveyReportController);
     }

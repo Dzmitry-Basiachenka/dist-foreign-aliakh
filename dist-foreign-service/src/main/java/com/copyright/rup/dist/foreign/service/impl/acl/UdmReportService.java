@@ -57,4 +57,9 @@ public class UdmReportService implements IUdmReportService {
     public void writeUdmWeeklySurveyCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
         udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream);
     }
+
+    @Override
+    public void writeUdmSurveyLicenseeCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        udmReportRepository.writeUdmSurveyLicenseeCsvReport(reportFilter, outputStream);
+    }
 }

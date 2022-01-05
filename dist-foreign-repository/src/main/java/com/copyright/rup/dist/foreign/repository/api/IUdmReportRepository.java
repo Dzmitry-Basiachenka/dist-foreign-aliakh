@@ -70,4 +70,12 @@ public interface IUdmReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmWeeklySurveyCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Survey Licensee Report into csv output stream.
+     *
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmSurveyLicenseeCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }
