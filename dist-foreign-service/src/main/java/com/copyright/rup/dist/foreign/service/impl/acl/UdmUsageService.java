@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -261,9 +262,8 @@ public class UdmUsageService implements IUdmUsageService {
         String userName = RupContextUtils.getUserName();
         Set<String> udmUsageIds = udmUsages
             .stream()
-            .peek(udmUsage -> udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
-                String.format("Assignment was changed. Old assignee is '%s'. Usage is not assigned to anyone",
-                    udmUsage.getAssignee())))
+            .peek(udmUsage -> udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.UNASSIGN,
+                String.format("Usage was unassigned from '%s'", udmUsage.getAssignee())))
             .map(BaseEntity::getId)
             .collect(Collectors.toSet());
         udmUsageRepository.updateAssignee(udmUsageIds, null, userName);

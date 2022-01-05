@@ -130,9 +130,8 @@ public class UdmValueService implements IUdmValueService {
         String userName = RupContextUtils.getUserName();
         Set<String> udmValueIds = udmValues
             .stream()
-            .peek(udmValue -> udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
-                String.format("Assignment was changed. Old assignee is '%s'. Value is not assigned to anyone",
-                    udmValue.getAssignee())))
+            .peek(udmValue -> udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.UNASSIGN,
+                String.format("Value was unassigned from '%s'", udmValue.getAssignee())))
             .map(BaseEntity::getId)
             .collect(Collectors.toSet());
         udmValueRepository.updateAssignee(udmValueIds, null, userName);

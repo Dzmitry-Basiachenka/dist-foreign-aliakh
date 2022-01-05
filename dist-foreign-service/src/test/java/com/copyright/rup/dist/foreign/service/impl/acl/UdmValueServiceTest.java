@@ -180,8 +180,8 @@ public class UdmValueServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmValueRepository.updateAssignee(Collections.singleton(udmValue.getId()), null, USER_NAME);
         expectLastCall().once();
-        udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.ASSIGNEE_CHANGE,
-            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. Value is not assigned to anyone");
+        udmValueAuditService.logAction(udmValue.getId(), UdmValueActionTypeEnum.UNASSIGN,
+            "Value was unassigned from 'wjohn@copyright.com'");
         expectLastCall().once();
         replay(udmValueRepository, udmValueAuditService, RupContextUtils.class);
         udmValueService.unassignValues(udmValues);

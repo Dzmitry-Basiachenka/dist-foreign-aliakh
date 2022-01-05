@@ -40,8 +40,8 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.ImmutableMap;
-
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -536,8 +536,8 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         udmUsageRepository.updateAssignee(Collections.singleton(udmUsage.getId()), null, USER_NAME);
         expectLastCall().once();
-        udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.ASSIGNEE_CHANGE,
-            "Assignment was changed. Old assignee is 'wjohn@copyright.com'. Usage is not assigned to anyone");
+        udmUsageAuditService.logAction(udmUsage.getId(), UsageActionTypeEnum.UNASSIGN,
+            "Usage was unassigned from 'wjohn@copyright.com'");
         expectLastCall().once();
         replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
         udmUsageService.unassignUsages(udmUsages);
