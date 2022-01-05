@@ -97,8 +97,8 @@ public class UdmFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("UDM additional filters", window.getCaption());
-        assertEquals(550, window.getWidth(), 0);
+        assertEquals("UDM usages additional filters", window.getCaption());
+        assertEquals(750, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(560, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
@@ -531,8 +531,11 @@ public class UdmFiltersWindowTest {
     }
 
     private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
+        verifyComboBox(operatorComboBox, "Operator", false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUALS,
+                FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -587,7 +590,7 @@ public class UdmFiltersWindowTest {
         List<HasValue<?>> fields = binder.getFields()
             .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
+        assertEquals(1, fields.size());
         TextField actualField = (TextField) fields.get(0);
         assertNotNull(actualField);
         String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
