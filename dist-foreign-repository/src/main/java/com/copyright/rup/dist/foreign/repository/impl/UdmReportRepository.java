@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
@@ -13,15 +14,15 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
+
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -78,18 +79,10 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
     }
 
     @Override
-    public void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
-                                              LocalDate dateReceivedFrom, LocalDate dateReceivedTo,
-                                              OutputStream outputStream) {
+    public void writeUdmWeeklySurveyCsvReport(UdmReportFilter filter, OutputStream outputStream) {
         try (UdmWeeklySurveyReportHandler handler =
                  new UdmWeeklySurveyReportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-            parameters.put("channel", channel);
-            parameters.put("usageOrigin", usageOrigin);
-            parameters.put("periods", Objects.requireNonNull(periods));
-            parameters.put("dateReceivedFrom", dateReceivedFrom);
-            parameters.put("dateReceivedTo", dateReceivedTo);
-            getTemplate().select("IUdmReportMapper.findUdmWeeklySurveyReportDtos", parameters, handler);
+            getTemplate().select("IUdmReportMapper.findUdmWeeklySurveyReportDtos", filter, handler);
         }
     }
 

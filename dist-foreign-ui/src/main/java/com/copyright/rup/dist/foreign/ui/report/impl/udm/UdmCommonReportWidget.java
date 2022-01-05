@@ -1,11 +1,12 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -27,29 +28,38 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of controller for {@link IUdmWeeklySurveyReportWidget}.
+ * Implementation of controller for {@link IUdmCommonReportWidget}.
  * <p>
- * Copyright (C) 2021 copyright.com
+ * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 12/15/2021
+ * Date: 01/03/2022
  *
  * @author Aliaksandr Liakh
+ * @author Anton Azarenka
  */
-public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySurveyReportWidget {
+public class UdmCommonReportWidget extends Window implements IUdmCommonReportWidget {
 
-    private IUdmWeeklySurveyReportController controller;
+    private IUdmCommonReportController controller;
     private ComboBox<UdmChannelEnum> channelComboBox;
     private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
     private PeriodFilterWidget periodFilterWidget;
-    private LocalDateWidget dateReceivedFromWidget;
-    private LocalDateWidget dateReceivedToWidget;
-    private Binder<LocalDate> dateReceivedBinder;
+    private LocalDateWidget dateFromWidget;
+    private LocalDateWidget dateToWidget;
+    private Binder<LocalDate> dateBinder;
     private Button exportButton;
     private final Set<Integer> periods = new HashSet<>();
+    private final String dateCaption;
+
+    /**
+     * @param dateCaption caption for date label.
+     */
+    public UdmCommonReportWidget(String dateCaption) {
+        this.dateCaption = dateCaption;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
-    public IUdmWeeklySurveyReportWidget init() {
+    public UdmCommonReportWidget init() {
         setWidth(300, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "report-udm-weekly-survey-window");
@@ -58,44 +68,35 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     }
 
     @Override
-    public void setController(IUdmWeeklySurveyReportController controller) {
+    public void setController(IUdmCommonReportController controller) {
         this.controller = controller;
     }
 
     @Override
-    public String getChannel() {
-        return Objects.nonNull(channelComboBox.getValue()) ? channelComboBox.getValue().name() : null;
+    public UdmReportFilter getReportFilter() {
+        UdmReportFilter udmReportFilter = new UdmReportFilter();
+        udmReportFilter.setChannel(
+            Objects.nonNull(channelComboBox.getValue()) ? channelComboBox.getValue() : null);
+        udmReportFilter.setPeriods(periods);
+        udmReportFilter.setUsageOrigin(
+            Objects.nonNull(usageOriginComboBox.getValue()) ? usageOriginComboBox.getValue() : null);
+        udmReportFilter.setDateFrom(dateFromWidget.getValue());
+        udmReportFilter.setDateTo(dateToWidget.getValue());
+        return udmReportFilter;
     }
 
-    @Override
-    public String getUsageOrigin() {
-        return Objects.nonNull(usageOriginComboBox.getValue()) ? usageOriginComboBox.getValue().name() : null;
-    }
-
-    @Override
-    public Set<Integer> getPeriods() {
-        return periods;
-    }
-
-    @Override
-    public LocalDate getDateReceivedFrom() {
-        return dateReceivedFromWidget.getValue();
-    }
-
-    @Override
-    public LocalDate getDateReceivedTo() {
-        return dateReceivedToWidget.getValue();
-    }
-
-    private void initContent() {
+    /**
+     * Init content.
+     */
+    public void initContent() {
         initChannelFilter();
         initUsageOriginFilter();
         initPeriodFilter();
         initDateReceivedFilter();
         HorizontalLayout multipleFiltersLayout = new HorizontalLayout(channelComboBox, usageOriginComboBox);
         multipleFiltersLayout.setSizeFull();
-        VerticalLayout content = new VerticalLayout(periodFilterWidget, multipleFiltersLayout, dateReceivedFromWidget,
-            dateReceivedToWidget, getButtonsLayout());
+        VerticalLayout content = new VerticalLayout(periodFilterWidget, multipleFiltersLayout, dateFromWidget,
+            dateToWidget, getButtonsLayout());
         setContent(content);
         VaadinUtils.setMaxComponentsWidth(content);
     }
@@ -124,27 +125,27 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
     }
 
     private void initDateReceivedFilter() {
-        dateReceivedBinder = new Binder<>();
-        dateReceivedFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_from"));
-        dateReceivedFromWidget.addValueChangeListener(event -> {
-            dateReceivedBinder.validate();
+        dateBinder = new Binder<>();
+        dateFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_report_from", dateCaption));
+        dateFromWidget.addValueChangeListener(event -> {
+            dateBinder.validate();
             updateExportButtonState();
         });
-        VaadinUtils.addComponentStyle(dateReceivedFromWidget, "date-received-from-filter");
-        dateReceivedToWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_received_to"));
-        dateReceivedToWidget.addValueChangeListener(event -> {
-            dateReceivedBinder.validate();
+        VaadinUtils.addComponentStyle(dateFromWidget, "date-received-from-filter");
+        dateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_report_to", dateCaption));
+        dateToWidget.addValueChangeListener(event -> {
+            dateBinder.validate();
             updateExportButtonState();
         });
-        VaadinUtils.addComponentStyle(dateReceivedToWidget, "date-received-to-filter");
-        dateReceivedBinder.forField(dateReceivedToWidget)
+        VaadinUtils.addComponentStyle(dateToWidget, "date-received-to-filter");
+        dateBinder.forField(dateToWidget)
             .withValidator(value -> {
-                LocalDate dateReceivedFrom = dateReceivedFromWidget.getValue();
-                LocalDate dateReceivedTo = dateReceivedToWidget.getValue();
-                return Objects.isNull(dateReceivedFrom) && Objects.isNull(dateReceivedTo)
-                    || 0 <= dateReceivedTo.compareTo(dateReceivedFrom);
+                LocalDate dateFromWidgetValue = dateFromWidget.getValue();
+                LocalDate dateToWidgetValue = dateToWidget.getValue();
+                return Objects.isNull(dateFromWidgetValue) && Objects.isNull(dateToWidgetValue)
+                    || 0 <= dateToWidgetValue.compareTo(dateFromWidgetValue);
             }, ForeignUi.getMessage("field.error.greater_or_equal_to",
-                ForeignUi.getMessage("label.date_received_from")))
+                ForeignUi.getMessage("label.date_report_from", dateCaption)))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
@@ -164,6 +165,6 @@ public class UdmWeeklySurveyReportWidget extends Window implements IUdmWeeklySur
 
     private void updateExportButtonState() {
         exportButton.setEnabled(!periods.isEmpty()
-            || dateReceivedBinder.isValid() && !dateReceivedFromWidget.isEmpty() && !dateReceivedToWidget.isEmpty());
+            || dateBinder.isValid() && !dateFromWidget.isEmpty() && !dateToWidget.isEmpty());
     }
 }

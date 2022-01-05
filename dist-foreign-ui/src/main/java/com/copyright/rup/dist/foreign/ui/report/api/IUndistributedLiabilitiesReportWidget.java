@@ -5,7 +5,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import java.time.LocalDate;
 
 /**
- * Interface for undistributed liabilities report controller.
+ * Interface for undistributed liabilities report widget.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>

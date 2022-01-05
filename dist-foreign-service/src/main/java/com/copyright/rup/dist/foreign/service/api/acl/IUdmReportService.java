@@ -2,12 +2,11 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDate;
-import java.util.Set;
 
 /**
  * Interface that provides ability to generate multiple UDM reports.
@@ -63,13 +62,8 @@ public interface IUdmReportService {
     /**
      * Writes UDM Weekly Survey Report into csv output stream.
      *
-     * @param channel          channel or {@code null}
-     * @param usageOrigin      usage origin or {@code null}
-     * @param periods          set of periods
-     * @param dateReceivedFrom date received from
-     * @param dateReceivedTo   date received to
-     * @param outputStream     instance of {@link OutputStream}
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
      */
-    void writeUdmWeeklySurveyCsvReport(String channel, String usageOrigin, Set<Integer> periods,
-                                       LocalDate dateReceivedFrom, LocalDate dateReceivedTo, OutputStream outputStream);
+    void writeUdmWeeklySurveyCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }

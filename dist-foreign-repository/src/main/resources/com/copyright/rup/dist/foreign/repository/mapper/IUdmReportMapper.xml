@@ -44,7 +44,7 @@
         <include refid="IUdmProxyValueMapper.selectDtosByFilterSql"/>
     </select>
 
-    <select id="findUdmWeeklySurveyReportDtos" parameterType="map" resultMap="udmWeeklySurveyReportDtoResultMap">
+    <select id="findUdmWeeklySurveyReportDtos" resultMap="udmWeeklySurveyReportDtoResultMap">
         select
             period,
             date_received,
@@ -97,8 +97,8 @@
                         u.period = #{period}
                     </foreach>
                 </if>
-                <if test="null != dateReceivedFrom and null != dateReceivedTo">
-                    and u.created_datetime::date between #{dateReceivedFrom} and #{dateReceivedTo}
+                <if test="null != dateFrom and null != dateTo">
+                    and u.created_datetime::date between #{dateFrom} and #{dateTo}
                 </if>
             </where>
             group by u.period, u.created_datetime, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name

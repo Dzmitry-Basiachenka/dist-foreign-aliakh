@@ -14,10 +14,14 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmWeeklySurveyReportController;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +36,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Verifies {@link UdmWeeklySurveyReportController}.
@@ -62,9 +65,9 @@ public class UdmWeeklySurveyReportControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        IUdmWeeklySurveyReportWidget widget = controller.instantiateWidget();
+        IUdmCommonReportWidget widget = controller.instantiateWidget();
         assertNotNull(controller.instantiateWidget());
-        assertEquals(UdmWeeklySurveyReportWidget.class, widget.getClass());
+        assertEquals(UdmCommonReportWidget.class, widget.getClass());
     }
 
     @Test
@@ -80,38 +83,25 @@ public class UdmWeeklySurveyReportControllerTest {
     public void testGetCsvStreamSource() {
         OffsetDateTime now = OffsetDateTime.of(2021, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
         mockStatic(OffsetDateTime.class);
-        String channels = UdmChannelEnum.CCC.name();
-        String usageOrigins = UdmUsageOriginEnum.RFA.name();
-        Set<Integer> periods = Collections.singleton(202112);
-        LocalDate dateReceivedFrom = LocalDate.of(2021, 11, 21);
-        LocalDate dateReceivedTo = LocalDate.of(2021, 11, 28);
-        IUdmWeeklySurveyReportWidget widget = createMock(IUdmWeeklySurveyReportWidget.class);
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setDateTo(LocalDate.of(2021, 11, 28));
+        filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        filter.setDateFrom(LocalDate.of(2021, 11, 21));
+        filter.setChannel(UdmChannelEnum.CCC);
+        filter.setPeriods(Collections.singleton(202112));
+        IUdmCommonReportWidget widget = createMock(IUdmCommonReportWidget.class);
         Whitebox.setInternalState(controller, widget);
-        Capture<String> channelCapture = newCapture();
-        Capture<String> usageOriginCapture = newCapture();
-        Capture<Set<Integer>> periodsCapture = newCapture();
-        Capture<LocalDate> dateReceivedFromCapture = newCapture();
-        Capture<LocalDate> dateReceivedToCapture = newCapture();
+        Capture<UdmReportFilter> reportFilterCapture = newCapture();
         Capture<OutputStream> osCapture = newCapture();
         expect(OffsetDateTime.now()).andReturn(now).once();
-        expect(widget.getChannel()).andReturn(channels).once();
-        expect(widget.getUsageOrigin()).andReturn(usageOrigins).once();
-        expect(widget.getPeriods()).andReturn(periods).once();
-        expect(widget.getDateReceivedFrom()).andReturn(dateReceivedFrom).once();
-        expect(widget.getDateReceivedTo()).andReturn(dateReceivedTo).once();
-        udmReportService.writeUdmWeeklySurveyCsvReport(capture(channelCapture), capture(usageOriginCapture),
-            capture(periodsCapture), capture(dateReceivedFromCapture), capture(dateReceivedToCapture),
-            capture(osCapture));
+        expect(widget.getReportFilter()).andReturn(filter).once();
+        udmReportService.writeUdmWeeklySurveyCsvReport(capture(reportFilterCapture), capture(osCapture));
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, udmReportService, udmUsageService);
         IStreamSource streamSource = controller.getCsvStreamSource();
         assertEquals("weekly_survey_report_01_02_2021_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
-        assertEquals(channels, channelCapture.getValue());
-        assertEquals(usageOrigins, usageOriginCapture.getValue());
-        assertEquals(periods, periodsCapture.getValue());
-        assertEquals(dateReceivedFrom, dateReceivedFromCapture.getValue());
-        assertEquals(dateReceivedTo, dateReceivedToCapture.getValue());
+        assertEquals(filter, reportFilterCapture.getValue());
         assertNotNull(osCapture.getValue());
         verify(OffsetDateTime.class, widget, udmReportService, udmUsageService);
     }
