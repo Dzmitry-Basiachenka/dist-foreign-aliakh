@@ -125,7 +125,9 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER = "2192-3558";
     private static final String DIGITAL = "DIGITAL";
     private static final String ASSIGNEE_1 = "wjohn@copyright.com";
-    private static final String ASSIGNEE_2 = "user@copyright.com";
+    private static final String ASSIGNEE_2 = "jjohn@copyright.com";
+    private static final String ASSIGNEE_3 = "ajohn@copyright.com";
+    private static final String UNASSIGNED = "Unassigned";
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final String INVALID_VALUE = "Invalid value";
@@ -159,7 +161,7 @@ public class UdmUsageRepositoryIntegrationTest {
         originalUsage.setStatus(UsageStatusEnum.INELIGIBLE);
         originalUsage.setPeriod(202512);
         originalUsage.setPeriodEndDate(LocalDate.of(2025, 12, 31));
-        originalUsage.setAssignee(ASSIGNEE_2);
+        originalUsage.setAssignee(ASSIGNEE_3);
         originalUsage.setWrWrkInst(WR_WRK_INST);
         originalUsage.setReportedTitle(REPORTED_TITLE);
         originalUsage.setReportedStandardNumber(STANDARD_NUMBER);
@@ -238,8 +240,14 @@ public class UdmUsageRepositoryIntegrationTest {
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)),
+            UDM_USAGE_UID_5);
         assertFilteringFindDtosByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
@@ -349,7 +357,10 @@ public class UdmUsageRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(Collections.singleton(202106)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setUsageStatus(UsageStatusEnum.RH_FOUND), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_1, UNASSIGNED)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_1)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(UNASSIGNED)), 1);
         assertFilteringFindCountByFilter(
             filter -> filter.setReportedPubTypes(Collections.singleton(PUB_TYPE_NOT_SHARED)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setPubFormats(Collections.singleton(PUBLICATION_FORMAT)), 3);
@@ -675,9 +686,9 @@ public class UdmUsageRepositoryIntegrationTest {
         UdmUsageDto udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
         assertNull(udmUsagedto.getAssignee());
         udmUsageRepository
-            .updateAssignee(Collections.singleton("22241298-5c9e-4222-8fc1-5ee80c0e48f1"), ASSIGNEE_2, USER_NAME);
+            .updateAssignee(Collections.singleton("22241298-5c9e-4222-8fc1-5ee80c0e48f1"), ASSIGNEE_3, USER_NAME);
         udmUsagedto = udmUsageRepository.findDtosByFilter(filter, null, null).get(0);
-        assertEquals(ASSIGNEE_2, udmUsagedto.getAssignee());
+        assertEquals(ASSIGNEE_3, udmUsagedto.getAssignee());
     }
 
     @Test

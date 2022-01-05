@@ -19,7 +19,6 @@ databaseChangeLog {
             column(name: 'period', value: 202106)
             column(name: 'period_end_date', value: '2021-06-30')
             column(name: 'status_ind', value: 'RH_FOUND')
-            column(name: 'assignee', value: 'wjohn@copyright.com')
             column(name: 'rh_account_number', value: 1000002612)
             column(name: 'wr_wrk_inst', value: 254327612)
             column(name: 'reported_title', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
