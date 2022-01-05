@@ -1,11 +1,10 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportController;
 
 import org.junit.Before;
 import org.junit.Test;
