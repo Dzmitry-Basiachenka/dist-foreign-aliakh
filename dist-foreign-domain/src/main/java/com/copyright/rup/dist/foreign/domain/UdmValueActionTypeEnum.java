@@ -27,6 +27,11 @@ public enum UdmValueActionTypeEnum {
     ASSIGNEE_CHANGE,
 
     /**
+     * Action type for UDM value unassignment.
+     */
+    UNASSIGN,
+
+    /**
      * Action type for UDM value publish.
      */
     PUBLISH_TO_BASELINE,
