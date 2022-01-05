@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
@@ -14,8 +14,6 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 

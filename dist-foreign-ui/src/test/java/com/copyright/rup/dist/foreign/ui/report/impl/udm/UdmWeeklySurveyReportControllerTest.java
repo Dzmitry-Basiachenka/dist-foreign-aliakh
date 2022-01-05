@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -19,8 +19,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmWeeklySurveyReportController;
 
 import org.easymock.Capture;
 import org.junit.Before;

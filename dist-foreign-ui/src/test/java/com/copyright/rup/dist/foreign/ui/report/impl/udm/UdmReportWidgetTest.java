@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -16,8 +16,6 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmReportWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
 
