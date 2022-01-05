@@ -28,4 +28,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Weekly Survey Report controller.
      */
     IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController();
+
+    /**
+     * @return UDM Weekly Survey Report controller.
+     */
+    IUdmSurveyLicenseeReportController getUdmSurveyLicenseeReportController();
 }

@@ -115,4 +115,16 @@ public class UdmReportServiceTest {
         udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
+
+    @Test
+    public void testWriteUdmSurveyLicenseeCsvReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setPeriods(Collections.singleton(202112));
+        udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
 }

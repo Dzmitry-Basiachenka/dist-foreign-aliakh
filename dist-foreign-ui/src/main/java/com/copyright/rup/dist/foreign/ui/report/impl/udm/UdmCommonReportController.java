@@ -1,9 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,41 +10,27 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
- * Implementation of {@link IUdmReportController}.
- * <p/>
- * Copyright (C) 2021 copyright.com
+ * Implementation of {@link IUdmCommonReportController}.
  * <p>
- * Date: 12/16/2021
+ * Copyright (C) 2022 copyright.com
+ * <p>
+ * Date: 01/05/2022
  *
- * @author Aliaksandr Liakh
+ * @author Anton Azarenka
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UdmCommonReportController extends CommonController<IUdmReportWidget> implements IUdmReportController {
+public abstract class UdmCommonReportController extends CommonController<IUdmCommonReportWidget>
+    implements IUdmCommonReportController {
 
     @Autowired
-    private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
-    @Autowired
-    private IProductFamilyProvider productFamilyProvider;
+    private IUdmUsageService udmUsageService;
 
     @Override
-    public void onProductFamilyChanged() {
-        refreshWidget();
-    }
-
-    @Override
-    public IProductFamilyProvider getProductFamilyProvider() {
-        return productFamilyProvider;
-    }
-
-    @Override
-    public IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController() {
-        return udmWeeklySurveyReportController;
-    }
-
-    @Override
-    protected IUdmReportWidget instantiateWidget() {
-        return new UdmReportWidget();
+    public List<Integer> getAllPeriods() {
+        return udmUsageService.getPeriods();
     }
 }
