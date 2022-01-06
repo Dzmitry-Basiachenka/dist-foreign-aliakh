@@ -204,4 +204,29 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
             outputStream -> udmReportRepository.writeUdmSurveyLicenseeCsvReport(reportFilter, outputStream),
             "udm_survey_licensee_empty_report.csv");
     }
+
+    @Test
+    @TestData(fileName =
+        "udm-csv-reports/udm-csv-reports-test-data-init-write-udm-verified-details-by-source-report.groovy")
+    public void testVerifiedDetailsBySourceReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setDateFrom(LocalDate.of(1900, 1, 1));
+        reportFilter.setDateTo(LocalDate.of(2100, 1, 1));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
+            "udm_verified_details_by_source_report.csv");
+    }
+
+    @Test
+    @TestData(fileName =
+        "udm-csv-reports/udm-csv-reports-test-data-init-write-udm-verified-details-by-source-report.groovy")
+    public void testVerifiedDetailsBySourceEmptyReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
+        reportFilter.setPeriods(Collections.singleton(202112));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
+            "udm_verified_details_by_source_empty_report.csv");
+    }
 }
