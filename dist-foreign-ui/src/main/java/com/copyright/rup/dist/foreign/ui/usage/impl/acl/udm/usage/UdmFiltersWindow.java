@@ -56,6 +56,7 @@ import java.util.function.Predicate;
  */
 public class UdmFiltersWindow extends Window {
 
+    private static final int ONE = 1;
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -113,9 +114,9 @@ public class UdmFiltersWindow extends Window {
         usageFilter = new UdmUsageFilter(udmUsageFilter);
         appliedUsageFilter = udmUsageFilter;
         setContent(initRootLayout());
-        setCaption(ForeignUi.getMessage("window.udm_additional_filters"));
+        setCaption(ForeignUi.getMessage("window.udm_usages_additional_filters"));
         setResizable(false);
-        setWidth(550, Unit.PIXELS);
+        setWidth(750, Unit.PIXELS);
         setHeight(560, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-additional-filters-window");
     }
@@ -267,8 +268,8 @@ public class UdmFiltersWindow extends Window {
         populateOperatorFilters(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox,
             UdmUsageFilter::getAnnualMultiplierExpression);
         annualMultiplierFromField.addValueChangeListener(event -> filterBinder.validate());
-        annualMultiplierOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(annualMultiplierToField, event.getValue()));
+        annualMultiplierOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(annualMultiplierFromField, annualMultiplierToField, event.getValue()));
         filterBinder.forField(annualMultiplierFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -317,8 +318,8 @@ public class UdmFiltersWindow extends Window {
                     ForeignUi.getMessage("label.annualized_copies_from")))
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
-        annualizedCopiesOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(annualizedCopiesToField, event.getValue()));
+        annualizedCopiesOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(annualizedCopiesFromField, annualizedCopiesToField, event.getValue()));
         annualizedCopiesFromField.setSizeFull();
         annualizedCopiesToField.setSizeFull();
         annualizedCopiesLayout.setEnabled(isFilterPermittedForUser);
@@ -335,8 +336,8 @@ public class UdmFiltersWindow extends Window {
         populateOperatorFilters(statisticalMultiplierFromField, statisticalMultiplierToField,
             statisticalMultiplierOperatorComboBox, UdmUsageFilter::getStatisticalMultiplierExpression);
         statisticalMultiplierFromField.addValueChangeListener(event -> filterBinder.validate());
-        statisticalMultiplierOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(statisticalMultiplierToField, event.getValue()));
+        statisticalMultiplierOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(statisticalMultiplierFromField, statisticalMultiplierToField, event.getValue()));
         filterBinder.forField(statisticalMultiplierFromField)
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
@@ -372,8 +373,8 @@ public class UdmFiltersWindow extends Window {
         populateOperatorFilters(quantityFromField, quantityToField, quantityOperatorComboBox,
             UdmUsageFilter::getQuantityExpression);
         quantityFromField.addValueChangeListener(event -> filterBinder.validate());
-        quantityOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(quantityToField, event.getValue()));
+        quantityOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(quantityFromField, quantityToField, event.getValue()));
         filterBinder.forField(quantityFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -448,8 +449,10 @@ public class UdmFiltersWindow extends Window {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN);
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUALS,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
@@ -459,21 +462,32 @@ public class UdmFiltersWindow extends Window {
         FilterExpression<Number> filterExpression = getExpressionFunction.apply(usageFilter);
         Number firstFieldValue = filterExpression.getFieldFirstValue();
         Number secondFieldValue = filterExpression.getFieldSecondValue();
+        FilterOperatorEnum filterOperator = filterExpression.getOperator();
         toField.setEnabled(Objects.nonNull(secondFieldValue));
         if (Objects.nonNull(firstFieldValue)) {
-            FilterOperatorEnum filterOperator = filterExpression.getOperator();
             fromField.setValue(firstFieldValue.toString());
             toField.setValue(Objects.nonNull(secondFieldValue) ? secondFieldValue.toString() : StringUtils.EMPTY);
+            comboBox.setSelectedItem(filterOperator);
+        } else if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
+            fromField.setEnabled(false);
+            toField.setEnabled(false);
             comboBox.setSelectedItem(filterOperator);
         }
     }
 
-    private void updateOperatorField(TextField fieldToUpdate, FilterOperatorEnum value) {
-        if (FilterOperatorEnum.BETWEEN == value) {
-            fieldToUpdate.setEnabled(true);
+    private void updateOperatorField(TextField fromField, TextField toField, FilterOperatorEnum filterOperator) {
+        if (0 == filterOperator.getArgumentsNumber()) {
+            fromField.clear();
+            fromField.setEnabled(false);
+            toField.clear();
+            toField.setEnabled(false);
+        } else if (ONE == filterOperator.getArgumentsNumber()) {
+            fromField.setEnabled(true);
+            toField.clear();
+            toField.setEnabled(false);
         } else {
-            fieldToUpdate.clear();
-            fieldToUpdate.setEnabled(false);
+            fromField.setEnabled(true);
+            toField.setEnabled(true);
         }
         filterBinder.validate();
     }
@@ -607,6 +621,8 @@ public class UdmFiltersWindow extends Window {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
                 successPredicate.test(toField) ? valueConverter.apply(toField.getValue().trim()) : null);
+            filterExpression.setOperator(comboBox.getValue());
+        } else if (0 == comboBox.getValue().getArgumentsNumber()) {
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;

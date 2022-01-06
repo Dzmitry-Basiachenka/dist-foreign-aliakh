@@ -84,6 +84,7 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String UDM_USAGE_UID_9 = "1d856581-09aa-4f70-9e0c-cf7fe121135f";
     private static final String UDM_USAGE_UID_10 = "d147235f-3595-4b74-b091-f6f91fba2e7d";
     private static final String UDM_USAGE_UID_11 = "cb241298-5c9e-4222-8fc1-5ee80c0e48f1";
+    private static final String UDM_USAGE_UID_12 = "f2776c57-f744-4fb0-9445-f01bde48730f";
     private static final String UDM_BATCH_UID_1 = "aa5751aa-2858-38c6-b0d9-51ec0edfcf4f";
     private static final String UDM_BATCH_UID_2 = "bb5751aa-2f56-38c6-b0d9-45ec0edfcf4a";
     private static final String UDM_BATCH_UID_3 = "4b6055be-fc4e-4b49-aeab-28563366c9fd";
@@ -259,11 +260,11 @@ public class UdmUsageRepositoryIntegrationTest {
                 filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), UDM_USAGE_UID_5,
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 11)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 10)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> {
             filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
             filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -271,7 +272,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> {
             filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
             filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
@@ -302,54 +303,129 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilterWithOperators() {
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)),
+    public void testFindDtosByFilterAnnualMultiplier() {
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 25, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 12, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 12, null)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 12, null)),
             UDM_USAGE_UID_5);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 20, null)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 12, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 12, 25)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 20, 25)),
-            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 425, null)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAnnualizedCopies() {
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 102, null)),
             UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 102, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 75, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 75, null)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 70, 100)),
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 75, null)),
+            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 75, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 75, 102)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterStatisticalMultiplier() {
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)),
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
-            UDM_USAGE_UID_7);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 1, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 2, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
-            UDM_USAGE_UID_7);
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0.5, null)),
+            UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0, null)), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 7, 100)));
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)),
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter ->
-                filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400)),
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 0.5, null)),
             UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 0.5, null)),
+            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 0.5, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 0.5, 1)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterQuantity() {
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 17, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 5, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 5, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 5, 17)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
     }
 
     @Test
@@ -368,15 +444,15 @@ public class UdmUsageRepositoryIntegrationTest {
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(2))), 1);
         assertFilteringFindCountByFilter(filter ->
             filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 4);
         assertFilteringFindCountByFilter(filter -> filter.setUsageDateFrom(LocalDate.of(2020, 5, 20)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 20)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDateTo(LocalDate.of(2020, 5, 20)), 3);
         assertFilteringFindCountByFilter(filter -> {
             filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
             filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         }, 2);
         assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateFrom(LocalDate.of(2020, 5, 20)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20)), 3);
         assertFilteringFindCountByFilter(filter -> {
             filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
             filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
@@ -399,39 +475,94 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilterWithOperators() {
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)), 2);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)), 1);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 20, null)), 2);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 20, 25)), 2);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 425, null)), 1);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null)), 2);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 2);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 70, 100)), 1);
+    public void testFindCountByFilterAnnualMultiplier() {
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 25, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 12, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 12, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 12, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 12, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 12, 25)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAnnualizedCopies() {
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 102, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 102, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 75, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 75, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 75, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 75, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 75, 102)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterStatisticalMultiplier() {
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 2, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 1, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0.5, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 7, 100)), 0);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)), 1);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 25, null)), 3);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 1);
-        assertFilteringFindCountByFilter(filter ->
-            filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 2, 400)), 2);
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 0.5, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 0.5, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 0.5, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 0.5, 1)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterQuantity() {
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 17, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 5, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 5, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 5, 17)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
     }
 
     @Test
