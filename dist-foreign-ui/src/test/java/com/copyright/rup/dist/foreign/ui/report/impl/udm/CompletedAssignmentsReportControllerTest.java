@@ -58,6 +58,6 @@ public class CompletedAssignmentsReportControllerTest {
         expect(udmUsageService.getPeriods()).andReturn(periods).once();
         replay(udmUsageService);
         assertEquals(periods, controller.getAllPeriods());
-        verify( udmUsageService);
+        verify(udmUsageService);
     }
 }
