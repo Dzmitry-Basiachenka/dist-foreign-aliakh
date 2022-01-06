@@ -83,6 +83,7 @@
         <typeAlias alias="UdmIneligibleReason" type="com.copyright.rup.dist.foreign.domain.UdmIneligibleReason"/>
         <typeAlias alias="UdmProxyValueDto" type="com.copyright.rup.dist.foreign.domain.UdmProxyValueDto"/>
         <typeAlias alias="UdmWeeklySurveyReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmWeeklySurveyReportDto"/>
+        <typeAlias alias="UdmSurveyLicenseeReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmSurveyLicenseeReportDto"/>
     </typeAliases>
 
     <typeHandlers>

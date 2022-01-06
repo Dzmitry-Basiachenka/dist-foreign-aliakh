@@ -24,6 +24,29 @@
         <result property="percentUsableFromUnregisteredUsers" column="percent_usable_from_unregistered_users"/>
     </resultMap>
 
+    <resultMap id="udmSurveyLicenseeReportDtoResultMap" type="UdmSurveyLicenseeReportDto">
+        <result property="period" column="period"/>
+        <result property="surveyStartDate" column="survey_start_date"/>
+        <result property="channel" column="channel"/>
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="companyId" column="company_id"/>
+        <result property="companyName" column="company_name"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="aggregateClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateClassName" column="aggregate_licensee_class_name"/>
+        <result property="numberOfTotalRows" column="number_of_total_rows"/>
+        <result property="numberOfUsableRows" column="number_of_usable_rows"/>
+        <result property="percentUsable" column="percent_usable"/>
+        <result property="numberOfRegisteredUsers" column="number_of_registered_users"/>
+        <result property="numberOfRowsByRegisteredUsers" column="number_of_rows_by_registered_users"/>
+        <result property="numberOfUsableRowsByRegisteredUsers" column="number_of_usable_rows_by_registered_users"/>
+        <result property="percentUsableFromRegisteredUsers" column="percent_usable_from_registered_users"/>
+        <result property="numberOfRowsByUnregisteredUsers" column="number_of_rows_by_unregistered_users"/>
+        <result property="numberOfUsableRowsByUnregisteredUsers" column="number_of_usable_rows_by_unregistered_users"/>
+        <result property="percentUsableFromUnregisteredUsers" column="percent_usable_from_unregistered_users"/>
+    </resultMap>
+
     <select id="findUdmUsagesCountByFilter" parameterType="map" resultType="int">
         <include refid="IUdmUsageMapper.selectCountByFilterSql"/>
     </select>
@@ -103,6 +126,73 @@
             </where>
             group by u.period, u.created_datetime, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name
             order by u.period desc, u.created_datetime desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name
+        ) as nested_report
+    </select>
+
+    <select id="findUdmSurveyLicenseeReportDtos" resultMap="udmSurveyLicenseeReportDtoResultMap">
+        select
+            period,
+            survey_start_date,
+            channel,
+            usage_origin,
+            company_id,
+            company_name,
+            detail_licensee_class_id,
+            detail_licensee_class_name,
+            aggregate_licensee_class_id,
+            aggregate_licensee_class_name,
+            number_of_total_rows,
+            number_of_usable_rows,
+            100 * number_of_usable_rows / number_of_total_rows as percent_usable,
+            number_of_registered_users,
+            number_of_rows_by_registered_users,
+            number_of_usable_rows_by_registered_users,
+            case when (number_of_rows_by_registered_users != 0) then 100 * number_of_usable_rows_by_registered_users / number_of_rows_by_registered_users else 0 end as percent_usable_from_registered_users,
+            number_of_rows_by_unregistered_users,
+            number_of_usable_rows_by_unregistered_users,
+            case when (number_of_rows_by_unregistered_users != 0) then 100 * number_of_usable_rows_by_unregistered_users / number_of_rows_by_unregistered_users else 0 end as percent_usable_from_unregistered_users
+        from (
+            select
+                u.period,
+                survey_start_date,
+                ub.channel,
+                ub.usage_origin,
+                company_id,
+                company_name,
+                u.detail_licensee_class_id,
+                dlc.description detail_licensee_class_name,
+                alc.aggregate_licensee_class_id,
+                alc.description aggregate_licensee_class_name,
+                count(1) as number_of_total_rows,
+                sum(case when reported_title = 'None' then 0 else 1 end) as number_of_usable_rows,
+                count(distinct survey_respondent) as number_of_registered_users,
+                sum(case when survey_respondent is not null then 1 else 0 end) as number_of_rows_by_registered_users,
+                sum(case when survey_respondent is not null and (reported_title != 'None' or reported_title is null) then 1 else 0 end) as number_of_usable_rows_by_registered_users,
+                sum(case when survey_respondent is null then 1 else 0 end) as number_of_rows_by_unregistered_users,
+                sum(case when survey_respondent is null and (reported_title != 'None' or reported_title is null) then 1 else 0 end) as number_of_usable_rows_by_unregistered_users
+            from ${schema}.df_udm_usage u
+            join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+            join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+            join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
+        <where>
+            <if test="null != channel">
+                and ub.channel = #{channel}
+            </if>
+            <if test="null != usageOrigin">
+                and ub.usage_origin = #{usageOrigin}
+            </if>
+            <if test="periods.size() > 0">
+                and
+                <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                    u.period = #{period}
+                </foreach>
+            </if>
+            <if test="null != dateFrom and null != dateTo">
+                and u.survey_start_date::date between #{dateFrom} and #{dateTo}
+            </if>
+        </where>
+            group by u.period, u.survey_start_date, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name, alc.aggregate_licensee_class_id, aggregate_licensee_class_name
+            order by u.period desc, u.survey_start_date desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name, aggregate_licensee_class_name
         ) as nested_report
     </select>
 </mapper>

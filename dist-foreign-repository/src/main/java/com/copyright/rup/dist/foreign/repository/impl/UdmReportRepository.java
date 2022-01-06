@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
@@ -87,8 +88,11 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
     }
 
     @Override
-    public void writeUdmSurveyLicenseeCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
-        //TODO will be implement later
+    public void writeUdmSurveyLicenseeCsvReport(UdmReportFilter filter, OutputStream outputStream) {
+        try (UdmSurveyLicenseeReportHandler handler =
+                 new UdmSurveyLicenseeReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmSurveyLicenseeReportDtos", filter, handler);
+        }
     }
 
     private void writeUdmUsageCsvReport(UdmUsageFilter filter, BaseCsvReportHandler handler) {
