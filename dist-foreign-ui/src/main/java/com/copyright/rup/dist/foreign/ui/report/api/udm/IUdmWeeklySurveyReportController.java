@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.api;
+package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 /**
  * Interface for controller for UDM Weekly Survey Report.
@@ -10,5 +10,4 @@ package com.copyright.rup.dist.foreign.ui.report.api;
  * @author Aliaksandr Liakh
  */
 public interface IUdmWeeklySurveyReportController extends IUdmCommonReportController {
-
 }

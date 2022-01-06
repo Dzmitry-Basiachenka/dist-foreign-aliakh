@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -11,16 +10,12 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
-import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
@@ -37,57 +32,52 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link UdmCommonReportWidget}.
+ * Verifies {@link CompletedAssignmentsReportWidget}.
  * <p>
- * Copyright (C) 2021 copyright.com
+ * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 12/15/2021
+ * Date: 01/06/2022
  *
- * @author Aliaksandr Liakh
+ * @author Ihar Suvorau
  */
-public class UdmCommonReportWidgetTest {
+public class CompletedAssignmentsReportWidgetTest {
 
-    private UdmCommonReportWidget widget;
+    private CompletedAssignmentsReportWidget widget;
     private Binder<LocalDate> dateBinder;
 
     @Before
     public void setUp() {
-        UdmWeeklySurveyReportController controller = new UdmWeeklySurveyReportController();
-        widget = (UdmCommonReportWidget) controller.initWidget();
+        CompletedAssignmentsReportController controller = new CompletedAssignmentsReportController();
+        widget = (CompletedAssignmentsReportWidget) controller.initWidget();
         dateBinder = Whitebox.getInternalState(widget, "dateBinder");
     }
 
     @Test
     public void testInit() {
-        verifyWindow(widget, StringUtils.EMPTY, 300, -1, Sizeable.Unit.PIXELS);
+        verifyWindow(widget, StringUtils.EMPTY, 330, -1, Sizeable.Unit.PIXELS);
         assertEquals("udm-report-window", widget.getStyleName());
         assertEquals("udm-report-window", widget.getId());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
-        assertEquals(5, content.getComponentCount());
-        Component periods = content.getComponent(0);
-        assertEquals(PeriodFilterWidget.class, periods.getClass());
-        verifyItemsFilterWidget(content.getComponent(0), "Periods");
-        HorizontalLayout multiFiltersLayout = (HorizontalLayout) content.getComponent(1);
-        verifyComboBox(multiFiltersLayout.getComponent(0), "Channel", true, UdmChannelEnum.values());
-        verifyComboBox(multiFiltersLayout.getComponent(1), "Usage Origin", true, UdmUsageOriginEnum.values());
-        Component dateFrom = content.getComponent(2);
+        assertEquals(4, content.getComponentCount());
+        HorizontalLayout multiFiltersLayout = (HorizontalLayout) content.getComponent(0);
+        verifyItemsFilterWidget(multiFiltersLayout.getComponent(0), "Periods");
+        verifyItemsFilterWidget(multiFiltersLayout.getComponent(1), "User Names");
+        Component dateFrom = content.getComponent(1);
         assertEquals(LocalDateWidget.class, dateFrom.getClass());
-        assertEquals("Received Date From", dateFrom.getCaption());
-        Component dateTo = content.getComponent(3);
+        assertEquals("From Date", dateFrom.getCaption());
+        Component dateTo = content.getComponent(2);
         assertEquals(LocalDateWidget.class, dateTo.getClass());
-        assertEquals("Received Date To", dateTo.getCaption());
-        verifyButtonsLayout(content.getComponent(4), "Export", "Close");
+        assertEquals("To Date", dateTo.getCaption());
+        verifyButtonsLayout(content.getComponent(3), "Export", "Close");
     }
 
     @Test
     public void testGetReportFilter() {
-        ComboBox<UdmChannelEnum> channelComboBox = Whitebox.getInternalState(widget, "channelComboBox");
-        ComboBox<UdmUsageOriginEnum> usageOriginComboBox = Whitebox.getInternalState(widget, "usageOriginComboBox");
-        channelComboBox.setSelectedItem(UdmChannelEnum.CCC);
-        usageOriginComboBox.setSelectedItem(UdmUsageOriginEnum.RFA);
         Set<Integer> periods = Collections.singleton(202112);
         Whitebox.setInternalState(widget, "periods", periods);
+        Set<String> userNames = Collections.singleton("user@copyright.com");
+        Whitebox.setInternalState(widget, "userNames", userNames);
         LocalDateWidget dateFromWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "dateFromWidget", dateFromWidget);
         LocalDate dateFrom = LocalDate.now();
@@ -98,16 +88,15 @@ public class UdmCommonReportWidgetTest {
         expect(dateToWidget.getValue()).andReturn(dateTo).once();
         replay(dateFromWidget, dateToWidget);
         UdmReportFilter reportFilter = widget.getReportFilter();
-        assertEquals(UdmChannelEnum.CCC, reportFilter.getChannel());
-        assertEquals(UdmUsageOriginEnum.RFA, reportFilter.getUsageOrigin());
         assertEquals(periods, reportFilter.getPeriods());
+        assertEquals(userNames, reportFilter.getUserNames());
         assertEquals(dateFrom, reportFilter.getDateFrom());
         assertEquals(dateTo, reportFilter.getDateTo());
         verify(dateFromWidget, dateToWidget);
     }
 
     @Test
-    public void testDateReceivedValidation() {
+    public void testDateValidation() {
         LocalDateWidget dateFromWidget = Whitebox.getInternalState(widget, "dateFromWidget");
         LocalDateWidget dateToWidget = Whitebox.getInternalState(widget, "dateToWidget");
         LocalDate localDateFrom = LocalDate.of(2021, 12, 13);
@@ -116,7 +105,7 @@ public class UdmCommonReportWidgetTest {
         verifyDateWidgetValidationMessage(dateToWidget, localDateTo, StringUtils.EMPTY, true);
         dateFromWidget.setValue(LocalDate.of(2021, 12, 27));
         verifyDateWidgetValidationMessage(dateToWidget, localDateTo,
-            "Field value should be greater or equal to Received Date From", false);
+            "Field value should be greater or equal to From Date", false);
         verifyDateWidgetValidationMessage(dateFromWidget, null, StringUtils.EMPTY, true);
         verifyDateWidgetValidationMessage(dateToWidget, null, StringUtils.EMPTY, true);
     }

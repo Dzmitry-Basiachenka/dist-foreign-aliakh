@@ -1,12 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
-import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
-import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -17,7 +15,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 import com.vaadin.data.Binder;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -28,39 +25,30 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of controller for {@link IUdmCommonReportWidget}.
- * <p>
+ * Widget provides functionality for configuring items filter widget for user names.
+ * <p/>
  * Copyright (C) 2022 copyright.com
- * <p>
- * Date: 01/03/2022
+ * <p/>
+ * Date: 01/05/2022
  *
- * @author Aliaksandr Liakh
- * @author Anton Azarenka
+ * @author Ihar Suvorau
  */
-public class UdmCommonReportWidget extends Window implements IUdmCommonReportWidget {
+public class CompletedAssignmentsReportWidget extends Window implements ICompletedAssignmentsReportWidget {
 
-    private IUdmCommonReportController controller;
-    private ComboBox<UdmChannelEnum> channelComboBox;
-    private ComboBox<UdmUsageOriginEnum> usageOriginComboBox;
+    private ICompletedAssignmentsReportController controller;
     private PeriodFilterWidget periodFilterWidget;
+    private UserNameFilterWidget userNameFilterWidget;
     private LocalDateWidget dateFromWidget;
     private LocalDateWidget dateToWidget;
     private Binder<LocalDate> dateBinder;
     private Button exportButton;
     private final Set<Integer> periods = new HashSet<>();
-    private final String dateCaption;
-
-    /**
-     * @param dateCaption caption for date label.
-     */
-    public UdmCommonReportWidget(String dateCaption) {
-        this.dateCaption = dateCaption;
-    }
+    private final Set<String> userNames = new HashSet<>();
 
     @Override
     @SuppressWarnings("unchecked")
-    public UdmCommonReportWidget init() {
-        setWidth(300, Unit.PIXELS);
+    public ICompletedAssignmentsReportWidget init() {
+        setWidth(330, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "udm-report-window");
         initContent();
@@ -68,18 +56,15 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
     }
 
     @Override
-    public void setController(IUdmCommonReportController controller) {
+    public void setController(ICompletedAssignmentsReportController controller) {
         this.controller = controller;
     }
 
     @Override
     public UdmReportFilter getReportFilter() {
         UdmReportFilter udmReportFilter = new UdmReportFilter();
-        udmReportFilter.setChannel(
-            Objects.nonNull(channelComboBox.getValue()) ? channelComboBox.getValue() : null);
         udmReportFilter.setPeriods(periods);
-        udmReportFilter.setUsageOrigin(
-            Objects.nonNull(usageOriginComboBox.getValue()) ? usageOriginComboBox.getValue() : null);
+        udmReportFilter.setUserNames(userNames);
         udmReportFilter.setDateFrom(dateFromWidget.getValue());
         udmReportFilter.setDateTo(dateToWidget.getValue());
         return udmReportFilter;
@@ -89,30 +74,15 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
      * Init content.
      */
     public void initContent() {
-        initChannelFilter();
-        initUsageOriginFilter();
         initPeriodFilter();
+        initUserNamesFilter();
         initDatesFilter();
-        HorizontalLayout multipleFiltersLayout = new HorizontalLayout(channelComboBox, usageOriginComboBox);
+        HorizontalLayout multipleFiltersLayout = new HorizontalLayout(periodFilterWidget, userNameFilterWidget);
         multipleFiltersLayout.setSizeFull();
-        VerticalLayout content = new VerticalLayout(periodFilterWidget, multipleFiltersLayout, dateFromWidget,
-            dateToWidget, getButtonsLayout());
+        VerticalLayout content =
+            new VerticalLayout(multipleFiltersLayout, dateFromWidget, dateToWidget, getButtonsLayout());
         setContent(content);
         VaadinUtils.setMaxComponentsWidth(content);
-    }
-
-    private void initChannelFilter() {
-        channelComboBox = new ComboBox<>(ForeignUi.getMessage("label.channel"));
-        channelComboBox.setItems(UdmChannelEnum.values());
-        VaadinUtils.setMaxComponentsWidth(channelComboBox);
-        VaadinUtils.addComponentStyle(channelComboBox, "channel-filter");
-    }
-
-    private void initUsageOriginFilter() {
-        usageOriginComboBox = new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
-        usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
-        VaadinUtils.setMaxComponentsWidth(usageOriginComboBox);
-        VaadinUtils.addComponentStyle(usageOriginComboBox, "usage-origin-filter");
     }
 
     private void initPeriodFilter() {
@@ -124,15 +94,23 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
         });
     }
 
+    private void initUserNamesFilter() {
+        userNameFilterWidget = new UserNameFilterWidget(controller::getUserNames);
+        userNameFilterWidget.addFilterSaveListener((CommonFilterWindow.IFilterSaveListener<String>) saveEvent -> {
+            userNames.clear();
+            userNames.addAll(saveEvent.getSelectedItemsIds());
+        });
+    }
+
     private void initDatesFilter() {
         dateBinder = new Binder<>();
-        dateFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_report_from", dateCaption));
+        dateFromWidget = new LocalDateWidget(ForeignUi.getMessage("label.from_date"));
         dateFromWidget.addValueChangeListener(event -> {
             dateBinder.validate();
             updateExportButtonState();
         });
         VaadinUtils.addComponentStyle(dateFromWidget, "date-from-filter");
-        dateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.date_report_to", dateCaption));
+        dateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.to_date"));
         dateToWidget.addValueChangeListener(event -> {
             dateBinder.validate();
             updateExportButtonState();
@@ -144,8 +122,7 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
                 LocalDate dateToWidgetValue = dateToWidget.getValue();
                 return Objects.isNull(dateFromWidgetValue) && Objects.isNull(dateToWidgetValue)
                     || 0 <= dateToWidgetValue.compareTo(dateFromWidgetValue);
-            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
-                ForeignUi.getMessage("label.date_report_from", dateCaption)))
+            }, ForeignUi.getMessage("field.error.greater_or_equal_to", ForeignUi.getMessage("label.from_date")))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }

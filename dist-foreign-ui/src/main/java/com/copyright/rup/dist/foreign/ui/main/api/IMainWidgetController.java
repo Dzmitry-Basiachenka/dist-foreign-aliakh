@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
