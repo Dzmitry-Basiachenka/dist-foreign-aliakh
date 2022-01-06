@@ -589,6 +589,17 @@
         order by period desc
     </select>
 
+    <select id="findUserNames" resultType="string">
+        select created_by_user
+        from ${schema}.df_udm_audit
+        where action_type_ind = 'UNASSIGN'
+        union
+        select created_by_user
+        from ${schema}.df_udm_value_audit
+        where action_type_ind = 'UNASSIGN'
+        order by created_by_user
+    </select>
+
     <select id="findAssignees" resultType="string">
         select distinct assignee
         from ${schema}.df_udm_usage

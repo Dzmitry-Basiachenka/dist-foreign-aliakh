@@ -116,6 +116,11 @@ public interface IUdmUsageService {
     List<Integer> getPeriods();
 
     /**
+     * @return list of usernames from UDM usages and values audit.
+     */
+    List<String> getUserNames();
+
+    /**
      * @return list of assignees from UDM usages.
      */
     List<String> getAssignees();

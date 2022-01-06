@@ -93,6 +93,13 @@ public interface IUdmUsageRepository {
     List<Integer> findPeriods();
 
     /**
+     * Finds list of usernames from UDM usages and values audit.
+     *
+     * @return list of periods
+     */
+    List<String> findUserNames();
+
+    /**
      * @return list of assignees from UDM usages.
      */
     List<String> findAssignees();

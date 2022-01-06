@@ -667,6 +667,15 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_FIELDS)
+    public void testFindUserNames() {
+        List<String> expectedUserNames = Arrays.asList(ASSIGNEE_3, ASSIGNEE_2, ASSIGNEE_1);
+        List<String> actualUserNames = udmUsageRepository.findUserNames();
+        assertFalse(actualUserNames.isEmpty());
+        assertEquals(expectedUserNames, actualUserNames);
+    }
+
+    @Test
+    @TestData(fileName = FIND_FIELDS)
     public void testFindPeriods() {
         List<Integer> expectedPeriods = Arrays.asList(202106, 202012, 202006);
         List<Integer> actualPeriods = udmUsageRepository.findPeriods();

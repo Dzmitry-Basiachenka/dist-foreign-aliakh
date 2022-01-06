@@ -202,6 +202,11 @@ public class UdmUsageService implements IUdmUsageService {
     }
 
     @Override
+    public List<String> getUserNames() {
+        return udmUsageRepository.findUserNames();
+    }
+
+    @Override
     public List<String> getAssignees() {
         return udmUsageRepository.findAssignees();
     }

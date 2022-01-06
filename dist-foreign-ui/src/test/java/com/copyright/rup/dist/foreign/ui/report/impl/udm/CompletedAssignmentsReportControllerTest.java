@@ -60,4 +60,13 @@ public class CompletedAssignmentsReportControllerTest {
         assertEquals(periods, controller.getAllPeriods());
         verify(udmUsageService);
     }
+
+    @Test
+    public void testGetUserNames() {
+        List<String> userNames = Collections.singletonList("user@copyrigt.com");
+        expect(udmUsageService.getUserNames()).andReturn(userNames).once();
+        replay(udmUsageService);
+        assertEquals(userNames, controller.getUserNames());
+        verify(udmUsageService);
+    }
 }
