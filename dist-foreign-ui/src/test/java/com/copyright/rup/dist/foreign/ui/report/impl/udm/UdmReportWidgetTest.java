@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replayAll;
@@ -13,9 +12,10 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmSurveyLicenseeReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -54,6 +54,7 @@ import java.util.function.Supplier;
 public class UdmReportWidgetTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
+    private static final String COMPLETED_ASSIGNMENT_REPORT = "Completed Assignments by Employee Report";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
     private final IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -108,8 +109,9 @@ public class UdmReportWidgetTest {
         replayAll();
         udmReportWidget.refresh();
         verifyAll();
-        assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
-        assertNull(udmReportWidget.getItems().get(0).getChildren());
+        List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
+        assertEquals(1, menuItems.size());
+        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(0).getText());
     }
 
     @Test
@@ -154,6 +156,21 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testCompletedAssignmentReportSelected() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
+        setSpecialistExpectations();
+        ICompletedAssignmentsReportController controller = createMock(ICompletedAssignmentsReportController.class);
+        expect(udmReportController.getCompletedAssignmentsReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(new CompletedAssignmentsReportWidget()).once();
+        Windows.showModalWindow(anyObject());
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(2);
+        verifyAll();
+    }
+
+    @Test
     public void testOpenReportWindowForWeeklySurveyReport() throws Exception {
         setSpecialistExpectations();
         mockStatic(Windows.class);
@@ -186,6 +203,22 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testOpenReportWindowForCompletedAssignmentReport() throws Exception {
+        setSpecialistExpectations();
+        mockStatic(Windows.class);
+        IController controller = createMock(IController.class);
+        UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
+        expect(controller.initWidget()).andReturn(widget).once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        widget.setCaption(COMPLETED_ASSIGNMENT_REPORT);
+        expectLastCall().once();
+        replayAll();
+        Whitebox.invokeMethod(udmReportWidget, "openReportWindow", COMPLETED_ASSIGNMENT_REPORT, controller);
+        verifyAll();
+    }
+
+    @Test
     public void testReportStreamSource() {
         setSpecialistExpectations();
         String fileName = "weekly_survey_report_01_02_2021_03_04.csv";
@@ -214,9 +247,10 @@ public class UdmReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(2, menuItems.size());
+        assertEquals(3, menuItems.size());
         assertEquals("Weekly Survey Report", menuItems.get(0).getText());
         assertEquals("Survey Licensee Report", menuItems.get(1).getText());
+        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(2).getText());
     }
 
     private void setSpecialistExpectations() {

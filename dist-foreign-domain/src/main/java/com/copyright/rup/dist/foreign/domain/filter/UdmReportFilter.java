@@ -23,6 +23,7 @@ import java.util.Set;
 public class UdmReportFilter {
 
     private Set<Integer> periods = new HashSet<>();
+    private Set<String> userNames = new HashSet<>();
     private UdmChannelEnum channel;
     private UdmUsageOriginEnum usageOrigin;
     private LocalDate dateFrom;
@@ -52,6 +53,14 @@ public class UdmReportFilter {
         this.periods = periods;
     }
 
+    public Set<String> getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(Set<String> userNames) {
+        this.userNames = userNames;
+    }
+
     public LocalDate getDateFrom() {
         return dateFrom;
     }
@@ -78,9 +87,10 @@ public class UdmReportFilter {
         }
         UdmReportFilter that = (UdmReportFilter) o;
         return new EqualsBuilder()
+            .append(periods, that.periods)
+            .append(userNames, that.userNames)
             .append(channel, that.channel)
             .append(usageOrigin, that.usageOrigin)
-            .append(periods, that.periods)
             .append(dateFrom, that.dateFrom)
             .append(dateTo, that.dateTo)
             .isEquals();
@@ -89,9 +99,10 @@ public class UdmReportFilter {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .append(periods)
+            .append(userNames)
             .append(channel)
             .append(usageOrigin)
-            .append(periods)
             .append(dateFrom)
             .append(dateTo)
             .toHashCode();
@@ -101,6 +112,7 @@ public class UdmReportFilter {
     public String toString() {
         return new ToStringBuilder(this)
             .append("periods", periods)
+            .append("userNames", userNames)
             .append("channel", channel)
             .append("usageOrigin", usageOrigin)
             .append("dateFrom", dateFrom)

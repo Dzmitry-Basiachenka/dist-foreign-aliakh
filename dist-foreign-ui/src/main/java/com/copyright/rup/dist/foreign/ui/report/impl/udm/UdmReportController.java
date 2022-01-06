@@ -1,10 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmSurveyLicenseeReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Autowired
     private IUdmWeeklySurveyReportController udmWeeklySurveyReportController;
     @Autowired
+    private ICompletedAssignmentsReportController completedAssignmentsReportController;
+    @Autowired
     private IUdmSurveyLicenseeReportController udmSurveyLicenseeReportController;
     @Autowired
     private IProductFamilyProvider productFamilyProvider;
@@ -50,6 +53,11 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Override
     public IUdmSurveyLicenseeReportController getUdmSurveyLicenseeReportController() {
         return udmSurveyLicenseeReportController;
+    }
+
+    @Override
+    public ICompletedAssignmentsReportController getCompletedAssignmentsReportController() {
+        return completedAssignmentsReportController;
     }
 
     @Override

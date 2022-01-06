@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.ui.main.impl.MainWidget;
 import com.copyright.rup.dist.foreign.ui.main.impl.MainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmReportWidget;
 

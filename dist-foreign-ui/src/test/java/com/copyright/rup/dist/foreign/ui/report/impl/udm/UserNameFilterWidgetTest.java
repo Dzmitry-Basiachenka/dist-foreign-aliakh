@@ -42,7 +42,7 @@ public class UserNameFilterWidgetTest {
 
     private static final String USER_NAME = "user@copyright.com";
     private final UserNameFilterWidget userNameFilterWidget =
-        new UserNameFilterWidget(() -> Collections.singletonList(USER_NAME), Collections.emptySet());
+        new UserNameFilterWidget(() -> Collections.singletonList(USER_NAME));
 
     @Test
     public void testLoadBeans() {

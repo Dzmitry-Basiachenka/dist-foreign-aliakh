@@ -1,18 +1,18 @@
-package com.copyright.rup.dist.foreign.ui.report.api;
+package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
- * Interface for widget for UDM common Report.
- * <p>
+ * Interface for UDM Completed Assignments by Employee Report widget.
+ * <p/>
  * Copyright (C) 2022 copyright.com
- * <p>
- * Date: 01/03/2022
+ * <p/>
+ * Date: 01/06/2022
  *
- * @author Anton Azarenka
+ * @author Ihar Suvorau
  */
-public interface IUdmCommonReportWidget extends IWidget<IUdmCommonReportController> {
+public interface ICompletedAssignmentsReportWidget extends IWidget<ICompletedAssignmentsReportController> {
 
     /**
      * Returns reported filter.

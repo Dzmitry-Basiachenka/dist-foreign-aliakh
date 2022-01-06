@@ -18,7 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmSurveyLicenseeReportController;
 

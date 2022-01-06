@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.api;
+package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 /**
  * Interface for IUdmSurveyLicenseeReportController.

@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmWeeklySurveyReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Implementation of {@link IUdmWeeklySurveyReportController}.
+ * Implementation of controller for {@link IUdmCommonReportWidget}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>

@@ -4,8 +4,8 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -45,6 +45,9 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
                 rootItem.addItem(surveyLicenseeReport, menuItem ->
                     this.openReportWindow(surveyLicenseeReport, controller.getUdmSurveyLicenseeReportController()));
             }
+            String completeAssignmentsReport = ForeignUi.getMessage("menu.report.completed_assignments_report");
+            rootItem.addItem(completeAssignmentsReport, menuItem ->
+                this.openReportWindow(completeAssignmentsReport, controller.getCompletedAssignmentsReportController()));
         }
     }
 

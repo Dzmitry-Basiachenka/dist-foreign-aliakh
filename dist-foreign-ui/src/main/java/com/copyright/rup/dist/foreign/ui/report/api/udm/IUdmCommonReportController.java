@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.api;
+package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 import com.copyright.rup.dist.common.reporting.api.ICsvReportProvider;
 import com.copyright.rup.vaadin.widget.api.IController;

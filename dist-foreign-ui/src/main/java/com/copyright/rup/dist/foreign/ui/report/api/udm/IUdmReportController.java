@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.api;
+package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -33,4 +33,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Weekly Survey Report controller.
      */
     IUdmSurveyLicenseeReportController getUdmSurveyLicenseeReportController();
+
+    /**
+     * @return UDM Completed Assignments Report controller.
+     */
+    ICompletedAssignmentsReportController getCompletedAssignmentsReportController();
 }

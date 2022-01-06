@@ -36,13 +36,10 @@ public class UserNameFilterWidget extends BaseUdmItemsFilterWidget<String> imple
      * Constructor.
      *
      * @param supplier         {@link String}s list supplier
-     * @param selectedItemsIds set of selected items
      */
-    public UserNameFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
+    public UserNameFilterWidget(Supplier<List<String>> supplier) {
         super(ForeignUi.getMessage("label.user_names"));
         this.supplier = supplier;
-        this.selectedItemsIds.addAll(selectedItemsIds);
-        setLabelValue(selectedItemsIds.size());
     }
 
     @Override

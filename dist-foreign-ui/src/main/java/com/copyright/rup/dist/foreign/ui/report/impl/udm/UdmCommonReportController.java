@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportController;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IUdmSurveyLicenseeReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
