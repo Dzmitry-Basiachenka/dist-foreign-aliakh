@@ -154,7 +154,7 @@ public class UdmUsageFilterWidgetTest {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).times(2);
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        Windows.showModalWindow(anyObject(UdmFiltersWindow.class));
+        Windows.showModalWindow(anyObject(UdmUsageFiltersWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class, ForeignSecurityUtils.class);
         widget.init();

@@ -308,7 +308,7 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)),
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 25, null)),
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 25, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setAnnualMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 12, null)),
@@ -340,7 +340,7 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 102, null)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 102, null)),
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 102, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 75, null)),
@@ -372,7 +372,7 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)),
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 1, null)),
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 1, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0.5, null)),
@@ -404,7 +404,7 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 17, null)),
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 17, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setQuantityExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)),
@@ -479,7 +479,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 25, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 25, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 12, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualMultiplierExpression(
@@ -502,7 +502,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 102, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 102, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 102, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 75, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
@@ -525,7 +525,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 1, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 1, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 0.5, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setStatisticalMultiplierExpression(
@@ -548,7 +548,7 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 17, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUALS, 17, null)), 3);
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 17, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setQuantityExpression(

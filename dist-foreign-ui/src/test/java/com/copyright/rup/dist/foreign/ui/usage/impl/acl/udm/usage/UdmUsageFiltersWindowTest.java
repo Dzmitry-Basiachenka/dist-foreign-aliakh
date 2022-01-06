@@ -54,7 +54,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link UdmFiltersWindow}.
+ * Verifies {@link UdmUsageFiltersWindow}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ForeignSecurityUtils.class})
-public class UdmFiltersWindowTest {
+public class UdmUsageFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
@@ -82,7 +82,7 @@ public class UdmFiltersWindowTest {
         "Field value should be positive number and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
-    private UdmFiltersWindow window;
+    private UdmUsageFiltersWindow window;
     private Binder<UdmUsageFilter> binder;
 
     @Before
@@ -90,7 +90,7 @@ public class UdmFiltersWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andStubReturn(false);
         replay(ForeignSecurityUtils.class);
-        window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class), new UdmUsageFilter());
+        window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), new UdmUsageFilter());
         binder = Whitebox.getInternalState(window, "filterBinder");
         verify(ForeignSecurityUtils.class);
     }
@@ -117,7 +117,7 @@ public class UdmFiltersWindowTest {
         licenseeClass.setDescription("Law Firms");
         usageFilter.setDetailLicenseeClasses(Collections.singleton(licenseeClass));
         replay(ForeignSecurityUtils.class);
-        window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class), usageFilter);
+        window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), usageFilter);
         verifyFiltersData();
         verify(ForeignSecurityUtils.class);
     }
@@ -167,7 +167,7 @@ public class UdmFiltersWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         replay(ForeignSecurityUtils.class);
-        window = new UdmFiltersWindow(createMock(IUdmUsageFilterController.class), new UdmUsageFilter());
+        window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), new UdmUsageFilter());
         VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         assertTrue(verticalLayout.getComponent(0).isEnabled());
         assertTrue(verticalLayout.getComponent(1).isEnabled());
@@ -532,7 +532,7 @@ public class UdmFiltersWindowTest {
 
     private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyComboBox(operatorComboBox, "Operator", false,
-            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUALS,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));

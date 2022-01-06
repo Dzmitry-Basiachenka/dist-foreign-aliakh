@@ -9,7 +9,7 @@
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
                 and ${column} = '${fieldFirstValue}'
             </when>
-            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUALS == ${operator}">
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUAL == ${operator}">
                 and (${column} is null or ${column} != '${fieldFirstValue}')
             </when>
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@GREATER_THAN == ${operator}">
@@ -41,7 +41,7 @@
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == ${operator}">
                 and ${column} ilike '${fieldFirstValue}'
             </when>
-            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUALS == ${operator}">
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUAL == ${operator}">
                 and (${column} is null or ${column} != '${fieldFirstValue}')
             </when>
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@CONTAINS == ${operator}">
