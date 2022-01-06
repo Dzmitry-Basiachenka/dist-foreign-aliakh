@@ -224,7 +224,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setLanguage(LANGUAGE);
         filter.setCompanyName(COMPANY_NAME_2);
         filter.setCompanyId(1136L);
-        filter.setWrWrkInst(254327612L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
@@ -297,8 +297,38 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS),
             UDM_USAGE_UID_7);
         assertFilteringFindDtosByFilter(filter -> filter.setCompanyId(1136L), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(254327612L), UDM_USAGE_UID_5, UDM_USAGE_UID_6,
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWrWrkInst() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 321208892L, null)),
             UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 321208892L, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 227738245L, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 227738245L, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 227738245L, null)),
+            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 227738245L, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 227738245L, 321208892L)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
 
     @Test
@@ -470,9 +500,31 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_FRAGMENT), 0);
         assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCompanyId(1136L), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(254327612L), 3);
     }
 
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWrWrkInst() {
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 321208892L, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 321208892L, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 227738245L, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 227738245L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 227738245L, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 227738245L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 227738245L, 321208892L)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+    
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAnnualMultiplier() {
@@ -629,7 +681,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setLanguage(LANGUAGE);
         filter.setCompanyName(COMPANY_NAME_2);
         filter.setCompanyId(1136L);
-        filter.setWrWrkInst(254327612L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));

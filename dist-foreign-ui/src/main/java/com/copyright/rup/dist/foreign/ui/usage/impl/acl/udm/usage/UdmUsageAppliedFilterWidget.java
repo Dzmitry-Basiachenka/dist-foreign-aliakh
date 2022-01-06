@@ -72,7 +72,8 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getSurveyStartDateTo, filter),
                 filter, "label.survey_start_date_to"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getWrWrkInst, filter, "label.wr_wrk_inst"), layout);
+            addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
+                "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getCompanyId, filter, "label.company_id"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getCompanyName, filter, "label.company_name"), layout);
             addLabel(
