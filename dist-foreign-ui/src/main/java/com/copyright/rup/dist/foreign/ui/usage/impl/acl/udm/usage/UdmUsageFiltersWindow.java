@@ -54,7 +54,7 @@ import java.util.function.Predicate;
  *
  * @author Ihar Suvorau
  */
-public class UdmFiltersWindow extends Window {
+public class UdmUsageFiltersWindow extends Window {
 
     private static final int ONE = 1;
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
@@ -109,7 +109,7 @@ public class UdmFiltersWindow extends Window {
      * @param controller     instance of {@link IUdmUsageFilterController}
      * @param udmUsageFilter instance of {@link UdmUsageFilter} to be displayed on window
      */
-    public UdmFiltersWindow(IUdmUsageFilterController controller, UdmUsageFilter udmUsageFilter) {
+    public UdmUsageFiltersWindow(IUdmUsageFilterController controller, UdmUsageFilter udmUsageFilter) {
         this.controller = controller;
         usageFilter = new UdmUsageFilter(udmUsageFilter);
         appliedUsageFilter = udmUsageFilter;
@@ -449,7 +449,7 @@ public class UdmFiltersWindow extends Window {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUALS,
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
