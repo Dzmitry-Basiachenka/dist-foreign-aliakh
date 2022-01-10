@@ -90,6 +90,11 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     }
 
     @Override
+    public List<String> findUserNames() {
+        return selectList("IUdmUsageMapper.findUserNames");
+    }
+
+    @Override
     public List<String> findAssignees() {
         return selectList("IUdmUsageMapper.findAssignees");
     }

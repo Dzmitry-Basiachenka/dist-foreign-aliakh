@@ -51,6 +51,16 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2020-02-10 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: '176b73bb-9e54-49d4-a210-5a23bbf5cfde')
+            column(name: 'df_udm_usage_uid', value: '73becd32-9b0d-47f4-96df-17f98330ecc5')
+            column(name: 'action_type_ind', value: 'UNASSIGN')
+            column(name: 'action_reason', value: 'Usage was unassigned from \'jjohn@copyright.com\'')
+            column(name: 'created_by_user', value: 'jjohn@copyright.com')
+            column(name: 'updated_by_user', value: 'jjohn@copyright.com')
+            column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: 'ad742734-624b-49ae-9104-081f87e9b833')
             column(name: 'df_udm_usage_batch_uid', value: '9608ee69-ea5d-4a80-b31d-399514a4f51e')
@@ -124,6 +134,16 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2020-02-10 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_audit') {
+            column(name: 'df_udm_audit_uid', value: 'b7349c9d-58ba-48c7-9397-b5fc9f7c785b')
+            column(name: 'df_udm_usage_uid', value: '8014b170-2118-4216-b9eb-eb518a53553d')
+            column(name: 'action_type_ind', value: 'UNASSIGN')
+            column(name: 'action_reason', value: 'Usage was unassigned from \'ajohn@copyright.com\'')
+            column(name: 'created_by_user', value: 'ajohn@copyright.com')
+            column(name: 'updated_by_user', value: 'ajohn@copyright.com')
+            column(name: 'created_datetime', value: '2012-03-15 11:41:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '22241298-5c9e-4222-8fc1-5ee80c0e48f1')
             column(name: 'df_udm_usage_batch_uid', value: '9608ee69-ea5d-4a80-b31d-399514a4f51e')
@@ -161,6 +181,44 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2021-02-10 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: '316612be-054b-4959-8d04-889d1f19f70b')
+            column(name: 'period', value: 202206)
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 306985899)
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'price', value: 5.0000000000)
+            column(name: 'price_in_usd', value: 2.5000000000)
+            column(name: 'price_year', value: 2021)
+            column(name: 'price_type', value: 'Individual')
+            column(name: 'price_source', value: 'http://google.com')
+            column(name: 'content', value: 60)
+            column(name: 'content_source', value: 'Book')
+            column(name: 'currency', value: 'USD')
+            column(name: 'currency_exchange_rate', value: 2)
+            column(name: 'currency_exchange_rate_date', value: '2021-09-10')
+            column(name: 'content_unit_price', value: 10.0000000000)
+            column(name: 'comment', value: 'Comment')
+            column(name: 'content_comment', value: 'Content comment')
+            column(name: 'updated_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2021-09-11T00:00:00-04:00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value_audit') {
+            column(name: 'df_udm_value_audit_uid', value: 'cebfd9b3-d147-4674-b637-71d2a6b4eca4')
+            column(name: 'df_udm_value_uid', value: '316612be-054b-4959-8d04-889d1f19f70b')
+            column(name: 'action_type_ind', value: 'UNASSIGN')
+            column(name: 'action_reason', value: 'Value was unassigned from \'wjohn@copyright.com\'')
+            column(name: 'created_by_user', value: 'wjohn@copyright.com')
+            column(name: 'updated_by_user', value: 'wjohn@copyright.com')
+            column(name: 'created_datetime', value: '2021-03-15 11:41:52.735531+03')
         }
 
         rollback {

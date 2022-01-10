@@ -437,6 +437,15 @@ public class UdmUsageServiceTest {
     }
 
     @Test
+    public void testGetUserNames() {
+        List<String> userNames = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
+        expect(udmUsageRepository.findUserNames()).andReturn(userNames).once();
+        replay(udmUsageRepository);
+        assertEquals(userNames, udmUsageService.getUserNames());
+        verify(udmUsageRepository);
+    }
+
+    @Test
     public void testGetAssignees() {
         List<String> assignees = Arrays.asList("jjohn@copyright.com", "wjohn@copyright.com");
         expect(udmUsageRepository.findAssignees()).andReturn(assignees).once();
