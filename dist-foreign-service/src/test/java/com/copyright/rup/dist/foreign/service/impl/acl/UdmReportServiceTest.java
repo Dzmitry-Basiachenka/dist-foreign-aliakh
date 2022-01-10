@@ -127,4 +127,16 @@ public class UdmReportServiceTest {
         udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
+
+    @Test
+    public void testUdmVerifiedDetailsBySourceReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setPeriods(Collections.singleton(202112));
+        udmReportRepository.writeUdmVerifiedDetailsBySourceReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportRepository.writeUdmVerifiedDetailsBySourceReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
 }
