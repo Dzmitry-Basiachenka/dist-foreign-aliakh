@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeR
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
 import com.google.common.collect.Maps;
@@ -92,6 +93,14 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         try (UdmSurveyLicenseeReportHandler handler =
                  new UdmSurveyLicenseeReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmSurveyLicenseeReportDtos", filter, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmVerifiedDetailsBySourceReport(UdmReportFilter filter, OutputStream outputStream) {
+        try (UdmVerifiedDetailsBySourceReportHandler handler =
+                 new UdmVerifiedDetailsBySourceReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmVerifiedDetailsBySourceReportDtos", filter, handler);
         }
     }
 
