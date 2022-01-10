@@ -172,8 +172,13 @@
             <if test="null != filter.companyId">
                 and u.company_id = #{filter.companyId}
             </if>
-            <if test="null != filter.wrWrkInst">
-                and u.wr_wrk_inst = #{filter.wrWrkInst}
+            <if test="!filter.wrWrkInstExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="u.wr_wrk_inst"/>
+                    <property name="operator" value="filter.wrWrkInstExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.wrWrkInstExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.annualMultiplierExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">

@@ -79,7 +79,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
         verifyLabel(((VerticalLayout) component).getComponent(12), "Survey Start Date To", "05/20/2020");
         verifyLabel(((VerticalLayout) component).getComponent(13), "Channel", "CCC");
-        verifyLabel(((VerticalLayout) component).getComponent(14), "Wr Wrk Inst", "254327612");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(14),
+            "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(15), "Company ID", "1136");
         verifyLabel(((VerticalLayout) component).getComponent(16), "Company Name", "Company name");
         verifyLabel(((VerticalLayout) component).getComponent(17), "Survey Country", "United States");
@@ -126,7 +127,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setCompanyName("Skadden, Arps, Slate, Meagher & Flom LLP");
         filter.setCompanyId(1136L);
         filter.setCompanyName("Company name");
-        filter.setWrWrkInst(254327612L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 254327612L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1, null));

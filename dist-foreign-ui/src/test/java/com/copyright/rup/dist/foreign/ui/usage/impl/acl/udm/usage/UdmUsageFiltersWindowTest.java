@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -48,6 +49,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -124,22 +126,22 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testAnnualMultiplierFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(8);
-    }
-
-    @Test
-    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testFilterOperatorChangeListener(9);
     }
 
     @Test
-    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
+    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testFilterOperatorChangeListener(10);
     }
 
     @Test
-    public void testQuantityFilterOperatorChangeListener() {
+    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
         testFilterOperatorChangeListener(11);
+    }
+
+    @Test
+    public void testQuantityFilterOperatorChangeListener() {
+        testFilterOperatorChangeListener(12);
     }
 
     @Test
@@ -147,7 +149,7 @@ public class UdmUsageFiltersWindowTest {
         UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
         assertTrue(appliedUsageFilter.isEmpty());
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(12);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(13);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
         assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
@@ -156,7 +158,7 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testClearButtonClickListener() {
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(12);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(13);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         assertTrue(window.getAppliedUsageFilter().isEmpty());
@@ -175,13 +177,14 @@ public class UdmUsageFiltersWindowTest {
         assertTrue(verticalLayout.getComponent(3).isEnabled());
         assertTrue(verticalLayout.getComponent(4).isEnabled());
         assertTrue(verticalLayout.getComponent(5).isEnabled());
-        assertFalse(verticalLayout.getComponent(6).isEnabled());
-        HorizontalLayout layout = (HorizontalLayout) verticalLayout.getComponent(7);
+        assertTrue(verticalLayout.getComponent(6).isEnabled());
+        assertFalse(verticalLayout.getComponent(7).isEnabled());
+        HorizontalLayout layout = (HorizontalLayout) verticalLayout.getComponent(8);
         verifyTextFieldComponent(layout.getComponent(0), "Survey Country", false);
-        assertFalse(verticalLayout.getComponent(8).isEnabled());
         assertFalse(verticalLayout.getComponent(9).isEnabled());
         assertFalse(verticalLayout.getComponent(10).isEnabled());
         assertFalse(verticalLayout.getComponent(11).isEnabled());
+        assertFalse(verticalLayout.getComponent(12).isEnabled());
         verify(ForeignSecurityUtils.class);
     }
 
@@ -264,15 +267,13 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testWrWrkInstValidation() {
-        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_INTEGER, null, true);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, null, true);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, "1234567890",
-            "Field value should not exceed 9 digits", false);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        TextField wrWrkInstFromField = Whitebox.getInternalState(window, "wrWrkInstFromField");
+        TextField wrWrkInstToField = Whitebox.getInternalState(window, "wrWrkInstToField");
+        ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox =
+            Whitebox.getInternalState(window, "wrWrkInstOperatorComboBox");
+        assertOperatorComboBoxItems(wrWrkInstOperatorComboBox);
+        verifyIntegerOperationValidations(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
+            "Field value should be greater or equal to Wr Wrk Inst From");
     }
 
     @Test
@@ -318,23 +319,25 @@ public class UdmUsageFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(13, verticalLayout.getComponentCount());
+        assertEquals(14, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
-        verifyChannelWrWkrInstLayout(verticalLayout.getComponent(5));
-        verifyTextFieldLayout(verticalLayout.getComponent(6), "Company ID", "Company Name");
-        verifyTextFieldLayout(verticalLayout.getComponent(7), "Survey Country", "Language");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Annual Multiplier From",
+        assertSizedComboBoxItems(verticalLayout.getComponent(5), "Channel", true,
+            Arrays.asList(UdmChannelEnum.values()));
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyTextFieldLayout(verticalLayout.getComponent(7), "Company ID", "Company Name");
+        verifyTextFieldLayout(verticalLayout.getComponent(8), "Survey Country", "Language");
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(9), "Annual Multiplier From",
             "Annual Multiplier To");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(9), "Annualized Copies From",
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(10), "Annualized Copies From",
             "Annualized Copies To");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(10), "Statistical Multiplier From",
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(11), "Statistical Multiplier From",
             "Statistical Multiplier To");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(11), "Quantity From", "Quantity To");
-        verifyButtonsLayout(verticalLayout.getComponent(12), "Save", "Clear", "Close");
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(12), "Quantity From", "Quantity To");
+        verifyButtonsLayout(verticalLayout.getComponent(13), "Save", "Clear", "Close");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -354,20 +357,6 @@ public class UdmUsageFiltersWindowTest {
         assertEquals(captionFrom, layout.getComponent(0).getCaption());
         assertTrue(layout.getComponent(1) instanceof LocalDateWidget);
         assertEquals(captionTo, layout.getComponent(1).getCaption());
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void verifyChannelWrWkrInstLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isEnabled());
-        assertEquals(2, layout.getComponentCount());
-        ComboBox<UdmChannelEnum> channelComboBox = (ComboBox<UdmChannelEnum>) layout.getComponent(0);
-        verifyComboBox(channelComboBox, "Channel", true, Arrays.asList(UdmChannelEnum.values()));
-        assertEquals(100, channelComboBox.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
-        assertEquals(channelComboBox.getCaption(), "Channel");
-        verifyTextFieldComponent(layout.getComponent(1), "Wr Wrk Inst", true);
     }
 
     private void verifyFieldWithOperatorComponent(Component component, String captionFrom, String captionTo) {
@@ -470,7 +459,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setSurveyStartDateFrom(DATE_FROM);
         filter.setSurveyStartDateTo(DATE_TO);
         filter.setChannel(UdmChannelEnum.CCC);
-        filter.setWrWrkInst(243904752L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752, null));
         filter.setCompanyId(454984566L);
         filter.setCompanyName(COMPANY_NAME);
         filter.setSurveyCountry(SURVEY_COUNTRY);
@@ -496,7 +485,8 @@ public class UdmUsageFiltersWindowTest {
         assertLocalDateFieldValue("surveyStartDateFromWidget", DATE_FROM);
         assertLocalDateFieldValue("surveyStartDateToWidget", DATE_TO);
         assertComboBoxValue("channelComboBox", UdmChannelEnum.CCC);
-        assertTextFieldValue("wrWrkInstField", "243904752");
+        assertTextFieldValue("wrWrkInstFromField", "243904752");
+        assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("companyIdField", "454984566");
         assertTextFieldValue("companyNameField", COMPANY_NAME);
         assertTextFieldValue("surveyCountryField", SURVEY_COUNTRY);
@@ -526,6 +516,23 @@ public class UdmUsageFiltersWindowTest {
     }
 
     @SuppressWarnings(UNCHECKED)
+    private <T> void assertSizedComboBoxItems(Component component, String caption, boolean emptySelectionAllowed,
+                                              List<T> expectedItems) {
+        assertTrue(component instanceof ComboBox);
+        ComboBox<T> comboBox = (ComboBox<T>) component;
+        assertFalse(comboBox.isReadOnly());
+        assertTrue(comboBox.isTextInputAllowed());
+        assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
+        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
+        Collection<?> actualItems = listDataProvider.getItems();
+        assertEquals(expectedItems.size(), actualItems.size());
+        assertEquals(expectedItems, actualItems);
+        assertEquals(355, component.getWidth(), 0);
+        assertEquals(Unit.PIXELS, component.getWidthUnits());
+        assertEquals(component.getCaption(), caption);
+    }
+
+    @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
@@ -545,7 +552,8 @@ public class UdmUsageFiltersWindowTest {
         populateLocalDateWidget("surveyStartDateFromWidget", DATE_FROM);
         populateLocalDateWidget("surveyStartDateToWidget", DATE_TO);
         populateComboBox("channelComboBox", UdmChannelEnum.CCC);
-        populateTextField("wrWrkInstField", "243904752");
+        populateTextField("wrWrkInstFromField", "243904752");
+        populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("companyIdField", "454984566");
         populateTextField("companyNameField", COMPANY_NAME);
         populateTextField("surveyCountryField", SURVEY_COUNTRY);

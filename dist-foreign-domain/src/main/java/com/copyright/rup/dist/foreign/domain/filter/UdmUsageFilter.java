@@ -49,7 +49,7 @@ public class UdmUsageFilter {
     private String language;
     private String companyName;
     private Long companyId;
-    private Long wrWrkInst;
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private String searchValue;
 
     /**
@@ -87,7 +87,7 @@ public class UdmUsageFilter {
             setLanguage(filter.getLanguage());
             setCompanyId(filter.getCompanyId());
             setCompanyName(filter.getCompanyName());
-            setWrWrkInst(filter.getWrWrkInst());
+            setWrWrkInstExpression(filter.getWrWrkInstExpression());
             setSearchValue(filter.getSearchValue());
         }
     }
@@ -268,12 +268,12 @@ public class UdmUsageFilter {
         this.companyId = companyId;
     }
 
-    public Long getWrWrkInst() {
-        return wrWrkInst;
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
     }
 
-    public void setWrWrkInst(Long wrWrkInst) {
-        this.wrWrkInst = wrWrkInst;
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
     public String getSearchValue() {
@@ -301,7 +301,7 @@ public class UdmUsageFilter {
             && null == language
             && null == companyName
             && null == companyId
-            && null == wrWrkInst
+            && wrWrkInstExpression.isEmpty()
             && annualMultiplierExpression.isEmpty()
             && annualizedCopiesExpression.isEmpty()
             && statisticalMultiplierExpression.isEmpty()
@@ -346,7 +346,7 @@ public class UdmUsageFilter {
             .append(language, that.language)
             .append(companyName, that.companyName)
             .append(companyId, that.companyId)
-            .append(wrWrkInst, that.wrWrkInst)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(searchValue, that.searchValue)
             .isEquals();
     }
@@ -376,7 +376,7 @@ public class UdmUsageFilter {
             .append(language)
             .append(companyName)
             .append(companyId)
-            .append(wrWrkInst)
+            .append(wrWrkInstExpression)
             .append(searchValue)
             .toHashCode();
     }
@@ -406,7 +406,7 @@ public class UdmUsageFilter {
             .append("language", language)
             .append("companyName", companyName)
             .append("companyId", companyId)
-            .append("wrWrkInst", wrWrkInst)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("searchValue", searchValue)
             .toString();
     }

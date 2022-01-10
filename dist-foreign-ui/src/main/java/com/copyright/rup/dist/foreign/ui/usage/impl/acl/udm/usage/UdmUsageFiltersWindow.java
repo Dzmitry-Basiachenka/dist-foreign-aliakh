@@ -83,7 +83,9 @@ public class UdmUsageFiltersWindow extends Window {
     private final TextField languageField = new TextField(ForeignUi.getMessage("label.language"));
     private final TextField companyNameField = new TextField(ForeignUi.getMessage("label.company_name"));
     private final TextField companyIdField = new TextField(ForeignUi.getMessage("label.company_id"));
-    private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
+    private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
+    private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
+    private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildOperatorComboBox();
     private final LocalDateWidget usageDateFromWidget =
         new LocalDateWidget(ForeignUi.getMessage("label.usage_date_from"));
     private final LocalDateWidget usageDateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.usage_date_to"));
@@ -137,8 +139,8 @@ public class UdmUsageFiltersWindow extends Window {
         initTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
-            publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initChannelWrWrkInstLayout(),
-            initCompanyLayout(), initSurveyCountryLanguageLayout(), initAnnualMultiplierLayout(),
+            publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initChannelLayout(),
+            initWrWrkInstLayout(), initCompanyLayout(), initSurveyCountryLanguageLayout(), initAnnualMultiplierLayout(),
             initAnnualizedCopiesLayout(), initStatisticalMultiplierLayout(), initQuantityLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
@@ -198,24 +200,47 @@ public class UdmUsageFiltersWindow extends Window {
         return reportedPubTypeTouLayout;
     }
 
-    private HorizontalLayout initChannelWrWrkInstLayout() {
-        HorizontalLayout comboBoxLayout = new HorizontalLayout(channelComboBox, wrWrkInstField);
-        wrWrkInstField.setValue(
-            Objects.nonNull(usageFilter.getWrWrkInst()) ? usageFilter.getWrWrkInst().toString() : StringUtils.EMPTY);
-        filterBinder.forField(wrWrkInstField)
-            .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
-            .bind(UdmUsageFilter::getWrWrkInst, UdmUsageFilter::setWrWrkInst);
+    private ComboBox<UdmChannelEnum> initChannelLayout() {
         channelComboBox.setItems(UdmChannelEnum.values());
         channelComboBox.setSelectedItem(usageFilter.getChannel());
         channelComboBox.setSizeFull();
-        wrWrkInstField.setSizeFull();
-        comboBoxLayout.setSizeFull();
-        comboBoxLayout.setSpacing(true);
+        channelComboBox.setWidth(355, Unit.PIXELS);
         VaadinUtils.addComponentStyle(channelComboBox, "udm-channel-filter");
-        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-wr-wrk-inst-filter");
-        return comboBoxLayout;
+        return channelComboBox;
+    }
+
+    private HorizontalLayout initWrWrkInstLayout() {
+        HorizontalLayout wrWrkInstLayout =
+            new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
+        populateOperatorFilters(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
+            UdmUsageFilter::getWrWrkInstExpression);
+        wrWrkInstFromField.addValueChangeListener(event -> filterBinder.validate());
+        wrWrkInstOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(wrWrkInstFromField, wrWrkInstToField, event.getValue()));
+        filterBinder.forField(wrWrkInstFromField)
+            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+        filterBinder.forField(wrWrkInstToField)
+            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.wr_wrk_inst_from")))
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+        wrWrkInstFromField.setSizeFull();
+        wrWrkInstToField.setSizeFull();
+        wrWrkInstLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-wr-wrk-inst-from-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-wr-wrk-inst-to-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-wr-wrk-inst-operator-filter");
+        return wrWrkInstLayout;
     }
 
     private HorizontalLayout initUsageDateLayout() {
@@ -503,8 +528,8 @@ public class UdmUsageFiltersWindow extends Window {
                 close();
             } else {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(usageDateToWidget, surveyStartDateToWidget, wrWrkInstField, companyIdField,
-                        companyNameField, surveyCountryField, languageField, annualMultiplierFromField,
+                    Arrays.asList(usageDateToWidget, surveyStartDateToWidget, wrWrkInstFromField, wrWrkInstToField,
+                        companyIdField, companyNameField, surveyCountryField, languageField, annualMultiplierFromField,
                         annualMultiplierToField, annualizedCopiesFromField, annualizedCopiesToField,
                         statisticalMultiplierFromField, statisticalMultiplierToField, quantityFromField,
                         quantityToField));
@@ -527,7 +552,7 @@ public class UdmUsageFiltersWindow extends Window {
         surveyStartDateFromWidget.clear();
         surveyStartDateToWidget.clear();
         channelComboBox.clear();
-        wrWrkInstField.clear();
+        clearOperatorLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         companyIdField.clear();
         companyNameField.clear();
         surveyCountryField.clear();
@@ -550,7 +575,7 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setSurveyStartDateFrom(null);
         usageFilter.setSurveyStartDateTo(null);
         usageFilter.setChannel(null);
-        usageFilter.setWrWrkInst(null);
+        usageFilter.setWrWrkInstExpression(new FilterExpression<>());
         usageFilter.setCompanyId(null);
         usageFilter.setCompanyName(null);
         usageFilter.setSurveyCountry(null);
@@ -574,7 +599,8 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setSurveyStartDateFrom(surveyStartDateFromWidget.getValue());
         usageFilter.setSurveyStartDateTo(surveyStartDateToWidget.getValue());
         usageFilter.setChannel(channelComboBox.getValue());
-        usageFilter.setWrWrkInst(getLongFromTextField(wrWrkInstField));
+        usageFilter.setWrWrkInstExpression(buildNumberFilterExpression(wrWrkInstFromField, wrWrkInstToField,
+            wrWrkInstOperatorComboBox, Integer::valueOf));
         usageFilter.setCompanyId(getLongFromTextField(companyIdField));
         usageFilter.setCompanyName(getStringFromTextField(companyNameField));
         usageFilter.setSurveyCountry(getStringFromTextField(surveyCountryField));
