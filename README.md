@@ -1,3 +1,28 @@
+14.1.43
+-
+* B-69423 FDA: Filter functionality modification: implement the Unassigned option for the Assignees widgets
+* B-69423 FDA: Filter functionality modification: implement operations for Annual Multiplier, Annualized Copies, Statistical Multiplier, Quantity in Usages tab
+* B-69423 FDA: Filter functionality modification: rename UdmFilterWidget to UdmUsageFilterWidget; fix spelling errors
+* B-69423 FDA: Filter functionality modification: implement operations for Wr Wrk Inst in Usages tab
+* B-67667 FDA Reports: Completed Assignments by Employee Report: implement filter window for report generation
+* B-67667 FDA Reports: Completed Assignments by Employee Report: implement logic to populate usernames filter
+* B-67667 FDA Reports: Completed Assignments by Employee Report: implement User Name filter widget
+* B-67667 FDA Reports: Completed Assignments by Employee Report: update action reason type for UNASSIGN action for UDM usages and values
+* B-70570 FDA: Survey Report Licensee: implement backend logic for survey licensee report
+* B-70570 FDA: Survey Report Licensee: implement UI and service logic to generate report Survey Licensee Report
+* B-70570 FDA: Survey Report Licensee: move survey start date column at the report
+* B-70571 FDA: Verified Details by Source Report: implement repository
+* B-70072 Tech Debt: FDA: refine logic for UDM filter windows with select all button
+* B-70072 Tech Debt: FDA: implement common method to verify comboboxes
+* B-70072 Tech Debt: FDA: Rename class UiCommonHelper to UiTestHelper
+* B-70072 Tech Debt: FDA: Use static imports for class UiTestHelper
+* B-70072 Tech Debt: FDA: Implement common method to verify multi-select widgets
+* B-70072 Tech Debt: FDA: implement common method to verify labels
+* B-70072 Tech Debt: FDA: Reuse common method to verify buttons panel
+* B-70072 Tech Debt: FDA: display Reports tab for all roles
+* B-70073 Tech Debt: FDA: apply 6_5 rup standard dependencies version set
+* B-70072 Tech Debt: FDA: introduce common UDM report widget and adjust weekly survey report
+
 14.1.42
 -
 * B-69779 FDA: FDA & UDM: View filters improvements: fix System Title filter on Baseline Values tab
