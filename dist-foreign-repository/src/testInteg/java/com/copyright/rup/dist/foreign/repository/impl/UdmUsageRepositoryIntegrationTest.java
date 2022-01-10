@@ -222,8 +222,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         filter.setSurveyCountry(SURVEY_COUNTRY);
         filter.setLanguage(LANGUAGE);
-        filter.setCompanyName(COMPANY_NAME_2);
-        filter.setCompanyId(1136L);
+        filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
+        filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
@@ -289,14 +289,6 @@ public class UdmUsageRepositoryIntegrationTest {
             UDM_USAGE_UID_6);
         assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT));
         assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_DIFFERENT_CASE), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_FRAGMENT));
-        assertFilteringFindDtosByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS),
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setCompanyId(1136L), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
     }
 
     @Test
@@ -327,6 +319,83 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
             UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterCompanyId() {
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 5374L, null)),
+            UDM_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 5374L, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1138L, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 1138L, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 1138L, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 1138L, null)),
+            UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1138L, 5374L)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterCompanyName() {
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2_FRAGMENT, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
@@ -495,11 +564,6 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_DIFFERENT_CASE), 2);
         assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT), 0);
         assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_DIFFERENT_CASE), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_2_FRAGMENT), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setCompanyName(COMPANY_NAME_WITH_METASYMBOLS), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setCompanyId(1136L), 2);
     }
 
     @Test
@@ -524,7 +588,63 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
-    
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterCompanyId() {
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 5374L, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 5374L, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1138L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 1138L, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 1138L, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 1138L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1138L, 5374L)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterCompanyName() {
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_2_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMPANY_NAME_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_2_FRAGMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMPANY_NAME_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAnnualMultiplier() {
@@ -679,8 +799,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         filter.setSurveyCountry(SURVEY_COUNTRY);
         filter.setLanguage(LANGUAGE);
-        filter.setCompanyName(COMPANY_NAME_2);
-        filter.setCompanyId(1136L);
+        filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
+        filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));

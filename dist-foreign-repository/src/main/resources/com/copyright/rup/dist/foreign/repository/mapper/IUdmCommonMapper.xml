@@ -42,10 +42,10 @@
                 and ${column} ilike '${fieldFirstValue}'
             </when>
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@DOES_NOT_EQUAL == ${operator}">
-                and (${column} is null or ${column} != '${fieldFirstValue}')
+                and (${column} is null or ${column} not ilike '${fieldFirstValue}')
             </when>
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@CONTAINS == ${operator}">
-                and ${column} ilike '%' || #{fieldFirstValue} || '%'
+                and ${column} ilike '%' || '${fieldFirstValue}' || '%'
             </when>
             <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
                 and ${column} is null
