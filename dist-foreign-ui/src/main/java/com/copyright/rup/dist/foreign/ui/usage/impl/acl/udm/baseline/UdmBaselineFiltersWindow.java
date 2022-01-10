@@ -50,6 +50,7 @@ import java.util.function.Function;
  */
 public class UdmBaselineFiltersWindow extends Window {
 
+    private static final int ONE = 1;
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String NOT_NUMERIC_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
@@ -84,7 +85,7 @@ public class UdmBaselineFiltersWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_baseline_additional_filters"));
         setResizable(false);
-        setWidth(550, Unit.PIXELS);
+        setWidth(750, Unit.PIXELS);
         setHeight(272, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-additional-filters-window");
     }
@@ -188,7 +189,7 @@ public class UdmBaselineFiltersWindow extends Window {
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(annualizedCopiesTo, event.getValue()));
+            event -> updateOperatorField(annualizedCopiesFrom, annualizedCopiesTo, event.getValue()));
         annualizedCopiesFrom.setSizeFull();
         annualizedCopiesTo.setSizeFull();
         annualizedCopiesLayout.setSizeFull();
@@ -222,8 +223,10 @@ public class UdmBaselineFiltersWindow extends Window {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN);
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN,
+            FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
@@ -233,21 +236,32 @@ public class UdmBaselineFiltersWindow extends Window {
         FilterExpression<Number> filterExpression = getExpressionFunction.apply(baselineFilter);
         Number firstFieldValue = filterExpression.getFieldFirstValue();
         Number secondFieldValue = filterExpression.getFieldSecondValue();
+        FilterOperatorEnum filterOperator = filterExpression.getOperator();
         toField.setEnabled(Objects.nonNull(secondFieldValue));
         if (Objects.nonNull(firstFieldValue)) {
-            FilterOperatorEnum filterOperator = filterExpression.getOperator();
             fromField.setValue(firstFieldValue.toString());
             toField.setValue(Objects.nonNull(secondFieldValue) ? secondFieldValue.toString() : StringUtils.EMPTY);
+            comboBox.setSelectedItem(filterOperator);
+        } else if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
+            fromField.setEnabled(false);
+            toField.setEnabled(false);
             comboBox.setSelectedItem(filterOperator);
         }
     }
 
-    private void updateOperatorField(TextField fieldToUpdate, FilterOperatorEnum value) {
-        if (FilterOperatorEnum.BETWEEN == value) {
-            fieldToUpdate.setEnabled(true);
+    private void updateOperatorField(TextField fromField, TextField toField, FilterOperatorEnum filterOperator) {
+        if (0 == filterOperator.getArgumentsNumber()) {
+            fromField.clear();
+            fromField.setEnabled(false);
+            toField.clear();
+            toField.setEnabled(false);
+        } else if (ONE == filterOperator.getArgumentsNumber()) {
+            fromField.setEnabled(true);
+            toField.clear();
+            toField.setEnabled(false);
         } else {
-            fieldToUpdate.clear();
-            fieldToUpdate.setEnabled(false);
+            fromField.setEnabled(true);
+            toField.setEnabled(true);
         }
         filterBinder.validate();
     }
@@ -314,6 +328,8 @@ public class UdmBaselineFiltersWindow extends Window {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
             filterExpression.setFieldSecondValue(
                 StringUtils.isNotBlank(toField.getValue()) ? valueConverter.apply(toField.getValue().trim()) : null);
+            filterExpression.setOperator(comboBox.getValue());
+        } else if (0 == comboBox.getValue().getArgumentsNumber()) {
             filterExpression.setOperator(comboBox.getValue());
         }
         return filterExpression;
