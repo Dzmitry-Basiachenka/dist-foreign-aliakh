@@ -31,7 +31,7 @@ public class UdmBaselineFilter {
     private Set<AggregateLicenseeClass> aggregateLicenseeClasses = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
-    private Long wrWrkInst;
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private String systemTitle;
     private String usageDetailId;
     private String surveyCountry;
@@ -55,8 +55,8 @@ public class UdmBaselineFilter {
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
             setAggregateLicenseeClasses(filter.getAggregateLicenseeClasses());
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
-            setAnnualizedCopiesExpression(filter.getAnnualizedCopiesExpression());
-            setWrWrkInst(filter.getWrWrkInst());
+            setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
+            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitle(filter.getSystemTitle());
             setSurveyCountry(filter.getSurveyCountry());
             setUsageDetailId(filter.getUsageDetailId());
@@ -119,12 +119,12 @@ public class UdmBaselineFilter {
         this.annualizedCopiesExpression = annualizedCopiesExpression;
     }
 
-    public Long getWrWrkInst() {
-        return wrWrkInst;
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
     }
 
-    public void setWrWrkInst(Long wrWrkInst) {
-        this.wrWrkInst = wrWrkInst;
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
     public String getSystemTitle() {
@@ -158,11 +158,11 @@ public class UdmBaselineFilter {
         return CollectionUtils.isEmpty(periods)
             && null == udmUsageOrigin
             && null == channel
-            && null == wrWrkInst
             && null == systemTitle
             && null == usageDetailId
             && null == surveyCountry
             && annualizedCopiesExpression.isEmpty()
+            && wrWrkInstExpression.isEmpty()
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(aggregateLicenseeClasses)
             && CollectionUtils.isEmpty(reportedTypeOfUses);
@@ -185,7 +185,7 @@ public class UdmBaselineFilter {
             .append(aggregateLicenseeClasses, that.aggregateLicenseeClasses)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
-            .append(wrWrkInst, that.wrWrkInst)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitle, that.systemTitle)
             .append(usageDetailId, that.usageDetailId)
             .append(surveyCountry, that.surveyCountry)
@@ -202,7 +202,7 @@ public class UdmBaselineFilter {
             .append(aggregateLicenseeClasses)
             .append(reportedTypeOfUses)
             .append(annualizedCopiesExpression)
-            .append(wrWrkInst)
+            .append(wrWrkInstExpression)
             .append(systemTitle)
             .append(usageDetailId)
             .append(surveyCountry)
@@ -219,7 +219,7 @@ public class UdmBaselineFilter {
             .append("aggregateLicenseeClasses", aggregateLicenseeClasses)
             .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
-            .append("wrWrkInst", wrWrkInst)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitle", systemTitle)
             .append("usageDetailId", usageDetailId)
             .append("surveyCountry", surveyCountry)
