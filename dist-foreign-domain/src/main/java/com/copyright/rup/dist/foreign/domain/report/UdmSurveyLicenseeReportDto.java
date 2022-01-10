@@ -20,9 +20,9 @@ import java.time.LocalDate;
 public class UdmSurveyLicenseeReportDto extends StoredEntity<String> {
 
     private Integer period;
-    private LocalDate surveyStartDate;
     private String channel;
     private String usageOrigin;
+    private LocalDate surveyStartDate;
     private Long companyId;
     private String companyName;
     private Integer detailLicenseeClassId;
@@ -44,14 +44,6 @@ public class UdmSurveyLicenseeReportDto extends StoredEntity<String> {
         return period;
     }
 
-    public LocalDate getSurveyStartDate() {
-        return surveyStartDate;
-    }
-
-    public void setSurveyStartDate(LocalDate surveyStartDate) {
-        this.surveyStartDate = surveyStartDate;
-    }
-
     public void setPeriod(Integer period) {
         this.period = period;
     }
@@ -70,6 +62,14 @@ public class UdmSurveyLicenseeReportDto extends StoredEntity<String> {
 
     public void setUsageOrigin(String usageOrigin) {
         this.usageOrigin = usageOrigin;
+    }
+
+    public LocalDate getSurveyStartDate() {
+        return surveyStartDate;
+    }
+
+    public void setSurveyStartDate(LocalDate surveyStartDate) {
+        this.surveyStartDate = surveyStartDate;
     }
 
     public Long getCompanyId() {

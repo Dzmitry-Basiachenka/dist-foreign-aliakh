@@ -24,7 +24,7 @@ import java.util.Objects;
 public class UdmSurveyLicenseeReportHandler extends BaseCsvReportHandler<UdmSurveyLicenseeReportDto> {
 
     private static final List<String> HEADERS =
-        ImmutableList.of("Period", "Survey Start Date", "Channel ", "Usage Origin", "Company ID", "Company Name",
+        ImmutableList.of("Period", "Channel ", "Usage Origin", "Survey Start Date", "Company ID", "Company Name",
             "Det LC ID", "Det LC Name", "Agg LC", "Agg LC Name", "Total Details", "Usable Details", "% Usable Data",
             "# of registered users", "# of rows reported by registered users",
             "# of usable rows reported by registered users", "% Usable from registered users",
@@ -44,9 +44,9 @@ public class UdmSurveyLicenseeReportHandler extends BaseCsvReportHandler<UdmSurv
     protected List<String> getBeanProperties(UdmSurveyLicenseeReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
-        beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(bean.getChannel());
         beanProperties.add(bean.getUsageOrigin());
+        beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getCompanyId()));
         beanProperties.add(bean.getCompanyName());
         beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClassId()));
