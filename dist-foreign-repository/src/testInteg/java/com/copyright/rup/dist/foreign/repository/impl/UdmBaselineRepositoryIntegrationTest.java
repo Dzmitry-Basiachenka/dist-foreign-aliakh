@@ -85,6 +85,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     private static final String USAGE_ID_2 = "1a1522d3-9dfe-4884-58aa-caaf8792112c";
     private static final String USAGE_ID_3 = "771522d3-ccfe-2189-b314-cd6f87ab6689";
     private static final String USAGE_ID_4 = "5c795dfc-94fb-4296-997c-6f36e0a673dc";
+    private static final String USAGE_ID_5 = "6f8957c2-8100-4283-ab2a-d410d3736db0";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Autowired
@@ -113,9 +114,9 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
-        verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), 3);
         verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)), 0);
@@ -137,10 +138,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2), 0);
         verifyFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
-        verifyFilteringFindCountByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)), 0);
-        verifyFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), 1);
         verifyFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(24))), 0);
@@ -148,6 +145,29 @@ public class UdmBaselineRepositoryIntegrationTest {
             filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56))), 1);
         verifyFilteringFindCountByFilter(filter ->
             filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(82))), 0);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAnnualizedCopies() {
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
 
     @Test
@@ -172,10 +192,11 @@ public class UdmBaselineRepositoryIntegrationTest {
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
-        verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1, USAGE_ID_4,
+            USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect));
         verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS), USAGE_ID_1,
-            USAGE_ID_4);
+            USAGE_ID_4, USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA));
         verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)),
             USAGE_ID_1);
@@ -199,10 +220,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_DIFFERENT_CASE), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2));
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1, USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 5, null)));
         verifyFilteringFindDtosByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
@@ -211,6 +228,31 @@ public class UdmBaselineRepositoryIntegrationTest {
             filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
             filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(82))));
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAnnualizedCopies() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter ->
+            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)),
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4,
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
     }
 
     @Test

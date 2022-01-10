@@ -83,7 +83,7 @@ public class UdmBaselineFiltersWindowTest {
     @Test
     public void testConstructor() {
         assertEquals("UDM baseline additional filters", window.getCaption());
-        assertEquals(550, window.getWidth(), 0);
+        assertEquals(750, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(272, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
@@ -307,8 +307,11 @@ public class UdmBaselineFiltersWindowTest {
     }
 
     private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
+        verifyComboBox(operatorComboBox, "Operator", false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+                FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     @SuppressWarnings(UNCHECKED)
