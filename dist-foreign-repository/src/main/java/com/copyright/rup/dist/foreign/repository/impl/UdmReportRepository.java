@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
@@ -101,6 +102,14 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         try (UdmVerifiedDetailsBySourceReportHandler handler =
                  new UdmVerifiedDetailsBySourceReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmVerifiedDetailsBySourceReportDtos", filter, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter filter, OutputStream outputStream) {
+        try (UdmCompletedAssignmentsReportHandler handler =
+                 new UdmCompletedAssignmentsReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmCompletedAssignmentsReportDtos", filter, handler);
         }
     }
 

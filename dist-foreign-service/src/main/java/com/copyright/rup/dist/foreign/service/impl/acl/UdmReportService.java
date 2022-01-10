@@ -67,4 +67,9 @@ public class UdmReportService implements IUdmReportService {
     public void writeUdmVerifiedDetailsBySourceReport(UdmReportFilter reportFilter, OutputStream outputStream) {
         udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream);
     }
+
+    @Override
+    public void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        udmReportRepository.writeUdmCompletedAssignmentsCsvReport(reportFilter, outputStream);
+    }
 }

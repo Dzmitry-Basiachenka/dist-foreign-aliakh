@@ -112,7 +112,7 @@ public class UdmReportServiceTest {
         udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportRepository.writeUdmWeeklySurveyCsvReport(filter, outputStream);
+        udmReportService.writeUdmWeeklySurveyCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 
@@ -124,7 +124,19 @@ public class UdmReportServiceTest {
         udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
         expectLastCall().once();
         replay(udmReportRepository);
-        udmReportRepository.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
+        udmReportService.writeUdmSurveyLicenseeCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }
+
+    @Test
+    public void testWriteCompletedAssignmentsReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setPeriods(Collections.singleton(202112));
+        udmReportRepository.writeUdmCompletedAssignmentsCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmCompletedAssignmentsCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
 

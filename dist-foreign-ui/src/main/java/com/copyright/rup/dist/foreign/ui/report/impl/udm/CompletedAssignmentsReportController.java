@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
@@ -29,6 +30,8 @@ public class CompletedAssignmentsReportController extends CommonController<IComp
     implements ICompletedAssignmentsReportController {
 
     @Autowired
+    private IUdmReportService udmReportService;
+    @Autowired
     private IUdmUsageService udmUsageService;
 
     @Override
@@ -44,7 +47,7 @@ public class CompletedAssignmentsReportController extends CommonController<IComp
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("completed_assignments_by_employee_",
-            os -> {/*TODO implement service logic*/});
+            os -> udmReportService.writeUdmCompletedAssignmentsCsvReport(getWidget().getReportFilter(), os));
     }
 
     @Override

@@ -57,7 +57,13 @@
         <result property="totalCountOfDetailsInEligibleStatus" column="total_count_of_details_in_eligible_status"/>
     </resultMap>
 
-    <sql id="drillDownWhereClauses">
+    <resultMap id="udmCompletedAssignmentsReportDtoResultMap" type="UdmCompletedAssignmentsReportDto">
+        <result property="userName" column="user_name"/>
+        <result property="usagesCount" column="usages_count"/>
+        <result property="valuesCount" column="values_count"/>
+    </resultMap>
+
+    <sql id="commonUdmFilterWhereClauses">
         <where>
             <if test="null != channel">
                 and ub.channel = #{channel}
@@ -137,7 +143,7 @@
             from ${schema}.df_udm_usage u
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
-        <include refid="drillDownWhereClauses"/>
+        <include refid="commonUdmFilterWhereClauses"/>
             group by u.period, u.created_datetime, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name
             order by u.period desc, u.created_datetime desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name
         ) as nested_report
@@ -188,7 +194,7 @@
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
             join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
-        <include refid="drillDownWhereClauses"/>
+        <include refid="commonUdmFilterWhereClauses"/>
             group by u.period, u.survey_start_date, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name, alc.aggregate_licensee_class_id, aggregate_licensee_class_name
             order by u.period desc, u.survey_start_date desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name, aggregate_licensee_class_name
         ) as nested_report
@@ -207,8 +213,54 @@
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         join ${schema}.df_udm_usage u on dlc.detail_licensee_class_id = u.detail_licensee_class_id
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        <include refid="drillDownWhereClauses"/>
+        <include refid="commonUdmFilterWhereClauses"/>
         group by dlc.detail_licensee_class_id, alc.aggregate_licensee_class_id, ub.channel, ub.usage_origin, u.status_ind
         having u.status_ind = 'ELIGIBLE'
+    </select>
+
+    <sql id="completedAssignmentsFilterWhereClauses">
+        where action_type_ind = 'UNASSIGN'
+        <if test="periods.size() > 0">
+            and
+            <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                period = #{period}
+            </foreach>
+        </if>
+        <if test="userNames.size() > 0">
+            and
+            <foreach collection="userNames" item="userName" open="(" separator=" or " close=")">
+                a.created_by_user = #{userName}
+            </foreach>
+        </if>
+        <if test="null != dateFrom and null != dateTo">
+            and a.created_datetime::date between #{dateFrom} and #{dateTo}
+        </if>
+    </sql>
+
+    <select id="findUdmCompletedAssignmentsReportDtos" parameterType="map" resultMap="udmCompletedAssignmentsReportDtoResultMap">
+        with usages_count as materialized (
+            select
+                a.created_by_user as user_name,
+                count(1) as usages_count
+            from ${schema}.df_udm_audit a
+            join ${schema}.df_udm_usage u on u.df_udm_usage_uid = a.df_udm_usage_uid
+            <include refid="completedAssignmentsFilterWhereClauses"/>
+            group by a.created_by_user
+        ),
+        values_count as materialized (
+            select
+                a.created_by_user as user_name,
+                count(1) as values_count
+            from ${schema}.df_udm_value_audit a
+            join ${schema}.df_udm_value v on v.df_udm_value_uid = a.df_udm_value_uid
+            <include refid="completedAssignmentsFilterWhereClauses"/>
+            group by a.created_by_user
+        )
+        select
+            coalesce(usages.user_name, values.user_name) user_name,
+            usages_count,
+            values_count
+        from usages_count usages
+        full join values_count values on usages.user_name = values.user_name
     </select>
 </mapper>

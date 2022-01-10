@@ -82,4 +82,12 @@ public interface IUdmReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmVerifiedDetailsBySourceReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Completed Assignments by Employee Report into csv output stream.
+     *
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }
