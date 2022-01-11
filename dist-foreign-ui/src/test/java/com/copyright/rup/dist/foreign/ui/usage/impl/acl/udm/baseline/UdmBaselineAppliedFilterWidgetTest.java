@@ -12,8 +12,8 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
-
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -57,7 +57,8 @@ public class UdmBaselineAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(3), "Detail Licensee Classes", "22 - Book series");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Types of Use", "EMAIL_COPY");
         verifyLabel(((VerticalLayout) component).getComponent(5), "Aggregate Licensee Classes", "56 - Financial");
-        verifyLabel(((VerticalLayout) component).getComponent(6), "Wr Wrk Inst", "20008506");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
+            "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(7), "System Title",
             "Colloids and surfaces. B, Biointerfaces");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Usage Detail ID",
@@ -85,7 +86,7 @@ public class UdmBaselineAppliedFilterWidgetTest {
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass()));
         filter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
         filter.setSurveyCountry("United States");
-        filter.setWrWrkInst(20008506L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitle("Colloids and surfaces. B, Biointerfaces");
         filter.setUsageDetailId("2fc665eb-6b75-4e12-afbe-d2e1e1bab69d");
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));

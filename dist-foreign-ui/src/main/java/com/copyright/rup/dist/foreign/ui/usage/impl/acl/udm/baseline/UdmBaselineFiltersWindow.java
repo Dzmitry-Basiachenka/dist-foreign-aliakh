@@ -17,7 +17,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.converter.StringToLongConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
@@ -54,13 +53,16 @@ public class UdmBaselineFiltersWindow extends Window {
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String NOT_NUMERIC_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
+    private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
     private final TextField systemTitle = new TextField(ForeignUi.getMessage("label.system_title"));
     private final TextField surveyCountry = new TextField(ForeignUi.getMessage("label.survey_country"));
     private final TextField usageDetailId = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
-    private final TextField wrWrkInst = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
+    private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
+    private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
+    private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildOperatorComboBox();
     private final TextField annualizedCopiesFrom = new TextField(ForeignUi.getMessage("label.annualized_copies_from"));
     private final TextField annualizedCopiesTo = new TextField(ForeignUi.getMessage("label.annualized_copies_to"));
     private final ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox = buildOperatorComboBox();
@@ -104,8 +106,9 @@ public class UdmBaselineFiltersWindow extends Window {
         initAggregateLicenseeClassFilterWidget();
         initTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initLicenseeClassesLayout(), typeOfUseFilterWidget, initWrWrkInstSystemTitleLayout(),
-            initUsageDetailIdSurveyCountryLayout(), initAnnualizedCopiesLayout(), buttonsLayout);
+        rootLayout.addComponents(initLicenseeClassesLayout(), typeOfUseFilterWidget, initWrWrkInstLayout(),
+            initSystemTitleLayout(), initUsageDetailIdSurveyCountryLayout(), initAnnualizedCopiesLayout(),
+            buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -145,26 +148,48 @@ public class UdmBaselineFiltersWindow extends Window {
         return licenseeClassesLayout;
     }
 
-    private HorizontalLayout initWrWrkInstSystemTitleLayout() {
-        HorizontalLayout layout = new HorizontalLayout(wrWrkInst, systemTitle);
-        wrWrkInst.setValue(Objects.nonNull(baselineFilter.getWrWrkInst())
-            ? baselineFilter.getWrWrkInst().toString() : StringUtils.EMPTY);
-        systemTitle.setValue(ObjectUtils.defaultIfNull(baselineFilter.getSystemTitle(), StringUtils.EMPTY));
-        filterBinder.forField(wrWrkInst)
+    private HorizontalLayout initWrWrkInstLayout() {
+        HorizontalLayout wrWrkInstLayout =
+            new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
+        populateOperatorFilters(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
+            UdmBaselineFilter::getWrWrkInstExpression);
+        wrWrkInstFromField.addValueChangeListener(event -> filterBinder.validate());
+        wrWrkInstOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(wrWrkInstFromField, wrWrkInstToField, event.getValue()));
+        filterBinder.forField(wrWrkInstFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NOT_NUMERIC_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter(NOT_NUMERIC_VALIDATION_MESSAGE))
-            .bind(UdmBaselineFilter::getWrWrkInst, UdmBaselineFilter::setWrWrkInst);
+            .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+        filterBinder.forField(wrWrkInstToField)
+            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberValidator(), NOT_NUMERIC_VALIDATION_MESSAGE)
+            .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.wr_wrk_inst_from")))
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+        wrWrkInstFromField.setSizeFull();
+        wrWrkInstToField.setSizeFull();
+        wrWrkInstLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-baseline-wr-wrk-inst-from-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-baseline-wr-wrk-inst-to-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-baseline-wr-wrk-inst-operator-filter");
+        return wrWrkInstLayout;
+    }
+
+    private TextField initSystemTitleLayout() {
+        systemTitle.setValue(ObjectUtils.defaultIfNull(baselineFilter.getSystemTitle(), StringUtils.EMPTY));
         filterBinder.forField(systemTitle)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
             .bind(UdmBaselineFilter::getSystemTitle, UdmBaselineFilter::setSystemTitle);
-        wrWrkInst.setSizeFull();
         systemTitle.setSizeFull();
-        layout.setSizeFull();
-        layout.setSpacing(true);
-        VaadinUtils.addComponentStyle(wrWrkInst, "udm-baseline-wr-wrk-inst-filter");
         VaadinUtils.addComponentStyle(systemTitle, "udm-baseline-system-title-filter");
-        return layout;
+        return systemTitle;
     }
 
     private HorizontalLayout initAnnualizedCopiesLayout() {
@@ -184,7 +209,7 @@ public class UdmBaselineFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(annualizedCopiesTo, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFrom, annualizedCopiesTo),
-                ForeignUi.getMessage("field.error.greater_or_equal_to",
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.annualized_copies_from")))
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
@@ -271,17 +296,12 @@ public class UdmBaselineFiltersWindow extends Window {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             if (filterBinder.isValid()) {
-                baselineFilter.setWrWrkInst(getLongFromTextField(wrWrkInst));
-                baselineFilter.setSystemTitle(getStringFromTextField(systemTitle));
-                baselineFilter.setUsageDetailId(getStringFromTextField(usageDetailId));
-                baselineFilter.setSurveyCountry(getStringFromTextField(surveyCountry));
-                baselineFilter.setAnnualizedCopiesExpression(buildNumberFilterExpression(annualizedCopiesFrom,
-                    annualizedCopiesTo, annualizedCopiesOperatorComboBox, BigDecimal::new));
+                populateBaselineFilter();
                 appliedBaselineFilter = baselineFilter;
                 close();
             } else {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInst, systemTitle, usageDetailId,
-                    surveyCountry, annualizedCopiesFrom, annualizedCopiesTo));
+                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitle,
+                    usageDetailId, surveyCountry, annualizedCopiesFrom, annualizedCopiesTo));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -289,11 +309,21 @@ public class UdmBaselineFiltersWindow extends Window {
         return new HorizontalLayout(saveButton, clearButton, closeButton);
     }
 
+    private void populateBaselineFilter() {
+        baselineFilter.setWrWrkInstExpression(buildNumberFilterExpression(wrWrkInstFromField, wrWrkInstToField,
+            wrWrkInstOperatorComboBox, Integer::valueOf));
+        baselineFilter.setSystemTitle(getStringFromTextField(systemTitle));
+        baselineFilter.setUsageDetailId(getStringFromTextField(usageDetailId));
+        baselineFilter.setSurveyCountry(getStringFromTextField(surveyCountry));
+        baselineFilter.setAnnualizedCopiesExpression(buildNumberFilterExpression(annualizedCopiesFrom,
+            annualizedCopiesTo, annualizedCopiesOperatorComboBox, BigDecimal::new));
+    }
+
     private void clearFilters() {
         baselineFilter.setDetailLicenseeClasses(new HashSet<>());
         baselineFilter.setAggregateLicenseeClasses(new HashSet<>());
         baselineFilter.setReportedTypeOfUses(new HashSet<>());
-        baselineFilter.setWrWrkInst(null);
+        baselineFilter.setWrWrkInstExpression(new FilterExpression<>());
         baselineFilter.setSystemTitle(null);
         baselineFilter.setUsageDetailId(null);
         baselineFilter.setSurveyCountry(null);
@@ -301,19 +331,18 @@ public class UdmBaselineFiltersWindow extends Window {
         detailLicenseeClassFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
         typeOfUseFilterWidget.reset();
-        wrWrkInst.clear();
+        clearOperatorLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         systemTitle.clear();
         usageDetailId.clear();
         surveyCountry.clear();
-        annualizedCopiesFrom.clear();
-        annualizedCopiesTo.clear();
-        annualizedCopiesTo.setEnabled(false);
-        annualizedCopiesOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
+        clearOperatorLayout(annualizedCopiesFrom, annualizedCopiesTo, annualizedCopiesOperatorComboBox);
     }
 
-    //TODO analyze does it make sense to move converters and validators to separate Utils class
-    private Long getLongFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? Long.valueOf(textField.getValue().trim()) : null;
+    private void clearOperatorLayout(TextField fromField, TextField toField, ComboBox<FilterOperatorEnum> comboBox) {
+        fromField.clear();
+        toField.clear();
+        toField.setEnabled(false);
+        comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
     }
 
     private String getStringFromTextField(TextField textField) {
@@ -354,5 +383,15 @@ public class UdmBaselineFiltersWindow extends Window {
             || !amountZeroValidator.isValid(fromValue)
             || !amountZeroValidator.isValid(toValue)
             || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
+    }
+
+    private boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
+        String fromValue = fromField.getValue();
+        String toValue = toField.getValue();
+        return StringUtils.isEmpty(fromValue)
+            || StringUtils.isEmpty(toValue)
+            || !getNumberValidator().test(fromValue)
+            || !getNumberValidator().test(toValue)
+            || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
     }
 }

@@ -46,7 +46,8 @@ public class UdmBaselineAppliedFilterWidget extends CommonUdmAppliedFilterPanel 
             addLabel(
                 createLabelWithMultipleValues(filter.getAggregateLicenseeClasses(), "label.aggregate_licensee_classes",
                     AggregateLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithSingleValue(UdmBaselineFilter::getWrWrkInst, filter, "label.wr_wrk_inst"), layout);
+            addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
+                "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getSystemTitle, filter, "label.system_title"),
                 layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getUsageDetailId, filter, "label.usage_detail_id"),
