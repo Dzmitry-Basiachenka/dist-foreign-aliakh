@@ -8,6 +8,8 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Widget for applied udm baseline filters.
  * <p>
@@ -48,8 +50,8 @@ public class UdmBaselineAppliedFilterWidget extends CommonUdmAppliedFilterPanel 
                     AggregateLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
-            addLabel(createLabelWithSingleValue(UdmBaselineFilter::getSystemTitle, filter, "label.system_title"),
-                layout);
+            addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
+                StringUtils.EMPTY), layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getUsageDetailId, filter, "label.usage_detail_id"),
                 layout);
             addLabel(

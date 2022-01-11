@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 
@@ -12,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -82,9 +84,20 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
 
     private UdmBaselineFilter escapeSqlLikePattern(UdmBaselineFilter udmBaselineFilter) {
         UdmBaselineFilter filterCopy = new UdmBaselineFilter(udmBaselineFilter);
-        filterCopy.setSystemTitle(escapeSqlLikePattern(filterCopy.getSystemTitle()));
+        filterCopy.setSystemTitleExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
         filterCopy.setUsageDetailId(escapeSqlLikePattern(filterCopy.getUsageDetailId()));
         filterCopy.setSurveyCountry(escapeSqlLikePattern(filterCopy.getSurveyCountry()));
         return filterCopy;
+    }
+
+    private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
+        FilterExpression<String> filterExpression) {
+        return Objects.nonNull(filterExpression.getOperator())
+            ? new FilterExpression<>(filterExpression.getOperator(),
+            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
+                new String[]{"'"}, new String[]{"''"}),
+            filterExpression.getFieldSecondValue())
+            : filterExpression;
     }
 }

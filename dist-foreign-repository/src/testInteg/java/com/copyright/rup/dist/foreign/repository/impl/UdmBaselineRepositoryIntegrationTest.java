@@ -62,7 +62,7 @@ import java.util.stream.IntStream;
 public class UdmBaselineRepositoryIntegrationTest {
 
     private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
-        "udm-baseline-repository-test-data-init-find-dtos-by-filter.groovy";
+        "udm-baseline-repository-test/find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
     private static final String SURVEY_COUNTRY = "Portugal";
     private static final String SURVEY_COUNTRY_FRAGMENT = "Portu";
@@ -79,8 +79,11 @@ public class UdmBaselineRepositoryIntegrationTest {
     private static final String SYSTEM_TITLE_1_FRAGMENT = "Colloids and surfaces. B,";
     private static final String SYSTEM_TITLE_1_DIFFERENT_CASE = "ColLoIds aND SurfaceS. B, BiointerfacES";
     private static final String SYSTEM_TITLE_2 = "Colloids and surfaces. C, Biointerfaces";
+    private static final String SYSTEM_TITLE_2_FRAGMENT = "Colloids and surfaces. C,";
     private static final String SYSTEM_TITLE_3_WITH_METASYMBOLS =
         "Colloids and surfaces. B, Biointerfaces !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String SYSTEM_TITLE_3_FRAGMENT_WITH_METASYMBOLS =
+        ", Biointerfaces !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String USAGE_ID_1 = "4a1522d3-9dfe-4884-b314-cd6f87922936";
     private static final String USAGE_ID_2 = "1a1522d3-9dfe-4884-58aa-caaf8792112c";
     private static final String USAGE_ID_3 = "771522d3-ccfe-2189-b314-cd6f87ab6689";
@@ -105,7 +108,7 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
         filter.setSurveyCountry(SURVEY_COUNTRY);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
-        filter.setSystemTitle(SYSTEM_TITLE_1);
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setUsageDetailId(USAGE_DETAIL_ID_1);
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         assertEquals(1, baselineRepository.findCountByFilter(filter));
@@ -130,11 +133,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_DIFFERENT_CASE), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_FRAGMENT), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_DIFFERENT_CASE), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2), 0);
         verifyFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), 1);
         verifyFilteringFindCountByFilter(filter ->
@@ -193,6 +191,45 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSystemTitle() {
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1_DIFFERENT_CASE, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_3_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_2, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1_FRAGMENT, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1_DIFFERENT_CASE, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_3_WITH_METASYMBOLS, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_2, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1_FRAGMENT, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1_DIFFERENT_CASE, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1_FRAGMENT, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_3_FRAGMENT_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_2_FRAGMENT, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 2);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Collections.singleton(202012));
@@ -203,7 +240,7 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
         filter.setSurveyCountry(SURVEY_COUNTRY);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
-        filter.setSystemTitle(SYSTEM_TITLE_1);
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setUsageDetailId(USAGE_DETAIL_ID_1);
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         assertEquals(loadExpectedBaselineDto("json/udm/udm_baseline_dto_4a1522d3.json"),
@@ -234,11 +271,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS),
             USAGE_ID_4);
         verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2));
-        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1), USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_FRAGMENT));
-        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_1_DIFFERENT_CASE), USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_3_WITH_METASYMBOLS), USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitle(SYSTEM_TITLE_2));
         verifyFilteringFindDtosByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
@@ -297,6 +329,52 @@ public class UdmBaselineRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
         verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSystemTitle() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1_DIFFERENT_CASE, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_3_WITH_METASYMBOLS, null)), USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_2, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1_FRAGMENT, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1, null)), USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1_DIFFERENT_CASE, null)),
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_3_WITH_METASYMBOLS, null)),
+            USAGE_ID_1, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_2, null)), USAGE_ID_1, USAGE_ID_4,
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_1_FRAGMENT, null)), USAGE_ID_1,
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1_DIFFERENT_CASE, null)), USAGE_ID_1,
+            USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_1_FRAGMENT, null)), USAGE_ID_1,
+            USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_3_FRAGMENT_WITH_METASYMBOLS, null)),
+            USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_2_FRAGMENT, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test

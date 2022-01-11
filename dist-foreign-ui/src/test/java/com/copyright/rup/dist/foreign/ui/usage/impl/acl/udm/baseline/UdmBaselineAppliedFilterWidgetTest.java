@@ -59,8 +59,8 @@ public class UdmBaselineAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(5), "Aggregate Licensee Classes", "56 - Financial");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
             "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(7), "System Title",
-            "Colloids and surfaces. B, Biointerfaces");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
+            "<li><b><i>System Title: </i></b>Medical journal</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Usage Detail ID",
             "2fc665eb-6b75-4e12-afbe-d2e1e1bab69d");
         verifyLabel(((VerticalLayout) component).getComponent(9), "Survey Country", "United States");
@@ -87,7 +87,8 @@ public class UdmBaselineAppliedFilterWidgetTest {
         filter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
         filter.setSurveyCountry("United States");
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
-        filter.setSystemTitle("Colloids and surfaces. B, Biointerfaces");
+        filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, "Medical journal", null));
         filter.setUsageDetailId("2fc665eb-6b75-4e12-afbe-d2e1e1bab69d");
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         return filter;

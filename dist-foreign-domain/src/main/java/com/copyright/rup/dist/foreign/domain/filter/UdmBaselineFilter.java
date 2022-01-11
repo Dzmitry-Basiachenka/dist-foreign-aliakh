@@ -32,7 +32,7 @@ public class UdmBaselineFilter {
     private Set<String> reportedTypeOfUses = new HashSet<>();
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
-    private String systemTitle;
+    private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private String usageDetailId;
     private String surveyCountry;
 
@@ -57,7 +57,7 @@ public class UdmBaselineFilter {
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
             setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
-            setSystemTitle(filter.getSystemTitle());
+            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setSurveyCountry(filter.getSurveyCountry());
             setUsageDetailId(filter.getUsageDetailId());
         }
@@ -127,12 +127,12 @@ public class UdmBaselineFilter {
         this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
-    public String getSystemTitle() {
-        return systemTitle;
+    public FilterExpression<String> getSystemTitleExpression() {
+        return systemTitleExpression;
     }
 
-    public void setSystemTitle(String systemTitle) {
-        this.systemTitle = systemTitle;
+    public void setSystemTitleExpression(FilterExpression<String> systemTitleExpression) {
+        this.systemTitleExpression = systemTitleExpression;
     }
 
     public String getUsageDetailId() {
@@ -158,11 +158,11 @@ public class UdmBaselineFilter {
         return CollectionUtils.isEmpty(periods)
             && null == udmUsageOrigin
             && null == channel
-            && null == systemTitle
             && null == usageDetailId
             && null == surveyCountry
             && annualizedCopiesExpression.isEmpty()
             && wrWrkInstExpression.isEmpty()
+            && systemTitleExpression.isEmpty()
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(aggregateLicenseeClasses)
             && CollectionUtils.isEmpty(reportedTypeOfUses);
@@ -186,7 +186,7 @@ public class UdmBaselineFilter {
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
-            .append(systemTitle, that.systemTitle)
+            .append(systemTitleExpression, that.systemTitleExpression)
             .append(usageDetailId, that.usageDetailId)
             .append(surveyCountry, that.surveyCountry)
             .isEquals();
@@ -203,7 +203,7 @@ public class UdmBaselineFilter {
             .append(reportedTypeOfUses)
             .append(annualizedCopiesExpression)
             .append(wrWrkInstExpression)
-            .append(systemTitle)
+            .append(systemTitleExpression)
             .append(usageDetailId)
             .append(surveyCountry)
             .toHashCode();
@@ -220,7 +220,7 @@ public class UdmBaselineFilter {
             .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .append("wrWrkInstExpression", wrWrkInstExpression)
-            .append("systemTitle", systemTitle)
+            .append("systemTitleExpression", systemTitleExpression)
             .append("usageDetailId", usageDetailId)
             .append("surveyCountry", surveyCountry)
             .toString();

@@ -66,11 +66,13 @@ public class UdmBaselineFiltersWindowTest {
     private static final String INVALID_NUMBER = "a12345678";
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
+    private static final String CAPTION_OPERATOR = "Operator";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String DECIMAL_VALIDATION_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
+
     private UdmBaselineFiltersWindow window;
     private Binder<UdmBaselineFilter> binder;
 
@@ -85,7 +87,7 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals("UDM baseline additional filters", window.getCaption());
         assertEquals(750, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(272, window.getHeight(), 0);
+        assertEquals(320, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
     }
@@ -100,26 +102,18 @@ public class UdmBaselineFiltersWindowTest {
     }
 
     @Test
-    @SuppressWarnings(UNCHECKED)
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        HorizontalLayout annualizedCopiesLayout = (HorizontalLayout) verticalLayout.getComponent(5);
-        TextField annualizedCopiesFromField = (TextField) annualizedCopiesLayout.getComponent(0);
-        TextField annualizedCopiesToField = (TextField) annualizedCopiesLayout.getComponent(1);
-        ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
-            (ComboBox<FilterOperatorEnum>) annualizedCopiesLayout.getComponent(2);
-        assertEquals(FilterOperatorEnum.EQUALS, annualizedCopiesOperatorComboBox.getValue());
-        assertTrue(annualizedCopiesFromField.isEnabled());
-        assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
-        assertTrue(annualizedCopiesFromField.isEnabled());
-        assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
-        assertTrue(annualizedCopiesFromField.isEnabled());
-        assertFalse(annualizedCopiesToField.isEnabled());
-        annualizedCopiesOperatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        assertTrue(annualizedCopiesFromField.isEnabled());
-        assertTrue(annualizedCopiesToField.isEnabled());
+        testNumericFilterOperatorChangeListener(5);
+    }
+
+    @Test
+    public void testWrWrkInstFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(2);
+    }
+
+    @Test
+    public void testSystemTitleFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(3);
     }
 
     @Test
@@ -148,7 +142,7 @@ public class UdmBaselineFiltersWindowTest {
         TextField annualizedCopiesToField = Whitebox.getInternalState(window, "annualizedCopiesTo");
         ComboBox<FilterOperatorEnum> annualizedCopiesOperatorComboBox =
             Whitebox.getInternalState(window, "annualizedCopiesOperatorComboBox");
-        assertOperatorComboBoxItems(annualizedCopiesOperatorComboBox);
+        assertNumericOperatorComboBoxItems(annualizedCopiesOperatorComboBox);
         verifyBigDecimalOperationValidations(annualizedCopiesFromField, annualizedCopiesToField,
             annualizedCopiesOperatorComboBox);
     }
@@ -159,7 +153,7 @@ public class UdmBaselineFiltersWindowTest {
         TextField wrWrkInstToField = Whitebox.getInternalState(window, "wrWrkInstToField");
         ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox =
             Whitebox.getInternalState(window, "wrWrkInstOperatorComboBox");
-        assertOperatorComboBoxItems(wrWrkInstOperatorComboBox);
+        assertNumericOperatorComboBoxItems(wrWrkInstOperatorComboBox);
         verifyIntegerOperationValidations(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
     }
 
@@ -174,10 +168,13 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testSystemTitleValidation() {
-        TextField languageField = Whitebox.getInternalState(window, "systemTitle");
-        validateFieldAndVerifyErrorMessage(languageField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(2000), null, true);
-        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(2001),
+        TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
+        ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox =
+            Whitebox.getInternalState(window, "systemTitleOperatorComboBox");
+        assertTextOperatorComboBoxItems(systemTitleOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
             "Field value should not exceed 2000 characters", false);
     }
 
@@ -187,10 +184,10 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(7, verticalLayout.getComponentCount());
         verifyFilterLayout(verticalLayout.getComponent(0), "Detail Licensee Classes", "Aggregate Licensee Classes");
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Types of Use");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(2), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyTextFieldComponent(verticalLayout.getComponent(3), "System Title");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(2), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(3), "System Title");
         verifyTextFieldLayout(verticalLayout.getComponent(4), "Usage Detail ID", "Survey Country");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(5), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(5), "Annualized Copies From",
             "Annualized Copies To");
         verifyButtonsLayout(verticalLayout.getComponent(6), "Save", "Clear", "Close");
     }
@@ -203,7 +200,17 @@ public class UdmBaselineFiltersWindowTest {
             .forEach(index -> verifyItemsFilterWidget(layout.getComponent(index), captions[index]));
     }
 
-    private void verifyFieldWithOperatorComponent(Component component, String captionFrom, String captionTo) {
+    private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertEquals(caption, layout.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(1) instanceof ComboBox);
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
+    }
+
+    private void verifyFieldWithNumericOperatorComponent(Component component, String captionFrom, String captionTo) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
@@ -212,7 +219,7 @@ public class UdmBaselineFiltersWindowTest {
         assertTrue(layout.getComponent(1) instanceof TextField);
         assertEquals(captionTo, layout.getComponent(1).getCaption());
         assertTrue(layout.getComponent(2) instanceof ComboBox);
-        assertEquals("Operator", layout.getComponent(2).getCaption());
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
 
     private void verifyTextFieldLayout(Component component, String firstCaption, String secondCaption) {
@@ -229,6 +236,62 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
         assertTrue(component.isEnabled());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testNumericFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField fromField = (TextField) horizontalLayout.getComponent(0);
+        TextField toField = (TextField) horizontalLayout.getComponent(1);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(2);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        assertTrue(fromField.isEnabled());
+        assertTrue(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testTextFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
+        assertFalse(textField.isEnabled());
     }
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
@@ -285,7 +348,7 @@ public class UdmBaselineFiltersWindowTest {
         filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752, null));
-        filter.setSystemTitle(SYSTEM_TITLE);
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setUsageDetailId(USAGE_DETAIL_ID);
         filter.setSurveyCountry(SURVEY_COUNTRY);
         filter.setAnnualizedCopiesExpression(
@@ -300,7 +363,8 @@ public class UdmBaselineFiltersWindowTest {
         assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(1)");
         assertTextFieldValue("wrWrkInstFromField", "243904752");
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("systemTitle", SYSTEM_TITLE);
+        assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
+        assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("usageDetailId", USAGE_DETAIL_ID);
         assertTextFieldValue("surveyCountry", SURVEY_COUNTRY);
         assertTextFieldValue("annualizedCopiesFrom", "5.5");
@@ -321,12 +385,18 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
-    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, "Operator", false,
+    private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
+    }
+
+    private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
+                FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -343,7 +413,8 @@ public class UdmBaselineFiltersWindowTest {
         baselineFilter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
         populateTextField("wrWrkInstFromField", "243904752");
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
-        populateTextField("systemTitle", SYSTEM_TITLE);
+        populateTextField("systemTitleField", SYSTEM_TITLE);
+        populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("usageDetailId", USAGE_DETAIL_ID);
         populateTextField("surveyCountry", SURVEY_COUNTRY);
         populateTextField("annualizedCopiesFrom", "5.5");
