@@ -3,7 +3,7 @@
 * B-69423 FDA: Filter functionality modification: implement operations for Annualized Copies in Baseline tab
 * B-69423 FDA: Filter functionality modification: implement operations for Wr Wrk Inst in Baseline tab
 * B-70571 FDA: Verified Details by Source Report: implement service
-* B-67667 FDAgit: Completed Assignments by Employee Report: implement backend logic to generate report
+* B-67667 FDA: Completed Assignments by Employee Report: implement backend logic to generate report
 * CDP-1036 FDA: Weekly Survey Report: Detail is considered as usable if Reported Title = 'none' (only 'None' is considered as unusable, should be case insensitive)
 
 14.1.43
