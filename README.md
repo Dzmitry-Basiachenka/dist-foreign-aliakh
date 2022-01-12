@@ -1,3 +1,10 @@
+14.1.45
+-
+* B-70571 FDA: Verified Details by Source Report: implement controller
+* B-69423 FDA: Filter functionality modification: implement operations for Company ID, Company Name in Usages tab
+* B-69423 FDA: Filter functionality modification: implement operations for System Title in Baseline tab
+* CDP-1037 FDA: Weekly Survey Report: 'Received Date From' and 'Received Date To' filters search data by 'Survey Start Date' instead of 'Load Date'
+
 14.1.44
 -
 * B-69423 FDA: Filter functionality modification: implement operations for Annualized Copies in Baseline tab
