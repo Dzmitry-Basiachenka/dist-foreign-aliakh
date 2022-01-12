@@ -78,7 +78,7 @@
                 </foreach>
             </if>
             <if test="null != dateFrom and null != dateTo">
-                and u.survey_start_date::date between #{dateFrom} and #{dateTo}
+                and ${date_column}::date between #{dateFrom} and #{dateTo}
             </if>
         </where>
     </sql>
@@ -143,7 +143,9 @@
             from ${schema}.df_udm_usage u
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
-        <include refid="commonUdmFilterWhereClauses"/>
+            <include refid="commonUdmFilterWhereClauses">
+                <property name="date_column" value="u.created_datetime"/>
+            </include>
             group by u.period, u.created_datetime, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name
             order by u.period desc, u.created_datetime desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name
         ) as nested_report
@@ -194,7 +196,9 @@
             join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
             join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
             join ${schema}.df_aggregate_licensee_class alc on alc.aggregate_licensee_class_id = dlc.aggregate_licensee_class_id
-        <include refid="commonUdmFilterWhereClauses"/>
+            <include refid="commonUdmFilterWhereClauses">
+                <property name="date_column" value="u.survey_start_date"/>
+            </include>
             group by u.period, u.survey_start_date, ub.channel, ub.usage_origin, company_id, company_name, u.detail_licensee_class_id, detail_licensee_class_name, alc.aggregate_licensee_class_id, aggregate_licensee_class_name
             order by u.period desc, u.survey_start_date desc, ub.channel, ub.usage_origin, company_name, detail_licensee_class_name, aggregate_licensee_class_name
         ) as nested_report
@@ -213,7 +217,9 @@
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         join ${schema}.df_udm_usage u on dlc.detail_licensee_class_id = u.detail_licensee_class_id
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        <include refid="commonUdmFilterWhereClauses"/>
+        <include refid="commonUdmFilterWhereClauses">
+            <property name="date_column" value="u.created_datetime"/>
+        </include>
         group by dlc.detail_licensee_class_id, alc.aggregate_licensee_class_id, ub.channel, ub.usage_origin, u.status_ind
         having u.status_ind = 'ELIGIBLE'
     </select>
