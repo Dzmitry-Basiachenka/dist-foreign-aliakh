@@ -61,8 +61,13 @@
                 <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
             </include>
         </if>
-        <if test="null != filter.systemTitle">
-            and u.system_title ilike #{filter.systemTitle}
+        <if test="!filter.systemTitleExpression.isEmpty()">
+            <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                <property name="column" value="u.system_title"/>
+                <property name="operator" value="filter.systemTitleExpression.operator"/>
+                <property name="fieldFirstValue" value="${filter.systemTitleExpression.fieldFirstValue}"/>
+                <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
+            </include>
         </if>
         <if test="null != filter.surveyCountry">
             and u.survey_country ilike #{filter.surveyCountry}
