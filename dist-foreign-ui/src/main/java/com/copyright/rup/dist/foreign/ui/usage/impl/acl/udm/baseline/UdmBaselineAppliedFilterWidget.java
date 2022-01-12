@@ -52,11 +52,10 @@ public class UdmBaselineAppliedFilterWidget extends CommonUdmAppliedFilterPanel 
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithSingleValue(UdmBaselineFilter::getUsageDetailId, filter, "label.usage_detail_id"),
-                layout);
-            addLabel(
-                createLabelWithSingleValue(UdmBaselineFilter::getSurveyCountry, filter, "label.survey_country"),
-                layout);
+            addLabel(createLabelWithOperator(filter.getUsageDetailIdExpression(), "label.usage_detail_id",
+                StringUtils.EMPTY), layout);
+            addLabel(createLabelWithOperator(filter.getSurveyCountryExpression(), "label.survey_country",
+                StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getAnnualizedCopiesExpression(), "label.annualized_copies_from",
                 "label.annualized_copies_to"), layout);
         }

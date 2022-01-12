@@ -86,8 +86,10 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
         UdmBaselineFilter filterCopy = new UdmBaselineFilter(udmBaselineFilter);
         filterCopy.setSystemTitleExpression(
             setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
-        filterCopy.setUsageDetailId(escapeSqlLikePattern(filterCopy.getUsageDetailId()));
-        filterCopy.setSurveyCountry(escapeSqlLikePattern(filterCopy.getSurveyCountry()));
+        filterCopy.setUsageDetailIdExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getUsageDetailIdExpression()));
+        filterCopy.setSurveyCountryExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSurveyCountryExpression()));
         return filterCopy;
     }
 

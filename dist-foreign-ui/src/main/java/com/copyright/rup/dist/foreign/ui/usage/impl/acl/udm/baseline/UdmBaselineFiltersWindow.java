@@ -29,7 +29,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -60,8 +59,10 @@ public class UdmBaselineFiltersWindow extends Window {
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
     private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
-    private final TextField surveyCountry = new TextField(ForeignUi.getMessage("label.survey_country"));
-    private final TextField usageDetailId = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
+    private final TextField surveyCountryField = new TextField(ForeignUi.getMessage("label.survey_country"));
+    private final ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox = buildTextOperatorComboBox();
+    private final TextField usageDetailIdField = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
+    private final ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox = buildTextOperatorComboBox();
     private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
     private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
     private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildNumericOperatorComboBox();
@@ -90,7 +91,7 @@ public class UdmBaselineFiltersWindow extends Window {
         setCaption(ForeignUi.getMessage("window.udm_baseline_additional_filters"));
         setResizable(false);
         setWidth(750, Unit.PIXELS);
-        setHeight(320, Unit.PIXELS);
+        setHeight(365, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-additional-filters-window");
     }
 
@@ -109,7 +110,7 @@ public class UdmBaselineFiltersWindow extends Window {
         initTypeOfUseFilterWidget();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initLicenseeClassesLayout(), typeOfUseFilterWidget, initWrWrkInstLayout(),
-            initSystemTitleLayout(), initUsageDetailIdSurveyCountryLayout(), initAnnualizedCopiesLayout(),
+            initSystemTitleLayout(), initUsageDetailIdLayout(), initSurveyCountryLayout(), initAnnualizedCopiesLayout(),
             buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
@@ -235,23 +236,40 @@ public class UdmBaselineFiltersWindow extends Window {
         return annualizedCopiesLayout;
     }
 
-    private HorizontalLayout initUsageDetailIdSurveyCountryLayout() {
-        HorizontalLayout layout = new HorizontalLayout(usageDetailId, surveyCountry);
-        usageDetailId.setValue(ObjectUtils.defaultIfNull(baselineFilter.getUsageDetailId(), StringUtils.EMPTY));
-        surveyCountry.setValue(ObjectUtils.defaultIfNull(baselineFilter.getSurveyCountry(), StringUtils.EMPTY));
-        filterBinder.forField(usageDetailId)
+    private HorizontalLayout initUsageDetailIdLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(usageDetailIdField, usageDetailIdOperatorComboBox);
+        populateOperatorFilters(usageDetailIdField, usageDetailIdOperatorComboBox,
+            UdmBaselineFilter::getUsageDetailIdExpression);
+        filterBinder.forField(usageDetailIdField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .bind(UdmBaselineFilter::getUsageDetailId, UdmBaselineFilter::setUsageDetailId);
-        filterBinder.forField(surveyCountry)
+            .bind(filter -> filter.getUsageDetailIdExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getUsageDetailIdExpression().setFieldFirstValue(value.trim()));
+        usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
+        usageDetailIdOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(usageDetailIdField, event.getValue()));
+        usageDetailIdField.setSizeFull();
+        horizontalLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(usageDetailIdField, "udm-baseline-usage-detail-id-filter");
+        VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "udm-baseline-usage-detail-id-operator-filter");
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initSurveyCountryLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(surveyCountryField, surveyCountryOperatorComboBox);
+        populateOperatorFilters(surveyCountryField, surveyCountryOperatorComboBox,
+            UdmBaselineFilter::getSurveyCountryExpression);
+        filterBinder.forField(surveyCountryField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 100), 0, 100))
-            .bind(UdmBaselineFilter::getSurveyCountry, UdmBaselineFilter::setSurveyCountry);
-        usageDetailId.setSizeFull();
-        surveyCountry.setSizeFull();
-        layout.setSizeFull();
-        layout.setSpacing(true);
-        VaadinUtils.addComponentStyle(usageDetailId, "udm-baseline-usage-detail-id-filter");
-        VaadinUtils.addComponentStyle(surveyCountry, "udm-baseline-survey-country-filter");
-        return layout;
+            .bind(filter -> filter.getSurveyCountryExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getSurveyCountryExpression().setFieldFirstValue(value.trim()));
+        surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
+        surveyCountryOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(surveyCountryField, event.getValue()));
+        surveyCountryField.setSizeFull();
+        horizontalLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(surveyCountryField, "udm-baseline-survey-country-filter");
+        VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "udm-baseline-survey-country-operator-filter");
+        return horizontalLayout;
     }
 
     private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
@@ -347,7 +365,7 @@ public class UdmBaselineFiltersWindow extends Window {
                 close();
             } else {
                 Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField,
-                    usageDetailId, surveyCountry, annualizedCopiesFrom, annualizedCopiesTo));
+                    usageDetailIdField, surveyCountryField, annualizedCopiesFrom, annualizedCopiesTo));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -360,8 +378,11 @@ public class UdmBaselineFiltersWindow extends Window {
             wrWrkInstOperatorComboBox, Integer::valueOf));
         baselineFilter.setSystemTitleExpression(buildFilterExpression(systemTitleField, systemTitleOperatorComboBox,
             Function.identity()));
-        baselineFilter.setUsageDetailId(getStringFromTextField(usageDetailId));
-        baselineFilter.setSurveyCountry(getStringFromTextField(surveyCountry));
+        baselineFilter.setUsageDetailIdExpression(buildFilterExpression(usageDetailIdField,
+            usageDetailIdOperatorComboBox,
+            Function.identity()));
+        baselineFilter.setSurveyCountryExpression(buildFilterExpression(surveyCountryField,
+            surveyCountryOperatorComboBox, Function.identity()));
         baselineFilter.setAnnualizedCopiesExpression(buildAmountFilterExpression(annualizedCopiesFrom,
             annualizedCopiesTo, annualizedCopiesOperatorComboBox, BigDecimal::new));
     }
@@ -372,16 +393,16 @@ public class UdmBaselineFiltersWindow extends Window {
         baselineFilter.setReportedTypeOfUses(new HashSet<>());
         baselineFilter.setWrWrkInstExpression(new FilterExpression<>());
         baselineFilter.setSystemTitleExpression(new FilterExpression<>());
-        baselineFilter.setUsageDetailId(null);
-        baselineFilter.setSurveyCountry(null);
+        baselineFilter.setUsageDetailIdExpression(new FilterExpression<>());
+        baselineFilter.setSurveyCountryExpression(new FilterExpression<>());
         baselineFilter.setAnnualizedCopiesExpression(new FilterExpression<>());
         detailLicenseeClassFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
         typeOfUseFilterWidget.reset();
         clearOperatorLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         clearOperatorLayout(systemTitleField, systemTitleOperatorComboBox);
-        usageDetailId.clear();
-        surveyCountry.clear();
+        clearOperatorLayout(usageDetailIdField, usageDetailIdOperatorComboBox);
+        clearOperatorLayout(surveyCountryField, surveyCountryOperatorComboBox);
         clearOperatorLayout(annualizedCopiesFrom, annualizedCopiesTo, annualizedCopiesOperatorComboBox);
     }
 
@@ -395,10 +416,6 @@ public class UdmBaselineFiltersWindow extends Window {
         toField.clear();
         toField.setEnabled(false);
         comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-    }
-
-    private String getStringFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
     }
 
     private <T> FilterExpression<T> buildFilterExpression(TextField textField,

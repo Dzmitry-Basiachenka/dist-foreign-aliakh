@@ -64,17 +64,18 @@ public class UdmBaselineRepositoryIntegrationTest {
     private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
         "udm-baseline-repository-test/find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
-    private static final String SURVEY_COUNTRY = "Portugal";
-    private static final String SURVEY_COUNTRY_FRAGMENT = "Portu";
-    private static final String SURVEY_COUNTRY_DIFFERENT_CASE = "PoRtUgaL";
-    private static final String SURVEY_COUNTRY_WITH_METASYMBOLS = "Portugal !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String SURVEY_COUNTRY_1 = "Portugal";
+    private static final String SURVEY_COUNTRY_1_FRAGMENT = "Portu";
+    private static final String SURVEY_COUNTRY_1_DIFFERENT_CASE = "PoRtUgaL";
+    private static final String SURVEY_COUNTRY_2 = "United States";
+    private static final String SURVEY_COUNTRY_3_WITH_METASYMBOLS = "PoRTUgal !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String TYPE_OF_USE_1 = "EMAIL_COPY";
     private static final String TYPE_OF_USE_2 = "PRINT_COPIES";
     private static final String USAGE_DETAIL_ID_1 = "OGN554GHHSG008";
     private static final String USAGE_DETAIL_ID_1_FRAGMENT = "HSG008";
     private static final String USAGE_DETAIL_ID_1_DIFFERENT_CASE = "Ogn554GHhSg008";
     private static final String USAGE_DETAIL_ID_2 = "OGN554GHHSG777";
-    private static final String USAGE_DETAIL_ID_3_WITH_METASYMBOLS = "OGN554GHHSG010 !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String USAGE_DETAIL_ID_3_WITH_METASYMBOLS = "OGN554GhhSG010 !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String SYSTEM_TITLE_1 = "Colloids and surfaces. B, Biointerfaces";
     private static final String SYSTEM_TITLE_1_FRAGMENT = "Colloids and surfaces. B,";
     private static final String SYSTEM_TITLE_1_DIFFERENT_CASE = "ColLoIds aND SurfaceS. B, BiointerfacES";
@@ -106,10 +107,10 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
         filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
-        filter.setSurveyCountry(SURVEY_COUNTRY);
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
-        filter.setUsageDetailId(USAGE_DETAIL_ID_1);
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         assertEquals(1, baselineRepository.findCountByFilter(filter));
     }
@@ -123,16 +124,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindCountByFilter(filter -> filter.setUdmUsageOrigin(UdmUsageOriginEnum.RFA), 0);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASYMBOLS), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountry("USA"), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_FRAGMENT), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_DIFFERENT_CASE), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2), 0);
         verifyFilteringFindCountByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), 1);
         verifyFilteringFindCountByFilter(filter ->
@@ -164,29 +155,6 @@ public class UdmBaselineRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
         verifyFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 2);
-    }
-
-    @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilterAnnualizedCopies() {
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), 2);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)), 1);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), 3);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), 2);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), 3);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
-        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
 
     @Test
@@ -230,6 +198,107 @@ public class UdmBaselineRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUsageDetailId() {
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1_FRAGMENT, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_2, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1_FRAGMENT, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_2, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1_FRAGMENT, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_2, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSurveyCountry() {
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1_FRAGMENT, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_2, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1_FRAGMENT, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_2, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1_FRAGMENT, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_2, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAnnualizedCopies() {
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)), 1);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), 2);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), 3);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Collections.singleton(202012));
@@ -238,10 +307,10 @@ public class UdmBaselineRepositoryIntegrationTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22)));
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(56)));
         filter.setReportedTypeOfUses(Collections.singleton(TYPE_OF_USE_1));
-        filter.setSurveyCountry(SURVEY_COUNTRY);
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
-        filter.setUsageDetailId(USAGE_DETAIL_ID_1);
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         assertEquals(loadExpectedBaselineDto("json/udm/udm_baseline_dto_4a1522d3.json"),
             baselineRepository.findDtosByFilter(filter, null, null));
@@ -259,18 +328,6 @@ public class UdmBaselineRepositoryIntegrationTest {
         verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_1)),
             USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter -> filter.setReportedTypeOfUses(ImmutableSet.of(TYPE_OF_USE_2)));
-        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT));
-        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASYMBOLS), USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountry("USA"));
-        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1), USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_FRAGMENT));
-        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_1_DIFFERENT_CASE),
-            USAGE_ID_1);
-        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_3_WITH_METASYMBOLS),
-            USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailId(USAGE_DETAIL_ID_2));
         verifyFilteringFindDtosByFilter(filter ->
             filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(22))), USAGE_ID_1);
         verifyFilteringFindDtosByFilter(filter ->
@@ -304,31 +361,6 @@ public class UdmBaselineRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4);
-    }
-
-    @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilterAnnualizedCopies() {
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), USAGE_ID_5);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), USAGE_ID_1, USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter ->
-            filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)),
-            USAGE_ID_5);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4,
-            USAGE_ID_5);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1, USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
-        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
     }
 
     @Test
@@ -375,6 +407,120 @@ public class UdmBaselineRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), USAGE_ID_5);
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageOriginId() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)), USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1_FRAGMENT, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_2, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1, null)), USAGE_ID_4,
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)),
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)),
+            USAGE_ID_1, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_1_FRAGMENT, null)), USAGE_ID_1,
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_2, null)), USAGE_ID_1,
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1_DIFFERENT_CASE, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_3_WITH_METASYMBOLS, null)), USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_1_FRAGMENT, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_2, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSurveyCountry() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)), USAGE_ID_1);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)), USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1_FRAGMENT, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_2, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1, null)), USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)),
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)),
+            USAGE_ID_1, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_1_FRAGMENT, null)), USAGE_ID_1,
+            USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_2, null)), USAGE_ID_1, USAGE_ID_4,
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1_DIFFERENT_CASE, null)), USAGE_ID_1,
+            USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_3_WITH_METASYMBOLS, null)), USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_1_FRAGMENT, null)), USAGE_ID_1,
+            USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_2, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
+    }
+
+    @Test
+    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAnnualizedCopies() {
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 30, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter ->
+                filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 4, null)),
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4,
+            USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 4, null)), USAGE_ID_1, USAGE_ID_4);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 4, 30)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), USAGE_ID_1, USAGE_ID_4, USAGE_ID_5);
     }
 
     @Test
