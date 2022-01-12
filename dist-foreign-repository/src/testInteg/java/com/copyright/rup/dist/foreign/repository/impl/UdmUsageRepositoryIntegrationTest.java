@@ -100,11 +100,11 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String LANGUAGE = "English";
     private static final String LANGUAGE_DIFFERENT_CASE = "EngLISH";
     private static final String LANGUAGE_FRAGMENT = "EnG";
-    private static final String LANGUAGE_WITH_METASYMBOLS = "EngLISH !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String LANGUAGE_WITH_METASYMBOLS = "GerMAN !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String SURVEY_COUNTRY = "United States";
     private static final String SURVEY_COUNTRY_DIFFERENT_CASE = "UnITed StaTES";
     private static final String SURVEY_COUNTRY_FRAGMENT = "Ted StaT";
-    private static final String SURVEY_COUNTRY_WITH_METASUMBOLS = "PortuGAL !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String SURVEY_COUNTRY_WITH_METASYMBOLS = "PortuGAL !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final LocalDate PERIOD_END_DATE = LocalDate.of(2021, 12, 31);
     private static final LocalDate USAGE_DATE = LocalDate.of(2020, 12, 12);
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
@@ -220,8 +220,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
-        filter.setSurveyCountry(SURVEY_COUNTRY);
-        filter.setLanguage(LANGUAGE);
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
+        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null));
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
@@ -277,18 +277,6 @@ public class UdmUsageRepositoryIntegrationTest {
             filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
             filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         }, UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE),
-            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT));
-        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASUMBOLS),
-            UDM_USAGE_UID_7);
-        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE), UDM_USAGE_UID_5, UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_DIFFERENT_CASE), UDM_USAGE_UID_5,
-            UDM_USAGE_UID_6);
-        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT));
-        assertFilteringFindDtosByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), UDM_USAGE_UID_7);
     }
 
     @Test
@@ -396,6 +384,97 @@ public class UdmUsageRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
             UDM_USAGE_UID_12);
         assertFilteringFindDtosByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSurveyCountry() {
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY, null)),
+            UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterLanguage() {
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE, null)),
+            UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
     }
@@ -556,14 +635,6 @@ public class UdmUsageRepositoryIntegrationTest {
             filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
             filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         }, 2);
-        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_DIFFERENT_CASE), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_FRAGMENT), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountry(SURVEY_COUNTRY_WITH_METASUMBOLS), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_DIFFERENT_CASE), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_FRAGMENT), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setLanguage(LANGUAGE_WITH_METASYMBOLS), 1);
     }
 
     @Test
@@ -642,6 +713,72 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCompanyNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSurveyCountry() {
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterLanguage() {
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LANGUAGE_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LANGUAGE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLanguageExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
 
@@ -797,8 +934,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
-        filter.setSurveyCountry(SURVEY_COUNTRY);
-        filter.setLanguage(LANGUAGE);
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
+        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null));
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));

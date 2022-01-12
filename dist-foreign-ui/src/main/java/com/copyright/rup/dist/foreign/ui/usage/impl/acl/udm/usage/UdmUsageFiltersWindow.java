@@ -33,7 +33,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -79,7 +78,9 @@ public class UdmUsageFiltersWindow extends Window {
     private final TextField quantityToField = new TextField(ForeignUi.getMessage("label.quantity_to"));
     private final ComboBox<FilterOperatorEnum> quantityOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField surveyCountryField = new TextField(ForeignUi.getMessage("label.survey_country"));
+    private final ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox = buildTextOperatorComboBox();
     private final TextField languageField = new TextField(ForeignUi.getMessage("label.language"));
+    private final ComboBox<FilterOperatorEnum> languageOperatorComboBox = buildTextOperatorComboBox();
     private final TextField companyIdFromField = new TextField(ForeignUi.getMessage("label.company_id_from"));
     private final TextField companyIdToField = new TextField(ForeignUi.getMessage("label.company_id_to"));
     private final ComboBox<FilterOperatorEnum> companyIdOperatorComboBox = buildNumericOperatorComboBox();
@@ -142,9 +143,9 @@ public class UdmUsageFiltersWindow extends Window {
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
             publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initChannelLayout(),
-            initWrWrkInstLayout(), initCompanyIdLayout(), initCompanyNameLayout(), initSurveyCountryLanguageLayout(),
-            initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(), initStatisticalMultiplierLayout(),
-            initQuantityLayout(), buttonsLayout);
+            initWrWrkInstLayout(), initCompanyIdLayout(), initCompanyNameLayout(), initSurveyCountryLayout(),
+            initLanguageLayout(), initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(),
+            initStatisticalMultiplierLayout(), initQuantityLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -484,24 +485,41 @@ public class UdmUsageFiltersWindow extends Window {
         return companyNameLayout;
     }
 
-    private HorizontalLayout initSurveyCountryLanguageLayout() {
-        HorizontalLayout surveyCountryLanguageLayout = new HorizontalLayout(surveyCountryField, languageField);
-        surveyCountryField.setValue(ObjectUtils.defaultIfNull(usageFilter.getSurveyCountry(), StringUtils.EMPTY));
-        languageField.setValue(ObjectUtils.defaultIfNull(usageFilter.getLanguage(), StringUtils.EMPTY));
+    private HorizontalLayout initSurveyCountryLayout() {
+        HorizontalLayout surveyCountryLayout = new HorizontalLayout(surveyCountryField, surveyCountryOperatorComboBox);
         filterBinder.forField(surveyCountryField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 100), 0, 100))
-            .bind(UdmUsageFilter::getSurveyCountry, UdmUsageFilter::setSurveyCountry);
+            .bind(filter -> filter.getSurveyCountryExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getSurveyCountryExpression().setFieldFirstValue(value.trim()));
+        populateOperatorFilters(surveyCountryField, surveyCountryOperatorComboBox,
+            UdmUsageFilter::getSurveyCountryExpression);
+        surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
+        surveyCountryOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(surveyCountryField, event.getValue()));
+        surveyCountryField.setSizeFull();
+        surveyCountryLayout.setEnabled(isFilterPermittedForUser);
+        surveyCountryLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(surveyCountryField, "udm-survey-country-filter");
+        VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "udm-survey-country-operator-filter");
+        return surveyCountryLayout;
+    }
+
+    private HorizontalLayout initLanguageLayout() {
+        HorizontalLayout languageLayout = new HorizontalLayout(languageField, languageOperatorComboBox);
         filterBinder.forField(languageField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 255), 0, 255))
-            .bind(UdmUsageFilter::getLanguage, UdmUsageFilter::setLanguage);
-        surveyCountryField.setEnabled(isFilterPermittedForUser);
-        surveyCountryField.setSizeFull();
+            .bind(filter -> filter.getLanguageExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getLanguageExpression().setFieldFirstValue(value.trim()));
+        populateOperatorFilters(languageField, languageOperatorComboBox,
+            UdmUsageFilter::getLanguageExpression);
+        languageField.addValueChangeListener(event -> filterBinder.validate());
+        languageOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(languageField, event.getValue()));
         languageField.setSizeFull();
-        surveyCountryLanguageLayout.setSizeFull();
-        surveyCountryLanguageLayout.setSpacing(true);
-        VaadinUtils.addComponentStyle(surveyCountryField, "udm-survey-country-filter");
+        languageLayout.setSizeFull();
         VaadinUtils.addComponentStyle(languageField, "udm-language-filter");
-        return surveyCountryLanguageLayout;
+        VaadinUtils.addComponentStyle(languageOperatorComboBox, "udm-language-operator-filter");
+        return languageLayout;
     }
 
     private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
@@ -646,8 +664,8 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setWrWrkInstExpression(new FilterExpression<>());
         usageFilter.setCompanyIdExpression(new FilterExpression<>());
         usageFilter.setCompanyNameExpression(new FilterExpression<>());
-        usageFilter.setSurveyCountry(null);
-        usageFilter.setLanguage(null);
+        usageFilter.setSurveyCountryExpression(new FilterExpression<>());
+        usageFilter.setLanguageExpression(new FilterExpression<>());
         usageFilter.setAnnualMultiplierExpression(new FilterExpression<>());
         usageFilter.setAnnualizedCopiesExpression(new FilterExpression<>());
         usageFilter.setStatisticalMultiplierExpression(new FilterExpression<>());
@@ -678,8 +696,10 @@ public class UdmUsageFiltersWindow extends Window {
             companyIdOperatorComboBox, Integer::valueOf));
         usageFilter.setCompanyNameExpression(buildTextFilterExpression(companyNameField, companyNameOperatorComboBox,
             Function.identity()));
-        usageFilter.setSurveyCountry(getStringFromTextField(surveyCountryField));
-        usageFilter.setLanguage(getStringFromTextField(languageField));
+        usageFilter.setSurveyCountryExpression(buildTextFilterExpression(surveyCountryField,
+            surveyCountryOperatorComboBox, Function.identity()));
+        usageFilter.setLanguageExpression(buildTextFilterExpression(languageField, languageOperatorComboBox,
+            Function.identity()));
         usageFilter.setAnnualMultiplierExpression(buildNumberFilterExpression(annualMultiplierFromField,
             annualMultiplierToField, annualMultiplierOperatorComboBox, Integer::valueOf));
         usageFilter.setAnnualizedCopiesExpression(buildAmountFilterExpression(annualizedCopiesFromField,
@@ -688,10 +708,6 @@ public class UdmUsageFiltersWindow extends Window {
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox, BigDecimal::new));
         usageFilter.setQuantityExpression(buildNumberFilterExpression(quantityFromField, quantityToField,
             quantityOperatorComboBox, Integer::valueOf));
-    }
-
-    private String getStringFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
     }
 
     private <T> FilterExpression<T> buildTextFilterExpression(TextField textField,

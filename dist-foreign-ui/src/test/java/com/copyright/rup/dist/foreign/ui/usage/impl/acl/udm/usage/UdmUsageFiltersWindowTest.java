@@ -139,22 +139,22 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testAnnualMultiplierFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(10);
-    }
-
-    @Test
-    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(11);
     }
 
     @Test
-    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
+    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(12);
     }
 
     @Test
-    public void testQuantityFilterOperatorChangeListener() {
+    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(13);
+    }
+
+    @Test
+    public void testQuantityFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(14);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class UdmUsageFiltersWindowTest {
         UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
         assertTrue(appliedUsageFilter.isEmpty());
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(14);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(15);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
         assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
@@ -171,7 +171,7 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testClearButtonClickListener() {
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(14);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(15);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         assertTrue(window.getAppliedUsageFilter().isEmpty());
@@ -193,12 +193,12 @@ public class UdmUsageFiltersWindowTest {
         assertTrue(verticalLayout.getComponent(6).isEnabled());
         assertFalse(verticalLayout.getComponent(7).isEnabled());
         assertFalse(verticalLayout.getComponent(8).isEnabled());
-        HorizontalLayout layout = (HorizontalLayout) verticalLayout.getComponent(9);
-        verifyTextFieldComponent(layout.getComponent(0), "Survey Country", false);
-        assertFalse(verticalLayout.getComponent(10).isEnabled());
+        assertFalse(verticalLayout.getComponent(9).isEnabled());
+        assertTrue(verticalLayout.getComponent(10).isEnabled());
         assertFalse(verticalLayout.getComponent(11).isEnabled());
         assertFalse(verticalLayout.getComponent(12).isEnabled());
         assertFalse(verticalLayout.getComponent(13).isEnabled());
+        assertFalse(verticalLayout.getComponent(14).isEnabled());
         verify(ForeignSecurityUtils.class);
     }
 
@@ -316,6 +316,9 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testSurveyCountryValidation() {
         TextField surveyCountryField = Whitebox.getInternalState(window, "surveyCountryField");
+        ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox =
+            Whitebox.getInternalState(window, "surveyCountryOperatorComboBox");
+        assertTextOperatorComboBoxItems(surveyCountryOperatorComboBox);
         validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, null, true);
         validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), null, true);
         validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101),
@@ -325,6 +328,9 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testLanguageValidation() {
         TextField languageField = Whitebox.getInternalState(window, "languageField");
+        ComboBox<FilterOperatorEnum> languageOperatorComboBox =
+            Whitebox.getInternalState(window, "languageOperatorComboBox");
+        assertTextOperatorComboBoxItems(languageOperatorComboBox);
         validateFieldAndVerifyErrorMessage(languageField, StringUtils.EMPTY, null, true);
         validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(255), null, true);
         validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(256),
@@ -334,7 +340,7 @@ public class UdmUsageFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(15, verticalLayout.getComponentCount());
+        assertEquals(16, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
@@ -345,15 +351,16 @@ public class UdmUsageFiltersWindowTest {
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Company ID From", "Company ID To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Company Name");
-        verifyTextFieldLayout(verticalLayout.getComponent(9), "Survey Country", "Language");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(10), "Annual Multiplier From",
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "Survey Country");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Language");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Annual Multiplier From",
             "Annual Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Annualized Copies From",
             "Annualized Copies To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Statistical Multiplier From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Statistical Multiplier From",
             "Statistical Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Quantity From", "Quantity To");
-        verifyButtonsLayout(verticalLayout.getComponent(14), "Save", "Clear", "Close");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(14), "Quantity From", "Quantity To");
+        verifyButtonsLayout(verticalLayout.getComponent(15), "Save", "Clear", "Close");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -395,22 +402,6 @@ public class UdmUsageFiltersWindowTest {
         assertEquals(captionTo, layout.getComponent(1).getCaption());
         assertTrue(layout.getComponent(2) instanceof ComboBox);
         assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
-    }
-
-    private void verifyTextFieldLayout(Component component, String firstCaption, String secondCaption) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        verifyTextFieldComponent(layout.getComponent(0), firstCaption, true);
-        verifyTextFieldComponent(layout.getComponent(1), secondCaption, true);
-    }
-
-    private void verifyTextFieldComponent(Component component, String caption, boolean isEnabled) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-        assertEquals(isEnabled, component.isEnabled());
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -524,8 +515,8 @@ public class UdmUsageFiltersWindowTest {
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_ID, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME, null));
-        filter.setSurveyCountry(SURVEY_COUNTRY);
-        filter.setLanguage(LANGUAGE);
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
+        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 10));
         filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.5"), null));
@@ -552,7 +543,9 @@ public class UdmUsageFiltersWindowTest {
         assertTextFieldValue("companyIdFromField", COMPANY_ID.toString());
         assertTextFieldValue("companyNameField", COMPANY_NAME);
         assertTextFieldValue("surveyCountryField", SURVEY_COUNTRY);
+        assertComboBoxValue("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("languageField", LANGUAGE);
+        assertComboBoxValue("languageOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("annualMultiplierFromField", "1");
         assertTextFieldValue("annualMultiplierToField", "10");
         assertComboBoxValue("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);
@@ -627,7 +620,9 @@ public class UdmUsageFiltersWindowTest {
         populateTextField("companyNameField", COMPANY_NAME);
         populateComboBox("companyNameOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("surveyCountryField", SURVEY_COUNTRY);
+        populateComboBox("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("languageField", LANGUAGE);
+        populateComboBox("languageOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("annualMultiplierFromField", "1");
         populateTextField("annualMultiplierToField", "10");
         populateComboBox("annualMultiplierOperatorComboBox", FilterOperatorEnum.BETWEEN);

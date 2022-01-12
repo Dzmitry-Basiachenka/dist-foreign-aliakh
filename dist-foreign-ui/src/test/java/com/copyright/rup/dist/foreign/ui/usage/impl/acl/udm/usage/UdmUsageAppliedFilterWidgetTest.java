@@ -85,8 +85,10 @@ public class UdmUsageAppliedFilterWidgetTest {
             "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
             "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(17), "Survey Country", "United States");
-        verifyLabel(((VerticalLayout) component).getComponent(18), "Language", "English");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(17),
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(18),
+            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
             "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(20),
@@ -124,8 +126,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
-        filter.setSurveyCountry("United States");
-        filter.setLanguage("English");
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
+        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "English", null));
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Albany International Corp.",
             null));
