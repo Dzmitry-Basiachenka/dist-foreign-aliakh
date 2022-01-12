@@ -61,9 +61,10 @@ public class UdmBaselineAppliedFilterWidgetTest {
             "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
             "<li><b><i>System Title: </i></b>Medical journal</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(8), "Usage Detail ID",
-            "2fc665eb-6b75-4e12-afbe-d2e1e1bab69d");
-        verifyLabel(((VerticalLayout) component).getComponent(9), "Survey Country", "United States");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(8), "<li><b><i>Usage Detail ID: </i></b>" +
+            "2fc665eb-6b75-4e12-afbe-d2e1e1bab69d</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(9),
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(10),
             "<li><b><i>Annualized Copies From: </i></b>5</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
     }
@@ -85,11 +86,11 @@ public class UdmBaselineAppliedFilterWidgetTest {
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
         filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass()));
         filter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
-        filter.setSurveyCountry("United States");
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
-        filter.setSystemTitleExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, "Medical journal", null));
-        filter.setUsageDetailId("2fc665eb-6b75-4e12-afbe-d2e1e1bab69d");
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Medical journal", null));
+        filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, "2fc665eb-6b75-4e12-afbe-d2e1e1bab69d", null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 5, null));
         return filter;
     }

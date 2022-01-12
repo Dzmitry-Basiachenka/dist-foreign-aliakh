@@ -33,8 +33,8 @@ public class UdmBaselineFilter {
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
-    private String usageDetailId;
-    private String surveyCountry;
+    private FilterExpression<String> usageDetailIdExpression = new FilterExpression<>();
+    private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
 
     /**
      * Default constructor.
@@ -58,8 +58,8 @@ public class UdmBaselineFilter {
             setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setSurveyCountry(filter.getSurveyCountry());
-            setUsageDetailId(filter.getUsageDetailId());
+            setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
+            setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
         }
     }
 
@@ -135,20 +135,20 @@ public class UdmBaselineFilter {
         this.systemTitleExpression = systemTitleExpression;
     }
 
-    public String getUsageDetailId() {
-        return usageDetailId;
+    public FilterExpression<String> getUsageDetailIdExpression() {
+        return usageDetailIdExpression;
     }
 
-    public void setUsageDetailId(String usageDetailId) {
-        this.usageDetailId = usageDetailId;
+    public void setUsageDetailIdExpression(FilterExpression<String> usageDetailIdExpression) {
+        this.usageDetailIdExpression = usageDetailIdExpression;
     }
 
-    public String getSurveyCountry() {
-        return surveyCountry;
+    public FilterExpression<String> getSurveyCountryExpression() {
+        return surveyCountryExpression;
     }
 
-    public void setSurveyCountry(String surveyCountry) {
-        this.surveyCountry = surveyCountry;
+    public void setSurveyCountryExpression(FilterExpression<String> surveyCountryExpression) {
+        this.surveyCountryExpression = surveyCountryExpression;
     }
 
     /**
@@ -158,11 +158,11 @@ public class UdmBaselineFilter {
         return CollectionUtils.isEmpty(periods)
             && null == udmUsageOrigin
             && null == channel
-            && null == usageDetailId
-            && null == surveyCountry
             && annualizedCopiesExpression.isEmpty()
             && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
+            && usageDetailIdExpression.isEmpty()
+            && surveyCountryExpression.isEmpty()
             && CollectionUtils.isEmpty(detailLicenseeClasses)
             && CollectionUtils.isEmpty(aggregateLicenseeClasses)
             && CollectionUtils.isEmpty(reportedTypeOfUses);
@@ -187,8 +187,8 @@ public class UdmBaselineFilter {
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
-            .append(usageDetailId, that.usageDetailId)
-            .append(surveyCountry, that.surveyCountry)
+            .append(usageDetailIdExpression, that.usageDetailIdExpression)
+            .append(surveyCountryExpression, that.surveyCountryExpression)
             .isEquals();
     }
 
@@ -204,8 +204,8 @@ public class UdmBaselineFilter {
             .append(annualizedCopiesExpression)
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
-            .append(usageDetailId)
-            .append(surveyCountry)
+            .append(usageDetailIdExpression)
+            .append(surveyCountryExpression)
             .toHashCode();
     }
 
@@ -221,8 +221,8 @@ public class UdmBaselineFilter {
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
-            .append("usageDetailId", usageDetailId)
-            .append("surveyCountry", surveyCountry)
+            .append("usageDetailIdExpression", usageDetailIdExpression)
+            .append("surveyCountryExpression", surveyCountryExpression)
             .toString();
     }
 }

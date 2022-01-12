@@ -69,11 +69,21 @@
                 <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
             </include>
         </if>
-        <if test="null != filter.surveyCountry">
-            and u.survey_country ilike #{filter.surveyCountry}
+        <if test="!filter.usageDetailIdExpression.isEmpty()">
+            <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                <property name="column" value="u.original_detail_id"/>
+                <property name="operator" value="filter.usageDetailIdExpression.operator"/>
+                <property name="fieldFirstValue" value="${filter.usageDetailIdExpression.fieldFirstValue}"/>
+                <property name="fieldSecondValue" value="${filter.usageDetailIdExpression.fieldSecondValue}"/>
+            </include>
         </if>
-        <if test="null != filter.usageDetailId">
-            and u.original_detail_id ilike #{filter.usageDetailId}
+        <if test="!filter.surveyCountryExpression.isEmpty()">
+            <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                <property name="column" value="u.survey_country"/>
+                <property name="operator" value="filter.surveyCountryExpression.operator"/>
+                <property name="fieldFirstValue" value="${filter.surveyCountryExpression.fieldFirstValue}"/>
+                <property name="fieldSecondValue" value="${filter.surveyCountryExpression.fieldSecondValue}"/>
+            </include>
         </if>
         <if test="!filter.annualizedCopiesExpression.isEmpty()">
             <include refid="IUdmCommonMapper.numericFieldFilterExpression">
