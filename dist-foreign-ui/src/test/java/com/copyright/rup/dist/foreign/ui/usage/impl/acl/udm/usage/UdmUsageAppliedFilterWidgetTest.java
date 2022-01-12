@@ -81,8 +81,10 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(13), "Channel", "CCC");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(14),
             "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(15), "Company ID", "1136");
-        verifyLabel(((VerticalLayout) component).getComponent(16), "Company Name", "Company name");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(15),
+            "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
+            "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(17), "Survey Country", "United States");
         verifyLabel(((VerticalLayout) component).getComponent(18), "Language", "English");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
@@ -124,9 +126,9 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
         filter.setSurveyCountry("United States");
         filter.setLanguage("English");
-        filter.setCompanyName("Skadden, Arps, Slate, Meagher & Flom LLP");
-        filter.setCompanyId(1136L);
-        filter.setCompanyName("Company name");
+        filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
+        filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Albany International Corp.",
+            null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 254327612L, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));

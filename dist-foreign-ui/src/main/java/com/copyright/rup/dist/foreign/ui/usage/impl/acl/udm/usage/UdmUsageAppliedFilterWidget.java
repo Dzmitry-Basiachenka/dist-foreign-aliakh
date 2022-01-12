@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilt
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -74,8 +75,10 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getCompanyId, filter, "label.company_id"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getCompanyName, filter, "label.company_name"), layout);
+            addLabel(createLabelWithOperator(filter.getCompanyIdExpression(), "label.company_id_from",
+                "label.company_id_to"), layout);
+            addLabel(createLabelWithOperator(filter.getCompanyNameExpression(), "label.company_name",
+                StringUtils.EMPTY), layout);
             addLabel(
                 createLabelWithSingleValue(UdmUsageFilter::getSurveyCountry, filter, "label.survey_country"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getLanguage, filter, "label.language"), layout);

@@ -166,11 +166,21 @@
             <if test="null != filter.language">
                 and u.language ilike #{filter.language}
             </if>
-            <if test="null != filter.companyName">
-                and u.company_name ilike #{filter.companyName}
+            <if test="!filter.companyIdExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="u.company_id"/>
+                    <property name="operator" value="filter.companyIdExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.companyIdExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.companyIdExpression.fieldSecondValue}"/>
+                </include>
             </if>
-            <if test="null != filter.companyId">
-                and u.company_id = #{filter.companyId}
+            <if test="!filter.companyNameExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="u.company_name"/>
+                    <property name="operator" value="filter.companyNameExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.companyNameExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.companyNameExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.wrWrkInstExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
