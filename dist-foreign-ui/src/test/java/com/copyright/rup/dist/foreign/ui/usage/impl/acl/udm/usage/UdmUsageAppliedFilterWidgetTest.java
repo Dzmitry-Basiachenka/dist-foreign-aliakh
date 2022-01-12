@@ -64,7 +64,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(23, verticalLayout.getComponentCount());
+        assertEquals(24, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches", "Udm Batch 2021, Udm Batch 2022");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
@@ -82,20 +82,23 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(14),
             "<li><b><i>Wr Wrk Inst From: </i></b>254327612</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(15),
-            "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Usage Detail ID: </i></b>b989e02b-1f1d-4637-b89e-dc99938a51b9</li>" +
+                "<li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
-            "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Company ID From: </i></b>1136</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(17),
-            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(18),
-            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
-            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(20),
-            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
+            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
-            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(22),
+            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
             "<li><b><i>Quantity From: </i></b>2</li><li><b><i>Quantity To: </i></b>400</li><li><b><i>Operator: " +
                 "</i></b>BETWEEN</li>");
     }
@@ -132,6 +135,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Albany International Corp.",
             null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 254327612L, null));
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
+            "b989e02b-1f1d-4637-b89e-dc99938a51b9", null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1, null));

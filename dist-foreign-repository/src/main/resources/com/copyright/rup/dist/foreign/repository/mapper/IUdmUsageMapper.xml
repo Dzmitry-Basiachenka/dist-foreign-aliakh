@@ -200,6 +200,14 @@
                     <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
                 </include>
             </if>
+            <if test="!filter.usageDetailIdExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="u.df_udm_usage_uid"/>
+                    <property name="operator" value="filter.usageDetailIdExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.usageDetailIdExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.usageDetailIdExpression.fieldSecondValue}"/>
+                </include>
+            </if>
             <if test="!filter.annualMultiplierExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
                     <property name="column" value="u.annual_multiplier"/>

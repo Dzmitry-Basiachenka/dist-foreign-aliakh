@@ -32,24 +32,25 @@ public class UdmUsageFilter {
     private UsageStatusEnum usageStatus;
     private UdmUsageOriginEnum udmUsageOrigin;
     private Set<String> assignees = new HashSet<>();
-    private Set<String> reportedPubTypes = new HashSet<>();
-    private Set<String> pubFormats = new HashSet<>();
     private Set<DetailLicenseeClass> detailLicenseeClasses = new HashSet<>();
+    private Set<String> reportedPubTypes = new HashSet<>();
     private Set<String> reportedTypeOfUses = new HashSet<>();
-    private UdmChannelEnum channel;
+    private Set<String> pubFormats = new HashSet<>();
     private LocalDate usageDateFrom;
     private LocalDate usageDateTo;
     private LocalDate surveyStartDateFrom;
     private LocalDate surveyStartDateTo;
+    private UdmChannelEnum channel;
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
+    private FilterExpression<String> usageDetailIdExpression = new FilterExpression<>();
+    private FilterExpression<Number> companyIdExpression = new FilterExpression<>();
+    private FilterExpression<String> companyNameExpression = new FilterExpression<>();
+    private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
+    private FilterExpression<String> languageExpression = new FilterExpression<>();
     private FilterExpression<Number> annualMultiplierExpression = new FilterExpression<>();
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> statisticalMultiplierExpression = new FilterExpression<>();
     private FilterExpression<Number> quantityExpression = new FilterExpression<>();
-    private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
-    private FilterExpression<String> languageExpression = new FilterExpression<>();
-    private FilterExpression<Number> companyIdExpression = new FilterExpression<>();
-    private FilterExpression<String> companyNameExpression = new FilterExpression<>();
-    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private String searchValue;
 
     /**
@@ -70,24 +71,25 @@ public class UdmUsageFilter {
             setUsageStatus(filter.getUsageStatus());
             setUdmUsageOrigin(filter.getUdmUsageOrigin());
             setAssignees(filter.getAssignees());
-            setReportedPubTypes(filter.getReportedPubTypes());
-            setPubFormats(filter.getPubFormats());
             setDetailLicenseeClasses(filter.getDetailLicenseeClasses());
-            setChannel(filter.getChannel());
+            setReportedPubTypes(filter.getReportedPubTypes());
+            setReportedTypeOfUses(filter.getReportedTypeOfUses());
+            setPubFormats(filter.getPubFormats());
             setUsageDateFrom(filter.getUsageDateFrom());
             setUsageDateTo(filter.getUsageDateTo());
             setSurveyStartDateFrom(filter.getSurveyStartDateFrom());
             setSurveyStartDateTo(filter.getSurveyStartDateTo());
+            setChannel(filter.getChannel());
+            setWrWrkInstExpression(filter.getWrWrkInstExpression());
+            setUsageDetailIdExpression(filter.getUsageDetailIdExpression());
+            setCompanyIdExpression(filter.getCompanyIdExpression());
+            setCompanyNameExpression(filter.getCompanyNameExpression());
+            setSurveyCountryExpression(filter.getSurveyCountryExpression());
+            setLanguageExpression(filter.getLanguageExpression());
             setAnnualMultiplierExpression(filter.getAnnualMultiplierExpression());
             setAnnualizedCopiesExpression(filter.getAnnualizedCopiesExpression());
             setStatisticalMultiplierExpression(filter.getStatisticalMultiplierExpression());
-            setReportedTypeOfUses(filter.getReportedTypeOfUses());
             setQuantityExpression(filter.getQuantityExpression());
-            setSurveyCountryExpression(filter.getSurveyCountryExpression());
-            setLanguageExpression(filter.getLanguageExpression());
-            setCompanyIdExpression(filter.getCompanyIdExpression());
-            setCompanyNameExpression(filter.getCompanyNameExpression());
-            setWrWrkInstExpression(filter.getWrWrkInstExpression());
             setSearchValue(filter.getSearchValue());
         }
     }
@@ -132,22 +134,6 @@ public class UdmUsageFilter {
         this.assignees = assignees;
     }
 
-    public Set<String> getReportedPubTypes() {
-        return reportedPubTypes;
-    }
-
-    public void setReportedPubTypes(Set<String> reportedPubTypes) {
-        this.reportedPubTypes = reportedPubTypes;
-    }
-
-    public Set<String> getPubFormats() {
-        return pubFormats;
-    }
-
-    public void setPubFormats(Set<String> pubFormats) {
-        this.pubFormats = pubFormats;
-    }
-
     public Set<DetailLicenseeClass> getDetailLicenseeClasses() {
         return detailLicenseeClasses;
     }
@@ -156,12 +142,28 @@ public class UdmUsageFilter {
         this.detailLicenseeClasses = detailLicenseeClasses;
     }
 
-    public UdmChannelEnum getChannel() {
-        return channel;
+    public Set<String> getReportedPubTypes() {
+        return reportedPubTypes;
     }
 
-    public void setChannel(UdmChannelEnum channel) {
-        this.channel = channel;
+    public void setReportedPubTypes(Set<String> reportedPubTypes) {
+        this.reportedPubTypes = reportedPubTypes;
+    }
+
+    public Set<String> getReportedTypeOfUses() {
+        return reportedTypeOfUses;
+    }
+
+    public void setReportedTypeOfUses(Set<String> reportedTypeOfUses) {
+        this.reportedTypeOfUses = reportedTypeOfUses;
+    }
+
+    public Set<String> getPubFormats() {
+        return pubFormats;
+    }
+
+    public void setPubFormats(Set<String> pubFormats) {
+        this.pubFormats = pubFormats;
     }
 
     public LocalDate getUsageDateFrom() {
@@ -196,6 +198,62 @@ public class UdmUsageFilter {
         this.surveyStartDateTo = surveyStartDateTo;
     }
 
+    public UdmChannelEnum getChannel() {
+        return channel;
+    }
+
+    public void setChannel(UdmChannelEnum channel) {
+        this.channel = channel;
+    }
+
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
+    }
+
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
+    }
+
+    public FilterExpression<String> getUsageDetailIdExpression() {
+        return usageDetailIdExpression;
+    }
+
+    public void setUsageDetailIdExpression(FilterExpression<String> usageDetailIdExpression) {
+        this.usageDetailIdExpression = usageDetailIdExpression;
+    }
+
+    public FilterExpression<Number> getCompanyIdExpression() {
+        return companyIdExpression;
+    }
+
+    public void setCompanyIdExpression(FilterExpression<Number> companyIdExpression) {
+        this.companyIdExpression = companyIdExpression;
+    }
+
+    public FilterExpression<String> getCompanyNameExpression() {
+        return companyNameExpression;
+    }
+
+    public void setCompanyNameExpression(FilterExpression<String> companyNameExpression) {
+        this.companyNameExpression = companyNameExpression;
+    }
+
+    public FilterExpression<String> getSurveyCountryExpression() {
+        return surveyCountryExpression;
+    }
+
+    public void setSurveyCountryExpression(FilterExpression<String> surveyCountryExpression) {
+        this.surveyCountryExpression = surveyCountryExpression;
+    }
+
+    public FilterExpression<String> getLanguageExpression() {
+        return languageExpression;
+    }
+
+    public void setLanguageExpression(FilterExpression<String> languageExpression) {
+        this.languageExpression = languageExpression;
+    }
+
     public FilterExpression<Number> getAnnualMultiplierExpression() {
         return annualMultiplierExpression;
     }
@@ -220,60 +278,12 @@ public class UdmUsageFilter {
         this.statisticalMultiplierExpression = statisticalMultiplierExpression;
     }
 
-    public Set<String> getReportedTypeOfUses() {
-        return reportedTypeOfUses;
-    }
-
-    public void setReportedTypeOfUses(Set<String> reportedTypeOfUses) {
-        this.reportedTypeOfUses = reportedTypeOfUses;
-    }
-
     public FilterExpression<Number> getQuantityExpression() {
         return quantityExpression;
     }
 
     public void setQuantityExpression(FilterExpression<Number> quantityExpression) {
         this.quantityExpression = quantityExpression;
-    }
-
-    public FilterExpression<String> getSurveyCountryExpression() {
-        return surveyCountryExpression;
-    }
-
-    public void setSurveyCountryExpression(FilterExpression<String> surveyCountryExpression) {
-        this.surveyCountryExpression = surveyCountryExpression;
-    }
-
-    public FilterExpression<String> getLanguageExpression() {
-        return languageExpression;
-    }
-
-    public void setLanguageExpression(FilterExpression<String> languageExpression) {
-        this.languageExpression = languageExpression;
-    }
-
-    public FilterExpression<Number> getCompanyIdExpression() {
-        return companyIdExpression;
-    }
-
-    public void setCompanyIdExpression(FilterExpression<Number> companyIdExpression) {
-        this.companyIdExpression = companyIdExpression;
-    }
-
-    public FilterExpression<String> getCompanyNameExpression() {
-        return companyNameExpression;
-    }
-
-    public void setCompanyNameExpression(FilterExpression<String> companyNameExpression) {
-        this.companyNameExpression = companyNameExpression;
-    }
-
-    public FilterExpression<Number> getWrWrkInstExpression() {
-        return wrWrkInstExpression;
-    }
-
-    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
-        this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
     public String getSearchValue() {
@@ -292,25 +302,26 @@ public class UdmUsageFilter {
             && CollectionUtils.isEmpty(periods)
             && null == usageStatus
             && null == udmUsageOrigin
-            && null == channel
+            && CollectionUtils.isEmpty(assignees)
+            && CollectionUtils.isEmpty(detailLicenseeClasses)
+            && CollectionUtils.isEmpty(reportedPubTypes)
+            && CollectionUtils.isEmpty(reportedTypeOfUses)
+            && CollectionUtils.isEmpty(pubFormats)
             && null == usageDateFrom
             && null == usageDateTo
             && null == surveyStartDateFrom
             && null == surveyStartDateTo
-            && surveyCountryExpression.isEmpty()
-            && languageExpression.isEmpty()
+            && null == channel
+            && wrWrkInstExpression.isEmpty()
+            && usageDetailIdExpression.isEmpty()
             && companyIdExpression.isEmpty()
             && companyNameExpression.isEmpty()
-            && wrWrkInstExpression.isEmpty()
+            && surveyCountryExpression.isEmpty()
+            && languageExpression.isEmpty()
             && annualMultiplierExpression.isEmpty()
             && annualizedCopiesExpression.isEmpty()
             && statisticalMultiplierExpression.isEmpty()
             && quantityExpression.isEmpty()
-            && CollectionUtils.isEmpty(assignees)
-            && CollectionUtils.isEmpty(reportedPubTypes)
-            && CollectionUtils.isEmpty(pubFormats)
-            && CollectionUtils.isEmpty(detailLicenseeClasses)
-            && CollectionUtils.isEmpty(reportedTypeOfUses)
             && StringUtils.isBlank(searchValue);
     }
 
@@ -329,24 +340,25 @@ public class UdmUsageFilter {
             .append(usageStatus, that.usageStatus)
             .append(udmUsageOrigin, that.udmUsageOrigin)
             .append(assignees, that.assignees)
-            .append(reportedPubTypes, that.reportedPubTypes)
-            .append(pubFormats, that.pubFormats)
             .append(detailLicenseeClasses, that.detailLicenseeClasses)
-            .append(channel, that.channel)
+            .append(reportedPubTypes, that.reportedPubTypes)
+            .append(reportedTypeOfUses, that.reportedTypeOfUses)
+            .append(pubFormats, that.pubFormats)
             .append(usageDateFrom, that.usageDateFrom)
             .append(usageDateTo, that.usageDateTo)
             .append(surveyStartDateFrom, that.surveyStartDateFrom)
             .append(surveyStartDateTo, that.surveyStartDateTo)
+            .append(channel, that.channel)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
+            .append(usageDetailIdExpression, that.usageDetailIdExpression)
+            .append(companyIdExpression, that.companyIdExpression)
+            .append(companyNameExpression, that.companyNameExpression)
+            .append(surveyCountryExpression, that.surveyCountryExpression)
+            .append(languageExpression, that.languageExpression)
             .append(annualMultiplierExpression, that.annualMultiplierExpression)
             .append(annualizedCopiesExpression, that.annualizedCopiesExpression)
             .append(statisticalMultiplierExpression, that.statisticalMultiplierExpression)
-            .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(quantityExpression, that.quantityExpression)
-            .append(surveyCountryExpression, that.surveyCountryExpression)
-            .append(languageExpression, that.languageExpression)
-            .append(companyIdExpression, that.companyIdExpression)
-            .append(companyNameExpression, that.companyNameExpression)
-            .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(searchValue, that.searchValue)
             .isEquals();
     }
@@ -359,24 +371,25 @@ public class UdmUsageFilter {
             .append(usageStatus)
             .append(udmUsageOrigin)
             .append(assignees)
-            .append(reportedPubTypes)
-            .append(pubFormats)
             .append(detailLicenseeClasses)
-            .append(channel)
+            .append(reportedPubTypes)
+            .append(reportedTypeOfUses)
+            .append(pubFormats)
             .append(usageDateFrom)
             .append(usageDateTo)
             .append(surveyStartDateFrom)
             .append(surveyStartDateTo)
+            .append(channel)
+            .append(wrWrkInstExpression)
+            .append(usageDetailIdExpression)
+            .append(companyIdExpression)
+            .append(companyNameExpression)
+            .append(surveyCountryExpression)
+            .append(languageExpression)
             .append(annualMultiplierExpression)
             .append(annualizedCopiesExpression)
             .append(statisticalMultiplierExpression)
-            .append(reportedTypeOfUses)
             .append(quantityExpression)
-            .append(surveyCountryExpression)
-            .append(languageExpression)
-            .append(companyIdExpression)
-            .append(companyNameExpression)
-            .append(wrWrkInstExpression)
             .append(searchValue)
             .toHashCode();
     }
@@ -389,24 +402,25 @@ public class UdmUsageFilter {
             .append("usageStatus", usageStatus)
             .append("udmUsageOrigin", udmUsageOrigin)
             .append("assignees", assignees)
-            .append("reportedPubTypes", reportedPubTypes)
-            .append("pubFormats", pubFormats)
             .append("detailLicenseeClasses", detailLicenseeClasses)
-            .append("channel", channel)
+            .append("reportedPubTypes", reportedPubTypes)
+            .append("reportedTypeOfUses", reportedTypeOfUses)
+            .append("pubFormats", pubFormats)
             .append("usageDateFrom", usageDateFrom)
             .append("usageDateTo", usageDateTo)
             .append("surveyStartDateFrom", surveyStartDateFrom)
             .append("surveyStartDateTo", surveyStartDateTo)
+            .append("channel", channel)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
+            .append("usageDetailIdExpression", usageDetailIdExpression)
+            .append("companyIdExpression", companyIdExpression)
+            .append("companyNameExpression", companyNameExpression)
+            .append("surveyCountryExpression", surveyCountryExpression)
+            .append("languageExpression", languageExpression)
             .append("annualMultiplierExpression", annualMultiplierExpression)
             .append("annualizedCopiesExpression", annualizedCopiesExpression)
             .append("statisticalMultiplierExpression", statisticalMultiplierExpression)
-            .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("quantityExpression", quantityExpression)
-            .append("surveyCountryExpression", surveyCountryExpression)
-            .append("languageExpression", languageExpression)
-            .append("companyIdExpression", companyIdExpression)
-            .append("companyNameExpression", companyNameExpression)
-            .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("searchValue", searchValue)
             .toString();
     }
