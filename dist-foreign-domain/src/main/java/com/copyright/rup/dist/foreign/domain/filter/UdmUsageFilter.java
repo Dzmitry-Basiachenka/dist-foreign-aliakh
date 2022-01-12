@@ -45,8 +45,8 @@ public class UdmUsageFilter {
     private FilterExpression<Number> annualizedCopiesExpression = new FilterExpression<>();
     private FilterExpression<Number> statisticalMultiplierExpression = new FilterExpression<>();
     private FilterExpression<Number> quantityExpression = new FilterExpression<>();
-    private String surveyCountry;
-    private String language;
+    private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
+    private FilterExpression<String> languageExpression = new FilterExpression<>();
     private FilterExpression<Number> companyIdExpression = new FilterExpression<>();
     private FilterExpression<String> companyNameExpression = new FilterExpression<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
@@ -83,8 +83,8 @@ public class UdmUsageFilter {
             setStatisticalMultiplierExpression(filter.getStatisticalMultiplierExpression());
             setReportedTypeOfUses(filter.getReportedTypeOfUses());
             setQuantityExpression(filter.getQuantityExpression());
-            setSurveyCountry(filter.getSurveyCountry());
-            setLanguage(filter.getLanguage());
+            setSurveyCountryExpression(filter.getSurveyCountryExpression());
+            setLanguageExpression(filter.getLanguageExpression());
             setCompanyIdExpression(filter.getCompanyIdExpression());
             setCompanyNameExpression(filter.getCompanyNameExpression());
             setWrWrkInstExpression(filter.getWrWrkInstExpression());
@@ -236,20 +236,20 @@ public class UdmUsageFilter {
         this.quantityExpression = quantityExpression;
     }
 
-    public String getSurveyCountry() {
-        return surveyCountry;
+    public FilterExpression<String> getSurveyCountryExpression() {
+        return surveyCountryExpression;
     }
 
-    public void setSurveyCountry(String surveyCountry) {
-        this.surveyCountry = surveyCountry;
+    public void setSurveyCountryExpression(FilterExpression<String> surveyCountryExpression) {
+        this.surveyCountryExpression = surveyCountryExpression;
     }
 
-    public String getLanguage() {
-        return language;
+    public FilterExpression<String> getLanguageExpression() {
+        return languageExpression;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setLanguageExpression(FilterExpression<String> languageExpression) {
+        this.languageExpression = languageExpression;
     }
 
     public FilterExpression<Number> getCompanyIdExpression() {
@@ -297,8 +297,8 @@ public class UdmUsageFilter {
             && null == usageDateTo
             && null == surveyStartDateFrom
             && null == surveyStartDateTo
-            && null == surveyCountry
-            && null == language
+            && surveyCountryExpression.isEmpty()
+            && languageExpression.isEmpty()
             && companyIdExpression.isEmpty()
             && companyNameExpression.isEmpty()
             && wrWrkInstExpression.isEmpty()
@@ -342,8 +342,8 @@ public class UdmUsageFilter {
             .append(statisticalMultiplierExpression, that.statisticalMultiplierExpression)
             .append(reportedTypeOfUses, that.reportedTypeOfUses)
             .append(quantityExpression, that.quantityExpression)
-            .append(surveyCountry, that.surveyCountry)
-            .append(language, that.language)
+            .append(surveyCountryExpression, that.surveyCountryExpression)
+            .append(languageExpression, that.languageExpression)
             .append(companyIdExpression, that.companyIdExpression)
             .append(companyNameExpression, that.companyNameExpression)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
@@ -372,8 +372,8 @@ public class UdmUsageFilter {
             .append(statisticalMultiplierExpression)
             .append(reportedTypeOfUses)
             .append(quantityExpression)
-            .append(surveyCountry)
-            .append(language)
+            .append(surveyCountryExpression)
+            .append(languageExpression)
             .append(companyIdExpression)
             .append(companyNameExpression)
             .append(wrWrkInstExpression)
@@ -402,8 +402,8 @@ public class UdmUsageFilter {
             .append("statisticalMultiplierExpression", statisticalMultiplierExpression)
             .append("reportedTypeOfUses", reportedTypeOfUses)
             .append("quantityExpression", quantityExpression)
-            .append("surveyCountry", surveyCountry)
-            .append("language", language)
+            .append("surveyCountryExpression", surveyCountryExpression)
+            .append("languageExpression", languageExpression)
             .append("companyIdExpression", companyIdExpression)
             .append("companyNameExpression", companyNameExpression)
             .append("wrWrkInstExpression", wrWrkInstExpression)

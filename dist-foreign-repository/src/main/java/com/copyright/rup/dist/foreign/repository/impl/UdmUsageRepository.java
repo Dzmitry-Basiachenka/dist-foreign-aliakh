@@ -115,8 +115,10 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
         UdmUsageFilter filterCopy = new UdmUsageFilter(udmUsageFilter);
         filterCopy.setCompanyNameExpression(
             setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getCompanyNameExpression()));
-        filterCopy.setSurveyCountry(escapeSqlLikePattern(filterCopy.getSurveyCountry()));
-        filterCopy.setLanguage(escapeSqlLikePattern(filterCopy.getLanguage()));
+        filterCopy.setSurveyCountryExpression(
+            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSurveyCountryExpression()));
+        filterCopy.setLanguageExpression(
+            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getLanguageExpression()));
         filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
         return filterCopy;
     }

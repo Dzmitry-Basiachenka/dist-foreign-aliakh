@@ -79,9 +79,10 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 "label.company_id_to"), layout);
             addLabel(createLabelWithOperator(filter.getCompanyNameExpression(), "label.company_name",
                 StringUtils.EMPTY), layout);
-            addLabel(
-                createLabelWithSingleValue(UdmUsageFilter::getSurveyCountry, filter, "label.survey_country"), layout);
-            addLabel(createLabelWithSingleValue(UdmUsageFilter::getLanguage, filter, "label.language"), layout);
+            addLabel(createLabelWithOperator(filter.getSurveyCountryExpression(), "label.survey_country",
+                StringUtils.EMPTY), layout);
+            addLabel(createLabelWithOperator(filter.getLanguageExpression(), "label.language",
+                StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getAnnualMultiplierExpression(), "label.annual_multiplier_from",
                 "label.annual_multiplier_to"), layout);
             addLabel(createLabelWithOperator(filter.getAnnualizedCopiesExpression(), "label.annualized_copies_from",
