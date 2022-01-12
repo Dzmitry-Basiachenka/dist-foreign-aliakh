@@ -1,4 +1,4 @@
 Period,Channel,Usage Origin,Survey Start Date,Company ID,Company Name,Det LC ID,Det LC Name,Agg LC,Agg LC Name,Total Details,Usable Details,% Usable Data,# of registered users,# of rows reported by registered users,# of usable rows reported by registered users,% Usable from registered users,# of rows reported by unregistered users,# of usable rows reported by unregistered users,% Usable from unregistered users
+202206,CCC,RFA,04/10/2022,1136,Albany International Corp.,3,"Lumber, Paper, etc.",51,Materials,1,0,0%,1,1,0,0%,0,0,0%
 202206,CCC,RFA,03/15/2022,1136,Albany International Corp.,3,"Lumber, Paper, etc.",51,Materials,1,1,100%,1,1,1,100%,0,0,0%
 202206,CCC,RFA,03/10/2022,1136,Albany International Corp.,3,"Lumber, Paper, etc.",51,Materials,3,1,33%,1,1,0,0%,2,1,50%
-202206,CCC,RFA,09/10/2020,1136,Albany International Corp.,3,"Lumber, Paper, etc.",51,Materials,1,0,0%,1,1,0,0%,0,0,0%

@@ -163,8 +163,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = "udm-csv-reports/write-udm-weekly-survey-csv-report.groovy")
     public void testWriteUdmWeeklySurveyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setDateFrom(LocalDate.of(1900, 1, 1));
-        reportFilter.setDateTo(LocalDate.of(2100, 1, 1));
+        reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
+        reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmWeeklySurveyCsvReport(reportFilter, outputStream),
             "udm/weekly_survey_report.csv");
@@ -187,8 +187,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testWriteUdmSurveyLicenseeCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202206));
-        reportFilter.setDateFrom(LocalDate.of(1900, 1, 1));
-        reportFilter.setDateTo(LocalDate.of(2100, 1, 1));
+        reportFilter.setDateFrom(LocalDate.of(2022, 3, 1));
+        reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmSurveyLicenseeCsvReport(reportFilter, outputStream),
             "udm/survey_licensee_report.csv");
@@ -210,8 +210,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = "udm-csv-reports/write-udm-verified-details-by-source-csv-report.groovy")
     public void testVerifiedDetailsBySourceReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setDateFrom(LocalDate.of(1900, 1, 1));
-        reportFilter.setDateTo(LocalDate.of(2100, 1, 1));
+        reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
+        reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
             "udm/verified_details_by_source_report.csv");
