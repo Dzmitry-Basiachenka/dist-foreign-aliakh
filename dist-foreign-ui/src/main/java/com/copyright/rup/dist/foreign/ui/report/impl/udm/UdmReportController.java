@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsRep
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmVerifiedDetailsBySourceReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -33,6 +34,8 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Autowired
     private IUdmSurveyLicenseeReportController udmSurveyLicenseeReportController;
     @Autowired
+    private IUdmVerifiedDetailsBySourceReportController udmVerifiedDetailsBySourceReportController;
+    @Autowired
     private IProductFamilyProvider productFamilyProvider;
 
     @Override
@@ -58,6 +61,11 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Override
     public ICompletedAssignmentsReportController getCompletedAssignmentsReportController() {
         return completedAssignmentsReportController;
+    }
+
+    @Override
+    public IUdmVerifiedDetailsBySourceReportController getUdmVerifiedDetailsBySourceReportController() {
+        return udmVerifiedDetailsBySourceReportController;
     }
 
     @Override

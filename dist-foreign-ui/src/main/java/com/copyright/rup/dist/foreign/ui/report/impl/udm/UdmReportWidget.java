@@ -44,6 +44,10 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
                 String surveyLicenseeReport = ForeignUi.getMessage("menu.report.survey_licensee_report");
                 rootItem.addItem(surveyLicenseeReport, menuItem ->
                     this.openReportWindow(surveyLicenseeReport, controller.getUdmSurveyLicenseeReportController()));
+                String verifiedDetailsBySourceReport =
+                    ForeignUi.getMessage("menu.report.verified_details_by_source_report");
+                rootItem.addItem(verifiedDetailsBySourceReport, menuItem -> this.openReportWindow(surveyLicenseeReport,
+                    controller.getUdmVerifiedDetailsBySourceReportController()));
             }
             String completeAssignmentsReport = ForeignUi.getMessage("menu.report.completed_assignments_report");
             rootItem.addItem(completeAssignmentsReport, menuItem ->

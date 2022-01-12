@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmVerifiedDetailsBySourceReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -55,6 +56,8 @@ public class UdmReportWidgetTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
     private static final String COMPLETED_ASSIGNMENT_REPORT = "Completed Assignments by Employee Report";
+    private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details By Source Report";
+    public static final String OPEN_REPORT_WINDOW = "openReportWindow";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
     private final IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -156,6 +159,22 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testUdmVerifiedDetailsBySourceReportSelected() {
+        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
+        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
+        setSpecialistExpectations();
+        IUdmVerifiedDetailsBySourceReportController controller =
+            createMock(IUdmVerifiedDetailsBySourceReportController.class);
+        expect(udmReportController.getUdmVerifiedDetailsBySourceReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(new UdmCommonReportWidget("Received")).once();
+        Windows.showModalWindow(anyObject());
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(2);
+        verifyAll();
+    }
+
+    @Test
     public void testCompletedAssignmentReportSelected() {
         expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
         expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
@@ -166,7 +185,7 @@ public class UdmReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(2);
+        selectMenuItem(3);
         verifyAll();
     }
 
@@ -182,7 +201,7 @@ public class UdmReportWidgetTest {
         widget.setCaption("Weekly Survey Report");
         expectLastCall().once();
         replayAll();
-        Whitebox.invokeMethod(udmReportWidget, "openReportWindow", "Weekly Survey Report", controller);
+        Whitebox.invokeMethod(udmReportWidget, OPEN_REPORT_WINDOW, "Weekly Survey Report", controller);
         verifyAll();
     }
 
@@ -198,7 +217,23 @@ public class UdmReportWidgetTest {
         widget.setCaption("Survey Licensee Report");
         expectLastCall().once();
         replayAll();
-        Whitebox.invokeMethod(udmReportWidget, "openReportWindow", "Survey Licensee Report", controller);
+        Whitebox.invokeMethod(udmReportWidget, OPEN_REPORT_WINDOW, "Survey Licensee Report", controller);
+        verifyAll();
+    }
+
+    @Test
+    public void testOpenReportWindowForVerifiedDetailsBySourceReport() throws Exception {
+        setSpecialistExpectations();
+        mockStatic(Windows.class);
+        IController controller = createMock(IController.class);
+        UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
+        expect(controller.initWidget()).andReturn(widget).once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        widget.setCaption(VERIFIED_DETAILS_BY_SOURCE_REPORT);
+        expectLastCall().once();
+        replayAll();
+        Whitebox.invokeMethod(udmReportWidget, OPEN_REPORT_WINDOW, VERIFIED_DETAILS_BY_SOURCE_REPORT, controller);
         verifyAll();
     }
 
@@ -214,7 +249,7 @@ public class UdmReportWidgetTest {
         widget.setCaption(COMPLETED_ASSIGNMENT_REPORT);
         expectLastCall().once();
         replayAll();
-        Whitebox.invokeMethod(udmReportWidget, "openReportWindow", COMPLETED_ASSIGNMENT_REPORT, controller);
+        Whitebox.invokeMethod(udmReportWidget, OPEN_REPORT_WINDOW, COMPLETED_ASSIGNMENT_REPORT, controller);
         verifyAll();
     }
 
@@ -247,10 +282,11 @@ public class UdmReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(3, menuItems.size());
+        assertEquals(4, menuItems.size());
         assertEquals("Weekly Survey Report", menuItems.get(0).getText());
         assertEquals("Survey Licensee Report", menuItems.get(1).getText());
-        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(2).getText());
+        assertEquals(VERIFIED_DETAILS_BY_SOURCE_REPORT, menuItems.get(2).getText());
+        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(3).getText());
     }
 
     private void setSpecialistExpectations() {
