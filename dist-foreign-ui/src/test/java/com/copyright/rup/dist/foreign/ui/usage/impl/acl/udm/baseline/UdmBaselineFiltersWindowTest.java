@@ -85,9 +85,9 @@ public class UdmBaselineFiltersWindowTest {
     @Test
     public void testConstructor() {
         assertEquals("UDM baseline additional filters", window.getCaption());
-        assertEquals(750, window.getWidth(), 0);
+        assertEquals(550, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(365, window.getHeight(), 0);
+        assertEquals(355, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
     }
@@ -405,7 +405,7 @@ public class UdmBaselineFiltersWindowTest {
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
@@ -413,7 +413,7 @@ public class UdmBaselineFiltersWindowTest {
     }
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
                 FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
@@ -458,7 +458,7 @@ public class UdmBaselineFiltersWindowTest {
         List<HasValue<?>> fields = binder.getFields()
             .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
+        assertEquals(1, fields.size());
         TextField actualField = (TextField) fields.get(0);
         assertNotNull(actualField);
         String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())

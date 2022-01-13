@@ -90,8 +90,8 @@ public class UdmBaselineFiltersWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_baseline_additional_filters"));
         setResizable(false);
-        setWidth(750, Unit.PIXELS);
-        setHeight(365, Unit.PIXELS);
+        setWidth(550, Unit.PIXELS);
+        setHeight(355, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-additional-filters-window");
     }
 
@@ -104,7 +104,6 @@ public class UdmBaselineFiltersWindow extends Window {
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        buttonsLayout.setMargin(new MarginInfo(true, false, false, false));
         initDetailLicenseeClassFilterWidget();
         initAggregateLicenseeClassFilterWidget();
         initTypeOfUseFilterWidget();
@@ -178,6 +177,8 @@ public class UdmBaselineFiltersWindow extends Window {
                 (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
         wrWrkInstFromField.setSizeFull();
         wrWrkInstToField.setSizeFull();
+        wrWrkInstLayout.setExpandRatio(wrWrkInstFromField, 0.5f);
+        wrWrkInstLayout.setExpandRatio(wrWrkInstToField, 0.5f);
         wrWrkInstLayout.setSizeFull();
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-baseline-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-baseline-wr-wrk-inst-to-filter");
@@ -197,6 +198,7 @@ public class UdmBaselineFiltersWindow extends Window {
         systemTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(systemTitleField, event.getValue()));
         systemTitleField.setSizeFull();
+        horizontalLayout.setExpandRatio(systemTitleField, 1f);
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(systemTitleField, "udm-baseline-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-baseline-system-title-operator-filter");
@@ -228,6 +230,8 @@ public class UdmBaselineFiltersWindow extends Window {
             event -> updateOperatorField(annualizedCopiesFrom, annualizedCopiesTo, event.getValue()));
         annualizedCopiesFrom.setSizeFull();
         annualizedCopiesTo.setSizeFull();
+        annualizedCopiesLayout.setExpandRatio(annualizedCopiesFrom, 0.5f);
+        annualizedCopiesLayout.setExpandRatio(annualizedCopiesTo, 0.5f);
         annualizedCopiesLayout.setSizeFull();
         VaadinUtils.addComponentStyle(annualizedCopiesFrom, "udm-baseline-annualized-copies-from-filter");
         VaadinUtils.addComponentStyle(annualizedCopiesTo, "udm-baseline-annualized-copies-to-filter");
@@ -248,6 +252,7 @@ public class UdmBaselineFiltersWindow extends Window {
         usageDetailIdOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(usageDetailIdField, event.getValue()));
         usageDetailIdField.setSizeFull();
+        horizontalLayout.setExpandRatio(usageDetailIdField, 1f);
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(usageDetailIdField, "udm-baseline-usage-detail-id-filter");
         VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "udm-baseline-usage-detail-id-operator-filter");
@@ -266,6 +271,7 @@ public class UdmBaselineFiltersWindow extends Window {
         surveyCountryOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(surveyCountryField, event.getValue()));
         surveyCountryField.setSizeFull();
+        horizontalLayout.setExpandRatio(surveyCountryField, 1f);
         horizontalLayout.setSizeFull();
         VaadinUtils.addComponentStyle(surveyCountryField, "udm-baseline-survey-country-filter");
         VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "udm-baseline-survey-country-operator-filter");
@@ -278,6 +284,7 @@ public class UdmBaselineFiltersWindow extends Window {
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN,
             FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
         return filterOperatorComboBox;
     }
 
@@ -285,6 +292,7 @@ public class UdmBaselineFiltersWindow extends Window {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
         filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
         return filterOperatorComboBox;
     }
 

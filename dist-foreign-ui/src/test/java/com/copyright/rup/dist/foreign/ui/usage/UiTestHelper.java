@@ -17,7 +17,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
@@ -200,17 +199,33 @@ public final class UiTestHelper {
      * @param expectedItems         expected items of combobox
      * @return instance of {@link ComboBox}
      */
-    @SuppressWarnings(UNCHECKED)
     public static <T> ComboBox<T> verifyComboBox(Component component, String caption, boolean emptySelectionAllowed,
                                                  Collection<T> expectedItems) {
+        return verifyComboBox(component, caption, Unit.PERCENTAGE, 100, emptySelectionAllowed, expectedItems);
+    }
+
+    /**
+     * Verifies combobox with expected size.
+     *
+     * @param component             UI component
+     * @param caption               caption of combobox
+     * @param emptySelectionAllowed {@code true} if empty selection allowed, {@code false} otherwise
+     * @param expectedItems         expected items of combobox
+     * @param widthUnits            expected combobox width units
+     * @param width                 expected combobox width
+     * @return instance of {@link ComboBox}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> ComboBox<T> verifyComboBox(Component component, String caption, Unit widthUnits, float width,
+                                                 boolean emptySelectionAllowed, Collection<T> expectedItems) {
         assertTrue(component instanceof ComboBox);
         ComboBox<T> comboBox = (ComboBox<T>) component;
         assertFalse(comboBox.isReadOnly());
         assertTrue(comboBox.isTextInputAllowed());
         assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
         assertEquals(caption, comboBox.getCaption());
-        assertEquals(100, comboBox.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PERCENTAGE, comboBox.getWidthUnits());
+        assertEquals(width, comboBox.getWidth(), 0);
+        assertEquals(widthUnits, comboBox.getWidthUnits());
         ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
         Collection<T> actualItems = listDataProvider.getItems();
         assertEquals(expectedItems.size(), actualItems.size());
@@ -242,7 +257,7 @@ public final class UiTestHelper {
      * Verifies filter widget.
      *
      * @param component UI component
-     * @param caption  caption of filter widget
+     * @param caption   caption of filter widget
      */
     @SuppressWarnings(UNCHECKED)
     public static void verifyItemsFilterWidget(Component component, String caption) {
