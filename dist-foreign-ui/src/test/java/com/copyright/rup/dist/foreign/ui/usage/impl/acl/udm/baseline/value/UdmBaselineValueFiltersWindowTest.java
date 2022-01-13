@@ -44,6 +44,7 @@ import java.util.List;
 public class UdmBaselineValueFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
+    private static final String CAPTION_OPERATOR = "Operator";
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
@@ -97,51 +98,24 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyFiltersData();
     }
 
-    @SuppressWarnings(UNCHECKED)
-    private void verifyFiltersData() {
-        assertTextFieldValue("wrWrkInstField", WR_WRK_INST.toString());
-        assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
-        assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
-        assertComboBoxValue("priceFlagComboBox", PRICE_FLAG_STRING);
-        assertTextFieldValue("priceFromField", PRICE_FROM.toString());
-        assertTextFieldValue("priceToField", PRICE_TO.toString());
-        assertComboBoxValue("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("contentFromField", CONTENT_FROM.toString());
-        assertTextFieldValue("contentToField", CONTENT_TO.toString());
-        assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("contentUnitPriceFromField", PRICE_FROM.toString());
-        assertTextFieldValue("contentUnitPriceToField", PRICE_TO.toString());
-        assertComboBoxValue("contentUnitPriceComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("commentField", COMMENT);
-    }
-
     @Test
-    public void testTitleFilterOperatorChangeListener() {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(1);
-        TextField textFieldFrom = (TextField) horizontalLayout.getComponent(0);
-        ComboBox<FilterOperatorEnum> operatorComboBox =
-            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
-        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
-        assertTrue(textFieldFrom.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
-        assertTrue(textFieldFrom.isEnabled());
+    public void testSystemTitleFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(1);
     }
 
     @Test
     public void testPriceFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(3);
+        testNumericFilterOperatorChangeListener(3);
     }
 
     @Test
     public void testContentFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(4);
+        testNumericFilterOperatorChangeListener(4);
     }
 
     @Test
     public void testContentUnitPriceFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(5);
+        testNumericFilterOperatorChangeListener(5);
     }
 
     @Test
@@ -179,6 +153,11 @@ public class UdmBaselineValueFiltersWindowTest {
     @Test
     public void testSystemTitleFieldValidation() {
         TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
+        ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox =
+            Whitebox.getInternalState(window, "systemTitleOperatorComboBox");
+        assertTextOperatorComboBoxItems(systemTitleOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, SPACES_STRING, binder, null, true);
         validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.repeat('a', 2000), binder, null, true);
         validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.repeat('a', 2001), binder,
             "Field value should not exceed 2000 characters", false);
@@ -190,7 +169,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField priceToField = Whitebox.getInternalState(window, "priceToField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
-        assertOperatorComboBoxItems(priceOperatorComboBox);
+        assertNumericOperatorComboBoxItems(priceOperatorComboBox);
         verifyBigDecimalOperationValidations(priceFromField, priceToField,
             priceOperatorComboBox, "Field value should be greater or equal to Price From");
     }
@@ -201,7 +180,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField contentToField = Whitebox.getInternalState(window, "contentToField");
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
-        assertOperatorComboBoxItems(contentOperatorComboBox);
+        assertNumericOperatorComboBoxItems(contentOperatorComboBox);
         verifyBigDecimalOperationValidations(contentFromField, contentToField,
             contentOperatorComboBox, "Field value should be greater or equal to Content From");
     }
@@ -212,7 +191,7 @@ public class UdmBaselineValueFiltersWindowTest {
         TextField contentUnitPriceToField = Whitebox.getInternalState(window, "contentUnitPriceToField");
         ComboBox<FilterOperatorEnum> contentUnitPriceComboBox =
             Whitebox.getInternalState(window, "contentUnitPriceComboBox");
-        assertOperatorComboBoxItems(contentUnitPriceComboBox);
+        assertNumericOperatorComboBoxItems(contentUnitPriceComboBox);
         verifyBigDecimalOperationValidations(contentUnitPriceFromField, contentUnitPriceToField,
             contentUnitPriceComboBox, "Field value should be greater or equal to Content Unit Price From");
     }
@@ -256,7 +235,7 @@ public class UdmBaselineValueFiltersWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyTextField(layout.getComponent(0), caption);
         assertTrue(layout.getComponent(1) instanceof ComboBox);
-        assertEquals("Operator", layout.getComponent(1).getCaption());
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
     }
 
     private void verifyLayoutWithOperatorComponent(Component component, String captionFrom, String captionTo) {
@@ -266,7 +245,7 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyTextField(layout.getComponent(0), captionFrom);
         verifyTextField(layout.getComponent(1), captionTo);
         assertTrue(layout.getComponent(2) instanceof ComboBox);
-        assertEquals("Operator", layout.getComponent(2).getCaption());
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
 
     private void verifyTextFieldLayout(Component component, Class<?> firstClass, String firstCaption,
@@ -286,26 +265,78 @@ public class UdmBaselineValueFiltersWindowTest {
         assertEquals(isEnabled, component.isEnabled());
     }
 
+    private void verifyFiltersData() {
+        assertTextFieldValue("wrWrkInstField", WR_WRK_INST.toString());
+        assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
+        assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
+        assertComboBoxValue("priceFlagComboBox", PRICE_FLAG_STRING);
+        assertTextFieldValue("priceFromField", PRICE_FROM.toString());
+        assertTextFieldValue("priceToField", PRICE_TO.toString());
+        assertComboBoxValue("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("contentFromField", CONTENT_FROM.toString());
+        assertTextFieldValue("contentToField", CONTENT_TO.toString());
+        assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("contentUnitPriceFromField", PRICE_FROM.toString());
+        assertTextFieldValue("contentUnitPriceToField", PRICE_TO.toString());
+        assertComboBoxValue("contentUnitPriceComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("commentField", COMMENT);
+    }
+
     @SuppressWarnings(UNCHECKED)
-    private void testFilterOperatorChangeListener(int index) {
+    private void testTextFilterOperatorChangeListener(int index) {
         VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
-        TextField textFieldFrom = (TextField) horizontalLayout.getComponent(0);
-        TextField textFieldTo = (TextField) horizontalLayout.getComponent(1);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
+        assertFalse(textField.isEnabled());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testNumericFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField fromField = (TextField) horizontalLayout.getComponent(0);
+        TextField toField = (TextField) horizontalLayout.getComponent(1);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(2);
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
-        assertTrue(textFieldFrom.isEnabled());
-        assertFalse(textFieldTo.isEnabled());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
-        assertTrue(textFieldFrom.isEnabled());
-        assertFalse(textFieldTo.isEnabled());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
-        assertTrue(textFieldFrom.isEnabled());
-        assertFalse(textFieldTo.isEnabled());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        assertTrue(textFieldFrom.isEnabled());
-        assertTrue(textFieldTo.isEnabled());
+        assertTrue(fromField.isEnabled());
+        assertTrue(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
     }
 
     private void assertTextFieldValue(String fieldName, Object value) {
@@ -322,9 +353,18 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyComboBox(Whitebox.getInternalState(window, fieldName), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN));
+    private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+                FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
+    }
+
+    private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
+                FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
@@ -357,7 +397,6 @@ public class UdmBaselineValueFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, binder, null, true);
     }
 
-    @SuppressWarnings(UNCHECKED)
     private void populateData() {
         populateTextField("wrWrkInstField", String.valueOf(WR_WRK_INST));
         populateTextField("systemTitleField", SYSTEM_TITLE);

@@ -83,14 +83,12 @@
                 and content_flag = #{filter.contentFlag}
             </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
-                <choose>
-                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemTitleExpression.operator">
-                        and v.system_title ilike #{filter.systemTitleExpression.fieldFirstValue}
-                    </when>
-                    <otherwise>
-                        and v.system_title ilike '%' || #{filter.systemTitleExpression.fieldFirstValue} || '%'
-                    </otherwise>
-                </choose>
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.system_title"/>
+                    <property name="operator" value="filter.systemTitleExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.systemTitleExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="null != filter.comment">
                 and v.comment ilike '%' || #{filter.comment} || '%'

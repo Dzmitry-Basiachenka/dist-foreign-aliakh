@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -61,7 +62,9 @@ public class UdmBaselineValueRepository extends BaseRepository implements IUdmBa
         FilterExpression<String> filterExpression) {
         return Objects.nonNull(filterExpression.getOperator())
             ? new FilterExpression<>(filterExpression.getOperator(),
-            escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue())
+            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
+                new String[]{"'"}, new String[]{"''"}),
+            filterExpression.getFieldSecondValue())
             : filterExpression;
     }
 }
