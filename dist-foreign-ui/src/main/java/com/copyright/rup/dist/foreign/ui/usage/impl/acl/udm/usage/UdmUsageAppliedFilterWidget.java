@@ -75,6 +75,8 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getChannel, filter, "label.channel"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
+            addLabel(createLabelWithOperator(filter.getUsageDetailIdExpression(), "label.usage_detail_id",
+                StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getCompanyIdExpression(), "label.company_id_from",
                 "label.company_id_to"), layout);
             addLabel(createLabelWithOperator(filter.getCompanyNameExpression(), "label.company_name",

@@ -73,6 +73,7 @@ public class UdmUsageFiltersWindowTest {
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
     private static final LocalDate DATE_TO = LocalDate.of(2021, 1, 2);
     private static final Integer WR_WRK_INST = 243904752;
+    private static final String USAGE_DETAIL_ID = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
     private static final Integer COMPANY_ID = 454984566;
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String SURVEY_COUNTRY = "United States";
@@ -129,32 +130,32 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testCompanyIdFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(7);
+        testNumericFilterOperatorChangeListener(8);
     }
 
     @Test
     public void testCompanyNameFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(8);
+        testTextFilterOperatorChangeListener(9);
     }
 
     @Test
     public void testAnnualMultiplierFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(11);
-    }
-
-    @Test
-    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(12);
     }
 
     @Test
-    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
+    public void testAnnualizedCopiesFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(13);
     }
 
     @Test
-    public void testQuantityFilterOperatorChangeListener() {
+    public void testStatisticalMultiplierMultiplierFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(14);
+    }
+
+    @Test
+    public void testQuantityFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(15);
     }
 
     @Test
@@ -162,7 +163,7 @@ public class UdmUsageFiltersWindowTest {
         UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
         assertTrue(appliedUsageFilter.isEmpty());
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(15);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(16);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
         assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
@@ -171,7 +172,7 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testClearButtonClickListener() {
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(15);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(16);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         assertTrue(window.getAppliedUsageFilter().isEmpty());
@@ -191,14 +192,15 @@ public class UdmUsageFiltersWindowTest {
         assertTrue(verticalLayout.getComponent(4).isEnabled());
         assertTrue(verticalLayout.getComponent(5).isEnabled());
         assertTrue(verticalLayout.getComponent(6).isEnabled());
-        assertFalse(verticalLayout.getComponent(7).isEnabled());
+        assertTrue(verticalLayout.getComponent(7).isEnabled());
         assertFalse(verticalLayout.getComponent(8).isEnabled());
         assertFalse(verticalLayout.getComponent(9).isEnabled());
-        assertTrue(verticalLayout.getComponent(10).isEnabled());
-        assertFalse(verticalLayout.getComponent(11).isEnabled());
+        assertFalse(verticalLayout.getComponent(10).isEnabled());
+        assertTrue(verticalLayout.getComponent(11).isEnabled());
         assertFalse(verticalLayout.getComponent(12).isEnabled());
         assertFalse(verticalLayout.getComponent(13).isEnabled());
         assertFalse(verticalLayout.getComponent(14).isEnabled());
+        assertFalse(verticalLayout.getComponent(15).isEnabled());
         verify(ForeignSecurityUtils.class);
     }
 
@@ -291,6 +293,18 @@ public class UdmUsageFiltersWindowTest {
     }
 
     @Test
+    public void testUsageDetailIdValidation() {
+        TextField usageDetailIdField = Whitebox.getInternalState(window, "usageDetailIdField");
+        ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox =
+            Whitebox.getInternalState(window, "usageDetailIdOperatorComboBox");
+        assertTextOperatorComboBoxItems(usageDetailIdOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51),
+            "Field value should not exceed 50 characters", false);
+    }
+
+    @Test
     public void testCompanyIdValidation() {
         TextField companyIdFromField = Whitebox.getInternalState(window, "companyIdFromField");
         TextField companyIdToField = Whitebox.getInternalState(window, "companyIdToField");
@@ -340,7 +354,7 @@ public class UdmUsageFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(16, verticalLayout.getComponentCount());
+        assertEquals(17, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
@@ -349,18 +363,19 @@ public class UdmUsageFiltersWindowTest {
         assertSizedComboBoxItems(verticalLayout.getComponent(5), "Channel", true,
             Arrays.asList(UdmChannelEnum.values()));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Company ID From", "Company ID To");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(8), "Company Name");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "Survey Country");
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Language");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(11), "Annual Multiplier From",
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Usage Detail ID");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Company ID From", "Company ID To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(9), "Company Name");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Survey Country");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(11), "Language");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Annual Multiplier From",
             "Annual Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Annualized Copies From",
             "Annualized Copies To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Statistical Multiplier From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(14), "Statistical Multiplier From",
             "Statistical Multiplier To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(14), "Quantity From", "Quantity To");
-        verifyButtonsLayout(verticalLayout.getComponent(15), "Save", "Clear", "Close");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(15), "Quantity From", "Quantity To");
+        verifyButtonsLayout(verticalLayout.getComponent(16), "Save", "Clear", "Close");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -513,6 +528,7 @@ public class UdmUsageFiltersWindowTest {
         filter.setSurveyStartDateTo(DATE_TO);
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_ID, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME, null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
@@ -540,6 +556,8 @@ public class UdmUsageFiltersWindowTest {
         assertComboBoxValue("channelComboBox", UdmChannelEnum.CCC);
         assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateTextField("usageDetailIdField", USAGE_DETAIL_ID);
+        populateComboBox("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("companyIdFromField", COMPANY_ID.toString());
         assertTextFieldValue("companyNameField", COMPANY_NAME);
         assertTextFieldValue("surveyCountryField", SURVEY_COUNTRY);
@@ -615,6 +633,8 @@ public class UdmUsageFiltersWindowTest {
         populateComboBox("channelComboBox", UdmChannelEnum.CCC);
         populateTextField("wrWrkInstFromField", WR_WRK_INST.toString());
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateTextField("usageDetailIdField", USAGE_DETAIL_ID);
+        populateComboBox("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("companyIdFromField", COMPANY_ID.toString());
         populateComboBox("companyIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("companyNameField", COMPANY_NAME);

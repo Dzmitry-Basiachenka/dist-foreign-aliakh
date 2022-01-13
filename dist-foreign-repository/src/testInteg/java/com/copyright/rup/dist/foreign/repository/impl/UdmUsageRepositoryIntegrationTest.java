@@ -110,6 +110,9 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
     private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
     private static final Long WR_WRK_INST = 122825347L;
+    private static final String USAGE_DETAIL_ID = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
+    private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "B989E02B-1F1D-4637-B89E-DC99938A51B9";
+    private static final String USAGE_DETAIL_ID_FRAGMENT = "b89e";
     private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME_1 = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String COMPANY_NAME_2 = "Albany International Corp.";
@@ -225,6 +228,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
@@ -309,6 +313,42 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
             UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageDetailId() {
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_FRAGMENT, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
     }
 
     @Test
@@ -662,6 +702,33 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUsageDetailId() {
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_FRAGMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterCompanyId() {
         assertFilteringFindCountByFilter(filter -> filter.setCompanyIdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 5374L, null)), 1);
@@ -939,6 +1006,7 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
