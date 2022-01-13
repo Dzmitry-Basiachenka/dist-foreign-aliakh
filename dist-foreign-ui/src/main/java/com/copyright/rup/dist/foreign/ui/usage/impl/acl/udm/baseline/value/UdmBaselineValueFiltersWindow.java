@@ -46,6 +46,7 @@ import java.util.Objects;
  */
 public class UdmBaselineValueFiltersWindow extends Window {
 
+    private static final int ONE = 1;
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String NUMBER_VALIDATION_MESSAGE = "field.error.not_numeric";
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
@@ -58,18 +59,18 @@ public class UdmBaselineValueFiltersWindow extends Window {
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
-    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
     private final TextField priceFromField = new TextField(ForeignUi.getMessage("label.price_from"));
     private final TextField priceToField = new TextField(ForeignUi.getMessage("label.price_to"));
-    private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField contentFromField = new TextField(ForeignUi.getMessage("label.content_from"));
     private final TextField contentToField = new TextField(ForeignUi.getMessage("label.content_to"));
-    private final ComboBox<FilterOperatorEnum> contentOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> contentOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField contentUnitPriceFromField =
         new TextField(ForeignUi.getMessage("label.content_unit_price_from"));
     private final TextField contentUnitPriceToField =
         new TextField(ForeignUi.getMessage("label.content_unit_price_to"));
-    private final ComboBox<FilterOperatorEnum> contentUnitPriceComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> contentUnitPriceComboBox = buildNumericOperatorComboBox();
     private final ComboBox<String> priceFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
     private final ComboBox<String> contentFlagComboBox =
@@ -143,7 +144,6 @@ public class UdmBaselineValueFiltersWindow extends Window {
     }
 
     private HorizontalLayout initSystemTitleLayout() {
-        systemTitleOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.CONTAINS);
         filterBinder.forField(systemTitleField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
             .bind(filter -> Objects.toString(filter.getSystemTitleExpression().getFieldFirstValue(), null),
@@ -153,6 +153,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
                     filter.getSystemTitleExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getSystemTitleExpression().setOperator(value));
         HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
+        systemTitleOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(systemTitleField, event.getValue()));
         setComponentsFullSize(systemTitleField, systemTitleOperatorComboBox, horizontalLayout);
         VaadinUtils.addComponentStyle(systemTitleField, "udm-baseline-value-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-baseline-value-system-title-operator-filter");
@@ -183,7 +185,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
                     filter.getPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getPriceExpression().setOperator(value));
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceFromField, priceToField, priceOperatorComboBox);
-        priceOperatorComboBox.addValueChangeListener(event -> updateOperatorField(priceToField, event.getValue()));
+        priceOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(priceFromField, priceToField, event.getValue()));
         setComponentsFullSize(priceFromField, priceToField, priceOperatorComboBox, horizontalLayout);
         VaadinUtils.addComponentStyle(priceFromField, "udm-baseline-value-price-from-filter");
         VaadinUtils.addComponentStyle(priceToField, "udm-baseline-value-price-to-filter");
@@ -216,7 +219,8 @@ public class UdmBaselineValueFiltersWindow extends Window {
                 (filter, value) -> filter.getContentExpression().setOperator(value));
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(contentFromField, contentToField, contentOperatorComboBox);
-        contentOperatorComboBox.addValueChangeListener(event -> updateOperatorField(contentToField, event.getValue()));
+        contentOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(contentFromField, contentToField, event.getValue()));
         setComponentsFullSize(contentFromField, contentToField, contentOperatorComboBox, horizontalLayout);
         VaadinUtils.addComponentStyle(contentFromField, "udm-baseline-value-content-from-filter");
         VaadinUtils.addComponentStyle(contentToField, "udm-baseline-value-content-to-filter");
@@ -246,7 +250,7 @@ public class UdmBaselineValueFiltersWindow extends Window {
                 (filter, value) -> filter.getContentUnitPriceExpression()
                     .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         contentUnitPriceComboBox.addValueChangeListener(
-            event -> updateOperatorField(contentUnitPriceToField, event.getValue()));
+            event -> updateOperatorField(contentUnitPriceFromField, contentUnitPriceToField, event.getValue()));
         filterBinder.forField(contentUnitPriceComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(
                     filter.getContentUnitPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
@@ -290,23 +294,53 @@ public class UdmBaselineValueFiltersWindow extends Window {
         return new HorizontalLayout(saveButton, clearButton, closeButton);
     }
 
+    private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN,
+            FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+        return filterOperatorComboBox;
+    }
+
+    private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
+        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+        return filterOperatorComboBox;
+    }
+
     private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox =
-            new ComboBox<>(ForeignUi.getMessage("label.operator"));
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.GREATER_THAN,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.BETWEEN);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
 
-    private void updateOperatorField(TextField fieldToUpdate, FilterOperatorEnum value) {
-        if (FilterOperatorEnum.BETWEEN == value) {
-            fieldToUpdate.setEnabled(true);
+    private void updateOperatorField(TextField textField, FilterOperatorEnum filterOperator) {
+        if (0 == filterOperator.getArgumentsNumber()) {
+            textField.clear();
+            textField.setEnabled(false);
         } else {
-            fieldToUpdate.clear();
-            fieldToUpdate.setEnabled(false);
+            textField.setEnabled(true);
+        }
+        filterBinder.validate();
+    }
+
+    private void updateOperatorField(TextField fromField, TextField toField, FilterOperatorEnum filterOperator) {
+        if (0 == filterOperator.getArgumentsNumber()) {
+            fromField.clear();
+            fromField.setEnabled(false);
+            toField.clear();
+            toField.setEnabled(false);
+        } else if (ONE == filterOperator.getArgumentsNumber()) {
+            fromField.setEnabled(true);
+            toField.clear();
+            toField.setEnabled(false);
+        } else {
+            fromField.setEnabled(true);
+            toField.setEnabled(true);
         }
         filterBinder.validate();
     }

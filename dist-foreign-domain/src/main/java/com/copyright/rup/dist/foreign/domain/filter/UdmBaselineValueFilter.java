@@ -94,8 +94,7 @@ public class UdmBaselineValueFilter {
         return priceExpression;
     }
 
-    public void setPriceExpression(
-        FilterExpression<Number> priceExpression) {
+    public void setPriceExpression(FilterExpression<Number> priceExpression) {
         this.priceExpression = priceExpression;
     }
 
@@ -127,8 +126,7 @@ public class UdmBaselineValueFilter {
         return contentUnitPriceExpression;
     }
 
-    public void setContentUnitPriceExpression(
-        FilterExpression<Number> contentUnitPriceExpression) {
+    public void setContentUnitPriceExpression(FilterExpression<Number> contentUnitPriceExpression) {
         this.contentUnitPriceExpression = contentUnitPriceExpression;
     }
 

@@ -62,7 +62,7 @@ import java.util.stream.IntStream;
 public class UdmBaselineRepositoryIntegrationTest {
 
     private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
-        "udm-baseline-repository-test/find-dtos-by-filter.groovy";
+        "udm-baseline-repository-integration-test/find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
     private static final String SURVEY_COUNTRY_1 = "Portugal";
     private static final String SURVEY_COUNTRY_1_FRAGMENT = "Portu";
@@ -546,13 +546,13 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-test-data-init-find-periods.groovy")
+    @TestData(fileName = "udm-baseline-repository-integration-test/find-periods.groovy")
     public void testGetPeriods() {
         assertEquals(Arrays.asList(202106, 202012), baselineRepository.findPeriods());
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-test-data-init-find-not-populated-values-from-baseline.groovy")
+    @TestData(fileName = "udm-baseline-repository-integration-test/find-not-populated-values-from-baseline.groovy")
     public void testFindNotPopulatedValuesFromBaseline() {
         assertEquals(loadExpectedValues("json/udm/udm_values_201512.json"),
             baselineRepository.findNotPopulatedValuesFromBaseline(201512));
@@ -562,7 +562,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-test-data-init-populate-value-id.groovy")
+    @TestData(fileName = "udm-baseline-repository-integration-test/populate-value-id.groovy")
     public void testPopulateValueId() {
         Map<Long, String> wrWrkInstToValueIdMap = ImmutableMap.of(
             28908508L, "9b2550ff-a80a-41a9-a63c-047216a62241",
@@ -578,7 +578,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-test-data-init-remove-udm-usage-from-baseline-by-id.groovy")
+    @TestData(fileName = "udm-baseline-repository-integration-test/remove-udm-usage-from-baseline-by-id.groovy")
     public void testRemoveUdmUsageFromBaselineById() {
         List<UdmUsage> udmUsages =
             udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
