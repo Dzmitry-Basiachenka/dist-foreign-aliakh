@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidge
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
@@ -29,6 +30,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -130,7 +132,7 @@ public class UdmUsageFiltersWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_usages_additional_filters"));
         setResizable(false);
-        setWidth(750, Unit.PIXELS);
+        setWidth(600, Unit.PIXELS);
         setHeight(560, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-additional-filters-window");
     }
@@ -143,23 +145,33 @@ public class UdmUsageFiltersWindow extends Window {
     }
 
     private ComponentContainer initRootLayout() {
-        HorizontalLayout buttonsLayout = initButtonsLayout();
         initAssigneeFilterWidget();
         initReportedPublicationTypeFilterWidget();
         initPublicationFormatFilterWidget();
         initDetailLicenseeClassFilterWidget();
         initTypeOfUseFilterWidget();
-        VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
+        VerticalLayout fieldsLayout = new VerticalLayout();
+        fieldsLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
             publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initChannelLayout(),
             initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(), initUsageDetailIdLayout(),
             initCompanyIdLayout(), initCompanyNameLayout(), initSurveyRespondentLayout(), initSurveyCountryLayout(),
             initLanguageLayout(), initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(),
-            initStatisticalMultiplierLayout(), initQuantityLayout(), buttonsLayout);
-        rootLayout.setMargin(new MarginInfo(true, true, true, true));
-        VaadinUtils.setMaxComponentsWidth(rootLayout);
-        rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+            initStatisticalMultiplierLayout(), initQuantityLayout());
         filterBinder.validate();
+        return buildRootLayout(fieldsLayout);
+    }
+
+    private VerticalLayout buildRootLayout(VerticalLayout fieldsLayout) {
+        VerticalLayout rootLayout = new VerticalLayout();
+        Panel panel = new Panel(fieldsLayout);
+        panel.setSizeFull();
+        fieldsLayout.setMargin(new MarginInfo(true));
+        HorizontalLayout buttonsLayout = initButtonsLayout();
+        rootLayout.addComponents(panel, buttonsLayout);
+        rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        rootLayout.setExpandRatio(panel, 1f);
+        rootLayout.setSizeFull();
+        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
         return rootLayout;
     }
 
@@ -218,7 +230,7 @@ public class UdmUsageFiltersWindow extends Window {
         channelComboBox.setItems(UdmChannelEnum.values());
         channelComboBox.setSelectedItem(usageFilter.getChannel());
         channelComboBox.setSizeFull();
-        channelComboBox.setWidth(355, Unit.PIXELS);
+        channelComboBox.setWidth(50, Unit.PERCENTAGE);
         VaadinUtils.addComponentStyle(channelComboBox, "udm-channel-filter");
         return channelComboBox;
     }
@@ -248,9 +260,7 @@ public class UdmUsageFiltersWindow extends Window {
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
             .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
-        wrWrkInstFromField.setSizeFull();
-        wrWrkInstToField.setSizeFull();
-        wrWrkInstLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(wrWrkInstLayout, wrWrkInstFromField, wrWrkInstToField);
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-wr-wrk-inst-to-filter");
         VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-wr-wrk-inst-operator-filter");
@@ -268,8 +278,7 @@ public class UdmUsageFiltersWindow extends Window {
         reportedTitleField.addValueChangeListener(event -> filterBinder.validate());
         reportedTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(reportedTitleField, event.getValue()));
-        reportedTitleField.setSizeFull();
-        reportedTitleLayout.setSizeFull();
+        applyCommonTextFieldFormatting(reportedTitleLayout, reportedTitleField);
         VaadinUtils.addComponentStyle(reportedTitleField, "udm-reported-title-filter");
         VaadinUtils.addComponentStyle(reportedTitleOperatorComboBox, "udm-reported-title-operator-filter");
         return reportedTitleLayout;
@@ -286,8 +295,7 @@ public class UdmUsageFiltersWindow extends Window {
         systemTitleField.addValueChangeListener(event -> filterBinder.validate());
         systemTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(systemTitleField, event.getValue()));
-        systemTitleField.setSizeFull();
-        systemTitleLayout.setSizeFull();
+        applyCommonTextFieldFormatting(systemTitleLayout, systemTitleField);
         VaadinUtils.addComponentStyle(systemTitleField, "udm-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-system-title-operator-filter");
         return systemTitleLayout;
@@ -304,8 +312,7 @@ public class UdmUsageFiltersWindow extends Window {
         usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
         usageDetailIdOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(usageDetailIdField, event.getValue()));
-        usageDetailIdField.setSizeFull();
-        usageDetailIdLayout.setSizeFull();
+        applyCommonTextFieldFormatting(usageDetailIdLayout, usageDetailIdField);
         VaadinUtils.addComponentStyle(usageDetailIdField, "udm-usage-detail-id-filter");
         VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "udm-usage-detail-id-operator-filter");
         return usageDetailIdLayout;
@@ -380,10 +387,8 @@ public class UdmUsageFiltersWindow extends Window {
                     ForeignUi.getMessage("label.annual_multiplier_from")))
             .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Integer.valueOf(value)));
-        annualMultiplierFromField.setSizeFull();
-        annualMultiplierToField.setSizeFull();
         annualMultiplierLayout.setEnabled(isFilterPermittedForUser);
-        annualMultiplierLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(annualMultiplierLayout, annualMultiplierFromField, annualMultiplierToField);
         VaadinUtils.addComponentStyle(annualMultiplierFromField, "udm-annual-multiplier-from-filter");
         VaadinUtils.addComponentStyle(annualMultiplierToField, "udm-annual-multiplier-to-filter");
         VaadinUtils.addComponentStyle(annualMultiplierOperatorComboBox, "udm-annual-multiplier-operator-filter");
@@ -413,10 +418,8 @@ public class UdmUsageFiltersWindow extends Window {
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(annualizedCopiesFromField, annualizedCopiesToField, event.getValue()));
-        annualizedCopiesFromField.setSizeFull();
-        annualizedCopiesToField.setSizeFull();
         annualizedCopiesLayout.setEnabled(isFilterPermittedForUser);
-        annualizedCopiesLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(annualizedCopiesLayout, annualizedCopiesFromField, annualizedCopiesToField);
         VaadinUtils.addComponentStyle(annualizedCopiesFromField, "udm-annualized-copies-from-filter");
         VaadinUtils.addComponentStyle(annualizedCopiesToField, "udm-annualized-copies-to-filter");
         VaadinUtils.addComponentStyle(annualizedCopiesOperatorComboBox, "udm-annualized-copies-operator-filter");
@@ -449,10 +452,9 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getStatisticalMultiplierExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getStatisticalMultiplierExpression()
                     .setFieldSecondValue(new BigDecimal(value)));
-        statisticalMultiplierFromField.setSizeFull();
-        statisticalMultiplierToField.setSizeFull();
         statisticalMultiplierLayout.setEnabled(isFilterPermittedForUser);
-        statisticalMultiplierLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(statisticalMultiplierLayout, statisticalMultiplierFromField,
+            statisticalMultiplierToField);
         VaadinUtils.addComponentStyle(statisticalMultiplierFromField, "udm-statistical-multiplier-from-filter");
         VaadinUtils.addComponentStyle(statisticalMultiplierToField, "udm-statistical-multiplier-to-filter");
         VaadinUtils.addComponentStyle(statisticalMultiplierOperatorComboBox,
@@ -485,10 +487,8 @@ public class UdmUsageFiltersWindow extends Window {
                     ForeignUi.getMessage("label.quantity_from")))
             .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Integer.valueOf(value)));
-        quantityFromField.setSizeFull();
-        quantityToField.setSizeFull();
         quantityLayout.setEnabled(isFilterPermittedForUser);
-        quantityLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(quantityLayout, quantityFromField, quantityToField);
         VaadinUtils.addComponentStyle(quantityFromField, "udm-quantity-from-filter");
         VaadinUtils.addComponentStyle(quantityToField, "udm-quantity-to-filter");
         VaadinUtils.addComponentStyle(quantityOperatorComboBox, "udm-quantity-operator-filter");
@@ -520,10 +520,8 @@ public class UdmUsageFiltersWindow extends Window {
                     ForeignUi.getMessage("label.company_id_from")))
             .bind(filter -> filter.getCompanyIdExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getCompanyIdExpression().setFieldFirstValue(Long.valueOf(value)));
-        companyIdFromField.setSizeFull();
-        companyIdToField.setSizeFull();
         companyIdLayout.setEnabled(isFilterPermittedForUser);
-        companyIdLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(companyIdLayout, companyIdFromField, companyIdToField);
         VaadinUtils.addComponentStyle(companyIdFromField, "udm-company-id-from-filter");
         VaadinUtils.addComponentStyle(companyIdToField, "udm-company-id-to-filter");
         VaadinUtils.addComponentStyle(companyIdOperatorComboBox, "udm-company-id-operator-filter");
@@ -541,9 +539,8 @@ public class UdmUsageFiltersWindow extends Window {
         companyNameField.addValueChangeListener(event -> filterBinder.validate());
         companyNameOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(companyNameField, event.getValue()));
-        companyNameField.setSizeFull();
         companyNameLayout.setEnabled(isFilterPermittedForUser);
-        companyNameLayout.setSizeFull();
+        applyCommonTextFieldFormatting(companyNameLayout, companyNameField);
         VaadinUtils.addComponentStyle(companyNameField, "udm-company-name-filter");
         VaadinUtils.addComponentStyle(companyNameOperatorComboBox, "udm-company-name-operator-filter");
         return companyNameLayout;
@@ -561,9 +558,8 @@ public class UdmUsageFiltersWindow extends Window {
         surveyRespondentField.addValueChangeListener(event -> filterBinder.validate());
         surveyRespondentOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(surveyRespondentField, event.getValue()));
-        surveyRespondentField.setSizeFull();
         surveyRespondentLayout.setEnabled(isFilterPermittedForUser);
-        surveyRespondentLayout.setSizeFull();
+        applyCommonTextFieldFormatting(surveyRespondentLayout, surveyRespondentField);
         VaadinUtils.addComponentStyle(surveyRespondentField, "udm-survey-respondent-filter");
         VaadinUtils.addComponentStyle(surveyRespondentOperatorComboBox, "udm-survey-respondent-operator-filter");
         return surveyRespondentLayout;
@@ -580,9 +576,8 @@ public class UdmUsageFiltersWindow extends Window {
         surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
         surveyCountryOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(surveyCountryField, event.getValue()));
-        surveyCountryField.setSizeFull();
         surveyCountryLayout.setEnabled(isFilterPermittedForUser);
-        surveyCountryLayout.setSizeFull();
+        applyCommonTextFieldFormatting(surveyCountryLayout, surveyCountryField);
         VaadinUtils.addComponentStyle(surveyCountryField, "udm-survey-country-filter");
         VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "udm-survey-country-operator-filter");
         return surveyCountryLayout;
@@ -599,31 +594,29 @@ public class UdmUsageFiltersWindow extends Window {
         languageField.addValueChangeListener(event -> filterBinder.validate());
         languageOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(languageField, event.getValue()));
-        languageField.setSizeFull();
-        languageLayout.setSizeFull();
+        applyCommonTextFieldFormatting(languageLayout, languageField);
         VaadinUtils.addComponentStyle(languageField, "udm-language-filter");
         VaadinUtils.addComponentStyle(languageOperatorComboBox, "udm-language-operator-filter");
         return languageLayout;
     }
 
     private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return filterOperatorComboBox;
     }
 
     private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setSizeFull();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+    }
+
+    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
+        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
+        filterOperatorComboBox.setEmptySelectionAllowed(false);
+        filterOperatorComboBox.setItems(items);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
@@ -658,6 +651,21 @@ public class UdmUsageFiltersWindow extends Window {
             toField.setEnabled(false);
             comboBox.setSelectedItem(filterOperator);
         }
+    }
+
+    private void applyCommonTextFieldFormatting(HorizontalLayout mainLayout, TextField textField) {
+        mainLayout.setSizeFull();
+        textField.setSizeFull();
+        mainLayout.setExpandRatio(textField, 1f);
+    }
+
+    private void applyCommonNumericFieldFormatting(HorizontalLayout mainLayout, TextField firstField,
+                                                   TextField secondField) {
+        mainLayout.setSizeFull();
+        firstField.setSizeFull();
+        mainLayout.setExpandRatio(firstField, 0.5f);
+        secondField.setSizeFull();
+        mainLayout.setExpandRatio(secondField, 0.5f);
     }
 
     private void updateOperatorField(TextField textField, FilterOperatorEnum filterOperator) {
