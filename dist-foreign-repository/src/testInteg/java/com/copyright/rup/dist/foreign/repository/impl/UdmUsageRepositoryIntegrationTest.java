@@ -92,7 +92,6 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
     private static final String REPORTED_STANDARD_NUMBER = "0927-7765";
     private static final String REPORTED_TYPE_OF_USE = "COPY_FOR_MYSELF";
-    private static final String REPORTED_TITLE = "Colloids and surfaces. B, Biointerfaces";
     private static final String PUB_TYPE_JOURNAL = "Journal";
     private static final String PUB_TYPE_NOT_SHARED = "Not Shared";
     private static final String PUBLICATION_FORMAT = "Digital";
@@ -110,6 +109,14 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final LocalDate SURVEY_START_DATE = LocalDate.of(2019, 12, 12);
     private static final LocalDate SURVEY_END_DATE = LocalDate.of(2022, 12, 12);
     private static final Long WR_WRK_INST = 122825347L;
+    private static final String REPORTED_TITLE = "The Wall Street journal";
+    private static final String REPORTED_TITLE_DIFFERENT_CASE = "THe WAll STReet JOURnal";
+    private static final String REPORTED_TITLE_FRAGMENT = "JOURnal";
+    private static final String REPORTED_TITLE_WITH_METASYMBOLS = "The New York times !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String SYSTEM_TITLE = "Wall Street journal";
+    private static final String SYSTEM_TITLE_DIFFERENT_CASE = "WAll STReet JOURnal";
+    private static final String SYSTEM_TITLE_FRAGMENT = "JOURnal";
+    private static final String SYSTEM_TITLE_WITH_METASYMBOLS = "New York times !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String USAGE_DETAIL_ID = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
     private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "B989E02B-1F1D-4637-B89E-DC99938A51B9";
     private static final String USAGE_DETAIL_ID_FRAGMENT = "b89e";
@@ -228,6 +235,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
+        filter.setReportedTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE, null));
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
@@ -475,6 +484,98 @@ public class UdmUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterReportedTitle() {
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSystemTitle() {
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_FRAGMENT, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            UDM_USAGE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_USAGE_UID_12);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_USAGE_UID_5, UDM_USAGE_UID_6, UDM_USAGE_UID_7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterLanguage() {
         assertFilteringFindDtosByFilter(filter -> filter.setLanguageExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null)),
@@ -697,6 +798,72 @@ public class UdmUsageRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterReportedTitle() {
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, REPORTED_TITLE_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, REPORTED_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setReportedTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSystemTitle() {
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
 
@@ -1006,6 +1173,8 @@ public class UdmUsageRepositoryIntegrationTest {
         filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
         filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMPANY_NAME_2, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 227738245L, null));
+        filter.setReportedTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, REPORTED_TITLE, null));
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));

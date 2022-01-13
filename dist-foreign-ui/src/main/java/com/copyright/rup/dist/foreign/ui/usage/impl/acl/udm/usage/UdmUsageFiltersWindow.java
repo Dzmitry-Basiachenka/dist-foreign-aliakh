@@ -90,6 +90,10 @@ public class UdmUsageFiltersWindow extends Window {
     private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
     private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
     private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildNumericOperatorComboBox();
+    private final TextField reportedTitleField = new TextField(ForeignUi.getMessage("label.reported_title"));
+    private final ComboBox<FilterOperatorEnum> reportedTitleOperatorComboBox = buildTextOperatorComboBox();
+    private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
+    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
     private final TextField usageDetailIdField = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
     private final ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox = buildTextOperatorComboBox();
     private final LocalDateWidget usageDateFromWidget =
@@ -146,9 +150,10 @@ public class UdmUsageFiltersWindow extends Window {
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initAssigneeLicenseeClassLayout(), initReportedPubTypeTouLayout(),
             publicationFormatFilterWidget, initUsageDateLayout(), initSurveyDateLayout(), initChannelLayout(),
-            initWrWrkInstLayout(), initUsageDetailIdLayout(), initCompanyIdLayout(), initCompanyNameLayout(),
-            initSurveyCountryLayout(), initLanguageLayout(), initAnnualMultiplierLayout(),
-            initAnnualizedCopiesLayout(), initStatisticalMultiplierLayout(), initQuantityLayout(), buttonsLayout);
+            initWrWrkInstLayout(), initReportedTitleLayout(), initSystemTitleLayout(), initUsageDetailIdLayout(),
+            initCompanyIdLayout(), initCompanyNameLayout(), initSurveyCountryLayout(), initLanguageLayout(),
+            initAnnualMultiplierLayout(), initAnnualizedCopiesLayout(), initStatisticalMultiplierLayout(),
+            initQuantityLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -248,6 +253,42 @@ public class UdmUsageFiltersWindow extends Window {
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-wr-wrk-inst-to-filter");
         VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-wr-wrk-inst-operator-filter");
         return wrWrkInstLayout;
+    }
+
+    private HorizontalLayout initReportedTitleLayout() {
+        HorizontalLayout reportedTitleLayout = new HorizontalLayout(reportedTitleField, reportedTitleOperatorComboBox);
+        filterBinder.forField(reportedTitleField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
+            .bind(filter -> filter.getReportedTitleExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getReportedTitleExpression().setFieldFirstValue(value.trim()));
+        populateOperatorFilters(reportedTitleField, reportedTitleOperatorComboBox,
+            UdmUsageFilter::getReportedTitleExpression);
+        reportedTitleField.addValueChangeListener(event -> filterBinder.validate());
+        reportedTitleOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(reportedTitleField, event.getValue()));
+        reportedTitleField.setSizeFull();
+        reportedTitleLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(reportedTitleField, "udm-reported-title-filter");
+        VaadinUtils.addComponentStyle(reportedTitleOperatorComboBox, "udm-reported-title-operator-filter");
+        return reportedTitleLayout;
+    }
+
+    private HorizontalLayout initSystemTitleLayout() {
+        HorizontalLayout systemTitleLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
+        filterBinder.forField(systemTitleField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
+            .bind(filter -> filter.getSystemTitleExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(value.trim()));
+        populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
+            UdmUsageFilter::getSystemTitleExpression);
+        systemTitleField.addValueChangeListener(event -> filterBinder.validate());
+        systemTitleOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(systemTitleField, event.getValue()));
+        systemTitleField.setSizeFull();
+        systemTitleLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(systemTitleField, "udm-system-title-filter");
+        VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-system-title-operator-filter");
+        return systemTitleLayout;
     }
 
     private HorizontalLayout initUsageDetailIdLayout() {
@@ -636,10 +677,11 @@ public class UdmUsageFiltersWindow extends Window {
             } else {
                 Windows.showValidationErrorWindow(
                     Arrays.asList(usageDateToWidget, surveyStartDateToWidget, wrWrkInstFromField, wrWrkInstToField,
-                        usageDetailIdField, companyIdFromField, companyIdToField, companyNameField, surveyCountryField,
-                        languageField, annualMultiplierFromField, annualMultiplierToField, annualizedCopiesFromField,
-                        annualizedCopiesToField, statisticalMultiplierFromField, statisticalMultiplierToField,
-                        quantityFromField, quantityToField));
+                        reportedTitleField, systemTitleField, usageDetailIdField, companyIdFromField, companyIdToField,
+                        companyNameField, surveyCountryField, languageField, annualMultiplierFromField,
+                        annualMultiplierToField, annualizedCopiesFromField, annualizedCopiesToField,
+                        statisticalMultiplierFromField, statisticalMultiplierToField, quantityFromField,
+                        quantityToField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -650,16 +692,18 @@ public class UdmUsageFiltersWindow extends Window {
     private void clearFilters() {
         clearUsageFilter();
         assigneeFilterWidget.reset();
-        reportedPubTypeFilterWidget.reset();
-        publicationFormatFilterWidget.reset();
         detailLicenseeClassFilterWidget.reset();
+        reportedPubTypeFilterWidget.reset();
         typeOfUseFilterWidget.reset();
+        publicationFormatFilterWidget.reset();
         usageDateFromWidget.clear();
         usageDateToWidget.clear();
         surveyStartDateFromWidget.clear();
         surveyStartDateToWidget.clear();
         channelComboBox.clear();
         clearOperatorLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
+        clearOperatorLayout(reportedTitleField, reportedTitleOperatorComboBox);
+        clearOperatorLayout(systemTitleField, systemTitleOperatorComboBox);
         clearOperatorLayout(usageDetailIdField, usageDetailIdOperatorComboBox);
         clearOperatorLayout(companyIdFromField, companyIdToField, companyIdOperatorComboBox);
         clearOperatorLayout(companyNameField, companyNameOperatorComboBox);
@@ -674,16 +718,18 @@ public class UdmUsageFiltersWindow extends Window {
 
     private void clearUsageFilter() {
         usageFilter.setAssignees(new HashSet<>());
-        usageFilter.setPubFormats(new HashSet<>());
-        usageFilter.setReportedTypeOfUses(new HashSet<>());
-        usageFilter.setReportedPubTypes(new HashSet<>());
         usageFilter.setDetailLicenseeClasses(new HashSet<>());
+        usageFilter.setReportedPubTypes(new HashSet<>());
+        usageFilter.setReportedTypeOfUses(new HashSet<>());
+        usageFilter.setPubFormats(new HashSet<>());
         usageFilter.setUsageDateFrom(null);
         usageFilter.setUsageDateTo(null);
         usageFilter.setSurveyStartDateFrom(null);
         usageFilter.setSurveyStartDateTo(null);
         usageFilter.setChannel(null);
         usageFilter.setWrWrkInstExpression(new FilterExpression<>());
+        usageFilter.setReportedTitleExpression(new FilterExpression<>());
+        usageFilter.setSystemTitleExpression(new FilterExpression<>());
         usageFilter.setUsageDetailIdExpression(new FilterExpression<>());
         usageFilter.setCompanyIdExpression(new FilterExpression<>());
         usageFilter.setCompanyNameExpression(new FilterExpression<>());
@@ -715,6 +761,10 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setChannel(channelComboBox.getValue());
         usageFilter.setWrWrkInstExpression(buildNumberFilterExpression(wrWrkInstFromField, wrWrkInstToField,
             wrWrkInstOperatorComboBox, Integer::valueOf));
+        usageFilter.setReportedTitleExpression(buildTextFilterExpression(reportedTitleField,
+            reportedTitleOperatorComboBox, Function.identity()));
+        usageFilter.setSystemTitleExpression(buildTextFilterExpression(systemTitleField,
+            systemTitleOperatorComboBox, Function.identity()));
         usageFilter.setUsageDetailIdExpression(buildTextFilterExpression(usageDetailIdField,
             usageDetailIdOperatorComboBox, Function.identity()));
         usageFilter.setCompanyIdExpression(buildNumberFilterExpression(companyIdFromField, companyIdToField,
