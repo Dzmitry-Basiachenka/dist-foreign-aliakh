@@ -64,16 +64,16 @@ public class UdmUsageAppliedFilterWidgetTest {
         Component component = widget.getContent();
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(26, verticalLayout.getComponentCount());
+        assertEquals(27, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches", "Udm Batch 2021, Udm Batch 2022");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees", "user@copyright.com");
-        verifyLabel(((VerticalLayout) component).getComponent(5), "Reported Pub Types", "Not Shared");
-        verifyLabel(((VerticalLayout) component).getComponent(6), "Publication Formats", "Digital");
-        verifyLabel(((VerticalLayout) component).getComponent(7), "Detail Licensee Classes", "22 - Book series");
-        verifyLabel(((VerticalLayout) component).getComponent(8), "Types of Use", "COPY_FOR_MYSELF");
+        verifyLabel(((VerticalLayout) component).getComponent(5), "Detail Licensee Classes", "22 - Book series");
+        verifyLabel(((VerticalLayout) component).getComponent(6), "Reported Pub Types", "Not Shared");
+        verifyLabel(((VerticalLayout) component).getComponent(7), "Types of Use", "COPY_FOR_MYSELF");
+        verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital");
         verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "04/12/2020");
         verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
         verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
@@ -93,16 +93,19 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
             "<li><b><i>Company Name: </i></b>Albany International Corp.</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(20),
-            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Survey Respondent: </i></b>fa0276c3-55d6-42cd-8ffe-e9124acae02f</li>" +
+                "<li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
-            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Survey Country: </i></b>United States</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(22),
-            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Language: </i></b>English</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
-            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
+            "<li><b><i>Annual Multiplier From: </i></b>25</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(24),
-            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+            "<li><b><i>Annualized Copies From: </i></b>425</li><li><b><i>Operator: </i></b>LESS_THAN</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(25),
+            "<li><b><i>Statistical Multiplier From: </i></b>1</li><li><b><i>Operator: </i></b>GREATER_THAN</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(26),
             "<li><b><i>Quantity From: </i></b>2</li><li><b><i>Quantity To: </i></b>400</li>" +
                 "<li><b><i>Operator: </i></b>BETWEEN</li>");
     }
@@ -128,16 +131,11 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setPubFormats(Collections.singleton("Digital"));
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
         filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
-        filter.setChannel(UdmChannelEnum.CCC);
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
         filter.setSurveyStartDateTo(LocalDate.of(2020, 5, 20));
-        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
-        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "English", null));
-        filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
-        filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Albany International Corp.",
-            null));
+        filter.setChannel(UdmChannelEnum.CCC);
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 254327612L, null));
         filter.setReportedTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "The New York times",
             null));
@@ -145,6 +143,13 @@ public class UdmUsageAppliedFilterWidgetTest {
             null));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
             "b989e02b-1f1d-4637-b89e-dc99938a51b9", null));
+        filter.setCompanyIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1136L, null));
+        filter.setCompanyNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Albany International Corp.",
+            null));
+        filter.setSurveyRespondentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
+            "fa0276c3-55d6-42cd-8ffe-e9124acae02f", null));
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
+        filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "English", null));
         filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 25, null));
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 425, null));
         filter.setStatisticalMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1, null));

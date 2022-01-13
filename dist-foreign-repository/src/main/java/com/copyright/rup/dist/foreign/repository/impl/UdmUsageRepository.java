@@ -119,6 +119,8 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
             setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSystemTitleExpression()));
         filterCopy.setCompanyNameExpression(
             setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getCompanyNameExpression()));
+        filterCopy.setSurveyRespondentExpression(
+            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSurveyRespondentExpression()));
         filterCopy.setSurveyCountryExpression(
             setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSurveyCountryExpression()));
         filterCopy.setLanguageExpression(

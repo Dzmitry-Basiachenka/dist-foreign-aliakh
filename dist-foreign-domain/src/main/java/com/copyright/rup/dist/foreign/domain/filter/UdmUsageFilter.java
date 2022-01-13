@@ -47,6 +47,7 @@ public class UdmUsageFilter {
     private FilterExpression<String> usageDetailIdExpression = new FilterExpression<>();
     private FilterExpression<Number> companyIdExpression = new FilterExpression<>();
     private FilterExpression<String> companyNameExpression = new FilterExpression<>();
+    private FilterExpression<String> surveyRespondentExpression = new FilterExpression<>();
     private FilterExpression<String> surveyCountryExpression = new FilterExpression<>();
     private FilterExpression<String> languageExpression = new FilterExpression<>();
     private FilterExpression<Number> annualMultiplierExpression = new FilterExpression<>();
@@ -88,6 +89,7 @@ public class UdmUsageFilter {
             setUsageDetailIdExpression(filter.getUsageDetailIdExpression());
             setCompanyIdExpression(filter.getCompanyIdExpression());
             setCompanyNameExpression(filter.getCompanyNameExpression());
+            setSurveyRespondentExpression(filter.getSurveyRespondentExpression());
             setSurveyCountryExpression(filter.getSurveyCountryExpression());
             setLanguageExpression(filter.getLanguageExpression());
             setAnnualMultiplierExpression(filter.getAnnualMultiplierExpression());
@@ -258,6 +260,14 @@ public class UdmUsageFilter {
         this.companyNameExpression = companyNameExpression;
     }
 
+    public FilterExpression<String> getSurveyRespondentExpression() {
+        return surveyRespondentExpression;
+    }
+
+    public void setSurveyRespondentExpression(FilterExpression<String> surveyRespondentExpression) {
+        this.surveyRespondentExpression = surveyRespondentExpression;
+    }
+
     public FilterExpression<String> getSurveyCountryExpression() {
         return surveyCountryExpression;
     }
@@ -338,6 +348,7 @@ public class UdmUsageFilter {
             && usageDetailIdExpression.isEmpty()
             && companyIdExpression.isEmpty()
             && companyNameExpression.isEmpty()
+            && surveyRespondentExpression.isEmpty()
             && surveyCountryExpression.isEmpty()
             && languageExpression.isEmpty()
             && annualMultiplierExpression.isEmpty()
@@ -377,6 +388,7 @@ public class UdmUsageFilter {
             .append(usageDetailIdExpression, that.usageDetailIdExpression)
             .append(companyIdExpression, that.companyIdExpression)
             .append(companyNameExpression, that.companyNameExpression)
+            .append(surveyRespondentExpression, that.surveyRespondentExpression)
             .append(surveyCountryExpression, that.surveyCountryExpression)
             .append(languageExpression, that.languageExpression)
             .append(annualMultiplierExpression, that.annualMultiplierExpression)
@@ -410,6 +422,7 @@ public class UdmUsageFilter {
             .append(usageDetailIdExpression)
             .append(companyIdExpression)
             .append(companyNameExpression)
+            .append(surveyRespondentExpression)
             .append(surveyCountryExpression)
             .append(languageExpression)
             .append(annualMultiplierExpression)
@@ -443,6 +456,7 @@ public class UdmUsageFilter {
             .append("usageDetailIdExpression", usageDetailIdExpression)
             .append("companyIdExpression", companyIdExpression)
             .append("companyNameExpression", companyNameExpression)
+            .append("surveyRespondentExpression", surveyRespondentExpression)
             .append("surveyCountryExpression", surveyCountryExpression)
             .append("languageExpression", languageExpression)
             .append("annualMultiplierExpression", annualMultiplierExpression)
