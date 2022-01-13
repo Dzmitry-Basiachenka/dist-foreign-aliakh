@@ -113,6 +113,10 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
 
     private UdmUsageFilter escapeSqlLikePattern(UdmUsageFilter udmUsageFilter) {
         UdmUsageFilter filterCopy = new UdmUsageFilter(udmUsageFilter);
+        filterCopy.setReportedTitleExpression(
+            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getReportedTitleExpression()));
+        filterCopy.setSystemTitleExpression(
+            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSystemTitleExpression()));
         filterCopy.setCompanyNameExpression(
             setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getCompanyNameExpression()));
         filterCopy.setSurveyCountryExpression(

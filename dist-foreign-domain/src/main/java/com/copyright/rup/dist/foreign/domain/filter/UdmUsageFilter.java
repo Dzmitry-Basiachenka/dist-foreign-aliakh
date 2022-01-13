@@ -42,6 +42,8 @@ public class UdmUsageFilter {
     private LocalDate surveyStartDateTo;
     private UdmChannelEnum channel;
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
+    private FilterExpression<String> reportedTitleExpression = new FilterExpression<>();
+    private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<String> usageDetailIdExpression = new FilterExpression<>();
     private FilterExpression<Number> companyIdExpression = new FilterExpression<>();
     private FilterExpression<String> companyNameExpression = new FilterExpression<>();
@@ -81,6 +83,8 @@ public class UdmUsageFilter {
             setSurveyStartDateTo(filter.getSurveyStartDateTo());
             setChannel(filter.getChannel());
             setWrWrkInstExpression(filter.getWrWrkInstExpression());
+            setReportedTitleExpression(filter.getReportedTitleExpression());
+            setSystemTitleExpression(filter.getSystemTitleExpression());
             setUsageDetailIdExpression(filter.getUsageDetailIdExpression());
             setCompanyIdExpression(filter.getCompanyIdExpression());
             setCompanyNameExpression(filter.getCompanyNameExpression());
@@ -214,6 +218,22 @@ public class UdmUsageFilter {
         this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
+    public FilterExpression<String> getReportedTitleExpression() {
+        return reportedTitleExpression;
+    }
+
+    public void setReportedTitleExpression(FilterExpression<String> reportedTitleExpression) {
+        this.reportedTitleExpression = reportedTitleExpression;
+    }
+
+    public FilterExpression<String> getSystemTitleExpression() {
+        return systemTitleExpression;
+    }
+
+    public void setSystemTitleExpression(FilterExpression<String> systemTitleExpression) {
+        this.systemTitleExpression = systemTitleExpression;
+    }
+
     public FilterExpression<String> getUsageDetailIdExpression() {
         return usageDetailIdExpression;
     }
@@ -313,6 +333,8 @@ public class UdmUsageFilter {
             && null == surveyStartDateTo
             && null == channel
             && wrWrkInstExpression.isEmpty()
+            && reportedTitleExpression.isEmpty()
+            && systemTitleExpression.isEmpty()
             && usageDetailIdExpression.isEmpty()
             && companyIdExpression.isEmpty()
             && companyNameExpression.isEmpty()
@@ -350,6 +372,8 @@ public class UdmUsageFilter {
             .append(surveyStartDateTo, that.surveyStartDateTo)
             .append(channel, that.channel)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
+            .append(reportedTitleExpression, that.reportedTitleExpression)
+            .append(systemTitleExpression, that.systemTitleExpression)
             .append(usageDetailIdExpression, that.usageDetailIdExpression)
             .append(companyIdExpression, that.companyIdExpression)
             .append(companyNameExpression, that.companyNameExpression)
@@ -381,6 +405,8 @@ public class UdmUsageFilter {
             .append(surveyStartDateTo)
             .append(channel)
             .append(wrWrkInstExpression)
+            .append(reportedTitleExpression)
+            .append(systemTitleExpression)
             .append(usageDetailIdExpression)
             .append(companyIdExpression)
             .append(companyNameExpression)
@@ -412,6 +438,8 @@ public class UdmUsageFilter {
             .append("surveyStartDateTo", surveyStartDateTo)
             .append("channel", channel)
             .append("wrWrkInstExpression", wrWrkInstExpression)
+            .append("reportedTitleExpression", reportedTitleExpression)
+            .append("systemTitleExpression", systemTitleExpression)
             .append("usageDetailIdExpression", usageDetailIdExpression)
             .append("companyIdExpression", companyIdExpression)
             .append("companyNameExpression", companyNameExpression)
