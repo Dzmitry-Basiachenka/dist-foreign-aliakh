@@ -210,6 +210,9 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = "udm-csv-reports/write-udm-verified-details-by-source-csv-report.groovy")
     public void testVerifiedDetailsBySourceReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setChannel(UdmChannelEnum.CCC);
+        reportFilter.setUsageOrigin(UdmUsageOriginEnum.SS);
         reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
         reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
@@ -221,9 +224,10 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = "udm-csv-reports/write-udm-verified-details-by-source-csv-report.groovy")
     public void testVerifiedDetailsBySourceEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
-        reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
-        reportFilter.setPeriods(Collections.singleton(202112));
+        reportFilter.setChannel(UdmChannelEnum.CCC);
+        reportFilter.setUsageOrigin(UdmUsageOriginEnum.SS);
+        reportFilter.setDateFrom(LocalDate.of(2018, 2, 1));
+        reportFilter.setDateTo(LocalDate.of(2019, 1, 1));
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
             "udm/verified_details_by_source_empty_report.csv");
