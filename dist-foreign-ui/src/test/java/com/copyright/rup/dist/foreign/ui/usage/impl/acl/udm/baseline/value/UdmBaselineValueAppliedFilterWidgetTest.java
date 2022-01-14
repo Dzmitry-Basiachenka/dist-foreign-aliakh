@@ -35,7 +35,6 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
     private static final BigDecimal PRICE = new BigDecimal("50.0000000000");
     private static final BigDecimal CONTENT = new BigDecimal("2.0000000000");
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
-    private static final String COMMENT = "Comment";
     private UdmBaselineValueAppliedFilterWidget widget;
 
     @Test
@@ -54,7 +53,8 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         assertEquals(10, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Type", "BK - Book");
-        verifyLabel(((VerticalLayout) component).getComponent(2), "Wr Wrk Inst", "306985899");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(2),
+            "<li><b><i>Wr Wrk Inst From: </i></b>306985899</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(3),
             "<li><b><i>System Title: </i></b>Tenside, surfactants, detergents</li><li>" +
                 "<b><i>Operator: </i></b>EQUALS</li>");
@@ -66,7 +66,8 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
             "<li><b><i>Content From: </i></b>2.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(8),
             "<li><b><i>Content Unit Price From: </i></b>25.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(9), COMMENT, COMMENT);
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(9),
+            "<li><b><i>Comment: </i></b>Comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
@@ -82,7 +83,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(201506));
         filter.setPubType(buildPubType());
-        filter.setWrWrkInst(306985899L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
         filter.setPriceFlag(false);
@@ -91,7 +92,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
-        filter.setComment("Comment");
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Comment", null));
         return filter;
     }
 

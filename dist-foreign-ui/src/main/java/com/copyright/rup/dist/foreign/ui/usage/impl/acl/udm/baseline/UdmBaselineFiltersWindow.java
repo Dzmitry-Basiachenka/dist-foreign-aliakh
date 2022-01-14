@@ -278,28 +278,23 @@ public class UdmBaselineFiltersWindow extends Window {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN,
-            FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
-        return filterOperatorComboBox;
-    }
-
     private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
-        return filterOperatorComboBox;
     }
 
-    private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
+    private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+            FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+    }
+
+    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
+        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
         filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setSizeFull();
+        filterOperatorComboBox.setItems(items);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }

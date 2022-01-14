@@ -22,15 +22,15 @@ import java.util.Set;
 public class UdmBaselineValueFilter {
 
     private Set<Integer> periods = new HashSet<>();
-    private Long wrWrkInst;
-    private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private PublicationType pubType;
-    private FilterExpression<Number> priceExpression = new FilterExpression<>();
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
+    private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private Boolean priceFlag;
-    private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private Boolean contentFlag;
+    private FilterExpression<Number> priceExpression = new FilterExpression<>();
+    private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
-    private String comment;
+    private FilterExpression<String> commentExpression = new FilterExpression<>();
 
     /**
      * Default constructor.
@@ -46,15 +46,15 @@ public class UdmBaselineValueFilter {
     public UdmBaselineValueFilter(UdmBaselineValueFilter filter) {
         if (null != filter) {
             setPeriods(filter.getPeriods());
-            setWrWrkInst(filter.getWrWrkInst());
-            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setPubType(filter.getPubType());
-            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
+            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
+            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setPriceFlag(filter.getPriceFlag());
-            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentFlag(filter.getContentFlag());
+            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
+            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
-            setComment(filter.getComment());
+            setCommentExpression(new FilterExpression<>(filter.getCommentExpression()));
         }
     }
 
@@ -66,12 +66,20 @@ public class UdmBaselineValueFilter {
         this.periods = periods;
     }
 
-    public Long getWrWrkInst() {
-        return wrWrkInst;
+    public PublicationType getPubType() {
+        return pubType;
     }
 
-    public void setWrWrkInst(Long wrWrkInst) {
-        this.wrWrkInst = wrWrkInst;
+    public void setPubType(PublicationType pubType) {
+        this.pubType = pubType;
+    }
+
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
+    }
+
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
     public FilterExpression<String> getSystemTitleExpression() {
@@ -82,36 +90,12 @@ public class UdmBaselineValueFilter {
         this.systemTitleExpression = systemTitleExpression;
     }
 
-    public PublicationType getPubType() {
-        return pubType;
-    }
-
-    public void setPubType(PublicationType pubType) {
-        this.pubType = pubType;
-    }
-
-    public FilterExpression<Number> getPriceExpression() {
-        return priceExpression;
-    }
-
-    public void setPriceExpression(FilterExpression<Number> priceExpression) {
-        this.priceExpression = priceExpression;
-    }
-
     public Boolean getPriceFlag() {
         return priceFlag;
     }
 
     public void setPriceFlag(Boolean priceFlag) {
         this.priceFlag = priceFlag;
-    }
-
-    public FilterExpression<Number> getContentExpression() {
-        return contentExpression;
-    }
-
-    public void setContentExpression(FilterExpression<Number> contentExpression) {
-        this.contentExpression = contentExpression;
     }
 
     public Boolean getContentFlag() {
@@ -122,6 +106,22 @@ public class UdmBaselineValueFilter {
         this.contentFlag = contentFlag;
     }
 
+    public FilterExpression<Number> getPriceExpression() {
+        return priceExpression;
+    }
+
+    public void setPriceExpression(FilterExpression<Number> priceExpression) {
+        this.priceExpression = priceExpression;
+    }
+
+    public FilterExpression<Number> getContentExpression() {
+        return contentExpression;
+    }
+
+    public void setContentExpression(FilterExpression<Number> contentExpression) {
+        this.contentExpression = contentExpression;
+    }
+
     public FilterExpression<Number> getContentUnitPriceExpression() {
         return contentUnitPriceExpression;
     }
@@ -130,12 +130,12 @@ public class UdmBaselineValueFilter {
         this.contentUnitPriceExpression = contentUnitPriceExpression;
     }
 
-    public String getComment() {
-        return comment;
+    public FilterExpression<String> getCommentExpression() {
+        return commentExpression;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommentExpression(FilterExpression<String> commentExpression) {
+        this.commentExpression = commentExpression;
     }
 
     /**
@@ -143,40 +143,40 @@ public class UdmBaselineValueFilter {
      */
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(periods)
-            && null == wrWrkInst
-            && systemTitleExpression.isEmpty()
             && null == pubType
-            && priceExpression.isEmpty()
+            && wrWrkInstExpression.isEmpty()
+            && systemTitleExpression.isEmpty()
             && null == priceFlag
-            && contentExpression.isEmpty()
             && null == contentFlag
+            && priceExpression.isEmpty()
+            && contentExpression.isEmpty()
             && contentUnitPriceExpression.isEmpty()
-            && null == comment;
+            && commentExpression.isEmpty();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
 
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
 
-        UdmBaselineValueFilter that = (UdmBaselineValueFilter) o;
+        UdmBaselineValueFilter that = (UdmBaselineValueFilter) obj;
 
         return new EqualsBuilder()
             .append(periods, that.periods)
-            .append(wrWrkInst, that.wrWrkInst)
-            .append(systemTitleExpression, that.systemTitleExpression)
             .append(pubType, that.pubType)
-            .append(priceExpression, that.priceExpression)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
+            .append(systemTitleExpression, that.systemTitleExpression)
             .append(priceFlag, that.priceFlag)
-            .append(contentExpression, that.contentExpression)
             .append(contentFlag, that.contentFlag)
+            .append(priceExpression, that.priceExpression)
+            .append(contentExpression, that.contentExpression)
             .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
-            .append(comment, that.comment)
+            .append(commentExpression, that.commentExpression)
             .isEquals();
     }
 
@@ -184,15 +184,15 @@ public class UdmBaselineValueFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(periods)
-            .append(wrWrkInst)
-            .append(systemTitleExpression)
             .append(pubType)
-            .append(priceExpression)
+            .append(wrWrkInstExpression)
+            .append(systemTitleExpression)
             .append(priceFlag)
-            .append(contentExpression)
             .append(contentFlag)
+            .append(priceExpression)
+            .append(contentExpression)
             .append(contentUnitPriceExpression)
-            .append(comment)
+            .append(commentExpression)
             .toHashCode();
     }
 
@@ -200,15 +200,15 @@ public class UdmBaselineValueFilter {
     public String toString() {
         return new ToStringBuilder(this)
             .append("periods", periods)
-            .append("wrWrkInst", wrWrkInst)
-            .append("systemTitleExpression", systemTitleExpression)
             .append("pubType", pubType)
-            .append("priceExpression", priceExpression)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
+            .append("systemTitleExpression", systemTitleExpression)
             .append("priceFlag", priceFlag)
-            .append("contentExpression", contentExpression)
             .append("contentFlag", contentFlag)
+            .append("priceExpression", priceExpression)
+            .append("contentExpression", contentExpression)
             .append("contentUnitPriceExpression", contentUnitPriceExpression)
-            .append("comment", comment)
+            .append("commentExpression", commentExpression)
             .toString();
     }
 }

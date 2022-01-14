@@ -61,8 +61,8 @@ import java.util.stream.IntStream;
 )
 public class UdmBaselineRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
-        "udm-baseline-repository-integration-test/find-dtos-by-filter.groovy";
+    private static final String FOLDER_NAME = "udm-baseline-repository-integration-test/";
+    private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
     private static final String USER_NAME = "user@copyright.com";
     private static final String SURVEY_COUNTRY_1 = "Portugal";
     private static final String SURVEY_COUNTRY_1_FRAGMENT = "Portu";
@@ -98,7 +98,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     private IUdmBaselineRepository baselineRepository;
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Collections.singleton(202012));
@@ -116,7 +116,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), 3);
         verifyFilteringFindCountByFilter(filter -> filter.setChannel(UdmChannelEnum.Rightsdirect), 0);
@@ -135,7 +135,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterWrWrkInst() {
         verifyFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null)), 2);
@@ -158,7 +158,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterSystemTitle() {
         verifyFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), 1);
@@ -197,7 +197,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterUsageDetailId() {
         verifyFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null)), 1);
@@ -236,7 +236,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterSurveyCountry() {
         verifyFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null)), 1);
@@ -275,7 +275,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterAnnualizedCopies() {
         verifyFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), 1);
@@ -298,7 +298,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
         filter.setPeriods(Collections.singleton(202012));
@@ -317,7 +317,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
         verifyFilteringFindDtosByFilter(filter -> filter.setChannel(UdmChannelEnum.CCC), USAGE_ID_1, USAGE_ID_4,
             USAGE_ID_5);
@@ -339,7 +339,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterWrWrkInst() {
         verifyFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null)), USAGE_ID_1, USAGE_ID_4);
@@ -364,7 +364,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterSystemTitle() {
         verifyFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), USAGE_ID_1);
@@ -410,7 +410,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterUsageOriginId() {
         verifyFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_1, null)), USAGE_ID_1);
@@ -454,7 +454,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterSurveyCountry() {
         verifyFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_1, null)), USAGE_ID_1);
@@ -499,7 +499,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterAnnualizedCopies() {
         verifyFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 30, null)), USAGE_ID_5);
@@ -524,7 +524,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
         verifySortingFindDtosByFilter(USAGE_ID_2, USAGE_ID_3, "detailId");
         verifySortingFindDtosByFilter(USAGE_ID_3, USAGE_ID_2, "usageOrigin");
@@ -546,13 +546,13 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-integration-test/find-periods.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testGetPeriods() {
         assertEquals(Arrays.asList(202106, 202012), baselineRepository.findPeriods());
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-integration-test/find-not-populated-values-from-baseline.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-not-populated-values-from-baseline.groovy")
     public void testFindNotPopulatedValuesFromBaseline() {
         assertEquals(loadExpectedValues("json/udm/udm_values_201512.json"),
             baselineRepository.findNotPopulatedValuesFromBaseline(201512));
@@ -562,7 +562,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-integration-test/populate-value-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "populate-value-id.groovy")
     public void testPopulateValueId() {
         Map<Long, String> wrWrkInstToValueIdMap = ImmutableMap.of(
             28908508L, "9b2550ff-a80a-41a9-a63c-047216a62241",
@@ -578,7 +578,7 @@ public class UdmBaselineRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-baseline-repository-integration-test/remove-udm-usage-from-baseline-by-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "remove-udm-usage-from-baseline-by-id.groovy")
     public void testRemoveUdmUsageFromBaselineById() {
         List<UdmUsage> udmUsages =
             udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
