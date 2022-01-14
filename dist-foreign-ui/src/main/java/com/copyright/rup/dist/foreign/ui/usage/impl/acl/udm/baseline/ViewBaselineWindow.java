@@ -77,8 +77,8 @@ public class ViewBaselineWindow extends Window {
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setSizeFull();
-        binder.validate();
         binder.readBean(udmBaselineDto);
+        binder.validate();
         return rootLayout;
     }
 

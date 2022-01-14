@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyLong;
 import static org.easymock.EasyMock.anyObject;
@@ -444,6 +445,7 @@ public class UdmEditUsageWindowTest {
         binder = createMock(Binder.class);
         binder.readBean(udmUsage);
         expectLastCall().once();
+        expect(binder.validate()).andReturn(null).once();
         replay(controller, binder, ForeignSecurityUtils.class);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Whitebox.setInternalState(window, binder);

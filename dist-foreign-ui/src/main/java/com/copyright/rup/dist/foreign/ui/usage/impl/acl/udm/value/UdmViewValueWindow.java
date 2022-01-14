@@ -74,8 +74,8 @@ public class UdmViewValueWindow extends CommonUdmValueWindow {
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        binder.validate();
         binder.readBean(udmValueDto);
+        binder.validate();
         return rootLayout;
     }
 

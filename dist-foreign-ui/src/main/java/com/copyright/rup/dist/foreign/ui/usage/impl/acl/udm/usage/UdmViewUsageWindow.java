@@ -66,8 +66,8 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow {
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        binder.validate();
         binder.readBean(udmUsage);
+        binder.validate();
         return rootLayout;
     }
 
