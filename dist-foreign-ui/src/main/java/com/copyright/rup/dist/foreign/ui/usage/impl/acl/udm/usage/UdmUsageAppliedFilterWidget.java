@@ -56,13 +56,13 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getUdmUsageOrigin, filter, "label.usage_origin"),
                 layout);
             addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getReportedPubTypes(), "label.reported_pub_types",
-                String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPubFormats(), "label.publication_formats",
-                String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
                 DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(filter.getReportedPubTypes(), "label.reported_pub_types",
+                String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getReportedTypeOfUses(), "label.types_of_use",
+                String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(filter.getPubFormats(), "label.publication_formats",
                 String::valueOf), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateFrom, filter), filter,
                 "label.usage_date_from"), layout);
@@ -84,6 +84,8 @@ public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithOperator(filter.getCompanyIdExpression(), "label.company_id_from",
                 "label.company_id_to"), layout);
             addLabel(createLabelWithOperator(filter.getCompanyNameExpression(), "label.company_name",
+                StringUtils.EMPTY), layout);
+            addLabel(createLabelWithOperator(filter.getSurveyRespondentExpression(), "label.survey_respondent",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getSurveyCountryExpression(), "label.survey_country",
                 StringUtils.EMPTY), layout);

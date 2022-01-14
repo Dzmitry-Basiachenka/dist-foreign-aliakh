@@ -160,6 +160,14 @@
             <if test="null != filter.surveyStartDateTo">
                 and <![CDATA[u.survey_start_date::date <= #{filter.surveyStartDateTo}]]>
             </if>
+            <if test="!filter.surveyRespondentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="u.survey_respondent"/>
+                    <property name="operator" value="filter.surveyRespondentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.surveyRespondentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.surveyRespondentExpression.fieldSecondValue}"/>
+                </include>
+            </if>
             <if test="!filter.surveyCountryExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
                     <property name="column" value="u.survey_country"/>
