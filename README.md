@@ -1,3 +1,18 @@
+14.1.46
+-
+* B-69423 FDA: Filter functionality modification: implement operations for Survey Country, Language in Usages tab
+* B-69423 FDA: Filter functionality modification: implement operations for Usage Detail ID, Survey Country in Baseline tab
+* B-69423 FDA: Filter functionality modification: implement operations for Usage Detail ID in Usages tab
+* B-69423 FDA: Filter functionality modification: implement operations for Reported Title, System Title in Usages tab
+* B-69423 FDA: Filter functionality modification: implement operations for System Title, Price, Content, Content Unit Price in Baseline Values tab
+* B-69423 FDA: Filter functionality modification: implement operations for Survey Respondent in Usages tab
+* B-69423 FDA: Filter functionality modification: adjust Usage filters window view
+* B-69423 FDA: Filter functionality modification: adjust Baseline filters window view
+* B-70571 FDA: Verified Details by Source Report: add test cases for UdmCsvReportsIntegrationTest
+* B-70571 FDA: Verified Details by Source Report: make changes based manual testing
+* B-70073 Tech Debt: FDA: fix validation error message on UDM usages tab for ineligible status
+* CDP-1038 FDA: ACL: Usages sub-tab: Additional filters: Exception occurs when entering value more than max int32 one in ‘Company ID’ filter
+
 14.1.45
 -
 * B-70571 FDA: Verified Details by Source Report: implement controller
