@@ -28,13 +28,13 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -49,7 +49,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -107,11 +106,12 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testConstructor() {
         assertEquals("UDM usages additional filters", window.getCaption());
-        assertEquals(750, window.getWidth(), 0);
+        assertEquals(600, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(560, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
+        verifyPanel();
     }
 
     @Test
@@ -181,7 +181,7 @@ public class UdmUsageFiltersWindowTest {
         UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
         assertTrue(appliedUsageFilter.isEmpty());
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(19);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
         assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
@@ -190,7 +190,7 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testClearButtonClickListener() {
         populateData();
-        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(19);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
         assertTrue(window.getAppliedUsageFilter().isEmpty());
@@ -202,7 +202,7 @@ public class UdmUsageFiltersWindowTest {
         expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         replay(ForeignSecurityUtils.class);
         window = new UdmUsageFiltersWindow(createMock(IUdmUsageFilterController.class), new UdmUsageFilter());
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        VerticalLayout verticalLayout = getFiltersLayout();
         assertTrue(verticalLayout.getComponent(0).isEnabled());
         assertTrue(verticalLayout.getComponent(1).isEnabled());
         assertTrue(verticalLayout.getComponent(2).isEnabled());
@@ -397,13 +397,19 @@ public class UdmUsageFiltersWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(20, verticalLayout.getComponentCount());
+        assertEquals(2, verticalLayout.getComponentCount());
+        verifyButtonsLayout(verticalLayout.getComponent(1), "Save", "Clear", "Close");
+    }
+
+    private void verifyPanel() {
+        VerticalLayout verticalLayout = getFiltersLayout();
+        assertEquals(19, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Reported Pub Types", "Types of Use");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Publication Formats");
         verifyDateFieldComponent(verticalLayout.getComponent(3), "Usage Date From", "Usage Date To");
         verifyDateFieldComponent(verticalLayout.getComponent(4), "Survey Start Date From", "Survey Start Date To");
-        assertSizedComboBoxItems(verticalLayout.getComponent(5), "Channel", true,
+        verifyComboBox(verticalLayout.getComponent(5), "Channel", Unit.PERCENTAGE, 50, true,
             Arrays.asList(UdmChannelEnum.values()));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Reported Title");
@@ -421,7 +427,6 @@ public class UdmUsageFiltersWindowTest {
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(17), "Statistical Multiplier From",
             "Statistical Multiplier To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(18), "Quantity From", "Quantity To");
-        verifyButtonsLayout(verticalLayout.getComponent(19), "Save", "Clear", "Close");
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -467,8 +472,7 @@ public class UdmUsageFiltersWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void testTextFilterOperatorChangeListener(int index) {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) (getFiltersLayout()).getComponent(index);
         TextField fromField = (TextField) horizontalLayout.getComponent(0);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
@@ -486,7 +490,7 @@ public class UdmUsageFiltersWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void testNumericFilterOperatorChangeListener(int index) {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        VerticalLayout verticalLayout = getFiltersLayout();
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
         TextField fromField = (TextField) horizontalLayout.getComponent(0);
         TextField toField = (TextField) horizontalLayout.getComponent(1);
@@ -645,35 +649,18 @@ public class UdmUsageFiltersWindowTest {
     }
 
     @SuppressWarnings(UNCHECKED)
-    private <T> void assertSizedComboBoxItems(Component component, String caption, boolean emptySelectionAllowed,
-                                              List<T> expectedItems) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<T> comboBox = (ComboBox<T>) component;
-        assertFalse(comboBox.isReadOnly());
-        assertTrue(comboBox.isTextInputAllowed());
-        assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
-        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(expectedItems.size(), actualItems.size());
-        assertEquals(expectedItems, actualItems);
-        assertEquals(355, component.getWidth(), 0);
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-    }
-
-    @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
@@ -714,6 +701,11 @@ public class UdmUsageFiltersWindowTest {
         populateComboBox("statisticalMultiplierOperatorComboBox", FilterOperatorEnum.GREATER_THAN);
         populateTextField("quantityFromField", "3");
         populateComboBox("quantityOperatorComboBox", FilterOperatorEnum.LESS_THAN);
+    }
+
+    private VerticalLayout getFiltersLayout() {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        return (VerticalLayout) ((Panel) verticalLayout.getComponent(0)).getContent();
     }
 
     private void populateLocalDateWidget(String fieldName, LocalDate value) {
