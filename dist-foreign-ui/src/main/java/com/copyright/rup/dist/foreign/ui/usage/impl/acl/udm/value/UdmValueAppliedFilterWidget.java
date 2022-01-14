@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Widget for applied udm value filters.
+ * Widget for applied UDM value filters.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -47,7 +47,8 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getLastValuePeriods(), "label.last_value_periods",
                 String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(UdmValueFilter::getWrWrkInst, filter, "label.wr_wrk_inst"), layout);
+            addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
+                "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getSystemStandardNumberExpression(), "label.system_standard_number",

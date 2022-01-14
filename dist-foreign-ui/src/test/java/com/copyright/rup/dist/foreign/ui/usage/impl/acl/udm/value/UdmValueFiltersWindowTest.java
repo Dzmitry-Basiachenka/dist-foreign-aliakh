@@ -61,10 +61,11 @@ import java.util.stream.Collectors;
 public class UdmValueFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
+    private static final String CAPTION_OPERATOR = "Operator";
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String LAST_VALUE_PERIOD = "202106";
-    private static final Long WR_WRK_INST = 243904752L;
+    private static final Integer WR_WRK_INST = 243904752;
     private static final String SYSTEM_TITLE = "Medical Journal";
     private static final String SYSTEM_STANDARD_NUMBER = "0927-7765";
     private static final Long RH_ACCOUNT_NUMBER = 100000001L;
@@ -90,6 +91,9 @@ public class UdmValueFiltersWindowTest {
     private static final String INVALID_NUMBER = "a12345678";
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
+        "Field value should be populated for Between Operator";
     private static final Currency USD_CURRENCY = new Currency("USD", "US Dollar");
     private static final List<Currency> CURRENCIES =
         Arrays.asList(USD_CURRENCY, new Currency("AUD", "Australian Dollar"), new Currency("CAD", "Canadian Dollar"),
@@ -130,7 +134,7 @@ public class UdmValueFiltersWindowTest {
         UdmValueFilter valueFilter = buildExpectedFilter();
         valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
         valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
-        valueFilter.setWrWrkInst(WR_WRK_INST);
+        valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
             SYSTEM_STANDARD_NUMBER, null));
@@ -158,6 +162,11 @@ public class UdmValueFiltersWindowTest {
         window = new UdmValueFiltersWindow(controller, valueFilter);
         verify(controller);
         verifyFiltersData();
+    }
+
+    @Test
+    public void testWrWrkInstFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(1);
     }
 
     @Test
@@ -212,13 +221,13 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testWrWrkInstValidation() {
-        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, "123456789", null, true);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, "1234567890", "Field value should not exceed 9 digits",
-            false);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, "123456789", null, true);
-        validateFieldAndVerifyErrorMessage(wrWrkInstField, "234fdsfs", "Field value should contain numeric values only",
-            false);
+        TextField wrWrkInstFromField = Whitebox.getInternalState(window, "wrWrkInstFromField");
+        TextField wrWrkInstToField = Whitebox.getInternalState(window, "wrWrkInstToField");
+        ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox =
+            Whitebox.getInternalState(window, "wrWrkInstOperatorComboBox");
+        assertNumericOperatorComboBoxItems(wrWrkInstOperatorComboBox);
+        verifyIntegerOperationValidations(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
+            "Field value should be greater or equal to Wr Wrk Inst From", 9);
     }
 
     @Test
@@ -323,7 +332,7 @@ public class UdmValueFiltersWindowTest {
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(16, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
-        verifySizedTextField(verticalLayout.getComponent(1), "Wr Wrk Inst");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(1), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(2), "System Title");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(3), "System Standard Number");
         verifySizedTextField(verticalLayout.getComponent(4), "RH Account #");
@@ -347,6 +356,18 @@ public class UdmValueFiltersWindowTest {
         assertSizedComboBoxItems(verticalLayout.getComponent(14), "Last Pub Type", true,
             Arrays.asList(new PublicationType(), buildPublicationType()));
         verifyTextField(verticalLayout.getComponent(15), "Comment");
+    }
+
+    private void verifyFieldWithNumericOperatorComponent(Component component, String captionFrom, String captionTo) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(3, layout.getComponentCount());
+        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertEquals(captionFrom, layout.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(1) instanceof TextField);
+        assertEquals(captionTo, layout.getComponent(1).getCaption());
+        assertTrue(layout.getComponent(2) instanceof ComboBox);
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -420,6 +441,76 @@ public class UdmValueFiltersWindowTest {
         assertFalse(textField.isEnabled());
     }
 
+    @SuppressWarnings(UNCHECKED)
+    private void testNumericFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        VerticalLayout panelContent = (VerticalLayout) ((Panel) verticalLayout.getComponent(0)).getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) panelContent.getComponent(index);
+        TextField fromField = (TextField) horizontalLayout.getComponent(0);
+        TextField toField = (TextField) horizontalLayout.getComponent(1);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(2);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
+        assertTrue(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        assertTrue(fromField.isEnabled());
+        assertTrue(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
+        assertFalse(fromField.isEnabled());
+        assertFalse(toField.isEnabled());
+    }
+
+    private void verifyIntegerOperationValidations(TextField fromField, TextField toField,
+                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                   String fieldSpecificErrorMessage, int length) {
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, "12345679", null, true);
+        validateFieldAndVerifyErrorMessage(toField, "12345678", fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, buildStringWithExpectedLength(length + 1),
+            String.format("Field value should not exceed %d digits", length), false);
+        validateFieldAndVerifyErrorMessage(toField, buildStringWithExpectedLength(length + 1),
+            String.format("Field value should not exceed %d digits", length), false);
+    }
+
+    private void verifyCommonOperationValidations(TextField fromField, TextField toField,
+                                                  ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                  String numberValidationMessage) {
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, null, true);
+        operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
+        operatorComboBox.setValue(FilterOperatorEnum.EQUALS);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, null, true);
+    }
+
     private void verifyAmountValidationZeroAllowed(TextField textField) {
         validateFieldAndVerifyErrorMessage(textField, "0", null, true);
         validateFieldAndVerifyErrorMessage(textField, " 0.004 ", null, true);
@@ -456,7 +547,7 @@ public class UdmValueFiltersWindowTest {
 
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
-        valueFilter.setWrWrkInst(WR_WRK_INST);
+        valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
             SYSTEM_STANDARD_NUMBER, null));
@@ -483,7 +574,8 @@ public class UdmValueFiltersWindowTest {
     private void verifyFiltersData() {
         assertFilterWidgetLabelValue("assigneeFilterWidget", "(1)");
         assertFilterWidgetLabelValue("lastValuePeriodFilterWidget", "(1)");
-        assertTextFieldValue("wrWrkInstField", WR_WRK_INST.toString());
+        assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
+        assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
         assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemStandardNumberField", SYSTEM_STANDARD_NUMBER);
@@ -550,9 +642,18 @@ public class UdmValueFiltersWindowTest {
             FilterOperatorEnum.IS_NULL));
     }
 
+    private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+                FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
+                FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
+    }
+
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
-        populateTextField("wrWrkInstField", String.valueOf(WR_WRK_INST));
+        populateTextField("wrWrkInstFromField", String.valueOf(WR_WRK_INST));
+        populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemTitleField", SYSTEM_TITLE);
         populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemStandardNumberField", SYSTEM_STANDARD_NUMBER);
@@ -607,7 +708,7 @@ public class UdmValueFiltersWindowTest {
     }
 
     private String buildStringWithExpectedLength(int length) {
-        return StringUtils.repeat('a', length);
+        return StringUtils.repeat('1', length);
     }
 
     private PublicationType buildPublicationType() {

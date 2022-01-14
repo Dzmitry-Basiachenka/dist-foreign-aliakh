@@ -56,7 +56,8 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Type", "BK - Book");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Assignees", "user@copyright.com");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Last Value Periods", "IS_NULL");
-        verifyLabel(((VerticalLayout) component).getComponent(5), "Wr Wrk Inst", "306985899");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(5),
+            "<li><b><i>Wr Wrk Inst From: </i></b>306985899</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
             "<li><b><i>System Title: </i></b>Tenside, surfactants, detergents</li><li>" +
                 "<b><i>Operator: </i></b>EQUALS</li>");
@@ -99,7 +100,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setStatus(UdmValueStatusEnum.NEW);
         filter.setAssignees(Collections.singleton("user@copyright.com"));
         filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
-        filter.setWrWrkInst(306985899L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
         filter.setSystemStandardNumberExpression(
