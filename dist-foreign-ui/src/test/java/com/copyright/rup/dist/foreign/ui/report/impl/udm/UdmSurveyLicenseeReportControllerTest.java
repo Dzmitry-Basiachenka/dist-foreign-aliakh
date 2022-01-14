@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.report.impl;
+package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 
 import static org.easymock.EasyMock.capture;
@@ -8,6 +8,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -19,8 +21,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmCommonReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.impl.udm.UdmSurveyLicenseeReportController;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -46,7 +46,7 @@ import java.util.Collections;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, UdmSurveyLicenseeReportController.class})
 public class UdmSurveyLicenseeReportControllerTest {
 
     private UdmSurveyLicenseeReportController controller;
@@ -60,10 +60,12 @@ public class UdmSurveyLicenseeReportControllerTest {
     }
 
     @Test
-    public void testInstantiateWidget() {
-        IUdmCommonReportWidget widget = controller.instantiateWidget();
-        assertNotNull(controller.instantiateWidget());
-        assertEquals(UdmCommonReportWidget.class, widget.getClass());
+    public void testInstantiateWidget() throws Exception {
+        UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
+        expectNew(UdmCommonReportWidget.class, "Survey Start").andReturn(widget).once();
+        replay(UdmCommonReportWidget.class);
+        assertSame(widget, controller.instantiateWidget());
+        verify(UdmCommonReportWidget.class);
     }
 
     @Test

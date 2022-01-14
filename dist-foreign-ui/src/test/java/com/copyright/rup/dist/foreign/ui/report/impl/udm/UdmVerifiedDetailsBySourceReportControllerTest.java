@@ -7,6 +7,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -43,7 +45,7 @@ import java.util.Collections;
  * @author Mikita Maistrenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class})
+@PrepareForTest({OffsetDateTime.class, ByteArrayStreamSource.class, UdmVerifiedDetailsBySourceReportController.class})
 public class UdmVerifiedDetailsBySourceReportControllerTest {
 
     private UdmVerifiedDetailsBySourceReportController controller;
@@ -57,10 +59,12 @@ public class UdmVerifiedDetailsBySourceReportControllerTest {
     }
 
     @Test
-    public void testInstantiateWidget() {
-        IUdmCommonReportWidget widget = controller.instantiateWidget();
-        assertNotNull(controller.instantiateWidget());
-        assertEquals(UdmCommonReportWidget.class, widget.getClass());
+    public void testInstantiateWidget() throws Exception {
+        UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
+        expectNew(UdmCommonReportWidget.class, "Load").andReturn(widget).once();
+        replay(UdmCommonReportWidget.class);
+        assertSame(widget, controller.instantiateWidget());
+        verify(UdmCommonReportWidget.class);
     }
 
     @Test

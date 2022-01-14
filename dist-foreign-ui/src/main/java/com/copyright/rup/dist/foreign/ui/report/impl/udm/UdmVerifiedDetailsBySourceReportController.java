@@ -36,6 +36,6 @@ public class UdmVerifiedDetailsBySourceReportController extends UdmCommonReportC
 
     @Override
     public IUdmCommonReportWidget instantiateWidget() {
-        return new UdmCommonReportWidget("Received");
+        return new UdmCommonReportWidget("Load");
     }
 }
