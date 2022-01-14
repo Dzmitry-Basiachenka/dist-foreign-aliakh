@@ -135,8 +135,8 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         rootLayout.setExpandRatio(panel, 1f);
         rootLayout.setSizeFull();
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
-        binder.validate();
         binder.readBean(udmUsage);
+        binder.validate();
         binder.addValueChangeListener(event -> saveButton.setEnabled(binder.hasChanges()));
         return rootLayout;
     }
@@ -480,7 +480,10 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
-        discardButton.addClickListener(event -> binder.readBean(udmUsage));
+        discardButton.addClickListener(event -> {
+            binder.readBean(udmUsage);
+            binder.validate();
+        });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
