@@ -71,11 +71,11 @@ public class UdmUsageFiltersWindowTest {
     private static final String CAPTION_OPERATOR = "Operator";
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
     private static final LocalDate DATE_TO = LocalDate.of(2021, 1, 2);
-    private static final Integer WR_WRK_INST = 243904752;
+    private static final Long WR_WRK_INST = 243904752L;
     private static final String REPORTED_TITLE = "The New York times";
     private static final String SYSTEM_TITLE = "New York times";
     private static final String USAGE_DETAIL_ID = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
-    private static final Integer COMPANY_ID = 454984566;
+    private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String SURVEY_RESPONDENT = "fa0276c3-55d6-42cd-8ffe-e9124acae02f";
     private static final String SURVEY_COUNTRY = "United States";
@@ -587,12 +587,12 @@ public class UdmUsageFiltersWindowTest {
             null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setLanguageExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LANGUAGE, null));
-        filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 10));
+        filter.setAnnualMultiplierExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1L, 10L));
         filter.setAnnualizedCopiesExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.5"), null));
         filter.setStatisticalMultiplierExpression(
             new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, new BigDecimal("2.2"), null));
-        filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 3, null));
+        filter.setQuantityExpression(new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 3L, null));
         return filter;
     }
 
