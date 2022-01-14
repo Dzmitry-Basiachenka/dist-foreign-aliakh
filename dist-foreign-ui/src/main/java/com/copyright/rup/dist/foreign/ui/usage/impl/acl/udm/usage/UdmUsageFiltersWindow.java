@@ -376,7 +376,7 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(annualMultiplierFromField, annualMultiplierOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Integer.valueOf(value)));
+                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(annualMultiplierToField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -386,7 +386,7 @@ public class UdmUsageFiltersWindow extends Window {
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.annual_multiplier_from")))
             .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Integer.valueOf(value)));
+                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Long.valueOf(value)));
         annualMultiplierLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(annualMultiplierLayout, annualMultiplierFromField, annualMultiplierToField);
         VaadinUtils.addComponentStyle(annualMultiplierFromField, "udm-annual-multiplier-from-filter");
@@ -476,7 +476,7 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(getBetweenOperatorValidator(quantityFromField, quantityOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Integer.valueOf(value)));
+                (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(quantityToField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -486,7 +486,7 @@ public class UdmUsageFiltersWindow extends Window {
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.quantity_from")))
             .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Integer.valueOf(value)));
+                (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Long.valueOf(value)));
         quantityLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(quantityLayout, quantityFromField, quantityToField);
         VaadinUtils.addComponentStyle(quantityFromField, "udm-quantity-from-filter");
@@ -792,7 +792,7 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setSurveyStartDateTo(surveyStartDateToWidget.getValue());
         usageFilter.setChannel(channelComboBox.getValue());
         usageFilter.setWrWrkInstExpression(buildNumberFilterExpression(wrWrkInstFromField, wrWrkInstToField,
-            wrWrkInstOperatorComboBox, Integer::valueOf));
+            wrWrkInstOperatorComboBox, Long::valueOf));
         usageFilter.setReportedTitleExpression(buildTextFilterExpression(reportedTitleField,
             reportedTitleOperatorComboBox, Function.identity()));
         usageFilter.setSystemTitleExpression(buildTextFilterExpression(systemTitleField,
@@ -800,7 +800,7 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setUsageDetailIdExpression(buildTextFilterExpression(usageDetailIdField,
             usageDetailIdOperatorComboBox, Function.identity()));
         usageFilter.setCompanyIdExpression(buildNumberFilterExpression(companyIdFromField, companyIdToField,
-            companyIdOperatorComboBox, Integer::valueOf));
+            companyIdOperatorComboBox, Long::valueOf));
         usageFilter.setCompanyNameExpression(buildTextFilterExpression(companyNameField, companyNameOperatorComboBox,
             Function.identity()));
         usageFilter.setSurveyRespondentExpression(buildTextFilterExpression(surveyRespondentField,
@@ -810,13 +810,13 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setLanguageExpression(buildTextFilterExpression(languageField, languageOperatorComboBox,
             Function.identity()));
         usageFilter.setAnnualMultiplierExpression(buildNumberFilterExpression(annualMultiplierFromField,
-            annualMultiplierToField, annualMultiplierOperatorComboBox, Integer::valueOf));
+            annualMultiplierToField, annualMultiplierOperatorComboBox, Long::valueOf));
         usageFilter.setAnnualizedCopiesExpression(buildAmountFilterExpression(annualizedCopiesFromField,
             annualizedCopiesToField, annualizedCopiesOperatorComboBox, BigDecimal::new));
         usageFilter.setStatisticalMultiplierExpression(buildAmountFilterExpression(statisticalMultiplierFromField,
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox, BigDecimal::new));
         usageFilter.setQuantityExpression(buildNumberFilterExpression(quantityFromField, quantityToField,
-            quantityOperatorComboBox, Integer::valueOf));
+            quantityOperatorComboBox, Long::valueOf));
     }
 
     private <T> FilterExpression<T> buildTextFilterExpression(TextField textField,
@@ -898,6 +898,6 @@ public class UdmUsageFiltersWindow extends Window {
             || StringUtils.isEmpty(toValue)
             || !getNumberValidator().test(fromValue)
             || !getNumberValidator().test(toValue)
-            || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
+            || 0 <= Long.valueOf(toValue.trim()).compareTo(Long.valueOf(fromValue.trim()));
     }
 }
