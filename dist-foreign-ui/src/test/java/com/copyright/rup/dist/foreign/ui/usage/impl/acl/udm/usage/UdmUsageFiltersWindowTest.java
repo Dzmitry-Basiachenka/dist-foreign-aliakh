@@ -132,6 +132,26 @@ public class UdmUsageFiltersWindowTest {
     }
 
     @Test
+    public void testWrWrkInstFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(6);
+    }
+
+    @Test
+    public void testReportedTitleFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(7);
+    }
+
+    @Test
+    public void testSystemTitleFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(8);
+    }
+
+    @Test
+    public void testUsageDetaiIdIdFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(9);
+    }
+
+    @Test
     public void testCompanyIdFilterOperatorChangeListener() {
         testNumericFilterOperatorChangeListener(10);
     }

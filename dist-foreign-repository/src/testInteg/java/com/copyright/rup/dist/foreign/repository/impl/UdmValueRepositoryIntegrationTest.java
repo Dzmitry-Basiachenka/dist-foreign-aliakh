@@ -82,6 +82,7 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String PERIOD_1 = "201406";
     private static final String PERIOD_2 = "202106";
     private static final String USER_NAME = "jjohn@copyright.com";
+    private static final Long WR_WRK_INST = 306985899L;
     private static final String SYSTEM_TITLE = "Tenside, surfactants, detergents";
     private static final String SYSTEM_TITLE_DIFFERENT_CASE = "TensIDE, SurfacTants, detErgentS";
     private static final String PART_SYSTEM_TITLE = "Tenside";
@@ -175,7 +176,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setStatus(UdmValueStatusEnum.NEW);
         filter.setAssignees(Collections.singleton(ASSIGNEE_1));
         filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
-        filter.setWrWrkInst(306985899L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null));
@@ -207,7 +208,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setStatus(UdmValueStatusEnum.NEW);
         filter.setAssignees(Collections.singleton(ASSIGNEE_1));
         filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
-        filter.setWrWrkInst(306985899L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null));
@@ -256,8 +257,6 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())),
             UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(306985899L), UDM_VALUE_UID_2, UDM_VALUE_UID_4,
-            UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumber(1000002859L), UDM_VALUE_UID_1,
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
@@ -297,6 +296,37 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
             UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWrWrkInst() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null)),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 306985899L, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 123456789L, null)),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 123456789L, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 306985899L, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 306985899L, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 123456789L, 306985899L)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
     }
 
     @Test
@@ -402,7 +432,6 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name())), 2);
         assertFilteringFindCountByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(306985899L), 3);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
@@ -481,6 +510,29 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType(null, null)), 4);
         assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType("BK", BOOK)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWrWrkInst() {
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, 306985899L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 123456789L, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 123456789L, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, 306985899L, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, 306985899L, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, 123456789L, 306985899L)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 5);
     }
 
     @Test

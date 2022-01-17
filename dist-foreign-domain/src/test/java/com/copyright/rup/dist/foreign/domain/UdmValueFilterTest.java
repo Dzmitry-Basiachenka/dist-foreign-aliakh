@@ -83,10 +83,6 @@ public class UdmValueFilterTest {
         assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setLastValuePeriods(null);
         assertTrue(udmValueFilter.isEmpty());
-        udmValueFilter.setWrWrkInst(WR_WRK_INST);
-        assertFalse(udmValueFilter.isEmpty());
-        udmValueFilter.setWrWrkInst(null);
-        assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         assertFalse(udmValueFilter.isEmpty());
         udmValueFilter.setRhAccountNumber(null);
@@ -124,6 +120,11 @@ public class UdmValueFilterTest {
     @Test
     public void testIsEmptyExpressions() {
         UdmValueFilter udmValueFilter = new UdmValueFilter();
+        assertTrue(udmValueFilter.isEmpty());
+        udmValueFilter.setWrWrkInstExpression(new FilterExpression<>(
+            FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
+        assertFalse(udmValueFilter.isEmpty());
+        udmValueFilter.setWrWrkInstExpression(new FilterExpression<>());
         assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setSystemTitleExpression(new FilterExpression<>(
             FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
@@ -201,7 +202,7 @@ public class UdmValueFilterTest {
         assertNull(udmValueFilter.getCurrency());
         assertTrue(udmValueFilter.getAssignees().isEmpty());
         assertTrue(udmValueFilter.getLastValuePeriods().isEmpty());
-        assertNull(udmValueFilter.getWrWrkInst());
+        assertNull(udmValueFilter.getWrWrkInstExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemTitleExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemStandardNumberExpression());
         assertNull(udmValueFilter.getRhAccountNumber());

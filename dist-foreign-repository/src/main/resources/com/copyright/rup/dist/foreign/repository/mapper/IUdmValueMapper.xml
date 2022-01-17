@@ -212,8 +212,13 @@
             <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and filter.lastValuePeriods.contains('IS_NOT_NULL')">
                 and last_value_period is not null
             </if>
-            <if test="null != filter.wrWrkInst">
-                and v.wr_wrk_inst = #{filter.wrWrkInst}
+            <if test="!filter.wrWrkInstExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="v.wr_wrk_inst"/>
+                    <property name="operator" value="filter.wrWrkInstExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.wrWrkInstExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="null != filter.rhAccountNumber">
                 and v.rh_account_number = #{filter.rhAccountNumber}

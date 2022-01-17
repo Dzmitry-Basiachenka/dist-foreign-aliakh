@@ -18,7 +18,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Widget for applied udm usage filters.
+ * Widget for applied UDM usage filters.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>

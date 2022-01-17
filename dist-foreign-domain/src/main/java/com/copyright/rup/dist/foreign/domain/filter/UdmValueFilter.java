@@ -28,7 +28,7 @@ public class UdmValueFilter {
     private Currency currency;
     private Set<String> assignees = new HashSet<>();
     private Set<String> lastValuePeriods = new HashSet<>();
-    private Long wrWrkInst;
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<String> systemStandardNumberExpression = new FilterExpression<>();
     private Long rhAccountNumber;
@@ -66,7 +66,7 @@ public class UdmValueFilter {
             setCurrency(filter.getCurrency());
             setAssignees(filter.getAssignees());
             setLastValuePeriods(filter.getLastValuePeriods());
-            setWrWrkInst(filter.getWrWrkInst());
+            setWrWrkInstExpression(filter.getWrWrkInstExpression());
             setSystemTitleExpression(filter.getSystemTitleExpression());
             setSystemStandardNumberExpression(filter.getSystemStandardNumberExpression());
             setRhAccountNumber(filter.getRhAccountNumber());
@@ -128,12 +128,12 @@ public class UdmValueFilter {
         this.lastValuePeriods = lastValuePeriods;
     }
 
-    public Long getWrWrkInst() {
-        return wrWrkInst;
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
     }
 
-    public void setWrWrkInst(Long wrWrkInst) {
-        this.wrWrkInst = wrWrkInst;
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
     }
 
     public FilterExpression<String> getSystemTitleExpression() {
@@ -289,7 +289,7 @@ public class UdmValueFilter {
             && null == currency
             && CollectionUtils.isEmpty(assignees)
             && CollectionUtils.isEmpty(lastValuePeriods)
-            && null == wrWrkInst
+            && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
             && systemStandardNumberExpression.isEmpty()
             && null == rhAccountNumber
@@ -325,7 +325,7 @@ public class UdmValueFilter {
             .append(currency, that.currency)
             .append(assignees, that.assignees)
             .append(lastValuePeriods, that.lastValuePeriods)
-            .append(wrWrkInst, that.wrWrkInst)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(systemStandardNumberExpression, that.systemStandardNumberExpression)
             .append(rhAccountNumber, that.rhAccountNumber)
@@ -355,7 +355,7 @@ public class UdmValueFilter {
             .append(currency)
             .append(assignees)
             .append(lastValuePeriods)
-            .append(wrWrkInst)
+            .append(wrWrkInstExpression)
             .append(systemTitleExpression)
             .append(systemStandardNumberExpression)
             .append(rhAccountNumber)
@@ -385,7 +385,7 @@ public class UdmValueFilter {
             .append("currency", currency)
             .append("assignees", assignees)
             .append("lastValuePeriods", lastValuePeriods)
-            .append("wrWrkInst", wrWrkInst)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
             .append("systemStandardNumberExpression", systemStandardNumberExpression)
             .append("rhAccountNumber", rhAccountNumber)
