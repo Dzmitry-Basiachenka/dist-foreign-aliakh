@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
 /**
- * Interface for Udm Verified Details By Source Report Controller.
+ * Interface for Udm Verified Details by Source Report Controller.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
