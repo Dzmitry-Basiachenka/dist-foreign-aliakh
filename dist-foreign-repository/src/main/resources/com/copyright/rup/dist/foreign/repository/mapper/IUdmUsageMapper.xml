@@ -226,7 +226,7 @@
             </if>
             <if test="!filter.usageDetailIdExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
-                    <property name="column" value="u.df_udm_usage_uid"/>
+                    <property name="column" value="u.original_detail_id"/>
                     <property name="operator" value="filter.usageDetailIdExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.usageDetailIdExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.usageDetailIdExpression.fieldSecondValue}"/>
