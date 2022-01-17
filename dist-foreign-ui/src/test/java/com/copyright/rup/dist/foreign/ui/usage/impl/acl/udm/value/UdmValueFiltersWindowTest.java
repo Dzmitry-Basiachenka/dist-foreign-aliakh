@@ -138,7 +138,8 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
             SYSTEM_STANDARD_NUMBER, null));
-        valueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        valueFilter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER,
+            null));
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
         valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
@@ -175,13 +176,18 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
-    public void testSystemStandardNumberFilterOperatorChangeListener3() {
+    public void testSystemStandardNumberFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(3);
     }
 
     @Test
+    public void testRhAccountNumberOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(4);
+    }
+
+    @Test
     public void testRhNameFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(5);
+        testTextFilterOperatorChangeListener(5);
     }
 
     @Test
@@ -191,7 +197,7 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testPriceInUsdFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(7);
+        testFilterOperatorChangeListener(8);
     }
 
     @Test
@@ -252,13 +258,13 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testRhAccountNumberFieldValidation() {
-        TextField rhAccountNumberField = Whitebox.getInternalState(window, "rhAccountNumberField");
-        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1234567897", null, true);
-        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "21234567897",
-            "Field value should not exceed 10 digits", false);
-        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1234567891", null, true);
-        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "234fdsfs",
-            "Field value should contain numeric values only", false);
+        TextField rhAccountNumberFromField = Whitebox.getInternalState(window, "rhAccountNumberFromField");
+        TextField rhAccountNumberToField = Whitebox.getInternalState(window, "rhAccountNumberToField");
+        ComboBox<FilterOperatorEnum> rhAccountNumberOperatorComboBox =
+            Whitebox.getInternalState(window, "rhAccountNumberOperatorComboBox");
+        assertNumericOperatorComboBoxItems(rhAccountNumberOperatorComboBox);
+        verifyIntegerOperationValidations(rhAccountNumberFromField, rhAccountNumberToField,
+            rhAccountNumberOperatorComboBox, "Field value should be greater or equal to RH Account # From", 10);
     }
 
     @Test
@@ -337,10 +343,10 @@ public class UdmValueFiltersWindowTest {
         assertEquals(16, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(1), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(2), "System Title");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(3), "System Standard Number");
-        verifySizedTextField(verticalLayout.getComponent(4), "RH Account #");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(5), "RH Name");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(2), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(3), "System Standard Number");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(4), "RH Account # From", "RH Account # To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "RH Name");
         assertSizedComboBoxItems(verticalLayout.getComponent(6), "Currency", true, CURRENCIES);
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Price");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Price in USD");
@@ -360,6 +366,16 @@ public class UdmValueFiltersWindowTest {
         assertSizedComboBoxItems(verticalLayout.getComponent(14), "Last Pub Type", true,
             Arrays.asList(new PublicationType(), buildPublicationType()));
         verifyTextField(verticalLayout.getComponent(15), "Comment");
+    }
+
+    private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertEquals(caption, layout.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(1) instanceof ComboBox);
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
     }
 
     private void verifyFieldWithNumericOperatorComponent(Component component, String captionFrom, String captionTo) {
@@ -407,11 +423,6 @@ public class UdmValueFiltersWindowTest {
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
         assertEquals(isEnabled, component.isEnabled());
-    }
-
-    private void verifySizedTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        verifyComponentWidthAndCaption(component, caption);
     }
 
     private void verifyComponentWidthAndCaption(Component component, String caption) {
@@ -575,7 +586,8 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
             SYSTEM_STANDARD_NUMBER, null));
-        valueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        valueFilter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER,
+            null));
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
         valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
@@ -604,7 +616,8 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemStandardNumberField", SYSTEM_STANDARD_NUMBER);
         assertComboBoxValue("systemStandardNumberOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("rhAccountNumberField", RH_ACCOUNT_NUMBER.toString());
+        assertTextFieldValue("rhAccountNumberFromField", RH_ACCOUNT_NUMBER.toString());
+        assertComboBoxValue("rhAccountNumberOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("rhNameField", RH_NAME);
         assertComboBoxValue("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("currencyComboBox", USD_CURRENCY);
@@ -688,7 +701,8 @@ public class UdmValueFiltersWindowTest {
         populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemStandardNumberField", SYSTEM_STANDARD_NUMBER);
         populateComboBox("systemStandardNumberOperatorComboBox", FilterOperatorEnum.EQUALS);
-        populateTextField("rhAccountNumberField", String.valueOf(RH_ACCOUNT_NUMBER));
+        populateTextField("rhAccountNumberFromField", String.valueOf(RH_ACCOUNT_NUMBER));
+        populateComboBox("rhAccountNumberOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("rhNameField", RH_NAME);
         populateComboBox("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("currencyComboBox", USD_CURRENCY);

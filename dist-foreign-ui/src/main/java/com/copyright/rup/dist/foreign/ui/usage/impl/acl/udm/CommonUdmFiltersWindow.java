@@ -4,6 +4,8 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.vaadin.data.Binder;
+import com.vaadin.data.Validator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
@@ -280,6 +282,26 @@ public abstract class CommonUdmFiltersWindow extends Window {
      */
     protected SerializablePredicate<String> getNumberValidator() {
         return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
+    }
+
+    /**
+     * Gets text length validator.
+     *
+     * @param maxLength maximum length
+     * @return length validator
+     */
+    protected StringLengthValidator getTextStringLengthValidator(int maxLength) {
+        return new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength);
+    }
+
+    /**
+     * Gets number length validator.
+     *
+     * @param maxLength maximum length
+     * @return length validator
+     */
+    protected Validator<String> getNumberStringLengthValidator(int maxLength) {
+        return new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", maxLength), 0, maxLength);
     }
 
     /**

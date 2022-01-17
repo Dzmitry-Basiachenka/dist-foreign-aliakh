@@ -92,9 +92,11 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER_DIFFERENT_CASE = "1008902112377633Xx";
     private static final String STANDARD_NUMBER_FRAGMENT = "633XX";
     private static final String STANDARD_NUMBER_WITH_METASYMBOLS = "1008902112377654XX !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final Long RH_ACCOUNT_NUMBER = 1000002859L;
     private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final String RH_NAME_DIFFERENT_CASE = "JoHN WileY & Sons - BOOKS";
-    private static final String RH_NAME_PART = "John Wiley";
+    private static final String RH_NAME_FRAGMENT = "John Wiley";
+    private static final String RH_NAME_WITH_METASYMBOLS = "John Wiley & Sons - Books !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String COMMENT_WITH_METASYMBOLS = "Comment !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final String PRICE_COMMENT_FRAGMENT = "riCE COmmen";
     private static final String CONTENT_COMMENT_FRAGMENT = "onteNT Commen";
@@ -180,8 +182,8 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null));
-        filter.setRhAccountNumber(1000002859L);
-        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_PART, null));
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
+        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_FRAGMENT, null));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
@@ -212,8 +214,8 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, STANDARD_NUMBER, null));
-        filter.setRhAccountNumber(1000002859L);
-        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_PART, null));
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
+        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_FRAGMENT, null));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
@@ -257,8 +259,6 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())),
             UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumber(1000002859L), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
             UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(null),
@@ -421,18 +421,80 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterRhAccountNumber() {
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_ACCOUNT_NUMBER, null)),
+            UDM_VALUE_UID_6, UDM_VALUE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, RH_ACCOUNT_NUMBER, null)),
+            UDM_VALUE_UID_6, UDM_VALUE_UID_7);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, RH_ACCOUNT_NUMBER, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_6, UDM_VALUE_UID_7, UDM_VALUE_UID_3, UDM_VALUE_UID_4,
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, RH_ACCOUNT_NUMBER, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, RH_ACCOUNT_NUMBER, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, RH_ACCOUNT_NUMBER, 1000010077)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_6, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_6, UDM_VALUE_UID_7, UDM_VALUE_UID_3, UDM_VALUE_UID_4,
+            UDM_VALUE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterRhName() {
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_WITH_METASYMBOLS, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_DIFFERENT_CASE, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_WITH_METASYMBOLS, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_WITH_METASYMBOLS, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAdditionalFilterWithOperators() {
-        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_PART, null)), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_PART, null)));
-        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null)), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_DIFFERENT_CASE, null)), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null)),
             UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
@@ -494,15 +556,6 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name())), 2);
         assertFilteringFindCountByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumber(1000002859L), 5);
-        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_PART, null)), 5);
-        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_PART, null)), 0);
-        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null)), 5);
-        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_DIFFERENT_CASE, null)), 5);
         assertFilteringFindCountByFilter(filter -> filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setPriceExpression(new FilterExpression<>(
@@ -638,6 +691,62 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindCountByFilter(filter -> filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
         assertFilteringFindCountByFilter(filter -> filter.setSystemStandardNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterRhAccountNumber() {
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_ACCOUNT_NUMBER, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, RH_ACCOUNT_NUMBER, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, RH_ACCOUNT_NUMBER, null)), 7);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, RH_ACCOUNT_NUMBER, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, RH_ACCOUNT_NUMBER, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, RH_ACCOUNT_NUMBER, 1000010077)), 6);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 7);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterRhName() {
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_DIFFERENT_CASE, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME_WITH_METASYMBOLS, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_DIFFERENT_CASE, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_FRAGMENT, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, RH_NAME_WITH_METASYMBOLS, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_DIFFERENT_CASE, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_FRAGMENT, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, RH_NAME_WITH_METASYMBOLS, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setRhNameExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 5);
     }
 
@@ -809,7 +918,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     private void assertFilteringFindDtosByFilter(Consumer<UdmValueFilter> consumer, String... usageIds) {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setRhAccountNumber(1000002859L);
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
         consumer.accept(filter);
         List<UdmValueDto> usages = udmValueRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(usageIds.length, usages.size());
@@ -819,7 +928,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     private void assertFilteringFindCountByFilter(Consumer<UdmValueFilter> consumer, int count) {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setRhAccountNumber(1000002859L);
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
         consumer.accept(filter);
         int usagesCount = udmValueRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);

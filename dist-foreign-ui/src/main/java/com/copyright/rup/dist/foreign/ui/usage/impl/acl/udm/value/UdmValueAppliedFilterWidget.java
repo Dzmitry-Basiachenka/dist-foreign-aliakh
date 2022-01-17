@@ -53,8 +53,8 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getSystemStandardNumberExpression(), "label.system_standard_number",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithSingleValue(UdmValueFilter::getRhAccountNumber, filter, "label.rh_account_number"),
-                layout);
+            addLabel(createLabelWithOperator(filter.getRhAccountNumberExpression(), "label.rh_account_number_from",
+                "label.rh_account_number_to"), layout);
             addLabel(createLabelWithOperator(filter.getRhNameExpression(), "label.rh_name", StringUtils.EMPTY), layout);
             addLabel(createLabelWithSingleValue(
                 Objects.nonNull(filter.getCurrency())
