@@ -240,7 +240,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
-            .bind(getter, setter);
+            .bind(getter, (usage, fieldValue) -> setter.accept(usage, StringUtils.trimToNull(fieldValue)));
         textField.addValueChangeListener(event ->
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         VaadinUtils.addComponentStyle(textField, styleName);

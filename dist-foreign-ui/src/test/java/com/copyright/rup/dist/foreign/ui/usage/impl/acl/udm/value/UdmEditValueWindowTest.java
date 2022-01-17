@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
-
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -498,20 +498,28 @@ public class UdmEditValueWindowTest {
     @Test
     public void testSaveButtonClickListener() throws Exception {
         setSpecialistExpectations();
-        binder = createMock(Binder.class);
-        binder.writeBean(udmValue);
-        expectLastCall().once();
         controller.updateValue(udmValue, new UdmValueAuditFieldToValuesMap(udmValue).getActionReasons());
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
-        replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        replay(controller, saveButtonClickListener, ForeignSecurityUtils.class);
+        udmValue.setComment(null);
+        udmValue.setContent(null);
+        udmValue.setContentSource(null);
+        udmValue.setContentComment(null);
+        udmValue.setPrice(null);
+        udmValue.setPriceSource(null);
+        udmValue.setPriceComment(null);
         window = new UdmEditValueWindow(controller, udmValue, saveButtonClickListener);
-        Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
-        verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        assertNull(udmValue.getComment());
+        assertNull(udmValue.getContentSource());
+        assertNull(udmValue.getContentComment());
+        assertNull(udmValue.getPriceSource());
+        assertNull(udmValue.getPriceComment());
+        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class);
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
@@ -733,7 +741,7 @@ public class UdmEditValueWindowTest {
         List fields = binder.getFields()
             .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
+        assertEquals(1, fields.size());
         TextField actualField = (TextField) fields.get(0);
         assertNotNull(actualField);
         String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
