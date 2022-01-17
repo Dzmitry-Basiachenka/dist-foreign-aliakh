@@ -202,7 +202,7 @@ public class UdmValueFilterTest {
         assertNull(udmValueFilter.getCurrency());
         assertTrue(udmValueFilter.getAssignees().isEmpty());
         assertTrue(udmValueFilter.getLastValuePeriods().isEmpty());
-        assertNull(udmValueFilter.getWrWrkInstExpression());
+        assertEquals(new FilterExpression<>(), udmValueFilter.getWrWrkInstExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemTitleExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemStandardNumberExpression());
         assertNull(udmValueFilter.getRhAccountNumber());
