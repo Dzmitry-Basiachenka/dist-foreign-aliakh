@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
@@ -101,10 +102,10 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
-        filterCopy.setSystemTitleExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
-        filterCopy.setSystemStandardNumberExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemStandardNumberExpression()));
+        filterCopy.setSystemTitleExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
+            filterCopy.getSystemTitleExpression()));
+        filterCopy.setSystemStandardNumberExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
+            filterCopy.getSystemStandardNumberExpression()));
         filterCopy.setRhNameExpression(setEscapeSqlLikePatternForFilterExpression(filterCopy.getRhNameExpression()));
         filterCopy.setLastPriceComment(escapeSqlLikePattern(filterCopy.getLastPriceComment()));
         filterCopy.setLastContentComment(escapeSqlLikePattern(filterCopy.getLastContentComment()));
@@ -119,6 +120,17 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
         return Objects.nonNull(filterExpression.getOperator())
             ? new FilterExpression<>(filterExpression.getOperator(),
             escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue())
+            : filterExpression;
+    }
+
+    // MyBatis expressions ${} do not replace ' with '' in comparison with expressions #{}
+    private FilterExpression<String> setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
+        FilterExpression<String> filterExpression) {
+        return Objects.nonNull(filterExpression.getOperator())
+            ? new FilterExpression<>(filterExpression.getOperator(),
+            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
+                new String[]{"'"}, new String[]{"''"}),
+            filterExpression.getFieldSecondValue())
             : filterExpression;
     }
 }

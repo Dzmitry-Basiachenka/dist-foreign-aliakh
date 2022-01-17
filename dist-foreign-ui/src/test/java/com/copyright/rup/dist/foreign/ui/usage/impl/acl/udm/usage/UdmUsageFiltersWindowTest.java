@@ -493,19 +493,19 @@ public class UdmUsageFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private void testTextFilterOperatorChangeListener(int index) {
         HorizontalLayout horizontalLayout = (HorizontalLayout) (getFiltersLayout()).getComponent(index);
-        TextField fromField = (TextField) horizontalLayout.getComponent(0);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
-        assertTrue(fromField.isEnabled());
+        assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
-        assertTrue(fromField.isEnabled());
+        assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
-        assertTrue(fromField.isEnabled());
+        assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
-        assertFalse(fromField.isEnabled());
+        assertFalse(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
-        assertFalse(fromField.isEnabled());
+        assertFalse(textField.isEnabled());
     }
 
     @SuppressWarnings(UNCHECKED)
