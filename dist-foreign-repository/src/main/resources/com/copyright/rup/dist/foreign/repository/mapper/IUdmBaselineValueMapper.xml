@@ -66,9 +66,6 @@
                     v.period = #{period}
                 </foreach>
             </if>
-            <if test="null != filter.wrWrkInst">
-                and v.wr_wrk_inst = #{filter.wrWrkInst}
-            </if>
             <if test="null != filter.pubType">
                 <choose>
                     <when test="null != filter.pubType.name">
@@ -76,11 +73,13 @@
                     </when>
                 </choose>
             </if>
-            <if test="null != filter.priceFlag">
-                and v.price_flag = #{filter.priceFlag}
-            </if>
-            <if test="null != filter.contentFlag">
-                and content_flag = #{filter.contentFlag}
+            <if test="!filter.wrWrkInstExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="v.wr_wrk_inst"/>
+                    <property name="operator" value="filter.wrWrkInstExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.wrWrkInstExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
@@ -90,8 +89,11 @@
                     <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.comment">
-                and v.comment ilike '%' || #{filter.comment} || '%'
+            <if test="null != filter.priceFlag">
+                and v.price_flag = #{filter.priceFlag}
+            </if>
+            <if test="null != filter.contentFlag">
+                and content_flag = #{filter.contentFlag}
             </if>
             <if test="!filter.priceExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
@@ -115,6 +117,14 @@
                     <property name="operator" value="filter.contentUnitPriceExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.contentUnitPriceExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.contentUnitPriceExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.commentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.comment"/>
+                    <property name="operator" value="filter.commentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.commentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.commentExpression.fieldSecondValue}"/>
                 </include>
             </if>
         </where>

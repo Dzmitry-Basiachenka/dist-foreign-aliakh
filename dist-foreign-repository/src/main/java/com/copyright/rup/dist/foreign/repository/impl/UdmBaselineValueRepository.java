@@ -54,7 +54,8 @@ public class UdmBaselineValueRepository extends BaseRepository implements IUdmBa
         UdmBaselineValueFilter filterCopy = new UdmBaselineValueFilter(udmUsageFilter);
         filterCopy.setSystemTitleExpression(
             setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
-        filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
+        filterCopy.setCommentExpression(
+            setEscapeSqlLikePatternForFilterExpression(filterCopy.getCommentExpression()));
         return filterCopy;
     }
 

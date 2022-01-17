@@ -57,7 +57,9 @@ public class UdmBaselineValueFiltersWindow extends Window {
 
     private final StringLengthValidator numberStringLengthValidator =
         new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
-    private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
+    private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
+    private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
+    private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
     private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
     private final TextField priceFromField = new TextField(ForeignUi.getMessage("label.price_from"));
@@ -76,6 +78,7 @@ public class UdmBaselineValueFiltersWindow extends Window {
     private final ComboBox<String> contentFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
+    private final ComboBox<FilterOperatorEnum> commentOperatorComboBox = buildTextOperatorComboBox();
     private final Binder<UdmBaselineValueFilter> filterBinder = new Binder<>();
     private final UdmBaselineValueFilter baselineValueFilter;
 
@@ -132,15 +135,40 @@ public class UdmBaselineValueFiltersWindow extends Window {
         return horizontalLayout;
     }
 
-    private TextField initWrWrkInstLayout() {
-        filterBinder.forField(wrWrkInstField)
+    private HorizontalLayout initWrWrkInstLayout() {
+        wrWrkInstToField.setEnabled(false);
+        filterBinder.forField(wrWrkInstFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
-            .bind(filter -> Objects.toString(filter.getWrWrkInst(), StringUtils.EMPTY),
-                (filter, value) -> filter.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
-        wrWrkInstField.setWidth(260, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(wrWrkInstField, "udm-baseline-value-wr-wrk-inst-filter");
-        return wrWrkInstField;
+            .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> Objects.toString(filter.getWrWrkInstExpression().getFieldFirstValue(), StringUtils.EMPTY),
+                (filter, value) -> filter.getWrWrkInstExpression()
+                    .setFieldFirstValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        filterBinder.forField(wrWrkInstToField)
+            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
+            .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.wr_wrk_inst_from")))
+            .bind(filter -> Objects.toString(filter.getWrWrkInstExpression().getFieldSecondValue(), StringUtils.EMPTY),
+                (filter, value) -> filter.getWrWrkInstExpression()
+                    .setFieldSecondValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        filterBinder.forField(wrWrkInstOperatorComboBox)
+            .bind(filter -> ObjectUtils.defaultIfNull(
+                filter.getWrWrkInstExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+                (filter, value) -> filter.getWrWrkInstExpression().setOperator(value));
+        wrWrkInstOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(wrWrkInstFromField, wrWrkInstToField, event.getValue()));
+        HorizontalLayout wrWrkInstLayout =
+            new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
+        setComponentsFullSize(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox, wrWrkInstLayout);
+        VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-baseline-value-wr-wrk-inst-from-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-baseline-value-wr-wrk-inst-to-filter");
+        VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-baseline-value-wr-wrk-inst-operator-filter");
+        return wrWrkInstLayout;
     }
 
     private HorizontalLayout initSystemTitleLayout() {
@@ -266,14 +294,21 @@ public class UdmBaselineValueFiltersWindow extends Window {
         return horizontalLayout;
     }
 
-    private TextField initCommentLayout() {
+    private HorizontalLayout initCommentLayout() {
         filterBinder.forField(commentField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
-            .bind(filter -> Objects.toString(filter.getComment(), null),
-                (filter, value) -> filter.setComment(StringUtils.trimToNull(value)));
-        commentField.setSizeFull();
+            .bind(filter -> Objects.toString(filter.getCommentExpression().getFieldFirstValue(), null),
+                (filter, value) -> filter.getCommentExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
+        filterBinder.forField(commentOperatorComboBox)
+            .bind(filter -> ObjectUtils.defaultIfNull(
+                filter.getCommentExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+                (filter, value) -> filter.getCommentExpression().setOperator(value));
+        HorizontalLayout horizontalLayout = new HorizontalLayout(commentField, commentOperatorComboBox);
+        commentOperatorComboBox.addValueChangeListener(event -> updateOperatorField(commentField, event.getValue()));
+        setComponentsFullSize(commentField, commentOperatorComboBox, horizontalLayout);
         VaadinUtils.addComponentStyle(commentField, "udm-baseline-value-comment-filter");
-        return commentField;
+        VaadinUtils.addComponentStyle(commentOperatorComboBox, "udm-baseline-value-comment-operator-filter");
+        return horizontalLayout;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -285,8 +320,9 @@ public class UdmBaselineValueFiltersWindow extends Window {
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
-                    Arrays.asList(wrWrkInstField, systemTitleField, priceFromField, priceToField, contentFromField,
-                        contentToField, contentUnitPriceFromField, contentUnitPriceToField, commentField));
+                    Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, priceFromField,
+                        priceToField, contentFromField, contentToField, contentUnitPriceFromField,
+                        contentUnitPriceToField, commentField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -294,26 +330,23 @@ public class UdmBaselineValueFiltersWindow extends Window {
         return new HorizontalLayout(saveButton, clearButton, closeButton);
     }
 
+    private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+    }
+
     private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN,
             FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        return filterOperatorComboBox;
     }
 
-    private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = buildOperatorComboBox();
-        filterOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        return filterOperatorComboBox;
-    }
-
-    private ComboBox<FilterOperatorEnum> buildOperatorComboBox() {
+    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
         ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
         filterOperatorComboBox.setEmptySelectionAllowed(false);
         filterOperatorComboBox.setSizeFull();
+        filterOperatorComboBox.setItems(items);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
     }
@@ -368,6 +401,16 @@ public class UdmBaselineValueFiltersWindow extends Window {
             || !amountZeroValidator.isValid(fromValue)
             || !amountZeroValidator.isValid(toValue)
             || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
+    }
+
+    private boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
+        String fromValue = fromField.getValue();
+        String toValue = toField.getValue();
+        return StringUtils.isEmpty(fromValue)
+            || StringUtils.isEmpty(toValue)
+            || !getNumberValidator().test(fromValue)
+            || !getNumberValidator().test(toValue)
+            || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
     }
 
     private Boolean convertStringToBoolean(String value) {

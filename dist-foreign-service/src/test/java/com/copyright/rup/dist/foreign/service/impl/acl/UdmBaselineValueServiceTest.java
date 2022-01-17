@@ -9,6 +9,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineValueService;
@@ -60,7 +62,7 @@ public class UdmBaselineValueServiceTest {
     @Test
     public void testGetValuesCount() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
-        filter.setComment("Comment");
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Comment", null));
         expect(baselineValueRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(baselineValueRepository);
         assertEquals(1, udmBaselineValueService.getBaselineValueCount(filter));

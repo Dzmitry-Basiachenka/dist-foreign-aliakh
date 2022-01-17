@@ -55,12 +55,12 @@ import java.util.stream.IntStream;
 )
 public class UdmBaselineValueRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_DTOS_BY_FILTER =
-        "udm-baseline-value-repository-integration-test/find-fields.groovy";
+    private static final String FIND_DTOS_BY_FILTER =
+        "udm-baseline-value-repository-integration-test/find-dtos-by-filter.groovy";
     private static final String UDM_BASELINE_VALUE_UID_1 = "5cd47c05-4539-4bc6-a71d-f33c67896ce5";
     private static final String UDM_BASELINE_VALUE_UID_2 = "123c31cc-4be5-41b6-9ab3-c36b0ff85d8d";
     private static final String UDM_BASELINE_VALUE_UID_3 = "3e48b712-739d-409a-b077-895e420d89e6";
-
+    private static final Long WR_WRK_INST = 569856369L;
     private static final String SYSTEM_TITLE_1 = "Malcolm Gruel Jr";
     private static final String SYSTEM_TITLE_1_FRAGMENT = "ruel";
     private static final String SYSTEM_TITLE_1_DIFFERENT_CASE = "MalcoLM GRueL JR";
@@ -71,8 +71,11 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     private static final BigDecimal CONTENT = new BigDecimal("2.0000000000");
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
     private static final String NEWSPAPER = "Newspaper";
-    private static final String COMMENT_FRAGMENT = "ommen";
-    private static final String COMMENT_WITH_METASYMBOLS = "Comment !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String COMMENT_1 = "Comment";
+    private static final String COMMENT_1_FRAGMENT = "ommen";
+    private static final String COMMENT_1_DIFFERENT_CASE = "ComMENT";
+    private static final String COMMENT_2 = "UDM value b6ded5b5";
+    private static final String COMMENT_3_WITH_METASYMBOLS = "Comment !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -84,7 +87,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     private IUdmBaselineValueRepository udmBaselineValueRepository;
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindPeriods() {
         List<Integer> expectedPeriods = Arrays.asList(211212, 211112, 211012);
         List<Integer> actualPeriods = udmBaselineValueRepository.findPeriods();
@@ -93,11 +96,11 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByAllFilters() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(211112));
-        filter.setWrWrkInst(569856369L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setPubType(createPubType("NP", NEWSPAPER));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlag(false);
@@ -106,16 +109,16 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
-        filter.setComment(COMMENT_FRAGMENT);
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_FRAGMENT, null));
         assertEquals(1, udmBaselineValueRepository.findCountByFilter(filter));
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAllFilters() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(211112));
-        filter.setWrWrkInst(569856369L);
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setPubType(createPubType("NP", NEWSPAPER));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlag(false);
@@ -124,7 +127,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
-        filter.setComment(COMMENT_FRAGMENT);
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_FRAGMENT, null));
         List<UdmValueBaselineDto> baselineValues =
             udmBaselineValueRepository.findDtosByFilter(filter, null, null);
         assertEquals(1, baselineValues.size());
@@ -133,7 +136,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(ImmutableSet.of(211012, 211212)),
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
@@ -142,23 +145,46 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByAdditionalFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInst(569856369L), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(true), UDM_BASELINE_VALUE_UID_3);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(false), UDM_BASELINE_VALUE_UID_2,
             UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(true), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(false), UDM_BASELINE_VALUE_UID_3,
             UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_BASELINE_VALUE_UID_2,
-            UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_WITH_METASYMBOLS),
-            UDM_BASELINE_VALUE_UID_3);
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWrWrkInst() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null)), UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, WR_WRK_INST, null)), UDM_BASELINE_VALUE_UID_3,
+            UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, WR_WRK_INST, null)), UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, WR_WRK_INST, null)),
+            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, WR_WRK_INST, null)), UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, WR_WRK_INST, null)),
+            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, WR_WRK_INST, 823333789L)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterSystemTitle() {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), UDM_BASELINE_VALUE_UID_2);
@@ -208,7 +234,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterPrice() {
         assertFilteringFindDtosByFilter(filter -> filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null)), UDM_BASELINE_VALUE_UID_2);
@@ -236,7 +262,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterContent() {
         assertFilteringFindDtosByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null)), UDM_BASELINE_VALUE_UID_2);
@@ -265,7 +291,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterContentUnitPrice() {
         assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null)), UDM_BASELINE_VALUE_UID_2);
@@ -295,20 +321,91 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterComment() {
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1, null)), UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1_DIFFERENT_CASE, null)),
+            UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_3_WITH_METASYMBOLS, null)),
+            UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_2, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1, null)), UDM_BASELINE_VALUE_UID_3,
+            UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1_DIFFERENT_CASE, null)),
+            UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_3_WITH_METASYMBOLS, null)),
+            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_2, null)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1_FRAGMENT, null)),
+            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1, null)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_DIFFERENT_CASE, null)),
+            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_3_WITH_METASYMBOLS, null)),
+            UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_2, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_FRAGMENT, null)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilter() {
-        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInst(569856369L), 1);
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)), 3);
         assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(true), 1);
         assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(false), 2);
         assertFilteringFindCountByFilter(filter -> filter.setContentFlag(true), 1);
         assertFilteringFindCountByFilter(filter -> filter.setContentFlag(false), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_WITH_METASYMBOLS), 1);
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWrWrkInst() {
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, WR_WRK_INST, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, WR_WRK_INST, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, WR_WRK_INST, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, WR_WRK_INST, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, WR_WRK_INST, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, WR_WRK_INST, 823333789L)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterSystemTitle() {
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null)), 1);
@@ -347,7 +444,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterPrice() {
         assertFilteringFindCountByFilter(filter -> filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null)), 1);
@@ -371,7 +468,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterContent() {
         assertFilteringFindCountByFilter(filter -> filter.setContentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null)), 1);
@@ -395,7 +492,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByFilterContentUnitPrice() {
         assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null)), 1);
@@ -420,7 +517,46 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_DTOS_BY_FILTER)
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterComment() {
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_3_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_2, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_1_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_3_WITH_METASYMBOLS, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_1_FRAGMENT, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_3_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_2, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_1_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "detailId");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_3, "period");
@@ -432,7 +568,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "content");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "contentFlag");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_2, "contentUnitPrice");
-        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "comment");
+        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "comment");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, "updateDate");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_2, "updateUser");
     }

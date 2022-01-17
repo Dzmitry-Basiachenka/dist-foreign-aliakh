@@ -43,8 +43,8 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterP
                     ? valueFilter.getPubType().getNameAndDescription()
                     : valueFilter.getPubType(), filter,
                 "label.pub_type"), layout);
-            addLabel(createLabelWithSingleValue(UdmBaselineValueFilter::getWrWrkInst, filter, "label.wr_wrk_inst"),
-                layout);
+            addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
+                "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithSingleValue(udmValueFilter ->
@@ -57,7 +57,8 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterP
                 layout);
             addLabel(createLabelWithOperator(filter.getContentUnitPriceExpression(),
                 "label.content_unit_price_from", "label.content_unit_price_to"), layout);
-            addLabel(createLabelWithSingleValue(UdmBaselineValueFilter::getComment, filter, "label.comment"), layout);
+            addLabel(createLabelWithOperator(filter.getCommentExpression(), "label.comment", StringUtils.EMPTY),
+                layout);
         }
         setContent(layout);
     }
