@@ -119,9 +119,9 @@ public class UdmUsageRepositoryIntegrationTest {
     private static final String SYSTEM_TITLE_DIFFERENT_CASE = "WAll STReet JOURnal";
     private static final String SYSTEM_TITLE_FRAGMENT = "JOURnal";
     private static final String SYSTEM_TITLE_WITH_METASYMBOLS = "New York times !@#$%^&*()_+-=?/\\'\"}{][<>";
-    private static final String USAGE_DETAIL_ID = "b989e02b-1f1d-4637-b89e-dc99938a51b9";
-    private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "B989E02B-1F1D-4637-B89E-DC99938A51B9";
-    private static final String USAGE_DETAIL_ID_FRAGMENT = "B89E";
+    private static final String USAGE_DETAIL_ID = "OGN674GHHSB0108";
+    private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "ogn674ghhsb0108";
+    private static final String USAGE_DETAIL_ID_FRAGMENT = "HSB0108";
     private static final Long COMPANY_ID = 454984566L;
     private static final String COMPANY_NAME_1 = "Skadden, Arps, Slate, Meagher & Flom LLP";
     private static final String COMPANY_NAME_2 = "Albany International Corp.";
