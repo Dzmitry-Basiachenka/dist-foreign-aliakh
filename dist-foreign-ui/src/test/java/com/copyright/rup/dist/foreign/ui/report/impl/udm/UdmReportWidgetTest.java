@@ -53,7 +53,7 @@ public class UdmReportWidgetTest {
 
     private static final String ACL_PRODUCT_FAMILY = "ACL";
     private static final String COMPLETED_ASSIGNMENT_REPORT = "Completed Assignments by Employee Report";
-    private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details By Source Report";
+    private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details by Source Report";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
     private final IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
@@ -170,7 +170,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getUdmVerifiedDetailsBySourceReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption("Verified Details By Source Report");
+        widget.setCaption("Verified Details by Source Report");
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();

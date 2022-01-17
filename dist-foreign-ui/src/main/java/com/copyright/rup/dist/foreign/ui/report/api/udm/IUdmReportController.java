@@ -40,7 +40,7 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
     ICompletedAssignmentsReportController getCompletedAssignmentsReportController();
 
     /**
-     * @return UDM Verified Details By Source Report controller.
+     * @return UDM Verified Details by Source Report controller.
      */
     IUdmVerifiedDetailsBySourceReportController getUdmVerifiedDetailsBySourceReportController();
 }
