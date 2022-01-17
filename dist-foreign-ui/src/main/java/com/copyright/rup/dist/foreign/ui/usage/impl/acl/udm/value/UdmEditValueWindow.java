@@ -40,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -115,13 +116,12 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     void recalculatePriceInUsd() {
         if (Objects.isNull(priceField.getErrorMessage()) && StringUtils.isNotBlank(priceField.getValue())
             && Objects.isNull(currencyComboBox.getErrorMessage()) && Objects.nonNull(currencyComboBox.getValue())) {
-            ExchangeRate exchangeRate = controller.getExchangeRate(currencyComboBox.getValue().getCode(),
-                LocalDate.now());
+            ExchangeRate exchangeRate =
+                controller.getExchangeRate(currencyComboBox.getValue().getCode(), LocalDate.now());
             BigDecimal price = NumberUtils.createBigDecimal(priceField.getValue().trim());
-            BigDecimal currencyExchangeRate = exchangeRate.getInverseExchangeRateValue()
-                .setScale(10, BigDecimal.ROUND_HALF_UP);
-            BigDecimal priceInUsd = price.multiply(currencyExchangeRate)
-                .setScale(10, BigDecimal.ROUND_HALF_UP);
+            BigDecimal currencyExchangeRate =
+                exchangeRate.getInverseExchangeRateValue().setScale(10, RoundingMode.HALF_UP);
+            BigDecimal priceInUsd = price.multiply(currencyExchangeRate).setScale(10, RoundingMode.HALF_UP);
             currencyExchangeRateField.setValue(currencyExchangeRate.toString());
             currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
             priceInUsdField.setValue(convertFromBigDecimalToMoneyString(priceInUsd));
@@ -157,7 +157,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             && Objects.isNull(contentField.getErrorMessage()) && StringUtils.isNotBlank(contentField.getValue())) {
             BigDecimal priceInUsd = NumberUtils.createBigDecimal(priceInUsdField.getValue().trim());
             BigDecimal content = NumberUtils.createBigDecimal(contentField.getValue().trim());
-            BigDecimal contentUnitPrice = priceInUsd.divide(content, 10, BigDecimal.ROUND_HALF_UP);
+            BigDecimal contentUnitPrice = priceInUsd.divide(content, 10, RoundingMode.HALF_UP);
             contentUnitPriceField.setValue(convertFromBigDecimalToMoneyString(contentUnitPrice));
         } else {
             contentUnitPriceField.clear();
@@ -167,12 +167,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
     private ComponentContainer initRootLayout() {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout editFieldsLayout = new VerticalLayout();
-        editFieldsLayout.addComponents(
-            new HorizontalLayout(
-                initLeftColumn(),
-                initRightColumn()
-            )
-        );
+        editFieldsLayout.addComponents(new HorizontalLayout(initLeftColumn(), initRightColumn()));
         Panel panel = new Panel(editFieldsLayout);
         panel.setSizeFull();
         editFieldsLayout.setMargin(false);
@@ -301,7 +296,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         binder.forField(textField)
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
-            .bind(getter, setter);
+            .bind(getter, (value, fieldValue) -> setter.accept(value, StringUtils.trimToNull(fieldValue)));
         textField.addValueChangeListener(event ->
             fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().trim()));
         VaadinUtils.addComponentStyle(textField, styleName);
@@ -470,7 +465,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 ForeignUi.getMessage("field.error.empty_if_price_specified"))
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
-            .bind(UdmValueDto::getPriceSource, UdmValueDto::setPriceSource);
+            .bind(UdmValueDto::getPriceSource,
+                (value, fieldValue) -> value.setPriceSource(StringUtils.trimToNull(fieldValue)));
         VaadinUtils.addComponentStyle(priceSourceField, "udm-value-edit-price-source-field");
         return buildCommonLayout(priceSourceField, fieldName);
     }
@@ -510,7 +506,8 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 ForeignUi.getMessage("field.error.empty_if_content_specified"))
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1000), 0, 1000))
-            .bind(UdmValueDto::getContentSource, UdmValueDto::setContentSource);
+            .bind(UdmValueDto::getContentSource,
+                (value, fieldValue) -> value.setContentSource(StringUtils.trimToNull(fieldValue)));
         VaadinUtils.addComponentStyle(contentSourceField, "udm-value-edit-content-source-field");
         return buildCommonLayout(contentSourceField, fieldName);
     }

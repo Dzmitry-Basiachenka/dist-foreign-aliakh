@@ -14,6 +14,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -377,22 +378,27 @@ public class UdmEditUsageWindowTest {
         setSpecialistExpectations();
         expect(controller.calculateAnnualizedCopies(eq(REPORTED_TYPE_OF_USE), anyLong(), anyInt(),
             anyObject(BigDecimal.class))).andReturn(BigDecimal.ONE).anyTimes();
-        binder = createMock(Binder.class);
-        binder.writeBean(udmUsage);
-        expectLastCall().once();
-        expect(binder.isValid()).andReturn(true).once();
         controller.updateUsage(udmUsage, new UdmUsageAuditFieldToValuesMap(udmUsage).getActionReasons(),
             false, StringUtils.EMPTY);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
-        replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        replay(controller,  saveButtonClickListener, ForeignSecurityUtils.class);
+        udmUsage.setReportedTitle(null);
+        udmUsage.setReportedStandardNumber(null);
+        udmUsage.setReportedPubType(null);
+        udmUsage.setComment(null);
+        udmUsage.setResearchUrl(null);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
-        Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
-        verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        assertNull(udmUsage.getReportedTitle());
+        assertNull(udmUsage.getReportedStandardNumber());
+        assertNull(udmUsage.getReportedPubType());
+        assertNull(udmUsage.getComment());
+        assertNull(udmUsage.getResearchUrl());
+        verify(controller,  saveButtonClickListener, ForeignSecurityUtils.class);
     }
 
     @Test
