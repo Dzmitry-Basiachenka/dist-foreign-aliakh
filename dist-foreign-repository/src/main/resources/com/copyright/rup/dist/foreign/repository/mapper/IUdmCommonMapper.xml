@@ -55,4 +55,18 @@
             </when>
         </choose>
     </sql>
+
+    <sql id="booleanFieldFilterExpression">
+        <choose>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@Y == ${operator}">
+                and ${column} = true
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@N == ${operator}">
+                and ${column} = false
+            </when>
+            <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@IS_NULL == ${operator}">
+                and ${column} is null
+            </when>
+        </choose>
+    </sql>
 </mapper>

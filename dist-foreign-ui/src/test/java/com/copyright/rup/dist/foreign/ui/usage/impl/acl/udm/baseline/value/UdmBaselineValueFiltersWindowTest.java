@@ -45,13 +45,12 @@ public class UdmBaselineValueFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
-    private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
+    private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
-    private static final Boolean PRICE_FLAG = true;
-    private static final String PRICE_FLAG_STRING = "Y";
-    private static final Boolean CONTENT_FLAG = false;
-    private static final String CONTENT_FLAG_STRING = "N";
+    private static final FilterOperatorEnum PRICE_FLAG = FilterOperatorEnum.Y;
+    private static final FilterOperatorEnum CONTENT_FLAG = FilterOperatorEnum.N;
     private static final BigDecimal PRICE_FROM = new BigDecimal("100.00");
     private static final BigDecimal PRICE_TO = new BigDecimal("120.00");
     private static final BigDecimal CONTENT_FROM = new BigDecimal("70");
@@ -87,8 +86,8 @@ public class UdmBaselineValueFiltersWindowTest {
     public void testConstructorWithPopulatedFilter() {
         UdmBaselineValueFilter valueFilter = buildExpectedFilter();
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
-        valueFilter.setPriceFlag(PRICE_FLAG);
-        valueFilter.setContentFlag(CONTENT_FLAG);
+        valueFilter.setPriceFlagExpression(new FilterExpression<>(PRICE_FLAG));
+        valueFilter.setContentFlagExpression(new FilterExpression<>(CONTENT_FLAG));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_FROM, PRICE_TO));
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_FROM, CONTENT_TO));
@@ -216,8 +215,8 @@ public class UdmBaselineValueFiltersWindowTest {
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(1), "System Title");
         verifyTextFieldLayout(verticalLayout.getComponent(2), ComboBox.class, "Price Flag",
             ComboBox.class, "Content Flag");
-        assertComboBoxItems("priceFlagComboBox", "Price Flag", true, Y_N_ITEMS);
-        assertComboBoxItems("contentFlagComboBox", "Content Flag", true, Y_N_ITEMS);
+        assertComboBoxItems("priceFlagComboBox", "Price Flag", true, FLAG_ITEMS);
+        assertComboBoxItems("contentFlagComboBox", "Content Flag", true, FLAG_ITEMS);
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(3), "Price From", "Price To");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(4), "Content From", "Content To");
         verifyLayoutWithOperatorComponent(verticalLayout.getComponent(5), "Content Unit Price From",
@@ -266,8 +265,8 @@ public class UdmBaselineValueFiltersWindowTest {
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
         assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
-        assertComboBoxValue("priceFlagComboBox", PRICE_FLAG_STRING);
+        assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG);
+        assertComboBoxValue("priceFlagComboBox", PRICE_FLAG);
         assertTextFieldValue("priceFromField", PRICE_FROM.toString());
         assertTextFieldValue("priceToField", PRICE_TO.toString());
         assertComboBoxValue("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
@@ -417,8 +416,8 @@ public class UdmBaselineValueFiltersWindowTest {
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemTitleField", SYSTEM_TITLE);
         populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
-        populateComboBox("priceFlagComboBox", PRICE_FLAG_STRING);
-        populateComboBox("contentFlagComboBox", CONTENT_FLAG_STRING);
+        populateComboBox("priceFlagComboBox", PRICE_FLAG);
+        populateComboBox("contentFlagComboBox", CONTENT_FLAG);
         populateTextField("priceFromField", PRICE_FROM.toString());
         populateTextField("priceToField", PRICE_TO.toString());
         populateComboBox("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
@@ -449,8 +448,8 @@ public class UdmBaselineValueFiltersWindowTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         udmBaselineValueFilter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
-        udmBaselineValueFilter.setPriceFlag(PRICE_FLAG);
-        udmBaselineValueFilter.setContentFlag(CONTENT_FLAG);
+        udmBaselineValueFilter.setPriceFlagExpression(new FilterExpression<>(PRICE_FLAG));
+        udmBaselineValueFilter.setContentFlagExpression(new FilterExpression<>(CONTENT_FLAG));
         udmBaselineValueFilter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_FROM, PRICE_TO));
         udmBaselineValueFilter.setContentExpression(

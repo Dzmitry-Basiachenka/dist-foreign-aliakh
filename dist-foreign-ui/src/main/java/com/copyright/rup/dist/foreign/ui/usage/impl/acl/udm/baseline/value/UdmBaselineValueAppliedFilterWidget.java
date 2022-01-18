@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -47,10 +46,10 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterP
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter ->
-                BooleanUtils.toYNString(udmValueFilter.getPriceFlag()), filter, "label.price_flag"), layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter ->
-                BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter, "label.content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getPriceFlagExpression().getOperator()), filter, "label.price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getContentFlagExpression().getOperator()), filter, "label.content_flag"), layout);
             addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price_from", "label.price_to"),
                 layout);
             addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content_from", "label.content_to"),

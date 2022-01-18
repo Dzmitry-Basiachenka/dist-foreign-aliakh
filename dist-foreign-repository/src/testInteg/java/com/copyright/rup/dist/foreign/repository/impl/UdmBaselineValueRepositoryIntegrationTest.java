@@ -103,8 +103,8 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setPubType(createPubType("NP", NEWSPAPER));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
-        filter.setPriceFlag(false);
-        filter.setContentFlag(true);
+        filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
+        filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
@@ -121,8 +121,8 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         filter.setPubType(createPubType("NP", NEWSPAPER));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
-        filter.setPriceFlag(false);
-        filter.setContentFlag(true);
+        filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
+        filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
@@ -142,17 +142,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
         assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)),
             UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
-    }
-
-    @Test
-    @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByAdditionalFilter() {
-        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(true), UDM_BASELINE_VALUE_UID_3);
-        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlag(false), UDM_BASELINE_VALUE_UID_2,
-            UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(true), UDM_BASELINE_VALUE_UID_2);
-        assertFilteringFindDtosByFilter(filter -> filter.setContentFlag(false), UDM_BASELINE_VALUE_UID_3,
-            UDM_BASELINE_VALUE_UID_1);
     }
 
     @Test
@@ -231,6 +220,29 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), UDM_BASELINE_VALUE_UID_2,
             UDM_BASELINE_VALUE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterPriceFlag() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_2,
+            UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL)));
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentFlag() {
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL)));
     }
 
     @Test
@@ -373,12 +385,9 @@ public class UdmBaselineValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilter() {
+    public void testFindCountByBasicFilter() {
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(ImmutableSet.of(211012, 211212)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)), 3);
-        assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(true), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setPriceFlag(false), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setContentFlag(true), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setContentFlag(false), 2);
     }
 
     @Test
@@ -441,6 +450,28 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterPriceFlag() {
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL)), 0);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentFlag() {
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.Y)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.N)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL)), 0);
     }
 
     @Test

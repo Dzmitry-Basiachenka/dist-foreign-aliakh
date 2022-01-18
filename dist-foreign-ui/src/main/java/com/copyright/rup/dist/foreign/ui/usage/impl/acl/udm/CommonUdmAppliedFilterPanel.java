@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -130,6 +131,16 @@ public abstract class CommonUdmAppliedFilterPanel extends Panel {
         filtersPanelLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(filtersPanelLayout);
         return filtersPanelLayout;
+    }
+
+    /**
+     * Converts {@link FilterOperatorEnum} to string.
+     *
+     * @param value instance of {@link FilterOperatorEnum}
+     * @return value represented as string
+     */
+    protected String convertFilterOperatorToString(FilterOperatorEnum value) {
+        return Objects.nonNull(value) ? value.name() : null;
     }
 
     private <T> String formatMultipleSelectToString(Collection<T> values, Function<T, String> formatFunction) {

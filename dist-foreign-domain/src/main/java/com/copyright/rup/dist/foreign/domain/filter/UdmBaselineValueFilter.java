@@ -25,8 +25,8 @@ public class UdmBaselineValueFilter {
     private PublicationType pubType;
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
-    private Boolean priceFlag;
-    private Boolean contentFlag;
+    private FilterExpression<Boolean> priceFlagExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> contentFlagExpression = new FilterExpression<>();
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private FilterExpression<Number> contentUnitPriceExpression = new FilterExpression<>();
@@ -49,8 +49,8 @@ public class UdmBaselineValueFilter {
             setPubType(filter.getPubType());
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
-            setPriceFlag(filter.getPriceFlag());
-            setContentFlag(filter.getContentFlag());
+            setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
+            setContentFlagExpression(new FilterExpression<>(filter.getContentFlagExpression()));
             setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
             setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentUnitPriceExpression(new FilterExpression<>(filter.getContentUnitPriceExpression()));
@@ -90,20 +90,20 @@ public class UdmBaselineValueFilter {
         this.systemTitleExpression = systemTitleExpression;
     }
 
-    public Boolean getPriceFlag() {
-        return priceFlag;
+    public FilterExpression<Boolean> getPriceFlagExpression() {
+        return priceFlagExpression;
     }
 
-    public void setPriceFlag(Boolean priceFlag) {
-        this.priceFlag = priceFlag;
+    public void setPriceFlagExpression(FilterExpression<Boolean> priceFlagExpression) {
+        this.priceFlagExpression = priceFlagExpression;
     }
 
-    public Boolean getContentFlag() {
-        return contentFlag;
+    public FilterExpression<Boolean> getContentFlagExpression() {
+        return contentFlagExpression;
     }
 
-    public void setContentFlag(Boolean contentFlag) {
-        this.contentFlag = contentFlag;
+    public void setContentFlagExpression(FilterExpression<Boolean> contentFlagExpression) {
+        this.contentFlagExpression = contentFlagExpression;
     }
 
     public FilterExpression<Number> getPriceExpression() {
@@ -146,8 +146,8 @@ public class UdmBaselineValueFilter {
             && null == pubType
             && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
-            && null == priceFlag
-            && null == contentFlag
+            && priceFlagExpression.isEmpty()
+            && contentFlagExpression.isEmpty()
             && priceExpression.isEmpty()
             && contentExpression.isEmpty()
             && contentUnitPriceExpression.isEmpty()
@@ -171,8 +171,8 @@ public class UdmBaselineValueFilter {
             .append(pubType, that.pubType)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
-            .append(priceFlag, that.priceFlag)
-            .append(contentFlag, that.contentFlag)
+            .append(priceFlagExpression, that.priceFlagExpression)
+            .append(contentFlagExpression, that.contentFlagExpression)
             .append(priceExpression, that.priceExpression)
             .append(contentExpression, that.contentExpression)
             .append(contentUnitPriceExpression, that.contentUnitPriceExpression)
@@ -187,8 +187,8 @@ public class UdmBaselineValueFilter {
             .append(pubType)
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
-            .append(priceFlag)
-            .append(contentFlag)
+            .append(priceFlagExpression)
+            .append(contentFlagExpression)
             .append(priceExpression)
             .append(contentExpression)
             .append(contentUnitPriceExpression)
@@ -203,8 +203,8 @@ public class UdmBaselineValueFilter {
             .append("pubType", pubType)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
-            .append("priceFlag", priceFlag)
-            .append("contentFlag", contentFlag)
+            .append("priceFlagExpression", priceFlagExpression)
+            .append("contentFlagExpression", contentFlagExpression)
             .append("priceExpression", priceExpression)
             .append("contentExpression", contentExpression)
             .append("contentUnitPriceExpression", contentUnitPriceExpression)

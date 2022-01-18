@@ -29,6 +29,13 @@ public class FilterExpression<T> {
     }
 
     /**
+     * @param operator instance of {@link FilterOperatorEnum}
+     */
+    public FilterExpression(FilterOperatorEnum operator) {
+        this(operator, null, null);
+    }
+
+    /**
      * @param operator         instance of {@link FilterOperatorEnum}
      * @param fieldFirstValue  first value of a field
      * @param fieldSecondValue second value of a field
@@ -74,7 +81,7 @@ public class FilterExpression<T> {
 
     public boolean isEmpty() {
         return Objects.isNull(fieldFirstValue) && Objects.isNull(fieldSecondValue)
-            && FilterOperatorEnum.IS_NULL != operator && FilterOperatorEnum.IS_NOT_NULL != operator;
+            && (Objects.isNull(operator) || 0 != operator.getArgumentsNumber());
     }
 
     @Override

@@ -9,8 +9,8 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -86,8 +86,8 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
-        filter.setPriceFlag(false);
-        filter.setContentFlag(true);
+        filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
+        filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         filter.setContentUnitPriceExpression(
