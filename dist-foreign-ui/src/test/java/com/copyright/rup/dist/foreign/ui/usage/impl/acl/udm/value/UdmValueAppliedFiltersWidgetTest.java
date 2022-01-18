@@ -63,7 +63,8 @@ public class UdmValueAppliedFiltersWidgetTest {
                 "<b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
             "<li><b><i>System Standard Number: </i></b>1873-7773</li><li><b><i>Operator: </i></b>EQUALS</li>");
-        verifyLabel(((VerticalLayout) component).getComponent(8), "RH Account #", "1000002859");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(8),
+            "<li><b><i>RH Account # From: </i></b>1000002859</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(9),
             "<li><b><i>RH Name: </i></b>John Wiley</li><li><b><i>Operator: </i></b>CONTAINS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(10), "Currency", "US - United States");
@@ -105,7 +106,7 @@ public class UdmValueAppliedFiltersWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
         filter.setSystemStandardNumberExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "1873-7773", null));
-        filter.setRhAccountNumber(1000002859L);
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1000002859L, null));
         filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "John Wiley", null));
         filter.setPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.0000000000"), null));

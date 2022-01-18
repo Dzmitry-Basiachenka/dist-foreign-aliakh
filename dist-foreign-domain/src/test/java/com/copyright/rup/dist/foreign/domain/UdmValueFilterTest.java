@@ -83,10 +83,6 @@ public class UdmValueFilterTest {
         assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setLastValuePeriods(null);
         assertTrue(udmValueFilter.isEmpty());
-        udmValueFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
-        assertFalse(udmValueFilter.isEmpty());
-        udmValueFilter.setRhAccountNumber(null);
-        assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
         assertFalse(udmValueFilter.isEmpty());
         udmValueFilter.setLastPriceFlag(null);
@@ -129,24 +125,20 @@ public class UdmValueFilterTest {
         udmValueFilter.setSystemTitleExpression(new FilterExpression<>(
             FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         assertFalse(udmValueFilter.isEmpty());
-        udmValueFilter.setSystemTitleExpression(new FilterExpression<>(
-            FilterOperatorEnum.CONTAINS, SYSTEM_TITLE, null));
-        assertFalse(udmValueFilter.isEmpty());
         udmValueFilter.setSystemTitleExpression(new FilterExpression<>());
         assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setSystemStandardNumberExpression(new FilterExpression<>(
             FilterOperatorEnum.EQUALS, SYSTEM_STANDARD_NUMBER, null));
         assertFalse(udmValueFilter.isEmpty());
-        udmValueFilter.setSystemStandardNumberExpression(new FilterExpression<>(
-            FilterOperatorEnum.CONTAINS, SYSTEM_STANDARD_NUMBER, null));
-        assertFalse(udmValueFilter.isEmpty());
         udmValueFilter.setSystemStandardNumberExpression(new FilterExpression<>());
+        assertTrue(udmValueFilter.isEmpty());
+        udmValueFilter.setRhAccountNumberExpression(new FilterExpression<>(
+            FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
+        assertFalse(udmValueFilter.isEmpty());
+        udmValueFilter.setRhAccountNumberExpression(new FilterExpression<>());
         assertTrue(udmValueFilter.isEmpty());
         udmValueFilter.setRhNameExpression(new FilterExpression<>(
             FilterOperatorEnum.EQUALS, RH_NAME, null));
-        assertFalse(udmValueFilter.isEmpty());
-        udmValueFilter.setRhNameExpression(new FilterExpression<>(
-            FilterOperatorEnum.CONTAINS, RH_NAME, null));
         assertFalse(udmValueFilter.isEmpty());
         udmValueFilter.setRhNameExpression(new FilterExpression<>());
         assertTrue(udmValueFilter.isEmpty());
@@ -205,7 +197,7 @@ public class UdmValueFilterTest {
         assertEquals(new FilterExpression<>(), udmValueFilter.getWrWrkInstExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemTitleExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getSystemStandardNumberExpression());
-        assertNull(udmValueFilter.getRhAccountNumber());
+        assertEquals(new FilterExpression<>(), udmValueFilter.getRhAccountNumberExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getRhNameExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getPriceExpression());
         assertEquals(new FilterExpression<>(), udmValueFilter.getPriceInUsdExpression());

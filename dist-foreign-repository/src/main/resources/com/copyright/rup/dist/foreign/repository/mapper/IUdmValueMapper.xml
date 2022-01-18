@@ -220,9 +220,6 @@
                     <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.rhAccountNumber">
-                and v.rh_account_number = #{filter.rhAccountNumber}
-            </if>
             <if test="null != filter.lastPriceComment">
                 and last_value.last_price_comment ilike '%' || #{filter.lastPriceComment} || '%'
             </if>
@@ -248,15 +245,21 @@
                     <property name="fieldSecondValue" value="${filter.systemStandardNumberExpression.fieldSecondValue}"/>
                 </include>
             </if>
+            <if test="!filter.rhAccountNumberExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="v.rh_account_number"/>
+                    <property name="operator" value="filter.rhAccountNumberExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.rhAccountNumberExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.rhAccountNumberExpression.fieldSecondValue}"/>
+                </include>
+            </if>            
             <if test="!filter.rhNameExpression.isEmpty()">
-                <choose>
-                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.rhNameExpression.operator">
-                        and r.name ilike #{filter.rhNameExpression.fieldFirstValue}
-                    </when>
-                    <otherwise>
-                        and r.name ilike '%' || #{filter.rhNameExpression.fieldFirstValue} || '%'
-                    </otherwise>
-                </choose>
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="r.name"/>
+                    <property name="operator" value="filter.rhNameExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.rhNameExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.rhNameExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.priceExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">

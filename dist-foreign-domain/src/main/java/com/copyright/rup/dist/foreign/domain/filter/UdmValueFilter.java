@@ -31,7 +31,7 @@ public class UdmValueFilter {
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<String> systemStandardNumberExpression = new FilterExpression<>();
-    private Long rhAccountNumber;
+    private FilterExpression<Number> rhAccountNumberExpression = new FilterExpression<>();
     private FilterExpression<String> rhNameExpression = new FilterExpression<>();
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
@@ -69,7 +69,7 @@ public class UdmValueFilter {
             setWrWrkInstExpression(filter.getWrWrkInstExpression());
             setSystemTitleExpression(filter.getSystemTitleExpression());
             setSystemStandardNumberExpression(filter.getSystemStandardNumberExpression());
-            setRhAccountNumber(filter.getRhAccountNumber());
+            setRhAccountNumberExpression(filter.getRhAccountNumberExpression());
             setRhNameExpression(filter.getRhNameExpression());
             setPriceExpression(filter.getPriceExpression());
             setPriceInUsdExpression(filter.getPriceInUsdExpression());
@@ -152,12 +152,12 @@ public class UdmValueFilter {
         this.systemStandardNumberExpression = systemStandardNumberExpression;
     }
 
-    public Long getRhAccountNumber() {
-        return rhAccountNumber;
+    public FilterExpression<Number> getRhAccountNumberExpression() {
+        return rhAccountNumberExpression;
     }
 
-    public void setRhAccountNumber(Long rhAccountNumber) {
-        this.rhAccountNumber = rhAccountNumber;
+    public void setRhAccountNumberExpression(FilterExpression<Number> rhAccountNumberExpression) {
+        this.rhAccountNumberExpression = rhAccountNumberExpression;
     }
 
     public FilterExpression<String> getRhNameExpression() {
@@ -292,7 +292,7 @@ public class UdmValueFilter {
             && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
             && systemStandardNumberExpression.isEmpty()
-            && null == rhAccountNumber
+            && rhAccountNumberExpression.isEmpty()
             && rhNameExpression.isEmpty()
             && priceExpression.isEmpty()
             && priceInUsdExpression.isEmpty()
@@ -328,7 +328,7 @@ public class UdmValueFilter {
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(systemStandardNumberExpression, that.systemStandardNumberExpression)
-            .append(rhAccountNumber, that.rhAccountNumber)
+            .append(rhAccountNumberExpression, that.rhAccountNumberExpression)
             .append(rhNameExpression, that.rhNameExpression)
             .append(priceExpression, that.priceExpression)
             .append(priceInUsdExpression, that.priceInUsdExpression)
@@ -358,7 +358,7 @@ public class UdmValueFilter {
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
             .append(systemStandardNumberExpression)
-            .append(rhAccountNumber)
+            .append(rhAccountNumberExpression)
             .append(rhNameExpression)
             .append(priceExpression)
             .append(priceInUsdExpression)
@@ -388,7 +388,7 @@ public class UdmValueFilter {
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
             .append("systemStandardNumberExpression", systemStandardNumberExpression)
-            .append("rhAccountNumber", rhAccountNumber)
+            .append("rhAccountNumberExpression", rhAccountNumberExpression)
             .append("rhNameExpression", rhNameExpression)
             .append("priceExpression", priceExpression)
             .append("priceInUsdExpression", priceInUsdExpression)

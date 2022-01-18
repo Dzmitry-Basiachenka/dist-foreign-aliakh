@@ -106,21 +106,14 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
             filterCopy.getSystemTitleExpression()));
         filterCopy.setSystemStandardNumberExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
             filterCopy.getSystemStandardNumberExpression()));
-        filterCopy.setRhNameExpression(setEscapeSqlLikePatternForFilterExpression(filterCopy.getRhNameExpression()));
+        filterCopy.setRhNameExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
+            filterCopy.getRhNameExpression()));
         filterCopy.setLastPriceComment(escapeSqlLikePattern(filterCopy.getLastPriceComment()));
         filterCopy.setLastContentComment(escapeSqlLikePattern(filterCopy.getLastContentComment()));
         filterCopy.setComment(escapeSqlLikePattern(filterCopy.getComment()));
         filterCopy.setPriceComment(escapeSqlLikePattern(filterCopy.getPriceComment()));
         filterCopy.setContentComment(escapeSqlLikePattern(filterCopy.getContentComment()));
         return filterCopy;
-    }
-
-    private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
-        FilterExpression<String> filterExpression) {
-        return Objects.nonNull(filterExpression.getOperator())
-            ? new FilterExpression<>(filterExpression.getOperator(),
-            escapeSqlLikePattern(filterExpression.getFieldFirstValue()), filterExpression.getFieldSecondValue())
-            : filterExpression;
     }
 
     // MyBatis expressions ${} do not replace ' with '' in comparison with expressions #{}

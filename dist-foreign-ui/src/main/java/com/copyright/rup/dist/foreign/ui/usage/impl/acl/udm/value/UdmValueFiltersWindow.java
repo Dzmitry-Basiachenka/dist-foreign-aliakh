@@ -19,8 +19,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.converter.StringToLongConverter;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -54,13 +52,10 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
 
     private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
-    private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
 
-    private final StringLengthValidator numberStringLengthValidator =
-        new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9);
     private final Binder<UdmValueFilter> filterBinder = new Binder<>();
     private AssigneeFilterWidget assigneeFilterWidget;
     private LastValuePeriodFilterWidget lastValuePeriodFilterWidget;
@@ -72,9 +67,12 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private final TextField systemStandardNumberField =
         new TextField(ForeignUi.getMessage("label.system_standard_number"));
     private final ComboBox<FilterOperatorEnum> systemStandardNumberOperatorComboBox = buildTextOperatorComboBox();
-    private final TextField rhAccountNumberField = new TextField(ForeignUi.getMessage("label.rh_account_number"));
+    private final TextField rhAccountNumberFromField =
+        new TextField(ForeignUi.getMessage("label.rh_account_number_from"));
+    private final TextField rhAccountNumberToField = new TextField(ForeignUi.getMessage("label.rh_account_number_to"));
+    private final ComboBox<FilterOperatorEnum> rhAccountNumberOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField rhNameField = new TextField(ForeignUi.getMessage("label.rh_name"));
-    private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox = buildTextOperatorComboBox();
     private final ComboBox<Currency> currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
     private final TextField priceField = new TextField(ForeignUi.getMessage("label.price"));
     private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildOperatorComboBox();
@@ -168,14 +166,14 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         wrWrkInstOperatorComboBox.addValueChangeListener(event ->
             updateOperatorField(filterBinder, wrWrkInstFromField, wrWrkInstToField, event.getValue()));
         filterBinder.forField(wrWrkInstFromField)
-            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberStringLengthValidator(9))
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
             .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(wrWrkInstToField)
-            .withValidator(numberStringLengthValidator)
+            .withValidator(getNumberStringLengthValidator(9))
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
             .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
@@ -198,7 +196,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
             valueFilter.getSystemTitleExpression());
         filterBinder.forField(systemTitleField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
+            .withValidator(getTextStringLengthValidator(2000))
             .bind(filter -> filter.getSystemTitleExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(value.trim()));
         systemTitleField.addValueChangeListener(event -> filterBinder.validate());
@@ -212,12 +210,12 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     }
 
     private HorizontalLayout initSystemStandardNumberLayout() {
-        HorizontalLayout systemStandardNumberLayout = new HorizontalLayout(systemStandardNumberField,
-            systemStandardNumberOperatorComboBox);
+        HorizontalLayout systemStandardNumberLayout =
+            new HorizontalLayout(systemStandardNumberField, systemStandardNumberOperatorComboBox);
         populateOperatorFilters(systemStandardNumberField, systemStandardNumberOperatorComboBox,
             valueFilter.getSystemStandardNumberExpression());
         filterBinder.forField(systemStandardNumberField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1000), 0, 1000))
+            .withValidator(getTextStringLengthValidator(1000))
             .bind(filter -> filter.getSystemStandardNumberExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getSystemStandardNumberExpression().setFieldFirstValue(value.trim()));
         systemStandardNumberField.addValueChangeListener(event -> filterBinder.validate());
@@ -231,35 +229,55 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return systemStandardNumberLayout;
     }
 
-    private TextField initRhAccountNumberLayout() {
-        filterBinder.forField(rhAccountNumberField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
+    private HorizontalLayout initRhAccountNumberLayout() {
+        HorizontalLayout rhAccountNumberLayout =
+            new HorizontalLayout(rhAccountNumberFromField, rhAccountNumberToField, rhAccountNumberOperatorComboBox);
+        populateOperatorFilters(rhAccountNumberFromField, rhAccountNumberToField, rhAccountNumberOperatorComboBox,
+            valueFilter.getRhAccountNumberExpression());
+        rhAccountNumberFromField.addValueChangeListener(event -> filterBinder.validate());
+        rhAccountNumberOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(filterBinder, rhAccountNumberFromField, rhAccountNumberToField, event.getValue()));
+        filterBinder.forField(rhAccountNumberFromField)
+            .withValidator(getNumberStringLengthValidator(10))
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
-            .withConverter(new StringToLongConverter(NUMBER_VALIDATION_MESSAGE))
-            .bind(UdmValueFilter::getRhAccountNumber, UdmValueFilter::setRhAccountNumber);
-        rhAccountNumberField.setValue(Objects.nonNull(valueFilter.getRhAccountNumber())
-            ? valueFilter.getRhAccountNumber().toString() : StringUtils.EMPTY);
-        rhAccountNumberField.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(rhAccountNumberField, "udm-value-rh-account-number-filter");
-        return rhAccountNumberField;
+            .withValidator(getBetweenOperatorValidator(rhAccountNumberFromField, rhAccountNumberOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .bind(filter -> filter.getRhAccountNumberExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getRhAccountNumberExpression().setFieldFirstValue(Long.valueOf(value)));
+        filterBinder.forField(rhAccountNumberToField)
+            .withValidator(getNumberStringLengthValidator(10))
+            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(getBetweenOperatorValidator(rhAccountNumberToField, rhAccountNumberOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateIntegerFromToValues(rhAccountNumberFromField, rhAccountNumberToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.rh_account_number_from")))
+            .bind(filter -> filter.getRhAccountNumberExpression().getFieldFirstValue().toString(),
+                (filter, value) -> filter.getRhAccountNumberExpression().setFieldFirstValue(Long.valueOf(value)));
+        rhAccountNumberFromField.setSizeFull();
+        rhAccountNumberToField.setSizeFull();
+        rhAccountNumberLayout.setSizeFull();
+        VaadinUtils.addComponentStyle(rhAccountNumberFromField, "udm-value-rh-account-number-from-filter");
+        VaadinUtils.addComponentStyle(rhAccountNumberToField, "udm-value-rh-account-number-to-filter");
+        VaadinUtils.addComponentStyle(rhAccountNumberOperatorComboBox, "udm-value-rh-account-number-operator-filter");
+        return rhAccountNumberLayout;
     }
 
     private HorizontalLayout initRhNameLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(rhNameField, rhNameOperatorComboBox);
-        rhNameOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.CONTAINS);
+        HorizontalLayout rhNameLayout = new HorizontalLayout(rhNameField, rhNameOperatorComboBox);
+        populateOperatorFilters(rhNameField, rhNameOperatorComboBox, valueFilter.getRhNameExpression());
         filterBinder.forField(rhNameField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 255), 0, 255))
+            .withValidator(getTextStringLengthValidator(255))
             .bind(filter -> filter.getRhNameExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getRhNameExpression().setFieldFirstValue(value.trim()));
-        populateOperatorFilters(rhNameField, rhNameOperatorComboBox, valueFilter.getRhNameExpression());
         rhNameField.addValueChangeListener(event -> filterBinder.validate());
         rhNameOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, rhNameField, event.getValue()));
         rhNameField.setSizeFull();
-        horizontalLayout.setSizeFull();
+        rhNameLayout.setSizeFull();
         VaadinUtils.addComponentStyle(rhNameField, "udm-value-rh-name-filter");
         VaadinUtils.addComponentStyle(rhNameOperatorComboBox, "udm-value-rh-name-operator-filter");
-        return horizontalLayout;
+        return rhNameLayout;
     }
 
     private ComboBox<Currency> initCurrencyFilter() {
@@ -314,7 +332,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         priceFlagComboBox.setSizeFull();
         priceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getPriceComment(), StringUtils.EMPTY));
         filterBinder.forField(priceCommentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
+            .withValidator(getTextStringLengthValidator(1024))
             .bind(UdmValueFilter::getPriceComment, UdmValueFilter::setPriceComment);
         priceCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
@@ -331,7 +349,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         lastPriceFlagComboBox.setSizeFull();
         lastPriceCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getLastPriceComment(), StringUtils.EMPTY));
         filterBinder.forField(lastPriceCommentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
+            .withValidator(getTextStringLengthValidator(1024))
             .bind(UdmValueFilter::getLastPriceComment, UdmValueFilter::setLastPriceComment);
         lastPriceCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
@@ -365,7 +383,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         contentFlagComboBox.setSizeFull();
         contentCommentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getContentComment(), StringUtils.EMPTY));
         filterBinder.forField(contentCommentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
+            .withValidator(getTextStringLengthValidator(1024))
             .bind(UdmValueFilter::getContentComment, UdmValueFilter::setContentComment);
         contentCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
@@ -383,7 +401,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         lastContentCommentField.setValue(
             ObjectUtils.defaultIfNull(valueFilter.getLastContentComment(), StringUtils.EMPTY));
         filterBinder.forField(lastContentCommentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
+            .withValidator(getTextStringLengthValidator(1024))
             .bind(UdmValueFilter::getLastContentComment, UdmValueFilter::setLastContentComment);
         lastContentCommentField.setSizeFull();
         horizontalLayout.setSizeFull();
@@ -410,7 +428,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private TextField initCommentLayout() {
         commentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getComment(), StringUtils.EMPTY));
         filterBinder.forField(commentField)
-            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 1024), 0, 1024))
+            .withValidator(getTextStringLengthValidator(1024))
             .bind(UdmValueFilter::getComment, UdmValueFilter::setComment);
         commentField.setSizeFull();
         VaadinUtils.addComponentStyle(commentField, "udm-value-comment-filter");
@@ -440,9 +458,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             } else {
                 Windows.showValidationErrorWindow(
                     Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, systemStandardNumberField,
-                        rhAccountNumberField, rhNameField, priceField, priceInUsdField, priceCommentField,
-                        lastPriceCommentField, contentField, contentCommentField, lastContentCommentField,
-                        commentField));
+                        rhAccountNumberFromField, rhAccountNumberToField, rhNameField, priceField, priceInUsdField,
+                        priceCommentField, lastPriceCommentField, contentField, contentCommentField,
+                        lastContentCommentField, commentField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -457,7 +475,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         clearOperatorLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         clearOperatorLayout(systemTitleField, systemTitleOperatorComboBox);
         clearOperatorLayout(systemStandardNumberField, systemStandardNumberOperatorComboBox);
-        rhAccountNumberField.clear();
+        clearOperatorLayout(rhAccountNumberFromField, rhAccountNumberToField, rhAccountNumberOperatorComboBox);
         clearOperatorLayout(rhNameField, rhNameOperatorComboBox);
         currencyComboBox.clear();
         clearOperatorLayout(priceField, priceOperatorComboBox);
@@ -481,7 +499,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         valueFilter.setWrWrkInstExpression(new FilterExpression<>());
         valueFilter.setSystemTitleExpression(new FilterExpression<>());
         valueFilter.setSystemStandardNumberExpression(new FilterExpression<>());
-        valueFilter.setRhAccountNumber(null);
+        valueFilter.setRhAccountNumberExpression(new FilterExpression<>());
         valueFilter.setRhNameExpression(new FilterExpression<>());
         valueFilter.setCurrency(null);
         valueFilter.setPriceExpression(new FilterExpression<>());
@@ -506,7 +524,8 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             Function.identity()));
         valueFilter.setSystemStandardNumberExpression(buildTextFilterExpression(systemStandardNumberField,
             systemStandardNumberOperatorComboBox, Function.identity()));
-        valueFilter.setRhAccountNumber(getLongFromTextField(rhAccountNumberField));
+        valueFilter.setRhAccountNumberExpression(buildNumberFilterExpression(rhAccountNumberFromField,
+            rhAccountNumberToField, rhAccountNumberOperatorComboBox, Long::valueOf));
         valueFilter.setRhNameExpression(buildTextFilterExpression(rhNameField, rhNameOperatorComboBox,
             Function.identity()));
         valueFilter.setCurrency(Objects.nonNull(currencyComboBox.getValue()) ? currencyComboBox.getValue() : null);
@@ -531,10 +550,6 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         valueFilter.setLastPubType(Objects.nonNull(lastPubTypeComboBox.getValue())
             ? lastPubTypeComboBox.getValue() : null);
         valueFilter.setComment(getStringFromTextField(commentField));
-    }
-
-    private Long getLongFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? Long.valueOf(textField.getValue().trim()) : null;
     }
 
     private String getStringFromTextField(TextField textField) {
