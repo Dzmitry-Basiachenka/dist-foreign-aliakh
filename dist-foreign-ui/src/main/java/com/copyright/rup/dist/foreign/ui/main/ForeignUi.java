@@ -150,7 +150,7 @@ public class ForeignUi extends CommonUi implements IMediatorProvider {
 
     private void addReportMenu() {
         IUdmReportWidget udmReportWidget = udmReportController.initWidget();
-        VaadinUtils.addComponentStyle(udmReportWidget, "udm-reports_menu");
+        VaadinUtils.addComponentStyle(udmReportWidget, "udm-reports-menu");
         if (ForeignSecurityUtils.hasResearcherPermission()) {
             getAbsoluteLayout().addComponent(udmReportWidget, UDM_REPORT_MENU_CSS_POSITION_RESEARCHER);
         } else if (ForeignSecurityUtils.hasSpecialistPermission()) {
