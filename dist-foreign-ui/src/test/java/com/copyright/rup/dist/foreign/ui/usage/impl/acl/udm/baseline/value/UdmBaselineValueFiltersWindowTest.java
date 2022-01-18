@@ -351,7 +351,7 @@ public class UdmBaselineValueFiltersWindowTest {
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
@@ -359,7 +359,7 @@ public class UdmBaselineValueFiltersWindowTest {
     }
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL, FilterOperatorEnum.CONTAINS,
                 FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
@@ -368,7 +368,7 @@ public class UdmBaselineValueFiltersWindowTest {
                                                    ComboBox<FilterOperatorEnum> operatorComboBox) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
         validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, "12345679", binder,null, true);
+        validateFieldAndVerifyErrorMessage(fromField, "12345679", binder, null, true);
         validateFieldAndVerifyErrorMessage(toField, "12345678", binder,
             "Field value should be greater or equal to Wr Wrk Inst From", false);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
