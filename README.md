@@ -1,3 +1,13 @@
+14.1.47
+-
+* B-69423 FDA: Filter functionality modification: implement operators for Wr Wrk Inst, Comment in Baseline Values tab
+* B-69423 FDA: Filter functionality modification: implement operations for Wr Wrk Inst in Values tab
+* B-69423 FDA: Filter functionality modification: implement operations for System Title, System Standard Number in Values tab
+* B-69423 FDA: Filter functionality modification: implement operators for Price Flag, Content Flag in Baseline Values tab
+* B-70571 FDA: Verified Details by Source Report: make changes based code review
+* CDP-1039 FDA: ACL: empty usages and value fields that were edited are not treated by the system the same as ‘null’ fields while sorting
+* CDP-1040 FDA: ACL: Usages sub-tab: Additional filters: 'Usage Detail ID' filter searches records by 'Detail ID' field instead of 'Usage Detail ID' field
+
 14.1.46
 -
 * B-69423 FDA: Filter functionality modification: implement operations for Survey Country, Language in Usages tab
