@@ -171,12 +171,12 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testSystemTitleFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(2);
+        testTextFilterOperatorChangeListener(2);
     }
 
     @Test
     public void testSystemStandardNumberFilterOperatorChangeListener3() {
-        testFilterOperatorChangeListener(3);
+        testTextFilterOperatorChangeListener(3);
     }
 
     @Test
@@ -231,16 +231,20 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
-    public void testSystemTitleFieldValidation() {
+    public void testSystemTitleValidation() {
         TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
+        assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "systemTitleOperatorComboBox"));
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, null, true);
         validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
         validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
             "Field value should not exceed 2000 characters", false);
     }
 
     @Test
-    public void testStandardNumberFieldValidation() {
+    public void testSystemStandardNumberValidation() {
         TextField systemStandardNumberField = Whitebox.getInternalState(window, "systemStandardNumberField");
+        assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "systemStandardNumberOperatorComboBox"));
+        validateFieldAndVerifyErrorMessage(systemStandardNumberField, StringUtils.EMPTY, null, true);
         validateFieldAndVerifyErrorMessage(systemStandardNumberField, buildStringWithExpectedLength(1000), null, true);
         validateFieldAndVerifyErrorMessage(systemStandardNumberField, buildStringWithExpectedLength(1001),
             "Field value should not exceed 1000 characters", false);
@@ -438,6 +442,26 @@ public class UdmValueFiltersWindowTest {
         operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
         assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
+    }
+
+    @SuppressWarnings(UNCHECKED)
+    private void testTextFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
+        VerticalLayout panelContent = (VerticalLayout) ((Panel) verticalLayout.getComponent(0)).getContent();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) panelContent.getComponent(index);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
+        assertFalse(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.IS_NOT_NULL);
         assertFalse(textField.isEnabled());
     }
 
@@ -640,6 +664,12 @@ public class UdmValueFiltersWindowTest {
         verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
             FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.IS_NULL));
+    }
+
+    private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+                FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {

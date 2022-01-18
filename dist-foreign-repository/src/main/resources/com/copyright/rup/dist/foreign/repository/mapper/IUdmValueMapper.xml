@@ -233,24 +233,20 @@
                 and v.comment ilike '%' || #{filter.comment} || '%'
             </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
-                <choose>
-                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemTitleExpression.operator">
-                        and v.system_title ilike #{filter.systemTitleExpression.fieldFirstValue}
-                    </when>
-                    <otherwise>
-                        and v.system_title ilike '%' || #{filter.systemTitleExpression.fieldFirstValue} || '%'
-                    </otherwise>
-                </choose>
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.system_title"/>
+                    <property name="operator" value="filter.systemTitleExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.systemTitleExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.systemTitleExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.systemStandardNumberExpression.isEmpty()">
-                <choose>
-                    <when test="@com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum@EQUALS == filter.systemStandardNumberExpression.operator">
-                        and v.standard_number ilike #{filter.systemStandardNumberExpression.fieldFirstValue}
-                    </when>
-                    <otherwise>
-                        and v.standard_number ilike '%' || #{filter.systemStandardNumberExpression.fieldFirstValue} || '%'
-                    </otherwise>
-                </choose>
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.standard_number"/>
+                    <property name="operator" value="filter.systemStandardNumberExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.systemStandardNumberExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.systemStandardNumberExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.rhNameExpression.isEmpty()">
                 <choose>

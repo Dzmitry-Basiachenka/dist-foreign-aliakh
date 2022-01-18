@@ -68,10 +68,10 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
     private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildNumericOperatorComboBox();
     private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
-    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox = buildTextOperatorComboBox();
     private final TextField systemStandardNumberField =
         new TextField(ForeignUi.getMessage("label.system_standard_number"));
-    private final ComboBox<FilterOperatorEnum> systemStandardNumberOperatorComboBox = buildOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> systemStandardNumberOperatorComboBox = buildTextOperatorComboBox();
     private final TextField rhAccountNumberField = new TextField(ForeignUi.getMessage("label.rh_account_number"));
     private final TextField rhNameField = new TextField(ForeignUi.getMessage("label.rh_name"));
     private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox = buildOperatorComboBox();
@@ -194,8 +194,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     }
 
     private HorizontalLayout initSystemTitleLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
-        systemTitleOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.CONTAINS);
+        HorizontalLayout systemTitleLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
         populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
             valueFilter.getSystemTitleExpression());
         filterBinder.forField(systemTitleField)
@@ -206,16 +205,15 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         systemTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, systemTitleField, event.getValue()));
         systemTitleField.setSizeFull();
-        horizontalLayout.setSizeFull();
+        systemTitleLayout.setSizeFull();
         VaadinUtils.addComponentStyle(systemTitleField, "udm-value-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-value-system-title-operator-filter");
-        return horizontalLayout;
+        return systemTitleLayout;
     }
 
     private HorizontalLayout initSystemStandardNumberLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(systemStandardNumberField,
+        HorizontalLayout systemStandardNumberLayout = new HorizontalLayout(systemStandardNumberField,
             systemStandardNumberOperatorComboBox);
-        systemStandardNumberOperatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.CONTAINS);
         populateOperatorFilters(systemStandardNumberField, systemStandardNumberOperatorComboBox,
             valueFilter.getSystemStandardNumberExpression());
         filterBinder.forField(systemStandardNumberField)
@@ -226,11 +224,11 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         systemStandardNumberOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, systemStandardNumberField, event.getValue()));
         systemStandardNumberField.setSizeFull();
-        horizontalLayout.setSizeFull();
+        systemStandardNumberLayout.setSizeFull();
         VaadinUtils.addComponentStyle(systemStandardNumberField, "udm-value-system-standard-number-filter");
         VaadinUtils.addComponentStyle(systemStandardNumberOperatorComboBox,
             "udm-value-system-standard-number-operator-filter");
-        return horizontalLayout;
+        return systemStandardNumberLayout;
     }
 
     private TextField initRhAccountNumberLayout() {
