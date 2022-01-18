@@ -50,7 +50,15 @@ public enum FilterOperatorEnum {
     /**
      * Contains filter operator.
      */
-    CONTAINS(1);
+    CONTAINS(1),
+    /**
+     * 'Y' filter operator
+     */
+    Y(0),
+    /**
+     * 'N' filter operator
+     */
+    N(0);
 
     private final int argumentsNumber;
 

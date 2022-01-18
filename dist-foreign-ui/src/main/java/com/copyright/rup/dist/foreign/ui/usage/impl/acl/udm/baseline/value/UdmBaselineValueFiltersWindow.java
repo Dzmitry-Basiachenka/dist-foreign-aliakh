@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -47,7 +46,8 @@ import java.util.Objects;
 public class UdmBaselineValueFiltersWindow extends Window {
 
     private static final int ONE = 1;
-    private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
+    private static final List<FilterOperatorEnum> FLAG_ITEMS = Arrays.asList(FilterOperatorEnum.Y,
+        FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String NUMBER_VALIDATION_MESSAGE = "field.error.not_numeric";
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
@@ -73,9 +73,9 @@ public class UdmBaselineValueFiltersWindow extends Window {
     private final TextField contentUnitPriceToField =
         new TextField(ForeignUi.getMessage("label.content_unit_price_to"));
     private final ComboBox<FilterOperatorEnum> contentUnitPriceComboBox = buildNumericOperatorComboBox();
-    private final ComboBox<String> priceFlagComboBox =
+    private final ComboBox<FilterOperatorEnum> priceFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
-    private final ComboBox<String> contentFlagComboBox =
+    private final ComboBox<FilterOperatorEnum> contentFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
     private final ComboBox<FilterOperatorEnum> commentOperatorComboBox = buildTextOperatorComboBox();
@@ -118,15 +118,13 @@ public class UdmBaselineValueFiltersWindow extends Window {
 
     private HorizontalLayout initFlagsLayout() {
         filterBinder.forField(priceFlagComboBox)
-            .bind(filter -> BooleanUtils.toYNString(filter.getPriceFlag()),
-                (filter, value) ->
-                    filter.setPriceFlag(StringUtils.isNotEmpty(value) ? convertStringToBoolean(value) : null));
+            .bind(filter -> filter.getPriceFlagExpression().getOperator(),
+                (filter, value) -> filter.getPriceFlagExpression().setOperator(value));
+        priceFlagComboBox.setItems(FLAG_ITEMS);
         filterBinder.forField(contentFlagComboBox)
-            .bind(filter -> BooleanUtils.toYNString(filter.getContentFlag()),
-                (filter, value) ->
-                    filter.setContentFlag(StringUtils.isNotEmpty(value) ? convertStringToBoolean(value) : null));
-        priceFlagComboBox.setItems(Y_N_ITEMS);
-        contentFlagComboBox.setItems(Y_N_ITEMS);
+            .bind(filter -> filter.getContentFlagExpression().getOperator(),
+                (filter, value) -> filter.getContentFlagExpression().setOperator(value));
+        contentFlagComboBox.setItems(FLAG_ITEMS);
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceFlagComboBox, contentFlagComboBox);
         setComponentsFullSize(priceFlagComboBox, contentFlagComboBox, horizontalLayout);
         horizontalLayout.setSpacing(true);
@@ -411,9 +409,5 @@ public class UdmBaselineValueFiltersWindow extends Window {
             || !getNumberValidator().test(fromValue)
             || !getNumberValidator().test(toValue)
             || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
-    }
-
-    private Boolean convertStringToBoolean(String value) {
-        return "Y".equals(value);
     }
 }
