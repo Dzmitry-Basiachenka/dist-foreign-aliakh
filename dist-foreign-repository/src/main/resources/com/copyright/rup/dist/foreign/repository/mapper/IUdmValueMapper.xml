@@ -220,12 +220,6 @@
                     <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.lastPriceComment">
-                and last_value.last_price_comment ilike '%' || #{filter.lastPriceComment} || '%'
-            </if>
-            <if test="null != filter.lastContentComment">
-                and last_value.last_content_comment ilike '%' || #{filter.lastContentComment} || '%'
-            </if>
             <if test="null != filter.comment">
                 and v.comment ilike '%' || #{filter.comment} || '%'
             </if>
@@ -280,11 +274,24 @@
             <if test="null != filter.priceFlag">
                 and v.price_flag = #{filter.priceFlag}
             </if>
-            <if test="null != filter.priceComment">
-                and v.price_comment ilike '%' || #{filter.priceComment} || '%'
+            <if test="!filter.priceCommentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.price_comment"/>
+                    <property name="operator" value="filter.priceCommentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.priceCommentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.priceCommentExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="null != filter.lastPriceFlag">
                 and last_value.last_price_flag = #{filter.lastPriceFlag}
+            </if>
+            <if test="!filter.lastPriceCommentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="last_value.last_price_comment"/>
+                    <property name="operator" value="filter.lastPriceCommentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.lastPriceCommentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.lastPriceCommentExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="!filter.contentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
@@ -297,12 +304,25 @@
             <if test="null != filter.contentFlag">
                 and v.content_flag = #{filter.contentFlag}
             </if>
-            <if test="null != filter.contentComment">
-                and v.content_comment ilike '%' || #{filter.contentComment} || '%'
+            <if test="!filter.contentCommentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.content_comment"/>
+                    <property name="operator" value="filter.contentCommentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.contentCommentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.contentCommentExpression.fieldSecondValue}"/>
+                </include>
             </if>
             <if test="null != filter.lastContentFlag">
                 and last_value.last_content_flag = #{filter.lastContentFlag}
             </if>
+            <if test="!filter.lastContentCommentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="last_value.last_content_comment"/>
+                    <property name="operator" value="filter.lastContentCommentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.lastContentCommentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.lastContentCommentExpression.fieldSecondValue}"/>
+                </include>
+            </if>            
         </where>
     </sql>
 

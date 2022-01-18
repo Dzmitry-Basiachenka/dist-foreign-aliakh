@@ -314,7 +314,7 @@ public abstract class CommonUdmFiltersWindow extends Window {
      * @param maxLength maximum length
      * @return length validator
      */
-    protected StringLengthValidator getTextStringLengthValidator(int maxLength) {
+    protected Validator<String> getTextStringLengthValidator(int maxLength) {
         return new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength);
     }
 

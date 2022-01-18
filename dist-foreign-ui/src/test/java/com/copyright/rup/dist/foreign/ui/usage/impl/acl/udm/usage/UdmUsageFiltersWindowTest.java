@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -496,6 +497,7 @@ public class UdmUsageFiltersWindowTest {
         TextField textField = (TextField) horizontalLayout.getComponent(0);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(5, ((ListDataProvider<?>) operatorComboBox.getDataProvider()).getItems().size());
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
         assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
@@ -516,6 +518,7 @@ public class UdmUsageFiltersWindowTest {
         TextField toField = (TextField) horizontalLayout.getComponent(1);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(2);
+        assertEquals(9, ((ListDataProvider<?>) operatorComboBox.getDataProvider()).getItems().size());
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
         assertTrue(fromField.isEnabled());
         assertFalse(toField.isEnabled());
