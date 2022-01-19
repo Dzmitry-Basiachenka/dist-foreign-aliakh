@@ -271,8 +271,11 @@
                     <property name="fieldSecondValue" value="${filter.priceInUsdExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.priceFlag">
-                and v.price_flag = #{filter.priceFlag}
+            <if test="!filter.priceFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="v.price_flag"/>
+                    <property name="operator" value="filter.priceFlagExpression.operator"/>
+                </include>
             </if>
             <if test="!filter.priceCommentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
@@ -282,8 +285,11 @@
                     <property name="fieldSecondValue" value="${filter.priceCommentExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.lastPriceFlag">
-                and last_value.last_price_flag = #{filter.lastPriceFlag}
+            <if test="!filter.lastPriceFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="last_value.last_price_flag"/>
+                    <property name="operator" value="filter.lastPriceFlagExpression.operator"/>
+                </include>
             </if>
             <if test="!filter.lastPriceCommentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
@@ -301,8 +307,11 @@
                     <property name="fieldSecondValue" value="${filter.contentExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.contentFlag">
-                and v.content_flag = #{filter.contentFlag}
+            <if test="!filter.contentFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="v.content_flag"/>
+                    <property name="operator" value="filter.contentFlagExpression.operator"/>
+                </include>
             </if>
             <if test="!filter.contentCommentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
@@ -312,8 +321,11 @@
                     <property name="fieldSecondValue" value="${filter.contentCommentExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.lastContentFlag">
-                and last_value.last_content_flag = #{filter.lastContentFlag}
+            <if test="!filter.lastContentFlagExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="last_value.last_content_flag"/>
+                    <property name="operator" value="filter.lastContentFlagExpression.operator"/>
+                </include>
             </if>
             <if test="!filter.lastContentCommentExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -38,11 +39,9 @@ public class UdmValueFilterTest {
     private static final BigDecimal PRICE = new BigDecimal("100.00");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("200.00");
     private static final String PRICE_COMMENT = "price comment";
-    private static final Boolean LAST_PRICE_FLAG = true;
     private static final String LAST_PRICE_COMMENT = "last price comment";
     private static final BigDecimal CONTENT = new BigDecimal("70");
     private static final String CONTENT_COMMENT = "content comment";
-    private static final Boolean LAST_CONTENT_FLAG = false;
     private static final String LAST_CONTENT_COMMENT = "last content comment";
     private static final PublicationType PUB_TYPE;
     private static final PublicationType LAST_PUB_TYPE;
@@ -84,14 +83,6 @@ public class UdmValueFilterTest {
         valueFilter.setLastValuePeriods(new HashSet<>());
         assertTrue(valueFilter.isEmpty());
         valueFilter.setLastValuePeriods(null);
-        assertTrue(valueFilter.isEmpty());
-        valueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
-        assertFalse(valueFilter.isEmpty());
-        valueFilter.setLastPriceFlag(null);
-        assertTrue(valueFilter.isEmpty());
-        valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
-        assertFalse(valueFilter.isEmpty());
-        valueFilter.setLastContentFlag(null);
         assertTrue(valueFilter.isEmpty());
         valueFilter.setPubType(PUB_TYPE);
         assertFalse(valueFilter.isEmpty());
@@ -141,6 +132,14 @@ public class UdmValueFilterTest {
         assertFalse(valueFilter.isEmpty());
         valueFilter.setPriceInUsdExpression(new FilterExpression<>());
         assertTrue(valueFilter.isEmpty());
+        valueFilter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setPriceFlagExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
+        valueFilter.setLastPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setLastPriceFlagExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
         valueFilter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_COMMENT, null));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setPriceCommentExpression(new FilterExpression<>());
@@ -153,6 +152,14 @@ public class UdmValueFilterTest {
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         assertFalse(valueFilter.isEmpty());
         valueFilter.setContentExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
+        valueFilter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setContentFlagExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
+        valueFilter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setLastContentFlagExpression(new FilterExpression<>());
         assertTrue(valueFilter.isEmpty());
         valueFilter.setContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
@@ -181,14 +188,14 @@ public class UdmValueFilterTest {
         assertEquals(new FilterExpression<>(), valueFilter.getRhNameExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getPriceExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getPriceInUsdExpression());
-        assertNull(valueFilter.getPriceFlag());
+        assertEquals(new FilterExpression<>(), valueFilter.getPriceFlagExpression());
+        assertEquals(new FilterExpression<>(), valueFilter.getLastPriceFlagExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getPriceCommentExpression());
-        assertNull(valueFilter.getLastPriceFlag());
         assertEquals(new FilterExpression<>(), valueFilter.getLastPriceCommentExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getContentExpression());
-        assertNull(valueFilter.getContentFlag());
+        assertEquals(new FilterExpression<>(), valueFilter.getContentFlagExpression());
+        assertEquals(new FilterExpression<>(), valueFilter.getLastContentFlagExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getContentCommentExpression());
-        assertNull(valueFilter.getLastContentFlag());
         assertEquals(new FilterExpression<>(), valueFilter.getLastContentCommentExpression());
         assertNull(valueFilter.getPubType());
         assertNull(valueFilter.getLastPubType());
