@@ -36,14 +36,14 @@ public class UdmValueFilter {
     private FilterExpression<Number> priceExpression = new FilterExpression<>();
     private FilterExpression<Number> priceInUsdExpression = new FilterExpression<>();
     private Boolean priceFlag;
-    private String priceComment;
+    private FilterExpression<String> priceCommentExpression = new FilterExpression<>();
     private Boolean lastPriceFlag;
-    private String lastPriceComment;
+    private FilterExpression<String> lastPriceCommentExpression = new FilterExpression<>();
     private FilterExpression<Number> contentExpression = new FilterExpression<>();
     private Boolean contentFlag;
-    private String contentComment;
+    private FilterExpression<String> contentCommentExpression = new FilterExpression<>();
     private Boolean lastContentFlag;
-    private String lastContentComment;
+    private FilterExpression<String> lastContentCommentExpression = new FilterExpression<>();
     private PublicationType pubType;
     private PublicationType lastPubType;
     private String comment;
@@ -74,14 +74,14 @@ public class UdmValueFilter {
             setPriceExpression(filter.getPriceExpression());
             setPriceInUsdExpression(filter.getPriceInUsdExpression());
             setPriceFlag(filter.getPriceFlag());
-            setPriceComment(filter.getPriceComment());
+            setPriceCommentExpression(filter.getPriceCommentExpression());
             setLastPriceFlag(filter.getLastPriceFlag());
-            setLastPriceComment(filter.getLastPriceComment());
+            setLastPriceCommentExpression(filter.getLastPriceCommentExpression());
             setContentExpression(filter.getContentExpression());
             setContentFlag(filter.getContentFlag());
-            setContentComment(filter.getContentComment());
+            setContentCommentExpression(filter.getContentCommentExpression());
             setLastContentFlag(filter.getLastContentFlag());
-            setLastContentComment(filter.getLastContentComment());
+            setLastContentCommentExpression(filter.getLastContentCommentExpression());
             setPubType(filter.getPubType());
             setLastPubType(filter.getLastPubType());
             setComment(filter.getComment());
@@ -192,12 +192,12 @@ public class UdmValueFilter {
         this.priceFlag = priceFlag;
     }
 
-    public String getPriceComment() {
-        return priceComment;
+    public FilterExpression<String> getPriceCommentExpression() {
+        return priceCommentExpression;
     }
 
-    public void setPriceComment(String priceComment) {
-        this.priceComment = priceComment;
+    public void setPriceCommentExpression(FilterExpression<String> priceCommentExpression) {
+        this.priceCommentExpression = priceCommentExpression;
     }
 
     public Boolean getLastPriceFlag() {
@@ -208,12 +208,12 @@ public class UdmValueFilter {
         this.lastPriceFlag = lastPriceFlag;
     }
 
-    public String getLastPriceComment() {
-        return lastPriceComment;
+    public FilterExpression<String> getLastPriceCommentExpression() {
+        return lastPriceCommentExpression;
     }
 
-    public void setLastPriceComment(String lastPriceComment) {
-        this.lastPriceComment = lastPriceComment;
+    public void setLastPriceCommentExpression(FilterExpression<String> lastPriceCommentExpression) {
+        this.lastPriceCommentExpression = lastPriceCommentExpression;
     }
 
     public FilterExpression<Number> getContentExpression() {
@@ -232,12 +232,12 @@ public class UdmValueFilter {
         this.contentFlag = contentFlag;
     }
 
-    public String getContentComment() {
-        return contentComment;
+    public FilterExpression<String> getContentCommentExpression() {
+        return contentCommentExpression;
     }
 
-    public void setContentComment(String contentComment) {
-        this.contentComment = contentComment;
+    public void setContentCommentExpression(FilterExpression<String> contentCommentExpression) {
+        this.contentCommentExpression = contentCommentExpression;
     }
 
     public Boolean getLastContentFlag() {
@@ -248,12 +248,12 @@ public class UdmValueFilter {
         this.lastContentFlag = lastContentFlag;
     }
 
-    public String getLastContentComment() {
-        return lastContentComment;
+    public FilterExpression<String> getLastContentCommentExpression() {
+        return lastContentCommentExpression;
     }
 
-    public void setLastContentComment(String lastContentComment) {
-        this.lastContentComment = lastContentComment;
+    public void setLastContentCommentExpression(FilterExpression<String> lastContentCommentExpression) {
+        this.lastContentCommentExpression = lastContentCommentExpression;
     }
 
     public PublicationType getPubType() {
@@ -297,14 +297,14 @@ public class UdmValueFilter {
             && priceExpression.isEmpty()
             && priceInUsdExpression.isEmpty()
             && null == priceFlag
-            && null == priceComment
+            && priceCommentExpression.isEmpty()
             && null == lastPriceFlag
-            && null == lastPriceComment
+            && lastPriceCommentExpression.isEmpty()
             && contentExpression.isEmpty()
             && null == contentFlag
-            && null == contentComment
+            && contentCommentExpression.isEmpty()
             && null == lastContentFlag
-            && null == lastContentComment
+            && lastContentCommentExpression.isEmpty()
             && null == pubType
             && null == lastPubType
             && null == comment;
@@ -333,14 +333,14 @@ public class UdmValueFilter {
             .append(priceExpression, that.priceExpression)
             .append(priceInUsdExpression, that.priceInUsdExpression)
             .append(priceFlag, that.priceFlag)
-            .append(priceComment, that.priceComment)
+            .append(priceCommentExpression, that.priceCommentExpression)
             .append(lastPriceFlag, that.lastPriceFlag)
-            .append(lastPriceComment, that.lastPriceComment)
+            .append(lastPriceCommentExpression, that.lastPriceCommentExpression)
             .append(contentExpression, that.contentExpression)
             .append(contentFlag, that.contentFlag)
-            .append(contentComment, that.contentComment)
+            .append(contentCommentExpression, that.contentCommentExpression)
             .append(lastContentFlag, that.lastContentFlag)
-            .append(lastContentComment, that.lastContentComment)
+            .append(lastContentCommentExpression, that.lastContentCommentExpression)
             .append(pubType, that.pubType)
             .append(lastPubType, that.lastPubType)
             .append(comment, that.comment)
@@ -363,14 +363,14 @@ public class UdmValueFilter {
             .append(priceExpression)
             .append(priceInUsdExpression)
             .append(priceFlag)
-            .append(priceComment)
+            .append(priceCommentExpression)
             .append(lastPriceFlag)
-            .append(lastPriceComment)
+            .append(lastPriceCommentExpression)
             .append(contentExpression)
             .append(contentFlag)
-            .append(contentComment)
+            .append(contentCommentExpression)
             .append(lastContentFlag)
-            .append(lastContentComment)
+            .append(lastContentCommentExpression)
             .append(pubType)
             .append(lastPubType)
             .append(comment)
@@ -393,14 +393,14 @@ public class UdmValueFilter {
             .append("priceExpression", priceExpression)
             .append("priceInUsdExpression", priceInUsdExpression)
             .append("priceFlag", priceFlag)
-            .append("priceComment", priceComment)
+            .append("priceCommentExpression", priceCommentExpression)
             .append("lastPriceFlag", lastPriceFlag)
-            .append("lastPriceComment", lastPriceComment)
+            .append("lastPriceCommentExpression", lastPriceCommentExpression)
             .append("contentExpression", contentExpression)
             .append("contentFlag", contentFlag)
-            .append("contentComment", contentComment)
+            .append("contentCommentExpression", contentCommentExpression)
             .append("lastContentFlag", lastContentFlag)
-            .append("lastContentComment", lastContentComment)
+            .append("lastContentCommentExpression", lastContentCommentExpression)
             .append("pubType", pubType)
             .append("lastPubType", lastPubType)
             .append("comment", comment)

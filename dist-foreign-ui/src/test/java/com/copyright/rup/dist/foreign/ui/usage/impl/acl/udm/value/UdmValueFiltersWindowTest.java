@@ -136,23 +136,26 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
-        valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
-            SYSTEM_STANDARD_NUMBER, null));
-        valueFilter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER,
-            null));
+        valueFilter.setSystemStandardNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_STANDARD_NUMBER, null));
+        valueFilter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
         valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         valueFilter.setPriceInUsdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
         valueFilter.setPriceFlag(PRICE_FLAG);
-        valueFilter.setPriceComment(PRICE_COMMENT);
+        valueFilter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_COMMENT, null));
         valueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
-        valueFilter.setLastPriceComment(LAST_PRICE_COMMENT);
+        valueFilter.setLastPriceCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_PRICE_COMMENT, null));
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         valueFilter.setContentFlag(CONTENT_FLAG);
-        valueFilter.setContentComment(CONTENT_COMMENT);
+        valueFilter.setContentCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
-        valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
+        valueFilter.setLastContentCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_CONTENT_COMMENT, null));
         valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setComment(COMMENT);
         IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
@@ -201,8 +204,28 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testPriceCommentFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(10);
+    }
+
+    @Test
+    public void testLastPriceCommentFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(12);
+    }
+
+    @Test
     public void testContentFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(11);
+        testFilterOperatorChangeListener(13);
+    }
+
+    @Test
+    public void testContentCommentFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(15);
+    }
+
+    @Test
+    public void testLastContentCommentFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(17);
     }
 
     @Test
@@ -294,6 +317,16 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
+    public void testPriceCommentValidation() {
+        validateCommentField("priceCommentField", "priceCommentOperatorComboBox");
+    }
+
+    @Test
+    public void testLastPriceCommentValidation() {
+        validateCommentField("lastPriceCommentField", "lastPriceCommentOperatorComboBox");
+    }
+
+    @Test
     public void testContentValidation() {
         TextField contentField = Whitebox.getInternalState(window, "contentField");
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
@@ -303,23 +336,13 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
-    public void testPriceCommentValidation() {
-        validateCommentField("priceCommentField");
-    }
-
-    @Test
     public void testContentCommentValidation() {
-        validateCommentField("contentCommentField");
-    }
-
-    @Test
-    public void testLastPriceCommentValidation() {
-        validateCommentField("lastPriceCommentField");
+        validateCommentField("contentCommentField", "contentCommentOperatorComboBox");
     }
 
     @Test
     public void testLastContentCommentValidation() {
-        validateCommentField("lastContentCommentField");
+        validateCommentField("lastContentCommentField", "lastContentCommentOperatorComboBox");
     }
 
     @Test
@@ -340,7 +363,7 @@ public class UdmValueFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(16, verticalLayout.getComponentCount());
+        assertEquals(20, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(1), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(2), "System Title");
@@ -350,22 +373,18 @@ public class UdmValueFiltersWindowTest {
         assertSizedComboBoxItems(verticalLayout.getComponent(6), "Currency", true, CURRENCIES);
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Price");
         verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Price in USD");
-        verifyTextFieldLayout(verticalLayout.getComponent(9), ComboBox.class, "Price Flag",
-            TextField.class, "Price Comment");
-        assertComboBoxItems("priceFlagComboBox", "Price Flag", true, Y_N_ITEMS);
-        verifyTextFieldLayout(verticalLayout.getComponent(10), ComboBox.class, "Last Price Flag",
-            TextField.class, "Last Price Comment");
-        assertComboBoxItems("lastPriceFlagComboBox", "Last Price Flag", true, Y_N_ITEMS);
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(11), "Content");
-        verifyTextFieldLayout(verticalLayout.getComponent(12), ComboBox.class, "Content Flag",
-            TextField.class, "Content Comment");
-        assertComboBoxItems("contentFlagComboBox", "Content Flag", true, Y_N_ITEMS);
-        verifyTextFieldLayout(verticalLayout.getComponent(13), ComboBox.class, "Last Content Flag",
-            TextField.class, "Last Content Comment");
-        assertComboBoxItems("lastContentFlagComboBox", "Last Content Flag", true, Y_N_ITEMS);
-        assertSizedComboBoxItems(verticalLayout.getComponent(14), "Last Pub Type", true,
+        assertSizedComboBoxItems(verticalLayout.getComponent(9), "Price Flag", true, Y_N_ITEMS);
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Price Comment");
+        assertSizedComboBoxItems(verticalLayout.getComponent(11), "Last Price Flag", true, Y_N_ITEMS);
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Last Price Comment");
+        verifyFieldWithOperatorComponent(verticalLayout.getComponent(13), "Content");
+        assertSizedComboBoxItems(verticalLayout.getComponent(14), "Content Flag", true, Y_N_ITEMS);
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Content Comment");
+        assertSizedComboBoxItems(verticalLayout.getComponent(16), "Last Content Flag", true, Y_N_ITEMS);
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(17), "Last Content Comment");
+        assertSizedComboBoxItems(verticalLayout.getComponent(18), "Last Pub Type", true,
             Arrays.asList(new PublicationType(), buildPublicationType()));
-        verifyTextField(verticalLayout.getComponent(15), "Comment");
+        verifyTextField(verticalLayout.getComponent(19), "Comment");
     }
 
     private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
@@ -408,23 +427,6 @@ public class UdmValueFiltersWindowTest {
         assertEquals("Operator", layout.getComponent(1).getCaption());
     }
 
-    private void verifyTextFieldLayout(Component component, Class<?> firstClass, String firstCaption,
-                                       Class<?> secondClass, String secondCaption) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        verifyComponent(layout.getComponent(0), firstClass, firstCaption, true);
-        verifyComponent(layout.getComponent(1), secondClass, secondCaption, true);
-    }
-
-    private void verifyComponent(Component component, Class<?> clazz, String caption, boolean isEnabled) {
-        assertTrue(clazz.isInstance(component));
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-        assertEquals(isEnabled, component.isEnabled());
-    }
-
     private void verifyComponentWidthAndCaption(Component component, String caption) {
         assertEquals(248, component.getWidth(), 0);
         assertEquals(Unit.PIXELS, component.getWidthUnits());
@@ -464,6 +466,7 @@ public class UdmValueFiltersWindowTest {
         TextField textField = (TextField) horizontalLayout.getComponent(0);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(5, ((ListDataProvider<?>) operatorComboBox.getDataProvider()).getItems().size());
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
         assertTrue(textField.isEnabled());
         operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
@@ -485,6 +488,7 @@ public class UdmValueFiltersWindowTest {
         TextField toField = (TextField) horizontalLayout.getComponent(1);
         ComboBox<FilterOperatorEnum> operatorComboBox =
             (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(2);
+        assertEquals(9, ((ListDataProvider<?>) operatorComboBox.getDataProvider()).getItems().size());
         assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
         assertTrue(fromField.isEnabled());
         assertFalse(toField.isEnabled());
@@ -580,27 +584,39 @@ public class UdmValueFiltersWindowTest {
             "Field value should not exceed 1024 characters", false);
     }
 
+    public void validateCommentField(String fieldName, String operatorComboboxName) {
+        TextField priceCommentField = Whitebox.getInternalState(window, fieldName);
+        assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, operatorComboboxName));
+        validateFieldAndVerifyErrorMessage(priceCommentField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(priceCommentField, buildStringWithExpectedLength(1024), null, true);
+        validateFieldAndVerifyErrorMessage(priceCommentField, buildStringWithExpectedLength(1025),
+            "Field value should not exceed 1024 characters", false);
+    }
+
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
-        valueFilter.setSystemStandardNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS,
-            SYSTEM_STANDARD_NUMBER, null));
-        valueFilter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER,
-            null));
+        valueFilter.setSystemStandardNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_STANDARD_NUMBER, null));
+        valueFilter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_ACCOUNT_NUMBER, null));
         valueFilter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, RH_NAME, null));
         valueFilter.setCurrency(USD_CURRENCY);
         valueFilter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE, null));
         valueFilter.setPriceInUsdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_IN_USD, null));
         valueFilter.setPriceFlag(PRICE_FLAG);
-        valueFilter.setPriceComment(PRICE_COMMENT);
+        valueFilter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, PRICE_COMMENT, null));
         valueFilter.setLastPriceFlag(LAST_PRICE_FLAG);
-        valueFilter.setLastPriceComment(LAST_PRICE_COMMENT);
+        valueFilter.setLastPriceCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_PRICE_COMMENT, null));
         valueFilter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT, null));
         valueFilter.setContentFlag(CONTENT_FLAG);
-        valueFilter.setContentComment(CONTENT_COMMENT);
+        valueFilter.setContentCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         valueFilter.setLastContentFlag(LAST_CONTENT_FLAG);
-        valueFilter.setLastContentComment(LAST_CONTENT_COMMENT);
+        valueFilter.setLastContentCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_CONTENT_COMMENT, null));
         valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setComment(COMMENT);
         return valueFilter;
@@ -627,14 +643,18 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("priceFlagComboBox", PRICE_FLAG_STRING);
         assertTextFieldValue("priceCommentField", PRICE_COMMENT);
+        assertComboBoxValue("priceCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastPriceFlagComboBox", LAST_PRICE_FLAG_STRING);
         assertTextFieldValue("lastPriceCommentField", LAST_PRICE_COMMENT);
+        assertComboBoxValue("lastPriceCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("contentField", CONTENT.toString());
         assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("contentFlagComboBox", CONTENT_FLAG_STRING);
         assertTextFieldValue("contentCommentField", CONTENT_COMMENT);
+        assertComboBoxValue("contentCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastContentFlagComboBox", LAST_CONTENT_FLAG_STRING);
         assertTextFieldValue("lastContentCommentField", LAST_CONTENT_COMMENT);
+        assertComboBoxValue("lastContentCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("lastPubTypeComboBox", buildPublicationType());
         assertTextFieldValue("commentField", COMMENT);
     }
@@ -666,11 +686,6 @@ public class UdmValueFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
-    }
-
-    private <T> void assertComboBoxItems(String fieldName, String caption, boolean emptySelectionAllowed,
-                                         List<T> expectedItems) {
-        verifyComboBox(Whitebox.getInternalState(window, fieldName), caption, emptySelectionAllowed, expectedItems);
     }
 
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {

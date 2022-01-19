@@ -73,15 +73,19 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(12),
             "<li><b><i>Price in USD: </i></b>2.5000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(13), "Price Flag", "Y");
-        verifyLabel(((VerticalLayout) component).getComponent(14), "Price Comment", "riCE COmmen");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(14),
+            "<li><b><i>Price Comment: </i></b>price comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(15), "Last Price Flag", "Y");
-        verifyLabel(((VerticalLayout) component).getComponent(16), "Last Price Comment", COMMENT);
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
+            "<li><b><i>Last Price Comment: </i></b>last price comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(17),
             "<li><b><i>Content: </i></b>50</li><li><b><i>Operator: </i></b>GREATER_THAN_OR_EQUALS_TO</li>");
         verifyLabel(((VerticalLayout) component).getComponent(18), "Content Flag", "Y");
-        verifyLabel(((VerticalLayout) component).getComponent(19), "Content Comment", "onteNT Commen");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
+            "<li><b><i>Content Comment: </i></b>content comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(20), "Last Content Flag", "N");
-        verifyLabel(((VerticalLayout) component).getComponent(21), "Last Content Comment", COMMENT);
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
+            "<li><b><i>Last Content Comment: </i></b>last content comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(22), "Last Pub Type", "BK - Book");
         verifyLabel(((VerticalLayout) component).getComponent(23), COMMENT, COMMENT);
     }
@@ -113,15 +117,17 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("2.5000000000"), null));
         filter.setPriceFlag(true);
-        filter.setPriceComment("riCE COmmen");
+        filter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "price comment", null));
         filter.setLastPriceFlag(true);
-        filter.setLastPriceComment(COMMENT);
+        filter.setLastPriceCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, "last price comment", null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null));
         filter.setContentFlag(true);
         filter.setCurrency(new Currency("US", "United States"));
-        filter.setContentComment("onteNT Commen");
+        filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "content comment", null));
         filter.setLastContentFlag(false);
-        filter.setLastContentComment(COMMENT);
+        filter.setLastContentCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
         filter.setPubType(buildPubType());
         filter.setLastPubType(buildPubType());
         filter.setComment(COMMENT);
