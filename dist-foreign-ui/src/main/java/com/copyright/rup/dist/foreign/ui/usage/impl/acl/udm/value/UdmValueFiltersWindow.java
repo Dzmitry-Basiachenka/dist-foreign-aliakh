@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
-import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -50,7 +49,8 @@ import java.util.function.Function;
  */
 public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
 
-    private static final List<String> Y_N_ITEMS = Arrays.asList("Y", "N");
+    private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -78,19 +78,21 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildTextOperatorComboBox();
     private final TextField priceInUsdField = new TextField(ForeignUi.getMessage("label.price_in_usd"));
     private final ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox = buildTextOperatorComboBox();
-    private final ComboBox<String> priceFlagComboBox = new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
+    private final ComboBox<FilterOperatorEnum> priceFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
     private final TextField priceCommentField = new TextField(ForeignUi.getMessage("label.price_comment"));
     private final ComboBox<FilterOperatorEnum> priceCommentOperatorComboBox = buildTextOperatorComboBox();
-    private final ComboBox<String> lastPriceFlagComboBox =
+    private final ComboBox<FilterOperatorEnum> lastPriceFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.last_price_flag"));
     private final TextField lastPriceCommentField = new TextField(ForeignUi.getMessage("label.last_price_comment"));
     private final ComboBox<FilterOperatorEnum> lastPriceCommentOperatorComboBox = buildTextOperatorComboBox();
     private final TextField contentField = new TextField(ForeignUi.getMessage("label.content"));
     private final ComboBox<FilterOperatorEnum> contentOperatorComboBox = buildTextOperatorComboBox();
-    private final ComboBox<String> contentFlagComboBox = new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
+    private final ComboBox<FilterOperatorEnum> contentFlagComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
     private final ComboBox<FilterOperatorEnum> contentCommentOperatorComboBox = buildTextOperatorComboBox();
-    private final ComboBox<String> lastContentFlagComboBox =
+    private final ComboBox<FilterOperatorEnum> lastContentFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.last_content_flag"));
     private final TextField lastContentCommentField = new TextField(ForeignUi.getMessage("label.last_content_comment"));
     private final ComboBox<FilterOperatorEnum> lastContentCommentOperatorComboBox = buildTextOperatorComboBox();
@@ -320,9 +322,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<String> initPriceFlag() {
-        priceFlagComboBox.setItems(Y_N_ITEMS);
-        priceFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getPriceFlag()));
+    private ComboBox<FilterOperatorEnum> initPriceFlag() {
+        priceFlagComboBox.setItems(FLAG_ITEMS);
+        priceFlagComboBox.setSelectedItem(valueFilter.getPriceFlagExpression().getOperator());
         priceFlagComboBox.setWidth(248, Unit.PIXELS);
         VaadinUtils.addComponentStyle(priceFlagComboBox, "udm-value-price-flag-filter");
         return priceFlagComboBox;
@@ -345,9 +347,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<String> initLastPriceFlag() {
-        lastPriceFlagComboBox.setItems(Y_N_ITEMS);
-        lastPriceFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getLastPriceFlag()));
+    private ComboBox<FilterOperatorEnum> initLastPriceFlag() {
+        lastPriceFlagComboBox.setItems(FLAG_ITEMS);
+        lastPriceFlagComboBox.setSelectedItem(valueFilter.getLastPriceFlagExpression().getOperator());
         lastPriceFlagComboBox.setWidth(248, Unit.PIXELS);
         VaadinUtils.addComponentStyle(lastPriceFlagComboBox, "udm-value-last-price-flag-filter");
         return lastPriceFlagComboBox;
@@ -388,9 +390,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<String> initContentFlag() {
-        contentFlagComboBox.setItems(Y_N_ITEMS);
-        contentFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getContentFlag()));
+    private ComboBox<FilterOperatorEnum> initContentFlag() {
+        contentFlagComboBox.setItems(FLAG_ITEMS);
+        contentFlagComboBox.setSelectedItem(valueFilter.getContentFlagExpression().getOperator());
         contentFlagComboBox.setWidth(248, Unit.PIXELS);
         VaadinUtils.addComponentStyle(contentFlagComboBox, "udm-value-content-flag-filter");
         return contentFlagComboBox;
@@ -414,9 +416,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<String> initLastContentFlag() {
-        lastContentFlagComboBox.setItems(Y_N_ITEMS);
-        lastContentFlagComboBox.setSelectedItem(BooleanUtils.toYNString(valueFilter.getLastContentFlag()));
+    private ComboBox<FilterOperatorEnum> initLastContentFlag() {
+        lastContentFlagComboBox.setItems(FLAG_ITEMS);
+        lastContentFlagComboBox.setSelectedItem(valueFilter.getLastContentFlagExpression().getOperator());
         lastContentFlagComboBox.setWidth(248, Unit.PIXELS);
         VaadinUtils.addComponentStyle(lastContentFlagComboBox, "udm-value-last-content-flag-filter");
         return lastContentFlagComboBox;
@@ -523,14 +525,14 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         valueFilter.setCurrency(null);
         valueFilter.setPriceExpression(new FilterExpression<>());
         valueFilter.setPriceInUsdExpression(new FilterExpression<>());
-        valueFilter.setPriceFlag(null);
+        valueFilter.setPriceFlagExpression(new FilterExpression<>());
         valueFilter.setPriceCommentExpression(new FilterExpression<>());
-        valueFilter.setLastPriceFlag(null);
+        valueFilter.setLastPriceFlagExpression(new FilterExpression<>());
         valueFilter.setLastPriceCommentExpression(new FilterExpression<>());
         valueFilter.setContentExpression(new FilterExpression<>());
-        valueFilter.setContentFlag(null);
+        valueFilter.setContentFlagExpression(new FilterExpression<>());
         valueFilter.setContentCommentExpression(new FilterExpression<>());
-        valueFilter.setLastContentFlag(null);
+        valueFilter.setLastContentFlagExpression(new FilterExpression<>());
         valueFilter.setLastContentCommentExpression(new FilterExpression<>());
         valueFilter.setLastPubType(null);
         valueFilter.setComment(null);
@@ -552,22 +554,18 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             BigDecimal::new));
         valueFilter.setPriceInUsdExpression(buildAmountFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setPriceFlag(Objects.isNull(priceFlagComboBox.getValue())
-            ? null : convertStringToBoolean(priceFlagComboBox.getValue()));
+        valueFilter.getPriceFlagExpression().setOperator(priceFlagComboBox.getValue());
         valueFilter.setPriceCommentExpression(buildTextFilterExpression(priceCommentField, priceCommentOperatorComboBox,
             Function.identity()));
-        valueFilter.setLastPriceFlag(Objects.isNull(lastPriceFlagComboBox.getValue())
-            ? null : convertStringToBoolean(lastPriceFlagComboBox.getValue()));
+        valueFilter.getLastPriceFlagExpression().setOperator(lastPriceFlagComboBox.getValue());
         valueFilter.setLastPriceCommentExpression(buildTextFilterExpression(lastPriceCommentField,
             lastPriceCommentOperatorComboBox, Function.identity()));
         valueFilter.setContentExpression(buildAmountFilterExpression(contentField, contentOperatorComboBox,
             BigDecimal::new));
-        valueFilter.setContentFlag(Objects.isNull(contentFlagComboBox.getValue())
-            ? null : convertStringToBoolean(contentFlagComboBox.getValue()));
+        valueFilter.getContentFlagExpression().setOperator(contentFlagComboBox.getValue());
         valueFilter.setContentCommentExpression(buildTextFilterExpression(contentCommentField,
             contentCommentOperatorComboBox, Function.identity()));
-        valueFilter.setLastContentFlag(Objects.isNull(lastContentFlagComboBox.getValue())
-            ? null : convertStringToBoolean(lastContentFlagComboBox.getValue()));
+        valueFilter.getLastContentFlagExpression().setOperator(lastContentFlagComboBox.getValue());
         valueFilter.setLastContentCommentExpression(buildTextFilterExpression(lastContentCommentField,
             lastContentCommentOperatorComboBox, Function.identity()));
         valueFilter.setLastPubType(Objects.nonNull(lastPubTypeComboBox.getValue())
@@ -577,9 +575,5 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
 
     private String getStringFromTextField(TextField textField) {
         return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
-    }
-
-    private Boolean convertStringToBoolean(String value) {
-        return "Y".equals(value);
     }
 }

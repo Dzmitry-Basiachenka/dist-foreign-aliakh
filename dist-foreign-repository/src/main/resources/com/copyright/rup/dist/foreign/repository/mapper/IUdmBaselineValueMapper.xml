@@ -93,16 +93,12 @@
                 <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
                     <property name="column" value="v.price_flag"/>
                     <property name="operator" value="filter.priceFlagExpression.operator"/>
-                    <property name="fieldFirstValue" value="${filter.priceFlagExpression.fieldFirstValue}"/>
-                    <property name="fieldSecondValue" value="${filter.priceFlagExpression.fieldSecondValue}"/>
                 </include>
             </if>
             <if test="!filter.contentFlagExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
                     <property name="column" value="v.content_flag"/>
                     <property name="operator" value="filter.contentFlagExpression.operator"/>
-                    <property name="fieldFirstValue" value="${filter.contentFlagExpression.fieldFirstValue}"/>
-                    <property name="fieldSecondValue" value="${filter.contentFlagExpression.fieldSecondValue}"/>
                 </include>
             </if>
             <if test="!filter.priceExpression.isEmpty()">

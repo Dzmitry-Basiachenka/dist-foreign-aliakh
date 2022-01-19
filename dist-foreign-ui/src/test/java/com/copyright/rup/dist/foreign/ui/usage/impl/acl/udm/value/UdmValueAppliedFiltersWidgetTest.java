@@ -11,8 +11,8 @@ import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
-
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -116,16 +116,16 @@ public class UdmValueAppliedFiltersWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.0000000000"), null));
         filter.setPriceInUsdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("2.5000000000"), null));
-        filter.setPriceFlag(true);
+        filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "price comment", null));
-        filter.setLastPriceFlag(true);
+        filter.setLastPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setLastPriceCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last price comment", null));
         filter.setContentExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, 50, null));
-        filter.setContentFlag(true);
+        filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setCurrency(new Currency("US", "United States"));
         filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "content comment", null));
-        filter.setLastContentFlag(false);
+        filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
         filter.setPubType(buildPubType());

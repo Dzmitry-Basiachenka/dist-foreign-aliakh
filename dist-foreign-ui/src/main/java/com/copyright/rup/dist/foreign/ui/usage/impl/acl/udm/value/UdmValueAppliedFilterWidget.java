@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
-import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -64,22 +63,23 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
             addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price", StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getPriceInUsdExpression(), "label.price_in_usd", StringUtils.EMPTY),
                 layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter ->
-                BooleanUtils.toYNString(udmValueFilter.getPriceFlag()), filter, "label.price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getPriceFlagExpression().getOperator()), filter, "label.price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getPriceCommentExpression(), "label.price_comment",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter ->
-                BooleanUtils.toYNString(udmValueFilter.getLastPriceFlag()), filter, "label.last_price_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getLastPriceFlagExpression().getOperator()), filter, "label.last_price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getLastPriceCommentExpression(), "label.last_price_comment",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content", StringUtils.EMPTY),
                 layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter ->
-                BooleanUtils.toYNString(udmValueFilter.getContentFlag()), filter, "label.content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getContentFlagExpression().getOperator()), filter, "label.content_flag"), layout);
             addLabel(createLabelWithOperator(filter.getContentCommentExpression(), "label.content_comment",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithSingleValue(udmValueFilter -> BooleanUtils.toYNString(
-                udmValueFilter.getLastContentFlag()), filter, "label.last_content_flag"), layout);
+            addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
+                udmValueFilter.getLastContentFlagExpression().getOperator()), filter, "label.last_content_flag"),
+                layout);
             addLabel(createLabelWithOperator(filter.getLastContentCommentExpression(), "label.last_content_comment",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getLastPubType, filter), filter,
