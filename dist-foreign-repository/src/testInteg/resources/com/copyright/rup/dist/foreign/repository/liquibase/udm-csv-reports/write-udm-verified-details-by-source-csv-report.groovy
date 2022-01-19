@@ -323,7 +323,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '763a212c-fbb0-426b-ab19-7f29b474e1a1')
-            column(name: 'name', value: 'UDM Batch 2021 December')
+            column(name: 'name', value: 'UDM Batch 2021 December with unset Period filter')
             column(name: 'period', value: 202112)
             column(name: 'usage_origin', value: 'SS')
             column(name: 'channel', value: 'CCC')
@@ -366,12 +366,12 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '1838a19d-526d-4277-b683-5fb9bd1edc54')
-            column(name: 'name', value: 'UDM Batch 2020 June with another Usage Origin')
+            column(name: 'name', value: 'UDM Batch 2020 June with unset Usage Origin filter')
             column(name: 'period', value: 202006)
             column(name: 'usage_origin', value: 'RFA')
             column(name: 'channel', value: 'CCC')
@@ -463,6 +463,53 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2021-02-14 12:00:00+00')
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2021-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
+            column(name: 'df_udm_usage_batch_uid', value: '517e8937-7064-414e-8c8d-0d0aa3d1871b')
+            column(name: 'name', value: 'UDM Batch 2020 June with Created Time UDM Usage for unset Date filter')
+            column(name: 'period', value: 202006)
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'CCC')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '58da01a3-4068-4db6-9db6-54175b6acde4')
+            column(name: 'df_udm_usage_batch_uid', value: '517e8937-7064-414e-8c8d-0d0aa3d1871b')
+            column(name: 'original_detail_id', value: 'OGXN674GHHSB412')
+            column(name: 'period', value: '202006')
+            column(name: 'period_end_date', value: '2020-06-30')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'rh_account_number', value: 1000002859)
+            column(name: 'wr_wrk_inst', value: 306985867)
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'reported_standard_number', value: '0927-7765')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'reported_pub_type', value: 'Book')
+            column(name: 'publication_format', value: 'Digital')
+            column(name: 'article', value: 'Tenside, surfactants, detergents')
+            column(name: 'language', value: 'German')
+            column(name: 'company_id', value: 1136)
+            column(name: 'company_name', value: 'Albany International Corp.')
+            column(name: 'survey_respondent', value: 'f86412b1-a555-4acf-96f9-b909b139533f')
+            column(name: 'ip_address', value: '24.12.119.203')
+            column(name: 'survey_country', value: 'United States')
+            column(name: 'usage_date', value: '2020-09-10')
+            column(name: 'survey_start_date', value: '2020-01-01')
+            column(name: 'survey_end_date', value: '2020-01-30')
+            column(name: 'statistical_multiplier', value: 1.00000)
+            column(name: 'annual_multiplier', value: 1)
+            column(name: 'quantity', value: 1)
+            column(name: 'annualized_copies', value: 1)
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'reported_type_of_use', value: 'EMAIL_COPY')
+            column(name: 'is_baseline_flag', value: true)
+            column(name: 'baseline_created_by_user', value: 'jjohn@copyright.com')
+            column(name: 'baseline_created_datetime', value: '2020-06-14 12:00:00+00')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2020-01-01 12:00:00+00')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'updated_datetime', value: '2020-01-14 12:00:00+00')
         }
 
         rollback {

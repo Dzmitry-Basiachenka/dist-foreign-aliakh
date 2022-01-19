@@ -909,7 +909,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '65e76c55-195d-41df-a101-a31ec9c65a96')
             column(name: 'name', value: 'UDM Batch 2020 June with Created Time UDM Usage for unset Date filter')
-            column(name: 'period', value: 202005)
+            column(name: 'period', value: 202006)
             column(name: 'usage_origin', value: 'SS')
             column(name: 'channel', value: 'CCC')
         }
@@ -918,7 +918,7 @@ databaseChangeLog {
             column(name: 'df_udm_usage_uid', value: 'e88f59cb-4a74-4b4c-a24e-b7bbbaa22f0d')
             column(name: 'df_udm_usage_batch_uid', value: '65e76c55-195d-41df-a101-a31ec9c65a96')
             column(name: 'original_detail_id', value: 'OGN674GHHSB917')
-            column(name: 'period', value: '202005')
+            column(name: 'period', value: '202006')
             column(name: 'period_end_date', value: '2020-06-30')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'rh_account_number', value: 1000002859)

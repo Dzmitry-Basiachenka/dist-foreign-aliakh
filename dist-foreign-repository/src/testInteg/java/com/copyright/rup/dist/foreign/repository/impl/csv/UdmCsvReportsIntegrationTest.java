@@ -190,6 +190,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testWriteUdmSurveyLicenseeCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202206));
+        reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        reportFilter.setChannel(UdmChannelEnum.CCC);
         reportFilter.setDateFrom(LocalDate.of(2022, 3, 1));
         reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
@@ -198,7 +200,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-weekly-survey-csv-report.groovy")
+    @TestData(fileName = "udm-csv-reports/write-udm-survey-licensee-csv-report.groovy")
     public void testWriteUdmSurveyLicenseeEmptyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
