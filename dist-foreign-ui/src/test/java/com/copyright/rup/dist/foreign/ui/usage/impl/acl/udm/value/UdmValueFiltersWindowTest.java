@@ -280,7 +280,7 @@ public class UdmValueFiltersWindowTest {
         TextField priceField = Whitebox.getInternalState(window, "priceField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
-        assertOperatorComboBoxItems(priceOperatorComboBox);
+        assertTextOperatorComboBoxItems(priceOperatorComboBox);
         verifyAmountValidationZeroAllowed(priceField);
     }
 
@@ -289,7 +289,7 @@ public class UdmValueFiltersWindowTest {
         TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
         ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
             Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
-        assertOperatorComboBoxItems(priceInUsdOperatorComboBox);
+        assertTextOperatorComboBoxItems(priceInUsdOperatorComboBox);
         verifyAmountValidationZeroAllowed(priceInUsdField);
     }
 
@@ -298,7 +298,7 @@ public class UdmValueFiltersWindowTest {
         TextField contentField = Whitebox.getInternalState(window, "contentField");
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
-        assertOperatorComboBoxItems(contentOperatorComboBox);
+        assertTextOperatorComboBoxItems(contentOperatorComboBox);
         verifyAmountValidationZeroDenied(contentField);
     }
 
@@ -673,20 +673,14 @@ public class UdmValueFiltersWindowTest {
         verifyComboBox(Whitebox.getInternalState(window, fieldName), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private void assertOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, "Operator", false, Arrays.asList(FilterOperatorEnum.EQUALS,
-            FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.IS_NULL));
-    }
-
     private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, false,
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
             Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
                 FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
                 FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,

@@ -2,16 +2,22 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,13 +41,8 @@ public abstract class CommonUdmFiltersWindow extends Window {
      * @return text operator combobox
      */
     protected ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> operatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        operatorComboBox.setEmptySelectionAllowed(false);
-        operatorComboBox.setSizeFull();
-        operatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        operatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return operatorComboBox;
     }
 
     /**
@@ -50,15 +51,10 @@ public abstract class CommonUdmFiltersWindow extends Window {
      * @return numeric operator combobox
      */
     protected ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        ComboBox<FilterOperatorEnum> operatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        operatorComboBox.setEmptySelectionAllowed(false);
-        operatorComboBox.setSizeFull();
-        operatorComboBox.setItems(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-        operatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return operatorComboBox;
     }
 
     /**
@@ -249,6 +245,34 @@ public abstract class CommonUdmFiltersWindow extends Window {
     }
 
     /**
+     * Applies common formatting for HorizontalLayout with one component.
+     *
+     * @param mainLayout main horizontal layout
+     * @param component  component to expand
+     */
+    protected void applyCommonTextFieldFormatting(HorizontalLayout mainLayout, Component component) {
+        mainLayout.setSizeFull();
+        component.setSizeFull();
+        mainLayout.setExpandRatio(component, 1f);
+    }
+
+    /**
+     * Applies common formatting for HorizontalLayout with two components.
+     *
+     * @param mainLayout      main horizontal layout
+     * @param firstComponent  first component to expand
+     * @param secondComponent second component to expand
+     */
+    protected void applyCommonNumericFieldFormatting(HorizontalLayout mainLayout, Component firstComponent,
+                                                     Component secondComponent) {
+        mainLayout.setSizeFull();
+        firstComponent.setSizeFull();
+        mainLayout.setExpandRatio(firstComponent, 0.5f);
+        secondComponent.setSizeFull();
+        mainLayout.setExpandRatio(secondComponent, 0.5f);
+    }
+
+    /**
      * Builds filter expression.
      *
      * @param fromField        'from' text field
@@ -259,10 +283,10 @@ public abstract class CommonUdmFiltersWindow extends Window {
      * @param <T>              type of value converter
      * @return filter expression
      */
-    private <T> FilterExpression<T> buildFilterExpression(TextField fromField, TextField toField,
-                                                          ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                          Function<String, T> valueConverter,
-                                                          Predicate<TextField> successPredicate) {
+    protected <T> FilterExpression<T> buildFilterExpression(TextField fromField, TextField toField,
+                                                            ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                            Function<String, T> valueConverter,
+                                                            Predicate<TextField> successPredicate) {
         FilterExpression<T> filterExpression = new FilterExpression<>();
         if (successPredicate.test(fromField)) {
             filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
@@ -332,5 +356,32 @@ public abstract class CommonUdmFiltersWindow extends Window {
             || !getNumberValidator().test(fromValue)
             || !getNumberValidator().test(toValue)
             || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
+    }
+
+    /**
+     * Validates BigDecimal values in 'from' and 'to' text fields.
+     *
+     * @param fromField 'from' text field
+     * @param toField   'to' text field
+     * @return {@code true} is the text fields contains valid numbers, {@code false} otherwise
+     */
+    protected boolean validateBigDecimalFromToValues(TextField fromField, TextField toField) {
+        String fromValue = fromField.getValue();
+        String toValue = toField.getValue();
+        AmountZeroValidator amountZeroValidator = new AmountZeroValidator();
+        return StringUtils.isBlank(fromValue)
+            || StringUtils.isBlank(toValue)
+            || !amountZeroValidator.isValid(fromValue)
+            || !amountZeroValidator.isValid(toValue)
+            || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
+    }
+
+    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
+        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
+        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
+        filterOperatorComboBox.setEmptySelectionAllowed(false);
+        filterOperatorComboBox.setItems(items);
+        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
+        return filterOperatorComboBox;
     }
 }
