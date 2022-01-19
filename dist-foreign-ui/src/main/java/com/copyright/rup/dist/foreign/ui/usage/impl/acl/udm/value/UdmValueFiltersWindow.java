@@ -250,9 +250,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
                     ForeignUi.getMessage("label.rh_account_number_from")))
             .bind(filter -> filter.getRhAccountNumberExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getRhAccountNumberExpression().setFieldFirstValue(Long.valueOf(value)));
-        rhAccountNumberFromField.setSizeFull();
-        rhAccountNumberToField.setSizeFull();
-        rhAccountNumberLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(rhAccountNumberLayout, rhAccountNumberFromField, rhAccountNumberToField);
         VaadinUtils.addComponentStyle(rhAccountNumberFromField, "udm-value-rh-account-number-from-filter");
         VaadinUtils.addComponentStyle(rhAccountNumberToField, "udm-value-rh-account-number-to-filter");
         VaadinUtils.addComponentStyle(rhAccountNumberOperatorComboBox, "udm-value-rh-account-number-operator-filter");
