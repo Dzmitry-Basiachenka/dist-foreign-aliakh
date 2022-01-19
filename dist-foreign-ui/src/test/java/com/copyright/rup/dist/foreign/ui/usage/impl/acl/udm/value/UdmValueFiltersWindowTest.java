@@ -192,12 +192,12 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testPriceFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(7);
+        testNumericFilterOperatorChangeListener(7);
     }
 
     @Test
     public void testPriceInUsdFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(8);
+        testNumericFilterOperatorChangeListener(8);
     }
 
     @Test
@@ -212,7 +212,7 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testContentFilterOperatorChangeListener() {
-        testFilterOperatorChangeListener(13);
+        testNumericFilterOperatorChangeListener(13);
     }
 
     @Test
@@ -297,20 +297,24 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testPriceValidation() {
-        TextField priceField = Whitebox.getInternalState(window, "priceField");
+        TextField priceFromField = Whitebox.getInternalState(window, "priceFromField");
+        TextField priceToField = Whitebox.getInternalState(window, "priceToField");
         ComboBox<FilterOperatorEnum> priceOperatorComboBox =
             Whitebox.getInternalState(window, "priceOperatorComboBox");
-        assertTextOperatorComboBoxItems(priceOperatorComboBox);
-        verifyAmountValidationZeroAllowed(priceField);
+        assertNumericOperatorComboBoxItems(priceOperatorComboBox);
+        verifyAmountValidationZeroAllowed(priceFromField, priceToField,
+            priceOperatorComboBox, "Field value should be greater or equal to Price From");
     }
 
     @Test
     public void testPriceInUsdValidation() {
-        TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
+        TextField priceInUsdFromField = Whitebox.getInternalState(window, "priceInUsdFromField");
+        TextField priceInUsdToField = Whitebox.getInternalState(window, "priceInUsdToField");
         ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox =
             Whitebox.getInternalState(window, "priceInUsdOperatorComboBox");
-        assertTextOperatorComboBoxItems(priceInUsdOperatorComboBox);
-        verifyAmountValidationZeroAllowed(priceInUsdField);
+        assertNumericOperatorComboBoxItems(priceInUsdOperatorComboBox);
+        verifyAmountValidationZeroAllowed(priceInUsdFromField, priceInUsdToField,
+            priceInUsdOperatorComboBox, "Field value should be greater or equal to Price in USD From");
     }
 
     @Test
@@ -325,11 +329,13 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testContentValidation() {
-        TextField contentField = Whitebox.getInternalState(window, "contentField");
+        TextField contentFromField = Whitebox.getInternalState(window, "contentFromField");
+        TextField contentToField = Whitebox.getInternalState(window, "contentToField");
         ComboBox<FilterOperatorEnum> contentOperatorComboBox =
             Whitebox.getInternalState(window, "contentOperatorComboBox");
-        assertTextOperatorComboBoxItems(contentOperatorComboBox);
-        verifyAmountValidationZeroDenied(contentField);
+        assertNumericOperatorComboBoxItems(contentOperatorComboBox);
+        verifyAmountValidationZeroDenied(contentFromField, contentToField,
+            contentOperatorComboBox, "Field value should be greater or equal to Content From");
     }
 
     @Test
@@ -368,13 +374,13 @@ public class UdmValueFiltersWindowTest {
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(4), "RH Account # From", "RH Account # To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "RH Name");
         assertSizedComboBoxItems(verticalLayout.getComponent(6), "Currency", true, CURRENCIES);
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(7), "Price");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(8), "Price in USD");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Price From", "Price To");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Price in USD From", "Price in USD To");
         assertSizedComboBoxItems(verticalLayout.getComponent(9), "Price Flag", true, FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Price Comment");
         assertSizedComboBoxItems(verticalLayout.getComponent(11), "Last Price Flag", true, FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Last Price Comment");
-        verifyFieldWithOperatorComponent(verticalLayout.getComponent(13), "Content");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Content From", "Content To");
         assertSizedComboBoxItems(verticalLayout.getComponent(14), "Content Flag", true, FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Content Comment");
         assertSizedComboBoxItems(verticalLayout.getComponent(16), "Last Content Flag", true, FLAG_ITEMS);
@@ -414,16 +420,6 @@ public class UdmValueFiltersWindowTest {
         verifyItemsFilterWidget(layout.getComponent(1), secondCaption);
     }
 
-    private void verifyFieldWithOperatorComponent(Component component, String caption) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        assertTrue(layout.getComponent(0) instanceof TextField);
-        assertEquals(caption, layout.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(1) instanceof ComboBox);
-        assertEquals("Operator", layout.getComponent(1).getCaption());
-    }
-
     private void verifyComponentWidthAndCaption(Component component, String caption) {
         assertEquals(248, component.getWidth(), 0);
         assertEquals(Unit.PIXELS, component.getWidthUnits());
@@ -435,24 +431,6 @@ public class UdmValueFiltersWindowTest {
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         assertEquals(component.getCaption(), caption);
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void testFilterOperatorChangeListener(int index) {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        VerticalLayout panelContent = (VerticalLayout) ((Panel) verticalLayout.getComponent(0)).getContent();
-        HorizontalLayout horizontalLayout = (HorizontalLayout) panelContent.getComponent(index);
-        TextField textField = (TextField) horizontalLayout.getComponent(0);
-        ComboBox<FilterOperatorEnum> operatorComboBox =
-            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
-        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO);
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO);
-        assertTrue(textField.isEnabled());
-        operatorComboBox.setValue(FilterOperatorEnum.IS_NULL);
-        assertFalse(textField.isEnabled());
     }
 
     @SuppressWarnings(UNCHECKED)
@@ -547,19 +525,52 @@ public class UdmValueFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, null, true);
     }
 
-    private void verifyAmountValidationZeroAllowed(TextField textField) {
-        validateFieldAndVerifyErrorMessage(textField, "0", null, true);
-        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", null, true);
-        verifyCommonAmountValidations(textField,
-            "Field value should be positive number or zero and should not exceed 10 digits");
+    private void verifyAmountValidationZeroAllowed(TextField fromField, TextField toField,
+                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                   String fieldSpecificErrorMessage) {
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
+        String numberValidationMessage =
+            "Field value should be positive number or zero and should not exceed 10 digits";
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyAmountValidationZeroAllowed(fromField, numberValidationMessage);
+        verifyAmountValidationZeroAllowed(toField, numberValidationMessage);
     }
 
-    private void verifyAmountValidationZeroDenied(TextField textField) {
-        String decimalValidationMessage = "Field value should be positive number and should not exceed 10 digits";
-        validateFieldAndVerifyErrorMessage(textField, "0", decimalValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", decimalValidationMessage, false);
+    private void verifyAmountValidationZeroAllowed(TextField textField,
+                                                   String fieldSpecificErrorMessage) {
+        validateFieldAndVerifyErrorMessage(textField, "0", null, true);
+        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", null, true);
+        verifyCommonAmountValidations(textField, fieldSpecificErrorMessage);
+    }
+
+    private void verifyAmountValidationZeroDenied(TextField fromField, TextField toField,
+                                                  ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                  String fieldSpecificErrorMessage) {
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
+        String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
+        verifyAmountValidationZeroDenied(fromField, numberValidationMessage);
+        verifyAmountValidationZeroDenied(toField, numberValidationMessage);
+    }
+
+    private void verifyAmountValidationZeroDenied(TextField textField,
+                                                  String fieldSpecificErrorMessage) {
+        validateFieldAndVerifyErrorMessage(textField, "0", fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, " 0.004 ", fieldSpecificErrorMessage, false);
         validateFieldAndVerifyErrorMessage(textField, " 0.005 ", null, true);
-        verifyCommonAmountValidations(textField, decimalValidationMessage);
+        verifyCommonAmountValidations(textField, fieldSpecificErrorMessage);
     }
 
     private void verifyCommonAmountValidations(TextField textField, String errorMessage) {
@@ -634,9 +645,9 @@ public class UdmValueFiltersWindowTest {
         assertTextFieldValue("rhNameField", RH_NAME);
         assertComboBoxValue("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("currencyComboBox", USD_CURRENCY);
-        assertTextFieldValue("priceField", PRICE.toString());
+        assertTextFieldValue("priceFromField", PRICE.toString());
         assertComboBoxValue("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("priceInUsdField", PRICE_IN_USD.toString());
+        assertTextFieldValue("priceInUsdFromField", PRICE_IN_USD.toString());
         assertComboBoxValue("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("priceFlagComboBox", FilterOperatorEnum.Y);
         assertTextFieldValue("priceCommentField", PRICE_COMMENT);
@@ -644,7 +655,7 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("lastPriceFlagComboBox", FilterOperatorEnum.Y);
         assertTextFieldValue("lastPriceCommentField", LAST_PRICE_COMMENT);
         assertComboBoxValue("lastPriceCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
-        assertTextFieldValue("contentField", CONTENT.toString());
+        assertTextFieldValue("contentFromField", CONTENT.toString());
         assertComboBoxValue("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertComboBoxValue("contentFlagComboBox", FilterOperatorEnum.Y);
         assertTextFieldValue("contentCommentField", CONTENT_COMMENT);
@@ -712,15 +723,15 @@ public class UdmValueFiltersWindowTest {
         populateTextField("rhNameField", RH_NAME);
         populateComboBox("rhNameOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("currencyComboBox", USD_CURRENCY);
-        populateTextField("priceField", PRICE.toString());
+        populateTextField("priceFromField", PRICE.toString());
         populateComboBox("priceOperatorComboBox", FilterOperatorEnum.EQUALS);
-        populateTextField("priceInUsdField", PRICE_IN_USD.toString());
+        populateTextField("priceInUsdFromField", PRICE_IN_USD.toString());
         populateComboBox("priceInUsdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("priceFlagComboBox", FilterOperatorEnum.Y);
         populateTextField("priceCommentField", PRICE_COMMENT);
         populateComboBox("lastPriceFlagComboBox", FilterOperatorEnum.Y);
         populateTextField("lastPriceCommentField", LAST_PRICE_COMMENT);
-        populateTextField("contentField", String.valueOf(CONTENT));
+        populateTextField("contentFromField", String.valueOf(CONTENT));
         populateComboBox("contentOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateComboBox("contentFlagComboBox", FilterOperatorEnum.Y);
         populateTextField("contentCommentField", CONTENT_COMMENT);

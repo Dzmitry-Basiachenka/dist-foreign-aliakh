@@ -207,16 +207,16 @@ public abstract class CommonUdmFiltersWindow extends Window {
     /**
      * Builds amount filter expression.
      *
-     * @param textField        text field
+     * @param fromField        'from' text field
+     * @param toField          'to' text field
      * @param operatorComboBox operator combobox
      * @param valueConverter   value converter
-     * @param <T>              type of value converter
      * @return amount filter expression
      */
-    protected <T> FilterExpression<T> buildAmountFilterExpression(TextField textField,
-                                                                  ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                                  Function<String, T> valueConverter) {
-        return buildFilterExpression(textField, operatorComboBox, valueConverter,
+    protected FilterExpression<Number> buildAmountFilterExpression(TextField fromField, TextField toField,
+                                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                                   Function<String, Number> valueConverter) {
+        return buildFilterExpression(fromField, toField, operatorComboBox, valueConverter,
             field -> StringUtils.isNotBlank(field.getValue()));
     }
 
