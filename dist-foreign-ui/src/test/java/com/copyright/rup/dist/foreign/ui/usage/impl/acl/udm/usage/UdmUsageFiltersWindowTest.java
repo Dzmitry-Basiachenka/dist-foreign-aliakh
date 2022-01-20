@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -106,11 +107,7 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("UDM usages additional filters", window.getCaption());
-        assertEquals(600, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(560, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "UDM usages additional filters", 600, 560, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verifyPanel();
     }

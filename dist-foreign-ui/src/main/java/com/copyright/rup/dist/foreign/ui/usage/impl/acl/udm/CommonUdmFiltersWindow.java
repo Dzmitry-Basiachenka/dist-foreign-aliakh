@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
@@ -18,6 +19,8 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -33,6 +36,8 @@ import java.util.function.Predicate;
  */
 public abstract class CommonUdmFiltersWindow extends Window {
 
+    private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final int ONE = 1;
 
     /**
@@ -55,6 +60,21 @@ public abstract class CommonUdmFiltersWindow extends Window {
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+    }
+
+    /**
+     * Populates comboBox with specific values for flags.
+     *
+     * @param comboBox     comboBox to be populated
+     * @param selectedItem selected item
+     * @param componentId  comboBox id
+     */
+    protected void populateFlagComboBox(ComboBox<FilterOperatorEnum> comboBox, FilterOperatorEnum selectedItem,
+                                        String componentId) {
+        comboBox.setItems(FLAG_ITEMS);
+        comboBox.setSizeFull();
+        comboBox.setSelectedItem(selectedItem);
+        VaadinUtils.addComponentStyle(comboBox, componentId);
     }
 
     /**

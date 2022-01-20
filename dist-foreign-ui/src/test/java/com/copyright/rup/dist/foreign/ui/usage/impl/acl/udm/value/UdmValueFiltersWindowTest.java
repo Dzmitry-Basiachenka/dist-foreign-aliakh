@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -43,7 +44,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -117,11 +117,7 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("UDM values additional filters", window.getCaption());
-        assertEquals(560, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(650, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "UDM values additional filters", 600, 650, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent());
         verifyPanel(verticalLayout.getComponent(0));
     }
@@ -207,22 +203,22 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testLastPriceCommentFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(12);
+        testTextFilterOperatorChangeListener(11);
     }
 
     @Test
     public void testContentFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(13);
+        testNumericFilterOperatorChangeListener(12);
     }
 
     @Test
     public void testContentCommentFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(15);
+        testTextFilterOperatorChangeListener(14);
     }
 
     @Test
     public void testLastContentCommentFilterOperatorChangeListener() {
-        testTextFilterOperatorChangeListener(17);
+        testTextFilterOperatorChangeListener(15);
     }
 
     @Test
@@ -366,28 +362,34 @@ public class UdmValueFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(20, verticalLayout.getComponentCount());
+        assertEquals(17, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(1), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(2), "System Title");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(3), "System Standard Number");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(4), "RH Account # From", "RH Account # To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(5), "RH Name");
-        assertSizedComboBoxItems(verticalLayout.getComponent(6), "Currency", true, CURRENCIES);
+        verifyComboBoxLayout(verticalLayout.getComponent(6), "Currency", CURRENCIES, "Last Pub Type",
+            Arrays.asList(new PublicationType(), buildPublicationType()));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Price From", "Price To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Price in USD From", "Price in USD To");
-        assertSizedComboBoxItems(verticalLayout.getComponent(9), "Price Flag", true, FLAG_ITEMS);
+        verifyComboBoxLayout(verticalLayout.getComponent(9), "Price Flag", FLAG_ITEMS, "Last Price Flag", FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Price Comment");
-        assertSizedComboBoxItems(verticalLayout.getComponent(11), "Last Price Flag", true, FLAG_ITEMS);
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(12), "Last Price Comment");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(13), "Content From", "Content To");
-        assertSizedComboBoxItems(verticalLayout.getComponent(14), "Content Flag", true, FLAG_ITEMS);
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Content Comment");
-        assertSizedComboBoxItems(verticalLayout.getComponent(16), "Last Content Flag", true, FLAG_ITEMS);
-        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(17), "Last Content Comment");
-        assertSizedComboBoxItems(verticalLayout.getComponent(18), "Last Pub Type", true,
-            Arrays.asList(new PublicationType(), buildPublicationType()));
-        verifyTextField(verticalLayout.getComponent(19), "Comment");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(11), "Last Price Comment");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Content From", "Content To");
+        verifyComboBoxLayout(verticalLayout.getComponent(13), "Content Flag", FLAG_ITEMS, "Last Content Flag",
+            FLAG_ITEMS);
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Content Comment");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Last Content Comment");
+        verifyTextField(verticalLayout.getComponent(16), "Comment");
+    }
+
+    private void verifyComboBoxLayout(Component component, String firstCaption, List<?> firstItemList,
+                                      String secondCaption, List<?> secondItemList) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        verifyComboBox(layout.getComponent(0), firstCaption, true, firstItemList);
+        verifyComboBox(layout.getComponent(1), secondCaption, true, secondItemList);
     }
 
     private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
@@ -418,12 +420,6 @@ public class UdmValueFiltersWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyItemsFilterWidget(layout.getComponent(0), firstCaption);
         verifyItemsFilterWidget(layout.getComponent(1), secondCaption);
-    }
-
-    private void verifyComponentWidthAndCaption(Component component, String caption) {
-        assertEquals(248, component.getWidth(), 0);
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
     }
 
     private void verifyTextField(Component component, String caption) {
@@ -674,21 +670,6 @@ public class UdmValueFiltersWindowTest {
 
     private void assertTextFieldValue(String fieldName, Object value) {
         assertEquals(value, ((TextField) Whitebox.getInternalState(window, fieldName)).getValue());
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private <T> void assertSizedComboBoxItems(Component component, String caption, boolean emptySelectionAllowed,
-                                              List<T> expectedItems) {
-        assertTrue(component instanceof ComboBox);
-        ComboBox<T> comboBox = (ComboBox<T>) component;
-        assertFalse(comboBox.isReadOnly());
-        assertTrue(comboBox.isTextInputAllowed());
-        assertEquals(emptySelectionAllowed, comboBox.isEmptySelectionAllowed());
-        ListDataProvider<T> listDataProvider = (ListDataProvider<T>) comboBox.getDataProvider();
-        Collection<?> actualItems = listDataProvider.getItems();
-        assertEquals(expectedItems.size(), actualItems.size());
-        assertEquals(expectedItems, actualItems);
-        verifyComponentWidthAndCaption(component, caption);
     }
 
     @SuppressWarnings(UNCHECKED)

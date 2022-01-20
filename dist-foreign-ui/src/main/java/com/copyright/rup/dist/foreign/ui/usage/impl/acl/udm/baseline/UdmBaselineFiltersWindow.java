@@ -90,7 +90,7 @@ public class UdmBaselineFiltersWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_baseline_additional_filters"));
         setResizable(false);
-        setWidth(550, Unit.PIXELS);
+        setWidth(600, Unit.PIXELS);
         setHeight(355, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-baseline-additional-filters-window");
     }

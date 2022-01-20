@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -84,11 +85,7 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("UDM baseline additional filters", window.getCaption());
-        assertEquals(550, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(355, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "UDM baseline additional filters", 600, 355, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 

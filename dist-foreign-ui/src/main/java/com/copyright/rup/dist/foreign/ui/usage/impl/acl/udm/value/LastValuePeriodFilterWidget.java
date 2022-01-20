@@ -10,12 +10,8 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
-import com.vaadin.ui.CheckBoxGroup;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,32 +89,8 @@ public class LastValuePeriodFilterWidget extends BaseUdmItemsFilterWidget<String
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.last_value_period"));
-        VerticalLayout verticalLayout = (VerticalLayout) filterWindow.getContent();
-        Panel panel = (Panel) verticalLayout.getComponent(1);
-        CheckBoxGroup<String> checkBoxGroup = (CheckBoxGroup<String>) panel.getContent();
-        setItemEnabledProvider(checkBoxGroup, selectedItemsIds);
-        checkBoxGroup.addValueChangeListener(event -> setItemEnabledProvider(checkBoxGroup, event.getValue()));
         VaadinUtils.addComponentStyle(filterWindow, "last-value-period-filter-window");
         Windows.showModalWindow(filterWindow);
         return filterWindow;
-    }
-
-    /**
-     * Enables and disables items in the checkboxes depends on their selected items.
-     *
-     * @param checkBoxGroup  instance of {@link CheckBoxGroup}
-     * @param checkedItemIds checked item ids
-     */
-    void setItemEnabledProvider(CheckBoxGroup<String> checkBoxGroup, Set<String> checkedItemIds) {
-        if (checkedItemIds.isEmpty()) {
-            checkBoxGroup.setItemEnabledProvider(item -> true);
-        } else if (checkedItemIds.contains(FilterOperatorEnum.IS_NULL.name())) {
-            checkBoxGroup.setItemEnabledProvider(item -> item.equals(FilterOperatorEnum.IS_NULL.name()));
-        } else if (checkedItemIds.contains(FilterOperatorEnum.IS_NOT_NULL.name())) {
-            checkBoxGroup.setItemEnabledProvider(item -> item.equals(FilterOperatorEnum.IS_NOT_NULL.name()));
-        } else if (checkedItemIds.stream().allMatch(NumberUtils::isDigits)) {
-            checkBoxGroup.setItemEnabledProvider(item ->
-                !item.equals(FilterOperatorEnum.IS_NULL.name()) && !item.equals(FilterOperatorEnum.IS_NOT_NULL.name()));
-        }
     }
 }
