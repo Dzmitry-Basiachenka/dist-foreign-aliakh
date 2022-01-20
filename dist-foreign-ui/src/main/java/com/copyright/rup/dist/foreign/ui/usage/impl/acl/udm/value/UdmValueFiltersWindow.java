@@ -49,8 +49,6 @@ import java.util.function.Function;
  */
 public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
 
-    private static final List<FilterOperatorEnum> FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -119,7 +117,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.udm_values_additional_filters"));
         setResizable(false);
-        setWidth(560, Unit.PIXELS);
+        setWidth(600, Unit.PIXELS);
         setHeight(650, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "udm-values-additional-filters-window");
     }
@@ -135,10 +133,10 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         VerticalLayout rootLayout = new VerticalLayout();
         VerticalLayout fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initAssigneeLastValuePeriodLayout(), initWrWrkInstLayout(), initSystemTitleLayout(),
-            initSystemStandardNumberLayout(), initRhAccountNumberLayout(), initRhNameLayout(), initCurrencyFilter(),
-            initPriceLayout(), initPriceInUsdLayout(), initPriceFlag(), initPriceCommentLayout(), initLastPriceFlag(),
-            initLastPriceCommentLayout(), initContentLayout(), initContentFlag(), initContentCommentLayout(),
-            initLastContentFlag(), initLastContentCommentLayout(), initLastPubTypeLayout(), initCommentLayout());
+            initSystemStandardNumberLayout(), initRhAccountNumberLayout(), initRhNameLayout(),
+            initCurrencyLastPubTypeLayout(), initPriceLayout(), initPriceInUsdLayout(), initPriceFlagsLayout(),
+            initPriceCommentLayout(), initLastPriceCommentLayout(), initContentLayout(), initContentFlagsLayout(),
+            initContentCommentLayout(), initLastContentCommentLayout(), initCommentLayout());
         Panel panel = new Panel(fieldsLayout);
         panel.setSizeFull();
         fieldsLayout.setMargin(new MarginInfo(true));
@@ -282,15 +280,35 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<Currency> initCurrencyFilter() {
+    private HorizontalLayout initCurrencyLastPubTypeLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initCurrencyComboBox(), initLastPubTypeCombobox());
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
+    private ComboBox<Currency> initCurrencyComboBox() {
         currencyComboBox.setItems(controller.getAllCurrencies());
         currencyComboBox.setPageLength(16);
         currencyComboBox.setItemCaptionGenerator(
             value -> String.format("%s - %s", value.getCode(), value.getDescription()));
         currencyComboBox.setSelectedItem(valueFilter.getCurrency());
-        currencyComboBox.setWidth(248, Unit.PIXELS);
+        currencyComboBox.setSizeFull();
         VaadinUtils.addComponentStyle(currencyComboBox, "udm-value-currency-filter");
         return currencyComboBox;
+    }
+
+    private ComboBox<PublicationType> initLastPubTypeCombobox() {
+        List<PublicationType> publicationTypes = controller.getPublicationTypes();
+        publicationTypes.add(0, new PublicationType());
+        lastPubTypeComboBox.setItems(publicationTypes);
+        lastPubTypeComboBox.setPageLength(12);
+        lastPubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
+            ? value.getNameAndDescription()
+            : "NULL");
+        lastPubTypeComboBox.setSelectedItem(valueFilter.getLastPubType());
+        lastPubTypeComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(lastPubTypeComboBox, "udm-value-last-pub-type-filter");
+        return lastPubTypeComboBox;
     }
 
     private HorizontalLayout initPriceLayout() {
@@ -353,12 +371,14 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> initPriceFlag() {
-        priceFlagComboBox.setItems(FLAG_ITEMS);
-        priceFlagComboBox.setSelectedItem(valueFilter.getPriceFlagExpression().getOperator());
-        priceFlagComboBox.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(priceFlagComboBox, "udm-value-price-flag-filter");
-        return priceFlagComboBox;
+    private HorizontalLayout initPriceFlagsLayout() {
+        populateFlagComboBox(priceFlagComboBox, valueFilter.getPriceFlagExpression().getOperator(),
+            "udm-value-price-flag-filter");
+        populateFlagComboBox(lastPriceFlagComboBox, valueFilter.getLastPriceFlagExpression().getOperator(),
+            "udm-value-last-price-flag-filter");
+        HorizontalLayout horizontalLayout = new HorizontalLayout(priceFlagComboBox, lastPriceFlagComboBox);
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
     }
 
     private HorizontalLayout initPriceCommentLayout() {
@@ -376,14 +396,6 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         VaadinUtils.addComponentStyle(priceCommentField, "udm-value-price-comment-filter");
         VaadinUtils.addComponentStyle(priceCommentOperatorComboBox, "udm-value-price-comment-operator-filter");
         return horizontalLayout;
-    }
-
-    private ComboBox<FilterOperatorEnum> initLastPriceFlag() {
-        lastPriceFlagComboBox.setItems(FLAG_ITEMS);
-        lastPriceFlagComboBox.setSelectedItem(valueFilter.getLastPriceFlagExpression().getOperator());
-        lastPriceFlagComboBox.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(lastPriceFlagComboBox, "udm-value-last-price-flag-filter");
-        return lastPriceFlagComboBox;
     }
 
     private HorizontalLayout initLastPriceCommentLayout() {
@@ -435,14 +447,6 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> initContentFlag() {
-        contentFlagComboBox.setItems(FLAG_ITEMS);
-        contentFlagComboBox.setSelectedItem(valueFilter.getContentFlagExpression().getOperator());
-        contentFlagComboBox.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(contentFlagComboBox, "udm-value-content-flag-filter");
-        return contentFlagComboBox;
-    }
-
     private HorizontalLayout initContentCommentLayout() {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(contentCommentField, contentCommentOperatorComboBox);
@@ -461,12 +465,14 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private ComboBox<FilterOperatorEnum> initLastContentFlag() {
-        lastContentFlagComboBox.setItems(FLAG_ITEMS);
-        lastContentFlagComboBox.setSelectedItem(valueFilter.getLastContentFlagExpression().getOperator());
-        lastContentFlagComboBox.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(lastContentFlagComboBox, "udm-value-last-content-flag-filter");
-        return lastContentFlagComboBox;
+    private HorizontalLayout initContentFlagsLayout() {
+        populateFlagComboBox(contentFlagComboBox, valueFilter.getContentFlagExpression().getOperator(),
+            "udm-value-content-flag-filter");
+        populateFlagComboBox(lastContentFlagComboBox, valueFilter.getLastContentFlagExpression().getOperator(),
+            "udm-value-last-content-flag-filter");
+        HorizontalLayout horizontalLayout = new HorizontalLayout(contentFlagComboBox, lastContentFlagComboBox);
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
     }
 
     private HorizontalLayout initLastContentCommentLayout() {
@@ -486,20 +492,6 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         VaadinUtils.addComponentStyle(lastContentCommentOperatorComboBox,
             "udm-value-last-content-comment-operator-filter");
         return horizontalLayout;
-    }
-
-    private ComboBox<PublicationType> initLastPubTypeLayout() {
-        List<PublicationType> publicationTypes = controller.getPublicationTypes();
-        publicationTypes.add(0, new PublicationType());
-        lastPubTypeComboBox.setItems(publicationTypes);
-        lastPubTypeComboBox.setPageLength(12);
-        lastPubTypeComboBox.setItemCaptionGenerator(value -> Objects.nonNull(value.getName())
-            ? value.getNameAndDescription()
-            : "NULL");
-        lastPubTypeComboBox.setSelectedItem(valueFilter.getLastPubType());
-        lastPubTypeComboBox.setWidth(248, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(lastPubTypeComboBox, "udm-value-last-pub-type-filter");
-        return lastPubTypeComboBox;
     }
 
     private TextField initCommentLayout() {

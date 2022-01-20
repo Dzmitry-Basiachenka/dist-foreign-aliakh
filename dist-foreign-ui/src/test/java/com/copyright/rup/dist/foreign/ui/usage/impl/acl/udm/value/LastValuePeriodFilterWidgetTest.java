@@ -3,16 +3,11 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-
-import com.vaadin.server.SerializablePredicate;
-import com.vaadin.ui.CheckBoxGroup;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +15,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -69,30 +63,5 @@ public class LastValuePeriodFilterWidgetTest {
         replay(filterSaveEvent);
         lastValuePeriodFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
-    }
-
-    @Test
-    public void testSetItemEnabledProvider() {
-        CheckBoxGroup<String> checkBoxGroup = new CheckBoxGroup<>();
-        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, new HashSet<>());
-        SerializablePredicate<String> itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
-        assertTrue(itemEnabledProvider.test(LAST_VALUE_PERIOD));
-        assertTrue(itemEnabledProvider.test(IS_NULL));
-        assertTrue(itemEnabledProvider.test(IS_NOT_NULL));
-        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(LAST_VALUE_PERIOD));
-        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
-        assertTrue(itemEnabledProvider.test(LAST_VALUE_PERIOD));
-        assertFalse(itemEnabledProvider.test(IS_NULL));
-        assertFalse(itemEnabledProvider.test(IS_NOT_NULL));
-        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(IS_NULL));
-        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
-        assertFalse(itemEnabledProvider.test(LAST_VALUE_PERIOD));
-        assertTrue(itemEnabledProvider.test(IS_NULL));
-        assertFalse(itemEnabledProvider.test(IS_NOT_NULL));
-        lastValuePeriodFilterWidget.setItemEnabledProvider(checkBoxGroup, Collections.singleton(IS_NOT_NULL));
-        itemEnabledProvider = checkBoxGroup.getItemEnabledProvider();
-        assertFalse(itemEnabledProvider.test(LAST_VALUE_PERIOD));
-        assertFalse(itemEnabledProvider.test(IS_NULL));
-        assertTrue(itemEnabledProvider.test(IS_NOT_NULL));
     }
 }
