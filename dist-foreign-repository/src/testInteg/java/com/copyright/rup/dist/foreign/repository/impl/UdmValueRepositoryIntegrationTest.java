@@ -116,6 +116,7 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String COMMENT_FRAGMENT = "ommen";
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("2.5000000000");
     private static final BigDecimal PRICE = new BigDecimal("5.0000000000");
+    private static final String BK = "BK";
     private static final String BOOK = "Book";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -206,7 +207,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         filter.setLastContentFlagExpression(new FilterExpression<>());
         filter.setLastContentCommentExpression(new FilterExpression<>());
-        filter.setPubType(null);
+        filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setComment(COMMENT_FRAGMENT);
         assertEquals(1, udmValueRepository.findCountByFilter(filter));
@@ -237,7 +238,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setContentCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_COMMENT, null));
         filter.setLastContentFlagExpression(new FilterExpression<>());
         filter.setLastContentCommentExpression(new FilterExpression<>());
-        filter.setPubType(null);
+        filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setComment(COMMENT_FRAGMENT);
         List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, buildSort());
@@ -299,10 +300,9 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(
             filter -> filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N)),
             UDM_VALUE_UID_1, UDM_VALUE_UID_2);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("BK", BOOK)), UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType(null, null)), UDM_VALUE_UID_1,
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
-        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType("BK", BOOK)),
+        assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType(BK, BOOK)),
             UDM_VALUE_UID_5);
         assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
             UDM_VALUE_UID_3, UDM_VALUE_UID_4);
@@ -725,15 +725,18 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE),
             UDM_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType(null, null)), UDM_VALUE_UID_1,
-            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubTypes(Collections.singleton(createPubType(null, null))),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubTypes(Collections.singleton(createPubType(BK, BOOK))),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubTypes(Sets.newHashSet(createPubType(null, null),
+            createPubType(BK, BOOK))), UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4,
+            UDM_VALUE_UID_5);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilter() {
-        assertFilteringFindCountByFilter(filter -> filter.setPeriods(Sets.newHashSet(201506, 202112)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
+    public void testFindCountByAdditionalFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")), 1);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_2, UNASSIGNED)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setAssignees(Collections.singleton(ASSIGNEE_2)), 1);
@@ -788,10 +791,8 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y)), 1);
         assertFilteringFindCountByFilter(
             filter -> filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType(null, null)), 4);
-        assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("BK", BOOK)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType(null, null)), 4);
-        assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType("BK", BOOK)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType(BK, BOOK)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), 4);
     }
 
@@ -1114,6 +1115,19 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByBasicFilter() {
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(Sets.newHashSet(201506, 202112)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setPubTypes(
+            Collections.singleton(createPubType(null, null))), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setPubTypes(
+            Collections.singleton(createPubType(BK, BOOK))), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setPubTypes(Sets.newHashSet(createPubType(BK, BOOK),
+            createPubType(null, null))), 5);
     }
 
     @Test

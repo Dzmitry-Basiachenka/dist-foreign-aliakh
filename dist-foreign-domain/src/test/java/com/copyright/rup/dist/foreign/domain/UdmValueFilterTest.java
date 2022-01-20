@@ -84,9 +84,9 @@ public class UdmValueFilterTest {
         assertTrue(valueFilter.isEmpty());
         valueFilter.setLastValuePeriods(null);
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setPubType(PUB_TYPE);
+        valueFilter.setPubTypes(Collections.singleton(PUB_TYPE));
         assertFalse(valueFilter.isEmpty());
-        valueFilter.setPubType(null);
+        valueFilter.setPubTypes(new HashSet<>());
         assertTrue(valueFilter.isEmpty());
         valueFilter.setLastPubType(LAST_PUB_TYPE);
         assertFalse(valueFilter.isEmpty());
@@ -197,7 +197,7 @@ public class UdmValueFilterTest {
         assertEquals(new FilterExpression<>(), valueFilter.getLastContentFlagExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getContentCommentExpression());
         assertEquals(new FilterExpression<>(), valueFilter.getLastContentCommentExpression());
-        assertNull(valueFilter.getPubType());
+        assertTrue(valueFilter.getPubTypes().isEmpty());
         assertNull(valueFilter.getLastPubType());
         assertNull(valueFilter.getComment());
     }

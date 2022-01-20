@@ -16,10 +16,8 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -76,9 +74,6 @@ public class UdmValueFilterWidgetTest {
     @Before
     public void setUp() {
         controller = createMock(IUdmValueFilterController.class);
-        expect(controller.getPublicationTypes()).andReturn(
-            new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
-        replay(controller);
         widget = new UdmValueFilterWidget(controller);
         widget.setController(controller);
     }
@@ -90,14 +85,12 @@ public class UdmValueFilterWidgetTest {
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
-        verify(controller);
     }
 
     @Test
     public void testApplyFilter() {
         widget.init();
         widget.clearFilter();
-        verify(controller);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -118,7 +111,6 @@ public class UdmValueFilterWidgetTest {
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.applyFilter();
-        verify(controller);
         assertFalse(applyButton.isEnabled());
     }
 
@@ -138,15 +130,12 @@ public class UdmValueFilterWidgetTest {
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
         assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "statusComboBox").getValue());
-        assertNull(Whitebox.<ComboBox<?>>getInternalState(widget, "pubTypeComboBox").getValue());
-        verify(controller);
     }
 
     @Test
     public void verifyMoreFiltersButtonClickListener() {
-        reset(controller);
         expect(controller.getAllCurrencies()).andReturn(new ArrayList<>()).once();
-        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).times(2);
+        expect(controller.getPublicationTypes()).andReturn(new ArrayList<>()).once();
         replay(controller);
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
@@ -164,7 +153,6 @@ public class UdmValueFilterWidgetTest {
     public void verifyApplyButtonClickListener() {
         widget.init();
         widget.clearFilter();
-        verify(controller);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().getPeriods().isEmpty());
@@ -183,7 +171,7 @@ public class UdmValueFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        replay(clickEvent, controller);
+        replay(clickEvent);
         widget.init();
         Button applyButton = getApplyButton();
         widget.getFilter().setStatus(UdmValueStatusEnum.NEW);
@@ -194,7 +182,7 @@ public class UdmValueFilterWidgetTest {
         clickListener.buttonClick(clickEvent);
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
-        verify(clickEvent, controller);
+        verify(clickEvent);
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -203,8 +191,8 @@ public class UdmValueFilterWidgetTest {
         assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
-        verifyComboBox(verticalLayout.getComponent(2), "Status", true, VALUE_STATUSES);
-        verifyComboBox(verticalLayout.getComponent(3), "Pub Type", true, new PublicationType(), buildPublicationType());
+        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Pub Types");
+        verifyComboBox(verticalLayout.getComponent(3), "Status", true, VALUE_STATUSES);
         verifyMoreFiltersButton(verticalLayout.getComponent(4));
     }
 
@@ -249,12 +237,5 @@ public class UdmValueFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton");
-    }
-
-    private PublicationType buildPublicationType() {
-        PublicationType publicationType = new PublicationType();
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
-        return publicationType;
     }
 }

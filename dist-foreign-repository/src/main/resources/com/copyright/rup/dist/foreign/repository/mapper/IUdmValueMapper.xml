@@ -180,15 +180,18 @@
                     </choose>
                 </foreach>
             </if>
-            <if test="null != filter.pubType">
-                <choose>
-                    <when test="null != filter.pubType.name">
-                        and pt.name = #{filter.pubType.name}
-                    </when>
-                    <otherwise>
-                        and v.publication_type_uid is null
-                    </otherwise>
-                </choose>
+            <if test="filter.pubTypes.size() > 0">
+                and
+                <foreach collection="filter.pubTypes" item="pubType" open="(" separator=" or " close=")">
+                    <choose>
+                        <when test="null != pubType.name">
+                            pt.name = #{pubType.name}
+                        </when>
+                        <otherwise>
+                            v.publication_type_uid is null
+                        </otherwise>
+                    </choose>
+                </foreach>
             </if>
             <if test="null != filter.lastPubType">
                 <choose>
