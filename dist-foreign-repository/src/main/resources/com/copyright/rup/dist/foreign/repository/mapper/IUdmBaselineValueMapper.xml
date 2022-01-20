@@ -66,12 +66,11 @@
                     v.period = #{period}
                 </foreach>
             </if>
-            <if test="null != filter.pubType">
-                <choose>
-                    <when test="null != filter.pubType.name">
-                        and pt.name = #{filter.pubType.name}
-                    </when>
-                </choose>
+            <if test="filter.pubTypes.size() > 0">
+                and
+                <foreach collection="filter.pubTypes" item="pubType" open="(" separator=" or " close=")">
+                    pt.name = #{pubType.name}
+                </foreach>
             </if>
             <if test="!filter.wrWrkInstExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">

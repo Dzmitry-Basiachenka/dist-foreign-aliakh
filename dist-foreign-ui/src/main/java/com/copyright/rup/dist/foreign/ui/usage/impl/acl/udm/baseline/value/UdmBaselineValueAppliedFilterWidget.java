@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -7,8 +8,6 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
 
 /**
  * Widget for applied udm baseline values filters.
@@ -38,10 +37,8 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterP
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(valueFilter -> Objects.nonNull(valueFilter.getPubType())
-                    ? valueFilter.getPubType().getNameAndDescription()
-                    : valueFilter.getPubType(), filter,
-                "label.pub_type"), layout);
+            addLabel(createLabelWithMultipleValues(filter.getPubTypes(), "label.pub_types",
+                PublicationType::getNameAndDescription), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",

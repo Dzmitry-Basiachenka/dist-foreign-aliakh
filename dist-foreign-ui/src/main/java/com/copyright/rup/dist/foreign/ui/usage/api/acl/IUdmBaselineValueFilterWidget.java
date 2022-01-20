@@ -17,5 +17,10 @@ public interface IUdmBaselineValueFilterWidget extends IFilterWidget<IUdmBaselin
     /**
      * @return {@link UdmBaselineValueFilter}.
      */
+    UdmBaselineValueFilter getFilter();
+
+    /**
+     * @return {@link UdmBaselineValueFilter}.
+     */
     UdmBaselineValueFilter getAppliedFilter();
 }

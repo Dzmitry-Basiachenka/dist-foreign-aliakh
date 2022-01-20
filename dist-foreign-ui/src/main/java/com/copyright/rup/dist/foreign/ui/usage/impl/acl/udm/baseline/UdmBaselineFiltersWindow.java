@@ -173,8 +173,8 @@ public class UdmBaselineFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
-            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldSecondValue(Long.valueOf(value)));
         wrWrkInstFromField.setSizeFull();
         wrWrkInstToField.setSizeFull();
         wrWrkInstLayout.setExpandRatio(wrWrkInstFromField, 0.5f);

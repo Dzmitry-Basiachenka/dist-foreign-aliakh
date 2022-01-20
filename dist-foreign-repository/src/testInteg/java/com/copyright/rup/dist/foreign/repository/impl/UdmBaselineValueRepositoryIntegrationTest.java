@@ -70,6 +70,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     private static final BigDecimal PRICE = new BigDecimal("50.0000000000");
     private static final BigDecimal CONTENT = new BigDecimal("2.0000000000");
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
+    private static final String NP = "NP";
     private static final String NEWSPAPER = "Newspaper";
     private static final String COMMENT_1 = "Comment";
     private static final String COMMENT_1_FRAGMENT = "ommen";
@@ -101,7 +102,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(211112));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
-        filter.setPubType(createPubType("NP", NEWSPAPER));
+        filter.setPubTypes(Collections.singleton(createPubType(NP, NEWSPAPER)));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
@@ -119,7 +120,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(211112));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
-        filter.setPubType(createPubType("NP", NEWSPAPER));
+        filter.setPubTypes(Collections.singleton(createPubType(NP, NEWSPAPER)));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_1, null));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
@@ -140,8 +141,9 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     public void testFindDtosByBasicFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(ImmutableSet.of(211012, 211212)),
             UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)),
-            UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setPubTypes(
+            Collections.singleton(createPubType(NP, NEWSPAPER))), UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_3,
+            UDM_BASELINE_VALUE_UID_1);
     }
 
     @Test
@@ -387,7 +389,8 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByBasicFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(ImmutableSet.of(211012, 211212)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setPubType(createPubType("NP", NEWSPAPER)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setPubTypes(
+            Collections.singleton(createPubType(NP, NEWSPAPER))), 3);
     }
 
     @Test
