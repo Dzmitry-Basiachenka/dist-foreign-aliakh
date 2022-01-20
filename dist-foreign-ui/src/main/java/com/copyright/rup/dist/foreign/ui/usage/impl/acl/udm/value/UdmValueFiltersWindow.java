@@ -28,9 +28,6 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -100,6 +97,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private final ComboBox<PublicationType> lastPubTypeComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.last_pub_type"));
     private final TextField commentField = new TextField(ForeignUi.getMessage("label.comment"));
+    private final ComboBox<FilterOperatorEnum> commentOperatorComboBox = buildTextOperatorComboBox();
     private UdmValueFilter appliedValueFilter;
     private final UdmValueFilter valueFilter;
     private final IUdmValueFilterController controller;
@@ -494,14 +492,20 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         return horizontalLayout;
     }
 
-    private TextField initCommentLayout() {
-        commentField.setValue(ObjectUtils.defaultIfNull(valueFilter.getComment(), StringUtils.EMPTY));
+    private HorizontalLayout initCommentLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(commentField, commentOperatorComboBox);
+        populateOperatorFilters(commentField, commentOperatorComboBox, valueFilter.getCommentExpression());
         filterBinder.forField(commentField)
             .withValidator(getTextStringLengthValidator(1024))
-            .bind(UdmValueFilter::getComment, UdmValueFilter::setComment);
-        commentField.setSizeFull();
+            .bind(filter -> filter.getCommentExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getCommentExpression().setFieldFirstValue(value.trim()));
+        commentField.addValueChangeListener(event -> filterBinder.validate());
+        commentOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(filterBinder, commentField, event.getValue()));
+        applyCommonTextFieldFormatting(horizontalLayout, commentField);
         VaadinUtils.addComponentStyle(commentField, "udm-value-comment-filter");
-        return commentField;
+        VaadinUtils.addComponentStyle(commentOperatorComboBox, "udm-value-comment-operator-filter");
+        return horizontalLayout;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -548,7 +552,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         lastContentFlagComboBox.clear();
         clearOperatorLayout(lastContentCommentField, lastContentCommentOperatorComboBox);
         lastPubTypeComboBox.clear();
-        commentField.clear();
+        clearOperatorLayout(commentField, commentOperatorComboBox);
     }
 
     private void clearValueFilter() {
@@ -572,7 +576,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         valueFilter.setLastContentFlagExpression(new FilterExpression<>());
         valueFilter.setLastContentCommentExpression(new FilterExpression<>());
         valueFilter.setLastPubType(null);
-        valueFilter.setComment(null);
+        valueFilter.setCommentExpression(new FilterExpression<>());
     }
 
     private void populateValueFilter() {
@@ -607,10 +611,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             lastContentCommentOperatorComboBox, Function.identity()));
         valueFilter.setLastPubType(Objects.nonNull(lastPubTypeComboBox.getValue())
             ? lastPubTypeComboBox.getValue() : null);
-        valueFilter.setComment(getStringFromTextField(commentField));
-    }
-
-    private String getStringFromTextField(TextField textField) {
-        return StringUtils.isNotEmpty(textField.getValue()) ? textField.getValue().trim() : null;
+        valueFilter.setCommentExpression(buildTextFilterExpression(commentField, commentOperatorComboBox,
+            Function.identity()));
     }
 }

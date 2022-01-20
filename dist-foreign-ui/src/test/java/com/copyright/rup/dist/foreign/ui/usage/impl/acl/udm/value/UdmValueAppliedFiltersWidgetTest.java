@@ -34,7 +34,6 @@ import java.util.Collections;
  */
 public class UdmValueAppliedFiltersWidgetTest {
 
-    private static final String COMMENT = "Comment";
     private UdmValueAppliedFilterWidget widget;
 
     @Test
@@ -87,7 +86,8 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(21),
             "<li><b><i>Last Content Comment: </i></b>last content comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(22), "Last Pub Type", "BK - Book");
-        verifyLabel(((VerticalLayout) component).getComponent(23), COMMENT, COMMENT);
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
+            "<li><b><i>Comment: </i></b>comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
@@ -130,7 +130,7 @@ public class UdmValueAppliedFiltersWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
         filter.setPubTypes(Collections.singleton(buildPubType()));
         filter.setLastPubType(buildPubType());
-        filter.setComment(COMMENT);
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "comment", null));
         return filter;
     }
 
