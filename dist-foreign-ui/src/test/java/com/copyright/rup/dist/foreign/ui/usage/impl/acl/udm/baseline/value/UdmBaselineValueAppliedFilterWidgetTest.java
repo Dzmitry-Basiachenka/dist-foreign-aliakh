@@ -52,7 +52,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(10, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Type", "BK - Book");
+        verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Types", "BK - Book");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(2),
             "<li><b><i>Wr Wrk Inst From: </i></b>306985899</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(3),
@@ -82,7 +82,7 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
     private UdmBaselineValueFilter buildUdmFilter() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(201506));
-        filter.setPubType(buildPubType());
+        filter.setPubTypes(Collections.singleton(buildPubType()));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));

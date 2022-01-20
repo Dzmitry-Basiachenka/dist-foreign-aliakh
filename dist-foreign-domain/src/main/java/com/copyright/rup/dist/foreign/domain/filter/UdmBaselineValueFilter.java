@@ -22,7 +22,7 @@ import java.util.Set;
 public class UdmBaselineValueFilter {
 
     private Set<Integer> periods = new HashSet<>();
-    private PublicationType pubType;
+    private Set<PublicationType> pubTypes = new HashSet<>();
     private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
     private FilterExpression<String> systemTitleExpression = new FilterExpression<>();
     private FilterExpression<Boolean> priceFlagExpression = new FilterExpression<>();
@@ -46,7 +46,7 @@ public class UdmBaselineValueFilter {
     public UdmBaselineValueFilter(UdmBaselineValueFilter filter) {
         if (null != filter) {
             setPeriods(filter.getPeriods());
-            setPubType(filter.getPubType());
+            setPubTypes(filter.getPubTypes());
             setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
             setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
             setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
@@ -66,12 +66,12 @@ public class UdmBaselineValueFilter {
         this.periods = periods;
     }
 
-    public PublicationType getPubType() {
-        return pubType;
+    public Set<PublicationType> getPubTypes() {
+        return pubTypes;
     }
 
-    public void setPubType(PublicationType pubType) {
-        this.pubType = pubType;
+    public void setPubTypes(Set<PublicationType> pubTypes) {
+        this.pubTypes = pubTypes;
     }
 
     public FilterExpression<Number> getWrWrkInstExpression() {
@@ -143,7 +143,7 @@ public class UdmBaselineValueFilter {
      */
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(periods)
-            && null == pubType
+            && CollectionUtils.isEmpty(pubTypes)
             && wrWrkInstExpression.isEmpty()
             && systemTitleExpression.isEmpty()
             && priceFlagExpression.isEmpty()
@@ -168,7 +168,7 @@ public class UdmBaselineValueFilter {
 
         return new EqualsBuilder()
             .append(periods, that.periods)
-            .append(pubType, that.pubType)
+            .append(pubTypes, that.pubTypes)
             .append(wrWrkInstExpression, that.wrWrkInstExpression)
             .append(systemTitleExpression, that.systemTitleExpression)
             .append(priceFlagExpression, that.priceFlagExpression)
@@ -184,7 +184,7 @@ public class UdmBaselineValueFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(periods)
-            .append(pubType)
+            .append(pubTypes)
             .append(wrWrkInstExpression)
             .append(systemTitleExpression)
             .append(priceFlagExpression)
@@ -200,7 +200,7 @@ public class UdmBaselineValueFilter {
     public String toString() {
         return new ToStringBuilder(this)
             .append("periods", periods)
-            .append("pubType", pubType)
+            .append("pubTypes", pubTypes)
             .append("wrWrkInstExpression", wrWrkInstExpression)
             .append("systemTitleExpression", systemTitleExpression)
             .append("priceFlagExpression", priceFlagExpression)
