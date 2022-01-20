@@ -53,7 +53,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         assertEquals(24, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Status", "NEW");
-        verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Type", "BK - Book");
+        verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Types", "BK - Book");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Assignees", "user@copyright.com");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Last Value Periods", "IS_NULL");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(5),
@@ -128,7 +128,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
-        filter.setPubType(buildPubType());
+        filter.setPubTypes(Collections.singleton(buildPubType()));
         filter.setLastPubType(buildPubType());
         filter.setComment(COMMENT);
         return filter;

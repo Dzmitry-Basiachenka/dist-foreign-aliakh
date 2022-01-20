@@ -44,7 +44,7 @@ public class UdmValueFilter {
     private FilterExpression<String> contentCommentExpression = new FilterExpression<>();
     private FilterExpression<Boolean> lastContentFlagExpression = new FilterExpression<>();
     private FilterExpression<String> lastContentCommentExpression = new FilterExpression<>();
-    private PublicationType pubType;
+    private Set<PublicationType> pubTypes = new HashSet<>();
     private PublicationType lastPubType;
     private String comment;
 
@@ -82,7 +82,7 @@ public class UdmValueFilter {
             setLastContentFlagExpression(new FilterExpression<>(filter.getLastContentFlagExpression()));
             setContentCommentExpression(filter.getContentCommentExpression());
             setLastContentCommentExpression(filter.getLastContentCommentExpression());
-            setPubType(filter.getPubType());
+            setPubTypes(filter.getPubTypes());
             setLastPubType(filter.getLastPubType());
             setComment(filter.getComment());
         }
@@ -256,12 +256,12 @@ public class UdmValueFilter {
         this.lastContentCommentExpression = lastContentCommentExpression;
     }
 
-    public PublicationType getPubType() {
-        return pubType;
+    public Set<PublicationType> getPubTypes() {
+        return pubTypes;
     }
 
-    public void setPubType(PublicationType pubType) {
-        this.pubType = pubType;
+    public void setPubTypes(Set<PublicationType> pubTypes) {
+        this.pubTypes = pubTypes;
     }
 
     public PublicationType getLastPubType() {
@@ -305,7 +305,7 @@ public class UdmValueFilter {
             && lastContentFlagExpression.isEmpty()
             && contentCommentExpression.isEmpty()
             && lastContentCommentExpression.isEmpty()
-            && null == pubType
+            && CollectionUtils.isEmpty(pubTypes)
             && null == lastPubType
             && null == comment;
     }
@@ -341,7 +341,7 @@ public class UdmValueFilter {
             .append(lastContentFlagExpression, that.lastContentFlagExpression)
             .append(contentCommentExpression, that.contentCommentExpression)
             .append(lastContentCommentExpression, that.lastContentCommentExpression)
-            .append(pubType, that.pubType)
+            .append(pubTypes, that.pubTypes)
             .append(lastPubType, that.lastPubType)
             .append(comment, that.comment)
             .isEquals();
@@ -371,7 +371,7 @@ public class UdmValueFilter {
             .append(lastContentFlagExpression)
             .append(contentCommentExpression)
             .append(lastContentCommentExpression)
-            .append(pubType)
+            .append(pubTypes)
             .append(lastPubType)
             .append(comment)
             .toHashCode();
@@ -401,7 +401,7 @@ public class UdmValueFilter {
             .append("lastContentFlagExpression", lastContentFlagExpression)
             .append("contentCommentExpression", contentCommentExpression)
             .append("lastContentCommentExpression", lastContentCommentExpression)
-            .append("pubType", pubType)
+            .append("pubTypes", pubTypes)
             .append("lastPubType", lastPubType)
             .append("comment", comment)
             .toString();

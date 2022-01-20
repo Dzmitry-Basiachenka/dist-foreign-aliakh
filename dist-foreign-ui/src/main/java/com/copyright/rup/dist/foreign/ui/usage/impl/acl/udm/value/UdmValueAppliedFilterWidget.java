@@ -23,6 +23,8 @@ import java.util.function.Function;
  */
 public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
 
+    private static final String NULL = "NULL";
+
     /**
      * Constructor.
      */
@@ -41,8 +43,8 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
         if (!filter.isEmpty()) {
             addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getStatus, filter, "label.status"), layout);
-            addLabel(createLabelWithSingleValue(getPubTypeFunction(UdmValueFilter::getPubType, filter), filter,
-                "label.pub_type"), layout);
+            addLabel(createLabelWithMultipleValues(filter.getPubTypes(), "label.pub_types",
+                getPubTypeToStringFunction()), layout);
             addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getLastValuePeriods(), "label.last_value_periods",
                 String::valueOf), layout);
@@ -95,8 +97,14 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
         if (Objects.nonNull(publicationType)) {
             return Objects.nonNull(publicationType.getId())
                 ? udmValueFilter -> publicationType.getNameAndDescription()
-                : udmValueFilter -> "NULL";
+                : udmValueFilter -> NULL;
         }
         return function;
+    }
+
+    private Function<PublicationType, String> getPubTypeToStringFunction() {
+        return publicationType -> Objects.nonNull(publicationType.getId())
+            ? publicationType.getNameAndDescription()
+            : NULL;
     }
 }
