@@ -74,10 +74,12 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private final TextField rhNameField = new TextField(ForeignUi.getMessage("label.rh_name"));
     private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox = buildTextOperatorComboBox();
     private final ComboBox<Currency> currencyComboBox = new ComboBox<>(ForeignUi.getMessage("label.currency"));
-    private final TextField priceField = new TextField(ForeignUi.getMessage("label.price"));
-    private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildTextOperatorComboBox();
-    private final TextField priceInUsdField = new TextField(ForeignUi.getMessage("label.price_in_usd"));
-    private final ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox = buildTextOperatorComboBox();
+    private final TextField priceFromField = new TextField(ForeignUi.getMessage("label.price_from"));
+    private final TextField priceToField = new TextField(ForeignUi.getMessage("label.price_to"));
+    private final ComboBox<FilterOperatorEnum> priceOperatorComboBox = buildNumericOperatorComboBox();
+    private final TextField priceInUsdFromField = new TextField(ForeignUi.getMessage("label.price_in_usd_from"));
+    private final TextField priceInUsdToField = new TextField(ForeignUi.getMessage("label.price_in_usd_to"));
+    private final ComboBox<FilterOperatorEnum> priceInUsdOperatorComboBox = buildNumericOperatorComboBox();
     private final ComboBox<FilterOperatorEnum> priceFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.price_flag"));
     private final TextField priceCommentField = new TextField(ForeignUi.getMessage("label.price_comment"));
@@ -86,8 +88,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         new ComboBox<>(ForeignUi.getMessage("label.last_price_flag"));
     private final TextField lastPriceCommentField = new TextField(ForeignUi.getMessage("label.last_price_comment"));
     private final ComboBox<FilterOperatorEnum> lastPriceCommentOperatorComboBox = buildTextOperatorComboBox();
-    private final TextField contentField = new TextField(ForeignUi.getMessage("label.content"));
-    private final ComboBox<FilterOperatorEnum> contentOperatorComboBox = buildTextOperatorComboBox();
+    private final TextField contentFromField = new TextField(ForeignUi.getMessage("label.content_from"));
+    private final TextField contentToField = new TextField(ForeignUi.getMessage("label.content_to"));
+    private final ComboBox<FilterOperatorEnum> contentOperatorComboBox = buildNumericOperatorComboBox();
     private final ComboBox<FilterOperatorEnum> contentFlagComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.content_flag"));
     private final TextField contentCommentField = new TextField(ForeignUi.getMessage("label.content_comment"));
@@ -186,8 +189,8 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
-            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldSecondValue(Long.valueOf(value)));
         applyCommonNumericFieldFormatting(horizontalLayout, wrWrkInstFromField, wrWrkInstToField);
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-value-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-value-wr-wrk-inst-to-filter");
@@ -254,8 +257,8 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             .withValidator(value -> validateIntegerFromToValues(rhAccountNumberFromField, rhAccountNumberToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.rh_account_number_from")))
-            .bind(filter -> filter.getRhAccountNumberExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getRhAccountNumberExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getRhAccountNumberExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getRhAccountNumberExpression().setFieldSecondValue(Long.valueOf(value)));
         applyCommonNumericFieldFormatting(horizontalLayout, rhAccountNumberFromField, rhAccountNumberToField);
         VaadinUtils.addComponentStyle(rhAccountNumberFromField, "udm-value-rh-account-number-from-filter");
         VaadinUtils.addComponentStyle(rhAccountNumberToField, "udm-value-rh-account-number-to-filter");
@@ -291,33 +294,61 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     }
 
     private HorizontalLayout initPriceLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(priceField, priceOperatorComboBox);
-        populateOperatorFilters(priceField, priceOperatorComboBox, valueFilter.getPriceExpression());
-        priceField.addValueChangeListener(event -> filterBinder.validate());
-        priceOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(filterBinder, priceField, event.getValue()));
-        filterBinder.forField(priceField)
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(priceFromField, priceToField, priceOperatorComboBox);
+        populateOperatorFilters(priceFromField, priceToField, priceOperatorComboBox,
+            valueFilter.getPriceExpression());
+        priceFromField.addValueChangeListener(event -> filterBinder.validate());
+        priceOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(filterBinder, priceFromField, priceToField, event.getValue()));
+        filterBinder.forField(priceFromField)
             .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(priceFromField, priceOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getPriceExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceExpression().setFieldFirstValue(new BigDecimal(value)));
-        applyCommonTextFieldFormatting(horizontalLayout, priceField);
-        VaadinUtils.addComponentStyle(priceField, "udm-value-price-filter");
+        filterBinder.forField(priceToField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(priceToField, priceOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(priceFromField, priceToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.price_from")))
+            .bind(filter -> filter.getPriceExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getPriceExpression().setFieldSecondValue(new BigDecimal(value)));
+        applyCommonNumericFieldFormatting(horizontalLayout, priceFromField, priceToField);
+        VaadinUtils.addComponentStyle(priceFromField, "udm-value-price-from-filter");
+        VaadinUtils.addComponentStyle(priceToField, "udm-value-price-to-filter");
         VaadinUtils.addComponentStyle(priceOperatorComboBox, "udm-value-price-operator-filter");
         return horizontalLayout;
     }
 
     private HorizontalLayout initPriceInUsdLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(priceInUsdField, priceInUsdOperatorComboBox);
-        populateOperatorFilters(priceInUsdField, priceInUsdOperatorComboBox, valueFilter.getPriceInUsdExpression());
-        priceInUsdField.addValueChangeListener(event -> filterBinder.validate());
-        priceInUsdOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(filterBinder, priceInUsdField, event.getValue()));
-        filterBinder.forField(priceInUsdField)
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(priceInUsdFromField, priceInUsdToField, priceInUsdOperatorComboBox);
+        populateOperatorFilters(priceInUsdFromField, priceInUsdToField, priceInUsdOperatorComboBox,
+            valueFilter.getPriceInUsdExpression());
+        priceInUsdFromField.addValueChangeListener(event -> filterBinder.validate());
+        priceInUsdOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(filterBinder, priceInUsdFromField, priceInUsdToField, event.getValue()));
+        filterBinder.forField(priceInUsdFromField)
             .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(priceInUsdFromField, priceInUsdOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getPriceInUsdExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getPriceInUsdExpression().setFieldFirstValue(new BigDecimal(value)));
-        applyCommonTextFieldFormatting(horizontalLayout, priceInUsdField);
-        VaadinUtils.addComponentStyle(priceInUsdField, "udm-value-price-in-usd-filter");
+        filterBinder.forField(priceInUsdToField)
+            .withValidator(new AmountValidator())
+            .withValidator(getBetweenOperatorValidator(priceInUsdToField, priceInUsdOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(priceInUsdFromField, priceInUsdToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.price_in_usd_from")))
+            .bind(filter -> filter.getPriceInUsdExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getPriceInUsdExpression().setFieldSecondValue(new BigDecimal(value)));
+        applyCommonNumericFieldFormatting(horizontalLayout, priceInUsdFromField, priceInUsdToField);
+        VaadinUtils.addComponentStyle(priceInUsdFromField, "udm-value-price-in-usd-from-filter");
+        VaadinUtils.addComponentStyle(priceInUsdToField, "udm-value-price-in-usd-to-filter");
         VaadinUtils.addComponentStyle(priceInUsdOperatorComboBox, "udm-value-price-in-usd-operator-filter");
         return horizontalLayout;
     }
@@ -375,17 +406,31 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     }
 
     private HorizontalLayout initContentLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout(contentField, contentOperatorComboBox);
-        populateOperatorFilters(contentField, contentOperatorComboBox, valueFilter.getContentExpression());
-        contentField.addValueChangeListener(event -> filterBinder.validate());
-        contentOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(filterBinder, contentField, event.getValue()));
-        filterBinder.forField(contentField)
+        HorizontalLayout horizontalLayout =
+            new HorizontalLayout(contentFromField, contentToField, contentOperatorComboBox);
+        populateOperatorFilters(contentFromField, contentToField, contentOperatorComboBox,
+            valueFilter.getContentExpression());
+        contentFromField.addValueChangeListener(event -> filterBinder.validate());
+        contentOperatorComboBox.addValueChangeListener(event ->
+            updateOperatorField(filterBinder, contentFromField, contentToField, event.getValue()));
+        filterBinder.forField(contentFromField)
             .withValidator(new AmountZeroValidator())
+            .withValidator(getBetweenOperatorValidator(contentFromField, contentOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getContentExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getContentExpression().setFieldFirstValue(new BigDecimal(value)));
-        applyCommonTextFieldFormatting(horizontalLayout, contentField);
-        VaadinUtils.addComponentStyle(contentField, "udm-value-content-filter");
+        filterBinder.forField(contentToField)
+            .withValidator(new AmountZeroValidator())
+            .withValidator(getBetweenOperatorValidator(contentToField, contentOperatorComboBox),
+                BETWEEN_OPERATOR_VALIDATION_MESSAGE)
+            .withValidator(value -> validateBigDecimalFromToValues(contentFromField, contentToField),
+                ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
+                    ForeignUi.getMessage("label.content_from")))
+            .bind(filter -> filter.getContentExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getContentExpression().setFieldSecondValue(new BigDecimal(value)));
+        applyCommonNumericFieldFormatting(horizontalLayout, contentFromField, contentToField);
+        VaadinUtils.addComponentStyle(contentFromField, "udm-value-content-from-filter");
+        VaadinUtils.addComponentStyle(contentToField, "udm-value-content-to-filter");
         VaadinUtils.addComponentStyle(contentOperatorComboBox, "udm-value-content-operator-filter");
         return horizontalLayout;
     }
@@ -479,9 +524,9 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
             } else {
                 Windows.showValidationErrorWindow(
                     Arrays.asList(wrWrkInstFromField, wrWrkInstToField, systemTitleField, systemStandardNumberField,
-                        rhAccountNumberFromField, rhAccountNumberToField, rhNameField, priceField, priceInUsdField,
-                        priceCommentField, lastPriceCommentField, contentField, contentCommentField,
-                        lastContentCommentField, commentField));
+                        rhAccountNumberFromField, rhAccountNumberToField, rhNameField, priceFromField, priceToField,
+                        priceInUsdFromField, priceInUsdToField, priceCommentField, lastPriceCommentField,
+                        contentFromField, contentToField, contentCommentField, lastContentCommentField, commentField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
@@ -499,13 +544,13 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         clearOperatorLayout(rhAccountNumberFromField, rhAccountNumberToField, rhAccountNumberOperatorComboBox);
         clearOperatorLayout(rhNameField, rhNameOperatorComboBox);
         currencyComboBox.clear();
-        clearOperatorLayout(priceField, priceOperatorComboBox);
-        clearOperatorLayout(priceInUsdField, priceInUsdOperatorComboBox);
+        clearOperatorLayout(priceFromField, priceToField, priceOperatorComboBox);
+        clearOperatorLayout(priceInUsdFromField, priceInUsdToField, priceInUsdOperatorComboBox);
         priceFlagComboBox.clear();
         clearOperatorLayout(priceCommentField, priceCommentOperatorComboBox);
         lastPriceFlagComboBox.clear();
         clearOperatorLayout(lastPriceCommentField, lastPriceCommentOperatorComboBox);
-        clearOperatorLayout(contentField, contentOperatorComboBox);
+        clearOperatorLayout(contentFromField, contentToField, contentOperatorComboBox);
         contentFlagComboBox.clear();
         clearOperatorLayout(contentCommentField, contentCommentOperatorComboBox);
         lastContentFlagComboBox.clear();
@@ -550,18 +595,18 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
         valueFilter.setRhNameExpression(buildTextFilterExpression(rhNameField, rhNameOperatorComboBox,
             Function.identity()));
         valueFilter.setCurrency(Objects.nonNull(currencyComboBox.getValue()) ? currencyComboBox.getValue() : null);
-        valueFilter.setPriceExpression(buildAmountFilterExpression(priceField, priceOperatorComboBox,
-            BigDecimal::new));
-        valueFilter.setPriceInUsdExpression(buildAmountFilterExpression(priceInUsdField, priceInUsdOperatorComboBox,
-            BigDecimal::new));
+        valueFilter.setPriceExpression(buildAmountFilterExpression(priceFromField, priceToField,
+            priceOperatorComboBox, BigDecimal::new));
+        valueFilter.setPriceInUsdExpression(buildAmountFilterExpression(priceInUsdFromField, priceInUsdToField,
+            priceInUsdOperatorComboBox, BigDecimal::new));
         valueFilter.getPriceFlagExpression().setOperator(priceFlagComboBox.getValue());
         valueFilter.setPriceCommentExpression(buildTextFilterExpression(priceCommentField, priceCommentOperatorComboBox,
             Function.identity()));
         valueFilter.getLastPriceFlagExpression().setOperator(lastPriceFlagComboBox.getValue());
         valueFilter.setLastPriceCommentExpression(buildTextFilterExpression(lastPriceCommentField,
             lastPriceCommentOperatorComboBox, Function.identity()));
-        valueFilter.setContentExpression(buildAmountFilterExpression(contentField, contentOperatorComboBox,
-            BigDecimal::new));
+        valueFilter.setContentExpression(buildAmountFilterExpression(contentFromField, contentToField,
+            contentOperatorComboBox, BigDecimal::new));
         valueFilter.getContentFlagExpression().setOperator(contentFlagComboBox.getValue());
         valueFilter.setContentCommentExpression(buildTextFilterExpression(contentCommentField,
             contentCommentOperatorComboBox, Function.identity()));

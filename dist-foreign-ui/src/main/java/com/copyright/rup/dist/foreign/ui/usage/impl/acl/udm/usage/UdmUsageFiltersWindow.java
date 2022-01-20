@@ -258,8 +258,8 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
-            .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getWrWrkInstExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getWrWrkInstExpression().setFieldSecondValue(Long.valueOf(value)));
         applyCommonNumericFieldFormatting(wrWrkInstLayout, wrWrkInstFromField, wrWrkInstToField);
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-wr-wrk-inst-to-filter");
@@ -385,8 +385,8 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(annualMultiplierFromField, annualMultiplierToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.annual_multiplier_from")))
-            .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getAnnualMultiplierExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getAnnualMultiplierExpression().setFieldSecondValue(Long.valueOf(value)));
         annualMultiplierLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(annualMultiplierLayout, annualMultiplierFromField, annualMultiplierToField);
         VaadinUtils.addComponentStyle(annualMultiplierFromField, "udm-annual-multiplier-from-filter");
@@ -485,8 +485,8 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(quantityFromField, quantityToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.quantity_from")))
-            .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getQuantityExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getQuantityExpression().setFieldSecondValue(Long.valueOf(value)));
         quantityLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(quantityLayout, quantityFromField, quantityToField);
         VaadinUtils.addComponentStyle(quantityFromField, "udm-quantity-from-filter");
@@ -518,8 +518,8 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(companyIdFromField, companyIdToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.company_id_from")))
-            .bind(filter -> filter.getCompanyIdExpression().getFieldFirstValue().toString(),
-                (filter, value) -> filter.getCompanyIdExpression().setFieldFirstValue(Long.valueOf(value)));
+            .bind(filter -> filter.getCompanyIdExpression().getFieldSecondValue().toString(),
+                (filter, value) -> filter.getCompanyIdExpression().setFieldSecondValue(Long.valueOf(value)));
         companyIdLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(companyIdLayout, companyIdFromField, companyIdToField);
         VaadinUtils.addComponentStyle(companyIdFromField, "udm-company-id-from-filter");
