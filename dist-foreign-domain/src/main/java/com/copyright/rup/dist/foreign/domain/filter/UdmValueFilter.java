@@ -46,7 +46,7 @@ public class UdmValueFilter {
     private FilterExpression<String> lastContentCommentExpression = new FilterExpression<>();
     private Set<PublicationType> pubTypes = new HashSet<>();
     private PublicationType lastPubType;
-    private String comment;
+    private FilterExpression<String> commentExpression = new FilterExpression<>();
 
     /**
      * Default constructor.
@@ -84,7 +84,7 @@ public class UdmValueFilter {
             setLastContentCommentExpression(filter.getLastContentCommentExpression());
             setPubTypes(filter.getPubTypes());
             setLastPubType(filter.getLastPubType());
-            setComment(filter.getComment());
+            setCommentExpression(filter.getCommentExpression());
         }
     }
 
@@ -272,12 +272,12 @@ public class UdmValueFilter {
         this.lastPubType = lastPubType;
     }
 
-    public String getComment() {
-        return comment;
+    public FilterExpression<String> getCommentExpression() {
+        return commentExpression;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setCommentExpression(FilterExpression<String> commentExpression) {
+        this.commentExpression = commentExpression;
     }
 
     /**
@@ -307,7 +307,7 @@ public class UdmValueFilter {
             && lastContentCommentExpression.isEmpty()
             && CollectionUtils.isEmpty(pubTypes)
             && null == lastPubType
-            && null == comment;
+            && commentExpression.isEmpty();
     }
 
     @Override
@@ -343,7 +343,7 @@ public class UdmValueFilter {
             .append(lastContentCommentExpression, that.lastContentCommentExpression)
             .append(pubTypes, that.pubTypes)
             .append(lastPubType, that.lastPubType)
-            .append(comment, that.comment)
+            .append(commentExpression, that.commentExpression)
             .isEquals();
     }
 
@@ -373,7 +373,7 @@ public class UdmValueFilter {
             .append(lastContentCommentExpression)
             .append(pubTypes)
             .append(lastPubType)
-            .append(comment)
+            .append(commentExpression)
             .toHashCode();
     }
 
@@ -403,7 +403,7 @@ public class UdmValueFilter {
             .append("lastContentCommentExpression", lastContentCommentExpression)
             .append("pubTypes", pubTypes)
             .append("lastPubType", lastPubType)
-            .append("comment", comment)
+            .append("commentExpression", commentExpression)
             .toString();
     }
 }

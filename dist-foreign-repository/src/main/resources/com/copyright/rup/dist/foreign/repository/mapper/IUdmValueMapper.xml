@@ -227,9 +227,6 @@
                     <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
                 </include>
             </if>
-            <if test="null != filter.comment">
-                and v.comment ilike '%' || #{filter.comment} || '%'
-            </if>
             <if test="!filter.systemTitleExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.textFieldFilterExpression">
                     <property name="column" value="v.system_title"/>
@@ -340,6 +337,14 @@
                     <property name="operator" value="filter.lastContentCommentExpression.operator"/>
                     <property name="fieldFirstValue" value="${filter.lastContentCommentExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.lastContentCommentExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.commentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="v.comment"/>
+                    <property name="operator" value="filter.commentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.commentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.commentExpression.fieldSecondValue}"/>
                 </include>
             </if>            
         </where>

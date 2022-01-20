@@ -113,7 +113,10 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String LAST_CONTENT_COMMENT_DIFFERENT_CASE = "content COmment 1";
     private static final String LAST_CONTENT_COMMENT_FRAGMENT = "onteNT COmmen";
     private static final String LAST_CONTENT_COMMENT_WITH_METASYMBOLS = "content comment 2 !@#$%^&*()_+-=?/\\'\"}{][<>";
-    private static final String COMMENT_FRAGMENT = "ommen";
+    private static final String COMMENT = "comment 1";
+    private static final String COMMENT_DIFFERENT_CASE = "COmment 1";
+    private static final String COMMENT_FRAGMENT = "COmmen";
+    private static final String COMMENT_WITH_METASYMBOLS = "comment 2 !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final BigDecimal PRICE = new BigDecimal("70.0000000000");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("79.29600028");
     private static final BigDecimal CONTENT = new BigDecimal("4");
@@ -210,7 +213,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setLastContentCommentExpression(new FilterExpression<>());
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
-        filter.setComment(COMMENT_FRAGMENT);
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
         assertEquals(1, udmValueRepository.findCountByFilter(filter));
     }
 
@@ -241,7 +244,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setLastContentCommentExpression(new FilterExpression<>());
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
-        filter.setComment(COMMENT_FRAGMENT);
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
         List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
         verifyValueDto(loadExpectedValueDto("json/udm/udm_value_dto_dae1b2c9.json").get(0), values.get(0), true);
@@ -309,8 +312,6 @@ public class UdmValueRepositoryIntegrationTest {
             UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setLastPubType(createPubType(BK, BOOK)),
             UDM_VALUE_UID_5);
-        assertFilteringFindDtosByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), UDM_VALUE_UID_1, UDM_VALUE_UID_2,
-            UDM_VALUE_UID_3, UDM_VALUE_UID_4);
     }
 
     @Test
@@ -785,6 +786,52 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterComment() {
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_WITH_METASYMBOLS, null)),
+            UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_WITH_METASYMBOLS, null)),
+            UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT, null)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_WITH_METASYMBOLS, null)),
+            UDM_VALUE_UID_1);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_VALUE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
@@ -836,7 +883,6 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType(null, null)), 4);
         assertFilteringFindCountByFilter(filter -> filter.setLastPubType(createPubType(BK, BOOK)), 1);
-        assertFilteringFindCountByFilter(filter -> filter.setComment(COMMENT_FRAGMENT), 4);
     }
 
     @Test
@@ -1231,6 +1277,39 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterComment() {
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_DIFFERENT_CASE, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_FRAGMENT, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, COMMENT_WITH_METASYMBOLS, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, COMMENT_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindCountByBasicFilter() {
         assertFilteringFindCountByFilter(filter -> filter.setPeriods(Sets.newHashSet(201506, 202112)), 2);
         assertFilteringFindCountByFilter(filter -> filter.setStatus(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE), 1);
@@ -1288,8 +1367,8 @@ public class UdmValueRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "update-assignee.groovy")
     public void testUpdateAssignee() {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setPeriods(ImmutableSet.of(202106));
-        filter.setComment("comment_assignment_");
+        filter.setPeriods(Collections.singleton(202106));
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "comment_assignment_1", null));
         UdmValueDto udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
         assertNull(udmValueDto.getAssignee());
         udmValueRepository
@@ -1302,8 +1381,8 @@ public class UdmValueRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "update-assignee.groovy")
     public void testUpdateAssigneeToNull() {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setPeriods(ImmutableSet.of(202112));
-        filter.setComment("comment_assignment_3");
+        filter.setPeriods(Collections.singleton(202112));
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "comment_assignment_2", null));
         UdmValueDto udmValueDto = udmValueRepository.findDtosByFilter(filter, null, null).get(0);
         assertEquals(ASSIGNEE_1, udmValueDto.getAssignee());
         udmValueRepository

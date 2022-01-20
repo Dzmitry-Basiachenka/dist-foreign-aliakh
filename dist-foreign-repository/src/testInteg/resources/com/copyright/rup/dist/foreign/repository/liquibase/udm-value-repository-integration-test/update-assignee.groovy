@@ -48,8 +48,8 @@ databaseChangeLog {
             column(name: 'currency_exchange_rate', value: 2)
             column(name: 'currency_exchange_rate_date', value: '2021-09-10')
             column(name: 'content_unit_price', value: 10.0000000000)
-            column(name: 'comment', value: 'Comment_assignment_3')
-            column(name: 'content_comment', value: 'Content_comment_3')
+            column(name: 'comment', value: 'Comment_assignment_2')
+            column(name: 'content_comment', value: 'Content_comment_2')
             column(name: 'updated_datetime', value: '2021-09-11')
             column(name: 'updated_by_user', value: 'jjohn@copyright.com')
         }

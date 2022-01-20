@@ -92,10 +92,6 @@ public class UdmValueFilterTest {
         assertFalse(valueFilter.isEmpty());
         valueFilter.setLastPubType(null);
         assertTrue(valueFilter.isEmpty());
-        valueFilter.setComment(COMMENT);
-        assertFalse(valueFilter.isEmpty());
-        valueFilter.setComment(null);
-        assertTrue(valueFilter.isEmpty());
     }
 
     @Test
@@ -171,6 +167,10 @@ public class UdmValueFilterTest {
         assertFalse(valueFilter.isEmpty());
         valueFilter.setLastContentCommentExpression(new FilterExpression<>());
         assertTrue(valueFilter.isEmpty());
+        valueFilter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setCommentExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
     }
 
     @Test
@@ -199,6 +199,6 @@ public class UdmValueFilterTest {
         assertEquals(new FilterExpression<>(), valueFilter.getLastContentCommentExpression());
         assertTrue(valueFilter.getPubTypes().isEmpty());
         assertNull(valueFilter.getLastPubType());
-        assertNull(valueFilter.getComment());
+        assertEquals(new FilterExpression<>(), valueFilter.getCommentExpression());
     }
 }
