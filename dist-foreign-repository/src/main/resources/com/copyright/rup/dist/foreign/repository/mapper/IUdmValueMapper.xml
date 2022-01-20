@@ -349,7 +349,15 @@
                     <property name="fieldFirstValue" value="${filter.commentExpression.fieldFirstValue}"/>
                     <property name="fieldSecondValue" value="${filter.commentExpression.fieldSecondValue}"/>
                 </include>
-            </if>            
+            </if>
+            <if test="!filter.lastCommentExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="last_value.last_comment"/>
+                    <property name="operator" value="filter.lastCommentExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.lastCommentExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.lastCommentExpression.fieldSecondValue}"/>
+                </include>
+            </if>
         </where>
     </sql>
 

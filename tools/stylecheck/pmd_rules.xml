@@ -98,7 +98,7 @@
         <properties>
             <!--Max count for method. if more method needs refactoring-->
             <property name="methodReportLevel">
-                <value>72</value>
+                <value>76</value>
             </property>
             <!--Max count for class. This value was used to support existing Tests-->
             <property name="classReportLevel">

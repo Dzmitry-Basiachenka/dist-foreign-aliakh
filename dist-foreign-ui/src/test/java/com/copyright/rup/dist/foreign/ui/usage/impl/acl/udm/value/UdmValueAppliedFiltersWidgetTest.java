@@ -49,7 +49,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         Component component = widget.getContent();
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(24, verticalLayout.getComponentCount());
+        assertEquals(25, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Status", "NEW");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Types", "BK - Book");
@@ -88,6 +88,8 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(22), "Last Pub Type", "BK - Book");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(23),
             "<li><b><i>Comment: </i></b>comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
+        verifyLabelWithOperator(((VerticalLayout) component).getComponent(24),
+            "<li><b><i>Last Comment: </i></b>last comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
     }
 
     private void verifyLabel(Component component, String labelName, String labelValue) {
@@ -131,6 +133,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setPubTypes(Collections.singleton(buildPubType()));
         filter.setLastPubType(buildPubType());
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "comment", null));
+        filter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "last comment", null));
         return filter;
     }
 

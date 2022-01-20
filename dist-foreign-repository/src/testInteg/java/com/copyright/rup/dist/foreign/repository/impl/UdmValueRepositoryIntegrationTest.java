@@ -117,6 +117,10 @@ public class UdmValueRepositoryIntegrationTest {
     private static final String COMMENT_DIFFERENT_CASE = "COmment 1";
     private static final String COMMENT_FRAGMENT = "COmmen";
     private static final String COMMENT_WITH_METASYMBOLS = "comment 2 !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String LAST_COMMENT = "comment 1";
+    private static final String LAST_COMMENT_DIFFERENT_CASE = "COmment 1";
+    private static final String LAST_COMMENT_FRAGMENT = "COmmen";
+    private static final String LAST_COMMENT_WITH_METASYMBOLS = "comment 2 !@#$%^&*()_+-=?/\\'\"}{][<>";
     private static final BigDecimal PRICE = new BigDecimal("70.0000000000");
     private static final BigDecimal PRICE_IN_USD = new BigDecimal("79.29600028");
     private static final BigDecimal CONTENT = new BigDecimal("4");
@@ -214,6 +218,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
+        filter.setLastCommentExpression(new FilterExpression<>());
         assertEquals(1, udmValueRepository.findCountByFilter(filter));
     }
 
@@ -245,6 +250,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPubTypes(Collections.emptySet());
         filter.setLastPubType(null);
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
+        filter.setLastCommentExpression(new FilterExpression<>());
         List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
         verifyValueDto(loadExpectedValueDto("json/udm/udm_value_dto_dae1b2c9.json").get(0), values.get(0), true);
@@ -832,6 +838,50 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterLastComment() {
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_WITH_METASYMBOLS, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_WITH_METASYMBOLS, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_3, UDM_VALUE_UID_4, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT, null)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_DIFFERENT_CASE, null)),
+            UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_FRAGMENT, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_WITH_METASYMBOLS, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)),
+            UDM_VALUE_UID_3, UDM_VALUE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByBasicFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setPeriods(new HashSet<>(Arrays.asList(201506, 202112))),
             UDM_VALUE_UID_2, UDM_VALUE_UID_4);
@@ -1306,6 +1356,39 @@ public class UdmValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterLastComment() {
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT_WITH_METASYMBOLS, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_DIFFERENT_CASE, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_FRAGMENT, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, LAST_COMMENT_WITH_METASYMBOLS, null)), 5);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_FRAGMENT, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, LAST_COMMENT_WITH_METASYMBOLS, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NULL, null, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setLastCommentExpression(
+            new FilterExpression<>(FilterOperatorEnum.IS_NOT_NULL, null, null)), 3);
     }
 
     @Test

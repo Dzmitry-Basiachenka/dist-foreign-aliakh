@@ -88,6 +88,8 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 "label.last_pub_type"), layout);
             addLabel(createLabelWithOperator(filter.getCommentExpression(), "label.comment",
                 StringUtils.EMPTY), layout);
+            addLabel(createLabelWithOperator(filter.getLastCommentExpression(), "label.last_comment",
+                StringUtils.EMPTY), layout);
         }
         setContent(layout);
     }
