@@ -203,17 +203,21 @@
                     </otherwise>
                 </choose>
             </if>
-            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and !filter.lastValuePeriods.contains('IS_NULL') and !filter.lastValuePeriods.contains('IS_NOT_NULL')">
+            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0">
                 and
                 <foreach collection="filter.lastValuePeriods" item="lastValuePeriod" open="(" separator=" or " close=")">
-                    last_value_period::text = #{lastValuePeriod}
+                    <choose>
+                        <when test="lastValuePeriod == 'IS_NULL'">
+                            last_value_period is null
+                        </when>
+                        <when test="lastValuePeriod == 'IS_NOT_NULL'">
+                            last_value_period is not null
+                        </when>
+                        <otherwise>
+                            last_value_period::text = #{lastValuePeriod}
+                        </otherwise>
+                    </choose>
                 </foreach>
-            </if>
-            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and filter.lastValuePeriods.contains('IS_NULL')">
-                and last_value_period is null
-            </if>
-            <if test="null != filter.lastValuePeriods and filter.lastValuePeriods.size() > 0 and filter.lastValuePeriods.contains('IS_NOT_NULL')">
-                and last_value_period is not null
             </if>
             <if test="!filter.wrWrkInstExpression.isEmpty()">
                 <include refid="IUdmCommonMapper.numericFieldFilterExpression">
