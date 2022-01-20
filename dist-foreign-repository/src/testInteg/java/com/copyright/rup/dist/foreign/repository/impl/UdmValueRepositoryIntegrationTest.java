@@ -249,6 +249,7 @@ public class UdmValueRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    //TODO distribute test and verify all filters separately
     public void testFindDtosByAdditionalFilter() {
         assertFilteringFindDtosByFilter(filter -> filter.setAssignees(Sets.newHashSet(ASSIGNEE_2, UNASSIGNED)),
             UDM_VALUE_UID_2, UDM_VALUE_UID_5);
@@ -270,6 +271,9 @@ public class UdmValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())),
             UDM_VALUE_UID_1, UDM_VALUE_UID_2, UDM_VALUE_UID_5);
+        assertFilteringFindDtosByFilter(
+            filter -> filter.setLastValuePeriods(Sets.newHashSet(FilterOperatorEnum.IS_NULL.name(), PERIOD_1)),
+            UDM_VALUE_UID_1, UDM_VALUE_UID_3, UDM_VALUE_UID_4);
         assertFilteringFindDtosByFilter(filter -> filter.setCurrency(new Currency("USD", "US Dollar")),
             UDM_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(new FilterExpression<>()),
@@ -810,6 +814,8 @@ public class UdmValueRepositoryIntegrationTest {
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name())), 2);
         assertFilteringFindCountByFilter(
             filter -> filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NOT_NULL.name())), 3);
+        assertFilteringFindCountByFilter(
+            filter -> filter.setLastValuePeriods(Sets.newHashSet(PERIOD_1, FilterOperatorEnum.IS_NULL.name())), 3);
         assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(new FilterExpression<>()), 5);
         assertFilteringFindCountByFilter(
             filter -> filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y)), 1);
