@@ -56,6 +56,7 @@ public class UdmValueDto extends StoredEntity<String> {
     private Boolean contentFlag;
     private BigDecimal contentUnitPrice;
     private String comment;
+    private String lastComment;
 
     public Integer getValuePeriod() {
         return valuePeriod;
@@ -345,6 +346,14 @@ public class UdmValueDto extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public String getLastComment() {
+        return lastComment;
+    }
+
+    public void setLastComment(String lastComment) {
+        this.lastComment = lastComment;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -392,6 +401,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(contentFlag, that.contentFlag)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(comment, that.comment)
+            .append(lastComment, that.lastComment)
             .isEquals();
     }
 
@@ -435,6 +445,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append(contentFlag)
             .append(contentUnitPrice)
             .append(comment)
+            .append(lastComment)
             .toHashCode();
     }
 
@@ -478,6 +489,7 @@ public class UdmValueDto extends StoredEntity<String> {
             .append("contentFlag", contentFlag)
             .append("contentUnitPrice", contentUnitPrice)
             .append("comment", comment)
+            .append("lastComment", lastComment)
             .toString();
     }
 }

@@ -1359,6 +1359,7 @@ public class UdmValueRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "contentFlag");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "contentUnitPrice");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_7, "comment");
+        assertSortingFindDtosByFilter(UDM_VALUE_UID_6, UDM_VALUE_UID_6, "lastComment");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "updateDate");
         assertSortingFindDtosByFilter(UDM_VALUE_UID_7, UDM_VALUE_UID_6, "updateUser");
     }

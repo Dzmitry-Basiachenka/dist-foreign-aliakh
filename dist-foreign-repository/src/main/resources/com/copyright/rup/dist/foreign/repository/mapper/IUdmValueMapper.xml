@@ -53,6 +53,7 @@
         <result property="contentFlag" column="content_flag"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="comment" column="comment"/>
+        <result property="lastComment" column="last_comment"/>
     </resultMap>
 
     <sql id="selectDtosByFilterSql">
@@ -97,6 +98,7 @@
             content_comment,
             content_flag,
             comment,
+            last_value.last_comment,
             v.created_datetime,
             v.updated_datetime,
             v.created_by_user,
@@ -141,7 +143,8 @@
                 v2.content as last_content,
                 v2.content_flag as last_content_flag,
                 v2.content_source as last_content_source,
-                v2.content_comment as last_content_comment
+                v2.content_comment as last_content_comment,
+                v2.comment as last_comment
             from ${schema}.df_udm_value v2
             where v.wr_wrk_inst = v2.wr_wrk_inst
                 and v.period > v2.period
@@ -462,6 +465,9 @@
             </when>
             <when test="sort.property == 'comment'">
                 comment <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'lastComment'">
+                last_comment <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'updateDate'">
                 v.updated_datetime <include refid="IUsageMapper.direction"/>
