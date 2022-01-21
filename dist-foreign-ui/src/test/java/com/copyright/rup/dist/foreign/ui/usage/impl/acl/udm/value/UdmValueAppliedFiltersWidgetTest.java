@@ -68,9 +68,11 @@ public class UdmValueAppliedFiltersWidgetTest {
             "<li><b><i>RH Name: </i></b>John Wiley</li><li><b><i>Operator: </i></b>CONTAINS</li>");
         verifyLabel(((VerticalLayout) component).getComponent(10), "Currency", "US - United States");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(11),
-            "<li><b><i>Price: </i></b>5.0000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Price From: </i></b>1.0000000000</li><li><b><i>Price To: </i></b>5.0000000000</li>" +
+                "<li><b><i>Operator: </i></b>BETWEEN</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(12),
-            "<li><b><i>Price in USD: </i></b>2.5000000000</li><li><b><i>Operator: </i></b>EQUALS</li>");
+            "<li><b><i>Price in USD From: </i></b>2.5000000000</li>" +
+                "<li><b><i>Price in USD To: </i></b>10.0000000000</li><li><b><i>Operator: </i></b>BETWEEN</li>");
         verifyLabel(((VerticalLayout) component).getComponent(13), "Price Flag", "Y");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(14),
             "<li><b><i>Price Comment: </i></b>price comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
@@ -78,7 +80,7 @@ public class UdmValueAppliedFiltersWidgetTest {
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(16),
             "<li><b><i>Last Price Comment: </i></b>last price comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(17),
-            "<li><b><i>Content: </i></b>50</li><li><b><i>Operator: </i></b>GREATER_THAN_OR_EQUALS_TO</li>");
+            "<li><b><i>Content From: </i></b>50</li><li><b><i>Operator: </i></b>GREATER_THAN_OR_EQUALS_TO</li>");
         verifyLabel(((VerticalLayout) component).getComponent(18), "Content Flag", "Y");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(19),
             "<li><b><i>Content Comment: </i></b>content comment</li><li><b><i>Operator: </i></b>EQUALS</li>");
@@ -114,10 +116,11 @@ public class UdmValueAppliedFiltersWidgetTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "1873-7773", null));
         filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1000002859L, null));
         filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "John Wiley", null));
-        filter.setPriceExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("5.0000000000"), null));
+        filter.setPriceExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("1.0000000000"),
+            new BigDecimal("5.0000000000")));
         filter.setPriceInUsdExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, new BigDecimal("2.5000000000"), null));
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, new BigDecimal("2.5000000000"),
+                new BigDecimal("10.0000000000")));
         filter.setPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         filter.setPriceCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "price comment", null));
         filter.setLastPriceFlagExpression(new FilterExpression<>(FilterOperatorEnum.Y));
