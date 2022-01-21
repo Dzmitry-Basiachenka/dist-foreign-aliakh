@@ -1,3 +1,24 @@
+14.1.48
+-
+* B-67667 FDA: Completed Assignments by Employee Report: update report menu id
+* B-69423 FDA: Filter functionality modification: implement operations for RH Account #, RH Name in Values tab
+* B-69423 FDA: Filter functionality modification: update UdmBaselineValueFiltersWindow to follow common pattern
+* B-69423 FDA: Filter functionality modification: apply common formatting for Rh acccount number layout on Values filter window
+* B-69423 FDA: Filter functionality modification: implement operations for Price Comment, Last Price Comment, Content Comment, Last Content Comment in Values tab
+* B-69423 FDA: Filter functionality modification: add IS_NULL operator for flag fields on Values tab
+* B-69423 FDA: Filter functionality modification: replace Pub Type filter to multi-select Pub Type filter on Values tab
+* B-69423 FDA: Filter functionality modification: implement operations for Price, Price in USD, Content in Values tab
+* B-69423 FDA: Filter functionality modification: refactor UDM Value Filters window, remove redundant logic to disable combobox options for Last Value Period filter
+* B-69423 FDA: Filter functionality modification: update backend logic for Last Value Period filter
+* B-69423 FDA: Filter functionality modification: implement operations for Comment in Values tab
+* B-69423 FDA: Filter functionality modification: replace Pub Type filter to multi-select Pub Type filter on Baseline Values tab
+* B-69423 FDA: Filter functionality modification: implement Last Comment column in Values grid
+* B-69423 FDA: Filter functionality modification: implement operations for Last Comment in Values tab
+* B-69423 FDA: Filter functionality modification: remove IS_NULL value from Price Flag and Content Flag on Values and Baseline Values tabs
+* B-69423 FDA: Filter functionality modification: apply common filters logic for UDM usages tab filters
+* B-70073 FDA: Tech Debt: refactor UdmCsvReportsIntegrationTest for Weekly Survey Report
+* B-70073 FDA: Tech Debt: add filters for testWriteUdmSurveyLicenseeCsvReport and not suitable cases, add unset Date case for testVerifiedDetailsBySourceReport
+
 14.1.47
 -
 * B-69423 FDA: Filter functionality modification: implement operators for Wr Wrk Inst, Comment in Baseline Values tab
