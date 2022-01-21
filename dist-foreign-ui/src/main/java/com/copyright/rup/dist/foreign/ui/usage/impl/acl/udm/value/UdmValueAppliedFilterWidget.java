@@ -62,9 +62,10 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                     ? valueFilter -> valueFilter.getCurrency().getCodeAndDescription()
                     : UdmValueFilter::getCurrency,
                 filter, "label.currency"), layout);
-            addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price", StringUtils.EMPTY), layout);
-            addLabel(createLabelWithOperator(filter.getPriceInUsdExpression(), "label.price_in_usd", StringUtils.EMPTY),
+            addLabel(createLabelWithOperator(filter.getPriceExpression(), "label.price_from", "label.price_to"),
                 layout);
+            addLabel(createLabelWithOperator(filter.getPriceInUsdExpression(), "label.price_in_usd_from",
+                "label.price_in_usd_to"), layout);
             addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
                 udmValueFilter.getPriceFlagExpression().getOperator()), filter, "label.price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getPriceCommentExpression(), "label.price_comment",
@@ -73,7 +74,7 @@ public class UdmValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
                 udmValueFilter.getLastPriceFlagExpression().getOperator()), filter, "label.last_price_flag"), layout);
             addLabel(createLabelWithOperator(filter.getLastPriceCommentExpression(), "label.last_price_comment",
                 StringUtils.EMPTY), layout);
-            addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content", StringUtils.EMPTY),
+            addLabel(createLabelWithOperator(filter.getContentExpression(), "label.content_from", "label.content_to"),
                 layout);
             addLabel(createLabelWithSingleValue(udmValueFilter -> convertFilterOperatorToString(
                 udmValueFilter.getContentFlagExpression().getOperator()), filter, "label.content_flag"), layout);
