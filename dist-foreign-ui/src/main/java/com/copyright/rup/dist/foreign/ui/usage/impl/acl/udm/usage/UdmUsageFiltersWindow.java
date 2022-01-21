@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.DetailLicenseeClassFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationFormatFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ReportedPubTypeFilterWidget;
@@ -23,7 +24,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -33,9 +33,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -43,7 +40,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Window to apply additional filters for {@link UdmUsageFilterWidget}.
@@ -54,9 +50,8 @@ import java.util.function.Predicate;
  *
  * @author Ihar Suvorau
  */
-public class UdmUsageFiltersWindow extends Window {
+public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
 
-    private static final int ONE = 1;
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
@@ -239,10 +234,10 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         populateOperatorFilters(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
-            UdmUsageFilter::getWrWrkInstExpression);
+            usageFilter.getWrWrkInstExpression());
         wrWrkInstFromField.addValueChangeListener(event -> filterBinder.validate());
         wrWrkInstOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(wrWrkInstFromField, wrWrkInstToField, event.getValue()));
+            updateOperatorField(filterBinder, wrWrkInstFromField, wrWrkInstToField, event.getValue()));
         filterBinder.forField(wrWrkInstFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -274,10 +269,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getReportedTitleExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getReportedTitleExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(reportedTitleField, reportedTitleOperatorComboBox,
-            UdmUsageFilter::getReportedTitleExpression);
+            usageFilter.getReportedTitleExpression());
         reportedTitleField.addValueChangeListener(event -> filterBinder.validate());
         reportedTitleOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(reportedTitleField, event.getValue()));
+            event -> updateOperatorField(filterBinder, reportedTitleField, event.getValue()));
         applyCommonTextFieldFormatting(horizontalLayout, reportedTitleField);
         VaadinUtils.addComponentStyle(reportedTitleField, "udm-reported-title-filter");
         VaadinUtils.addComponentStyle(reportedTitleOperatorComboBox, "udm-reported-title-operator-filter");
@@ -291,10 +286,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getSystemTitleExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
-            UdmUsageFilter::getSystemTitleExpression);
+            usageFilter.getSystemTitleExpression());
         systemTitleField.addValueChangeListener(event -> filterBinder.validate());
         systemTitleOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(systemTitleField, event.getValue()));
+            event -> updateOperatorField(filterBinder, systemTitleField, event.getValue()));
         applyCommonTextFieldFormatting(horizontalLayout, systemTitleField);
         VaadinUtils.addComponentStyle(systemTitleField, "udm-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-system-title-operator-filter");
@@ -308,10 +303,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getUsageDetailIdExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getUsageDetailIdExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(usageDetailIdField, usageDetailIdOperatorComboBox,
-            UdmUsageFilter::getUsageDetailIdExpression);
+            usageFilter.getUsageDetailIdExpression());
         usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
         usageDetailIdOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(usageDetailIdField, event.getValue()));
+            event -> updateOperatorField(filterBinder, usageDetailIdField, event.getValue()));
         applyCommonTextFieldFormatting(horizontalLayout, usageDetailIdField);
         VaadinUtils.addComponentStyle(usageDetailIdField, "udm-usage-detail-id-filter");
         VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "udm-usage-detail-id-operator-filter");
@@ -366,10 +361,10 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox);
         populateOperatorFilters(annualMultiplierFromField, annualMultiplierToField, annualMultiplierOperatorComboBox,
-            UdmUsageFilter::getAnnualMultiplierExpression);
+            usageFilter.getAnnualMultiplierExpression());
         annualMultiplierFromField.addValueChangeListener(event -> filterBinder.validate());
         annualMultiplierOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(annualMultiplierFromField, annualMultiplierToField, event.getValue()));
+            updateOperatorField(filterBinder, annualMultiplierFromField, annualMultiplierToField, event.getValue()));
         filterBinder.forField(annualMultiplierFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -399,7 +394,7 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(annualizedCopiesFromField, annualizedCopiesToField, annualizedCopiesOperatorComboBox);
         populateOperatorFilters(annualizedCopiesFromField, annualizedCopiesToField, annualizedCopiesOperatorComboBox,
-            UdmUsageFilter::getAnnualizedCopiesExpression);
+            usageFilter.getAnnualizedCopiesExpression());
         annualizedCopiesFromField.addValueChangeListener(event -> filterBinder.validate());
         filterBinder.forField(annualizedCopiesFromField)
             .withValidator(new AmountZeroValidator())
@@ -417,7 +412,7 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(annualizedCopiesFromField, annualizedCopiesToField, event.getValue()));
+            updateOperatorField(filterBinder, annualizedCopiesFromField, annualizedCopiesToField, event.getValue()));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonNumericFieldFormatting(horizontalLayout, annualizedCopiesFromField, annualizedCopiesToField);
         VaadinUtils.addComponentStyle(annualizedCopiesFromField, "udm-annualized-copies-from-filter");
@@ -430,10 +425,11 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout = new HorizontalLayout(statisticalMultiplierFromField,
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox);
         populateOperatorFilters(statisticalMultiplierFromField, statisticalMultiplierToField,
-            statisticalMultiplierOperatorComboBox, UdmUsageFilter::getStatisticalMultiplierExpression);
+            statisticalMultiplierOperatorComboBox, usageFilter.getStatisticalMultiplierExpression());
         statisticalMultiplierFromField.addValueChangeListener(event -> filterBinder.validate());
         statisticalMultiplierOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(statisticalMultiplierFromField, statisticalMultiplierToField, event.getValue()));
+            updateOperatorField(filterBinder, statisticalMultiplierFromField, statisticalMultiplierToField,
+                event.getValue()));
         filterBinder.forField(statisticalMultiplierFromField)
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
@@ -466,10 +462,10 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(quantityFromField, quantityToField, quantityOperatorComboBox);
         populateOperatorFilters(quantityFromField, quantityToField, quantityOperatorComboBox,
-            UdmUsageFilter::getQuantityExpression);
+            usageFilter.getQuantityExpression());
         quantityFromField.addValueChangeListener(event -> filterBinder.validate());
         quantityOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(quantityFromField, quantityToField, event.getValue()));
+            updateOperatorField(filterBinder, quantityFromField, quantityToField, event.getValue()));
         filterBinder.forField(quantityFromField)
             .withValidator(numberStringLengthValidator)
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -499,10 +495,10 @@ public class UdmUsageFiltersWindow extends Window {
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(companyIdFromField, companyIdToField, companyIdOperatorComboBox);
         populateOperatorFilters(companyIdFromField, companyIdToField, companyIdOperatorComboBox,
-            UdmUsageFilter::getCompanyIdExpression);
+            usageFilter.getCompanyIdExpression());
         companyIdFromField.addValueChangeListener(event -> filterBinder.validate());
         companyIdOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(companyIdFromField, companyIdToField, event.getValue()));
+            updateOperatorField(filterBinder, companyIdFromField, companyIdToField, event.getValue()));
         filterBinder.forField(companyIdFromField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
@@ -535,10 +531,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getCompanyNameExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getCompanyNameExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(companyNameField, companyNameOperatorComboBox,
-            UdmUsageFilter::getCompanyNameExpression);
+            usageFilter.getCompanyNameExpression());
         companyNameField.addValueChangeListener(event -> filterBinder.validate());
         companyNameOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(companyNameField, event.getValue()));
+            event -> updateOperatorField(filterBinder, companyNameField, event.getValue()));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonTextFieldFormatting(horizontalLayout, companyNameField);
         VaadinUtils.addComponentStyle(companyNameField, "udm-company-name-filter");
@@ -554,10 +550,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getSurveyRespondentExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getSurveyRespondentExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(surveyRespondentField, surveyRespondentOperatorComboBox,
-            UdmUsageFilter::getSurveyRespondentExpression);
+            usageFilter.getSurveyRespondentExpression());
         surveyRespondentField.addValueChangeListener(event -> filterBinder.validate());
         surveyRespondentOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(surveyRespondentField, event.getValue()));
+            event -> updateOperatorField(filterBinder, surveyRespondentField, event.getValue()));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonTextFieldFormatting(horizontalLayout, surveyRespondentField);
         VaadinUtils.addComponentStyle(surveyRespondentField, "udm-survey-respondent-filter");
@@ -572,10 +568,10 @@ public class UdmUsageFiltersWindow extends Window {
             .bind(filter -> filter.getSurveyCountryExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getSurveyCountryExpression().setFieldFirstValue(value.trim()));
         populateOperatorFilters(surveyCountryField, surveyCountryOperatorComboBox,
-            UdmUsageFilter::getSurveyCountryExpression);
+            usageFilter.getSurveyCountryExpression());
         surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
         surveyCountryOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(surveyCountryField, event.getValue()));
+            event -> updateOperatorField(filterBinder, surveyCountryField, event.getValue()));
         horizontalLayout.setEnabled(isFilterPermittedForUser);
         applyCommonTextFieldFormatting(horizontalLayout, surveyCountryField);
         VaadinUtils.addComponentStyle(surveyCountryField, "udm-survey-country-filter");
@@ -589,110 +585,14 @@ public class UdmUsageFiltersWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 255), 0, 255))
             .bind(filter -> filter.getLanguageExpression().getFieldFirstValue(),
                 (filter, value) -> filter.getLanguageExpression().setFieldFirstValue(value.trim()));
-        populateOperatorFilters(languageField, languageOperatorComboBox,
-            UdmUsageFilter::getLanguageExpression);
+        populateOperatorFilters(languageField, languageOperatorComboBox, usageFilter.getLanguageExpression());
         languageField.addValueChangeListener(event -> filterBinder.validate());
         languageOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(languageField, event.getValue()));
+            event -> updateOperatorField(filterBinder, languageField, event.getValue()));
         applyCommonTextFieldFormatting(horizontalLayout, languageField);
         VaadinUtils.addComponentStyle(languageField, "udm-language-filter");
         VaadinUtils.addComponentStyle(languageOperatorComboBox, "udm-language-operator-filter");
         return horizontalLayout;
-    }
-
-    private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.CONTAINS, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-    }
-
-    private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
-    }
-
-    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
-        filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setItems(items);
-        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return filterOperatorComboBox;
-    }
-
-    private void populateOperatorFilters(TextField textField, ComboBox<FilterOperatorEnum> comboBox,
-                                         Function<UdmUsageFilter, FilterExpression<?>> expressionFunction) {
-        FilterExpression<?> filterExpression = expressionFunction.apply(usageFilter);
-        Object fieldValue = filterExpression.getFieldFirstValue();
-        FilterOperatorEnum filterOperator = filterExpression.getOperator();
-        if (Objects.nonNull(fieldValue)) {
-            textField.setValue(fieldValue.toString());
-            comboBox.setSelectedItem(filterOperator);
-        } else if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
-            textField.setEnabled(false);
-            comboBox.setSelectedItem(filterOperator);
-        }
-    }
-
-    private void populateOperatorFilters(TextField fromField, TextField toField, ComboBox<FilterOperatorEnum> comboBox,
-                                         Function<UdmUsageFilter, FilterExpression<Number>> getExpressionFunction) {
-        FilterExpression<Number> filterExpression = getExpressionFunction.apply(usageFilter);
-        Number firstFieldValue = filterExpression.getFieldFirstValue();
-        Number secondFieldValue = filterExpression.getFieldSecondValue();
-        FilterOperatorEnum filterOperator = filterExpression.getOperator();
-        toField.setEnabled(Objects.nonNull(secondFieldValue));
-        if (Objects.nonNull(firstFieldValue)) {
-            fromField.setValue(firstFieldValue.toString());
-            toField.setValue(Objects.nonNull(secondFieldValue) ? secondFieldValue.toString() : StringUtils.EMPTY);
-            comboBox.setSelectedItem(filterOperator);
-        } else if (Objects.nonNull(filterOperator) && 0 == filterOperator.getArgumentsNumber()) {
-            fromField.setEnabled(false);
-            toField.setEnabled(false);
-            comboBox.setSelectedItem(filterOperator);
-        }
-    }
-
-    private void applyCommonTextFieldFormatting(HorizontalLayout mainLayout, TextField textField) {
-        mainLayout.setSizeFull();
-        textField.setSizeFull();
-        mainLayout.setExpandRatio(textField, 1f);
-    }
-
-    private void applyCommonNumericFieldFormatting(HorizontalLayout mainLayout, TextField firstField,
-                                                   TextField secondField) {
-        mainLayout.setSizeFull();
-        firstField.setSizeFull();
-        mainLayout.setExpandRatio(firstField, 0.5f);
-        secondField.setSizeFull();
-        mainLayout.setExpandRatio(secondField, 0.5f);
-    }
-
-    private void updateOperatorField(TextField textField, FilterOperatorEnum filterOperator) {
-        if (0 == filterOperator.getArgumentsNumber()) {
-            textField.clear();
-            textField.setEnabled(false);
-        } else {
-            textField.setEnabled(true);
-        }
-        filterBinder.validate();
-    }
-
-    private void updateOperatorField(TextField fromField, TextField toField, FilterOperatorEnum filterOperator) {
-        if (0 == filterOperator.getArgumentsNumber()) {
-            fromField.clear();
-            fromField.setEnabled(false);
-            toField.clear();
-            toField.setEnabled(false);
-        } else if (ONE == filterOperator.getArgumentsNumber()) {
-            fromField.setEnabled(true);
-            toField.clear();
-            toField.setEnabled(false);
-        } else {
-            fromField.setEnabled(true);
-            toField.setEnabled(true);
-        }
-        filterBinder.validate();
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -773,18 +673,6 @@ public class UdmUsageFiltersWindow extends Window {
         usageFilter.setQuantityExpression(new FilterExpression<>());
     }
 
-    private void clearOperatorLayout(TextField textField, ComboBox<FilterOperatorEnum> comboBox) {
-        textField.clear();
-        comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-    }
-
-    private void clearOperatorLayout(TextField fromField, TextField toField, ComboBox<FilterOperatorEnum> comboBox) {
-        fromField.clear();
-        toField.clear();
-        toField.setEnabled(false);
-        comboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-    }
-
     private void populateUsageFilter() {
         usageFilter.setUsageDateFrom(usageDateFromWidget.getValue());
         usageFilter.setUsageDateTo(usageDateToWidget.getValue());
@@ -817,87 +705,5 @@ public class UdmUsageFiltersWindow extends Window {
             statisticalMultiplierToField, statisticalMultiplierOperatorComboBox, BigDecimal::new));
         usageFilter.setQuantityExpression(buildNumberFilterExpression(quantityFromField, quantityToField,
             quantityOperatorComboBox, Long::valueOf));
-    }
-
-    private <T> FilterExpression<T> buildTextFilterExpression(TextField textField,
-                                                              ComboBox<FilterOperatorEnum> comboBox,
-                                                              Function<String, T> valueConverter) {
-        return buildFilterExpression(textField, comboBox, valueConverter,
-            field -> StringUtils.isNotEmpty(field.getValue()));
-    }
-
-    private FilterExpression<Number> buildNumberFilterExpression(TextField fromField, TextField toField,
-                                                                 ComboBox<FilterOperatorEnum> comboBox,
-                                                                 Function<String, Number> valueConverter) {
-        return buildFilterExpression(fromField, toField, comboBox, valueConverter,
-            field -> StringUtils.isNotEmpty(field.getValue()));
-    }
-
-    private FilterExpression<Number> buildAmountFilterExpression(TextField fromField, TextField toField,
-                                                                 ComboBox<FilterOperatorEnum> comboBox,
-                                                                 Function<String, Number> valueConverter) {
-        return buildFilterExpression(fromField, toField, comboBox, valueConverter,
-            field -> StringUtils.isNotBlank(field.getValue()));
-    }
-
-    private <T> FilterExpression<T> buildFilterExpression(TextField textField,
-                                                          ComboBox<FilterOperatorEnum> comboBox,
-                                                          Function<String, T> valueConverter,
-                                                          Predicate<TextField> successPredicate) {
-        FilterExpression<T> filterExpression = new FilterExpression<>();
-        if (successPredicate.test(textField)) {
-            filterExpression.setFieldFirstValue(valueConverter.apply(textField.getValue().trim()));
-            filterExpression.setOperator(comboBox.getValue());
-        } else if (0 == comboBox.getValue().getArgumentsNumber()) {
-            filterExpression.setOperator(comboBox.getValue());
-        }
-        return filterExpression;
-    }
-
-    private FilterExpression<Number> buildFilterExpression(TextField fromField, TextField toField,
-                                                           ComboBox<FilterOperatorEnum> comboBox,
-                                                           Function<String, Number> valueConverter,
-                                                           Predicate<TextField> successPredicate) {
-        FilterExpression<Number> filterExpression = new FilterExpression<>();
-        if (successPredicate.test(fromField)) {
-            filterExpression.setFieldFirstValue(valueConverter.apply(fromField.getValue().trim()));
-            filterExpression.setFieldSecondValue(
-                successPredicate.test(toField) ? valueConverter.apply(toField.getValue().trim()) : null);
-            filterExpression.setOperator(comboBox.getValue());
-        } else if (0 == comboBox.getValue().getArgumentsNumber()) {
-            filterExpression.setOperator(comboBox.getValue());
-        }
-        return filterExpression;
-    }
-
-    private SerializablePredicate<String> getNumberValidator() {
-        return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
-    }
-
-    private SerializablePredicate<String> getBetweenOperatorValidator(TextField fieldToValidate,
-                                                                      ComboBox<FilterOperatorEnum> comboBox) {
-        return value -> FilterOperatorEnum.BETWEEN != comboBox.getValue()
-            || StringUtils.isNotBlank(fieldToValidate.getValue());
-    }
-
-    private boolean validateBigDecimalFromToValues(TextField fromField, TextField toField) {
-        String fromValue = fromField.getValue();
-        String toValue = toField.getValue();
-        AmountZeroValidator amountZeroValidator = new AmountZeroValidator();
-        return StringUtils.isBlank(fromValue)
-            || StringUtils.isBlank(toValue)
-            || !amountZeroValidator.isValid(fromValue)
-            || !amountZeroValidator.isValid(toValue)
-            || 0 <= new BigDecimal(toValue.trim()).compareTo(new BigDecimal(fromValue.trim()));
-    }
-
-    private boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
-        String fromValue = fromField.getValue();
-        String toValue = toField.getValue();
-        return StringUtils.isEmpty(fromValue)
-            || StringUtils.isEmpty(toValue)
-            || !getNumberValidator().test(fromValue)
-            || !getNumberValidator().test(toValue)
-            || 0 <= Long.valueOf(toValue.trim()).compareTo(Long.valueOf(fromValue.trim()));
     }
 }
