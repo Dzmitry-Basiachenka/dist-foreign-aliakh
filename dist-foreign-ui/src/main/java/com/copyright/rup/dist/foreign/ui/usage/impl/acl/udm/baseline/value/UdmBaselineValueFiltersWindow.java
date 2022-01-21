@@ -41,7 +41,7 @@ import java.util.Objects;
 public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
 
     private static final List<FilterOperatorEnum> FLAG_ITEMS = Arrays.asList(FilterOperatorEnum.Y,
-        FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
+        FilterOperatorEnum.N);
     private static final String NUMBER_VALIDATION_MESSAGE = "field.error.not_numeric";
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =

@@ -374,7 +374,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private HorizontalLayout initPriceFlagsLayout() {
         populateFlagComboBox(priceFlagComboBox, valueFilter.getPriceFlagExpression().getOperator(),
             "udm-value-price-flag-filter");
-        populateFlagComboBox(lastPriceFlagComboBox, valueFilter.getLastPriceFlagExpression().getOperator(),
+        populateLastValueFlagComboBox(lastPriceFlagComboBox, valueFilter.getLastPriceFlagExpression().getOperator(),
             "udm-value-last-price-flag-filter");
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceFlagComboBox, lastPriceFlagComboBox);
         horizontalLayout.setSizeFull();
@@ -468,7 +468,7 @@ public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
     private HorizontalLayout initContentFlagsLayout() {
         populateFlagComboBox(contentFlagComboBox, valueFilter.getContentFlagExpression().getOperator(),
             "udm-value-content-flag-filter");
-        populateFlagComboBox(lastContentFlagComboBox, valueFilter.getLastContentFlagExpression().getOperator(),
+        populateLastValueFlagComboBox(lastContentFlagComboBox, valueFilter.getLastContentFlagExpression().getOperator(),
             "udm-value-last-content-flag-filter");
         HorizontalLayout horizontalLayout = new HorizontalLayout(contentFlagComboBox, lastContentFlagComboBox);
         horizontalLayout.setSizeFull();
