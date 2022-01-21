@@ -386,7 +386,7 @@ public abstract class CommonUdmFiltersWindow extends Window {
             || StringUtils.isEmpty(toValue)
             || !getNumberValidator().test(fromValue)
             || !getNumberValidator().test(toValue)
-            || 0 <= Integer.valueOf(toValue.trim()).compareTo(Integer.valueOf(fromValue.trim()));
+            || 0 <= Long.valueOf(toValue.trim()).compareTo(Long.valueOf(fromValue.trim()));
     }
 
     /**
