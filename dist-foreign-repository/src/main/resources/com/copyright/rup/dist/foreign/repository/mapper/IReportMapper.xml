@@ -737,9 +737,9 @@
         where usage_period in (
             select distinct usage_period
             from ${schema}.df_usage_baseline_aacl
-            order by usage_period desc
             limit #{numberOfYears}
         )
+        order by usage_period desc, df_usage_baseline_aacl_uid
     </select>
 
     <select id="findScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
