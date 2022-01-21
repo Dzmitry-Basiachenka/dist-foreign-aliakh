@@ -83,6 +83,7 @@ public class UdmValueFiltersWindowTest {
     private static final FilterExpression<Boolean> LAST_CONTENT_FLAG = new FilterExpression<>(FilterOperatorEnum.N);
     private static final String LAST_CONTENT_COMMENT = "last content comment";
     private static final String COMMENT = "comment";
+    private static final String LAST_COMMENT = "last comment";
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
     private static final String INVALID_NUMBER = "a12345678";
@@ -151,6 +152,7 @@ public class UdmValueFiltersWindowTest {
         valueFilter.setLastPriceFlagExpression(LAST_PRICE_FLAG);
         valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
+        valueFilter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null));
         IUdmValueFilterController controller = createMock(IUdmValueFilterController.class);
         expect(controller.getPublicationTypes()).andReturn(
             new ArrayList<>(Collections.singletonList(buildPublicationType()))).once();
@@ -224,6 +226,11 @@ public class UdmValueFiltersWindowTest {
     @Test
     public void testCommentFilterOperatorChangeListener() {
         testTextFilterOperatorChangeListener(16);
+    }
+
+    @Test
+    public void testLastCommentFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(17);
     }
 
     @Test
@@ -354,6 +361,11 @@ public class UdmValueFiltersWindowTest {
         validateCommentField("commentField", "commentOperatorComboBox");
     }
 
+    @Test
+    public void testlastCommentValidation() {
+        validateCommentField("lastCommentField", "lastCommentOperatorComboBox");
+    }
+
     private VerticalLayout verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
@@ -367,7 +379,7 @@ public class UdmValueFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(17, verticalLayout.getComponentCount());
+        assertEquals(18, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Assignees", "Last Value Periods");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(1), "Wr Wrk Inst From", "Wr Wrk Inst To");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(2), "System Title");
@@ -387,6 +399,7 @@ public class UdmValueFiltersWindowTest {
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Content Comment");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Last Content Comment");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(16), "Comment");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(17), "Last Comment");
     }
 
     private void verifyComboBoxLayout(Component component, String firstCaption, List<?> firstItemList,
@@ -613,6 +626,7 @@ public class UdmValueFiltersWindowTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_CONTENT_COMMENT, null));
         valueFilter.setLastPubType(buildPublicationType());
         valueFilter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, COMMENT, null));
+        valueFilter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null));
         return valueFilter;
     }
 
@@ -652,6 +666,8 @@ public class UdmValueFiltersWindowTest {
         assertComboBoxValue("lastPubTypeComboBox", buildPublicationType());
         assertTextFieldValue("commentField", COMMENT);
         assertComboBoxValue("commentOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("lastCommentField", LAST_COMMENT);
+        assertComboBoxValue("lastCommentOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
 
     private void assertFilterWidgetLabelValue(String filterName, String value) {
@@ -711,6 +727,7 @@ public class UdmValueFiltersWindowTest {
         populateTextField("lastContentCommentField", LAST_CONTENT_COMMENT);
         populateComboBox("lastPubTypeComboBox", buildPublicationType());
         populateTextField("commentField", COMMENT);
+        populateTextField("lastCommentField", LAST_COMMENT);
     }
 
     private void populateTextField(String fieldName, String value) {

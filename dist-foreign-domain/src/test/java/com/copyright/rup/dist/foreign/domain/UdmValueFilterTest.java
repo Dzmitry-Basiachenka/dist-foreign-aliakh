@@ -46,6 +46,7 @@ public class UdmValueFilterTest {
     private static final PublicationType PUB_TYPE;
     private static final PublicationType LAST_PUB_TYPE;
     private static final String COMMENT = "comment";
+    private static final String LAST_COMMENT = "last comment";
 
     static {
         PUB_TYPE = new PublicationType();
@@ -171,6 +172,10 @@ public class UdmValueFilterTest {
         assertFalse(valueFilter.isEmpty());
         valueFilter.setCommentExpression(new FilterExpression<>());
         assertTrue(valueFilter.isEmpty());
+        valueFilter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, LAST_COMMENT, null));
+        assertFalse(valueFilter.isEmpty());
+        valueFilter.setLastCommentExpression(new FilterExpression<>());
+        assertTrue(valueFilter.isEmpty());
     }
 
     @Test
@@ -200,5 +205,6 @@ public class UdmValueFilterTest {
         assertTrue(valueFilter.getPubTypes().isEmpty());
         assertNull(valueFilter.getLastPubType());
         assertEquals(new FilterExpression<>(), valueFilter.getCommentExpression());
+        assertEquals(new FilterExpression<>(), valueFilter.getLastCommentExpression());
     }
 }
