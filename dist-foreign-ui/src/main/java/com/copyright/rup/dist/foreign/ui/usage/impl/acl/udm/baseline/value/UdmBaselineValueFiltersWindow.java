@@ -121,7 +121,6 @@ public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
         contentFlagComboBox.setItems(FLAG_ITEMS);
         HorizontalLayout horizontalLayout = new HorizontalLayout(priceFlagComboBox, contentFlagComboBox);
         applyCommonNumericFieldFormatting(horizontalLayout, priceFlagComboBox, contentFlagComboBox);
-        horizontalLayout.setSpacing(true);
         VaadinUtils.addComponentStyle(priceFlagComboBox, "udm-baseline-value-price-flag-filter");
         VaadinUtils.addComponentStyle(contentFlagComboBox, "udm-baseline-value-content-flag-filter");
         return horizontalLayout;

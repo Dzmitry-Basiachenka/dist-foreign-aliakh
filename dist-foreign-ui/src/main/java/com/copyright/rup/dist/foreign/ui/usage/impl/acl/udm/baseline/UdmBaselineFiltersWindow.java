@@ -169,11 +169,7 @@ public class UdmBaselineFiltersWindow extends CommonUdmFiltersWindow {
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
             .bind(filter -> filter.getWrWrkInstExpression().getFieldSecondValue().toString(),
                 (filter, value) -> filter.getWrWrkInstExpression().setFieldSecondValue(Long.valueOf(value)));
-        wrWrkInstFromField.setSizeFull();
-        wrWrkInstToField.setSizeFull();
-        wrWrkInstLayout.setExpandRatio(wrWrkInstFromField, 0.5f);
-        wrWrkInstLayout.setExpandRatio(wrWrkInstToField, 0.5f);
-        wrWrkInstLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(wrWrkInstLayout, wrWrkInstFromField, wrWrkInstToField);
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "udm-baseline-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "udm-baseline-wr-wrk-inst-to-filter");
         VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "udm-baseline-wr-wrk-inst-operator-filter");
@@ -191,9 +187,7 @@ public class UdmBaselineFiltersWindow extends CommonUdmFiltersWindow {
         systemTitleField.addValueChangeListener(event -> filterBinder.validate());
         systemTitleOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, systemTitleField, event.getValue()));
-        systemTitleField.setSizeFull();
-        horizontalLayout.setExpandRatio(systemTitleField, 1f);
-        horizontalLayout.setSizeFull();
+        applyCommonTextFieldFormatting(horizontalLayout, systemTitleField);
         VaadinUtils.addComponentStyle(systemTitleField, "udm-baseline-system-title-filter");
         VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "udm-baseline-system-title-operator-filter");
         return horizontalLayout;
@@ -222,11 +216,7 @@ public class UdmBaselineFiltersWindow extends CommonUdmFiltersWindow {
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldSecondValue(new BigDecimal(value)));
         annualizedCopiesOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, annualizedCopiesFrom, annualizedCopiesTo, event.getValue()));
-        annualizedCopiesFrom.setSizeFull();
-        annualizedCopiesTo.setSizeFull();
-        annualizedCopiesLayout.setExpandRatio(annualizedCopiesFrom, 0.5f);
-        annualizedCopiesLayout.setExpandRatio(annualizedCopiesTo, 0.5f);
-        annualizedCopiesLayout.setSizeFull();
+        applyCommonNumericFieldFormatting(annualizedCopiesLayout, annualizedCopiesFrom, annualizedCopiesTo);
         VaadinUtils.addComponentStyle(annualizedCopiesFrom, "udm-baseline-annualized-copies-from-filter");
         VaadinUtils.addComponentStyle(annualizedCopiesTo, "udm-baseline-annualized-copies-to-filter");
         VaadinUtils.addComponentStyle(annualizedCopiesOperatorComboBox,
@@ -245,9 +235,7 @@ public class UdmBaselineFiltersWindow extends CommonUdmFiltersWindow {
         usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
         usageDetailIdOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, usageDetailIdField, event.getValue()));
-        usageDetailIdField.setSizeFull();
-        horizontalLayout.setExpandRatio(usageDetailIdField, 1f);
-        horizontalLayout.setSizeFull();
+        applyCommonTextFieldFormatting(horizontalLayout, usageDetailIdField);
         VaadinUtils.addComponentStyle(usageDetailIdField, "udm-baseline-usage-detail-id-filter");
         VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "udm-baseline-usage-detail-id-operator-filter");
         return horizontalLayout;
@@ -264,9 +252,7 @@ public class UdmBaselineFiltersWindow extends CommonUdmFiltersWindow {
         surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
         surveyCountryOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, surveyCountryField, event.getValue()));
-        surveyCountryField.setSizeFull();
-        horizontalLayout.setExpandRatio(surveyCountryField, 1f);
-        horizontalLayout.setSizeFull();
+        applyCommonTextFieldFormatting(horizontalLayout, surveyCountryField);
         VaadinUtils.addComponentStyle(surveyCountryField, "udm-baseline-survey-country-filter");
         VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "udm-baseline-survey-country-operator-filter");
         return horizontalLayout;
