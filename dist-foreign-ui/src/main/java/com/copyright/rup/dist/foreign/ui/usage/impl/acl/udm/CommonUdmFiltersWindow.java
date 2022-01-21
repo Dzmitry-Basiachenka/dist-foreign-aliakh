@@ -37,6 +37,8 @@ import java.util.function.Predicate;
 public abstract class CommonUdmFiltersWindow extends Window {
 
     private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> LAST_VALUE_FLAG_ITEMS =
         Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final int ONE = 1;
 
@@ -71,10 +73,19 @@ public abstract class CommonUdmFiltersWindow extends Window {
      */
     protected void populateFlagComboBox(ComboBox<FilterOperatorEnum> comboBox, FilterOperatorEnum selectedItem,
                                         String componentId) {
-        comboBox.setItems(FLAG_ITEMS);
-        comboBox.setSizeFull();
-        comboBox.setSelectedItem(selectedItem);
-        VaadinUtils.addComponentStyle(comboBox, componentId);
+        populateComboBox(comboBox, selectedItem, componentId, FLAG_ITEMS);
+    }
+
+    /**
+     * Populates comboBox with specific values for last value flags.
+     *
+     * @param comboBox     comboBox to be populated
+     * @param selectedItem selected item
+     * @param componentId  comboBox id
+     */
+    protected void populateLastValueFlagComboBox(ComboBox<FilterOperatorEnum> comboBox, FilterOperatorEnum selectedItem,
+                                                 String componentId) {
+        populateComboBox(comboBox, selectedItem, componentId, LAST_VALUE_FLAG_ITEMS);
     }
 
     /**
@@ -403,5 +414,13 @@ public abstract class CommonUdmFiltersWindow extends Window {
         filterOperatorComboBox.setItems(items);
         filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
         return filterOperatorComboBox;
+    }
+
+    private void populateComboBox(ComboBox<FilterOperatorEnum> comboBox, FilterOperatorEnum selectedItem,
+                                  String componentId, List<FilterOperatorEnum> items) {
+        comboBox.setItems(items);
+        comboBox.setSizeFull();
+        comboBox.setSelectedItem(selectedItem);
+        VaadinUtils.addComponentStyle(comboBox, componentId);
     }
 }

@@ -63,6 +63,8 @@ public class UdmValueFiltersWindowTest {
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
     private static final List<FilterOperatorEnum> FLAG_ITEMS =
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
+    private static final List<FilterOperatorEnum> LAST_VALUE_FLAG_ITEMS =
         Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String LAST_VALUE_PERIOD = "202106";
@@ -390,12 +392,13 @@ public class UdmValueFiltersWindowTest {
             Arrays.asList(new PublicationType(), buildPublicationType()));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(7), "Price From", "Price To");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Price in USD From", "Price in USD To");
-        verifyComboBoxLayout(verticalLayout.getComponent(9), "Price Flag", FLAG_ITEMS, "Last Price Flag", FLAG_ITEMS);
+        verifyComboBoxLayout(verticalLayout.getComponent(9), "Price Flag", FLAG_ITEMS, "Last Price Flag",
+            LAST_VALUE_FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(10), "Price Comment");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(11), "Last Price Comment");
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(12), "Content From", "Content To");
         verifyComboBoxLayout(verticalLayout.getComponent(13), "Content Flag", FLAG_ITEMS, "Last Content Flag",
-            FLAG_ITEMS);
+            LAST_VALUE_FLAG_ITEMS);
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(14), "Content Comment");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(15), "Last Content Comment");
         verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(16), "Comment");

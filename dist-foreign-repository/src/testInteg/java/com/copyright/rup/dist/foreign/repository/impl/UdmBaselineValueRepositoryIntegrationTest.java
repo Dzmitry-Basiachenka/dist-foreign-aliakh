@@ -232,8 +232,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
         assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_2,
             UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setPriceFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL)));
     }
 
     @Test
@@ -243,8 +241,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.Y)), UDM_BASELINE_VALUE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1);
-        assertFilteringFindDtosByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL)));
     }
 
     @Test
@@ -462,8 +458,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.Y)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setPriceFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL)), 0);
     }
 
     @Test
@@ -473,8 +467,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.Y)), 1);
         assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
             new FilterExpression<>(FilterOperatorEnum.N)), 2);
-        assertFilteringFindCountByFilter(filter -> filter.setContentFlagExpression(
-            new FilterExpression<>(FilterOperatorEnum.IS_NULL)), 0);
     }
 
     @Test

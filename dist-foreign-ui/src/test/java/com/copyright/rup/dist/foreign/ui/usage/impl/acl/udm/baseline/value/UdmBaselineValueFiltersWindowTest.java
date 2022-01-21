@@ -46,7 +46,7 @@ public class UdmBaselineValueFiltersWindowTest {
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
     private static final List<FilterOperatorEnum> FLAG_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
+        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
     private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
     private static final FilterOperatorEnum PRICE_FLAG = FilterOperatorEnum.Y;
