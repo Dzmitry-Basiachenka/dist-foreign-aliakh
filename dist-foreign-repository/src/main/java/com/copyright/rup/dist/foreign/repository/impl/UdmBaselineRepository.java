@@ -1,11 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
-import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 
@@ -13,7 +11,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmBaselineRepository extends BaseRepository implements IUdmBaselineRepository {
+public class UdmBaselineRepository extends UdmBaseRepository implements IUdmBaselineRepository {
 
     private static final int PARTITION_SIZE_FOR_POPULATING = 16000; // Max count of allowed parameters for 2 variables
     private static final String FILTER_KEY = "filter";
@@ -85,21 +82,11 @@ public class UdmBaselineRepository extends BaseRepository implements IUdmBaselin
     private UdmBaselineFilter escapeSqlLikePattern(UdmBaselineFilter udmBaselineFilter) {
         UdmBaselineFilter filterCopy = new UdmBaselineFilter(udmBaselineFilter);
         filterCopy.setSystemTitleExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemTitleExpression()));
         filterCopy.setUsageDetailIdExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getUsageDetailIdExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getUsageDetailIdExpression()));
         filterCopy.setSurveyCountryExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSurveyCountryExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSurveyCountryExpression()));
         return filterCopy;
-    }
-
-    private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
-        FilterExpression<String> filterExpression) {
-        return Objects.nonNull(filterExpression.getOperator())
-            ? new FilterExpression<>(filterExpression.getOperator(),
-            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
-                new String[]{"'"}, new String[]{"''"}),
-            filterExpression.getFieldSecondValue())
-            : filterExpression;
     }
 }

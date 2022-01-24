@@ -1,17 +1,14 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
-import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineValueRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +25,7 @@ import java.util.Objects;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmBaselineValueRepository extends BaseRepository implements IUdmBaselineValueRepository {
+public class UdmBaselineValueRepository extends UdmBaseRepository implements IUdmBaselineValueRepository {
 
     @Override
     public List<Integer> findPeriods() {
@@ -53,19 +50,9 @@ public class UdmBaselineValueRepository extends BaseRepository implements IUdmBa
     private UdmBaselineValueFilter escapeSqlLikePattern(UdmBaselineValueFilter udmUsageFilter) {
         UdmBaselineValueFilter filterCopy = new UdmBaselineValueFilter(udmUsageFilter);
         filterCopy.setSystemTitleExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getSystemTitleExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemTitleExpression()));
         filterCopy.setCommentExpression(
-            setEscapeSqlLikePatternForFilterExpression(filterCopy.getCommentExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getCommentExpression()));
         return filterCopy;
-    }
-
-    private FilterExpression<String> setEscapeSqlLikePatternForFilterExpression(
-        FilterExpression<String> filterExpression) {
-        return Objects.nonNull(filterExpression.getOperator())
-            ? new FilterExpression<>(filterExpression.getOperator(),
-            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
-                new String[]{"'"}, new String[]{"''"}),
-            filterExpression.getFieldSecondValue())
-            : filterExpression;
     }
 }
