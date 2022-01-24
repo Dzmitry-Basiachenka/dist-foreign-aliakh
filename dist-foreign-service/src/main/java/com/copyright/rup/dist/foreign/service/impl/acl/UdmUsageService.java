@@ -132,6 +132,8 @@ public class UdmUsageService implements IUdmUsageService {
         LOGGER.debug("Update UDM usage. Started. Usage={}, Reasons={}, IsResearcher={}, Reason={}, UserName={}",
             udmUsageDto, actionReasons, isResearcher, reason, userName);
         if (isResearcher && udmUsageDto.getStatus() == UsageStatusEnum.NEW) {
+            udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.UNASSIGN,
+                String.format("Usage was unassigned from '%s'", udmUsageDto.getAssignee()));
             udmUsageDto.setAssignee(null);
         }
         udmUsageDto.setUpdateUser(userName);
