@@ -79,7 +79,7 @@ public class PublicationTypeFilterWidgetTest {
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         Capture<ValueProvider<PublicationType, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Publication Types filter"), same(publicationTypeFilterWidget),
+        expect(Windows.showFilterWindow(eq("Pub Types filter"), same(publicationTypeFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
