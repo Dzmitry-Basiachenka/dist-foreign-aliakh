@@ -1,3 +1,10 @@
+14.1.49
+-
+* B-69423 FDA: Filter functionality modification: apply common fields formatting on UMD usage filters window
+* B-70073 FDA: Tech Debt: add sorting for writeAaclBaselineUsagesCsvReport
+* B-69423 FDA: Filter functionality modification: update Applied Filter widget for numeric fields on Values tab
+* B-69423 FDA: Filter functionality modification: apply common logic in UdmBaselineFiltersWindow
+
 14.1.48
 -
 * B-67667 FDA: Completed Assignments by Employee Report: update report menu id
