@@ -1,19 +1,16 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmValueRepository;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
@@ -32,7 +29,7 @@ import java.util.Set;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmValueRepository extends BaseRepository implements IUdmValueRepository {
+public class UdmValueRepository extends UdmBaseRepository implements IUdmValueRepository {
 
     @Override
     public void insert(UdmValue value) {
@@ -102,35 +99,24 @@ public class UdmValueRepository extends BaseRepository implements IUdmValueRepos
 
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
-        filterCopy.setSystemTitleExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getSystemTitleExpression()));
-        filterCopy.setSystemStandardNumberExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getSystemStandardNumberExpression()));
-        filterCopy.setRhNameExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getRhNameExpression()));
-        filterCopy.setLastPriceCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getLastPriceCommentExpression()));
-        filterCopy.setLastContentCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getLastContentCommentExpression()));
-        filterCopy.setPriceCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getPriceCommentExpression()));
-        filterCopy.setContentCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getContentCommentExpression()));
-        filterCopy.setCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getCommentExpression()));
-        filterCopy.setLastCommentExpression(setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-            filterCopy.getLastCommentExpression()));
+        filterCopy.setSystemTitleExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemTitleExpression()));
+        filterCopy.setSystemStandardNumberExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemStandardNumberExpression()));
+        filterCopy.setRhNameExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getRhNameExpression()));
+        filterCopy.setLastPriceCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getLastPriceCommentExpression()));
+        filterCopy.setLastContentCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getLastContentCommentExpression()));
+        filterCopy.setPriceCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getPriceCommentExpression()));
+        filterCopy.setContentCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getContentCommentExpression()));
+        filterCopy.setCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getCommentExpression()));
+        filterCopy.setLastCommentExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getLastCommentExpression()));
         return filterCopy;
-    }
-
-    // MyBatis expressions ${} do not replace ' with '' in comparison with expressions #{}
-    private FilterExpression<String> setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-        FilterExpression<String> filterExpression) {
-        return Objects.nonNull(filterExpression.getOperator())
-            ? new FilterExpression<>(filterExpression.getOperator(),
-            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
-                new String[]{"'"}, new String[]{"''"}),
-            filterExpression.getFieldSecondValue())
-            : filterExpression;
     }
 }

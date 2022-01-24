@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
-import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmUsageRepository;
 
@@ -15,7 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -34,7 +31,7 @@ import java.util.Set;
  * @author Uladzislau Shalamitski
  */
 @Repository
-public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepository {
+public class UdmUsageRepository extends UdmBaseRepository implements IUdmUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String FILTER_KEY = "filter";
@@ -114,17 +111,17 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
     private UdmUsageFilter escapeSqlLikePattern(UdmUsageFilter udmUsageFilter) {
         UdmUsageFilter filterCopy = new UdmUsageFilter(udmUsageFilter);
         filterCopy.setReportedTitleExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getReportedTitleExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getReportedTitleExpression()));
         filterCopy.setSystemTitleExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSystemTitleExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemTitleExpression()));
         filterCopy.setCompanyNameExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getCompanyNameExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getCompanyNameExpression()));
         filterCopy.setSurveyRespondentExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSurveyRespondentExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSurveyRespondentExpression()));
         filterCopy.setSurveyCountryExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getSurveyCountryExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSurveyCountryExpression()));
         filterCopy.setLanguageExpression(
-            setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(filterCopy.getLanguageExpression()));
+            escapePropertyForMyBatisSqlFragment(filterCopy.getLanguageExpression()));
         filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
         return filterCopy;
     }
@@ -161,16 +158,5 @@ public class UdmUsageRepository extends BaseRepository implements IUdmUsageRepos
         parameters.put("period", Objects.requireNonNull(period));
         parameters.put("createUser", Objects.requireNonNull(userName));
         return new HashSet<>(selectList("IUdmUsageMapper.publishToBaseline", parameters));
-    }
-
-    // MyBatis expressions ${} do not replace ' with '' in comparison with expressions #{}
-    private FilterExpression<String> setEscapeSqlLikePatternIncludingSingleQuoteForFilterExpression(
-        FilterExpression<String> filterExpression) {
-        return Objects.nonNull(filterExpression.getOperator())
-            ? new FilterExpression<>(filterExpression.getOperator(),
-            StringUtils.replaceEach(escapeSqlLikePattern(filterExpression.getFieldFirstValue()),
-                new String[]{"'"}, new String[]{"''"}),
-            filterExpression.getFieldSecondValue())
-            : filterExpression;
     }
 }
