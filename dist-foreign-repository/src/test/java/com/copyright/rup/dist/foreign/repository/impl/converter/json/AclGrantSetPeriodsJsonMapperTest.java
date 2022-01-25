@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantSetPeriodsJsonMapper}.
@@ -17,7 +17,7 @@ import java.util.List;
  * <p>
  * Date: 01/26/2022
  *
- * @author Aliaksandr Liakhki
+ * @author Aliaksandr Liakh
  */
 public class AclGrantSetPeriodsJsonMapperTest {
 
@@ -31,7 +31,7 @@ public class AclGrantSetPeriodsJsonMapperTest {
 
     @Test
     public void testSerialize() throws IOException {
-        List<Integer> periods = buildPeriods();
+        Set<Integer> periods = buildPeriods();
         String actualJson = jsonMapper.serialize(periods);
         assertEquals(periods, jsonMapper.deserialize(actualJson));
     }
@@ -51,7 +51,7 @@ public class AclGrantSetPeriodsJsonMapperTest {
         jsonMapper.deserialize("{wrong JSON}");
     }
 
-    private List<Integer> buildPeriods() {
-        return Arrays.asList(202106, 202112);
+    private Set<Integer> buildPeriods() {
+        return Sets.newHashSet(202106, 202112);
     }
 }

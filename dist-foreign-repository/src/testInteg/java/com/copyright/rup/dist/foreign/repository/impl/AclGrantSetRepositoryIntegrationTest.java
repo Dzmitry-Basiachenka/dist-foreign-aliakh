@@ -8,14 +8,13 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
 
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Arrays;
 
 /**
  * Verifies {@link AclGrantSetRepository}.
@@ -61,7 +60,7 @@ public class AclGrantSetRepositoryIntegrationTest {
         grantSet.setId(ACL_GRANT_SET_ID);
         grantSet.setName("ACL Grant Set 2021");
         grantSet.setGrantPeriod(202112);
-        grantSet.setPeriods(Arrays.asList(202106, 202112));
+        grantSet.setPeriods(Sets.newHashSet(202106, 202112));
         grantSet.setLicenseType("ACL");
         grantSet.setEditable(true);
         return grantSet;
