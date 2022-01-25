@@ -252,6 +252,9 @@ public class UdmUsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         UdmUsageDto udmUsageDto = buildUsageDto(UsageStatusEnum.WORK_NOT_FOUND);
         udmUsageDto.setAssignee(null);
+        udmUsageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.UNASSIGN,
+            "Usage was unassigned from 'wjohn@copyright.com'");
+        expectLastCall().once();
         List<String> actionReasons = Collections.singletonList(
             "The field 'Detail Status' was edited. Old Value is 'WORK_NOT_FOUND'. New Value is 'NEW'");
         udmUsageDto.setStatus(UsageStatusEnum.NEW);
