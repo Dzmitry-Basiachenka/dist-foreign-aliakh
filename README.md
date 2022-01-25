@@ -1,3 +1,9 @@
+14.1.50
+-
+* B-69423 FDA: Filter functionality modification: make changes based on comments in code review
+* B-70073 FDA: Tech Debt: rename pub types filter widget caption
+* B-70073 Tech Debt: FDA: log unassign audit record for automatic research unassign during edit
+
 14.1.49
 -
 * B-69423 FDA: Filter functionality modification: apply common fields formatting on UMD usage filters window
