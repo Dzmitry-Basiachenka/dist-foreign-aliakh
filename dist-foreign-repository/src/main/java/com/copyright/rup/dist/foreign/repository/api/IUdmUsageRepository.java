@@ -65,7 +65,7 @@ public interface IUdmUsageRepository {
      * Finds {@link UdmUsage}s by their ids.
      *
      * @param udmUsagesIds list of ids of the {@link UdmUsage}
-     * @return list of {@link UdmUsage} with the given id or {@code null} if none exists
+     * @return list of {@link UdmUsage}s
      */
     List<UdmUsage> findByIds(List<String> udmUsagesIds);
 
