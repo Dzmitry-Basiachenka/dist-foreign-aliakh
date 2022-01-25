@@ -89,6 +89,7 @@
         <typeAlias alias="AclGrantSet" type="com.copyright.rup.dist.foreign.domain.AclGrantSet"/>
         <typeAlias alias="AclGrantDetail" type="com.copyright.rup.dist.foreign.domain.AclGrantDetail"/>
         <typeAlias alias="AclGrantSetPeriodsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AclGrantSetPeriodsTypeHandler"/>
+        <typeAlias alias="WrWrkInstSystemTitlePair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToSystemTitlesResultHandler$WrWrkInstSystemTitlePair"/>
     </typeAliases>
 
     <typeHandlers>

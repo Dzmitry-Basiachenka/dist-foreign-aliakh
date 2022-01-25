@@ -22,6 +22,11 @@
         <result property="valueId" column="df_udm_value_uid"/>
     </resultMap>
 
+    <resultMap id="wrWrkInstToSystemTitleMap" type="WrWrkInstSystemTitlePair">
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+    </resultMap>
+
     <sql id="udmBaselineFilter">
         <if test="filter.periods.size() > 0">
             and
@@ -291,4 +296,16 @@
             baseline_created_datetime = null
         where df_udm_usage_uid = #{udmUsageId}
     </update>
+
+    <select id="findWrWrkInstToSystemTitleMap" resultMap="wrWrkInstToSystemTitleMap">
+        select
+            wr_wrk_inst,
+            system_title
+        from ${schema}.df_udm_usage
+        where is_baseline_flag = true
+        and
+        <foreach collection="collection" item="period" open="(" separator=" or " close=")">
+            period = #{period}
+        </foreach>
+    </select>
 </mapper>

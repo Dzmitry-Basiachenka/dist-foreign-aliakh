@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -77,6 +78,14 @@ public class UdmBaselineRepository extends UdmBaseRepository implements IUdmBase
     @Override
     public void removeUdmUsageFromBaselineById(String udmUsageId) {
         update("IUdmBaselineMapper.removeUdmUsageFromBaselineById", Objects.requireNonNull(udmUsageId));
+    }
+
+    @Override
+    public Map<Long, String> findWrWrkInstToSystemTitles(Set<Integer> periods) {
+        WrWrkInstToSystemTitlesResultHandler handler = new WrWrkInstToSystemTitlesResultHandler();
+        getTemplate().select("IUdmBaselineMapper.findWrWrkInstToSystemTitleMap", Objects.requireNonNull(periods),
+            handler);
+        return handler.getWrWrkInstToSystemTitles();
     }
 
     private UdmBaselineFilter escapeSqlLikePattern(UdmBaselineFilter udmBaselineFilter) {

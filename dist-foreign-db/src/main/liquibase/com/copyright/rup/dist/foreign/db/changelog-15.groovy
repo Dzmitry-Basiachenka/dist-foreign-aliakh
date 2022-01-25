@@ -69,7 +69,7 @@ databaseChangeLog {
             column(name: 'grant_status', type: 'VARCHAR(128)', remarks: 'The grant status') {
                 constraints(nullable: false)
             }
-            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use')
+            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use') {
                 constraints(nullable: false)
             }
             column(name: 'type_of_use_status', type: 'VARCHAR(128)', remarks: 'The type of use status')
