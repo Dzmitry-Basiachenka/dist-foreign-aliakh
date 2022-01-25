@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclGrantSetMapper">
+
+    <resultMap id="aclGrantSetResultMap" type="aclGrantSet" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_grant_set_uid"/>
+        <result property="name" column="name"/>
+        <result property="grantPeriod" column="grant_period"/>
+        <result property="periods" column="periods" typeHandler="AclGrantSetPeriodsTypeHandler"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="editable" column="is_editable"/>
+    </resultMap>
+
+    <sql id="aclGrantSetColumns">
+        df_acl_grant_set_uid,
+        name,
+        grant_period,
+        periods,
+        license_type,
+        is_editable,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="aclGrantSet">
+        insert into ${schema}.df_acl_grant_set (
+            <include refid="aclGrantSetColumns"/>
+        ) values (
+            #{id},
+            #{name},
+            #{grantPeriod},
+            #{periods, typeHandler=AclGrantSetPeriodsTypeHandler},
+            #{licenseType},
+            #{editable},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findById" resultMap="aclGrantSetResultMap" parameterType="string">
+        select
+            <include refid="aclGrantSetColumns"/>
+        from ${schema}.df_acl_grant_set
+        where df_acl_grant_set_uid = #{grantSetId}
+    </select>
+</mapper>
