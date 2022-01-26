@@ -1,44 +1,39 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * Represents ACL grant detail.
+ * Represents ACL grant detail dto.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
  * Date: 01/26/2022
  *
- * @author Aliaksandr Liakh
+ * @author Dzmitry Basiachenka
  */
-public class AclGrantDetail extends StoredEntity<String> {
+public class AclGrantDetailDto extends StoredEntity<String> {
 
-    private String grantSetId;
-    private String typeOfUse;
-    private String typeOfUseStatus; // TODO use an enum if necessary
+    private String licenseType;
+    private String typeOfUseStatus;
+    private Boolean eligible;
     private Long wrWrkInst;
     private String systemTitle;
     private Long rhAccountNumber;
-    private Boolean eligible;
+    private String rhName;
+    private String typeOfUse;
     private String comment;
+    private Integer grantPeriod;
 
-    public String getGrantSetId() {
-        return grantSetId;
+    public String getLicenseType() {
+        return licenseType;
     }
 
-    public void setGrantSetId(String grantSetId) {
-        this.grantSetId = grantSetId;
-    }
-
-    public String getTypeOfUse() {
-        return typeOfUse;
-    }
-
-    public void setTypeOfUse(String typeOfUse) {
-        this.typeOfUse = typeOfUse;
+    public void setLicenseType(String licenseType) {
+        this.licenseType = licenseType;
     }
 
     public String getTypeOfUseStatus() {
@@ -47,6 +42,14 @@ public class AclGrantDetail extends StoredEntity<String> {
 
     public void setTypeOfUseStatus(String typeOfUseStatus) {
         this.typeOfUseStatus = typeOfUseStatus;
+    }
+
+    public Boolean getEligible() {
+        return eligible;
+    }
+
+    public void setEligible(Boolean eligible) {
+        this.eligible = eligible;
     }
 
     public Long getWrWrkInst() {
@@ -73,12 +76,20 @@ public class AclGrantDetail extends StoredEntity<String> {
         this.rhAccountNumber = rhAccountNumber;
     }
 
-    public Boolean getEligible() {
-        return eligible;
+    public String getRhName() {
+        return rhName;
     }
 
-    public void setEligible(Boolean eligible) {
-        this.eligible = eligible;
+    public void setRhName(String rhName) {
+        this.rhName = rhName;
+    }
+
+    public String getTypeOfUse() {
+        return typeOfUse;
+    }
+
+    public void setTypeOfUse(String typeOfUse) {
+        this.typeOfUse = typeOfUse;
     }
 
     public String getComment() {
@@ -89,6 +100,14 @@ public class AclGrantDetail extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public Integer getGrantPeriod() {
+        return grantPeriod;
+    }
+
+    public void setGrantPeriod(Integer grantPeriod) {
+        this.grantPeriod = grantPeriod;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -97,17 +116,19 @@ public class AclGrantDetail extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AclGrantDetail that = (AclGrantDetail) obj;
+        AclGrantDetailDto that = (AclGrantDetailDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(grantSetId, that.grantSetId)
-            .append(typeOfUse, that.typeOfUse)
+            .append(licenseType, that.licenseType)
             .append(typeOfUseStatus, that.typeOfUseStatus)
+            .append(eligible, that.eligible)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(rhAccountNumber, that.rhAccountNumber)
-            .append(eligible, that.eligible)
+            .append(rhName, that.rhName)
+            .append(typeOfUse, that.typeOfUse)
             .append(comment, that.comment)
+            .append(grantPeriod, that.grantPeriod)
             .isEquals();
     }
 
@@ -115,14 +136,16 @@ public class AclGrantDetail extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(grantSetId)
-            .append(typeOfUse)
+            .append(licenseType)
             .append(typeOfUseStatus)
+            .append(eligible)
             .append(wrWrkInst)
             .append(systemTitle)
             .append(rhAccountNumber)
-            .append(eligible)
+            .append(rhName)
+            .append(typeOfUse)
             .append(comment)
+            .append(grantPeriod)
             .toHashCode();
     }
 
@@ -130,14 +153,16 @@ public class AclGrantDetail extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("grantSetId", grantSetId)
-            .append("typeOfUse", typeOfUse)
+            .append("licenseType", licenseType)
             .append("typeOfUseStatus", typeOfUseStatus)
+            .append("eligible", eligible)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
             .append("rhAccountNumber", rhAccountNumber)
-            .append("eligible", eligible)
+            .append("rhName", rhName)
+            .append("typeOfUse", typeOfUse)
             .append("comment", comment)
+            .append("grantPeriod", grantPeriod)
             .toString();
     }
 }

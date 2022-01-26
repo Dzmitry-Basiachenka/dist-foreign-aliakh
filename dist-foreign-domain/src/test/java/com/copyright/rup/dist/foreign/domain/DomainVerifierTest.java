@@ -129,7 +129,8 @@ public class DomainVerifierTest {
             {UdmWeeklySurveyReportDto.class},
             {UdmVerifiedDetailsBySourceReportDto.class},
             {AclGrantSet.class},
-            {AclGrantDetail.class}
+            {AclGrantDetail.class},
+            {AclGrantDetailDto.class}
         };
         return Arrays.asList(testData);
     }
