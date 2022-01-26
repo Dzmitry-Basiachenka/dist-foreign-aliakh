@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.audit.api.ICommonAuditWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
@@ -12,6 +13,8 @@ import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmWidget;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -34,12 +37,14 @@ public class MainWidget extends TabSheet implements IMainWidget {
     private IMainWidgetController controller;
 
     private SwitchableWidget<IUdmWidget, IUdmController> udmWidget;
+    private SwitchableWidget<IAclCalculationWidget, IAclCalculationController> aclCalculationWidget;
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
 
     private Tab udmTab;
+    private Tab calculationsTab;
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
@@ -50,6 +55,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
         udmWidget = new SwitchableWidget<>(controller.getUdmControllerProvider(), widget -> {});
+        aclCalculationWidget = new SwitchableWidget<>(controller.getAclCalculationControllerProvider(), widget -> {});
         usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(),
             widget -> widget.addListener(ScenarioCreateEvent.class,
                 controller, IMainWidgetController.ON_SCENARIO_CREATED));
@@ -58,6 +64,8 @@ public class MainWidget extends TabSheet implements IMainWidget {
         batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
         udmTab = addTab(udmWidget, ForeignUi.getMessage("tab.udm"));
         udmTab.getComponent().addStyleName("sub-tab");
+        calculationsTab = addTab(aclCalculationWidget, ForeignUi.getMessage("tab.calculations"));
+        calculationsTab.getComponent().addStyleName("sub-tab");
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
@@ -70,6 +78,8 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @Override
     public void updateProductFamily() {
         udmTab.setVisible(udmWidget.updateProductFamily());
+        calculationsTab.setVisible(aclCalculationWidget.updateProductFamily()
+            && !ForeignSecurityUtils.hasResearcherPermission());
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());

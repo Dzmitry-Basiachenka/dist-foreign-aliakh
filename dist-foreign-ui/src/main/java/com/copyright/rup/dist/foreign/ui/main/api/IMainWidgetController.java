@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
@@ -35,6 +36,11 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * @return instance of {@link IControllerProvider} for {@link IUdmController}.
      */
     IControllerProvider<IUdmController> getUdmControllerProvider();
+
+    /**
+     * @return instance of {@link IControllerProvider} for {@link IAclCalculationController}.
+     */
+    IControllerProvider<IAclCalculationController> getAclCalculationControllerProvider();
 
     /**
      * @return instance of {@link IControllerProvider} for {@link ICommonUsageController}.

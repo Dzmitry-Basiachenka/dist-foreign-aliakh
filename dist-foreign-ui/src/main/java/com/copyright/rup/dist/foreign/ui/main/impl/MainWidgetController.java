@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController
 import com.copyright.rup.dist.foreign.ui.status.api.ICommonBatchStatusController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmController;
 import com.copyright.rup.vaadin.widget.api.TabController;
 
@@ -39,6 +40,9 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Qualifier("dist.foreign.udmControllerProvider")
     private IControllerProvider<IUdmController> udmControllerProvider;
     @Autowired
+    @Qualifier("dist.foreign.aclCalculationControllerProvider")
+    private IControllerProvider<IAclCalculationController> aclCalculationControllerProvider;
+    @Autowired
     @Qualifier("dist.foreign.usagesControllerProvider")
     private IControllerProvider<ICommonUsageController> usagesControllerProvider;
     @Autowired
@@ -56,6 +60,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     @Override
     public IControllerProvider<IUdmController> getUdmControllerProvider() {
         return udmControllerProvider;
+    }
+
+    @Override
+    public IControllerProvider<IAclCalculationController> getAclCalculationControllerProvider() {
+        return aclCalculationControllerProvider;
     }
 
     @Override
