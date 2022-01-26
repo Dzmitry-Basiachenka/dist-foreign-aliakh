@@ -86,6 +86,9 @@
         <typeAlias alias="UdmSurveyLicenseeReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmSurveyLicenseeReportDto"/>
         <typeAlias alias="UdmVerifiedDetailsBySourceReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmVerifiedDetailsBySourceReportDto"/>
         <typeAlias alias="UdmCompletedAssignmentsReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmCompletedAssignmentsReportDto"/>
+        <typeAlias alias="AclGrantSet" type="com.copyright.rup.dist.foreign.domain.AclGrantSet"/>
+        <typeAlias alias="AclGrantDetail" type="com.copyright.rup.dist.foreign.domain.AclGrantDetail"/>
+        <typeAlias alias="AclGrantSetPeriodsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AclGrantSetPeriodsTypeHandler"/>
     </typeAliases>
 
     <typeHandlers>
@@ -135,5 +138,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmBaselineValueMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmPriceTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmProxyValueMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantSetMapper.xml"/>
     </mappers>
 </configuration>
