@@ -127,7 +127,9 @@ public class DomainVerifierTest {
             {ExchangeRate.class},
             {UdmProxyValueFilter.class},
             {UdmWeeklySurveyReportDto.class},
-            {UdmVerifiedDetailsBySourceReportDto.class}
+            {UdmVerifiedDetailsBySourceReportDto.class},
+            {AclGrantSet.class},
+            {AclGrantDetail.class}
         };
         return Arrays.asList(testData);
     }
