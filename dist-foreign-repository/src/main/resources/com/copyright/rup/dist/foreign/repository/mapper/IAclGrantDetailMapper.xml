@@ -1,0 +1,59 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclGrantDetailMapper">
+
+    <resultMap id="aclGrantDetailResultMap" type="AclGrantDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_grant_detail_uid"/>
+        <result property="grantSetId" column="df_acl_grant_set_uid"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="typeOfUseStatus" column="type_of_use_status"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="eligible" column="is_eligible"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+    <sql id="aclGrantDetailColumns">
+        df_acl_grant_detail_uid,
+        df_acl_grant_set_uid,
+        type_of_use,
+        type_of_use_status,
+        wr_wrk_inst,
+        system_title,
+        rh_account_number,
+        is_eligible,
+        comment,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="AclGrantDetail">
+        insert into ${schema}.df_acl_grant_detail (
+            <include refid="aclGrantDetailColumns"/>
+        ) values (
+            #{id},
+            #{grantSetId},
+            #{typeOfUse},
+            #{typeOfUseStatus},
+            #{wrWrkInst},
+            #{systemTitle},
+            #{rhAccountNumber},
+            #{eligible},
+            #{comment},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findByIds" resultMap="aclGrantDetailResultMap">
+        select
+            <include refid="aclGrantDetailColumns"/>
+        from ${schema}.df_acl_grant_detail
+        where df_acl_grant_detail_uid in
+            <foreach collection="list" item="grantDetailId" open="(" separator="," close=")">
+                #{grantDetailId}
+            </foreach>
+        order by df_acl_grant_detail_uid
+    </select>
+</mapper>

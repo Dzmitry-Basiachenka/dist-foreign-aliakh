@@ -139,5 +139,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmPriceTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmProxyValueMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantSetMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantDetailMapper.xml"/>
     </mappers>
 </configuration>
