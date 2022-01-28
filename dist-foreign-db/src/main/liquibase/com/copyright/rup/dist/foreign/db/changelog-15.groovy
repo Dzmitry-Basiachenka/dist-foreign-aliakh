@@ -66,25 +66,21 @@ databaseChangeLog {
             column(name: 'df_acl_grant_set_uid', type: 'VARCHAR(255)', remarks: 'The identifier of grant set') {
                 constraints(nullable: false)
             }
-            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use') {
+            column(name: 'grant_status', type: 'VARCHAR(128)', remarks: 'The grant status') {
                 constraints(nullable: false)
             }
-            column(name: 'type_of_use_status', type: 'VARCHAR(128)', remarks: 'The type of use status') {
+            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use')
                 constraints(nullable: false)
             }
+            column(name: 'type_of_use_status', type: 'VARCHAR(128)', remarks: 'The type of use status')
             column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'The Wr Wrk Inst') {
                 constraints(nullable: false)
             }
-            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The system title') {
-                constraints(nullable: false)
-            }
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The system title')
             column(name: 'rh_account_number', type: 'NUMERIC(22)', remarks: 'The rightsholder account number') {
                 constraints(nullable: false)
             }
             column(name: 'is_eligible', type: 'BOOLEAN', defaultValue: true, remarks: 'The eligible flag') {
-                constraints(nullable: false)
-            }
-            column(name: 'comment', type: 'VARCHAR(1024)', remarks: 'The comment') {
                 constraints(nullable: false)
             }
             column(name: 'record_version', type: 'INTEGER', defaultValue: '1',

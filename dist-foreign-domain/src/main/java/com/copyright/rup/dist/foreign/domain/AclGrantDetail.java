@@ -17,13 +17,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class AclGrantDetail extends StoredEntity<String> {
 
     private String grantSetId;
+    private String grantStatus; // TODO use an enum if necessary
     private String typeOfUse;
     private String typeOfUseStatus; // TODO use an enum if necessary
     private Long wrWrkInst;
     private String systemTitle;
     private Long rhAccountNumber;
     private Boolean eligible;
-    private String comment;
 
     public String getGrantSetId() {
         return grantSetId;
@@ -31,6 +31,14 @@ public class AclGrantDetail extends StoredEntity<String> {
 
     public void setGrantSetId(String grantSetId) {
         this.grantSetId = grantSetId;
+    }
+
+    public String getGrantStatus() {
+        return grantStatus;
+    }
+
+    public void setGrantStatus(String grantStatus) {
+        this.grantStatus = grantStatus;
     }
 
     public String getTypeOfUse() {
@@ -81,14 +89,6 @@ public class AclGrantDetail extends StoredEntity<String> {
         this.eligible = eligible;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -101,13 +101,13 @@ public class AclGrantDetail extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(grantSetId, that.grantSetId)
+            .append(grantStatus, that.grantStatus)
             .append(typeOfUse, that.typeOfUse)
             .append(typeOfUseStatus, that.typeOfUseStatus)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(eligible, that.eligible)
-            .append(comment, that.comment)
             .isEquals();
     }
 
@@ -116,13 +116,13 @@ public class AclGrantDetail extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(grantSetId)
+            .append(grantStatus)
             .append(typeOfUse)
             .append(typeOfUseStatus)
             .append(wrWrkInst)
             .append(systemTitle)
             .append(rhAccountNumber)
             .append(eligible)
-            .append(comment)
             .toHashCode();
     }
 
@@ -131,13 +131,13 @@ public class AclGrantDetail extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("grantSetId", grantSetId)
+            .append("grantStatus", grantStatus)
             .append("typeOfUse", typeOfUse)
             .append("typeOfUseStatus", typeOfUseStatus)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
             .append("rhAccountNumber", rhAccountNumber)
             .append("eligible", eligible)
-            .append("comment", comment)
             .toString();
     }
 }
