@@ -1,8 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 
@@ -11,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,5 +43,17 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Insert ACL grant details. Started. AclGrantDetailsCount={}, UserName={}", size, userName);
         grantDetails.forEach(aclGrantDetail -> aclGrantDetailRepository.insert(aclGrantDetail));
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
+    }
+
+    @Override
+    public int getCount(AclGrantDetailFilter filter) {
+        return !filter.isEmpty() ? aclGrantDetailRepository.findCountByFilter(filter) : 0;
+    }
+
+    @Override
+    public List<AclGrantDetailDto> getDtos(AclGrantDetailFilter filter, Pageable pageable, Sort sort) {
+        return !filter.isEmpty()
+            ? aclGrantDetailRepository.findDtosByFilter(filter, pageable, sort)
+            : Collections.emptyList();
     }
 }

@@ -105,7 +105,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_3, "licenseType");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_3, "typeOfUseStatus");
-        assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "grantStatus");
+        assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_2, "grantStatus");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "eligible");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "wrWrkInst");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "systemTitle");

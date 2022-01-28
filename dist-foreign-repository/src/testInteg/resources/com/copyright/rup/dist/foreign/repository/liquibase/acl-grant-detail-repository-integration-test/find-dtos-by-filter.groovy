@@ -51,7 +51,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
             column(name: 'df_acl_grant_detail_uid', value: 'ce59e8f3-de93-4fef-9cfb-47eb8c0175cc')
             column(name: 'df_acl_grant_set_uid', value: 'f4d4f8d1-a3e2-4463-8143-c1c0d07ba1b1')
-            column(name: 'grant_status', value: 'DENY')
+            column(name: 'grant_status', value: 'GRANT')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'type_of_use_status', value: 'PRINT_DIGITAL')
             column(name: 'wr_wrk_inst', value: '122820628')
