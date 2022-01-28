@@ -12,4 +12,9 @@ import com.copyright.rup.vaadin.widget.api.IController;
  * @author Dzmitry Basiachenka
  */
 public interface IAclCalculationController extends IController<IAclCalculationWidget> {
+
+    /**
+     * @return instance of {@link IAclGrantDetailController}.
+     */
+    IAclGrantDetailController getAclGrantDetailController();
 }

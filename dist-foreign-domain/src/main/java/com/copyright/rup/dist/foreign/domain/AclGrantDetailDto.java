@@ -19,13 +19,13 @@ public class AclGrantDetailDto extends StoredEntity<String> {
 
     private String licenseType;
     private String typeOfUseStatus;
+    private String grantStatus;
     private Boolean eligible;
     private Long wrWrkInst;
     private String systemTitle;
     private Long rhAccountNumber;
     private String rhName;
     private String typeOfUse;
-    private String comment;
     private Integer grantPeriod;
 
     public String getLicenseType() {
@@ -42,6 +42,14 @@ public class AclGrantDetailDto extends StoredEntity<String> {
 
     public void setTypeOfUseStatus(String typeOfUseStatus) {
         this.typeOfUseStatus = typeOfUseStatus;
+    }
+
+    public String getGrantStatus() {
+        return grantStatus;
+    }
+
+    public void setGrantStatus(String grantStatus) {
+        this.grantStatus = grantStatus;
     }
 
     public Boolean getEligible() {
@@ -92,14 +100,6 @@ public class AclGrantDetailDto extends StoredEntity<String> {
         this.typeOfUse = typeOfUse;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public Integer getGrantPeriod() {
         return grantPeriod;
     }
@@ -121,13 +121,13 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .appendSuper(super.equals(obj))
             .append(licenseType, that.licenseType)
             .append(typeOfUseStatus, that.typeOfUseStatus)
+            .append(grantStatus, that.grantStatus)
             .append(eligible, that.eligible)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(rhName, that.rhName)
             .append(typeOfUse, that.typeOfUse)
-            .append(comment, that.comment)
             .append(grantPeriod, that.grantPeriod)
             .isEquals();
     }
@@ -138,13 +138,13 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .appendSuper(super.hashCode())
             .append(licenseType)
             .append(typeOfUseStatus)
+            .append(grantStatus)
             .append(eligible)
             .append(wrWrkInst)
             .append(systemTitle)
             .append(rhAccountNumber)
             .append(rhName)
             .append(typeOfUse)
-            .append(comment)
             .append(grantPeriod)
             .toHashCode();
     }
@@ -155,13 +155,13 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .appendSuper(super.toString())
             .append("licenseType", licenseType)
             .append("typeOfUseStatus", typeOfUseStatus)
+            .append("grantStatus", grantStatus)
             .append("eligible", eligible)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
             .append("typeOfUse", typeOfUse)
-            .append("comment", comment)
             .append("grantPeriod", grantPeriod)
             .toString();
     }
