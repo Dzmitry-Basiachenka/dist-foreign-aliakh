@@ -4,8 +4,9 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Represents ACL grant set.
@@ -20,7 +21,7 @@ public class AclGrantSet extends StoredEntity<String> {
 
     private String name;
     private Integer grantPeriod;
-    private List<Integer> periods;
+    private Set<Integer> periods;
     private String licenseType;
     private Boolean editable;
 
@@ -40,11 +41,11 @@ public class AclGrantSet extends StoredEntity<String> {
         this.grantPeriod = grantPeriod;
     }
 
-    public List<Integer> getPeriods() {
+    public Set<Integer> getPeriods() {
         return periods;
     }
 
-    public void setPeriods(List<Integer> periods) {
+    public void setPeriods(Set<Integer> periods) {
         this.periods = periods;
     }
 
@@ -97,7 +98,7 @@ public class AclGrantSet extends StoredEntity<String> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("name", name)
             .append("grantPeriod", grantPeriod)

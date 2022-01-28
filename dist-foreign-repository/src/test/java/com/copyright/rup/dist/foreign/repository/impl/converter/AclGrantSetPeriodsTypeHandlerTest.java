@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.postgresql.util.PGobject;
 
@@ -15,8 +16,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantSetPeriodsTypeHandler}.
@@ -39,7 +39,7 @@ public class AclGrantSetPeriodsTypeHandlerTest {
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
         PreparedStatement preparedStatement = createMock(PreparedStatement.class);
         PGobject pgobject = new PGobject();
-        List<Integer> periods = buildPeriods();
+        Set<Integer> periods = buildPeriods();
         pgobject.setValue(typeHandler.serialize(periods));
         pgobject.setType("jsonb");
         preparedStatement.setObject(PARAMETER_INDEX, pgobject);
@@ -69,7 +69,7 @@ public class AclGrantSetPeriodsTypeHandlerTest {
     public void testGetNullableResultColumnIndex() throws SQLException {
         ResultSet resultSet = createMock(ResultSet.class);
         try {
-            List<Integer> periods = buildPeriods();
+            Set<Integer> periods = buildPeriods();
             String json = typeHandler.serialize(periods);
             expect(resultSet.getString(COLUMN_INDEX)).andReturn(json).once();
             resultSet.close();
@@ -85,7 +85,7 @@ public class AclGrantSetPeriodsTypeHandlerTest {
     @Test
     public void testGetNullableResultCallableStatement() throws SQLException {
         CallableStatement callableStatement = createMock(CallableStatement.class);
-        List<Integer> periods = buildPeriods();
+        Set<Integer> periods = buildPeriods();
         String json = typeHandler.serialize(periods);
         expect(callableStatement.getString(PARAMETER_INDEX)).andReturn(json).once();
         replay(callableStatement);
@@ -93,7 +93,7 @@ public class AclGrantSetPeriodsTypeHandlerTest {
         verify(callableStatement);
     }
 
-    private List<Integer> buildPeriods() {
-        return Arrays.asList(202106, 202112);
+    private Set<Integer> buildPeriods() {
+        return Sets.newHashSet(202106, 202112);
     }
 }

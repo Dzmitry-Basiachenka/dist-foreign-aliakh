@@ -12,10 +12,10 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Set;
 
 /**
- * Implementation of {@link BaseTypeHandler} for {@link List} of ACL grant set periods.
+ * Implementation of {@link BaseTypeHandler} for {@link Set} of ACL grant set periods.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -23,13 +23,13 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetPeriodsTypeHandler extends BaseTypeHandler<List<Integer>> {
+public class AclGrantSetPeriodsTypeHandler extends BaseTypeHandler<Set<Integer>> {
 
     private static final AclGrantSetPeriodsJsonMapper JSON_MAPPER = new AclGrantSetPeriodsJsonMapper();
 
     @Override
     public void setNonNullParameter(PreparedStatement statement, int parameterIndex,
-                                    List<Integer> parameter, JdbcType jdbcType)
+                                    Set<Integer> parameter, JdbcType jdbcType)
         throws SQLException {
         PGobject pgobject = new PGobject();
         pgobject.setValue(serialize(parameter));
@@ -38,27 +38,27 @@ public class AclGrantSetPeriodsTypeHandler extends BaseTypeHandler<List<Integer>
     }
 
     @Override
-    public List<Integer> getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
+    public Set<Integer> getNullableResult(ResultSet resultSet, String columnName) throws SQLException {
         return deserialize(resultSet.getString(columnName));
     }
 
     @Override
-    public List<Integer> getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
+    public Set<Integer> getNullableResult(ResultSet resultSet, int columnIndex) throws SQLException {
         return deserialize(resultSet.getString(columnIndex));
     }
 
     @Override
-    public List<Integer> getNullableResult(CallableStatement statement, int columnIndex) throws SQLException {
+    public Set<Integer> getNullableResult(CallableStatement statement, int columnIndex) throws SQLException {
         return deserialize(statement.getString(columnIndex));
     }
 
     /**
-     * Serializes an instance of {@link List} of ACL grant set periods into a string JSON.
+     * Serializes an instance of {@link Set} of ACL grant set periods into a string JSON.
      *
-     * @param periods the instance of {@link List} of ACL grant set periods
+     * @param periods the instance of {@link Set} of ACL grant set periods
      * @return the string JSON
      */
-    String serialize(List<Integer> periods) {
+    String serialize(Set<Integer> periods) {
         try {
             return JSON_MAPPER.serialize(periods);
         } catch (JsonProcessingException e) {
@@ -67,12 +67,12 @@ public class AclGrantSetPeriodsTypeHandler extends BaseTypeHandler<List<Integer>
     }
 
     /**
-     * Deserializes a string JSON into an instance of {@link List} of ACL grant set periods.
+     * Deserializes a string JSON into an instance of {@link Set} of ACL grant set periods.
      *
      * @param json the string JSON
-     * @return the instance of {@link List} of ACL grant set periods
+     * @return the instance of {@link Set} of ACL grant set periods
      */
-    List<Integer> deserialize(String json) {
+    Set<Integer> deserialize(String json) {
         try {
             return JSON_MAPPER.deserialize(json);
         } catch (IOException e) {
