@@ -7,25 +7,25 @@
     <resultMap id="aclGrantDetailResultMap" type="AclGrantDetail" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_acl_grant_detail_uid"/>
         <result property="grantSetId" column="df_acl_grant_set_uid"/>
+        <result property="grantStatus" column="grant_status"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="typeOfUseStatus" column="type_of_use_status"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="systemTitle" column="system_title"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="eligible" column="is_eligible"/>
-        <result property="comment" column="comment"/>
     </resultMap>
 
     <sql id="aclGrantDetailColumns">
         df_acl_grant_detail_uid,
         df_acl_grant_set_uid,
+        grant_status,
         type_of_use,
         type_of_use_status,
         wr_wrk_inst,
         system_title,
         rh_account_number,
         is_eligible,
-        comment,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -35,13 +35,13 @@
         ) values (
             #{id},
             #{grantSetId},
+            #{grantStatus},
             #{typeOfUse},
             #{typeOfUseStatus},
             #{wrWrkInst},
             #{systemTitle},
             #{rhAccountNumber},
             #{eligible},
-            #{comment},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

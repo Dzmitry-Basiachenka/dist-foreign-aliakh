@@ -41,13 +41,13 @@ public class AclGrantDetailRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "acl-grant-detail-repository-integration-test/";
     private static final String UDM_GRANT_DETAIL_UID = "8676271a-9298-4e8b-ad46-3a864f6c655c";
     private static final String UDM_GRANT_SET_UID = "384a380e-c6ef-4af2-a282-96f4b1570fdd";
+    private static final String GRANT_STATUS = "Grant";
     private static final String TYPE_OF_USE = "Digital";
     private static final String TYPE_OF_USE_STATUS = "Digital Only";
     private static final Long WR_WRK_INST = 122825347L;
     private static final String SYSTEM_TITLE = "Wall Street journal";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final Boolean ELIGIBLE = true;
-    private static final String COMMENT = "comment";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -74,13 +74,13 @@ public class AclGrantDetailRepositoryIntegrationTest {
     private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail) {
         assertEquals(expectedGrantDetail.getId(), actualGrantDetail.getId());
         assertEquals(expectedGrantDetail.getGrantSetId(), actualGrantDetail.getGrantSetId());
+        assertEquals(expectedGrantDetail.getGrantStatus(), actualGrantDetail.getGrantStatus());
         assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
         assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
         assertEquals(expectedGrantDetail.getWrWrkInst(), actualGrantDetail.getWrWrkInst());
         assertEquals(expectedGrantDetail.getSystemTitle(), actualGrantDetail.getSystemTitle());
         assertEquals(expectedGrantDetail.getRhAccountNumber(), actualGrantDetail.getRhAccountNumber());
         assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
-        assertEquals(expectedGrantDetail.getComment(), actualGrantDetail.getComment());
         assertEquals(expectedGrantDetail, actualGrantDetail);
     }
 
@@ -88,13 +88,13 @@ public class AclGrantDetailRepositoryIntegrationTest {
         AclGrantDetail grantDetail = new AclGrantDetail();
         grantDetail.setId(UDM_GRANT_DETAIL_UID);
         grantDetail.setGrantSetId(UDM_GRANT_SET_UID);
+        grantDetail.setGrantStatus(GRANT_STATUS);
         grantDetail.setTypeOfUse(TYPE_OF_USE);
         grantDetail.setTypeOfUseStatus(TYPE_OF_USE_STATUS);
         grantDetail.setWrWrkInst(WR_WRK_INST);
         grantDetail.setSystemTitle(SYSTEM_TITLE);
         grantDetail.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         grantDetail.setEligible(ELIGIBLE);
-        grantDetail.setComment(COMMENT);
         return grantDetail;
     }
 }
