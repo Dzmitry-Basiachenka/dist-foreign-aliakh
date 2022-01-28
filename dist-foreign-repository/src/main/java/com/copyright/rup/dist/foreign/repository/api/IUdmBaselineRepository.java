@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for Baseline usage repository.
@@ -75,4 +76,12 @@ public interface IUdmBaselineRepository {
      * @param udmUsageId UDM usage id
      */
     void removeUdmUsageFromBaselineById(String udmUsageId);
+
+    /**
+     * Finds map of wrWrkInsts to system titles.
+     *
+     * @param periods set of periods
+     * @return map of wrWrkInsts to system titles
+     */
+    Map<Long, String> findWrWrkInstToSystemTitles(Set<Integer> periods);
 }

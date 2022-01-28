@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -588,6 +589,15 @@ public class UdmBaselineRepositoryIntegrationTest {
         udmUsages = udmUsageRepository.findByIds(Collections.singletonList("38ac4213-0515-42f5-a1bc-d4794f4eea8f"));
         assertEquals(1, udmUsages.size());
         assertFalse(udmUsages.get(0).isBaselineFlag());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-wr-wrk-inst-to-system-titles.groovy")
+    public void testFindWrWrkInstToSystemTitles() {
+        Map<Long, String> result = baselineRepository.findWrWrkInstToSystemTitles(Sets.newHashSet(201906, 202012));
+        assertEquals(2, result.size());
+        assertEquals("Tenside, surfactants, detergents", result.get(306985867L));
+        assertEquals("Colloids and surfaces. B, Biointerfaces", result.get(20008506L));
     }
 
     private void verifyUdmBaselineDto(List<UdmBaselineDto> expectedUsages, List<UdmBaselineDto> actualUsages) {
