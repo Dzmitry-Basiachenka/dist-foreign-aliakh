@@ -2,8 +2,10 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,8 +24,16 @@ import org.springframework.stereotype.Component;
 public class AclCalculationController extends CommonController<IAclCalculationWidget>
     implements IAclCalculationController {
 
+    @Autowired
+    private IAclGrantDetailController aclGrantDetailController;
+
     @Override
     protected IAclCalculationWidget instantiateWidget() {
         return new AclCalculationWidget();
+    }
+
+    @Override
+    public IAclGrantDetailController getAclGrantDetailController() {
+        return aclGrantDetailController;
     }
 }
