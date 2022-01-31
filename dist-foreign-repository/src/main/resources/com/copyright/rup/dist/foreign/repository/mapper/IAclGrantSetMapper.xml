@@ -51,4 +51,11 @@
             where name = #{grantSetName}
         )
     </select>
+
+    <select id="findAll" resultMap="aclGrantSetResultMap">
+        select
+            <include refid="aclGrantSetColumns"/>
+        from ${schema}.df_acl_grant_set
+        order by updated_datetime desc
+    </select>
 </mapper>

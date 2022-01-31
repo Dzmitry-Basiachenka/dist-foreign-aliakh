@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,5 +33,10 @@ public class AclGrantSetRepository extends BaseRepository implements IAclGrantSe
     @Override
     public boolean isGrantSetExist(String grantSetName) {
         return selectOne("IAclGrantSetMapper.isGrantSetExist", Objects.requireNonNull(grantSetName));
+    }
+
+    @Override
+    public List<AclGrantSet> findAll() {
+        return selectList("IAclGrantSetMapper.findAll");
     }
 }

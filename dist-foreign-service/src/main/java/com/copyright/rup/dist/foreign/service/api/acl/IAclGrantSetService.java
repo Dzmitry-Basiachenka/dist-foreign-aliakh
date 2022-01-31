@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 
+import java.util.List;
+
 /**
  * Represents interface of repository for ACL grant sets and grant details.
  * <p>
@@ -28,4 +30,11 @@ public interface IAclGrantSetService {
      * @return {@code true} if grant set with provided name exists, otherwise {@code false}
      */
     boolean isGrantSetExist(String grantSetName);
+
+    /**
+     * Gets list of all ACL grant sets.
+     *
+     * @return list of all {@link AclGrantSet}s
+     */
+    List<AclGrantSet> getAll();
 }
