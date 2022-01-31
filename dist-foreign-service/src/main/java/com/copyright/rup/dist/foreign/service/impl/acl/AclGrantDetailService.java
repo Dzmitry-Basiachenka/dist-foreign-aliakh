@@ -1,10 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,16 +32,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     @Transactional
     @Override
-    public void insert(String grantSetId, List<AclGrantDetail> grantDetails, String userName) {
+    public void insert(List<AclGrantDetail> grantDetails) {
         int size = grantDetails.size();
+        String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACL grant details. Started. AclGrantDetailsCount={}, UserName={}", size, userName);
-        grantDetails.forEach(grantDetail -> {
-            grantDetail.setId(RupPersistUtils.generateUuid());
-            grantDetail.setGrantSetId(grantSetId);
-            grantDetail.setCreateUser(userName);
-            grantDetail.setUpdateUser(userName);
-            aclGrantDetailRepository.insert(grantDetail);
-        });
+        grantDetails.forEach(aclGrantDetail -> aclGrantDetailRepository.insert(aclGrantDetail));
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
     }
 }
