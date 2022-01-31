@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -44,6 +45,7 @@ import java.util.Collections;
 public class AclGrantSetServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String GRANT_SET_NAME = "ACL Grant Set 2021";
     private static final Long WR_WRK_INST = 122825347L;
     private static final String SYSTEM_TITLE = "Wall Street journal";
 
@@ -87,6 +89,14 @@ public class AclGrantSetServiceTest {
         aclGrantSetService.insert(grantSet);
         verify(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
+    }
+
+    @Test
+    public void testIsGrantSetExist() {
+        expect(aclGrantSetRepository.isGrantSetExist(GRANT_SET_NAME)).andReturn(true).once();
+        replay(aclGrantSetRepository);
+        assertTrue(aclGrantSetService.isGrantSetExist(GRANT_SET_NAME));
+        verify(aclGrantSetRepository);
     }
 
     private AclGrantSet buildAclGrantSet() {
