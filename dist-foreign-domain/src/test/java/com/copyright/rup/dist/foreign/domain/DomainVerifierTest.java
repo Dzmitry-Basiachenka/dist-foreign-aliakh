@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterBetweenExpression;
@@ -130,7 +131,8 @@ public class DomainVerifierTest {
             {UdmVerifiedDetailsBySourceReportDto.class},
             {AclGrantSet.class},
             {AclGrantDetail.class},
-            {AclGrantDetailDto.class}
+            {AclGrantDetailDto.class},
+            {AclGrantDetailFilter.class}
         };
         return Arrays.asList(testData);
     }

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "bc696696-e46f-4fbd-85c7-4c509b370deb",
+    "licenseType": "ACL",
+    "typeOfUseStatus": "PRINT",
+    "grantStatus": "GRANT",
+    "eligible": true,
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "rhAccountNumber": 1000028511,
+    "rhName": "Greenleaf Publishing",
+    "typeOfUse": "PRINT",
+    "grantPeriod": 202106,
+    "version": 1,
+    "createDate": 1611979200000,
+    "updateDate": 1612065600000,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  }
+]

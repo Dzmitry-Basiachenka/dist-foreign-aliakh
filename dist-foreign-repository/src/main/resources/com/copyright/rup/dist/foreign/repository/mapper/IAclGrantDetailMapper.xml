@@ -16,6 +16,20 @@
         <result property="eligible" column="is_eligible"/>
     </resultMap>
 
+    <resultMap id="aclGrantDetailDtoResultMap" type="AclGrantDetailDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_grant_detail_uid"/>
+        <result property="licenseType" column="license_type"/>
+        <result property="typeOfUseStatus" column="type_of_use_status"/>
+        <result property="grantStatus" column="grant_status"/>
+        <result property="eligible" column="is_eligible"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="grantPeriod" column="grant_period"/>
+    </resultMap>
+
     <sql id="aclGrantDetailColumns">
         df_acl_grant_detail_uid,
         df_acl_grant_set_uid,
@@ -55,5 +69,106 @@
                 #{grantDetailId}
             </foreach>
         order by df_acl_grant_detail_uid
+    </select>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_acl_grant_detail gd
+        join ${schema}.df_acl_grant_set gs on gd.df_acl_grant_set_uid = gs.df_acl_grant_set_uid
+        left join ${schema}.df_rightsholder r on gd.rh_account_number = r.rh_account_number
+        <include refid="IAclGrantDetailMapper.aclGrantDetailFilter"/>
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            df_acl_grant_detail_uid,
+            license_type,
+            type_of_use_status,
+            grant_status,
+            is_eligible,
+            wr_wrk_inst,
+            system_title,
+            gd.rh_account_number,
+            r.name rh_name,
+            type_of_use,
+            grant_period,
+            gd.created_datetime,
+            gd.updated_datetime
+        from ${schema}.df_acl_grant_detail gd
+        join ${schema}.df_acl_grant_set gs on gd.df_acl_grant_set_uid = gs.df_acl_grant_set_uid
+        left join ${schema}.df_rightsholder r on gd.rh_account_number = r.rh_account_number
+        <include refid="IAclGrantDetailMapper.aclGrantDetailFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IAclGrantDetailMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                gd.updated_datetime desc
+            </otherwise>
+        </choose>,
+        gd.df_acl_grant_detail_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="aclGrantDetailFilter">
+        <where>
+            <if test="filter.grantSetNames.size() > 0">
+                and
+                <foreach collection="filter.grantSetNames" item="grantSetName" open="(" separator=" or " close=")">
+                    gs.name = #{grantSetName}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="chooseSortProperty">
+        <choose>
+            <when test="sort.property == 'licenseType'">
+                license_type <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'typeOfUseStatus'">
+                type_of_use_status <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'grantStatus'">
+                grant_status <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'eligible'">
+                is_eligible <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhAccountNumber'">
+                gd.rh_account_number <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                r.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'typeOfUse'">
+                type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'grantPeriod'">
+                grant_period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'createDate'">
+                gd.created_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateDate'">
+                gd.updated_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
+    </sql>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IAclGrantDetailMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findDtosByFilter" resultMap="aclGrantDetailDtoResultMap" parameterType="map"
+            fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclGrantDetailMapper.selectDtosByFilterSql"/>
     </select>
 </mapper>
