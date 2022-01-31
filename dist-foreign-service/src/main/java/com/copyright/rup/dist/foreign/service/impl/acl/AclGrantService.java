@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
@@ -39,7 +41,8 @@ import java.util.stream.Collectors;
 public class AclGrantService implements IAclGrantService {
 
     private static final int TYPE_OF_USE_COUNT = 1;
-    private static final Set<String> STATUSES = ImmutableSet.of("GRANT", "DENY");
+    private static final String GRANT = "GRANT";
+    private static final Set<String> STATUS = ImmutableSet.of(GRANT);
     private static final Set<String> TYPE_OF_USES = ImmutableSet.of("PRINT", "DIGITAL");
     private static final Map<String, AclGrantTypeOfUseStatusEnum> TOU_TO_STATUSES = ImmutableMap.of(
         "PRINT", AclGrantTypeOfUseStatusEnum.PRINT,
@@ -54,36 +57,50 @@ public class AclGrantService implements IAclGrantService {
 
     @Override
     @Transactional
-    public List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, List<Long> wrWrkInsts) {
+    public List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles) {
         LocalDate periodEndDate = createPeriodEndDate(grantSet.getGrantPeriod());
         Map<Long, List<RmsGrant>> wrWrkInstToGrants = new HashMap<>();
-        Iterables.partition(wrWrkInsts, rightsPartitionSize).forEach(wrWrkInstsPart ->
-            wrWrkInstToGrants.putAll(rmsRightsService.getGrants(wrWrkInstsPart, periodEndDate, STATUSES, TYPE_OF_USES,
+        Iterables.partition(wrWrkInstToSystemTitles.keySet(), rightsPartitionSize).forEach(wrWrkInstsPart ->
+            wrWrkInstToGrants.putAll(rmsRightsService.getGrants(wrWrkInstsPart, periodEndDate, STATUS, TYPE_OF_USES,
                     ImmutableSet.copyOf(Collections.singleton(grantSet.getLicenseType())))
                 .stream()
                 .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst))));
         List<AclGrantDetail> grantDetails = new ArrayList<>();
-        wrWrkInstToGrants.forEach((wrWrkInst, grants) -> grants.forEach(grant ->
-            grantDetails.add(
-                buildAclGrantDetail(grantSet.getId(), grant, isDifferentRh(grants), isDifferentTypesOfUse(grants)))));
+        wrWrkInstToGrants.forEach((wrWrkInst, grants) -> {
+            grants.forEach(grant -> {
+                AclGrantDetail detail =
+                    buildAclGrantDetail(grantSet.getId(), grant, grant.getStatus(), wrWrkInstToSystemTitles);
+                setTypeOfUseStatus(grants, detail);
+                grantDetails.add(detail);
+            });
+        });
         return grantDetails;
     }
 
-    private AclGrantDetail buildAclGrantDetail(String grantSetId, RmsGrant grant, boolean differentRh,
-                                               boolean differentTypeOfUse) {
+    private void setTypeOfUseStatus(List<RmsGrant> grants, AclGrantDetail detail) {
+        if (isDifferentRh(grants)) {
+            detail.setTypeOfUseStatus(AclGrantTypeOfUseStatusEnum.DIFFERENT_RH.toString());
+        } else {
+            detail.setTypeOfUseStatus(isDifferentTypesOfUse(grants)
+                ? AclGrantTypeOfUseStatusEnum.PRINT_DIGITAL.toString()
+                : TOU_TO_STATUSES.get(detail.getTypeOfUse()).toString());
+        }
+    }
+
+    private AclGrantDetail buildAclGrantDetail(String grantSetId, RmsGrant grant, String grantStatus,
+                                               Map<Long, String> wrWrkInstToSystemTitles) {
+        String userName = RupContextUtils.getUserName();
         AclGrantDetail aclGrantDetail = new AclGrantDetail();
+        aclGrantDetail.setId(RupPersistUtils.generateUuid());
         aclGrantDetail.setGrantSetId(grantSetId);
+        aclGrantDetail.setGrantStatus(grantStatus);
         aclGrantDetail.setEligible(true);
         aclGrantDetail.setTypeOfUse(grant.getTypeOfUse());
         aclGrantDetail.setRhAccountNumber(grant.getWorkGroupOwnerOrgNumber().longValueExact());
         aclGrantDetail.setWrWrkInst(grant.getWrWrkInst());
-        if (differentRh) {
-            aclGrantDetail.setTypeOfUseStatus(AclGrantTypeOfUseStatusEnum.DIFFERENT_RH.toString());
-        } else {
-            aclGrantDetail.setTypeOfUseStatus(
-                differentTypeOfUse ? AclGrantTypeOfUseStatusEnum.PRINT_DIGITAL.toString() : TOU_TO_STATUSES.get(
-                    grant.getTypeOfUse()).toString());
-        }
+        aclGrantDetail.setSystemTitle(wrWrkInstToSystemTitles.get(grant.getWrWrkInst()));
+        aclGrantDetail.setCreateUser(userName);
+        aclGrantDetail.setUpdateUser(userName);
         return aclGrantDetail;
     }
 

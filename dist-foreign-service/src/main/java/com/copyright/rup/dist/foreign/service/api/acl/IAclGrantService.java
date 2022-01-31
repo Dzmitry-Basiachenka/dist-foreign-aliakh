@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents interface of service for grant set business logic.
@@ -20,8 +21,8 @@ public interface IAclGrantService {
      * Creates grant details and populates fields based on information from RMS.
      *
      * @param grantSet   instance of {@link AclGrantSet}
-     * @param wrWrkInsts list of wrWrkInst
+     * @param wrWrkInstToSystemTitles map of wrWrkInsts to system titles
      * @return list of {@link AclGrantDetail}
      */
-    List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, List<Long> wrWrkInsts);
+    List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles);
 }

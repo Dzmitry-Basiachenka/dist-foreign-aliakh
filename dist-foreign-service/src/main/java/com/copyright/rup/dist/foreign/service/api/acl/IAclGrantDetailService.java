@@ -18,9 +18,7 @@ public interface IAclGrantDetailService {
     /**
      * Inserts grant details.
      *
-     * @param grantSetId   grant set id.
      * @param grantDetails list of {link GrantDetail}
-     * @param userName     user name
      */
-    void insert(String grantSetId, List<AclGrantDetail> grantDetails, String userName);
+    void insert(List<AclGrantDetail> grantDetails);
 }

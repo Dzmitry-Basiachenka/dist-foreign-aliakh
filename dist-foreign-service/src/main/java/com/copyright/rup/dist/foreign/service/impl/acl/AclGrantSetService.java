@@ -10,14 +10,13 @@ import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of {@link IAclGrantSetService}.
@@ -47,15 +46,13 @@ public class AclGrantSetService implements IAclGrantSetService {
     public void insert(AclGrantSet grantSet) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACL grant set. Started. AclGrantSet={}, UserName={}", grantSet, userName);
-        Map<Long, String> wrWrkInstToSystemTitles =
-            udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods());
-        List<AclGrantDetail> grantDetails =
-            aclGrantService.createAclGrantDetails(grantSet, new ArrayList<>(wrWrkInstToSystemTitles.keySet()));
         grantSet.setId(RupPersistUtils.generateUuid());
         grantSet.setCreateUser(userName);
         grantSet.setUpdateUser(userName);
+        List<AclGrantDetail> grantDetails = aclGrantService.createAclGrantDetails(grantSet,
+            udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()));
         aclGrantSetRepository.insert(grantSet);
-        aclGrantDetailService.insert(grantSet.getId(), grantDetails, userName);
+        aclGrantDetailService.insert(grantDetails);
         LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, UserName={}", grantSet, userName);
     }
 }

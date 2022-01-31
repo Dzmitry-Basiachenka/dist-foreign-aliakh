@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 /**
- * Enum for scenario statuses.
+ * Enum for grant type of use statuses.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
