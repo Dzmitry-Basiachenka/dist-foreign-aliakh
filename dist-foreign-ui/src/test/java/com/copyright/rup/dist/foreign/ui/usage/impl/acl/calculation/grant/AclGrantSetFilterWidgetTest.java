@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link AclGrantSetNameFilterWidget}.
+ * Verifies {@link AclGrantSetFilterWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -42,26 +42,26 @@ import java.util.Set;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class AclGrantSetNameFilterWidgetTest {
+public class AclGrantSetFilterWidgetTest {
 
     private static final String ACL_GRANT_SET_UID = "d3a93635-38d2-479c-b50d-6cbc8d84b924";
     private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
 
-    private AclGrantSetNameFilterWidget aclGrantSetNameFilterWidget;
+    private AclGrantSetFilterWidget aclGrantSetFilterWidget;
 
     @Before
     public void setUp() {
-        aclGrantSetNameFilterWidget = new AclGrantSetNameFilterWidget(Collections::emptyList);
+        aclGrantSetFilterWidget = new AclGrantSetFilterWidget(Collections::emptyList);
     }
 
     @Test
     public void testGetBeanClass() {
-        assertEquals(AclGrantSet.class, aclGrantSetNameFilterWidget.getBeanClass());
+        assertEquals(AclGrantSet.class, aclGrantSetFilterWidget.getBeanClass());
     }
 
     @Test
     public void testGetBeanItemCaption() {
-        assertEquals(ACL_GRANT_SET_NAME, aclGrantSetNameFilterWidget.getBeanItemCaption(buildAclGrantSet()));
+        assertEquals(ACL_GRANT_SET_NAME, aclGrantSetFilterWidget.getBeanItemCaption(buildAclGrantSet()));
     }
 
     @Test
@@ -70,9 +70,9 @@ public class AclGrantSetNameFilterWidgetTest {
         Set<AclGrantSet> grantSets = Collections.singleton(new AclGrantSet());
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(grantSets).once();
         replay(filterSaveEvent);
-        aclGrantSetNameFilterWidget.onSave(filterSaveEvent);
+        aclGrantSetFilterWidget.onSave(filterSaveEvent);
         verify(filterSaveEvent);
-        assertEquals(grantSets, Whitebox.getInternalState(aclGrantSetNameFilterWidget, "selectedItemsIds"));
+        assertEquals(grantSets, Whitebox.getInternalState(aclGrantSetFilterWidget, "selectedItemsIds"));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AclGrantSetNameFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<AclGrantSet, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Grant Sets filter"), same(aclGrantSetNameFilterWidget),
+        expect(Windows.showFilterWindow(eq("Grant Sets filter"), same(aclGrantSetFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();
@@ -92,7 +92,7 @@ public class AclGrantSetNameFilterWidgetTest {
         filterWindow.setSearchPromptString("Enter Grant Set Name");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
-        aclGrantSetNameFilterWidget.showFilterWindow();
+        aclGrantSetFilterWidget.showFilterWindow();
         assertEquals(Collections.singletonList(ACL_GRANT_SET_NAME),
             providerCapture.getValue().apply(buildAclGrantSet()));
         verify(filterWindow, Windows.class);

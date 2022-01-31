@@ -2,10 +2,13 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.util.ReflectTools;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -18,6 +21,19 @@ import java.util.List;
  * @author Dzmitry Basiachenka
  */
 public interface IAclGrantDetailController extends IController<IAclGrantDetailWidget> {
+
+    /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IAclGrantDetailController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 
     /**
      * @return number of items.
@@ -52,7 +68,7 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     /**
      * Inserts ACL grant set.
      *
-     * @param aclGrantSet  {@link AclGrantSet} instance
+     * @param aclGrantSet {@link AclGrantSet} instance
      * @return count of inserted grant details
      */
     int insertAclGrantSet(AclGrantSet aclGrantSet);

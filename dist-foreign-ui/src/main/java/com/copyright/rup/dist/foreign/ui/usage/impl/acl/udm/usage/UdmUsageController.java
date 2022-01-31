@@ -106,9 +106,9 @@ public class UdmUsageController extends CommonController<IUdmUsageWidget> implem
 
     @Override
     public IUdmUsageFilterWidget initUsagesFilterWidget() {
-        IUdmUsageFilterWidget result = udmUsageFilterController.initWidget();
-        result.addListener(FilterChangedEvent.class, this, IUdmUsageController.ON_FILTER_CHANGED);
-        return result;
+        IUdmUsageFilterWidget widget = udmUsageFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IUdmUsageController.ON_FILTER_CHANGED);
+        return widget;
     }
 
     @Override

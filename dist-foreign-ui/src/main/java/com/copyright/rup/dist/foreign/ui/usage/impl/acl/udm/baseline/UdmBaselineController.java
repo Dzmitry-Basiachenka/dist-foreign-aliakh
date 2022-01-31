@@ -76,9 +76,9 @@ public class UdmBaselineController extends CommonController<IUdmBaselineWidget> 
 
     @Override
     public IUdmBaselineFilterWidget initBaselineFilterWidget() {
-        IUdmBaselineFilterWidget result = udmBaselineFilterController.initWidget();
-        result.addListener(FilterChangedEvent.class, this, IUdmBaselineController.ON_FILTER_CHANGED);
-        return result;
+        IUdmBaselineFilterWidget widget = udmBaselineFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IUdmBaselineController.ON_FILTER_CHANGED);
+        return widget;
     }
 
     @Override

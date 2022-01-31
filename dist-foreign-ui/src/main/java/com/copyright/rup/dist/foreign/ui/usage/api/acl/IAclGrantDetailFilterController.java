@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
+
+import java.util.List;
 
 /**
  * Interface for controller for ACL grant detail filtering.
@@ -12,4 +15,11 @@ import com.copyright.rup.vaadin.widget.api.IFilterController;
  * @author Dzmitry Basiachenka
  */
 public interface IAclGrantDetailFilterController extends IFilterController<IAclGrantDetailFilterWidget> {
+
+    /**
+     * Gets list of all ACL grant sets.
+     *
+     * @return list of all {@link AclGrantSet}s
+     */
+    List<AclGrantSet> getAllAclGrantSets();
 }
