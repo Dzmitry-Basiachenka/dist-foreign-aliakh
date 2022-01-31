@@ -27,4 +27,12 @@ public interface IAclGrantSetRepository {
      * @return {@link AclGrantSet} with the given id or {@code null} if none exists
      */
     AclGrantSet findById(String grantSetId);
+
+    /**
+     * Checks whether ACL grant set with provided name exists.
+     *
+     * @param grantSetName name of the {@link AclGrantSet}
+     * @return {@code true} if grant set with provided name exists, otherwise {@code false}
+     */
+    boolean isGrantSetExist(String grantSetName);
 }

@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
@@ -34,7 +36,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 )
 public class AclGrantSetRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "acl-grant-set-repository-integration-test/";
     private static final String ACL_GRANT_SET_ID = "c598a928-2857-403c-bebc-9073ce56dbcc";
+    private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
 
     @Autowired
     private IAclGrantSetRepository aclGrantSetRepository;
@@ -55,10 +59,17 @@ public class AclGrantSetRepositoryIntegrationTest {
         assertEquals(grantSet, actualGrantSet);
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "is-grant-set-exist.groovy")
+    public void testIsGrantSetExist() {
+        assertTrue(aclGrantSetRepository.isGrantSetExist(ACL_GRANT_SET_NAME));
+        assertFalse(aclGrantSetRepository.isGrantSetExist("ACL Grant Set 2022"));
+    }
+
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setId(ACL_GRANT_SET_ID);
-        grantSet.setName("ACL Grant Set 2021");
+        grantSet.setName(ACL_GRANT_SET_NAME);
         grantSet.setGrantPeriod(202112);
         grantSet.setPeriods(Sets.newHashSet(202106, 202112));
         grantSet.setLicenseType("ACL");

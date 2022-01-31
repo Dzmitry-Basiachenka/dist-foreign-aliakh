@@ -55,4 +55,9 @@ public class AclGrantSetService implements IAclGrantSetService {
         aclGrantDetailService.insert(grantDetails);
         LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, UserName={}", grantSet, userName);
     }
+
+    @Override
+    public boolean isGrantSetExist(String grantSetName) {
+        return aclGrantSetRepository.isGrantSetExist(grantSetName);
+    }
 }

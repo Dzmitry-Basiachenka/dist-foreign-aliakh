@@ -28,4 +28,9 @@ public class AclGrantSetRepository extends BaseRepository implements IAclGrantSe
     public AclGrantSet findById(String grantSetId) {
         return selectOne("IAclGrantSetMapper.findById", Objects.requireNonNull(grantSetId));
     }
+
+    @Override
+    public boolean isGrantSetExist(String grantSetName) {
+        return selectOne("IAclGrantSetMapper.isGrantSetExist", Objects.requireNonNull(grantSetName));
+    }
 }
