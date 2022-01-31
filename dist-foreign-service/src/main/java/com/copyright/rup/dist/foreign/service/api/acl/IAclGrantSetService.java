@@ -17,8 +17,9 @@ public interface IAclGrantSetService {
      * Inserts ACL grant sets with grant details read from RMS.
      *
      * @param grantSet instance of {@link AclGrantSet}
+     * @return count of inserted grant details
      */
-    void insert(AclGrantSet grantSet);
+    int insert(AclGrantSet grantSet);
 
     /**
      * Checks whether ACL grant set with provided name exists.
