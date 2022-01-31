@@ -100,4 +100,14 @@ public interface IUdmValueRepository {
      * @return published values ids
      */
     List<String> publishToBaseline(Integer period, String userName);
+
+    /**
+     * Sets status to {@link com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum#RSCHD_IN_THE_PREV_PERIOD} for
+     * all values for provided period if corresponding Wr Wrk Inst was researched and published to baseline in previous
+     * period.
+     *
+     * @param period   period of value batch to publish
+     * @param userName name of the user who publishes to baseline
+     */
+    void updateResearchedInPrevPeriod(Integer period, String userName);
 }
