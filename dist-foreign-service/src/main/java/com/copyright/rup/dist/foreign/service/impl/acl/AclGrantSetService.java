@@ -43,7 +43,7 @@ public class AclGrantSetService implements IAclGrantSetService {
 
     @Transactional
     @Override
-    public void insert(AclGrantSet grantSet) {
+    public int insert(AclGrantSet grantSet) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert ACL grant set. Started. AclGrantSet={}, UserName={}", grantSet, userName);
         grantSet.setId(RupPersistUtils.generateUuid());
@@ -53,7 +53,9 @@ public class AclGrantSetService implements IAclGrantSetService {
             udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()));
         aclGrantSetRepository.insert(grantSet);
         aclGrantDetailService.insert(grantDetails);
-        LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, UserName={}", grantSet, userName);
+        LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, AclGrantDetailsCount={}, UserName={}",
+            grantSet, grantDetails.size(), userName);
+        return grantDetails.size();
     }
 
     @Override

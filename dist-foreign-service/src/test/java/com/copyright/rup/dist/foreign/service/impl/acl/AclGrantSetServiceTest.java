@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -86,7 +87,7 @@ public class AclGrantSetServiceTest {
         expectLastCall().once();
         replay(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
-        aclGrantSetService.insert(grantSet);
+        assertEquals(1, aclGrantSetService.insert(grantSet));
         verify(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
     }
