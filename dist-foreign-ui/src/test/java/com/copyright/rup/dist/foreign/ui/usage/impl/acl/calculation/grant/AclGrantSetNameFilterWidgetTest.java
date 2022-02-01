@@ -91,7 +91,8 @@ public class AclGrantSetNameFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         aclGrantSetNameFilterWidget.showFilterWindow();
-        assertEquals(Collections.singletonList(ACL_GRANT_SET_NAME), providerCapture.getValue().apply(buildAclGrantSet()));
+        assertEquals(Collections.singletonList(ACL_GRANT_SET_NAME),
+            providerCapture.getValue().apply(buildAclGrantSet()));
         verify(filterWindow, Windows.class);
     }
 
