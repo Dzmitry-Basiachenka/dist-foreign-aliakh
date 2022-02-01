@@ -240,8 +240,9 @@
         display:none !important;
     }
 
-    /**==== Styles for markets filter widget ====*/
-    .empty-selected-markets .v-label {
+    /**==== Styles for markets and periods filter widgets ====*/
+    .empty-selected-markets .v-label,
+    .empty-selected-periods .v-label {
         color: red;
     }
 
@@ -307,7 +308,8 @@
         width: 130px;
     }
 
-    .exclude-stm-rhs-checkbox {
+    .exclude-stm-rhs-checkbox,
+    .acl-editable-checkbox {
         font-weight: bold;
     }
 
