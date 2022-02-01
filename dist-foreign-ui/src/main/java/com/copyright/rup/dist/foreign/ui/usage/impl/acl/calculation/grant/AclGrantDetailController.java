@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
@@ -35,6 +37,8 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Autowired
     private IUdmBaselineService udmBaselineService;
     @Autowired
+    private IAclGrantSetService aclGrantSetService;
+    @Autowired
     private IAclGrantDetailFilterController aclGrantDetailFilterController;
 
     @Override
@@ -57,6 +61,16 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Override
     public IAclGrantDetailFilterWidget initAclGrantDetailFilterWidget() {
         return aclGrantDetailFilterController.initWidget();
+    }
+
+    @Override
+    public boolean isGrantSetExist(String name) {
+        return aclGrantSetService.isGrantSetExist(name);
+    }
+
+    @Override
+    public int insertAclGrantSet(AclGrantSet aclGrantSet) {
+        return aclGrantSetService.insert(aclGrantSet);
     }
 
     @Override

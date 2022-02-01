@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -39,6 +40,22 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return list of baseline periods
      */
     List<Integer> getBaselinePeriods();
+
+    /**
+     * Checks whether {@link AclGrantSet} with the name already exists.
+     *
+     * @param name ACL grant set name
+     * @return {@code true} - if grant set exists, {@code false} - otherwise
+     */
+    boolean isGrantSetExist(String name);
+
+    /**
+     * Inserts ACL grant set.
+     *
+     * @param aclGrantSet  {@link AclGrantSet} instance
+     * @return count of inserted grant details
+     */
+    int insertAclGrantSet(AclGrantSet aclGrantSet);
 
     /**
      * Initializes {@link IAclGrantDetailFilterWidget}.

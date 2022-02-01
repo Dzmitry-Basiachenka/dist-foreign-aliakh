@@ -7,13 +7,16 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -34,6 +37,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     private IAclGrantDetailController controller;
     private Grid<AclGrantDetailDto> aclGrantDetailsGrid;
     private DataProvider<AclGrantDetailDto, Void> dataProvider;
+    private MenuBar grantSetMenuBar;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -59,7 +63,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
 
     private VerticalLayout initGrantDetailsLayout() {
         initGrantDetailsGrid();
-        VerticalLayout layout = new VerticalLayout(aclGrantDetailsGrid);
+        VerticalLayout layout = new VerticalLayout(initToolbarLayout(), aclGrantDetailsGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -116,5 +120,23 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             .setSortProperty(columnId)
             .setHidable(true)
             .setWidth(width);
+    }
+
+    private HorizontalLayout initToolbarLayout() {
+        initGrantSetMenuBar();
+        HorizontalLayout toolbar = new HorizontalLayout(grantSetMenuBar);
+        toolbar.setMargin(true);
+        VaadinUtils.addComponentStyle(toolbar, "acl-grant-details-toolbar");
+        return toolbar;
+    }
+
+    private void initGrantSetMenuBar() {
+        grantSetMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            grantSetMenuBar.addItem(ForeignUi.getMessage("menu.caption.grant_set"), null, null);
+        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+            item -> Windows.showModalWindow(new CreateAclGrantSetWindow(controller)));
+        VaadinUtils.addComponentStyle(grantSetMenuBar, "acl-grant-set-menu-bar");
+        VaadinUtils.addComponentStyle(grantSetMenuBar, "v-menubar-df");
     }
 }
