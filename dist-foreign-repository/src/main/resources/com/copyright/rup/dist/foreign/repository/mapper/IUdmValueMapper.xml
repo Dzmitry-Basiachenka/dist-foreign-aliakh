@@ -567,6 +567,24 @@
         order by assignee
     </select>
 
+    <select id="updateResearchedInPrevPeriod" resultType="string">
+        update ${schema}.df_udm_value
+        set
+            status_ind = 'RSCHD_IN_THE_PREV_PERIOD',
+            <include refid="StoredEntityMapper.update"/>
+        where wr_wrk_inst in (
+            select distinct v.wr_wrk_inst
+            from ${schema}.df_udm_value v
+            join lateral (
+                select distinct wr_wrk_inst from ${schema}.df_udm_value_baseline
+                <!-- Selects Jan-June period based on provided July-Dec period -->
+                where period = #{period} - 6
+            ) last_value on v.wr_wrk_inst = last_value.wr_wrk_inst
+            where v.period = #{period}
+                and status_ind = 'NEW'
+        )
+    </select>
+
     <select id="findLastValuePeriods" resultType="string">
         select distinct last_value.last_value_period
         from ${schema}.df_udm_value v

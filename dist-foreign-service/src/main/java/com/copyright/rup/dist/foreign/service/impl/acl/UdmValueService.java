@@ -169,6 +169,9 @@ public class UdmValueService implements IUdmValueService {
         int updatedUsagesCount = 0;
         if (MapUtils.isNotEmpty(wrWrkInstToValueIdMap)) {
             updatedUsagesCount = baselineRepository.populateValueId(period, wrWrkInstToValueIdMap, userName);
+            if (String.valueOf(period).endsWith("12")) {
+                udmValueRepository.updateResearchedInPrevPeriod(period, userName);
+            }
         }
         LOGGER.info("Populate UDM Value batch. Finished. Period={}, UserName={}, PopulatedValuesCount={}, " +
             "UpdatedUsagesCount={}", period, userName, wrWrkInstToValueIdMap.size(), updatedUsagesCount);

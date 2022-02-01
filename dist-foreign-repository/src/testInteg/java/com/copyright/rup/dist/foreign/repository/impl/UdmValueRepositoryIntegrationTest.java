@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -1528,6 +1529,22 @@ public class UdmValueRepositoryIntegrationTest {
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_2.json"),
             udmBaselineValueRepository.findDtosByFilter(filter, null, null));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-researched-in-prev-period.groovy")
+    public void testUpdateResearchedInPrevPeriod() {
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setPeriods(Sets.newHashSet(202112, 202012));
+        filter.setStatus(UdmValueStatusEnum.NEW);
+        List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, null);
+        assertEquals(4, values.size());
+        udmValueRepository.updateResearchedInPrevPeriod(202112, USER_NAME);
+        filter.setStatus(UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD);
+        values = udmValueRepository.findDtosByFilter(filter, null, null);
+        assertEquals(2, values.size());
+        assertEquals(values.stream().map(UdmValueDto::getId).collect(Collectors.toSet()),
+            Sets.newHashSet("5cd32c80-49cb-4338-8896-c415b6bc0631", "64944284-158e-4bb1-96ca-7119a2ea322b"));
     }
 
     private void verifyValueBaselineDto(List<UdmValueBaselineDto> expectedValues,

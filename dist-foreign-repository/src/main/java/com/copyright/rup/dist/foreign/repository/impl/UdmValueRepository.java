@@ -97,6 +97,14 @@ public class UdmValueRepository extends UdmBaseRepository implements IUdmValueRe
         return selectList("IUdmValueMapper.publishToBaseline", parameters);
     }
 
+    @Override
+    public void updateResearchedInPrevPeriod(Integer period, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("updateUser", Objects.requireNonNull(userName));
+        update("IUdmValueMapper.updateResearchedInPrevPeriod", parameters);
+    }
+
     private UdmValueFilter escapeSqlLikePattern(UdmValueFilter udmUsageFilter) {
         UdmValueFilter filterCopy = new UdmValueFilter(udmUsageFilter);
         filterCopy.setSystemTitleExpression(

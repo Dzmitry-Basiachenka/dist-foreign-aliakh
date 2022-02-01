@@ -198,7 +198,31 @@ public class UdmValueServiceTest {
     }
 
     @Test
-    public void testPopulateValueBatch() {
+    public void testPopulateValueBatchFirstPeriodOfTheYear() {
+        mockStatic(RupContextUtils.class);
+        mockStatic(RupPersistUtils.class);
+        UdmValue value1 = buildUdmValue(2365985896L);
+        UdmValue value2 = buildUdmValue(3000985896L);
+        List<UdmValue> values = Arrays.asList(value1, value2);
+        expect(udmBaselineRepository.findNotPopulatedValuesFromBaseline(202006)).andReturn(values).once();
+        rightsService.updateUdmValuesRights(values, 202006);
+        expectLastCall().andAnswer(() -> {
+            values.get(0).setRhAccountNumber(1000002958L);
+            return null;
+        }).once();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(RupPersistUtils.generateUuid()).andReturn("fdd6a424-fa0c-4ced-b3c3-3804b36ae275").once();
+        udmValueRepository.insert(value1);
+        expectLastCall().once();
+        expect(udmBaselineRepository.populateValueId(202006,
+            ImmutableMap.of(2365985896L, "fdd6a424-fa0c-4ced-b3c3-3804b36ae275"), USER_NAME)).andReturn(1).once();
+        replay(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
+        assertEquals(1, udmValueService.populateValueBatch(202006));
+        verify(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
+    }
+
+    @Test
+    public void testPopulateValueBatchSecondPeriodOfTheYear() {
         mockStatic(RupContextUtils.class);
         mockStatic(RupPersistUtils.class);
         UdmValue value1 = buildUdmValue(2365985896L);
@@ -211,11 +235,13 @@ public class UdmValueServiceTest {
             return null;
         }).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(RupPersistUtils.generateUuid()).andReturn("04c91c97-3096-4380-8462-59ca4d7cf1e7").once();
+        expect(RupPersistUtils.generateUuid()).andReturn("064573cf-9043-42ae-a73a-25592ea4a01c").once();
         udmValueRepository.insert(value1);
         expectLastCall().once();
+        udmValueRepository.updateResearchedInPrevPeriod(202012, USER_NAME);
+        expectLastCall().once();
         expect(udmBaselineRepository.populateValueId(202012,
-            ImmutableMap.of(2365985896L, "04c91c97-3096-4380-8462-59ca4d7cf1e7"), USER_NAME)).andReturn(1).once();
+            ImmutableMap.of(2365985896L, "064573cf-9043-42ae-a73a-25592ea4a01c"), USER_NAME)).andReturn(1).once();
         replay(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
         assertEquals(1, udmValueService.populateValueBatch(202012));
         verify(udmBaselineRepository, udmValueRepository, rightsService, RupContextUtils.class, RupPersistUtils.class);
