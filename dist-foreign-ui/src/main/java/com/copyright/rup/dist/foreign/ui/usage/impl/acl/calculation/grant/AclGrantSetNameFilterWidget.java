@@ -11,7 +11,6 @@ import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 import com.vaadin.data.ValueProvider;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
