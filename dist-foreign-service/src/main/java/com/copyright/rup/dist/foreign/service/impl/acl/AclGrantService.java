@@ -69,7 +69,7 @@ public class AclGrantService implements IAclGrantService {
         wrWrkInstToGrants.forEach((wrWrkInst, grants) -> {
             grants.forEach(grant -> {
                 AclGrantDetail detail =
-                    buildAclGrantDetail(grantSet.getId(), grant, grant.getStatus(), wrWrkInstToSystemTitles);
+                    buildAclGrantDetail(grantSet.getId(), grant, grant.getRightStatus(), wrWrkInstToSystemTitles);
                 setTypeOfUseStatus(grants, detail);
                 grantDetails.add(detail);
             });

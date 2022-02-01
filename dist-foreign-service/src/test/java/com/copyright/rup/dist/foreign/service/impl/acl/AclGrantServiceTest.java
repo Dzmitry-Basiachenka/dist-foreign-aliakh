@@ -157,7 +157,7 @@ public class AclGrantServiceTest {
         RmsGrant grant = new RmsGrant();
         grant.setProductFamily(ACL);
         grant.setLicenseType(ACL);
-        grant.setStatus(GRANT);
+        grant.setRightStatus(GRANT);
         grant.setWorkGroupOwnerOrgNumber(ownerOrgNumber);
         grant.setWrWrkInst(wrWrkInst);
         grant.setTypeOfUse(typeOfUse);
