@@ -5,6 +5,8 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -31,6 +33,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclGrantSetService}.
@@ -97,6 +100,23 @@ public class AclGrantSetServiceTest {
         expect(aclGrantSetRepository.isGrantSetExist(GRANT_SET_NAME)).andReturn(true).once();
         replay(aclGrantSetRepository);
         assertTrue(aclGrantSetService.isGrantSetExist(GRANT_SET_NAME));
+        verify(aclGrantSetRepository);
+    }
+
+    @Test
+    public void testIsGrantSetNotExist() {
+        expect(aclGrantSetRepository.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).once();
+        replay(aclGrantSetRepository);
+        assertFalse(aclGrantSetService.isGrantSetExist(GRANT_SET_NAME));
+        verify(aclGrantSetRepository);
+    }
+
+    @Test
+    public void testGetAll() {
+        List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
+        expect(aclGrantSetRepository.findAll()).andReturn(grantSets).once();
+        replay(aclGrantSetRepository);
+        assertSame(grantSets, aclGrantSetService.getAll());
         verify(aclGrantSetRepository);
     }
 

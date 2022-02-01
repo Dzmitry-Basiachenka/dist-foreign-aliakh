@@ -18,6 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 /**
  * Verifies {@link AclGrantSetRepository}.
  * <p>
@@ -64,6 +66,15 @@ public class AclGrantSetRepositoryIntegrationTest {
     public void testIsGrantSetExist() {
         assertTrue(aclGrantSetRepository.isGrantSetExist(ACL_GRANT_SET_NAME));
         assertFalse(aclGrantSetRepository.isGrantSetExist("ACL Grant Set 2022"));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    public void testFindAll() {
+        List<AclGrantSet> grantSets = aclGrantSetRepository.findAll();
+        assertEquals(2, grantSets.size());
+        assertEquals("8e5930c0-318c-4cf3-bde7-452a2d572f03", grantSets.get(0).getId());
+        assertEquals("b4f502c7-583f-4bb8-aa37-7d60db3a9cb1", grantSets.get(1).getId());
     }
 
     private AclGrantSet buildAclGrantSet() {

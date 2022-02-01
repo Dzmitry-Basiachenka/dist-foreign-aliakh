@@ -62,4 +62,9 @@ public class AclGrantSetService implements IAclGrantSetService {
     public boolean isGrantSetExist(String grantSetName) {
         return aclGrantSetRepository.isGrantSetExist(grantSetName);
     }
+
+    @Override
+    public List<AclGrantSet> getAll() {
+        return aclGrantSetRepository.findAll();
+    }
 }
