@@ -112,9 +112,9 @@ public class UdmValueController extends CommonController<IUdmValueWidget> implem
 
     @Override
     public IUdmValueFilterWidget initValuesFilterWidget() {
-        IUdmValueFilterWidget result = udmValueFilterController.initWidget();
-        result.addListener(FilterChangedEvent.class, this, IUdmValueController.ON_FILTER_CHANGED);
-        return result;
+        IUdmValueFilterWidget widget = udmValueFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IUdmValueController.ON_FILTER_CHANGED);
+        return widget;
     }
 
     @Override

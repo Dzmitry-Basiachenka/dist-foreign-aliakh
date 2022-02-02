@@ -49,9 +49,9 @@ public class UdmProxyValueController extends CommonController<IUdmProxyValueWidg
 
     @Override
     public IUdmProxyValueFilterWidget initProxyValueFilterWidget() {
-        IUdmProxyValueFilterWidget result = udmProxyValueFilterController.initWidget();
-        result.addListener(FilterChangedEvent.class, this, IUdmProxyValueController.ON_FILTER_CHANGED);
-        return result;
+        IUdmProxyValueFilterWidget widget = udmProxyValueFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IUdmProxyValueController.ON_FILTER_CHANGED);
+        return widget;
     }
 
     @Override

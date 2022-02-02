@@ -62,9 +62,9 @@ public abstract class CommonUsageController extends CommonController<ICommonUsag
 
     @Override
     public ICommonUsageFilterWidget initUsagesFilterWidget() {
-        ICommonUsageFilterWidget result = getUsageFilterController().initWidget();
-        result.addListener(FilterChangedEvent.class, this, ICommonUsageController.ON_FILTER_CHANGED);
-        return result;
+        ICommonUsageFilterWidget widget = getUsageFilterController().initWidget();
+        widget.addListener(FilterChangedEvent.class, this, ICommonUsageController.ON_FILTER_CHANGED);
+        return widget;
     }
 
     @Override

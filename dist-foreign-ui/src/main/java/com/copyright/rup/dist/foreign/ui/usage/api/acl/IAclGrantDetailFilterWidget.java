@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,4 +13,14 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  * @author Dzmitry Basiachenka
  */
 public interface IAclGrantDetailFilterWidget extends IFilterWidget<IAclGrantDetailFilterController> {
+
+    /**
+     * @return {@link AclGrantDetailFilter}.
+     */
+    AclGrantDetailFilter getFilter();
+
+    /**
+     * @return applied {@link AclGrantDetailFilter}.
+     */
+    AclGrantDetailFilter getAppliedFilter();
 }

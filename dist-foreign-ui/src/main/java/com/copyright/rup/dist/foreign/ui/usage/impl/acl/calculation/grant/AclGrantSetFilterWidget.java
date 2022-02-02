@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetNameFilterWidget extends BaseItemsFilterWidget<AclGrantSet>
+public class AclGrantSetFilterWidget extends BaseItemsFilterWidget<AclGrantSet>
     implements IFilterWindowController<AclGrantSet> {
 
     private final Supplier<List<AclGrantSet>> supplier;
@@ -39,7 +39,7 @@ public class AclGrantSetNameFilterWidget extends BaseItemsFilterWidget<AclGrantS
      *
      * @param supplier {@link AclGrantSet}s supplier
      */
-    public AclGrantSetNameFilterWidget(Supplier<List<AclGrantSet>> supplier) {
+    public AclGrantSetFilterWidget(Supplier<List<AclGrantSet>> supplier) {
         super(ForeignUi.getMessage("label.grant_sets"));
         this.supplier = supplier;
     }

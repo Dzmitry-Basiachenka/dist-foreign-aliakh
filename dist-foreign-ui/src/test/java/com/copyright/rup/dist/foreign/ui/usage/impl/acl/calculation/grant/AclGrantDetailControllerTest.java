@@ -1,18 +1,30 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -37,27 +49,51 @@ public class AclGrantDetailControllerTest {
 
     private IUdmBaselineService udmBaselineService;
     private IAclGrantSetService aclGrantSetService;
+    private IAclGrantDetailService aclGrantDetailService;
+    private IAclGrantDetailFilterController aclGrantDetailFilterController;
     private IAclGrantDetailWidget aclGrantDetailWidget;
 
     @Before
     public void setUp() {
         udmBaselineService = createMock(IUdmBaselineService.class);
         aclGrantSetService = createMock(IAclGrantSetService.class);
+        aclGrantDetailService = createMock(IAclGrantDetailService.class);
+        aclGrantDetailFilterController = createMock(IAclGrantDetailFilterController.class);
         aclGrantDetailWidget = createMock(IAclGrantDetailWidget.class);
         Whitebox.setInternalState(controller, udmBaselineService);
         Whitebox.setInternalState(controller, aclGrantSetService);
-    }
-
-    @Test
-    public void testLoadBeans() {
-        // TODO {aliakh} implement for filter story
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, null));
+        Whitebox.setInternalState(controller, aclGrantDetailFilterController);
+        Whitebox.setInternalState(controller, aclGrantDetailService);
     }
 
     @Test
     public void testGetBeansCount() {
-        // TODO {aliakh} implement for filter story
-        assertEquals(0, controller.getBeansCount());
+        AclGrantDetailFilter filter = new AclGrantDetailFilter();
+        IAclGrantDetailFilterWidget aclGrantDetailFilterWidget = createMock(IAclGrantDetailFilterWidget.class);
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        expect(aclGrantDetailFilterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(aclGrantDetailService.getCount(filter)).andReturn(1).once();
+        replay(aclGrantDetailFilterController, aclGrantDetailFilterWidget, aclGrantDetailService);
+        assertEquals(1, controller.getBeansCount());
+        verify(aclGrantDetailFilterController, aclGrantDetailFilterWidget, aclGrantDetailService);
+    }
+
+    @Test
+    public void testLoadBeans() {
+        AclGrantDetailFilter filter = new AclGrantDetailFilter();
+        List<AclGrantDetailDto> grantDetails = Collections.singletonList(new AclGrantDetailDto());
+        Capture<Pageable> pageableCapture = newCapture();
+        IAclGrantDetailFilterWidget aclGrantDetailFilterWidget = createMock(IAclGrantDetailFilterWidget.class);
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        expect(aclGrantDetailFilterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(aclGrantDetailService.getDtos(eq(filter), capture(pageableCapture), isNull()))
+            .andReturn(grantDetails).once();
+        replay(aclGrantDetailFilterController, aclGrantDetailFilterWidget, aclGrantDetailService);
+        assertSame(grantDetails, controller.loadBeans(0, 1, null));
+        Pageable pageable = pageableCapture.getValue();
+        assertEquals(1, pageable.getLimit());
+        assertEquals(0, pageable.getOffset());
+        verify(aclGrantDetailFilterController, aclGrantDetailFilterWidget, aclGrantDetailService);
     }
 
     @Test
