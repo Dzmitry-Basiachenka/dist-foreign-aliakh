@@ -124,4 +124,20 @@ databaseChangeLog {
             dropTable(tableName: 'df_acl_grant_set', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2022-02-02-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-70074 FDA: Tech Debt: add database indexes by Wr Wrk Inst and Period for UDM baseline value table")
+
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_value_baseline', indexName: 'ix_df_udm_value_baseline_period') {
+            column(name: 'period')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_udm_value_baseline', indexName: 'ix_df_udm_value_baseline_wr_wrk_inst') {
+            column(name: 'wr_wrk_inst')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_udm_value_baseline_period")
+            sql("drop index ${dbAppsSchema}.ix_df_udm_value_baseline_wr_wrk_inst")
+        }
+    }
 }
