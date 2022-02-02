@@ -16,7 +16,9 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.ValueProvider;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
