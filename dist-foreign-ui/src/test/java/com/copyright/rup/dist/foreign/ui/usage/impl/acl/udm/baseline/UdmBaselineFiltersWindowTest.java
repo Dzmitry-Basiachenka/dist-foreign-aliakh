@@ -361,7 +361,7 @@ public class UdmBaselineFiltersWindowTest {
         filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
         filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
-        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752, null));
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 243904752L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
