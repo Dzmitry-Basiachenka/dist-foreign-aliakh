@@ -784,6 +784,36 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
+            column(name: 'df_usage_baseline_aacl_uid', value: '005cc2bd-fd05-4d91-aaa2-33631741927b')
+            column(name: 'wr_wrk_inst', value: 269040891)
+            column(name: 'usage_period', value: 2014)
+            column(name: 'usage_source', value: 'Feb 2014 TUR')
+            column(name: 'number_of_copies', value: 10)
+            column(name: 'number_of_pages', value: 12)
+            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'original_publication_type', value: 'Textbook')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'publication_type_weight', value: 1.71)
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'updated_datetime', value: '2014-02-14 11:45:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
+            column(name: 'df_usage_baseline_aacl_uid', value: 'd788c7af-c528-40bf-a998-beae4e6da94d')
+            column(name: 'wr_wrk_inst', value: 269040891)
+            column(name: 'usage_period', value: 2013)
+            column(name: 'usage_source', value: 'Feb 2013 TUR')
+            column(name: 'number_of_copies', value: 10)
+            column(name: 'number_of_pages', value: 12)
+            column(name: 'detail_licensee_class_id', value: 108)
+            column(name: 'original_publication_type', value: 'Textbook')
+            column(name: 'df_publication_type_uid', value: '1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e')
+            column(name: 'publication_type_weight', value: 1.71)
+            column(name: 'institution', value: 'BIOLA UNIVERSITY')
+            column(name: 'updated_datetime', value: '2013-02-14 11:45:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_baseline_aacl') {
             column(name: 'df_usage_baseline_aacl_uid', value: '13212981-431f-4311-97d5-1a39bc252afc')
             column(name: 'wr_wrk_inst', value: 269040891)
             column(name: 'usage_period', value: 2015)
