@@ -17,9 +17,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class AclGrantDetail extends StoredEntity<String> {
 
     private String grantSetId;
-    private String grantStatus; // TODO use an enum if necessary
+    private String grantStatus;
     private String typeOfUse;
-    private String typeOfUseStatus; // TODO use an enum if necessary
+    private String typeOfUseStatus;
     private Long wrWrkInst;
     private String systemTitle;
     private Long rhAccountNumber;
