@@ -20,9 +20,11 @@ public interface IAclGrantService {
     /**
      * Creates grant details and populates fields based on information from RMS.
      *
-     * @param grantSet   instance of {@link AclGrantSet}
+     * @param grantSet                instance of {@link AclGrantSet}
      * @param wrWrkInstToSystemTitles map of wrWrkInsts to system titles
+     * @param userName                name of user
      * @return list of {@link AclGrantDetail}
      */
-    List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles);
+    List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles,
+                                               String userName);
 }

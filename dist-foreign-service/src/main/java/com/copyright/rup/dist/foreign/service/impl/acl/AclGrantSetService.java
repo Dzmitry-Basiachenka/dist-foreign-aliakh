@@ -50,7 +50,7 @@ public class AclGrantSetService implements IAclGrantSetService {
         grantSet.setCreateUser(userName);
         grantSet.setUpdateUser(userName);
         List<AclGrantDetail> grantDetails = aclGrantService.createAclGrantDetails(grantSet,
-            udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()));
+            udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()), userName);
         aclGrantSetRepository.insert(grantSet);
         aclGrantDetailService.insert(grantDetails);
         LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, AclGrantDetailsCount={}, UserName={}",
