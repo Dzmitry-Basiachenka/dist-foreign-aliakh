@@ -49,6 +49,7 @@ public class AclGrantServiceIntegrationTest {
     private static final String DIGITAL = "DIGITAL";
     private static final String SYSTEM_TITLE = "Red Riding Hood's maths adventure";
     private static final String RMS_RESPONSE = "acl/grants/rms_grants_response.json";
+    private static final String USER_NAME = "user@copyright.com";
 
     @Autowired
     private IAclGrantService grantService;
@@ -76,7 +77,7 @@ public class AclGrantServiceIntegrationTest {
                 309812565L, "Red Riding Hood's maths adventure",
                 159246556L, "Embracing watershed politics",
                 136797639L, "Farewell to the leftist working class",
-                578123123L, "Red Riding Hood's maths adventure"));
+                578123123L, "Red Riding Hood's maths adventure"), USER_NAME);
         assertEquals(6, actualDetails.size());
         List<AclGrantDetail> expectedDetails = buildAclGrantDetails();
         IntStream.range(0, actualDetails.size()).forEach(i ->
@@ -124,6 +125,8 @@ public class AclGrantServiceIntegrationTest {
         aclGrantDetail.setTypeOfUseStatus(typeOfUseStatus);
         aclGrantDetail.setSystemTitle(systemTitle);
         aclGrantDetail.setGrantStatus(GRANT);
+        aclGrantDetail.setCreateUser(USER_NAME);
+        aclGrantDetail.setUpdateUser(USER_NAME);
         return aclGrantDetail;
     }
 
@@ -133,8 +136,8 @@ public class AclGrantServiceIntegrationTest {
         aclGrantSet.setGrantPeriod(202106);
         aclGrantSet.setLicenseType("ACL");
         aclGrantSet.setName("Grand set name");
-        aclGrantSet.setCreateUser("user@copyright.com");
-        aclGrantSet.setUpdateUser("user@copyright.com");
+        aclGrantSet.setCreateUser(USER_NAME);
+        aclGrantSet.setUpdateUser(USER_NAME);
         aclGrantSet.setEditable(true);
         return aclGrantSet;
     }

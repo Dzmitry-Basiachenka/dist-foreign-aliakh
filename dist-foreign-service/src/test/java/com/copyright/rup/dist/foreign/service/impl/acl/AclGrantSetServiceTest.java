@@ -81,7 +81,7 @@ public class AclGrantSetServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()))
             .andReturn(ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE)).once();
-        expect(aclGrantService.createAclGrantDetails(grantSet, ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE)))
+        expect(aclGrantService.createAclGrantDetails(grantSet, ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE), USER_NAME))
             .andReturn(Collections.singletonList(grantDetail)).once();
         aclGrantSetRepository.insert(grantSet);
         expectLastCall().once();

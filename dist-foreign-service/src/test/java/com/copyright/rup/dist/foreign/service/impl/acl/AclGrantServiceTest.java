@@ -70,7 +70,7 @@ public class AclGrantServiceTest {
                 TYPE_OF_USES, Collections.singleton(ACL))).andReturn(buildRmsGrants()).once();
         replay(rmsRightsService);
         List<AclGrantDetail> actualGrantDetails =
-            aclGrantService.createAclGrantDetails(buildGrantSet(), wrWrkInstToSystemTitles);
+            aclGrantService.createAclGrantDetails(buildGrantSet(), wrWrkInstToSystemTitles, "SYSTEM");
         List<AclGrantDetail> expectedGrantDetails = buildAclGrantDetails();
         assertEquals(expectedGrantDetails.size(), actualGrantDetails.size());
         IntStream.range(0, actualGrantDetails.size()).forEach(i ->

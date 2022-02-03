@@ -3,13 +3,11 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
-import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
@@ -44,10 +42,6 @@ public class AclGrantService implements IAclGrantService {
     private static final String GRANT = "GRANT";
     private static final Set<String> STATUS = ImmutableSet.of(GRANT);
     private static final Set<String> TYPE_OF_USES = ImmutableSet.of("PRINT", "DIGITAL");
-    private static final Map<String, AclGrantTypeOfUseStatusEnum> TOU_TO_STATUSES = ImmutableMap.of(
-        "PRINT", AclGrantTypeOfUseStatusEnum.PRINT,
-        "DIGITAL", AclGrantTypeOfUseStatusEnum.DIGITAL
-    );
 
     @Value("#{$RUP{dist.foreign.rest.rms.rights.partition_size}}")
     private int rightsPartitionSize;
@@ -57,7 +51,8 @@ public class AclGrantService implements IAclGrantService {
 
     @Override
     @Transactional
-    public List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles) {
+    public List<AclGrantDetail> createAclGrantDetails(AclGrantSet grantSet, Map<Long, String> wrWrkInstToSystemTitles,
+                                                      String userName) {
         LocalDate periodEndDate = createPeriodEndDate(grantSet.getGrantPeriod());
         Map<Long, List<RmsGrant>> wrWrkInstToGrants = new HashMap<>();
         Iterables.partition(wrWrkInstToSystemTitles.keySet(), rightsPartitionSize).forEach(wrWrkInstsPart ->
@@ -69,7 +64,8 @@ public class AclGrantService implements IAclGrantService {
         wrWrkInstToGrants.forEach((wrWrkInst, grants) -> {
             grants.forEach(grant -> {
                 AclGrantDetail detail =
-                    buildAclGrantDetail(grantSet.getId(), grant, grant.getRightStatus(), wrWrkInstToSystemTitles);
+                    buildAclGrantDetail(grantSet.getId(), grant, grant.getRightStatus(), wrWrkInstToSystemTitles,
+                        userName);
                 setTypeOfUseStatus(grants, detail);
                 grantDetails.add(detail);
             });
@@ -83,13 +79,12 @@ public class AclGrantService implements IAclGrantService {
         } else {
             detail.setTypeOfUseStatus(isDifferentTypesOfUse(grants)
                 ? AclGrantTypeOfUseStatusEnum.PRINT_DIGITAL.toString()
-                : TOU_TO_STATUSES.get(detail.getTypeOfUse()).toString());
+                : AclGrantTypeOfUseStatusEnum.valueOf(detail.getTypeOfUse()).toString());
         }
     }
 
     private AclGrantDetail buildAclGrantDetail(String grantSetId, RmsGrant grant, String grantStatus,
-                                               Map<Long, String> wrWrkInstToSystemTitles) {
-        String userName = RupContextUtils.getUserName();
+                                               Map<Long, String> wrWrkInstToSystemTitles, String userName) {
         AclGrantDetail aclGrantDetail = new AclGrantDetail();
         aclGrantDetail.setId(RupPersistUtils.generateUuid());
         aclGrantDetail.setGrantSetId(grantSetId);
