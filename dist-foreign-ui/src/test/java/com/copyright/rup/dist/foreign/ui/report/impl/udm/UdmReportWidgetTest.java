@@ -9,7 +9,6 @@ import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
@@ -51,12 +50,10 @@ import java.util.function.Supplier;
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class UdmReportWidgetTest {
 
-    private static final String ACL_PRODUCT_FAMILY = "ACL";
     private static final String COMPLETED_ASSIGNMENT_REPORT = "Completed Assignments by Employee Report";
     private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details by Source Report";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
-    private final IProductFamilyProvider productFamilyProvider = createMock(IProductFamilyProvider.class);
     private UdmReportWidget udmReportWidget;
 
     @Before
@@ -69,8 +66,6 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testInit() {
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         replayAll();
         udmReportWidget.init();
@@ -80,8 +75,6 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshSpecialist() {
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -91,8 +84,6 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshManager() {
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setManagerExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -102,8 +93,6 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshResearcher() {
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setResearcherExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -115,8 +104,6 @@ public class UdmReportWidgetTest {
 
     @Test
     public void testRefreshViewOnly() {
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setViewOnlyExpectations();
         replayAll();
         udmReportWidget.refresh();
@@ -128,8 +115,6 @@ public class UdmReportWidgetTest {
     public void testUdmWeeklySurveyReportSelected() {
         UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
         IUdmWeeklySurveyReportController controller = createMock(IUdmWeeklySurveyReportController.class);
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         expect(udmReportController.getUdmWeeklySurveyReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
@@ -146,8 +131,6 @@ public class UdmReportWidgetTest {
     public void testUdmSurveyLicenseeReportSelected() {
         UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
         IUdmSurveyLicenseeReportController controller = createMock(IUdmSurveyLicenseeReportController.class);
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         expect(udmReportController.getUdmSurveyLicenseeReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
@@ -165,8 +148,6 @@ public class UdmReportWidgetTest {
         UdmCommonReportWidget widget = createMock(UdmCommonReportWidget.class);
         IUdmVerifiedDetailsBySourceReportController controller =
             createMock(IUdmVerifiedDetailsBySourceReportController.class);
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         expect(udmReportController.getUdmVerifiedDetailsBySourceReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
@@ -183,8 +164,6 @@ public class UdmReportWidgetTest {
     public void testCompletedAssignmentReportSelected() {
         CompletedAssignmentsReportWidget widget = createMock(CompletedAssignmentsReportWidget.class);
         ICompletedAssignmentsReportController controller = createMock(ICompletedAssignmentsReportController.class);
-        expect(udmReportController.getProductFamilyProvider()).andReturn(productFamilyProvider).once();
-        expect(productFamilyProvider.getSelectedProductFamily()).andReturn(ACL_PRODUCT_FAMILY).once();
         setSpecialistExpectations();
         expect(udmReportController.getCompletedAssignmentsReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();

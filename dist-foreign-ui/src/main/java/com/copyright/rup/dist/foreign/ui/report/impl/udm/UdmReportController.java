@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
@@ -35,18 +34,6 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     private IUdmSurveyLicenseeReportController udmSurveyLicenseeReportController;
     @Autowired
     private IUdmVerifiedDetailsBySourceReportController udmVerifiedDetailsBySourceReportController;
-    @Autowired
-    private IProductFamilyProvider productFamilyProvider;
-
-    @Override
-    public void onProductFamilyChanged() {
-        refreshWidget();
-    }
-
-    @Override
-    public IProductFamilyProvider getProductFamilyProvider() {
-        return productFamilyProvider;
-    }
 
     @Override
     public IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController() {
