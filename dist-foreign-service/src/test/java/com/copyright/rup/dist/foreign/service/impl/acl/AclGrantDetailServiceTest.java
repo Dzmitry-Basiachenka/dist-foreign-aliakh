@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -76,18 +77,15 @@ public class AclGrantDetailServiceTest {
 
     @Test
     public void testGetDtos() {
-        AclGrantDetailDto aclGrantDetailDto = new AclGrantDetailDto();
-        List<AclGrantDetailDto> aclGrantDetails = Collections.singletonList(aclGrantDetailDto);
+        List<AclGrantDetailDto> grantDetails = Collections.singletonList(new AclGrantDetailDto());
         Pageable pageable = new Pageable(0, 1);
-        Sort sort = new Sort("grantDetailId", Sort.Direction.ASC);
+        Sort sort = new Sort("licenseType", Sort.Direction.ASC);
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
         filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
-        expect(aclGrantDetailRepository.findDtosByFilter(filter, pageable, sort)).andReturn(aclGrantDetails).once();
+        expect(aclGrantDetailRepository.findDtosByFilter(filter, pageable, sort)).andReturn(grantDetails).once();
         replay(aclGrantDetailRepository);
-        List<AclGrantDetailDto> result = aclGrantDetailRepository.findDtosByFilter(filter, pageable, sort);
+        assertSame(grantDetails, aclGrantDetailService.getDtos(filter, pageable, sort));
         verify(aclGrantDetailRepository);
-        assertNotNull(result);
-        assertEquals(1, result.size());
     }
 
     @Test

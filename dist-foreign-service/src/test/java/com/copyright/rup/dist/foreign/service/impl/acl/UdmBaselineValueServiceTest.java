@@ -4,10 +4,13 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -20,6 +23,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,7 +56,20 @@ public class UdmBaselineValueServiceTest {
     }
 
     @Test
-    public void testGetValuesDtosEmptyFilter() {
+    public void testGetValueDtos() {
+        List<UdmValueBaselineDto> baselineValues = Collections.singletonList(new UdmValueBaselineDto());
+        Pageable pageable = new Pageable(0, 1);
+        Sort sort = new Sort("detailId", Sort.Direction.ASC);
+        UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
+        filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Comment", null));
+        expect(baselineValueRepository.findDtosByFilter(filter, pageable, sort)).andReturn(baselineValues).once();
+        replay(baselineValueRepository);
+        assertSame(baselineValues, udmBaselineValueService.getValueDtos(filter, pageable, sort));
+        verify(baselineValueRepository);
+    }
+
+    @Test
+    public void testGetValueDtosEmptyFilter() {
         List<UdmValueBaselineDto> result =
             udmBaselineValueService.getValueDtos(new UdmBaselineValueFilter(), null, null);
         assertNotNull(result);
@@ -60,12 +77,17 @@ public class UdmBaselineValueServiceTest {
     }
 
     @Test
-    public void testGetValuesCount() {
+    public void testGetBaselineValueCount() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Comment", null));
         expect(baselineValueRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(baselineValueRepository);
         assertEquals(1, udmBaselineValueService.getBaselineValueCount(filter));
         verify(baselineValueRepository);
+    }
+
+    @Test
+    public void testGetBaselineValueCountEmptyFilter() {
+        assertEquals(0, udmBaselineValueService.getBaselineValueCount(new UdmBaselineValueFilter()));
     }
 }
