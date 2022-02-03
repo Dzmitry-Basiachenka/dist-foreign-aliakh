@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -12,6 +13,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValue;
@@ -126,20 +129,38 @@ public class UdmValueServiceTest {
     }
 
     @Test
-    public void testGetValuesDtosEmptyFilter() {
+    public void testGetValueDtos() {
+        List<UdmValueDto> udmValues = Collections.singletonList(new UdmValueDto());
+        Pageable pageable = new Pageable(0, 1);
+        Sort sort = new Sort("valueId", Sort.Direction.ASC);
+        UdmValueFilter filter = new UdmValueFilter();
+        filter.setStatus(UdmValueStatusEnum.NEW);
+        expect(udmValueRepository.findDtosByFilter(filter, pageable, sort)).andReturn(udmValues).once();
+        replay(udmValueRepository);
+        assertSame(udmValues, udmValueService.getValueDtos(filter, pageable, sort));
+        verify(udmValueRepository);
+    }
+
+    @Test
+    public void testGetValueDtosEmptyFilter() {
         List<UdmValueDto> result = udmValueService.getValueDtos(new UdmValueFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testGetValuesCount() {
+    public void testGetValueCount() {
         UdmValueFilter filter = new UdmValueFilter();
         filter.setStatus(UdmValueStatusEnum.NEW);
         expect(udmValueRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(udmValueRepository);
         assertEquals(1, udmValueService.getValueCount(filter));
         verify(udmValueRepository);
+    }
+
+    @Test
+    public void testGetValueCountEmptyFilter() {
+        assertEquals(0, udmValueService.getValueCount(new UdmValueFilter()));
     }
 
     @Test
