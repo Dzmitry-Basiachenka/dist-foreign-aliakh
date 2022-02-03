@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.report.api.udm;
 
-import com.copyright.rup.dist.foreign.ui.main.api.IProductFamilyProvider;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -13,16 +12,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
  * @author Aliaksandr Liakh
  */
 public interface IUdmReportController extends IController<IUdmReportWidget> {
-
-    /**
-     * @return product family provider.
-     */
-    IProductFamilyProvider getProductFamilyProvider();
-
-    /**
-     * Handles global product family selection.
-     */
-    void onProductFamilyChanged();
 
     /**
      * @return UDM Weekly Survey Report controller.

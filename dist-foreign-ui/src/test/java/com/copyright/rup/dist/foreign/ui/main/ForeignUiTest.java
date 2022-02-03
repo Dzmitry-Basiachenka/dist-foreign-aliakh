@@ -128,8 +128,8 @@ public class ForeignUiTest {
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
         expect(udmReportController.initWidget()).andReturn(new UdmReportWidget()).once();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).times(2);
-        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        expect(controller.getWidget()).andReturn(mainWidget).times(2);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(false).once();
         controller.refreshWidget();
         expectLastCall().once();
         replay(controller, reportController, udmReportController, ForeignSecurityUtils.class);
@@ -154,7 +154,8 @@ public class ForeignUiTest {
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
         expect(udmReportController.initWidget()).andReturn(new UdmReportWidget()).once();
-        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).times(2);
+        expect(controller.getWidget()).andReturn(mainWidget).times(2);
+        expect(ForeignSecurityUtils.hasResearcherPermission()).andReturn(true).once();
         controller.onProductFamilyChanged();
         expectLastCall().once();
         reportController.onProductFamilyChanged();
