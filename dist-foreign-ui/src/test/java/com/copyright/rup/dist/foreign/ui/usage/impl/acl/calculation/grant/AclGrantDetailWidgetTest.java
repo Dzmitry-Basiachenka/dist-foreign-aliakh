@@ -54,7 +54,6 @@ public class AclGrantDetailWidgetTest {
     public void testWidgetStructure() {
         replay(controller);
         initWidget();
-        verify(controller);
         assertTrue(aclGrantDetailWidget.isLocked());
         assertEquals(200, aclGrantDetailWidget.getSplitPosition(), 0);
         verifyWindow(aclGrantDetailWidget, null, 100, 100, Unit.PERCENTAGE);
@@ -81,6 +80,7 @@ public class AclGrantDetailWidgetTest {
             Triple.of("Grant Period", 100.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+        verify(controller);
     }
 
     private void verifyToolbarLayout(Component component) {

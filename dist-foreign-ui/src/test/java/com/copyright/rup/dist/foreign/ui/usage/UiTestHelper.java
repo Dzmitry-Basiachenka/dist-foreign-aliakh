@@ -23,6 +23,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -231,6 +232,21 @@ public final class UiTestHelper {
         assertEquals(expectedItems.size(), actualItems.size());
         assertEquals(expectedItems, actualItems);
         return comboBox;
+    }
+
+    /**
+     * Verifies checkbox.
+     *
+     * @param component UI component
+     * @param caption   caption of checkbox
+     * @param styleName name of style
+     */
+    public static void verifyCheckBox(Component component, String caption, String styleName) {
+        assertTrue(component instanceof CheckBox);
+        CheckBox checkBox = (CheckBox) component;
+        assertEquals(caption, checkBox.getCaption());
+        assertEquals(styleName, checkBox.getStyleName());
+        assertTrue(checkBox.getValue());
     }
 
     /**
