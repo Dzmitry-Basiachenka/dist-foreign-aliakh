@@ -104,7 +104,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_3, "licenseType");
-        assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_3, "typeOfUseStatus");
+        assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "typeOfUseStatus");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_2, UDM_GRANT_DETAIL_UID_2, "grantStatus");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "eligible");
         assertSortingFindDtosByFilter(UDM_GRANT_DETAIL_UID_3, UDM_GRANT_DETAIL_UID_2, "wrWrkInst");
