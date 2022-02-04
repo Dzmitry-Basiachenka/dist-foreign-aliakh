@@ -20,8 +20,7 @@ import java.util.Set;
 public class AclGrantSetPeriodsJsonMapper {
 
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
-    private static final TypeReference<Set<Integer>> TYPE_REFERENCE = new TypeReference<Set<Integer>>() {
-    };
+    private static final TypeReference<Set<Integer>> TYPE_REFERENCE = new TypeReference<Set<Integer>>() {};
 
     private static ObjectMapper buildObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();

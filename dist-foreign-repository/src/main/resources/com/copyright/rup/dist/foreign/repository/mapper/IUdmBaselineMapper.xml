@@ -303,9 +303,9 @@
             system_title
         from ${schema}.df_udm_usage
         where is_baseline_flag = true
-        and
-        <foreach collection="collection" item="period" open="(" separator=" or " close=")">
-            period = #{period}
-        </foreach>
+            and
+            <foreach collection="collection" item="period" open="(" separator=" or " close=")">
+                period = #{period}
+            </foreach>
     </select>
 </mapper>
