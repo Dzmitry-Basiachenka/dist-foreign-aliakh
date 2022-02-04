@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyCheckBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -85,11 +86,9 @@ public class CreateAclGrantSetWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testIsValid() {
-        expect(controller.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).anyTimes();
+        expect(controller.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).times(2);
         replay(controller);
         window = new CreateAclGrantSetWindow(controller);
-        assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD)).setValue(GRANT_SET_NAME);
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, GRANT_PERIOD_YEAR_FIELD)).setValue(PERIOD_YEAR_FIELD);
         assertFalse(window.isValid());
@@ -98,6 +97,8 @@ public class CreateAclGrantSetWindowTest {
         ((TextField) Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD)).setValue("1");
         assertFalse(window.isValid());
         ((ComboBox<String>) Whitebox.getInternalState(window, "licenseTypeComboBox")).setValue(ACL);
+        assertFalse(window.isValid());
+        ((TextField) Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD)).setValue(GRANT_SET_NAME);
         assertTrue(window.isValid());
         verify(controller);
     }
@@ -198,7 +199,7 @@ public class CreateAclGrantSetWindowTest {
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
         verifyComboBox(verticalLayout.getComponent(3), "License Type", true, LICENSE_TYPES);
-        verifyEditableCheckBox(verticalLayout.getComponent(4));
+        verifyCheckBox(verticalLayout.getComponent(4), "Editable", "acl-editable-checkbox");
         verifyButtonsLayout(verticalLayout.getComponent(5), "Create", "Close");
     }
 
@@ -221,14 +222,6 @@ public class CreateAclGrantSetWindowTest {
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
         verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, MONTHS);
-    }
-
-    private void verifyEditableCheckBox(Component component) {
-        assertTrue(component instanceof CheckBox);
-        CheckBox checkBox = (CheckBox) component;
-        assertEquals("Editable", checkBox.getCaption());
-        assertEquals("acl-editable-checkbox", checkBox.getStyleName());
-        assertTrue(checkBox.getValue());
     }
 
     private AclGrantSet buildAclGrantSet() {
