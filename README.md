@@ -1,3 +1,36 @@
+15.1.0
+-
+* B-71751 FDA: Create and View ACL Grant Set: implement domain objects
+* B-71751 FDA: Create and View ACL Grant Set: implement Liquibase script
+* B-71751 FDA: Create and View ACL Grant Set: add Calculations tab and implement AclCalculationWidget
+* B-71751 FDA: Create and View ACL Grant Set: implement backend to save grant set
+* B-71751 FDA: Create and View ACL Grant Set: implement AclGrantDetailDto object
+* B-71751 FDA: Create and View ACL Grant Set: implement backend to save grant details
+* B-71751 FDA: Create and View ACL Grant Set: migrate grant set  periods from List to Set
+* B-71751 FDA: Create and View ACL Grant Set: add grant_status column and delete comment column
+* B-71751 FDA: Create and View ACL Grant Set: implement backend to create grant set with grant details
+* B-71751 FDA: Create and View ACL Grant Set: add Grant Set sub tab and implement AclGrantDetailWidget
+* B-71751 FDA: Create and View ACL Grant Set: implement backend to check for the existence of a grant set with that name
+* B-71751 FDA: Create and View ACL Grant Set: implement returning the number of inserted grant details
+* B-71751 FDA: Create and View ACL Grant Set: implement CreateAclGrantSetWindow
+* B-71751 FDA: Create and View ACL Grant Set: disable Reports sub tab on Calcultations tab
+* B-71771 FDA: Grant Set Filter: implement repository
+* B-71771 FDA: Grant Set Filter: implement service
+* B-71771 FDA: Grant Set Filter: implement service and repository to read all grant sets
+* B-71771 FDA: Grant Set Filter: implement widget to filter grant sets
+* B-71771 FDA: Grant Set Filter: apply widget to filter grant sets
+* B-57767 FDA: Get Rights Information from RMS for ACL usages (get grants): make changes based on code review
+* B-57767 FDA: Get Rights Information from RMS for ACL usages (get grants): implement integration test for service to get grants from RMS
+* B-57767 FDA: Get Rights Information from RMS for ACL usages (get grants): refactor logic to populate grants
+* B-57767 FDA: Get Rights Information from RMS for ACL usages (get grants): implement service to get and populate grants
+* B-69659 FDA: Previous Period Research Status for Work Values: implement backend logic to set Researched in Prev Period status
+* B-70074 FDA: Tech Debt: move UDM baseline usage filter window to binder approach
+* B-70074 FDA: Tech Debt: add database indexes by Wr Wrk Inst and Period for UDM baseline value table
+
+14.1.51
+-
+* CDP-1041 FDA: AACL: Baseline Usages report: Exported report contains baseline usages with unexpected periods
+
 14.1.50
 -
 * B-69423 FDA: Filter functionality modification: make changes based on comments in code review
