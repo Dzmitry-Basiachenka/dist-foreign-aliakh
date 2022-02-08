@@ -1538,7 +1538,7 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPeriods(Sets.newHashSet(202112, 202012));
         filter.setStatus(UdmValueStatusEnum.NEW);
         List<UdmValueDto> values = udmValueRepository.findDtosByFilter(filter, null, null);
-        assertEquals(4, values.size());
+        assertEquals(5, values.size());
         udmValueRepository.updateResearchedInPrevPeriod(202112, USER_NAME);
         filter.setStatus(UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD);
         values = udmValueRepository.findDtosByFilter(filter, null, null);
