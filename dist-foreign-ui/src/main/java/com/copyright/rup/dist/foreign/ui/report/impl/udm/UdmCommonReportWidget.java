@@ -164,7 +164,8 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
     }
 
     private void updateExportButtonState() {
-        exportButton.setEnabled(!periods.isEmpty()
-            || dateBinder.isValid() && !dateFromWidget.isEmpty() && !dateToWidget.isEmpty());
+        boolean arePeriodsSet = !periods.isEmpty();
+        boolean areDateRangeSet = !dateFromWidget.isEmpty() && !dateToWidget.isEmpty();
+        exportButton.setEnabled(dateBinder.isValid() && (arePeriodsSet || areDateRangeSet));
     }
 }
