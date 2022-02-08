@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmFiltersWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -42,7 +43,6 @@ public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
 
     private static final List<FilterOperatorEnum> FLAG_ITEMS = Arrays.asList(FilterOperatorEnum.Y,
         FilterOperatorEnum.N);
-    private static final String NUMBER_VALIDATION_MESSAGE = "field.error.not_numeric";
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -130,7 +130,7 @@ public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
         wrWrkInstToField.setEnabled(false);
         filterBinder.forField(wrWrkInstFromField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> Objects.toString(filter.getWrWrkInstExpression().getFieldFirstValue(), StringUtils.EMPTY),
@@ -138,7 +138,7 @@ public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
                     .setFieldFirstValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(wrWrkInstToField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), ForeignUi.getMessage(NUMBER_VALIDATION_MESSAGE))
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),

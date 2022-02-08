@@ -241,14 +241,14 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
             updateOperatorField(filterBinder, wrWrkInstFromField, wrWrkInstToField, event.getValue()));
         filterBinder.forField(wrWrkInstFromField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(wrWrkInstFromField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getWrWrkInstExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getWrWrkInstExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(wrWrkInstToField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(wrWrkInstToField, wrWrkInstOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
