@@ -5,7 +5,8 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
@@ -367,14 +368,14 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
             updateOperatorField(filterBinder, annualMultiplierFromField, annualMultiplierToField, event.getValue()));
         filterBinder.forField(annualMultiplierFromField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(annualMultiplierFromField, annualMultiplierOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getAnnualMultiplierExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualMultiplierExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(annualMultiplierToField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(annualMultiplierToField, annualMultiplierOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(annualMultiplierFromField, annualMultiplierToField),
@@ -397,13 +398,13 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
             usageFilter.getAnnualizedCopiesExpression());
         annualizedCopiesFromField.addValueChangeListener(event -> filterBinder.validate());
         filterBinder.forField(annualizedCopiesFromField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator(NUMBER_VALIDATION_MESSAGE))
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFromField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getAnnualizedCopiesExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getAnnualizedCopiesExpression().setFieldFirstValue(new BigDecimal(value)));
         filterBinder.forField(annualizedCopiesToField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator(NUMBER_VALIDATION_MESSAGE))
             .withValidator(getBetweenOperatorValidator(annualizedCopiesToField, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFromField, annualizedCopiesToField),
@@ -433,12 +434,12 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
         filterBinder.forField(statisticalMultiplierFromField)
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator(NUMBER_VALIDATION_MESSAGE))
             .bind(filter -> filter.getStatisticalMultiplierExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getStatisticalMultiplierExpression()
                     .setFieldFirstValue(new BigDecimal(value)));
         filterBinder.forField(statisticalMultiplierToField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator(NUMBER_VALIDATION_MESSAGE))
             .withValidator(
                 value -> validateBigDecimalFromToValues(statisticalMultiplierFromField, statisticalMultiplierToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
@@ -468,14 +469,14 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
             updateOperatorField(filterBinder, quantityFromField, quantityToField, event.getValue()));
         filterBinder.forField(quantityFromField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(quantityFromField, quantityOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getQuantityExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getQuantityExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(quantityToField)
             .withValidator(numberStringLengthValidator)
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(quantityToField, quantityOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(quantityFromField, quantityToField),
@@ -501,14 +502,14 @@ public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
             updateOperatorField(filterBinder, companyIdFromField, companyIdToField, event.getValue()));
         filterBinder.forField(companyIdFromField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(companyIdFromField, companyIdOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter -> filter.getCompanyIdExpression().getFieldFirstValue().toString(),
                 (filter, value) -> filter.getCompanyIdExpression().setFieldFirstValue(Long.valueOf(value)));
         filterBinder.forField(companyIdToField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
-            .withValidator(getNumberValidator(), NUMBER_VALIDATION_MESSAGE)
+            .withValidator(new NumericValidator())
             .withValidator(getBetweenOperatorValidator(companyIdToField, companyIdOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateIntegerFromToValues(companyIdFromField, companyIdToField),
