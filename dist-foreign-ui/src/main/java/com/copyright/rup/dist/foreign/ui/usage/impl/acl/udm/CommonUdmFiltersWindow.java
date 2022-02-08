@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -331,15 +332,6 @@ public abstract class CommonUdmFiltersWindow extends Window {
     }
 
     /**
-     * Gets number validator.
-     *
-     * @return number validator
-     */
-    protected SerializablePredicate<String> getNumberValidator() {
-        return value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
-    }
-
-    /**
      * Gets text length validator.
      *
      * @param maxLength maximum length
@@ -382,10 +374,11 @@ public abstract class CommonUdmFiltersWindow extends Window {
     protected boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
         String fromValue = fromField.getValue();
         String toValue = toField.getValue();
+        NumericValidator numericValidator = new NumericValidator();
         return StringUtils.isEmpty(fromValue)
             || StringUtils.isEmpty(toValue)
-            || !getNumberValidator().test(fromValue)
-            || !getNumberValidator().test(toValue)
+            || !numericValidator.isValid(fromValue)
+            || !numericValidator.isValid(toValue)
             || 0 <= Long.valueOf(toValue.trim()).compareTo(Long.valueOf(fromValue.trim()));
     }
 
