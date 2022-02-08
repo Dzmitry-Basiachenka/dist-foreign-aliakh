@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link WorkClassificationRepository}.
+ * Verifies {@link UsageBatchStatusRepository}.
  * <p/>
  * Copyright (C) 2021 copyright.com
  * <p/>
@@ -41,13 +41,15 @@ import java.util.List;
 )
 public class UsageBatchStatusRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "usage-batch-status-repository-integration-test/";
     private static final String COMPLETED_STATUS = "COMPLETED";
     private static final String IN_PROGRESS_STATUS = "IN_PROGRESS";
+
     @Autowired
     private IUsageBatchStatusRepository usageBatchStatusRepository;
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-fas.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-statuses-fas.groovy")
     public void testFindUsageBatchStatusesFas() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesFas(
@@ -62,7 +64,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-nts.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-statuses-nts.groovy")
     public void testFindUsageBatchStatusesNts() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesNts(
@@ -77,7 +79,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-aacl.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-statuses-aacl.groovy")
     public void testFindUsageBatchStatusesAacl() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesAacl(
@@ -92,7 +94,7 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-usage-batch-statuses-sal.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-statuses-sal.groovy")
     public void testFindUsageBatchStatusesSal() {
         List<UsageBatchStatus> usageBatchStatuses =
             usageBatchStatusRepository.findUsageBatchStatusesSal(
@@ -107,21 +109,21 @@ public class UsageBatchStatusRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-batch-ids-eligible-for-statistic.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-batch-ids-eligible-for-statistic.groovy")
     public void testFindFasUsageBatchIdsEligibleForStatistic() {
         assertEquals(Collections.singleton("515a78e7-2a92-4b15-859a-fd9f70e80982"),
             usageBatchStatusRepository.findFasUsageBatchIdsEligibleForStatistic("FAS", LocalDate.of(2021, 2, 14)));
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-find-batch-ids-eligible-for-statistic.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-batch-ids-eligible-for-statistic.groovy")
     public void testFindUsageBatchIdsEligibleForStatistic() {
         assertEquals(Collections.singleton("359de82f-374b-4d53-88ab-0be3982b22aa"),
             usageBatchStatusRepository.findUsageBatchIdsEligibleForStatistic("NTS", LocalDate.of(2021, 2, 14)));
     }
 
     @Test
-    @TestData(fileName = "usage-batch-status-repository-test-data-init-is-batch-processing-complete.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-batch-processing-complete.groovy")
     public void testIsBatchProcessingCompleted() {
         assertTrue(usageBatchStatusRepository.isBatchProcessingCompleted("515a78e7-2a92-4b15-859a-fd9f70e80982",
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND)));
