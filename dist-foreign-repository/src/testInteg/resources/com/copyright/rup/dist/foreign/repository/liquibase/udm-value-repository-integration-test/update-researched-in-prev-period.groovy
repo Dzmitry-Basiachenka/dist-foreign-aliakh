@@ -294,6 +294,18 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: '0f33e4fe-c01a-4767-aeca-0f110745b006')
+            column(name: 'period', value: 202012)
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'rh_account_number', value: 2000017000)
+            column(name: 'wr_wrk_inst', value: 123160519)
+            column(name: 'system_title', value: 'Washington post')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'updated_datetime', value: '2021-09-11')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
         rollback {
             dbRollback
         }
