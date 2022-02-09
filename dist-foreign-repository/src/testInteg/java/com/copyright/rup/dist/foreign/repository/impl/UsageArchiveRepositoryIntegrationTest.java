@@ -10,7 +10,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
@@ -35,14 +34,12 @@ import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -71,15 +68,24 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "usage-archive-repository-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UsageArchiveRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "usage-archive-repository-integration-test/";
+    private static final String FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID =
+        FOLDER_NAME + "find-rightsholder-total-holders-by-scenario-id.groovy";
+    private static final String FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE =
+        FOLDER_NAME + "find-by-scenario-id-and-rh-number-search-value.groovy";
+    private static final String FIND_SAL_BY_SCENARIO_ID_AND_RN_ACCOUNT_NUMBER =
+        FOLDER_NAME + "find-sal-by-scenario-id-and-rh-account-number.groovy";
+    private static final String FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER =
+        FOLDER_NAME + "find-aacl-by-scenario-id-and-rh-account-number.groovy";
+    private static final String FIND_PAID_USAGES = FOLDER_NAME + "find-paid-usages.groovy";
+    private static final String COPY_TO_ARCHIVE_BY_SCENARIO_ID = FOLDER_NAME + "copy-to-archive-by-scenario-id.groovy";
+    private static final String FIND_SAL_BY_IDS = FOLDER_NAME + "find-sal-by-ids.groovy";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
     private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
@@ -103,7 +109,8 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final OffsetDateTime PAID_DATE =
         LocalDate.of(2016, 11, 3).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
     private static final Integer NUMBER_OF_COPIES = 155;
-    private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String SCENARIO_ID_1 = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String SCENARIO_ID_2 = "c0988cff-de62-4638-ac64-69f51c1c4672";
     private static final String FAS_SCENARIO_ID = "5f7c87e7-34d9-4548-8b85-97e405235f4a";
     private static final String NTS_SCENARIO_ID = "e65833c8-3a40-47ba-98fe-21aba07ef11e";
     private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
@@ -124,12 +131,8 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Autowired
     private IUsageRepository usageRepository;
 
-    @BeforeClass
-    public static void setUpTestDirectory() throws IOException {
-        ReportTestUtils.setUpTestDirectory(UsageArchiveRepositoryIntegrationTest.class);
-    }
-
     @Test
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         assertTrue(CollectionUtils.isNotEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(ARCHIVED_USAGE_ID),
@@ -142,21 +145,24 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "delete-by-ids.groovy")
     public void testDeleteByIds() {
-        List<String> usageIds = Arrays.asList(ARCHIVED_USAGE_ID, "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
+        List<String> usageIds =
+            Arrays.asList("7ddb99d9-b6f8-4a34-b730-e6772ccc8052", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
         assertTrue(
             CollectionUtils.isNotEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
         usageArchiveRepository.deleteByIds(usageIds);
         assertTrue(
             CollectionUtils.isEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
-        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(ARCHIVED_USAGE_ID,
-            "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1"));
+        assertEquals(0, usageRepository.findReferencedUsagesCountByIds(
+            "7ddb99d9-b6f8-4a34-b730-e6772ccc8052", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1"));
     }
 
     @Test
+    @TestData(fileName = FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID)
     public void testFindRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, StringUtils.EMPTY, null,
                 null);
         assertEquals(3, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
@@ -168,40 +174,43 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID)
     public void testFindRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", null, null);
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "JoHn", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
             67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", null, null);
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "IEEE", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
             35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "Japan Academic", null, null);
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "Japan Academic", null,
+                null);
         assertEquals(1, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
             2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", null, null);
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "ec", null, null);
         assertEquals(2, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, RH_ACCOUNT_NAME_1, 1000009997L,
             35000.00, 11200.00, 23800.00), rightsholderTotalsHolders.get(0));
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
             2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(1));
         assertEquals(0,
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "%", null, null).size());
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "%", null, null).size());
         assertEquals(0,
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "_", null, null).size());
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, "_", null, null).size());
     }
 
     @Test
+    @TestData(fileName = FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID)
     public void testFindRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
         Sort accountNumberSort = new Sort("rightsholder.accountNumber", Direction.ASC);
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, StringUtils.EMPTY, null,
                 accountNumberSort);
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, RH_ACCOUNT_NAME_2, 1000002859L,
             67874.80, 21720.00, 46154.80), rightsholderTotalsHolders.get(0));
@@ -212,10 +221,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID)
     public void testFindRightsholderTotalsHoldersByScenarioIdSortByName() {
         Sort accountNumberSort = new Sort("rightsholder.name", Direction.DESC);
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID_1, StringUtils.EMPTY, null,
                 accountNumberSort);
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, RH_ACCOUNT_NAME_4, 2000017010L,
             2125.24, 680.0768, 1445.1632), rightsholderTotalsHolders.get(0));
@@ -226,24 +236,39 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
-        assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009997L, null));
-        assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L, null));
-        assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(
-            "e19570d3-e9a0-4805-90ed-bd5dbcfcf803", 1000002859L, null));
+    @TestData(fileName = FIND_RIGHTSHOLDER_TOTAL_HOLDERS_BY_SCENARIO_ID)
+    public void testFindRightsholderTotalsHolderCountByScenarioId() {
+        assertEquals(3,
+            usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID_1, StringUtils.EMPTY));
+        assertEquals(1, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID_1, "IEEE"));
+        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID_1, "%"));
+        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID_1, "_"));
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
+    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
+        assertEquals(1,
+            usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID_2, 1000009997L, null));
+        assertEquals(1,
+            usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID_2, 1000002859L, null));
+        assertEquals(1, usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(
+            "f35732dc-4f9b-4829-8477-a4382a515e72", 1000002859L, null));
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberNullSearchValue() {
         assertEquals(1,
-            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000009997L, null, null, null)
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID_2, 1000009997L, null, null, null)
                 .size());
         assertEquals(1,
-            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L, null, null, null)
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID_2, 1000002859L, null, null, null)
                 .size());
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
         assertFindByScenarioIdAndRhSearch(RH_ACCOUNT_NAME_4, 1);
         assertFindByScenarioIdAndRhSearch("Copyright Clearance, Inc.", 1);
@@ -252,6 +277,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
         assertFindByScenarioIdAndRhSearch("2000017010", 1);
         assertFindByScenarioIdAndRhSearch("0001701", 1);
@@ -259,13 +285,15 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchByDetailId() {
-        assertFindByScenarioIdAndRhSearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
-        assertFindByScenarioIdAndRhSearch("48a5", 1);
-        assertFindByScenarioIdAndRhSearch("49", 0);
+        assertFindByScenarioIdAndRhSearch("1cca78ab-310a-4bbc-8725-d99530c60dbe", 1);
+        assertFindByScenarioIdAndRhSearch("310a", 1);
+        assertFindByScenarioIdAndRhSearch("32", 0);
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
         assertFindByScenarioIdAndRhSearch("243904752", 1);
         assertFindByScenarioIdAndRhSearch("24390", 1);
@@ -273,6 +301,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
         assertFindByScenarioIdAndRhSearch("1008902112377654XX", 1);
         assertFindByScenarioIdAndRhSearch("1008902112377654xx", 1);
@@ -280,27 +309,24 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_NUMBER_SEARCH_VALUE)
     public void testFindByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
         assertFindByScenarioIdAndRhSearch("%", 0);
         assertFindByScenarioIdAndRhSearch("_", 0);
     }
 
     @Test
-    public void testFindAaclCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
-        assertEquals(2,
-            usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null));
-    }
-
-    @Test
+    @TestData(fileName = FIND_SAL_BY_SCENARIO_ID_AND_RN_ACCOUNT_NUMBER)
     public void testFindSalCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
         assertEquals(1,
             usageArchiveRepository.findSalCountByScenarioIdAndRhAccountNumber(SAL_SCENARIO_ID, 2000017010L, null));
     }
 
     @Test
+    @TestData(fileName = FIND_SAL_BY_SCENARIO_ID_AND_RN_ACCOUNT_NUMBER)
     public void testFindSalByScenarioIdAndRhAccountNumberWithEmptySearch() {
         List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Arrays.asList("json/sal/sal_archived_usage_dto_678a3e29.json"));
+            loadExpectedUsageDtos(Collections.singletonList("json/sal/sal_archived_usage_dto_678a3e29.json"));
         List<UsageDto> actualUsageDtos =
             usageArchiveRepository.findSalByScenarioIdAndRhAccountNumber(SAL_SCENARIO_ID, 2000017010L, null,
                 null, null);
@@ -310,9 +336,17 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindAaclCountByScenarioIdAndRhAccountNumberWithEmptySearch() {
+        assertEquals(2,
+            usageArchiveRepository.findAaclCountByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null));
+    }
+
+    @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberWithEmptySearch() {
         List<UsageDto> expectedUsageDtos =
-            loadExpectedUsageDtos(Arrays.asList("json/aacl/aacl_archived_usage_dtos.json"));
+            loadExpectedUsageDtos(Collections.singletonList("json/aacl/aacl_archived_usage_dtos.json"));
         List<UsageDto> actualUsageDtos =
             usageArchiveRepository.findAaclByScenarioIdAndRhAccountNumber(AACL_SCENARIO_ID, 1000009997L, null,
                 null, null);
@@ -322,6 +356,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberSearchByDetailId() {
         assertFindAaclByScenarioIdAndRhSearch("cd1a9398-0b86-42f1-bdc9-ff1ac764b1c2", 1);
         assertFindAaclByScenarioIdAndRhSearch("42f1", 1);
@@ -329,6 +364,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
         assertFindAaclByScenarioIdAndRhSearch("243904752", 1);
         assertFindAaclByScenarioIdAndRhSearch("24390", 1);
@@ -337,6 +373,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
         assertFindAaclByScenarioIdAndRhSearch("1008902112377654XX", 1);
         assertFindAaclByScenarioIdAndRhSearch("1008902112377654xx", 1);
@@ -345,21 +382,30 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindAaclByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
         assertFindAaclByScenarioIdAndRhSearch("%", 0);
         assertFindAaclByScenarioIdAndRhSearch("_", 0);
     }
 
     @Test
-    public void testFindRightsholderTotalsHolderCountByScenarioId() {
-        assertEquals(3,
-            usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
-        assertEquals(1, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
-        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "%"));
-        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "_"));
+    @TestData(fileName = FIND_AACL_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindAaclDtosByScenarioId() {
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos(
+            Arrays.asList("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
+                "json/aacl/aacl_archived_usage_dto_cd1a9398.json", "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
+        List<UsageDto> actualUsageDtos =
+            usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID)
+                .stream()
+                .sorted(Comparator.comparing(UsageDto::getId))
+                .collect(Collectors.toList());
+        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
+        IntStream.range(0, expectedUsageDtos.size())
+            .forEach(i -> assertUsageDto(expectedUsageDtos.get(i), actualUsageDtos.get(i)));
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "update-paid-info.groovy")
     public void testUpdatePaidInfo() {
         String scenarioId = "98caae9b-2f20-4c6d-b2af-3190a1115c48";
         Long oldAccountNumber = 1000002859L;
@@ -393,13 +439,14 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_PAID_USAGES)
     public void testFindByIdsAndStatus() {
         List<PaidUsage> paidUsages =
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID), UsageStatusEnum.PAID);
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, paidUsages.size());
         PaidUsage paidUsage = paidUsages.get(0);
-        assertEquals("3f8ce825-6514-4307-a118-3ec89187bef3", paidUsage.getId());
+        assertEquals(PAID_USAGE_ID, paidUsage.getId());
         assertEquals(Long.valueOf("7000813806"), paidUsage.getRroAccountNumber());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getRightsholder().getAccountNumber());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getPayee().getAccountNumber());
@@ -427,7 +474,17 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindAaclUsagesByIds() {
+    @TestData(fileName = FIND_PAID_USAGES)
+    public void testFindPaidIds() {
+        List<String> usagesIds = usageArchiveRepository.findPaidIds();
+        assertTrue(CollectionUtils.isNotEmpty(usagesIds));
+        assertEquals(1, usagesIds.size());
+        assertTrue(usagesIds.contains(PAID_USAGE_ID));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-aacl-usages-by-ids-and-status.groovy")
+    public void testFindAaclUsagesByIdsAndStatus() {
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(
                 Arrays.asList("6e8172d6-c16f-4522-8606-e55db1b8e5a4", "1537f313-975e-420e-b745-95f2808a388a"),
@@ -438,6 +495,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-sal-usages-by-ids.groovy")
     public void testFindSalUsagesByIds() {
         List<PaidUsage> actualUsages =
             usageArchiveRepository.findByIdAndStatus(
@@ -448,16 +506,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindPaidIds() {
-        List<String> usagesIds = usageArchiveRepository.findPaidIds();
-        assertTrue(CollectionUtils.isNotEmpty(usagesIds));
-        assertEquals(3, usagesIds.size());
-        assertTrue(usagesIds.contains(PAID_USAGE_ID));
-        assertTrue(usagesIds.contains("13704648-838e-444f-8987-c4f1dc3aa38d"));
-        assertTrue(usagesIds.contains("2c2cf124-8c96-4662-8949-c56002247f39"));
-    }
-
-    @Test
+    @TestData(fileName = FIND_SAL_BY_IDS)
     public void testInsertPaid() {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
@@ -465,6 +514,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertPaidAacl() {
         List<PaidUsage> paidUsages =
             loadExpectedPaidUsages(Collections.singletonList("json/aacl/aacl_paid_usage_278adb86.json"));
@@ -478,6 +528,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "rollback-only.groovy")
     public void testInsertPaidSal() {
         List<PaidUsage> paidUsages =
             loadExpectedPaidUsages(Collections.singletonList("json/sal/sal_paid_usages.json"));
@@ -491,6 +542,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "move-fund-usages-to-archive.groovy")
     public void testMoveFundUsagesToArchive() {
         List<String> usageIds = Arrays.asList("677e1740-c791-4929-87f9-e7fc68dd4699",
             "2a868c86-a639-400f-b407-0602dd7ec8df", "9abfd0a0-2779-4321-af07-ebabe22627a0");
@@ -517,6 +569,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = COPY_TO_ARCHIVE_BY_SCENARIO_ID)
     public void testCopyNtsToArchiveByScenarioId() {
         List<String> archivedIds = usageArchiveRepository.copyNtsToArchiveByScenarioId(NTS_SCENARIO_ID, USER);
         assertEquals(1, archivedIds.size());
@@ -527,6 +580,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = COPY_TO_ARCHIVE_BY_SCENARIO_ID)
     public void testCopyFasToArchiveByScenarioId() {
         List<String> archivedIds = usageArchiveRepository.copyToArchiveByScenarioId(FAS_SCENARIO_ID, USER);
         assertEquals(1, archivedIds.size());
@@ -537,6 +591,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_SAL_BY_IDS)
     public void testFindSalByIds() {
         PaidUsage paidUsage = buildPaidUsage();
         usageArchiveRepository.insertPaid(paidUsage);
@@ -547,6 +602,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FIND_SAL_BY_IDS)
     public void testFindSalUsageByIds() {
         PaidUsage paidUsage = buildSalPaidUsage();
         List<Usage> usages = usageArchiveRepository.findSalByIds(ImmutableList.of(paidUsage.getId()));
@@ -556,27 +612,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-for-send-to-lm-by-ids.groovy")
     public void testFindForSendToLmByIds() {
         List<Usage> expectedUsages = loadExpectedUsages(Collections.singletonList("json/usage_for_send_to_lm.json"));
         List<Usage> actualUsages =
             usageArchiveRepository.findForSendToLmByIds(
                 Collections.singletonList("37ea653f-c748-4cb9-b4a3-7b11d434244a"));
         assertEquals(expectedUsages, actualUsages);
-    }
-
-    @Test
-    public void testFindAaclDtosByScenarioId() {
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos(
-            Arrays.asList("json/aacl/aacl_archived_usage_dto_927ea8a1.json",
-                "json/aacl/aacl_archived_usage_dto_cd1a9398.json", "json/aacl/aacl_archived_usage_dto_cfd3e488.json"));
-        List<UsageDto> actualUsageDtos =
-            usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID)
-                .stream()
-                .sorted(Comparator.comparing(UsageDto::getId))
-                .collect(Collectors.toList());
-        assertEquals(expectedUsageDtos.size(), actualUsageDtos.size());
-        IntStream.range(0, expectedUsageDtos.size())
-            .forEach(i -> assertUsageDto(expectedUsageDtos.get(i), actualUsageDtos.get(i)));
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
@@ -646,10 +688,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     private void assertFindByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
-        assertEquals(expectedSize, usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L,
-            searchValue, null, null).size());
+        assertEquals(expectedSize, usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
+            SCENARIO_ID_2, 1000002859L, searchValue, null, null).size());
         assertEquals(expectedSize,
-            usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L, searchValue));
+            usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID_2,
+                1000002859L, searchValue));
     }
 
     private void assertFindAaclByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
@@ -853,7 +896,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
-        usage.setScenarioId("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
+        usage.setScenarioId("eb94d853-1999-490c-b67b-d1fdab416a7e");
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle(WORK_TITLE);
         usage.setSystemTitle(SYSTEM_TITLE);
