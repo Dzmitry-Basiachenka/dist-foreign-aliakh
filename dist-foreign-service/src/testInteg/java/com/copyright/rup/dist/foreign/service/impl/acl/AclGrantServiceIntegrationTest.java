@@ -10,8 +10,6 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +20,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 /**
@@ -66,19 +67,13 @@ public class AclGrantServiceIntegrationTest {
     @Test
     public void testCreateAclGrantDetails() {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("acl/grants/rms_grants_144114260_request.json", RMS_RESPONSE);
-        testHelper.expectGetRmsRights("acl/grants/rms_grants_309812565_request.json", RMS_RESPONSE);
-        testHelper.expectGetRmsRights("acl/grants/rms_grants_159246556_request.json", RMS_RESPONSE);
-        testHelper.expectGetRmsRights("acl/grants/rms_grants_136797639_request.json", RMS_RESPONSE);
-        testHelper.expectGetRmsRights("acl/grants/rms_grants_578123123_request.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_1.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_2.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_3.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_4.json", RMS_RESPONSE);
         List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
-            ImmutableMap.of(
-                144114260L, "I've discovered energy!",
-                309812565L, "Red Riding Hood's maths adventure",
-                159246556L, "Embracing watershed politics",
-                136797639L, "Farewell to the leftist working class",
-                578123123L, "Red Riding Hood's maths adventure"), USER_NAME);
-        assertEquals(6, actualDetails.size());
+            createWrWrkInstToSystemTitleMap(), USER_NAME);
+        assertEquals(8, actualDetails.size());
         List<AclGrantDetail> expectedDetails = buildAclGrantDetails();
         IntStream.range(0, actualDetails.size()).forEach(i ->
             verifyAclGrantDetails(expectedDetails.get(i), actualDetails.get(i)));
@@ -110,8 +105,24 @@ public class AclGrantServiceIntegrationTest {
                 DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics"),
             buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE),
             buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!"),
-            buildAclGrantDetail(DIGITAL, 1000046080L, 578123123L, "Digital Only", SYSTEM_TITLE)
+            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE),
+            buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE)
         );
+    }
+
+    private Map<Long, String> createWrWrkInstToSystemTitleMap() {
+        Map<Long, String> wrWrkInstToSystemTitles = new TreeMap<>(Comparator.naturalOrder());
+        wrWrkInstToSystemTitles.put(144114260L, "I've discovered energy!");
+        wrWrkInstToSystemTitles.put(309812565L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(159246556L, "Embracing watershed politics");
+        wrWrkInstToSystemTitles.put(136797639L, "Farewell to the leftist working class");
+        wrWrkInstToSystemTitles.put(12345678L, "Autologous and cancer stem cell gene therapy");
+        wrWrkInstToSystemTitles.put(578123123L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964215L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964316L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964317L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964318L, SYSTEM_TITLE);
+        return wrWrkInstToSystemTitles;
     }
 
     private AclGrantDetail buildAclGrantDetail(String typeOfUse, Long rhAccountNumber, Long wrWrkInst,
