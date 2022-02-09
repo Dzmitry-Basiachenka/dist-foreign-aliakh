@@ -68,7 +68,7 @@ public class UdmValueFiltersWindowTest {
         Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N, FilterOperatorEnum.IS_NULL);
     private static final String ASSIGNEE = "wjohn@copyright.com";
     private static final String LAST_VALUE_PERIOD = "202106";
-    private static final Integer WR_WRK_INST = 243904752;
+    private static final Long WR_WRK_INST = 243904752L;
     private static final String SYSTEM_TITLE = "Medical Journal";
     private static final String SYSTEM_STANDARD_NUMBER = "0927-7765";
     private static final Long RH_ACCOUNT_NUMBER = 100000001L;
