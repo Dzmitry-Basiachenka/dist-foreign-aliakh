@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,13 +41,13 @@ public class AclGrantService implements IAclGrantService {
 
     private static final int TYPE_OF_USE_COUNT = 1;
     private static final String GRANT = "GRANT";
-    private static final Set<String> STATUS = ImmutableSet.of(GRANT);
+    private static final Set<String> STATUSES = ImmutableSet.of(GRANT, "DENY");
     private static final Set<String> TYPE_OF_USES = ImmutableSet.of("PRINT", "DIGITAL");
 
     @Value("#{$RUP{dist.foreign.rest.rms.rights.partition_size}}")
     private int rightsPartitionSize;
     @Autowired
-    @Qualifier("df.service.rmsCacheService")
+    @Qualifier("dist.common.integration.rmsRightsService")
     private IRmsRightsService rmsRightsService;
 
     @Override
@@ -56,21 +57,44 @@ public class AclGrantService implements IAclGrantService {
         LocalDate periodEndDate = createPeriodEndDate(grantSet.getGrantPeriod());
         Map<Long, List<RmsGrant>> wrWrkInstToGrants = new HashMap<>();
         Iterables.partition(wrWrkInstToSystemTitles.keySet(), rightsPartitionSize).forEach(wrWrkInstsPart ->
-            wrWrkInstToGrants.putAll(rmsRightsService.getGrants(wrWrkInstsPart, periodEndDate, STATUS, TYPE_OF_USES,
+            wrWrkInstToGrants.putAll(rmsRightsService.getGrants(wrWrkInstsPart, periodEndDate, STATUSES, TYPE_OF_USES,
                     ImmutableSet.copyOf(Collections.singleton(grantSet.getLicenseType())))
                 .stream()
                 .collect(Collectors.groupingBy(RmsGrant::getWrWrkInst))));
         List<AclGrantDetail> grantDetails = new ArrayList<>();
         wrWrkInstToGrants.forEach((wrWrkInst, grants) -> {
-            grants.forEach(grant -> {
+            List<RmsGrant> filteredRmsGrants = filterGrantsByPublicationEndDate(grants);
+            filteredRmsGrants.forEach(grant -> {
                 AclGrantDetail detail =
                     buildAclGrantDetail(grantSet.getId(), grant, grant.getRightStatus(), wrWrkInstToSystemTitles,
                         userName);
-                setTypeOfUseStatus(grants, detail);
+                setTypeOfUseStatus(filteredRmsGrants, detail);
                 grantDetails.add(detail);
             });
         });
         return grantDetails;
+    }
+
+    /**
+     * Filters grants based on publication end date and right status.
+     *
+     * Groups grants by publication end date. After that sorts by LocalDate and gets list of grants
+     * with max publication end date and filters this list by "GRANT" status
+     *
+     * @param grants list of {@link RmsGrant}
+     * @return filtered list of grants
+     */
+    private List<RmsGrant> filterGrantsByPublicationEndDate(List<RmsGrant> grants) {
+        return grants.stream()
+            .collect(Collectors.groupingBy(RmsGrant::getPublicationEndDate))
+            .entrySet()
+            .stream()
+            .max(Entry.comparingByKey())
+            .get()
+            .getValue()
+            .stream()
+            .filter(grant -> grant.getRightStatus().equals(GRANT))
+            .collect(Collectors.toList());
     }
 
     private void setTypeOfUseStatus(List<RmsGrant> grants, AclGrantDetail detail) {

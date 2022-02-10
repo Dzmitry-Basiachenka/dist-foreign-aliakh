@@ -43,13 +43,14 @@ import java.util.stream.IntStream;
 public class AclGrantServiceTest {
 
     private static final String GRANT = "GRANT";
+    private static final String DENY = "DENY";
     private static final String PRINT = "PRINT";
     private static final String DIGITAL = "DIGITAL";
     private static final String ACL = "ACL";
     private static final String SYSTEM_TITLE = "Red Riding Hood's maths adventure";
-    private static final Set<String> STATUS = ImmutableSet.of(GRANT);
+    private static final Set<String> STATUS = ImmutableSet.of(GRANT, DENY);
     private static final Set<String> TYPE_OF_USES = ImmutableSet.of(PRINT, DIGITAL);
-    private static final int RIGHTS_PARTITION_SIZE = 6;
+    private static final int RIGHTS_PARTITION_SIZE = 10;
 
     private final IAclGrantService aclGrantService = new AclGrantService();
     private IRmsRightsService rmsRightsService;
@@ -92,22 +93,6 @@ public class AclGrantServiceTest {
         assertEquals(expectedDetail.getUpdateUser(), actualDetail.getUpdateUser());
     }
 
-    private List<AclGrantDetail> buildAclGrantDetails() {
-        return Arrays.asList(
-            buildAclGrantDetail(
-                DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
-            buildAclGrantDetail(
-                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
-            buildAclGrantDetail(
-                PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
-            buildAclGrantDetail(
-                DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
-            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE, GRANT),
-            buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", GRANT),
-            buildAclGrantDetail(DIGITAL, 1000046080L, 578123123L, "Digital Only", SYSTEM_TITLE, GRANT)
-        );
-    }
-
     private Map<Long, String> createWrWrkInstToSystemTitleMap() {
         Map<Long, String> wrWrkInstToSystemTitles = new HashMap<>();
         wrWrkInstToSystemTitles.put(144114260L, "I've discovered energy!");
@@ -116,6 +101,8 @@ public class AclGrantServiceTest {
         wrWrkInstToSystemTitles.put(136797639L, "Farewell to the leftist working class");
         wrWrkInstToSystemTitles.put(12345678L, "Autologous and cancer stem cell gene therapy");
         wrWrkInstToSystemTitles.put(578123123L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964215L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(4875964316L, SYSTEM_TITLE);
         return wrWrkInstToSystemTitles;
     }
 
@@ -141,26 +128,54 @@ public class AclGrantServiceTest {
         return aclGrantSet;
     }
 
+    private List<AclGrantDetail> buildAclGrantDetails() {
+        return Arrays.asList(
+            buildAclGrantDetail(
+                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
+            buildAclGrantDetail(
+                DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class", GRANT),
+            buildAclGrantDetail(
+                PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
+            buildAclGrantDetail(
+                DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
+            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", GRANT),
+            buildAclGrantDetail(DIGITAL, 1000046080L, 578123123L, "Digital Only", SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE, GRANT)
+        );
+    }
+
     private Set<RmsGrant> buildRmsGrants() {
         return new HashSet<>(Arrays.asList(
-            buildRmsGrant(PRINT, new BigDecimal("1000025853"), 144114260L),
-            buildRmsGrant(DIGITAL, new BigDecimal("2000017000"), 309812565L),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000004023"), 159246556L),
-            buildRmsGrant(PRINT, new BigDecimal("1000004023"), 159246556L),
-            buildRmsGrant(PRINT, new BigDecimal("1000002760"), 136797639L),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000014080"), 136797639L),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000046080"), 578123123L)
+            buildRmsGrant(PRINT, new BigDecimal("1000025853"), 144114260L, GRANT, LocalDate.of(2021,6,30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("2000017000"), 309812565L, GRANT, LocalDate.of(2020,6,30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019,6,30)),
+            buildRmsGrant(PRINT, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019,6,30)),
+            buildRmsGrant(PRINT, new BigDecimal("1000002760"), 136797639L, GRANT, LocalDate.of(2015,6,30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000014080"), 136797639L, GRANT, LocalDate.of(2015,6,30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000046080"), 578123123L, GRANT, LocalDate.of(2020,12,31)),
+            buildRmsGrant(PRINT, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2010,12,31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2017,12,31)),
+            buildRmsGrant(PRINT, new BigDecimal("700009877"), 4875964316L, GRANT, LocalDate.of(2017,12,31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("700009877"), 4875964316L, DENY, LocalDate.of(2017,12,31)),
+            buildRmsGrant(PRINT, new BigDecimal("700009989"), 4875964317L, GRANT, LocalDate.of(2010,12,31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099877"), 4875964317L, DENY, LocalDate.of(2017,12,31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017,12,31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017,12,31))
         ));
     }
 
-    private RmsGrant buildRmsGrant(String typeOfUse, BigDecimal ownerOrgNumber, Long wrWrkInst) {
+    private RmsGrant buildRmsGrant(String typeOfUse, BigDecimal ownerOrgNumber, Long wrWrkInst, String grantStatus,
+                                   LocalDate publicationEndDate) {
         RmsGrant grant = new RmsGrant();
         grant.setProductFamily(ACL);
         grant.setLicenseType(ACL);
-        grant.setRightStatus(GRANT);
+        grant.setRightStatus(grantStatus);
         grant.setWorkGroupOwnerOrgNumber(ownerOrgNumber);
         grant.setWrWrkInst(wrWrkInst);
         grant.setTypeOfUse(typeOfUse);
+        grant.setPublicationEndDate(publicationEndDate);
         return grant;
     }
 }
