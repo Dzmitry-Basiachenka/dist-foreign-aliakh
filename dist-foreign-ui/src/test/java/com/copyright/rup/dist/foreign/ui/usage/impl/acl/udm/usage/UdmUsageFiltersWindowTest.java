@@ -194,22 +194,26 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        UdmUsageFilter appliedUsageFilter = window.getAppliedUsageFilter();
-        assertTrue(appliedUsageFilter.isEmpty());
+        UdmUsageFilter usageFilter = Whitebox.getInternalState(window, "usageFilter");
+        assertTrue(usageFilter.isEmpty());
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
-        assertEquals(buildExpectedFilter(), window.getAppliedUsageFilter());
+        assertEquals(buildExpectedFilter(), usageFilter);
     }
 
     @Test
     public void testClearButtonClickListener() {
-        populateData();
+        UdmUsageFilter usageFilter = buildExpectedFilter();
+        Whitebox.setInternalState(window, "usageFilter", usageFilter);
+        assertFalse(usageFilter.isEmpty());
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
-        assertTrue(window.getAppliedUsageFilter().isEmpty());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertTrue(usageFilter.isEmpty());
     }
 
     @Test

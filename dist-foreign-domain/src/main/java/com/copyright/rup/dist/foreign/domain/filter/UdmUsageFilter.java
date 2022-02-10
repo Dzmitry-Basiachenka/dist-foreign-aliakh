@@ -83,19 +83,19 @@ public class UdmUsageFilter {
             setSurveyStartDateFrom(filter.getSurveyStartDateFrom());
             setSurveyStartDateTo(filter.getSurveyStartDateTo());
             setChannel(filter.getChannel());
-            setWrWrkInstExpression(filter.getWrWrkInstExpression());
-            setReportedTitleExpression(filter.getReportedTitleExpression());
-            setSystemTitleExpression(filter.getSystemTitleExpression());
-            setUsageDetailIdExpression(filter.getUsageDetailIdExpression());
-            setCompanyIdExpression(filter.getCompanyIdExpression());
-            setCompanyNameExpression(filter.getCompanyNameExpression());
-            setSurveyRespondentExpression(filter.getSurveyRespondentExpression());
-            setSurveyCountryExpression(filter.getSurveyCountryExpression());
-            setLanguageExpression(filter.getLanguageExpression());
-            setAnnualMultiplierExpression(filter.getAnnualMultiplierExpression());
-            setAnnualizedCopiesExpression(filter.getAnnualizedCopiesExpression());
-            setStatisticalMultiplierExpression(filter.getStatisticalMultiplierExpression());
-            setQuantityExpression(filter.getQuantityExpression());
+            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
+            setReportedTitleExpression(new FilterExpression<>(filter.getReportedTitleExpression()));
+            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
+            setUsageDetailIdExpression(new FilterExpression<>(filter.getUsageDetailIdExpression()));
+            setCompanyIdExpression(new FilterExpression<>(filter.getCompanyIdExpression()));
+            setCompanyNameExpression(new FilterExpression<>(filter.getCompanyNameExpression()));
+            setSurveyRespondentExpression(new FilterExpression<>(filter.getSurveyRespondentExpression()));
+            setSurveyCountryExpression(new FilterExpression<>(filter.getSurveyCountryExpression()));
+            setLanguageExpression(new FilterExpression<>(filter.getLanguageExpression()));
+            setAnnualMultiplierExpression(new FilterExpression<>(filter.getAnnualMultiplierExpression()));
+            setAnnualizedCopiesExpression(new FilterExpression<>(filter.getAnnualizedCopiesExpression()));
+            setStatisticalMultiplierExpression(new FilterExpression<>(filter.getStatisticalMultiplierExpression()));
+            setQuantityExpression(new FilterExpression<>(filter.getQuantityExpression()));
             setSearchValue(filter.getSearchValue());
         }
     }
