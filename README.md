@@ -1,3 +1,15 @@
+15.1.1
+-
+* B-69659 FDA: Previous Period Research Status for Work Values: update backend logic to update only corresponding to period works
+* B-57767 FDA: Get Rights Information from RMS for ACL usages: adjust logic to get grants from RMS
+* B-71751 FDA: Create and View ACL Grant Set: add mediator for AclGrantDetailWidget
+* B-70074 Tech Debt: FDA: fix security vulnerability CVE-2022-23181
+* B-70074 Tech Debt: FDA: adjust filter validation on UDM usages tab
+* B-70074 Tech Debt: FDA: fixing date range validation in Weekly Survey and Survey Licensee reports
+* B-70074 Tech Debt: FDA: adjust filter validation on UDM tabs
+* B-70074 Tech Debt: FDA: move Liquibase scripts for UsageBatchStatusRepositoryIntegrationTest into separate folders
+* B-70074 Tech Debt: FDA: move Liquibase scripts for UsageArchiveRepositoryIntegrationTest into a separate folder
+
 15.1.0
 -
 * B-71751 FDA: Create and View ACL Grant Set: implement domain objects
