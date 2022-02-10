@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
@@ -61,6 +62,13 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         this.controller = controller;
     }
 
+    @Override
+    public IMediator initMediator() {
+        AclGrantDetailMediator mediator = new AclGrantDetailMediator();
+        mediator.setGrantSetMenuBar(grantSetMenuBar);
+        return mediator;
+    }
+
     private VerticalLayout initGrantDetailsLayout() {
         initGrantDetailsGrid();
         VerticalLayout layout = new VerticalLayout(initToolbarLayout(), aclGrantDetailsGrid);
@@ -108,7 +116,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             addColumn(AclGrantDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addColumn(value -> DateUtils.format(value.getCreateDate()), "table.column.created_date", "createDate", 100),
             addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate", 100),
-            addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 100));
+            addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 110));
     }
 
     private Column<AclGrantDetailDto, ?> addColumn(ValueProvider<AclGrantDetailDto, ?> valueProvider,

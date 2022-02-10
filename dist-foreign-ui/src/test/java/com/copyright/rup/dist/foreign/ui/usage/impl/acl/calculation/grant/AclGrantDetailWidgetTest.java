@@ -77,7 +77,7 @@ public class AclGrantDetailWidgetTest {
             Triple.of("TOU", 120.0, -1),
             Triple.of("Created Date", 100.0, -1),
             Triple.of("Updated Date", 100.0, -1),
-            Triple.of("Grant Period", 100.0, -1)));
+            Triple.of("Grant Period", 110.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
         verify(controller);
