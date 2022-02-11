@@ -31,7 +31,6 @@ public class CsvReportsTestHelper {
 
     protected static final String SEARCH_WITH_PERCENT = "%";
     protected static final String SEARCH_WITH_UNDERSCORE = "_";
-    protected static final String AACL_SCENARIO_ID = "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b";
     protected static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
 
     private final ReportTestUtils reportTestUtils =
