@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -70,8 +72,7 @@ public class CreateScenarioWindowTest {
         replay(controller);
         createScenarioWindow = new CreateScenarioWindow(controller);
         verify(controller);
-        assertEquals("Create Scenario", createScenarioWindow.getCaption());
-        assertEquals(320, createScenarioWindow.getWidth(), 0);
+        verifyWindow(createScenarioWindow,"Create Scenario", 320, -1, Unit.PIXELS);
         assertEquals("create-scenario-window", createScenarioWindow.getId());
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
         assertNotNull(content);

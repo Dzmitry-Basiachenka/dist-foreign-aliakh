@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -29,12 +32,12 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,11 +133,45 @@ public class AaclAuditWidgetTest {
     }
 
     private void verifyGridLayout(VerticalLayout layout) {
-        verifySize(layout, 100, Unit.PERCENTAGE, 100);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(layout.isSpacing());
         assertEquals(2, layout.getComponentCount());
         verifyToolbar(layout.getComponent(0));
-        verifyGrid(layout.getComponent(1));
+        assertTrue(layout.getComponent(1) instanceof Grid);
+        Grid grid = (Grid) layout.getComponent(1);
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Baseline ID", 125.0, -1),
+            Triple.of("Detail Status", 115.0, -1),
+            Triple.of("Product Family", 125.0, -1),
+            Triple.of("Usage Batch Name", 140.0, -1),
+            Triple.of("Period End Date", 115.0, -1),
+            Triple.of("RH Account #", 115.0, -1),
+            Triple.of("RH Name", 300.0, -1),
+            Triple.of("Payee Account #", 115.0, -1),
+            Triple.of("Payee Name", 300.0, -1),
+            Triple.of("Wr Wrk Inst", 110.0, -1),
+            Triple.of("System Title", 300.0, -1),
+            Triple.of("Standard Number", 140.0, -1),
+            Triple.of("Standard Number Type", 155.0, -1),
+            Triple.of("Gross Amt in USD", 130.0, -1),
+            Triple.of("Service Fee Amount", 150.0, -1),
+            Triple.of("Net Amt in USD", 120.0, -1),
+            Triple.of("Scenario Name", 125.0, -1),
+            Triple.of("Check #", 85.0, -1),
+            Triple.of("Check Date", 105.0, -1),
+            Triple.of("Event ID", 85.0, -1),
+            Triple.of("Dist. Name", 110.0, -1),
+            Triple.of("Dist. Date", 105.0, -1),
+            Triple.of("Det LC ID", 80.0, -1),
+            Triple.of("Det LC Enrollment", 140.0, -1),
+            Triple.of("Det LC Discipline", 140.0, -1),
+            Triple.of("Pub Type", 140.0, -1),
+            Triple.of("Usage Period", 100.0, -1),
+            Triple.of("Usage Source", 140.0, -1),
+            Triple.of("Comment", 200.0, -1)
+        ));
     }
 
     private void verifyToolbar(Component component) {
@@ -160,20 +197,6 @@ public class AaclAuditWidgetTest {
         Button button = (Button) component;
         assertEquals("Export", button.getCaption());
         assertEquals(1, button.getExtensions().size());
-    }
-
-    private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
-        Grid grid = (Grid) component;
-        verifySize(grid, 100, Unit.PERCENTAGE, 100);
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Baseline ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Period End Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
-            "System Title", "Standard Number", "Standard Number Type", "Gross Amt in USD", "Service Fee Amount",
-            "Net Amt in USD", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date",
-            "Det LC ID", "Det LC Enrollment", "Det LC Discipline", "Pub Type", "Usage Period", "Usage Source",
-            "Comment"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifySize(Component component, float width, Unit heightUnit, float height) {

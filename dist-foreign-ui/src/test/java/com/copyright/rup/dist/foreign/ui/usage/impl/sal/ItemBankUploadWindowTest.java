@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -243,12 +245,6 @@ public class ItemBankUploadWindowTest {
         TextField textField = (TextField) component;
         assertEquals(100, component.getWidth(), 0);
         assertEquals(StringUtils.EMPTY, textField.getValue());
-    }
-
-    private void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof UploadField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private void verifyLicenseeComponents(Component component) {
