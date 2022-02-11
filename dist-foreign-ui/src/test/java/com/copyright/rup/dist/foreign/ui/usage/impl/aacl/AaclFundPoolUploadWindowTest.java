@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -153,12 +154,6 @@ public class AaclFundPoolUploadWindowTest {
         TextField textField = (TextField) component;
         assertEquals(100, component.getWidth(), 0);
         assertEquals(StringUtils.EMPTY, textField.getValue());
-    }
-
-    private void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof UploadField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private FundPool buildFundPool() {

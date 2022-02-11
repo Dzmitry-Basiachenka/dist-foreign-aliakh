@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -52,8 +55,7 @@ public class AdditionalFundBatchesFilterWindowTest {
         replay(controller);
         AdditionalFundBatchesFilterWindow window =
             new AdditionalFundBatchesFilterWindow(controller);
-        assertEquals("Batches filter", window.getCaption());
-        verifySize(window, Unit.PIXELS, 450, 400);
+        verifyWindow(window, "Batches filter", 450, 400, Unit.PIXELS);
         assertEquals("batches-filter-window", window.getStyleName());
         verifyRootLayout(window.getContent());
         verify(controller);
@@ -87,6 +89,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     }
 
     private void verifyButtonsLayout(Component component) {
+        UiTestHelper.verifyButtonsLayout(component, "Continue", "Select All", "Clear", "Close");
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(4, layout.getComponentCount());

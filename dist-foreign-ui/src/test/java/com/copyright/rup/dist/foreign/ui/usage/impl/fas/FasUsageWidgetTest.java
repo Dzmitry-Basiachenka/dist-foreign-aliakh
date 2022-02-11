@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -20,6 +22,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
@@ -35,13 +38,13 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,7 +59,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -103,15 +105,45 @@ public class FasUsageWidgetTest {
     public void testWidgetStructure() {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
+        Grid grid = (Grid)layout.getComponent(1);
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Detail Status", 115.0, -1),
+            Triple.of("Product Family", 125.0, -1),
+            Triple.of("Usage Batch Name", 145.0, -1),
+            Triple.of("RRO Account #", 125.0, -1),
+            Triple.of("RRO Name", 135.0, -1),
+            Triple.of("RH Account #", 115.0, -1),
+            Triple.of("RH Name", 300.0, -1),
+            Triple.of("Wr Wrk Inst", 110.0, -1),
+            Triple.of("System Title", 300.0, -1),
+            Triple.of("Standard Number", 140.0, -1),
+            Triple.of("Standard Number Type", 155.0, -1),
+            Triple.of("Fiscal Year", 105.0, -1),
+            Triple.of("Payment Date", 115.0, -1),
+            Triple.of("Title", 300.0, -1),
+            Triple.of("Article", 135.0, -1),
+            Triple.of("Publisher", 135.0, -1),
+            Triple.of("Pub Date", 90.0, -1),
+            Triple.of("Number of Copies", 140.0, -1),
+            Triple.of("Reported Value", 130.0, -1),
+            Triple.of("Gross Amt in USD", 130.0, -1),
+            Triple.of("Batch Amt in USD", 130.0, -1),
+            Triple.of("Market", 115.0, -1),
+            Triple.of("Market Period From", 150.0, -1),
+            Triple.of("Market Period To", 145.0, -1),
+            Triple.of("Author", 300.0, -1),
+            Triple.of("Comment", 200.0, -1)
+        ));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -338,23 +370,5 @@ public class FasUsageWidgetTest {
             (HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0);
         MenuBar menuBar = (MenuBar) buttonsBar.getComponent(0);
         return menuBar.getItems().get(0).getChildren();
-    }
-
-    private void verifyGrid(Grid grid) {
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "RRO Account #", "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article", "Publisher", "Pub Date",
-            "Number of Copies", "Reported Value", "Gross Amt in USD", "Batch Amt in USD", "Market",
-            "Market Period From", "Market Period To", "Author", "Comment"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        verifySize(grid);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }

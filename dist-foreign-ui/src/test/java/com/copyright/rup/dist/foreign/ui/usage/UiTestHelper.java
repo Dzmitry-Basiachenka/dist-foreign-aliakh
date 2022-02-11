@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -110,6 +111,17 @@ public final class UiTestHelper {
         loadButton.click();
         verify(Windows.class);
         reset(Windows.class);
+    }
+
+    /**
+     * Verifies upload component.
+     *
+     * @param component instance of {@link Component}
+     */
+    public static void verifyUploadComponent(Component component) {
+        assertTrue(component instanceof UploadField);
+        assertEquals(100, component.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     /**
@@ -258,7 +270,7 @@ public final class UiTestHelper {
      */
     @SuppressWarnings(UNCHECKED)
     public static void verifyGrid(Grid grid,
-                                List<Triple<String, ? extends Number, ? extends Number>> columnsToWidthToExpandRatio) {
+                                 List<Triple<String, ? extends Number, ? extends Number>> columnsToWidthToExpandRatio) {
         assertNull(grid.getCaption());
         List<Grid.Column> columns = grid.getColumns();
         assertEquals(columnsToWidthToExpandRatio.stream().map(Triple::getLeft).collect(Collectors.toList()),

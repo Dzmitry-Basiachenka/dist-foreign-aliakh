@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -239,12 +240,6 @@ public class UsageDataUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(0));
         verifyComboBox(verticalLayout.getComponent(1), "Item Bank", true, buildUsageBatch());
         verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
-    }
-
-    private void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof UploadField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {

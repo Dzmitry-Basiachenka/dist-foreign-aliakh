@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -136,12 +137,6 @@ public class ClassifiedUsagesUploadWindowTest {
         Button loadButton = (Button) ((HorizontalLayout) verticalLayout.getComponent(1)).getComponent(0);
         verifyLoadClickListener(loadButton,
             Collections.singleton(Whitebox.getInternalState(window, "uploadField")));
-    }
-
-    private void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof UploadField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private ProcessingResult<AaclClassifiedUsage> buildCsvProcessingResult(List<AaclClassifiedUsage> classifiedUsages) {
