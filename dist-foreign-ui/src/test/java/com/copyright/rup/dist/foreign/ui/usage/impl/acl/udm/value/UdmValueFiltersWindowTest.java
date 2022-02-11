@@ -237,22 +237,26 @@ public class UdmValueFiltersWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        UdmValueFilter appliedValueFilter = window.getAppliedValueFilter();
-        assertTrue(appliedValueFilter.isEmpty());
+        UdmValueFilter valueFilter = Whitebox.getInternalState(window, "valueFilter");
+        assertTrue(valueFilter.isEmpty());
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
-        assertEquals(buildExpectedFilter(), window.getAppliedValueFilter());
+        assertEquals(buildExpectedFilter(), valueFilter);
     }
 
     @Test
     public void testClearButtonClickListener() {
-        populateData();
+        UdmValueFilter valueFilter = buildExpectedFilter();
+        Whitebox.setInternalState(window, "valueFilter", valueFilter);
+        assertFalse(valueFilter.isEmpty());
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
-        assertTrue(window.getAppliedValueFilter().isEmpty());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertTrue(valueFilter.isEmpty());
     }
 
     @Test
@@ -605,6 +609,8 @@ public class UdmValueFiltersWindowTest {
 
     private UdmValueFilter buildExpectedFilter() {
         UdmValueFilter valueFilter = new UdmValueFilter();
+        valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
+        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
         valueFilter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         valueFilter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
         valueFilter.setSystemStandardNumberExpression(
@@ -703,6 +709,9 @@ public class UdmValueFiltersWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
+        UdmValueFilter valueFilter = Whitebox.getInternalState(window, "valueFilter");
+        valueFilter.setAssignees(Collections.singleton(ASSIGNEE));
+        valueFilter.setLastValuePeriods(Collections.singleton(LAST_VALUE_PERIOD));
         populateTextField("wrWrkInstFromField", String.valueOf(WR_WRK_INST));
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("systemTitleField", SYSTEM_TITLE);

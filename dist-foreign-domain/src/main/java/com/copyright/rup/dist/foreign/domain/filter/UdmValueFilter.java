@@ -67,26 +67,26 @@ public class UdmValueFilter {
             setCurrency(filter.getCurrency());
             setAssignees(filter.getAssignees());
             setLastValuePeriods(filter.getLastValuePeriods());
-            setWrWrkInstExpression(filter.getWrWrkInstExpression());
-            setSystemTitleExpression(filter.getSystemTitleExpression());
-            setSystemStandardNumberExpression(filter.getSystemStandardNumberExpression());
-            setRhAccountNumberExpression(filter.getRhAccountNumberExpression());
-            setRhNameExpression(filter.getRhNameExpression());
-            setPriceExpression(filter.getPriceExpression());
-            setPriceInUsdExpression(filter.getPriceInUsdExpression());
-            setPriceCommentExpression(filter.getPriceCommentExpression());
+            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
+            setSystemTitleExpression(new FilterExpression<>(filter.getSystemTitleExpression()));
+            setSystemStandardNumberExpression(new FilterExpression<>(filter.getSystemStandardNumberExpression()));
+            setRhAccountNumberExpression(new FilterExpression<>(filter.getRhAccountNumberExpression()));
+            setRhNameExpression(new FilterExpression<>(filter.getRhNameExpression()));
+            setPriceExpression(new FilterExpression<>(filter.getPriceExpression()));
+            setPriceInUsdExpression(new FilterExpression<>(filter.getPriceInUsdExpression()));
+            setPriceCommentExpression(new FilterExpression<>(filter.getPriceCommentExpression()));
             setPriceFlagExpression(new FilterExpression<>(filter.getPriceFlagExpression()));
             setLastPriceFlagExpression(new FilterExpression<>(filter.getLastPriceFlagExpression()));
-            setLastPriceCommentExpression(filter.getLastPriceCommentExpression());
-            setContentExpression(filter.getContentExpression());
+            setLastPriceCommentExpression(new FilterExpression<>(filter.getLastPriceCommentExpression()));
+            setContentExpression(new FilterExpression<>(filter.getContentExpression()));
             setContentFlagExpression(new FilterExpression<>(filter.getContentFlagExpression()));
             setLastContentFlagExpression(new FilterExpression<>(filter.getLastContentFlagExpression()));
-            setContentCommentExpression(filter.getContentCommentExpression());
-            setLastContentCommentExpression(filter.getLastContentCommentExpression());
+            setContentCommentExpression(new FilterExpression<>(filter.getContentCommentExpression()));
+            setLastContentCommentExpression(new FilterExpression<>(filter.getLastContentCommentExpression()));
             setPubTypes(filter.getPubTypes());
             setLastPubType(filter.getLastPubType());
-            setCommentExpression(filter.getCommentExpression());
-            setLastCommentExpression(filter.getLastCommentExpression());
+            setCommentExpression(new FilterExpression<>(filter.getCommentExpression()));
+            setLastCommentExpression(new FilterExpression<>(filter.getLastCommentExpression()));
         }
     }
 
