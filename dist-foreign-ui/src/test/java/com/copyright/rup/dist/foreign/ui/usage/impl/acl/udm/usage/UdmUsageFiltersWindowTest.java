@@ -71,6 +71,12 @@ public class UdmUsageFiltersWindowTest {
 
     private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
+    private static final String USAGE_FILTER = "usageFilter";
+    private static final String ASSIGNEE = "wjohn@copyright.com";
+    private static final String LC_DESCRIPTION = "Law Firms";
+    private static final String REPORTED_PUB_TYPES = "Book";
+    private static final String REPORTED_TYPE_OF_USE = "EMAIL_COPY";
+    private static final String PUBLICATION_FORMATS = "PRINT";
     private static final LocalDate DATE_FROM = LocalDate.of(2021, 1, 1);
     private static final LocalDate DATE_TO = LocalDate.of(2021, 1, 2);
     private static final Long WR_WRK_INST = 243904752L;
@@ -194,7 +200,7 @@ public class UdmUsageFiltersWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        UdmUsageFilter usageFilter = Whitebox.getInternalState(window, "usageFilter");
+        UdmUsageFilter usageFilter = Whitebox.getInternalState(window, USAGE_FILTER);
         assertTrue(usageFilter.isEmpty());
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
@@ -206,7 +212,7 @@ public class UdmUsageFiltersWindowTest {
     @Test
     public void testClearButtonClickListener() {
         UdmUsageFilter usageFilter = buildExpectedFilter();
-        Whitebox.setInternalState(window, "usageFilter", usageFilter);
+        Whitebox.setInternalState(window, USAGE_FILTER, usageFilter);
         assertFalse(usageFilter.isEmpty());
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
@@ -593,7 +599,15 @@ public class UdmUsageFiltersWindowTest {
     }
 
     private UdmUsageFilter buildExpectedFilter() {
-        UdmUsageFilter filter = new UdmUsageFilter();
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(26);
+        detailLicenseeClass.setDescription(LC_DESCRIPTION);
+        UdmUsageFilter filter = Whitebox.getInternalState(window, USAGE_FILTER);
+        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
+        filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         filter.setUsageDateFrom(DATE_FROM);
         filter.setUsageDateTo(DATE_TO);
         filter.setSurveyStartDateFrom(DATE_FROM);
@@ -691,6 +705,15 @@ public class UdmUsageFiltersWindowTest {
 
     @SuppressWarnings(UNCHECKED)
     private void populateData() {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(26);
+        detailLicenseeClass.setDescription(LC_DESCRIPTION);
+        UdmUsageFilter filter = Whitebox.getInternalState(window, USAGE_FILTER);
+        filter.setAssignees(Collections.singleton(ASSIGNEE));
+        filter.setDetailLicenseeClasses(Collections.singleton(detailLicenseeClass));
+        filter.setReportedPubTypes(Collections.singleton(REPORTED_PUB_TYPES));
+        filter.setReportedTypeOfUses(Collections.singleton(REPORTED_TYPE_OF_USE));
+        filter.setPubFormats(Collections.singleton(PUBLICATION_FORMATS));
         populateLocalDateWidget("usageDateFromWidget", DATE_FROM);
         populateLocalDateWidget("usageDateToWidget", DATE_TO);
         populateLocalDateWidget("surveyStartDateFromWidget", DATE_FROM);

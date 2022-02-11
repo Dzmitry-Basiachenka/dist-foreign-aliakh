@@ -29,7 +29,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -120,23 +119,26 @@ public class UdmBaselineValueFiltersWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        UdmBaselineValueFilter appliedUsageFilter = window.getBaselineValueFilter();
-        assertTrue(appliedUsageFilter.isEmpty());
-        appliedUsageFilter.setPeriods(Collections.singleton(202012));
+        UdmBaselineValueFilter baselineValueFilter = Whitebox.getInternalState(window, "baselineValueFilter");
+        assertTrue(baselineValueFilter.isEmpty());
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
-        assertEquals(buildExpectedFilter(), window.getBaselineValueFilter());
+        assertEquals(buildExpectedFilter(), baselineValueFilter);
     }
 
     @Test
     public void testClearButtonClickListener() {
-        populateData();
+        UdmBaselineValueFilter baselineValueFilter = buildExpectedFilter();
+        Whitebox.setInternalState(window, "baselineValueFilter", baselineValueFilter);
+        assertFalse(baselineValueFilter.isEmpty());
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
-        assertTrue(window.getBaselineValueFilter().isEmpty());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertTrue(baselineValueFilter.isEmpty());
     }
 
     @Test
@@ -443,7 +445,6 @@ public class UdmBaselineValueFiltersWindowTest {
 
     private UdmBaselineValueFilter buildExpectedFilter() {
         UdmBaselineValueFilter udmBaselineValueFilter = new UdmBaselineValueFilter();
-        udmBaselineValueFilter.setPeriods(Collections.singleton(202012));
         udmBaselineValueFilter.setWrWrkInstExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
         udmBaselineValueFilter.setSystemTitleExpression(

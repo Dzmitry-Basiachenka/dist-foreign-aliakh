@@ -123,22 +123,26 @@ public class UdmBaselineFiltersWindowTest {
 
     @Test
     public void testSaveButtonClickListener() {
-        UdmBaselineFilter appliedBaselineFilter = window.getAppliedBaselineFilter();
-        assertTrue(appliedBaselineFilter.isEmpty());
+        UdmBaselineFilter baselineFilter = Whitebox.getInternalState(window, "baselineFilter");
+        assertTrue(baselineFilter.isEmpty());
         populateData();
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.click();
-        assertEquals(buildExpectedFilter(), window.getAppliedBaselineFilter());
+        assertEquals(buildExpectedFilter(), baselineFilter);
     }
 
     @Test
     public void testClearButtonClickListener() {
-        populateData();
+        UdmBaselineFilter baselineFilter = buildExpectedFilter();
+        Whitebox.setInternalState(window, "baselineFilter", baselineFilter);
+        assertFalse(baselineFilter.isEmpty());
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(7);
         Button clearButton = (Button) buttonsLayout.getComponent(1);
         clearButton.click();
-        assertTrue(window.getAppliedBaselineFilter().isEmpty());
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertTrue(baselineFilter.isEmpty());
     }
 
     @Test
