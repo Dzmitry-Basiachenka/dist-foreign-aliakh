@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -109,12 +111,12 @@ public class NtsUsageWidgetTest {
     public void testWidgetStructure() {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof FasNtsUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
         verifyGrid((Grid) layout.getComponent(1));

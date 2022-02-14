@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -22,7 +23,6 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.fas.IFasUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.FasNtsUsageFilterWidget;
@@ -113,9 +113,9 @@ public class FasUsageWidgetTest {
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        Grid grid = (Grid)layout.getComponent(1);
+        Grid grid = (Grid) layout.getComponent(1);
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        UiTestHelper.verifyGrid(grid, Arrays.asList(
+        verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 130.0, -1),
             Triple.of("Detail Status", 115.0, -1),
             Triple.of("Product Family", 125.0, -1),

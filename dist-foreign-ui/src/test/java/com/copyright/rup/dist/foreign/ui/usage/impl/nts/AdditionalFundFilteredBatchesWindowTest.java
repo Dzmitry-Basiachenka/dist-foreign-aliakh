@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -8,7 +10,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
@@ -18,11 +19,11 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -31,7 +32,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AdditionalFundFilteredBatchesWindow}.
@@ -62,8 +62,7 @@ public class AdditionalFundFilteredBatchesWindowTest {
             window = new AdditionalFundFilteredBatchesWindow(controller, batches,
             createMock(AdditionalFundBatchesFilterWindow.class));
         verify(controller, streamSource);
-        assertEquals("Filtered batches", window.getCaption());
-        verifySize(window, Unit.PIXELS, 700, Unit.PIXELS, 400);
+        verifyWindow(window, "Filtered batches", 700, 400, Unit.PIXELS);
         assertEquals("batches-filter-window", window.getStyleName());
         verifyRootLayout(window.getContent());
     }
@@ -72,21 +71,18 @@ public class AdditionalFundFilteredBatchesWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyGrid(verticalLayout.getComponent(0));
+        Grid grid = (Grid) verticalLayout.getComponent(0);
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Usage Batch Name", -1.0, 1),
+            Triple.of("Gross NTS Withdrawn Amount", 200.0, -1)
+        ));
+        verifyFooter(grid);
         verifyButtonsLayout(verticalLayout.getComponent(1), "Export", "Continue", "Cancel");
     }
 
-    private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
-        Grid grid = (Grid) component;
-        assertNull(grid.getCaption());
-        verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Gross NTS Withdrawn Amount"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(-1.0, columns.get(0).getWidth(), 0);
-        assertEquals(200, columns.get(1).getWidth(), 0);
-        FooterRow footerRow = grid.getFooterRow(0);
+    private void verifyFooter(Grid component) {
+        FooterRow footerRow = component.getFooterRow(0);
         assertNotNull(footerRow);
         FooterCell totalCell = footerRow.getCell("name");
         assertNotNull(totalCell);
@@ -95,13 +91,6 @@ public class AdditionalFundFilteredBatchesWindowTest {
         assertNotNull(amountCell);
         assertEquals("1.00", amountCell.getText());
         assertEquals("v-align-right", amountCell.getStyleName());
-    }
-
-    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
     }
 
     private UsageBatch buildUsageBatch() {

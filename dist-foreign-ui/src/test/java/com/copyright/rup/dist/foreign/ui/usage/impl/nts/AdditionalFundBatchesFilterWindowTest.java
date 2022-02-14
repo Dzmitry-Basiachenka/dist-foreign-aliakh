@@ -4,7 +4,6 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -15,11 +14,10 @@ import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBoxGroup;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -73,7 +71,7 @@ public class AdditionalFundBatchesFilterWindowTest {
     private void verifySearchWidget(Component component) {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
-        verifySize(searchWidget, Unit.PERCENTAGE, 100, -1);
+        verifySize(searchWidget);
         assertEquals("Enter Usage Batch Name",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
@@ -90,34 +88,21 @@ public class AdditionalFundBatchesFilterWindowTest {
 
     private void verifyButtonsLayout(Component component) {
         UiTestHelper.verifyButtonsLayout(component, "Continue", "Select All", "Clear", "Close");
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(4, layout.getComponentCount());
-        Button saveButton = verifyButton(layout.getComponent(0), "Continue");
-        Button selectAllButton = verifyButton(layout.getComponent(1), "Select All");
-        Button clearButton = verifyButton(layout.getComponent(2), "Clear");
-        Button closeButton = verifyButton(layout.getComponent(3), "Close");
-        assertTrue(saveButton.isVisible());
-        assertFalse(selectAllButton.isVisible());
-        assertTrue(clearButton.isVisible());
-        assertTrue(closeButton.isVisible());
-        assertEquals(1, saveButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, selectAllButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, clearButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, closeButton.getListeners(ClickEvent.class).size());
+        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
+        UiTestHelper.verifyButtonsVisibility(ImmutableMap.of(
+                buttonsLayout.getComponent(0), true,
+                buttonsLayout.getComponent(1), false,
+                buttonsLayout.getComponent(2), true,
+                buttonsLayout.getComponent(3), true
+            )
+        );
     }
 
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
-    }
-
-    private void verifySize(Component component, Unit widthUnit, float width, float height) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
+    private void verifySize(Component component) {
+        assertEquals((float) 100, component.getWidth(), 0);
+        assertEquals((float) -1, component.getHeight(), 0);
         assertEquals(Unit.PIXELS, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private UsageBatch buildUsageBatch() {

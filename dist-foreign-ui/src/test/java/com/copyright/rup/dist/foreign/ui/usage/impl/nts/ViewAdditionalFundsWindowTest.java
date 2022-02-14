@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -16,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.nts.ViewAdditionalFundsWindow.SearchController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
@@ -31,11 +34,11 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ViewAdditionalFundsWindow}.
@@ -85,12 +86,12 @@ public class ViewAdditionalFundsWindowTest {
 
     @Test
     public void testComponentStructure() {
+        verifyWindow(viewWindow, "View NTS Pre-Service Fee Funds", 1100, 450, Unit.PIXELS);
         assertEquals("View NTS Pre-Service Fee Funds", viewWindow.getCaption());
-        verifySize(viewWindow, 1100, Unit.PIXELS, 450, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) viewWindow.getContent();
         assertEquals(new MarginInfo(true), content.getMargin());
         assertTrue(content.isSpacing());
-        verifySize(content, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
+        verifyWindow(content, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(3, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
         Component component = content.getComponent(1);
@@ -154,24 +155,17 @@ public class ViewAdditionalFundsWindowTest {
         assertNotNull(dataProvider.getFilter());
     }
 
-    private void verifySize(Component component, float width, Unit widthUnit, float height, Unit heightUnit) {
-        assertEquals(width, component.getWidth(), 0);
-        assertEquals(height, component.getHeight(), 0);
-        assertEquals(heightUnit, component.getHeightUnits());
-        assertEquals(widthUnit, component.getWidthUnits());
-    }
-
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid) {
         assertNull(grid.getCaption());
-        verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Fund Name", "Fund Amount", "Created By", "Comment", StringUtils.EMPTY),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(100, columns.get(1).getWidth(), 0);
-        assertEquals(140, columns.get(2).getWidth(), 0);
-        assertEquals(320, columns.get(3).getWidth(), 0);
-        assertEquals(90, columns.get(4).getWidth(), 0);
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Fund Name", -1.0, 1),
+            Triple.of("Fund Amount", 100.0, -1),
+            Triple.of("Created By", 140.0, -1),
+            Triple.of("Comment", 320.0, -1),
+            Triple.of(StringUtils.EMPTY, 90.0, -1)
+        ));
         Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
         assertEquals("Delete", button.getCaption());
     }
