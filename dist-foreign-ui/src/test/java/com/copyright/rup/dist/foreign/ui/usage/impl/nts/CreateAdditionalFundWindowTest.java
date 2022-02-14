@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -68,8 +69,7 @@ public class CreateAdditionalFundWindowTest {
 
     @Test
     public void testConstructor() {
-        assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
-        verifySize(window);
+        verifyWindow(window, "Create NTS Pre-Service Fee Funds", 320, -1, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);
         assertTrue(content.isSpacing());
@@ -83,7 +83,7 @@ public class CreateAdditionalFundWindowTest {
     public void testIsValid() {
         expect(usagesController.additionalFundExists(FUND_POOL_NAME)).andReturn(false).anyTimes();
         replay(usagesController);
-        Binder<FundPool> binder  = Whitebox.getInternalState(window, BINDER_FIELD);
+        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         assertFalse(binder.isValid());
         setTextFieldValue(FUND_NAME_FIELD, StringUtils.EMPTY);
         assertFalse(binder.isValid());
@@ -102,7 +102,7 @@ public class CreateAdditionalFundWindowTest {
         expect(usagesController.additionalFundExists(FUND_POOL_NAME)).andReturn(true).times(2);
         expect(usagesController.additionalFundExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(usagesController);
-        Binder<FundPool> binder  = Whitebox.getInternalState(window, BINDER_FIELD);
+        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextFieldValue(FUND_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, FUND_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
         setTextFieldValue(FUND_NAME_FIELD, FUND_POOL_NAME);
@@ -117,7 +117,7 @@ public class CreateAdditionalFundWindowTest {
     @Test
     public void testVerifyCommentAreaWithErrorMessage() {
         replay(usagesController);
-        Binder<FundPool> binder  = Whitebox.getInternalState(window, BINDER_FIELD);
+        Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         setTextAreaValue(COMMENT_AREA, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, COMMENT_AREA, EMPTY_FIELD_ERROR_MESSAGE);
         setTextAreaValue(COMMENT_AREA, STRING_EXCEED_2000_CHARACTERS);
@@ -137,13 +137,6 @@ public class CreateAdditionalFundWindowTest {
         TextArea commentArea = (TextArea) component;
         assertEquals("Comment", commentArea.getCaption());
         assertEquals(StringUtils.EMPTY, commentArea.getValue());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(320, component.getWidth(), 0);
-        assertEquals(-1, component.getHeight(), 0);
-        assertEquals(Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Unit.PIXELS, component.getWidthUnits());
     }
 
     private void setTextFieldValue(String field, String value) {

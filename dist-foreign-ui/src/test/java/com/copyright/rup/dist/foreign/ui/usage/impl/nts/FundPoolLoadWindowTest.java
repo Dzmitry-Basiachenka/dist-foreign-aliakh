@@ -504,7 +504,7 @@ public class FundPoolLoadWindowTest {
         List<TextField> fields = (List<TextField>) binder.getFields()
             .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
+        assertEquals(1, fields.size());
         TextField actualField = fields.get(0);
         assertNotNull(actualField);
         String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())

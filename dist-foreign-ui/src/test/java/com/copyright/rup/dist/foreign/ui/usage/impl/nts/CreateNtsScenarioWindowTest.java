@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -22,6 +23,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.nts.INtsUsageController;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -83,8 +85,7 @@ public class CreateNtsScenarioWindowTest {
         replay(controller);
         window = new CreateNtsScenarioWindow(controller);
         verify(controller);
-        assertEquals("Create Scenario", window.getCaption());
-        assertEquals(320, window.getWidth(), 0);
+        verifyWindow(window, "Create Scenario", 320, -1, Unit.PIXELS);
         assertEquals("create-scenario-window", window.getId());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);

@@ -1,12 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -22,16 +25,17 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,8 +46,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ViewUsageBatchWindow}.
@@ -82,21 +84,25 @@ public class ViewUsageBatchWindowTest {
 
     @Test
     public void testStructure() {
-        assertEquals("View Usage Batch", viewUsageBatchWindow.getCaption());
-        verifySize(viewUsageBatchWindow);
+        verifyWindow(viewUsageBatchWindow, "View Usage Batch", 1000, 550, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) viewUsageBatchWindow.getContent();
         assertEquals(3, content.getComponentCount());
         assertEquals(SearchWidget.class, content.getComponent(0).getClass());
-        Component component = content.getComponent(1);
-        assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
-        assertEquals(1, content.getExpandRatio(component), 0);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Button deleteButton = (Button) buttonsLayout.getComponent(0);
-        Button closeButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Delete", deleteButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
+        Grid componentGrid = (Grid) content.getComponent(1);
+        verifyGrid(componentGrid, Arrays.asList(
+            Triple.of("Usage Batch Name", 150.0, -1),
+            Triple.of("RRO Account #", 120.0, -1),
+            Triple.of("RRO Name", 150.0, -1),
+            Triple.of("Payment Date", 100.0, -1),
+            Triple.of("Fiscal Year", 90.0, -1),
+            Triple.of("Batch Amt in USD", 130.0, -1),
+            Triple.of("Created By", 170.0, -1),
+            Triple.of("Created Date", -1.0, -1)
+        ));
+        Grid.Column createDateColumn = (Column) componentGrid.getColumns().get(7);
+        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
+        assertEquals(1, content.getExpandRatio(componentGrid), 0);
+        verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
     }
 
     @Test
@@ -183,26 +189,6 @@ public class ViewUsageBatchWindowTest {
         replay(searchWidget, grid);
         viewUsageBatchWindow.performSearch();
         verify(searchWidget, grid);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(1000, component.getWidth(), 0);
-        assertEquals(550, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void verifyGrid(Grid usagesGrid) {
-        assertNull(usagesGrid.getCaption());
-        List<Grid.Column> columns = usagesGrid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "RRO Account #", "RRO Name", "Payment Date", "Fiscal Year",
-            "Batch Amt in USD", "Created By", "Created Date"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 130.0, 170.0, -1.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
-        Grid.Column createDateColumn = columns.get(7);
-        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
     private Button.ClickListener getDeleteButtonClickListener() {
