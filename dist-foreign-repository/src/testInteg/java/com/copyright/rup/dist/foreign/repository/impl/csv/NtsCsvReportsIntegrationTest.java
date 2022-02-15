@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -35,16 +34,20 @@ import java.util.Collections;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "nts-csv-reports-test-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
-    private static final String EMPTY_REPORT = "audit_usages_report_nts_empty.csv";
+    private static final String FOLDER_NAME = "nts-csv-reports-integration-test/";
+    private static final String WRITE_AUDIT_CSV_REPORT = FOLDER_NAME + "write-audit-csv-report.groovy";
+    private static final String WRITE_USAGES_CSV_REPORT = FOLDER_NAME + "write-usages-csv-report.groovy";
+    private static final String WRITE_SERVICE_FEE_TRUE_UP_CSV_REPORT =
+        FOLDER_NAME + "write-service-fee-true-up-csv-report.groovy";
+    private static final String WRITE_WORK_CLASSIFICATION_CSV_REPORT =
+        FOLDER_NAME + "write-work-classification-csv-report.groovy";
+    private static final String EMPTY_REPORT = "nts/audit_usages_report_empty.csv";
 
     @Autowired
     private IReportRepository reportRepository;
@@ -55,23 +58,25 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testWriteAuditNtsCsvReport() throws Exception {
+    @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
+    public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
-        auditFilter.setBatchesIds(
-            Sets.newHashSet("0c0a379a-461c-4e84-8062-326ece3c1f65", "f20ac1a3-eee4-4027-b5fb-def9adf0f871"));
+        auditFilter.setBatchesIds(Collections.singleton("0c0a379a-461c-4e84-8062-326ece3c1f65"));
         auditFilter.setProductFamily("NTS");
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(auditFilter, outputStream),
-            "audit_usages_report_nts.csv");
+            "nts/audit_usages_report.csv");
     }
 
     @Test
-    public void testWriteAuditNtsCsvReportEmptyCsvReport() throws Exception {
+    @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
+    public void testWriteAuditEmptyCsvReport() throws Exception {
         assertFilesWithExecutor(outputStream -> reportRepository.writeAuditNtsCsvReport(
             new AuditFilter(), outputStream), EMPTY_REPORT);
     }
 
     @Test
-    public void testWriteAuditNtsCsvReportSearchBySqlLikePattern() throws Exception {
+    @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
+    public void testWriteAuditCsvReportSearchBySqlLikePattern() throws Exception {
         AuditFilter filter1 = new AuditFilter();
         filter1.setSearchValue(SEARCH_WITH_PERCENT);
         assertFilesWithExecutor(outputStream ->
@@ -96,93 +101,105 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    public void testWriteNtsUsagesCsvReport() throws IOException {
+    @TestData(fileName = WRITE_USAGES_CSV_REPORT)
+    public void testWriteUsagesCsvReport() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Sets.newHashSet("f20ac1a3-eee4-4027-b5fb-def9adf0f871",
             "c0c07d51-2216-43c3-b61b-b904d86ec36a"));
         assertFilesWithExecutor(outputStream -> reportRepository.writeNtsUsageCsvReport(usageFilter, outputStream),
-            "usages_report_nts.csv");
+            "nts/usages_report.csv");
     }
 
     @Test
-    public void testWriteNtsUsagesEmptyCsvReport() throws IOException {
+    @TestData(fileName = WRITE_USAGES_CSV_REPORT)
+    public void testWriteUsagesEmptyCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
-            reportRepository.writeNtsUsageCsvReport(new UsageFilter(), outputStream), "usages_report_nts_empty.csv");
+            reportRepository.writeNtsUsageCsvReport(new UsageFilter(), outputStream), "nts/usages_report_empty.csv");
     }
 
     @Test
-    public void testWriteNtsScenarioUsagesCsvReport() throws IOException {
+    @TestData(fileName = FOLDER_NAME + "write-scenario-usages-csv-report.groovy")
+    public void testWriteScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeNtsScenarioUsagesCsvReport("85ba864e-1939-4a60-9fab-888b84199321",
-                outputStream), "scenario_usages_report_nts.csv");
+                outputStream), "nts/scenario_usages_report.csv");
     }
 
     @Test
-    public void testWriteArchivedNtsScenarioUsagesCsvReport() throws IOException {
+    @TestData(fileName = FOLDER_NAME + "write-archived-scenario-usages-csv-report.groovy")
+    public void testWriteArchivedScenarioUsagesCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeArchivedNtsScenarioUsagesCsvReport("1ead8a3e-1231-43a5-a3c5-ed766abe5a2f",
-                outputStream), "archive_scenario_usages_report_nts.csv");
+                outputStream), "nts/archive_scenario_usages_report.csv");
     }
 
     @Test
-    public void testWriteNtsWithdrawnBatchSummaryCsvReport() throws IOException {
+    @TestData(fileName = FOLDER_NAME + "write-withdrawn-summary-csv-report.groovy")
+    public void testWriteWithdrawnBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream -> reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream),
-            "withdrawn_batch_summary_report_nts.csv");
+            "nts/withdrawn_batch_summary_report.csv");
     }
 
     @Test
-    public void testWriteNtsServiceFeeTrueUpCsvReportWithFundPool() throws IOException {
+    @TestData(fileName = WRITE_SERVICE_FEE_TRUE_UP_CSV_REPORT)
+    public void testWriteServiceFeeTrueUpCsvReportWithFundPool() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId("a537da01-b211-4b81-b2b9-7dc0c791811a");
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_1.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "nts/service_fee_true_up_report_1.csv");
     }
 
     @Test
-    public void testWriteNtsServiceFeeTrueUpCsvReportWithoutFundPool() throws IOException {
+    @TestData(fileName = WRITE_SERVICE_FEE_TRUE_UP_CSV_REPORT)
+    public void testWriteServiceFeeTrueUpCsvReportWithoutFundPool() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId("dc6df4bd-7059-4975-8898-78b4a50d30b0");
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_2.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "nts/service_fee_true_up_report_2.csv");
     }
 
     @Test
-    public void testWriteNtsServiceFeeTrueUpCsvEmptyReport() throws IOException {
+    @TestData(fileName = WRITE_SERVICE_FEE_TRUE_UP_CSV_REPORT)
+    public void testWriteServiceFeeTrueUpEmptyCsvReport() throws IOException {
         Scenario scenario = new Scenario();
         scenario.setId("1871799a-157a-4fb2-82ab-9092bb3b6395");
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         assertFiles(outputStream -> reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream,
-            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report_nts_empty.csv");
+            DEFAULT_ESTIMATED_SERVICE_FEE), "nts/service_fee_true_up_report_empty.csv");
     }
 
     @Test
-    public void testWriteNtsUndistributedLiabilitiesCsvReport() throws IOException {
+    @TestData(fileName = FOLDER_NAME + "write-undistributed-liabilities-csv-report.groovy")
+    public void testWriteUndistributedLiabilitiesCsvReport() throws IOException {
         assertFiles(
             outputStream -> reportRepository.writeNtsUndistributedLiabilitiesCsvReport(DEFAULT_ESTIMATED_SERVICE_FEE,
-                outputStream), "nts_undistributed_liabilities_report.csv");
+                outputStream), "nts/undistributed_liabilities_report.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
     public void testWriteWorkClassificationCsvReportWithBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
                 reportRepository.writeWorkClassificationCsvReport(
                     Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff"), "987654321", outputStream),
-            "work_classification_report_by_batch_ids.csv");
+            "nts/work_classification_report_by_batch_ids.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
     public void testWriteWorkClassificationCsvReportWithEmptyBatchIds() throws Exception {
         assertFilesWithExecutor(outputStream ->
             reportRepository.writeWorkClassificationCsvReport(Collections.singleton("not-existing-uid"),
-                null, outputStream), "work_classification_report_empty.csv");
+                null, outputStream), "nts/work_classification_report_empty.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
     public void testWriteWorkClassificationCsvReportWithSearch() throws Exception {
         assertFilesWithExecutor(
             outputStream -> reportRepository.writeWorkClassificationCsvReport("987654321", outputStream),
-            "work_classification_report_by_search.csv");
+            "nts/work_classification_report_by_search.csv");
     }
 }

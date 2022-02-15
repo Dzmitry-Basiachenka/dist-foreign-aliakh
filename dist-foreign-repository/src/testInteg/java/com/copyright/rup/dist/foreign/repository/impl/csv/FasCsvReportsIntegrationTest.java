@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv;
 
+import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
@@ -11,6 +12,7 @@ import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
 
 import com.google.common.collect.Sets;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,11 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
     @Autowired
     private IReportRepository reportRepository;
+
+    @BeforeClass
+    public static void setUpTestDirectory() throws IOException {
+        ReportTestUtils.setUpTestDirectory(FasCsvReportsIntegrationTest.class);
+    }
 
     @Test
     @TestData(fileName = WRITE_AUDIT_CSV_REPORT)
