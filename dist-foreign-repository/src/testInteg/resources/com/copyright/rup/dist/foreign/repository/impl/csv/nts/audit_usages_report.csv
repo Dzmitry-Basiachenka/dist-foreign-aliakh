@@ -1,4 +1,2 @@
 Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name,Payee Account #,Payee Name,Wr Wrk Inst,System Title,Title,Standard Number,Standard Number Type,Reported Value,Gross Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending,Comment
-581b71b0-07b1-4db1-9a3b-351c5c5a8cf0,ELIGIBLE,NTS,NTS batch,01/01/2019,1000002901,Kluwer Academic Publishers - Dordrecht,1000002901,Kluwer Academic Publishers - Dordrecht,743904744,Medical Journal,Medical Journal,1008902112317622XX,,30.86,0.00,,,,,,,,,
-9705a377-d59a-4c84-bd26-7c754aab92e2,ELIGIBLE,NTS,NTS batch,01/01/2019,1000009522,,1000009522,,243904752,100 ROAD MOVIES,100 ROAD MOVIES,1008902112317622XX,,30.86,0.00,,,,,,,,,
 b9a487f4-77b6-4264-8a53-ed1eab585a4a,LOCKED,NTS,Test Batch 4,01/11/2017,7000429266,,1000009997,,122235134,,CHICKEN BREAST ON GRILL WITH FLAMES,2558902245377325XX,,9900.00,8972.04,32.0,NTS Scenario,,,,,,,usage from usages.csv
