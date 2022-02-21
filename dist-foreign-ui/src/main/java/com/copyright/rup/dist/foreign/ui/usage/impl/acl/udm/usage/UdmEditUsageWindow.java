@@ -38,6 +38,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -98,6 +101,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private final ClickListener saveButtonClickListener;
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final UdmUsageAuditFieldToValuesMap fieldToValueChangesMap;
+    private final UdmUsageFieldsForStatusValidation udmUsageFieldsBeforeChanges;
 
     /**
      * Constructor.
@@ -113,6 +117,9 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
+        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(
+            Objects.toString(udmUsage.getWrWrkInst()), udmUsage.getReportedTitle(),
+            udmUsage.getReportedStandardNumber());
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
         setResizable(false);
@@ -329,8 +336,10 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private HorizontalLayout buildWrWrkInstLayout() {
         String fieldName = ForeignUi.getMessage("label.wr_wrk_inst");
         wrWrkInstField.setSizeFull();
-        wrWrkInstField.addValueChangeListener(event ->
-            fieldToValueChangesMap.updateFieldValue(fieldName, StringUtils.trimToNull(event.getValue())));
+        wrWrkInstField.addValueChangeListener(event -> {
+            fieldToValueChangesMap.updateFieldValue(fieldName, StringUtils.trimToNull(event.getValue()));
+            binder.validate();
+        });
         binder.forField(wrWrkInstField)
             .withValidator(value -> StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
@@ -429,6 +438,8 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
             .withValidator(
                 value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
                 ForeignUi.getMessage("field.error.ineligible_only_if_ineligible_reason_populated"))
+            .withValidator(this::validateUsageStatus,
+                ForeignUi.getMessage("field.error.not_set_new_detail_status_after_changes"))
             .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(usageStatusComboBox, "udm-edit-detail-status-combo-box");
         return buildCommonLayout(usageStatusComboBox, fieldName);
@@ -533,5 +544,83 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
 
     private String buildDetailLicenseeClassString(DetailLicenseeClass detailLicenseeClass) {
         return Objects.nonNull(detailLicenseeClass) ? detailLicenseeClass.getIdAndDescription() : null;
+    }
+
+    private boolean validateUsageStatus(UsageStatusEnum detailStatus) {
+        UdmUsageFieldsForStatusValidation udmUsageFieldsAfterChanges =
+            new UdmUsageFieldsForStatusValidation(wrWrkInstField.getValue(), reportedTitleField.getValue(),
+                reportedStandardNumberField.getValue());
+        return udmUsageFieldsAfterChanges.equals(udmUsageFieldsBeforeChanges)
+            || detailStatus == UsageStatusEnum.NEW;
+    }
+
+    private static class UdmUsageFieldsForStatusValidation {
+        private String wrWrkInst;
+        private String reportedTitle;
+        private String reportedStandardNumber;
+
+        UdmUsageFieldsForStatusValidation(String wrWrkInst, String reportedTitle, String reportedStandardNumber) {
+            this.wrWrkInst = wrWrkInst;
+            this.reportedTitle = reportedTitle;
+            this.reportedStandardNumber = reportedStandardNumber;
+        }
+
+        public String getWrWrkInst() {
+            return wrWrkInst;
+        }
+
+        public void setWrWrkInst(String wrWrkInst) {
+            this.wrWrkInst = wrWrkInst;
+        }
+
+        public String getReportedTitle() {
+            return reportedTitle;
+        }
+
+        public void setReportedTitle(String reportedTitle) {
+            this.reportedTitle = reportedTitle;
+        }
+
+        public String getReportedStandardNumber() {
+            return reportedStandardNumber;
+        }
+
+        public void setReportedStandardNumber(String reportedStandardNumber) {
+            this.reportedStandardNumber = reportedStandardNumber;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (null == obj || getClass() != obj.getClass()) {
+                return false;
+            }
+            UdmUsageFieldsForStatusValidation that = (UdmUsageFieldsForStatusValidation) obj;
+            return new EqualsBuilder()
+                .append(this.wrWrkInst, that.wrWrkInst)
+                .append(this.reportedTitle, that.reportedTitle)
+                .append(this.reportedStandardNumber, that.reportedStandardNumber)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(wrWrkInst)
+                .append(reportedTitle)
+                .append(reportedStandardNumber)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this)
+                .append("wrWrkInst", wrWrkInst)
+                .append("reportedTitle", reportedTitle)
+                .append("reportedStandardNumber", reportedStandardNumber)
+                .toString();
+        }
     }
 }
