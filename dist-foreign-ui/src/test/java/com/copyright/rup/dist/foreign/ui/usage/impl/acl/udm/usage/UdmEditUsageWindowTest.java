@@ -71,6 +71,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -134,6 +135,9 @@ public class UdmEditUsageWindowTest {
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String REASON = "Reason";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String INELIGIBLE_REASON_COMBOBOX = "ineligibleReasonComboBox";
+    private static final String USAGE_STATUS_COMBOBOX = "usageStatusComboBox";
 
     private CommonUdmUsageWindow window;
     private Binder<UdmUsageDto> binder;
@@ -225,9 +229,43 @@ public class UdmEditUsageWindowTest {
     }
 
     @Test
+    public void testUdmUsageValidation() {
+        setSpecialistExpectations();
+        initEditWindow();
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        TextField reportedTitleField = Whitebox.getInternalState(window, "reportedTitleField");
+        TextField reportedStandardNumberField = Whitebox.getInternalState(window, "reportedStandardNumberField");
+        ineligibleReason.setValue(null);
+        detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        wrWrkInstField.setValue(Objects.toString(WR_WRK_INST));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        reportedTitleField.setValue("Colloids and surfaces.");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        reportedTitleField.setValue(REPORTED_TITLE);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        reportedStandardNumberField.setValue("1232-2523");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        reportedTitleField.setValue("Colloids and surfaces.");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
     public void testWrWrkInstValidation() {
         setSpecialistExpectations();
         initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ineligibleReason.setValue(null);
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
@@ -338,6 +376,10 @@ public class UdmEditUsageWindowTest {
     public void testTextFieldsLengthValidation() {
         setSpecialistExpectations();
         initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ineligibleReason.setValue(null);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedStandardNumberField"), 100);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedPubTypeField"), 100);
@@ -389,6 +431,8 @@ public class UdmEditUsageWindowTest {
         udmUsage.setReportedPubType(null);
         udmUsage.setComment(null);
         udmUsage.setResearchUrl(null);
+        udmUsage.setStatus(UsageStatusEnum.NEW);
+        udmUsage.setIneligibleReason(null);
         window = new UdmEditUsageWindow(controller, udmUsage, saveButtonClickListener);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
@@ -398,6 +442,8 @@ public class UdmEditUsageWindowTest {
         assertNull(udmUsage.getReportedPubType());
         assertNull(udmUsage.getComment());
         assertNull(udmUsage.getResearchUrl());
+        assertEquals(UsageStatusEnum.NEW, udmUsage.getStatus());
+        assertNull(udmUsage.getIneligibleReason());
         verify(controller,  saveButtonClickListener, ForeignSecurityUtils.class);
     }
 
