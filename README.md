@@ -1,3 +1,17 @@
+15.1.2
+-
+* B-70074 FDA: Tech Debt: move UDM value filter window to binder approach
+* B-70074 FDA: Tech Debt: move Liquibase scripts for AaclCsvReportsIntegrationTest into a separate folder
+* B-70074 FDA: Tech Debt: move UDM usage filter window to binder approach
+* B-70074 FDA: Tech Debt: move common logic to common class
+* B-70074 FDA: Tech Debt: fix unit tests for additional filters windows and refactor UdmValueFilter
+* B-70074 FDA: Tech Debt: move Liquibase scripts for FasCsvReportsIntegrationTest into a separate folder
+* B-70074 Tech Debt: FDA: adjust unit tests in UI module
+* B-70074 FDA: Tech Debt: move Liquibase scripts for UsageBatchRepositoryIntegrationTest into separate folder
+* B-70074 FDA: Tech Debt: move Liquibase scripts for NtsCsvReportsIntegrationTest into a separate folder
+* B-70867 FDA: WrWrkInst change set status New: Add validation for Detail Status after changing WR Wrk Inst or Reported Title or Reported Standard Number single edit
+* B-70867 FDA: WrWrkInst change set status New: Add validation for Detail Status after changing WR Wrk Inst or Reported Title or Reported Standard Number multi edit
+
 15.1.1
 -
 * B-69659 FDA: Previous Period Research Status for Work Values: update backend logic to update only corresponding to period works
