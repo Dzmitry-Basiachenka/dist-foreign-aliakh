@@ -150,6 +150,8 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final String ANNUAL_MULTIPLIER_FIELD = "Annual Multiplier";
     private static final String STATISTICAL_MULTIPLIER_FIELD = "Statistical Multiplier";
     private static final String QUANTITY_FIELD = "Quantity";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String STATUS_COMBOBOX = "statusComboBox";
 
     private UdmEditMultipleUsagesWindow window;
     private Binder<UdmUsageDto> binder;
@@ -178,8 +180,37 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     @Test
+    public void testUdmUsagesStatusValidation() {
+        initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        TextField reportedTitleField = Whitebox.getInternalState(window, "reportedTitleField");
+        TextField reportedStandardNumberField = Whitebox.getInternalState(window, "reportedStandardNumberField");
+        detailsStatus.setValue(UsageStatusEnum.ELIGIBLE);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        wrWrkInstField.setValue(StringUtils.EMPTY);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        reportedTitleField.setValue("Colloids and surfaces.");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        reportedTitleField.setValue(StringUtils.EMPTY);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        reportedStandardNumberField.setValue("1232-2523");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        reportedTitleField.setValue("Colloids and surfaces.");
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        detailsStatus.setValue(UsageStatusEnum.ELIGIBLE);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
     public void testWrWrkInstValidation() {
         initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
@@ -194,6 +225,8 @@ public class UdmEditMultipleUsagesWindowTest {
     @Test
     public void testTextFieldsLengthValidation() {
         initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
         verifyLengthValidation(Whitebox.getInternalState(window, "reportedTitleField"), 1000);
         verifyLengthValidation(Whitebox.getInternalState(window, "commentField"), 4000);
     }

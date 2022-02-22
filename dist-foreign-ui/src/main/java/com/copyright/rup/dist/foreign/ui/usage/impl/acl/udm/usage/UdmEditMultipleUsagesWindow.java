@@ -159,6 +159,11 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(
                 value -> UsageStatusEnum.INELIGIBLE != value || Objects.nonNull(ineligibleReasonComboBox.getValue()),
                 ForeignUi.getMessage("field.error.ineligible_only_if_ineligible_reason_populated"))
+            .withValidator(value -> StringUtils.isEmpty(wrWrkInstField.getValue())
+                && StringUtils.isEmpty(reportedTitleField.getValue())
+                && StringUtils.isEmpty(reportedStandardNumberField.getValue())
+                || value == UsageStatusEnum.NEW,
+                ForeignUi.getMessage("field.error.not_set_new_detail_status_after_changes"))
             .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         statusComboBox.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
@@ -250,6 +255,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage(MAX_LENGTH_FIELD_MESSAGE, 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        wrWrkInstField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
@@ -327,6 +333,7 @@ public class UdmEditMultipleUsagesWindow extends Window {
             .withValidator(
                 new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
             .bind(getter, setter);
+        textField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(textField, styleName);
         return buildCommonLayout(textField, caption);
     }
