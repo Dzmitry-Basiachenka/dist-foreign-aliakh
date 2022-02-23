@@ -49,6 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,6 +79,8 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private static final String COMMENT = "Should be reviewed by Specialist";
     private static final String NEW_COMMENT = "Should be reviewed by Manager";
     private static final String NEW_REASON = "Should be improved";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String STATUS_COMBOBOX = "statusComboBox";
 
     private UdmEditMultipleUsagesResearcherWindow window;
     private IUdmUsageController controller;
@@ -105,8 +108,26 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     }
 
     @Test
+    public void testUdmUsagesStatusValidation() {
+        initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        detailsStatus.setValue(UsageStatusEnum.OPS_REVIEW);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        detailsStatus.setValue(UsageStatusEnum.OPS_REVIEW);
+        wrWrkInstField.setValue(StringUtils.EMPTY);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+    }
+
+    @Test
     public void testWrWrkInstValidation() {
         initEditWindow();
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
         verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
