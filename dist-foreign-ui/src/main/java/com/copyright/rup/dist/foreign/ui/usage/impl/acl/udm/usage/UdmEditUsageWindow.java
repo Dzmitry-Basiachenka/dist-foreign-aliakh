@@ -118,8 +118,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
         udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(
-            Objects.toString(udmUsage.getWrWrkInst()), udmUsage.getReportedTitle(),
-            udmUsage.getReportedStandardNumber());
+            udmUsage.getWrWrkInst(), udmUsage.getReportedTitle(), udmUsage.getReportedStandardNumber());
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
         setResizable(false);
@@ -548,28 +547,30 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
 
     private boolean validateUsageStatus(UsageStatusEnum detailStatus) {
         UdmUsageFieldsForStatusValidation udmUsageFieldsAfterChanges =
-            new UdmUsageFieldsForStatusValidation(wrWrkInstField.getValue(), reportedTitleField.getValue(),
-                reportedStandardNumberField.getValue());
+            new UdmUsageFieldsForStatusValidation(
+                NumberUtils.createLong(StringUtils.trimToNull(wrWrkInstField.getValue())),
+                StringUtils.trimToNull(reportedTitleField.getValue()),
+                StringUtils.trimToNull(reportedStandardNumberField.getValue()));
         return udmUsageFieldsAfterChanges.equals(udmUsageFieldsBeforeChanges)
             || detailStatus == UsageStatusEnum.NEW;
     }
 
     private static class UdmUsageFieldsForStatusValidation {
-        private String wrWrkInst;
+        private Long wrWrkInst;
         private String reportedTitle;
         private String reportedStandardNumber;
 
-        UdmUsageFieldsForStatusValidation(String wrWrkInst, String reportedTitle, String reportedStandardNumber) {
+        UdmUsageFieldsForStatusValidation(Long wrWrkInst, String reportedTitle, String reportedStandardNumber) {
             this.wrWrkInst = wrWrkInst;
             this.reportedTitle = reportedTitle;
             this.reportedStandardNumber = reportedStandardNumber;
         }
 
-        public String getWrWrkInst() {
+        public Long getWrWrkInst() {
             return wrWrkInst;
         }
 
-        public void setWrWrkInst(String wrWrkInst) {
+        public void setWrWrkInst(Long wrWrkInst) {
             this.wrWrkInst = wrWrkInst;
         }
 

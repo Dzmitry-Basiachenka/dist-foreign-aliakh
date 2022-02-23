@@ -229,7 +229,7 @@ public class UdmEditUsageWindowTest {
     }
 
     @Test
-    public void testUdmUsageValidation() {
+    public void testUdmUsageStatusValidation() {
         setSpecialistExpectations();
         initEditWindow();
         ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
@@ -256,6 +256,51 @@ public class UdmEditUsageWindowTest {
         verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
         detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
         verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+    }
+
+    @Test
+    public void testUdmUsageStatusValidationWithWrWrkInst() {
+        setSpecialistExpectations();
+        udmUsage.setWrWrkInst(WR_WRK_INST);
+        udmUsage.setReportedTitle(null);
+        udmUsage.setReportedStandardNumber(null);
+        udmUsage.setIneligibleReason(null);
+        initEditWindow();
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        ineligibleReason.setValue(null);
+        detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+    }
+
+    @Test
+    public void testUdmUsageStatusValidationWithReportedTitle() {
+        setSpecialistExpectations();
+        udmUsage.setWrWrkInst(null);
+        udmUsage.setReportedTitle(REPORTED_TITLE);
+        udmUsage.setReportedStandardNumber(null);
+        udmUsage.setIneligibleReason(null);
+        initEditWindow();
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        ineligibleReason.setValue(null);
+        detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+    }
+
+    @Test
+    public void testUdmUsageStatusValidationWithReportedStandardNumber() {
+        setSpecialistExpectations();
+        udmUsage.setWrWrkInst(null);
+        udmUsage.setReportedTitle(null);
+        udmUsage.setReportedStandardNumber(STANDARD_NUMBER);
+        udmUsage.setIneligibleReason(null);
+        initEditWindow();
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        ineligibleReason.setValue(null);
+        detailsStatus.setValue(UsageStatusEnum.WORK_NOT_FOUND);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
     }
 
     @Test
@@ -425,7 +470,7 @@ public class UdmEditUsageWindowTest {
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
-        replay(controller,  saveButtonClickListener, ForeignSecurityUtils.class);
+        replay(controller, saveButtonClickListener, ForeignSecurityUtils.class);
         udmUsage.setReportedTitle(null);
         udmUsage.setReportedStandardNumber(null);
         udmUsage.setReportedPubType(null);
@@ -444,7 +489,7 @@ public class UdmEditUsageWindowTest {
         assertNull(udmUsage.getResearchUrl());
         assertEquals(UsageStatusEnum.NEW, udmUsage.getStatus());
         assertNull(udmUsage.getIneligibleReason());
-        verify(controller,  saveButtonClickListener, ForeignSecurityUtils.class);
+        verify(controller, saveButtonClickListener, ForeignSecurityUtils.class);
     }
 
     @Test
