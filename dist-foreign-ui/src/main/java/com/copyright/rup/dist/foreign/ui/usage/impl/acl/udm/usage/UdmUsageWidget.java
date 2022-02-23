@@ -176,7 +176,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             initEditResearcherWindow(selectedUsages, createWindow);
         } else {
             if (isUsagesProcessingCompleted(selectedUsages)) {
-                openEditWindow(selectedUsages, createWindow);
+                Windows.showModalWindow(createWindow.get());
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage(USAGES_PROCESSING_ERROR_MESSAGE));
             }

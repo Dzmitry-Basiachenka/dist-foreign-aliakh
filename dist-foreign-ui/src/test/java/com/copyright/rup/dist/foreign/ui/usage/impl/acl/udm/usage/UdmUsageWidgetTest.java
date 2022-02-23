@@ -347,33 +347,9 @@ public class UdmUsageWidgetTest {
     }
 
     @Test
-    public void testMultipleEditButtonClickListenerSpecialistForbiddenInvalidAssignee() {
-        testMultipleEditButtonClickListenerSpecialistForbidden(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE,
-            USAGE_NOT_EDITED_ERROR_MESSAGE);
-    }
-
-    @Test
-    public void testMultipleEditButtonClickListenerSpecialistForbiddenNullAssignee() {
-        testMultipleEditButtonClickListenerSpecialistForbidden(UsageStatusEnum.WORK_NOT_FOUND, null,
-            USAGE_NOT_EDITED_ERROR_MESSAGE);
-    }
-
-    @Test
     public void testMultipleEditButtonClickListenerSpecialistForbiddenUsageProcessingCompleted() {
         testMultipleEditButtonClickListenerSpecialistForbidden(UsageStatusEnum.NEW, USER,
             USAGE_PROCESSING_ERROR_MESSAGE);
-    }
-
-    @Test
-    public void testMultipleEditButtonClickListenerManagerForbiddenInvalidAssignee() {
-        testMultipleEditButtonClickListenerManagerForbidden(UsageStatusEnum.WORK_NOT_FOUND, INVALID_ASSIGNEE,
-            USAGE_NOT_EDITED_ERROR_MESSAGE);
-    }
-
-    @Test
-    public void testMultipleEditButtonClickListenerManagerForbiddenNullAssignee() {
-        testMultipleEditButtonClickListenerManagerForbidden(UsageStatusEnum.WORK_NOT_FOUND, null,
-            USAGE_NOT_EDITED_ERROR_MESSAGE);
     }
 
     @Test
