@@ -109,7 +109,11 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         statusComboBox.setSizeFull();
         statusComboBox.setItems(EDIT_AVAILABLE_STATUSES);
         statusComboBox.setEmptySelectionAllowed(false);
-        binder.forField(statusComboBox).bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
+        binder.forField(statusComboBox)
+            .withValidator(value -> StringUtils.isEmpty(wrWrkInstField.getValue())
+                    || value == UsageStatusEnum.NEW,
+                ForeignUi.getMessage("field.error.not_set_new_detail_status_after_changes"))
+            .bind(UdmUsageDto::getStatus, UdmUsageDto::setStatus);
         VaadinUtils.addComponentStyle(statusComboBox, "udm-multiple-edit-detail-status-combo-box");
         return buildCommonLayout(statusComboBox, "label.detail_status");
     }
@@ -132,6 +136,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
+        wrWrkInstField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(wrWrkInstField, "udm-multiple-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
@@ -171,7 +176,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
                 saveButtonClickListener.buttonClick(event);
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstField, commentField));
+                Windows.showValidationErrorWindow(Arrays.asList(statusComboBox, wrWrkInstField, commentField));
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
