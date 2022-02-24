@@ -98,10 +98,8 @@ public class LoadAaclUsagesIntegrationTest {
     @Test
     public void testLoadUsages() throws Exception {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/aacl/rms_grants_100009840_request.json",
-            "rights/aacl/rms_grants_100009840_response.json");
-        testHelper.expectGetRmsRights("rights/aacl/rms_grants_100010768_request.json",
-            "rights/aacl/rms_grants_100010768_response.json");
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_request_2.json",
+            "rights/aacl/rms_grants_response_2.json");
         testHelper.expectGetRmsRights("rights/aacl/rms_grants_123456789_request.json",
             "rights/rms_grants_empty_response.json");
         testHelper.expectPrmCall("prm/rightsholder_1000024950_response.json", 1000024950L);

@@ -11,22 +11,22 @@
       "foundWorkCount": "1",
       "rights": [
         {
-          "wr_wrk_inst": "243618757",
+          "wr_wrk_inst": "122769471",
           "status": "GRANT",
           "type_of_use": "DIGITAL",
-          "market": "CORPORATE",
-          "distribution": "EXTERNAL",
+          "market": "ACADEMIC",
+          "distribution": "INTERNAL",
           "region": "WORLDWIDE",
-          "right_begin_date": "12/20/1995",
+          "right_begin_date": "08/12/2011",
           "right_end_date": "12/31/3000",
-          "publication_begin_date": "01/01/1995",
+          "publication_begin_date": "01/01/2011",
           "publication_end_date": "12/31/3000",
-          "agreement_begin_date": "12/20/1995",
+          "agreement_begin_date": "08/12/2011",
           "agreement_end_date": "12/31/3000",
           "wg_owner_org_number": "1000000322",
-          "right_id": "0c881491-d3d8-4516-87de-8d396a1fce05",
-          "license_type": "ACL",
-          "product_family": "ACL",
+          "right_id": "64da9e68-316d-4406-91dd-bf3df2941bc9",
+          "license_type": "SAL",
+          "product_family": "SAL",
           "rh_account_number": "1000000322"
         }
       ]

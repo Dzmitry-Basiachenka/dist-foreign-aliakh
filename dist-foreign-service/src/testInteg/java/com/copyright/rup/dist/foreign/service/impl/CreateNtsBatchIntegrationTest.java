@@ -57,8 +57,8 @@ public class CreateNtsBatchIntegrationTest {
     private static final String PRM_RH_2000017001_RESPONSE = "prm/rightsholder_2000017001_response.json";
     private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
     private static final String RMS_GRANTS_65882434_RESPONSE = "rights/rms_grants_658824345_response.json";
-    private static final String RMS_GRANTS_958824349_REQUEST = "rights/rms_grants_958824349_request.json";
-    private static final String RMS_GRANTS_958824349_RESPONSE = "rights/rms_grants_958824349_response.json";
+    private static final String RMS_GRANTS_REQUEST_1 = "rights/nts/rms_grants_request_1.json";
+    private static final String RMS_GRANTS_RESPONSE_1 = "rights/nts/rms_grants_response_1.json";
     private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE =
         "preferences/rh_1000023401_eligible_response.json";
     private static final String RH_ID_1 = "85f864f2-30a5-4215-ac4f-f1f541901218";
@@ -102,9 +102,7 @@ public class CreateNtsBatchIntegrationTest {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .withInitialUsagesCount(2)
-            .expectRmsRights(ImmutableMap.of(
-                RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
-                RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
+            .expectRmsRights(ImmutableMap.of(RMS_GRANTS_REQUEST_1, RMS_GRANTS_RESPONSE_1))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE,
@@ -123,9 +121,7 @@ public class CreateNtsBatchIntegrationTest {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .withInitialUsagesCount(2)
-            .expectRmsRights(ImmutableMap.of(
-                RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
-                RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
+            .expectRmsRights(ImmutableMap.of(RMS_GRANTS_REQUEST_1, RMS_GRANTS_RESPONSE_1))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE,
@@ -149,9 +145,7 @@ public class CreateNtsBatchIntegrationTest {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildNtsFields(DOC_DEL_MARKET, STM_AMOUNT, true)))
             .withInitialUsagesCount(2)
-            .expectRmsRights(ImmutableMap.of(
-                RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE,
-                RMS_GRANTS_958824349_REQUEST, RMS_GRANTS_958824349_RESPONSE))
+            .expectRmsRights(ImmutableMap.of(RMS_GRANTS_REQUEST_1, RMS_GRANTS_RESPONSE_1))
             .expectPrmCall(ImmutableMap.of(
                 2000017001L, PRM_RH_2000017001_RESPONSE,
                 1000023401L, PRM_RH_1000023401_RESPONSE,

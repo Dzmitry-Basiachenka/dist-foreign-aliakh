@@ -2,6 +2,13 @@
   "works": [
     {
       "status": ["GRANT"],
+      "wr_wrk_inst": 100009840,
+      "period_end_date": "06/30/2019",
+      "type_of_use": ["PRINT", "DIGITAL"],
+      "license_type": ["AACL"]
+    },
+    {
+      "status": ["GRANT"],
       "wr_wrk_inst": 100010768,
       "period_end_date": "06/30/2019",
       "type_of_use": ["PRINT", "DIGITAL"],

@@ -47,7 +47,7 @@ public class AclGrantService implements IAclGrantService {
     @Value("#{$RUP{dist.foreign.rest.rms.rights.partition_size}}")
     private int rightsPartitionSize;
     @Autowired
-    @Qualifier("dist.common.integration.rmsRightsService")
+    @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
 
     @Override

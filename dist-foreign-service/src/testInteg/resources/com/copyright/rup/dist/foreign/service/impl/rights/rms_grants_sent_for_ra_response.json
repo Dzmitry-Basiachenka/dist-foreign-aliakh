@@ -6,8 +6,8 @@
     },
     "content": {
       "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
-      "requestedWorkCount": "4",
-      "processedWorkCount": "4",
+      "requestedWorkCount": "2",
+      "processedWorkCount": "2",
       "foundWorkCount": "7",
       "rights": [
         {
