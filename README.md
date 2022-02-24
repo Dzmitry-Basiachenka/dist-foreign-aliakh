@@ -1,3 +1,11 @@
+15.1.3
+-
+* B-70887 FDA: Edit functionality modification on multi edit: Refactor multi edit of not assigned usages to specialist or manager
+* B-70867 FDA: WrWrkInst change status to new: fix issue with null values
+* B-70867 FDA: Wr Wrk Inst change set status New: Add validation for Detail Status after changing WR Wrk Inst for researchers multi edit
+* B-70867 FDA: Wr Wrk Inst change set status New: fix validation for Detail Status after changing WR Wrk Inst for researchers single edit
+* B-70816 FDA: Investigate(fix) issues with FDA RMS integration: reimplement RmsRightCacheService
+
 15.1.2
 -
 * B-70074 FDA: Tech Debt: move UDM value filter window to binder approach
