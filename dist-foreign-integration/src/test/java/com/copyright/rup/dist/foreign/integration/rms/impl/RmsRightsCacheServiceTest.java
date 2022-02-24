@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.integration.rms.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -15,12 +17,14 @@ import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +45,7 @@ public class RmsRightsCacheServiceTest {
     private static final Long RH_ACCOUNT_NUMBER_2 = 2000009522L;
     private static final Long WR_WRK_INST_1 = 459815489L;
     private static final Long WR_WRK_INST_2 = 559815489L;
+    private static final Long WR_WRK_INST_3 = 659815489L;
 
     private IRmsRightsService rmsService;
     private RmsRightsCacheService rmsAllRightsCacheService;
@@ -56,40 +61,47 @@ public class RmsRightsCacheServiceTest {
     @Test
     public void testGetAllRmsGrants() {
         List<Long> wrWrkInst1 = Collections.singletonList(WR_WRK_INST_1);
-        List<Long> wrWrkInst2 = Collections.singletonList(WR_WRK_INST_2);
+        List<Long> wrWrkInst2 = Arrays.asList(WR_WRK_INST_2, WR_WRK_INST_3);
+        Set<RmsGrant> expectedRmsGrants1 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1));
+        Set<RmsGrant> expectedRmsGrants2 = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
+            buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
+        Capture<List<Long>> wrWrkInstsCapture = newCapture();
         expect(rmsService.getGrants(eq(wrWrkInst1), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
-            eq(Collections.emptySet())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
-        expect(rmsService.getGrants(eq(wrWrkInst2), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
-            eq(Collections.emptySet())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2))).once();
+            eq(Collections.emptySet()))).andReturn(expectedRmsGrants1).once();
+        expect(rmsService.getGrants(capture(wrWrkInstsCapture), anyObject(), eq(Collections.emptySet()),
+            eq(Collections.emptySet()), eq(Collections.emptySet()))).andReturn(expectedRmsGrants2).once();
         replay(rmsService);
         Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst1, LocalDate.now(), Collections.emptySet(),
             Collections.emptySet(), Collections.emptySet());
         assertEquals(1, CollectionUtils.size(grants));
-        assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
+        assertTrue(grants.containsAll(expectedRmsGrants1));
         grants = rmsAllRightsCacheService.getGrants(wrWrkInst2, LocalDate.now(), Collections.emptySet(),
             Collections.emptySet(), Collections.emptySet());
-        assertEquals(1, CollectionUtils.size(grants));
-        assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2)));
+        assertEquals(2, CollectionUtils.size(grants));
+        assertTrue(grants.containsAll(expectedRmsGrants2));
+        verifyWrWrkInsts(wrWrkInst2, wrWrkInstsCapture.getValue());
         verify(rmsService);
     }
 
     @Test
     public void testGetAllRmsGrantsFromCache() {
-        List<Long> wrWrkInst = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(eq(wrWrkInst), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
-            eq(Collections.emptySet())))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
+        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_2, WR_WRK_INST_3);
+        Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
+            buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2),
+            buildRmsGrant(WR_WRK_INST_3, RH_ACCOUNT_NUMBER_2));
+        Capture<List<Long>> wrWrkInstsCapture = newCapture();
+        expect(rmsService.getGrants(capture(wrWrkInstsCapture), anyObject(), eq(Collections.emptySet()),
+            eq(Collections.emptySet()), eq(Collections.emptySet()))).andReturn(expectedRmsGrants).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(), Collections.emptySet(),
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInsts, LocalDate.now(), Collections.emptySet(),
             Collections.emptySet(), Collections.emptySet());
-        assertEquals(1, CollectionUtils.size(grants));
-        assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, LocalDate.now(),
+        assertEquals(3, CollectionUtils.size(grants));
+        assertTrue(grants.containsAll(expectedRmsGrants));
+        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInsts, LocalDate.now(),
             Collections.emptySet(), Collections.emptySet(), Collections.emptySet());
-        assertEquals(1, CollectionUtils.size(grantsFromCache));
-        assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
+        assertEquals(3, CollectionUtils.size(grantsFromCache));
+        assertTrue(grants.containsAll(expectedRmsGrants));
+        verifyWrWrkInsts(wrWrkInsts, wrWrkInstsCapture.getValue());
         verify(rmsService);
     }
 
@@ -97,31 +109,36 @@ public class RmsRightsCacheServiceTest {
     public void testGetAllRmsGrantsFromCacheWithTypeOfUses() {
         LocalDate periodEndDate = LocalDate.of(2019, 6, 30);
         Set<String> typeOfUses = Sets.newHashSet("PRINT", "DIGITAL");
-        List<Long> wrWrkInst = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(wrWrkInst, periodEndDate, Collections.emptySet(), typeOfUses,
-            Collections.emptySet()))
-            .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1))).once();
+        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_2);
+        Set<RmsGrant> expectedRmsGrants = Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1),
+            buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2));
+        Capture<List<Long>> wrWrkInstsCapture = newCapture();
+        expect(rmsService.getGrants(capture(wrWrkInstsCapture), eq(periodEndDate), eq(Collections.emptySet()),
+            eq(typeOfUses), eq(Collections.emptySet()))).andReturn(expectedRmsGrants).once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate, Collections.emptySet(),
+        Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInsts, periodEndDate, Collections.emptySet(),
             typeOfUses, Collections.emptySet());
-        assertEquals(1, CollectionUtils.size(grants));
-        assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInst, periodEndDate,
+        assertEquals(2, CollectionUtils.size(grants));
+        assertTrue(grants.containsAll(expectedRmsGrants));
+        Set<RmsGrant> grantsFromCache = rmsAllRightsCacheService.getGrants(wrWrkInsts, periodEndDate,
             Collections.emptySet(), typeOfUses, Collections.emptySet());
-        assertEquals(1, CollectionUtils.size(grantsFromCache));
-        assertTrue(grantsFromCache.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
+        assertEquals(2, CollectionUtils.size(grantsFromCache));
+        assertTrue(grantsFromCache.containsAll(expectedRmsGrants));
+        verifyWrWrkInsts(wrWrkInsts, wrWrkInstsCapture.getValue());
         verify(rmsService);
     }
 
     @Test
     public void testGetAllRmsGrantsNotFound() {
-        List<Long> wrWrkInsts = Collections.singletonList(WR_WRK_INST_1);
-        expect(rmsService.getGrants(eq(wrWrkInsts), anyObject(), eq(Collections.emptySet()), eq(Collections.emptySet()),
-            eq(Collections.emptySet()))).andReturn(new HashSet<>()).once();
+        List<Long> wrWrkInsts = Arrays.asList(WR_WRK_INST_1, WR_WRK_INST_3);
+        Capture<List<Long>> wrWrkInstsCapture = newCapture();
+        expect(rmsService.getGrants(capture(wrWrkInstsCapture), anyObject(), eq(Collections.emptySet()),
+            eq(Collections.emptySet()), eq(Collections.emptySet()))).andReturn(new HashSet<>()).once();
         replay(rmsService);
         Set<RmsGrant> grants = rmsAllRightsCacheService.getGrants(wrWrkInsts, LocalDate.now(), Collections.emptySet(),
             Collections.emptySet(), Collections.emptySet());
         assertTrue(CollectionUtils.isEmpty(grants));
+        verifyWrWrkInsts(wrWrkInsts, wrWrkInstsCapture.getValue());
         verify(rmsService);
     }
 
@@ -129,8 +146,13 @@ public class RmsRightsCacheServiceTest {
         RmsGrant rmsGrant = new RmsGrant();
         rmsGrant.setWrWrkInst(wrWrkInst);
         rmsGrant.setStatus("GRANT");
-        rmsGrant.setTypeOfUse("NGT_PHOTOCOPY");
+        rmsGrant.setTypeOfUse("PRINT");
         rmsGrant.setWorkGroupOwnerOrgNumber(new BigDecimal(rhAccountNumber));
         return rmsGrant;
+    }
+
+    private void verifyWrWrkInsts(List<Long> expectedWrWrkInsts, List<Long> actualWrWrkInsts) {
+        assertEquals(expectedWrWrkInsts.size(), actualWrWrkInsts.size());
+        assertTrue(actualWrWrkInsts.containsAll(expectedWrWrkInsts));
     }
 }

@@ -2,6 +2,13 @@
   "works": [
     {
       "status": ["GRANT", "DENY"],
+      "wr_wrk_inst": 122769471,
+      "period_end_date": "06/30/2020",
+      "type_of_use": ["DIGITAL"],
+      "license_type": ["SAL"]
+    },
+    {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 243618757,
       "period_end_date": "06/30/2020",
       "type_of_use": ["DIGITAL"],

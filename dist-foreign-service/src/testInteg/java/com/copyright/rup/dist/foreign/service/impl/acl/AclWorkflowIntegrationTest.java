@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 
 import com.google.common.collect.ImmutableMap;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,15 +56,14 @@ public class AclWorkflowIntegrationTest {
             .withUdmBatch(buildUdmBatch())
             .withUsagesToUpload("acl/usage/udm_usages_workflow.csv")
             .withRmsRequests(ImmutableMap.<String, String>builder()
-                .put("rights/rms_grants_udm_876543210_request.json", "rights/rms_grants_udm_876543210_response.json")
-                .put("rights/rms_grants_udm_123059057_request.json", "rights/rms_grants_udm_123059057_response.json")
-                .put("rights/rms_grants_udm_987654321_request.json", "rights/rms_grants_empty_response.json")
-                .put("rights/rms_grants_udm_140160102_request.json", "rights/rms_grants_udm_140160102_response.json")
-                .put("rights/rms_grants_udm_243618757_request.json", "rights/rms_grants_udm_243618757_response.json")
-                .put("rights/rms_grants_udm_values_202006_1_request.json",
-                    "rights/rms_grants_udm_values_202006_1_response.json")
-                .put("rights/rms_grants_udm_values_202006_2_request.json",
-                    "rights/rms_grants_udm_values_202006_2_response.json")
+                .put("rights/udm/usage/rms_grants_876543210_request.json",
+                    "rights/udm/usage/rms_grants_876543210_response.json")
+                .put("rights/udm/usage/rms_grants_request_2.json", "rights/udm/usage/rms_grants_response_2.json")
+                .put("rights/udm/usage/rms_grants_request_3.json", "rights/udm/usage/rms_grants_response_3.json")
+                .put("rights/udm/value/rms_grants_202006_1_request.json",
+                    "rights/udm/value/rms_grants_202006_1_response.json")
+                .put("rights/udm/value/rms_grants_202006_2_request.json",
+                    "rights/udm/value/rms_grants_202006_2_response.json")
                 .build())
             .withPrmRequests(ImmutableMap.of(
                 1000000322L, "prm/rightsholder_1000000322_response.json",

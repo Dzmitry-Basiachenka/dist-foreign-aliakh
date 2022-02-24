@@ -68,8 +68,7 @@ public class NtsWorkflowIntegrationTest {
             .withUsageBatch(buildUsageBatch(buildNtsFields()))
             .expectRollups("prm/nts_rollups_response.json", RH_ID_1)
             .expectRmsRights(ImmutableMap.of(
-                "rights/rms_grants_448824345_request.json", "rights/rms_grants_448824345_response.json",
-                "rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json"))
+                "rights/nts/rms_grants_request_2.json", "rights/nts/rms_grants_response_2.json"))
             .expectPrmCall(ImmutableMap.of(
                 1000009522L, "prm/rightsholder_1000009522_response.json",
                 1000023401L, "prm/rightsholder_1000023401_response.json"))

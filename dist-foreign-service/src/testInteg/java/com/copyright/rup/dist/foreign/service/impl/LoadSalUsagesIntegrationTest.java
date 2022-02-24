@@ -92,12 +92,9 @@ public class LoadSalUsagesIntegrationTest {
     @Test
     public void testLoadUsages() throws Exception {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/rms_grants_122769471_request.json",
-            "rights/rms_grants_122769471_response.json");
-        testHelper.expectGetRmsRights("rights/rms_grants_243618757_request.json",
-            "rights/rms_grants_243618757_response.json");
-        testHelper.expectGetRmsRights("rights/rms_grants_140160102_request.json",
-            "rights/rms_grants_empty_response.json");
+        testHelper.expectGetRmsRights("rights/sal/rms_grants_122769471_request.json",
+            "rights/sal/rms_grants_122769471_response.json");
+        testHelper.expectGetRmsRights("rights/sal/rms_grants_request_2.json", "rights/sal/rms_grants_response_2.json");
         testHelper.expectPrmCall("prm/rightsholder_1000000322_response.json", 1000000322L);
         loadUsageBatch();
         assertUsageBatch();

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.rms.impl;
 
-import com.copyright.rup.common.caching.impl.AbstractCacheService;
 import com.copyright.rup.dist.common.domain.RmsGrant;
+import com.copyright.rup.dist.common.integration.rest.prm.AbstractMultipleCacheService;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.foreign.integration.rms.impl.RmsRightsCacheService.RmsGrantKey;
 
@@ -9,8 +9,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author Uladzislau Shalamitski
  */
-public class RmsRightsCacheService extends AbstractCacheService<RmsGrantKey, Set<RmsGrant>>
+public class RmsRightsCacheService extends AbstractMultipleCacheService<RmsGrantKey, Set<RmsGrant>>
     implements IRmsRightsService {
 
     private final IRmsRightsService rmsRightsService;
@@ -48,20 +49,36 @@ public class RmsRightsCacheService extends AbstractCacheService<RmsGrantKey, Set
     public Set<RmsGrant> getGrants(List<Long> wrWrkInsts, LocalDate periodEndDate, Set<String> statuses,
                                    Set<String> typeOfUses, Set<String> licenseTypes) {
         if (cacheEnabled) {
-            return wrWrkInsts.stream()
-                .flatMap(wrWrkInst ->
-                    getFromCache(
-                        new RmsGrantKey(wrWrkInst, periodEndDate, statuses, typeOfUses, licenseTypes)).stream())
-                .collect(Collectors.toSet());
+            return getDataFromCache(wrWrkInsts.stream()
+                .map(wrWrkInst -> new RmsGrantKey(wrWrkInst, periodEndDate, statuses, typeOfUses, licenseTypes))
+                .collect(Collectors.toSet()))
+                .values().stream()
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toSet());
         } else {
             return getGrantsWithoutCache(wrWrkInsts, periodEndDate, statuses, typeOfUses, licenseTypes);
         }
     }
 
     @Override
-    protected Set<RmsGrant> loadData(RmsGrantKey grantKey) {
-        return getGrantsWithoutCache(Collections.singletonList(grantKey.getWrWrkInst()), grantKey.getPeriodEndDate(),
-            grantKey.getStatuses(), grantKey.getTypeOfUses(), grantKey.getLicenseTypes());
+    public Map<RmsGrantKey, Set<RmsGrant>> loadData(Set<RmsGrantKey> grantKeys) {
+        RmsGrantKey rmsGrantKey = grantKeys.stream().findAny().get();
+        List<Long> wrWrkInsts = grantKeys.stream()
+            .map(RmsGrantKey::getWrWrkInst)
+            .collect(Collectors.toList());
+        Set<RmsGrant> rmsGrants = getGrantsWithoutCache(wrWrkInsts, rmsGrantKey.getPeriodEndDate(),
+            rmsGrantKey.getStatuses(), rmsGrantKey.getTypeOfUses(), rmsGrantKey.getLicenseTypes());
+        return grantKeys.stream()
+            .collect(Collectors.toMap(
+                grantKey -> grantKey,
+                grantKey -> rmsGrants.stream()
+                    .filter(rmsGrant -> rmsGrant.getWrWrkInst().equals(grantKey.getWrWrkInst()))
+                    .collect(Collectors.toSet())));
+    }
+
+    @Override
+    protected Set<RmsGrant> loadData(RmsGrantKey key) {
+        return null;
     }
 
     private Set<RmsGrant> getGrantsWithoutCache(List<Long> wrWrkInsts, LocalDate periodEndDate, Set<String> statuses,

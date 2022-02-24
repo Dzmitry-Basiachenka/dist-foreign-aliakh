@@ -2,6 +2,12 @@
   "works": [
     {
       "status": ["GRANT", "DENY", "SPECIAL_REQUEST"],
+      "wr_wrk_inst": 243618757,
+      "period_end_date": "06/30/2020",
+      "license_type": ["ACL"]
+    },
+    {
+      "status": ["GRANT", "DENY", "SPECIAL_REQUEST"],
       "wr_wrk_inst": 140160102,
       "period_end_date": "06/30/2020",
       "license_type": ["ACL"]

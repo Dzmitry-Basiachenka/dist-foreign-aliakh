@@ -105,10 +105,8 @@ public class AaclWorkflowIntegrationTest {
             .expectUsages("usage/aacl/aacl_expected_usages_for_workflow.json")
             .expectArchivedUsages("usage/aacl/aacl_expected_archived_usages_for_workflow.json")
             .expectRollups("prm/aacl_workflow_rollups_response.json", "60080587-a225-439c-81af-f016cb33aeac")
-            .expectRmsRights("rights/aacl/rms_grants_100009840_request_workflow.json",
-                "rights/aacl/rms_grants_100009840_response_workflow.json")
-            .expectRmsRights("rights/aacl/rms_grants_100010768_request_workflow.json",
-                "rights/aacl/rms_grants_100010768_response_workflow.json")
+            .expectRmsRights("rights/aacl/rms_grants_request_workflow.json",
+                "rights/aacl/rms_grants_response_workflow.json")
             .expectRmsRights("rights/aacl/rms_grants_123456789_request_workflow.json",
                 "rights/rms_grants_empty_response.json")
             .expectLmDetails(1, "details/aacl_details_to_lm.json")

@@ -6,12 +6,12 @@
     },
     "content": {
       "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
-      "requestedWorkCount": "4",
-      "processedWorkCount": "4",
-      "foundWorkCount": "13",
+      "requestedWorkCount": "2",
+      "processedWorkCount": "2",
+      "foundWorkCount": "8",
       "rights": [
         {
-          "wr_wrk_inst": "958824349",
+          "wr_wrk_inst": "658824345",
           "status": "GRANT",
           "type_of_use": "NGT_PHOTOCOPY",
           "market": "CORPORATE",
@@ -23,11 +23,30 @@
           "publication_end_date": "12/31/1992",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "NGT_PHOTOCOPY",
           "product_family": "TRS",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
+        },
+        {
+          "wr_wrk_inst": "658824345",
+          "status": "SPECIAL_REQUEST",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "08/06/2008",
+          "right_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
+          "agreement_begin_date": "08/05/0001",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000010088",
+          "right_id": "566ff265-7889-44fc-997c-0b0e346609bb",
+          "license_type": "MACL",
+          "product_family": "MACL",
+          "rh_account_number": "1000010088"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -42,11 +61,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "08/12/2011",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "ACLDIGITAL",
           "product_family": "ACLDIGITAL",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -61,11 +80,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/07/2001",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "ACLDIGITAL",
           "product_family": "ACLDIGITAL",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -80,11 +99,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "ACLPRINT",
           "product_family": "ACLPRINT",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -99,11 +118,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "08/12/2011",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "ACLPRINT",
           "product_family": "ACLPRINT",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -118,11 +137,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "NGT_PHOTOCOPY",
           "product_family": "DPS",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         },
         {
           "wr_wrk_inst": "658824345",
@@ -137,11 +156,11 @@
           "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/07/2001",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000023995",
+          "wg_owner_org_number": "1000023401",
           "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
           "license_type": "REACTIVELY_SHARE",
           "product_family": "REACTIVELY_SHARE",
-          "rh_account_number": "1000023995"
+          "rh_account_number": "1000023401"
         }
       ]
     }

@@ -66,10 +66,7 @@ public class LoadResearchedUsagesIntegrationTest {
     @Test
     public void testLoadResearchedUsages() {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/rms_grants_854030732_request.json",
-            "rights/rms_grants_empty_response.json");
-        testHelper.expectGetRmsRights("rights/rms_grants_658824345_request.json",
-            "rights/rms_grants_658824345_response.json");
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_request_2.json", "rights/fas/rms_grants_response_2.json");
         testHelper.expectPrmCall("prm/rightsholder_1000023401_response.json", 1000023401L);
         fasUsageService.loadResearchedUsages(Arrays.asList(
             buildResearchedUsage(USAGE_ID_1, 658824345L, "1008902112377654XX", "VALISBN13", "Medical Journal"),
