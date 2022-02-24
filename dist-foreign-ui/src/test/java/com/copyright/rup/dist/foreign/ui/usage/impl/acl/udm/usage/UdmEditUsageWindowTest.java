@@ -229,6 +229,25 @@ public class UdmEditUsageWindowTest {
     }
 
     @Test
+    public void testUdmUsageStatusValidationResearcher() {
+        setResearcherExpectations();
+        initEditWindow();
+        ComboBox<UdmIneligibleReason> ineligibleReason = Whitebox.getInternalState(window, INELIGIBLE_REASON_COMBOBOX);
+        ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, USAGE_STATUS_COMBOBOX);
+        TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
+        ineligibleReason.setValue(null);
+        detailsStatus.setValue(UsageStatusEnum.OPS_REVIEW);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        wrWrkInstField.setValue(Objects.toString(123L));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, false);
+        detailsStatus.setValue(UsageStatusEnum.NEW);
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+        detailsStatus.setValue(UsageStatusEnum.OPS_REVIEW);
+        wrWrkInstField.setValue(Objects.toString(WR_WRK_INST));
+        verifyBinderStatusAndValidationMessage(DETAIL_STATUS_VALIDATION_MESSAGE, true);
+    }
+
+    @Test
     public void testUdmUsageStatusValidation() {
         setSpecialistExpectations();
         initEditWindow();

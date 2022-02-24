@@ -101,7 +101,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     private final ClickListener saveButtonClickListener;
     private final boolean hasResearcherPermission = ForeignSecurityUtils.hasResearcherPermission();
     private final UdmUsageAuditFieldToValuesMap fieldToValueChangesMap;
-    private final UdmUsageFieldsForStatusValidation udmUsageFieldsBeforeChanges;
+    private UdmUsageFieldsForStatusValidation udmUsageFieldsBeforeChanges;
 
     /**
      * Constructor.
@@ -117,8 +117,6 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         fieldToValueChangesMap = new UdmUsageAuditFieldToValuesMap(udmUsage);
         saveButtonClickListener = clickListener;
         idToLicenseeClassMap = controller.getIdsToDetailLicenseeClasses();
-        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(
-            udmUsage.getWrWrkInst(), udmUsage.getReportedTitle(), udmUsage.getReportedStandardNumber());
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.edit_udm_usage"));
         setResizable(false);
@@ -148,6 +146,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     }
 
     private Component[] getComponentsForResearcher() {
+        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst());
         return new Component[]{
             buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
             buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
@@ -186,6 +185,8 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
     }
 
     private Component[] getComponentsForSpecialistAndManager() {
+        udmUsageFieldsBeforeChanges = new UdmUsageFieldsForStatusValidation(udmUsage.getWrWrkInst(),
+            udmUsage.getReportedTitle(), udmUsage.getReportedStandardNumber());
         return new Component[]{
             buildReadOnlyLayout("label.detail_id", UdmUsageDto::getId, binder),
             buildReadOnlyLayout("label.period", usage -> Objects.toString(usage.getPeriod()), binder),
@@ -564,6 +565,10 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
             this.wrWrkInst = wrWrkInst;
             this.reportedTitle = reportedTitle;
             this.reportedStandardNumber = reportedStandardNumber;
+        }
+
+        UdmUsageFieldsForStatusValidation(Long wrWrkInst) {
+            this.wrWrkInst = wrWrkInst;
         }
 
         public Long getWrWrkInst() {
