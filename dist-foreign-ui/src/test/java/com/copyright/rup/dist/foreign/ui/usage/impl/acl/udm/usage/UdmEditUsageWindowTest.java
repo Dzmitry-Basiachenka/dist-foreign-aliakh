@@ -135,7 +135,7 @@ public class UdmEditUsageWindowTest {
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String REASON = "Reason";
-    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to NEW in order to save";
     private static final String INELIGIBLE_REASON_COMBOBOX = "ineligibleReasonComboBox";
     private static final String USAGE_STATUS_COMBOBOX = "usageStatusComboBox";
 

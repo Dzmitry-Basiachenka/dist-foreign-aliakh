@@ -79,7 +79,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     private static final String COMMENT = "Should be reviewed by Specialist";
     private static final String NEW_COMMENT = "Should be reviewed by Manager";
     private static final String NEW_REASON = "Should be improved";
-    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to NEW in order to save";
     private static final String STATUS_COMBOBOX = "statusComboBox";
 
     private UdmEditMultipleUsagesResearcherWindow window;
