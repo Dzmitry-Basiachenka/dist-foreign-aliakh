@@ -150,7 +150,7 @@ public class UdmEditMultipleUsagesWindowTest {
     private static final String ANNUAL_MULTIPLIER_FIELD = "Annual Multiplier";
     private static final String STATISTICAL_MULTIPLIER_FIELD = "Statistical Multiplier";
     private static final String QUANTITY_FIELD = "Quantity";
-    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to \"New\" in order to save";
+    private static final String DETAIL_STATUS_VALIDATION_MESSAGE = "Please set the status to NEW in order to save";
     private static final String STATUS_COMBOBOX = "statusComboBox";
 
     private UdmEditMultipleUsagesWindow window;
