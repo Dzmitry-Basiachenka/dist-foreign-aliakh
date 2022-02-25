@@ -1,18 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -41,8 +44,7 @@ public class AaclBaselineUsagesReportWidgetTest {
 
     @Test
     public void testInit() {
-        assertEquals(300, widget.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
+        verifyWindow(widget, StringUtils.EMPTY, 300, -1, Unit.PIXELS);
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(2, content.getComponentCount());
@@ -50,16 +52,7 @@ public class AaclBaselineUsagesReportWidgetTest {
         assertEquals(TextField.class, firstComponent.getClass());
         assertEquals("Number of Baseline Years", firstComponent.getCaption());
         Component secondComponent = content.getComponent(1);
-        assertEquals(HorizontalLayout.class, secondComponent.getClass());
-        HorizontalLayout buttonsLayout = (HorizontalLayout) secondComponent;
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Component firstButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, firstButton.getClass());
-        assertEquals("Export", firstButton.getCaption());
-        assertFalse(firstButton.isEnabled());
-        Component secondButton = buttonsLayout.getComponent(1);
-        assertEquals(Button.class, secondButton.getClass());
-        assertEquals("Close", secondButton.getCaption());
+        verifyButtonsLayout(secondComponent, "Export", "Close");
         assertEquals("baseline-usages-report-window", widget.getStyleName());
         assertEquals("baseline-usages-report-window", widget.getId());
     }
@@ -71,14 +64,11 @@ public class AaclBaselineUsagesReportWidgetTest {
         Button exportButton = Whitebox.getInternalState(widget, "exportButton");
         verifyField(numberOfBaselineYears, "", binder, "Field value should be specified", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number",
-            false);
+        verifyField(numberOfBaselineYears, "two", binder, "Field value should be positive number", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number",
-            false);
+        verifyField(numberOfBaselineYears, "-1", binder, "Field value should be positive number", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should be positive number",
-            false);
+        verifyField(numberOfBaselineYears, " -2 ", binder, "Field value should be positive number", false);
         assertFalse(exportButton.isEnabled());
         verifyField(numberOfBaselineYears, " 1 ", binder, null, true);
         assertTrue(exportButton.isEnabled());

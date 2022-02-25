@@ -1,35 +1,38 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.report.api.ICommonScenariosReportController;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link CommonScenariosReportWidget}.
@@ -69,18 +72,17 @@ public class CommonScenariosReportWidgetTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals(500, widget.getWidth(), 0);
-        assertEquals(400, widget.getHeight(), 0);
+        verifyWindow(widget, StringUtils.EMPTY, 500, 400, Unit.PIXELS);
         assertEquals("common-scenarios-report-window", widget.getStyleName());
         assertEquals("common-scenarios-report-window", widget.getId());
-        assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
         assertTrue(searchWidget instanceof SearchWidget);
-        verifyGrid((Grid) content.getComponent(1));
-        verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
+        UiTestHelper.verifyGrid((Grid) content.getComponent(1), Arrays.asList(
+            Triple.of("Scenario Name", -1.0, -1)));
+        verifyButtonsLayout(content.getComponent(2), "Export", "Close");
     }
 
     @Test
@@ -107,26 +109,6 @@ public class CommonScenariosReportWidgetTest {
         assertEquals(Arrays.asList(scenario1, scenario2), widget.getSelectedScenarios());
         grid.deselectAll();
         assertEquals(Collections.emptyList(), widget.getSelectedScenarios());
-    }
-
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Collections.singletonList("Scenario Name"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Collections.singletonList(-1.0),
-            columns.stream().map(Column::getWidth).collect(Collectors.toList()));
-    }
-
-    private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Component exportButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, exportButton.getClass());
-        assertEquals("Export", exportButton.getCaption());
-        assertFalse(exportButton.isEnabled());
-        Component closeButton = buttonsLayout.getComponent(1);
-        assertEquals(Button.class, closeButton.getClass());
-        assertEquals("Close", closeButton.getCaption());
     }
 
     private static Scenario buildScenario(String id, String name) {

@@ -1,19 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.vaadin.server.Sizeable;
-import com.vaadin.ui.Button;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -41,8 +43,7 @@ public class FasServiceFeeTrueUpReportWidgetTest {
 
     @Test
     public void testInit() {
-        assertEquals(350, widget.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
+        verifyWindow(widget, StringUtils.EMPTY,  350, -1, Unit.PIXELS);
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(4, content.getComponentCount());
@@ -56,16 +57,7 @@ public class FasServiceFeeTrueUpReportWidgetTest {
         assertEquals(LocalDateWidget.class, thirdComponent.getClass());
         assertEquals("Payment Date To", thirdComponent.getCaption());
         Component fourthComponent = content.getComponent(3);
-        assertEquals(HorizontalLayout.class, fourthComponent.getClass());
-        HorizontalLayout buttonsLayout = (HorizontalLayout) fourthComponent;
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Component firstButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, firstButton.getClass());
-        assertEquals("Export", firstButton.getCaption());
-        assertFalse(firstButton.isEnabled());
-        Component secondButton = buttonsLayout.getComponent(1);
-        assertEquals(Button.class, secondButton.getClass());
-        assertEquals("Close", secondButton.getCaption());
+        verifyButtonsLayout(fourthComponent, "Export", "Close");
         assertEquals("report-service-fee-true-up-window", widget.getStyleName());
         assertEquals("report-service-fee-true-up-window", widget.getId());
     }

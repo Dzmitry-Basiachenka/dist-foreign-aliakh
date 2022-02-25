@@ -1,12 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
@@ -16,17 +20,17 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -34,9 +38,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link TaxNotificationReportWidget}.
@@ -54,8 +56,8 @@ public class TaxNotificationReportWidgetTest {
     private static final Scenario SCENARIO_1 = buildScenario(SCENARIO_ID_1, "Scenario One");
     private static final Scenario SCENARIO_2 = buildScenario(SCENARIO_ID_2, "Scenario Two");
     private static final String EMPTY_FIELD_ERROR_MESSAGE = "Field value should be specified";
-    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE = "Field value should be positive number " +
-        "or zero and should not exceed 99999";
+    private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number " + "or zero and should not exceed 99999";
 
     private TaxNotificationReportWidget widget;
 
@@ -70,8 +72,8 @@ public class TaxNotificationReportWidgetTest {
     public void setUp() {
         ITaxNotificationReportController controller = createMock(ITaxNotificationReportController.class);
         IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(streamSource.getSource())
-            .andReturn(new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
+        expect(streamSource.getSource()).andReturn(
+            new SimpleImmutableEntry(createMock(Supplier.class), createMock(Supplier.class))).once();
         expect(controller.getCsvStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenarios()).andReturn(Arrays.asList(SCENARIO_1, SCENARIO_2)).once();
         replay(controller, streamSource);
@@ -83,8 +85,7 @@ public class TaxNotificationReportWidgetTest {
 
     @Test
     public void testInit() {
-        assertEquals(600, widget.getWidth(), 0);
-        assertEquals(400, widget.getHeight(), 0);
+        verifyWindow(widget, StringUtils.EMPTY, 600, 400, Unit.PIXELS);
         assertEquals("tax-notification-report-window", widget.getStyleName());
         assertEquals("tax-notification-report-window", widget.getId());
         assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
@@ -93,15 +94,14 @@ public class TaxNotificationReportWidgetTest {
         assertEquals(4, content.getComponentCount());
         Component searchWidget = content.getComponent(0);
         assertTrue(searchWidget instanceof SearchWidget);
-        Component grid = content.getComponent(1);
-        assertTrue(grid instanceof Grid);
         Component numberOfDaysField = content.getComponent(2);
         assertTrue(numberOfDaysField instanceof TextField);
-        Component buttonsLayout = content.getComponent(3);
-        assertTrue(buttonsLayout instanceof HorizontalLayout);
-        verifyGrid((Grid) grid);
+        Component grid = content.getComponent(1);
+        assertTrue(grid instanceof Grid);
+        verifyGrid((Grid) content.getComponent(1),
+            Collections.singletonList(Triple.of("Scenario Name", -1.0, -1)));
         verifyNumberOfDaysField((TextField) numberOfDaysField);
-        verifyButtonsLayout((HorizontalLayout) buttonsLayout);
+        verifyButtonsLayout(content.getComponent(3), "Export", "Close");
     }
 
     @Test
@@ -140,47 +140,20 @@ public class TaxNotificationReportWidgetTest {
     public void testNumberOfDaysFieldValidation() {
         Binder binder = Whitebox.getInternalState(widget, "binder");
         TextField numberOfDays = Whitebox.getInternalState(widget, "numberOfDaysField");
-        verifyField(numberOfDays, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR_MESSAGE, false);
-        verifyField(numberOfDays, "   ", binder, EMPTY_FIELD_ERROR_MESSAGE, false);
-        verifyField(numberOfDays, "a", binder, "Field value should contain numeric values only", false);
-        verifyField(numberOfDays, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(numberOfDays, "999999", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(numberOfDays, "0", binder, null, true);
-        verifyField(numberOfDays, "99999", binder, null, true);
-    }
-
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Collections.singletonList("Scenario Name"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Collections.singletonList(-1.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
+        validateFieldAndVerifyErrorMessage(numberOfDays, StringUtils.EMPTY, binder, EMPTY_FIELD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "   ", binder, EMPTY_FIELD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "a", binder, "Field value should contain numeric values only",
+            false);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE,
+            false);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "999999", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE,
+            false);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(numberOfDays, "99999", binder, null, true);
     }
 
     private void verifyNumberOfDaysField(TextField field) {
         assertEquals("Number of days since last notification", field.getCaption());
         assertEquals("15", field.getValue());
-    }
-
-    private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Component exportButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, exportButton.getClass());
-        assertEquals("Export", exportButton.getCaption());
-        assertFalse(exportButton.isEnabled());
-        Component closeButton = buttonsLayout.getComponent(1);
-        assertEquals(Button.class, closeButton.getClass());
-        assertEquals("Close", closeButton.getCaption());
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }
