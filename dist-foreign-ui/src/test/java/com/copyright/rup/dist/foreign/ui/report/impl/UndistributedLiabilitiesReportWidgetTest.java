@@ -1,16 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.vaadin.server.Sizeable;
-import com.vaadin.ui.Button;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +36,7 @@ public class UndistributedLiabilitiesReportWidgetTest {
 
     @Test
     public void testInit() {
-        assertEquals(350, widget.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
+        verifyWindow(widget, StringUtils.EMPTY, 350, -1, Unit.PIXELS);
         assertEquals(VerticalLayout.class, widget.getContent().getClass());
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(2, content.getComponentCount());
@@ -44,16 +44,7 @@ public class UndistributedLiabilitiesReportWidgetTest {
         assertEquals(LocalDateWidget.class, firstComponent.getClass());
         assertEquals("Payment Date To", firstComponent.getCaption());
         Component secondComponent = content.getComponent(1);
-        assertEquals(HorizontalLayout.class, secondComponent.getClass());
-        HorizontalLayout buttonsLayout = (HorizontalLayout) secondComponent;
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Component firstButton = buttonsLayout.getComponent(0);
-        assertEquals(Button.class, firstButton.getClass());
-        assertEquals("Export", firstButton.getCaption());
-        assertFalse(firstButton.isEnabled());
-        Component secondButton = buttonsLayout.getComponent(1);
-        assertEquals(Button.class, secondButton.getClass());
-        assertEquals("Close", secondButton.getCaption());
+        verifyButtonsLayout(secondComponent, "Export", "Close");
         assertEquals("report-undistributed-liabilities-window", widget.getStyleName());
         assertEquals("report-undistributed-liabilities-window", widget.getId());
     }

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -20,7 +22,6 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Extension;
-import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -30,6 +31,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -70,15 +72,8 @@ public class CommonScenarioReportWidgetTest {
         replay(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
         CommonScenarioReportWidget widget = (CommonScenarioReportWidget) controller.initWidget();
         verify(scenarioService, streamSourceHandler, streamSource, productFamilyProvider);
-        verifySize(widget);
+        verifyWindow(widget, StringUtils.EMPTY, 450, -1, Unit.PIXELS);
         verifyContent(widget.getContent(), scenario);
-    }
-
-    private void verifySize(CommonScenarioReportWidget widget) {
-        assertEquals(450, widget.getWidth(), 0);
-        assertEquals(-1.0, widget.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, widget.getWidthUnits());
-        assertEquals(Sizeable.Unit.PIXELS, widget.getHeightUnits());
     }
 
     private void verifyContent(Component component, Scenario scenario) {
