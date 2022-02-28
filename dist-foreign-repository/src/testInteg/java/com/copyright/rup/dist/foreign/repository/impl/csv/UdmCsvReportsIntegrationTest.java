@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -43,10 +42,20 @@ import java.util.Collections;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
-    private static final String DATA_INIT = "udm-csv-reports-test-data-init.groovy";
+    private static final String FOLDER_NAME = "udm-csv-reports-integration-test/";
+    private static final String WRITE_PROXY_VALUE_CSV_REPORT = FOLDER_NAME + "write-proxy-value-csv-report.groovy";
+    private static final String WRITE_USAGE_CSV_REPORT = FOLDER_NAME + "write-usage-csv-report.groovy";
+    private static final String WRITE_BASELINE_USAGE_CSV_REPORT =
+        FOLDER_NAME + "write-baseline-usage-csv-report.groovy";
+    private static final String WRITE_WEEKLY_SURVEY_CSV_REPORT = FOLDER_NAME + "write-weekly-survey-csv-report.groovy";
+    private static final String WRITE_SURVEY_LICENSEE_CSV_REPORT =
+        FOLDER_NAME + "write-survey-licensee-csv-report.groovy";
+    private static final String WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT =
+        FOLDER_NAME + "write-verified-details-by-source-csv-report.groovy";
+    private static final String WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT =
+        FOLDER_NAME + "write-completed-assignments-csv-report.groovy";
 
     @Autowired
     private IUdmReportRepository udmReportRepository;
@@ -57,8 +66,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-proxy-value-csv-report.groovy")
-    public void testWriteUdmProxyValueCsvReport() throws IOException {
+    @TestData(fileName = WRITE_PROXY_VALUE_CSV_REPORT)
+    public void testWriteProxyValueCsvReport() throws IOException {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(211512, 211006));
         filter.setPubTypeNames(ImmutableSet.of("NP", "OT"));
@@ -67,8 +76,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-proxy-value-csv-report.groovy")
-    public void testWriteUdmProxyValueEmptyCsvReport() throws IOException {
+    @TestData(fileName = WRITE_PROXY_VALUE_CSV_REPORT)
+    public void testWriteProxyValueEmptyCsvReport() throws IOException {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(211012, 209906));
         filter.setPubTypeNames(ImmutableSet.of("NP"));
@@ -77,9 +86,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageCsvReportSpecialistManager() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageCsvReportSpecialistManager() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("a23681ae-1cf7-44ee-b09b-6fc06779e05c"));
         assertFilesWithExecutor(outputStream ->
@@ -88,18 +96,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageEmptyCsvReportSpecialistManager() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageEmptyCsvReportSpecialistManager() throws IOException {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportSpecialistManager(new UdmUsageFilter(), outputStream),
             "udm/usages_report_empty_specialist_manager.csv");
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageCsvReportResearcher() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageCsvReportResearcher() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("94b644cb-ab57-4825-b985-c51734a5aa1e"));
         assertFilesWithExecutor(outputStream ->
@@ -108,18 +114,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageEmptyCsvReportResearcher() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageEmptyCsvReportResearcher() throws IOException {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportResearcher(new UdmUsageFilter(), outputStream),
             "udm/usages_report_empty_researcher.csv");
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageCsvReportView() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageCsvReportView() throws IOException {
         UdmUsageFilter udmUsageFilter = new UdmUsageFilter();
         udmUsageFilter.setUdmBatchesIds(Collections.singleton("a524f8a9-2c95-43ea-8c25-b9f38b1c758e"));
         assertFilesWithExecutor(outputStream ->
@@ -128,18 +132,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmUsageEmptyCsvReportView() throws IOException {
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageEmptyCsvReportView() throws IOException {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmUsageCsvReportView(new UdmUsageFilter(), outputStream),
             "udm/usages_report_empty_view.csv");
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmBaselineUsageCsvReport() throws IOException {
+    @TestData(fileName = WRITE_BASELINE_USAGE_CSV_REPORT)
+    public void testWriteBaselineUsageCsvReport() throws IOException {
         UdmBaselineFilter udmBaselineFilter = new UdmBaselineFilter();
         udmBaselineFilter.setPeriods(Collections.singleton(202106));
         udmBaselineFilter.setChannel(UdmChannelEnum.CCC);
@@ -151,17 +153,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    //TODO: split test data into separate files for each test method
-    @TestData(fileName = DATA_INIT)
-    public void testWriteUdmBaselineUsageEmptyCsvReport() throws IOException {
+    @TestData(fileName = WRITE_BASELINE_USAGE_CSV_REPORT)
+    public void testWriteBaselineUsageEmptyCsvReport() throws IOException {
         assertFilesWithExecutor(outputStream ->
                 udmReportRepository.writeUdmBaselineUsageCsvReport(new UdmBaselineFilter(), outputStream),
             "udm/baseline_usages_report_empty.csv");
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-weekly-survey-csv-report.groovy")
-    public void testWriteUdmWeeklySurveyCsvReport() throws IOException {
+    @TestData(fileName = WRITE_WEEKLY_SURVEY_CSV_REPORT)
+    public void testWriteWeeklySurveyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(ImmutableSet.of(202006, 202112, 202206));
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.SS);
@@ -174,8 +175,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-weekly-survey-csv-report.groovy")
-    public void testWriteUdmWeeklySurveyCsvEmptyReport() throws IOException {
+    @TestData(fileName = WRITE_WEEKLY_SURVEY_CSV_REPORT)
+    public void testWriteWeeklySurveyCsvEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
@@ -186,8 +187,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-survey-licensee-csv-report.groovy")
-    public void testWriteUdmSurveyLicenseeCsvReport() throws IOException {
+    @TestData(fileName = WRITE_SURVEY_LICENSEE_CSV_REPORT)
+    public void testWriteSurveyLicenseeCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202206));
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
@@ -200,8 +201,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-survey-licensee-csv-report.groovy")
-    public void testWriteUdmSurveyLicenseeEmptyCsvReport() throws IOException {
+    @TestData(fileName = WRITE_SURVEY_LICENSEE_CSV_REPORT)
+    public void testWriteSurveyLicenseeEmptyCsvReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         reportFilter.setChannel(UdmChannelEnum.Rightsdirect);
@@ -212,7 +213,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-verified-details-by-source-csv-report.groovy")
+    @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
     public void testVerifiedDetailsBySourceReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202006));
@@ -226,7 +227,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-verified-details-by-source-csv-report.groovy")
+    @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
     public void testVerifiedDetailsBySourceEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setChannel(UdmChannelEnum.CCC);
@@ -239,7 +240,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-completed-assignments-csv-report.groovy")
+    @TestData(fileName = WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT)
     public void testCompletedAssignmentsReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202006));
@@ -252,7 +253,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
-    @TestData(fileName = "udm-csv-reports/write-udm-completed-assignments-csv-report.groovy")
+    @TestData(fileName = WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT)
     public void testCompletedAssignmentsEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setPeriods(Collections.singleton(202112));

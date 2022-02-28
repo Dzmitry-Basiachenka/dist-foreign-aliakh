@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2022-01-06-00', author: 'Mikita Maistrenka <mmaistrenka@copyright.com>') {
-        comment('Insert test data for testVerifiedDetailsBySourceReport')
+        comment('Insert test data for testVerifiedDetailsBySourceReport, testVerifiedDetailsBySourceEmptyReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '576a40ae-7874-4f58-ab14-f811c96b0677')
