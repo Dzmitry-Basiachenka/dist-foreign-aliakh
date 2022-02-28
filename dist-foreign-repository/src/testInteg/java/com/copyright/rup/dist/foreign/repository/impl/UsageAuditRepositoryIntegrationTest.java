@@ -50,8 +50,8 @@ import java.util.List;
 )
 public class UsageAuditRepositoryIntegrationTest {
 
-    private static final String TEST_DATA_INIT_FIND_BATCHES_STATISTIC =
-        "usage-audit-repository-test-data-init-find-batches-statistic.groovy";
+    private static final String FOLDER_NAME = "usage-audit-repository-integration-test/";
+    private static final String FIND_BATCHES_STATISTIC = FOLDER_NAME + "find-batches-statistic.groovy";
     private static final String USAGE_UID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_UID_2 = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
     private static final String USAGE_UID_3 = "ea85a226-8a4b-45e3-82f8-1233a9cd7ecb";
@@ -63,7 +63,7 @@ public class UsageAuditRepositoryIntegrationTest {
     private IUsageAuditRepository usageAuditRepository;
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-find-by-usage-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-usage-id.groovy")
     public void testFindByUsageId() {
         List<UsageAuditItem> auditItems = usageAuditRepository.findByUsageId(USAGE_UID_1);
         assertEquals(1, CollectionUtils.size(auditItems));
@@ -74,7 +74,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-find-by-usage-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-usage-id.groovy")
     public void testInsert() {
         List<UsageAuditItem> auditItems = usageAuditRepository.findByUsageId(USAGE_UID_1);
         assertEquals(1, CollectionUtils.size(auditItems));
@@ -92,7 +92,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_1)));
         usageAuditRepository.deleteByBatchId("56282dbc-2468-48d4-b926-93d3458a656a");
@@ -100,7 +100,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-for-sal-usage-data-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-for-sal-usage-data-by-batch-id.groovy")
     public void testDeleteForSalUsageDataByBatchId() {
         assertEquals(1,
             CollectionUtils.size(usageAuditRepository.findByUsageId("51e60822-5b4c-4fa8-9922-05e93065f216")));
@@ -116,7 +116,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-for-archived-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-for-archived-by-batch-id.groovy")
     public void testDeleteForArchivedByBatchId() {
         assertEquals(1,
             CollectionUtils.size(usageAuditRepository.findByUsageId("422d33c0-4594-451e-a1ca-412c023299aa")));
@@ -125,7 +125,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByUsageId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_1)));
         usageAuditRepository.deleteByUsageId(USAGE_UID_1);
@@ -133,7 +133,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-scenario-id.groovy")
     public void testDeleteByScenarioId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
         assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
@@ -143,7 +143,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-delete-by-scenario-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-scenario-id.groovy")
     public void testDeleteForExcludedByScenarioId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_3)));
         assertEquals(2, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID_4)));
@@ -153,7 +153,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    @TestData(fileName = FIND_BATCHES_STATISTIC)
     public void testFindFasBatchesStatisticByBatchName() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "FAS batch statistic", null);
@@ -163,7 +163,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    @TestData(fileName = FIND_BATCHES_STATISTIC)
     public void testFindFasBatchesStatisticByBatchNameAndDate() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "FAS batch statistic", LocalDate.of(2019, 4, 1));
@@ -173,7 +173,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    @TestData(fileName = FIND_BATCHES_STATISTIC)
     public void testFindNtsBatchesStatisticByBatchName() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "NTS batch statistic", null);
@@ -183,7 +183,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    @TestData(fileName = FIND_BATCHES_STATISTIC)
     public void testFindNtsBatchesStatisticByBatchNameAndDate() {
         List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
             "NTS batch statistic", LocalDate.of(2019, 4, 1));
@@ -193,7 +193,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = TEST_DATA_INIT_FIND_BATCHES_STATISTIC)
+    @TestData(fileName = FIND_BATCHES_STATISTIC)
     public void testFindBatchesStatisticByDateFromAndDateTo() throws IOException {
         List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(
             LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
@@ -204,7 +204,7 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "usage-audit-repository-test-data-init-find-usage-statistic.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-usage-statistic.groovy")
     public void testFindUsageStatistic() {
         UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
         assertEquals(USAGE_UID_2, statistic.getUsageId());
