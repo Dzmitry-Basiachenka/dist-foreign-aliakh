@@ -49,8 +49,6 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "sal-item-bank-csv-processor-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
@@ -106,6 +104,7 @@ public class SalItemBankCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "sal-item-bank-csv-processor-integration-test/test-processor.groovy")
     public void testProcessorForNegativePathBusinessValidation() throws Exception {
         ProcessingResult<Usage> result = processFile("sal_item_bank_usages_with_business_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
