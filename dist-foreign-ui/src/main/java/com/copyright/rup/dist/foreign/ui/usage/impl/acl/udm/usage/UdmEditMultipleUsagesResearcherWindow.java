@@ -14,9 +14,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.ValueProvider;
 import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
@@ -27,6 +25,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -94,8 +93,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
             buildDetailStatusLayout(),
             buildWrWrkInstLayout(),
             buildActionReasonLayout(),
-            buildCommonStringLayout(commentField, "label.comment", 4000, UdmUsageDto::getComment,
-                UdmUsageDto::setComment, "udm-edit-comment-field"),
+            buildCommentLayout(),
             buttonsLayout
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -141,16 +139,13 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
 
-    private HorizontalLayout buildCommonStringLayout(TextField textField, String caption, int maxLength,
-                                                     ValueProvider<UdmUsageDto, String> getter,
-                                                     Setter<UdmUsageDto, String> setter, String styleName) {
-        textField.setSizeFull();
-        binder.forField(textField)
-            .withValidator(
-                new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength))
-            .bind(getter, setter);
-        VaadinUtils.addComponentStyle(textField, styleName);
-        return buildCommonLayout(textField, caption);
+    private HorizontalLayout buildCommentLayout() {
+        commentField.setSizeFull();
+        binder.forField(commentField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 4000), 0, 4000))
+            .bind(UdmUsageDto::getComment, (filter, value) -> StringUtils.trimToNull(value));
+        VaadinUtils.addComponentStyle(commentField, "udm-edit-comment-field");
+        return buildCommonLayout(commentField, "label.comment");
     }
 
     private HorizontalLayout buildCommonLayout(Component component, String labelCaption) {

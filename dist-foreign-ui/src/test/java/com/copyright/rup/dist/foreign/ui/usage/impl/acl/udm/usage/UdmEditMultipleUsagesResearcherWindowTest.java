@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -24,6 +25,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
+import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -166,13 +168,13 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         fieldToValuesMap.putFieldWithValues("Wr Wrk Inst", "122825347", "1234567");
         fieldToValuesMap.putFieldWithValues("Action Reason", ACTION_REASON.getReason(), NEW_REASON);
         fieldToValuesMap.putFieldWithValues("Comment", COMMENT, NEW_COMMENT);
-        UdmUsageDto udmUsageDto = buildExpectedUdmUsageDto();
+        UdmUsageDto expectedUdmUsages = buildExpectedUdmUsageDto();
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
-            ImmutableMap.of(udmUsageDto, fieldToValuesMap);
+            ImmutableMap.of(expectedUdmUsages, fieldToValuesMap);
         udmUsages = Collections.singleton(buildUdmUsageDto());
         binder = createMock(Binder.class);
-        binder.writeBean(udmUsageDto);
-        expectLastCall();
+        binder.writeBean(expectedUdmUsages);
+        expectLastCall().once();
         controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
             true, StringUtils.EMPTY);
         expectLastCall().once();
@@ -180,14 +182,45 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         expectLastCall().once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
-        Whitebox.setInternalState(window, udmUsageDto);
+        Whitebox.setInternalState(window, expectedUdmUsages);
         updateFields();
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
-        udmUsages.forEach(this::verifyUpdatedUdmUsages);
+        udmUsages.forEach(udmUsageDto -> verifyUpdatedUdmUsages(expectedUdmUsages, udmUsageDto));
+    }
+
+    @Test
+    public void testUpdateStatusField() throws ValidationException {
+        UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
+        fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
+            UsageStatusEnum.INELIGIBLE.name());
+        UdmUsageDto expectedUdmUsages = buildUdmUsageDto();
+        expectedUdmUsages.setStatus(UsageStatusEnum.INELIGIBLE);
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
+            ImmutableMap.of(expectedUdmUsages, fieldToValuesMap);
+        udmUsages = Collections.singleton(buildUdmUsageDto());
+        binder = createMock(Binder.class);
+        binder.writeBean(expectedUdmUsages);
+        expectLastCall().once();
+        controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
+            true, StringUtils.EMPTY);
+        expectLastCall().once();
+        saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
+        expectLastCall().once();
+        replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
+        Whitebox.setInternalState(window, expectedUdmUsages);
+        ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
+        statusEnumComboBox.setValue(UsageStatusEnum.INELIGIBLE);
+        Whitebox.setInternalState(window, binder);
+        Button saveButton = Whitebox.getInternalState(window, "saveButton");
+        saveButton.setEnabled(true);
+        saveButton.click();
+        verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
+        udmUsages.forEach(udmUsageDto -> verifyUpdatedUdmUsages(expectedUdmUsages, udmUsageDto));
     }
 
     @SuppressWarnings("unchecked")
@@ -197,7 +230,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         TextField wrWrkInstField = (TextField) getComponent(1).getComponent(1);
         wrWrkInstField.setValue("1234567");
         ComboBox<UdmActionReason> actionReasonComboBox = (ComboBox<UdmActionReason>) getComponent(2).getComponent(1);
-        actionReasonComboBox.setValue(buildActionReason());
+        actionReasonComboBox.setValue(buildActionReason(NEW_REASON));
         TextField commentField = (TextField) getComponent(3).getComponent(1);
         commentField.setValue(NEW_COMMENT);
     }
@@ -207,11 +240,11 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         return (HorizontalLayout) verticalLayout.getComponent(number);
     }
 
-    private void verifyUpdatedUdmUsages(UdmUsageDto actualUdmUsageDto) {
-        assertEquals(UsageStatusEnum.INELIGIBLE, actualUdmUsageDto.getStatus());
-        assertEquals(NEW_WR_WRK_INST, actualUdmUsageDto.getWrWrkInst());
-        assertEquals(buildActionReason(), actualUdmUsageDto.getActionReason());
-        assertEquals(NEW_COMMENT, actualUdmUsageDto.getComment());
+    private void verifyUpdatedUdmUsages(UdmUsageDto expectedUdmUsageDto, UdmUsageDto actualUdmUsageDto) {
+        assertEquals(expectedUdmUsageDto.getStatus(), actualUdmUsageDto.getStatus());
+        assertEquals(expectedUdmUsageDto.getWrWrkInst(), actualUdmUsageDto.getWrWrkInst());
+        assertEquals(expectedUdmUsageDto.getActionReason(), actualUdmUsageDto.getActionReason());
+        assertEquals(expectedUdmUsageDto.getComment(), actualUdmUsageDto.getComment());
     }
 
     private HorizontalLayout getButtonsLayout() {
@@ -306,14 +339,14 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         udmUsageDto.setStatus(UsageStatusEnum.INELIGIBLE);
         udmUsageDto.setWrWrkInst(NEW_WR_WRK_INST);
         udmUsageDto.setComment(NEW_COMMENT);
-        udmUsageDto.setActionReason(buildActionReason());
+        udmUsageDto.setActionReason(buildActionReason(NEW_REASON));
         return udmUsageDto;
     }
 
-    private UdmActionReason buildActionReason() {
+    private UdmActionReason buildActionReason(String reason) {
         UdmActionReason actionReason = new UdmActionReason();
         actionReason.setId("d658136a-1e6b-4c45-9d6e-d93ccedd36f7");
-        actionReason.setReason(NEW_REASON);
+        actionReason.setReason(reason);
         return actionReason;
     }
 }
