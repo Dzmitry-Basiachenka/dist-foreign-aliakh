@@ -1,3 +1,13 @@
+15.1.4
+-
+* B-70867 FDA: Wr Wrk Inst change set status New: refactor error message
+* B-72269 FDA: Tech Debt: move common logic to common class to avoid duplicate logic
+* B-72269 FDA: Tech Debt: move Liquibase scripts for SalCsvReportsIntegrationTest into a separate folder
+* B-72269 FDA: Tech Debt: move Liquibase scripts for UsageAuditRepositoryIntegrationTest into separate folder
+* B-72269 FDA: Tech Debt: move Liquibase scripts for UdmCsvReportsIntegrationTest into a separate folder
+* B-72269 FDA: Tech Debt: resolve issue with lost comment field  during multiple edit of usage for researcher role
+* B-72269 FDA: Tech Debt: move Liquibase scripts for UdmBatchRepositoryIntegrationTest into separate folder
+ 
 15.1.3
 -
 * B-70887 FDA: Edit functionality modification on multi edit: Refactor multi edit of not assigned usages to specialist or manager
