@@ -37,6 +37,7 @@ import java.util.List;
 )
 public class UdmUsageAuditRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "udm-usage-audit-repository-integration-test/";
     private static final String UDM_USAGE_UID = "e6040f00-8564-4482-ab67-9965483a8a9f";
     private static final String UDM_USAGE_AUDIT_UID_1 = "0cc67ffc-e565-46ef-abbc-1da6cf2e47b5";
     private static final String UDM_USAGE_AUDIT_UID_2 = "e7370736-60c0-4283-9948-717d075f152f";
@@ -45,7 +46,7 @@ public class UdmUsageAuditRepositoryIntegrationTest {
     private IUdmUsageAuditRepository udmUsageAuditRepository;
 
     @Test
-    @TestData(fileName = "udm-usage-audit-repository-test-data-init-find-by-udm-usage-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-udm-usage-id.groovy")
     public void testFindByUdmUsageId() {
         List<UsageAuditItem> auditItems = udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID);
         assertEquals(1, auditItems.size());
@@ -57,7 +58,7 @@ public class UdmUsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-audit-repository-test-data-init-find-by-udm-usage-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-by-udm-usage-id.groovy")
     public void testInsert() {
         List<UsageAuditItem> auditItems = udmUsageAuditRepository.findByUdmUsageId(UDM_USAGE_UID);
         assertEquals(1, auditItems.size());
@@ -77,7 +78,7 @@ public class UdmUsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-usage-audit-repository-test-data-init-delete-by-batch-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-batch-id.groovy")
     public void testDeleteByBatchId() {
         assertEquals(1,
             CollectionUtils.size(udmUsageAuditRepository.findByUdmUsageId("081dbeb4-ec1d-4519-882d-704acb68d8fa")));
