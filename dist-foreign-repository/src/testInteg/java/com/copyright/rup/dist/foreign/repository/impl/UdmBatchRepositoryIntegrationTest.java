@@ -44,6 +44,7 @@ import java.util.List;
 )
 public class UdmBatchRepositoryIntegrationTest {
 
+    private static final String FOLDER_NAME = "udm-batch-repository-integration-test/";
     private static final String UDM_BATCH_UID = "4b5751aa-6258-44c6-b839-a1ec0edfcf4d";
     private static final String UDM_BATCH_UID_2 = "7649518a-33a5-4929-8956-0c4ed0714250";
     private static final String UDM_BATCH_UID_3 = "e133e00c-d8bb-4be2-ae54-a82c9306a224";
@@ -69,7 +70,7 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-batch-repository-test-data-init-find-all.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
     public void testFindAll() {
         List<UdmBatch> udmBatches = udmBatchRepository.findAll();
         assertFalse(udmBatches.isEmpty());
@@ -81,14 +82,14 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-batch-repository-test-data-init-find-all.groovy")
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
     public void testBatchExists() {
         assertTrue(udmBatchRepository.udmBatchExists("UDM Batch 2021 1"));
         assertFalse(udmBatchRepository.udmBatchExists("No name in database"));
     }
 
     @Test
-    @TestData(fileName = "udm-batch-repository-test-data-init-is-udm-batch-processing-completed.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-udm-batch-processing-completed.groovy")
     public void testIsUdmBatchProcessingCompleted() {
         assertFalse(udmBatchRepository.isUdmBatchProcessingCompleted(UDM_BATCH_UID_2,
             Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.WORK_FOUND)));
@@ -97,14 +98,14 @@ public class UdmBatchRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-batch-repository-test-data-init-is-udm-batch-contains-baseline-usages.groovy")
+    @TestData(fileName = FOLDER_NAME + "is-udm-batch-contains-baseline-usages.groovy")
     public void testIsUdmBatchContainsBaselineUsages() {
         assertFalse(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID_3));
         assertTrue(udmBatchRepository.isUdmBatchContainsBaselineUsages(UDM_BATCH_UID_4));
     }
 
     @Test
-    @TestData(fileName = "udm-batch-repository-test-data-init-delete-by-id.groovy")
+    @TestData(fileName = FOLDER_NAME + "delete-by-id.groovy")
     public void testDeleteById() {
         String batchId = UDM_BATCH_UID_2;
         assertEquals(1, udmBatchRepository.findAll().size());
