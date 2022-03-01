@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2018-04-03-00', author: 'Alaiksandr Liakh <aliakh@copyright.com>') {
-        comment('B-41583 FDA Reload researched details: implement business validation')
+        comment('Inserting test data for testProcessor')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')

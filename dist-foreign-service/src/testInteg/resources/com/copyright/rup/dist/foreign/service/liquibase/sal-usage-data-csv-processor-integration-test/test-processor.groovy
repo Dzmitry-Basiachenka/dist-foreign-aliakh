@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-09-24-00', author: 'Stanislau Rudak <srudak@copyright.com>') {
-        comment('Inserting test data for SalUsageDataCsvProcessorIntegrationTest')
+        comment('Inserting test data for testProcessor, testProcessorForNegativePathBusinessValidation')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '10ddbb20-1b13-434d-8347-6db3f840e70f')
