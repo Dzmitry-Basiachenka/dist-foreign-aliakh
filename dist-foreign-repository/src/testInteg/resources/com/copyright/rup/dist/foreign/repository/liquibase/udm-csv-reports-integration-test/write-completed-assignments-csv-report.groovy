@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2022-01-10-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Insert test data for testCompletedAssignmentsReport')
+        comment('Insert test data for testCompletedAssignmentsReport, testCompletedAssignmentsEmptyReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: '0f7d2ea3-41ac-41fc-a16d-1a9498db53a2')

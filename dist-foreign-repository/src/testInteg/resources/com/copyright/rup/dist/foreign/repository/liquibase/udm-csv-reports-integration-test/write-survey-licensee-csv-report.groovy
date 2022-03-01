@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2020-01-06-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
-        comment('Insert test data for testWriteUdmSurveyLicenseeCsvReport')
+        comment('Insert test data for testWriteSurveyLicenseeCsvReport, testWriteSurveyLicenseeEmptyCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
             column(name: 'df_udm_usage_batch_uid', value: 'b7aa2c31-52bf-4a38-a97b-7c9ef68eecbc')

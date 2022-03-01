@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2021-07-05-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment('Insert test data for testWriteUdmProxyValueCsvReport')
+        comment('Insert test data for testWriteProxyValueCsvReport, testWriteProxyValueEmptyCsvReport')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
             column(name: 'df_udm_value_uid', value: '278897ad-dc6a-4f69-97ac-7bb503a562b3')
