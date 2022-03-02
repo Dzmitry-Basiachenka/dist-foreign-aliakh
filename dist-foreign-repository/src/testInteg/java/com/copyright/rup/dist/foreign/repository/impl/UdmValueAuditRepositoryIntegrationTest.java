@@ -35,6 +35,8 @@ import java.util.List;
 )
 public class UdmValueAuditRepositoryIntegrationTest {
 
+    private static final String FIND_BY_UDM_VALUE_ID =
+        "udm-value-audit-repository-integration-test/find-by-udm-value-id.groovy";
     private static final String UDM_VALUE_UID = "16040f00-8564-4482-ab67-9965483a8a9f";
     private static final String UDM_VALUE_AUDIT_UID_1 = "0cc67ffc-e565-46ef-abbc-1da6cf2e47b5";
     private static final String UDM_VALUE_AUDIT_UID_2 = "e7370736-60c0-4283-9948-717d075f152f";
@@ -43,7 +45,7 @@ public class UdmValueAuditRepositoryIntegrationTest {
     private IUdmValueAuditRepository udmValueAuditRepository;
 
     @Test
-    @TestData(fileName = "udm-value-audit-repository-test-data-init-find-by-udm-value-id.groovy")
+    @TestData(fileName = FIND_BY_UDM_VALUE_ID)
     public void testFindByUdmValueId() {
         List<UdmValueAuditItem> auditItems = udmValueAuditRepository.findByUdmValueId(UDM_VALUE_UID);
         assertEquals(1, auditItems.size());
@@ -55,7 +57,7 @@ public class UdmValueAuditRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "udm-value-audit-repository-test-data-init-find-by-udm-value-id.groovy")
+    @TestData(fileName = FIND_BY_UDM_VALUE_ID)
     public void testInsert() {
         List<UdmValueAuditItem> auditItems = udmValueAuditRepository.findByUdmValueId(UDM_VALUE_UID);
         assertEquals(1, auditItems.size());

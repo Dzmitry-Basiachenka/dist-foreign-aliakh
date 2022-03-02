@@ -49,8 +49,6 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "researched-usages-csv-processor-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
@@ -71,6 +69,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = "researched-usages-csv-processor-integration-test/test-processor.groovy")
     public void testProcessor() throws Exception {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages.csv");
         assertNotNull(result);

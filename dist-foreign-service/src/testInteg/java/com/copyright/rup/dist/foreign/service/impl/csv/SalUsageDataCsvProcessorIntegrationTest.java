@@ -49,14 +49,13 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "sal-usage-data-csv-processor-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class SalUsageDataCsvProcessorIntegrationTest {
 
+    private static final String TEST_PROCESSOR = "sal-usage-data-csv-processor-integration-test/test-processor.groovy";
     private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/sal/";
     private static final String PATH_TO_CSV = "src/testInteg/resources" + BASE_PATH;
     private static final String BATCH_ID = "10ddbb20-1b13-434d-8347-6db3f840e70f";
@@ -72,6 +71,7 @@ public class SalUsageDataCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_PROCESSOR)
     public void testProcessor() throws Exception {
         ProcessingResult<Usage> result = processFile("sal_usage_data.csv");
         assertNotNull(result);
@@ -107,6 +107,7 @@ public class SalUsageDataCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = TEST_PROCESSOR)
     public void testProcessorForNegativePathBusinessValidation() throws Exception {
         ProcessingResult<Usage> result = processFile("sal_usage_data_with_business_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
