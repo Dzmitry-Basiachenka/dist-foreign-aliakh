@@ -1,3 +1,10 @@
+15.1.5
+-
+* B-72269 FDA: Tech Debt: move Liquibase scripts for UdmUsageAuditRepositoryIntegrationTest into a separate folder
+* B-72269 FDA: Tech Debt: move Liquibase scripts for ResearchedUsagesCsvProcessorIntegrationTest, SalUsageDataCsvProcessorIntegrationTest, UdmValueAuditRepositoryIntegrationTest into a separate folder 
+* B-72269 FDA: Tech Debt: move Liquibase scripts for ClassifiedUsageCsvProcessorIntegrationTest, SalItemBankCsvProcessorIntegrationTest, UsageCsvProcessorIntegrationTest into separate folders 
+* B-72269 Tech Debt: fix edit comment field issue 
+
 15.1.4
 -
 * B-70867 FDA: Wr Wrk Inst change set status New: refactor error message
