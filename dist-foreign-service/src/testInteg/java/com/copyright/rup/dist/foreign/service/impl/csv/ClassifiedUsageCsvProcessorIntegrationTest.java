@@ -48,14 +48,13 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "classified-usage-csv-processor-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class ClassifiedUsageCsvProcessorIntegrationTest {
 
+    private static final String FOLDER_NAME = "classified-usage-csv-processor-integration-test/";
     private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/aacl/classified/";
     private static final String PATH_TO_CSV = "src/testInteg/resources" + BASE_PATH;
 
@@ -70,6 +69,7 @@ public class ClassifiedUsageCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-processor.groovy")
     public void testProcessor() throws Exception {
         ProcessingResult<AaclClassifiedUsage> result = processFile("classified_usages.csv");
         assertNotNull(result);
@@ -96,6 +96,7 @@ public class ClassifiedUsageCsvProcessorIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "test-processor-failure.groovy")
     public void testProcessorFailure() throws Exception {
         ProcessingResult<AaclClassifiedUsage> result = processFile("classified_usages_with_errors.csv");
         assertFalse(result.isSuccessful());

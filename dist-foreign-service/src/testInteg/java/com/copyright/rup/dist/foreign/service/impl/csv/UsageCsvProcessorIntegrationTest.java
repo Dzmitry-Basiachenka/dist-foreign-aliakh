@@ -14,7 +14,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Threshold
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
-import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -52,8 +51,6 @@ import java.util.stream.IntStream;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "usages-csv-processor-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
