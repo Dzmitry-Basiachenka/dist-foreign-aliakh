@@ -143,7 +143,7 @@ public class UdmEditMultipleUsagesResearcherWindow extends Window {
         commentField.setSizeFull();
         binder.forField(commentField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 4000), 0, 4000))
-            .bind(UdmUsageDto::getComment, (filter, value) -> StringUtils.trimToNull(value));
+            .bind(UdmUsageDto::getComment, (usage, value) -> usage.setComment(StringUtils.trimToNull(value)));
         VaadinUtils.addComponentStyle(commentField, "udm-edit-comment-field");
         return buildCommonLayout(commentField, "label.comment");
     }

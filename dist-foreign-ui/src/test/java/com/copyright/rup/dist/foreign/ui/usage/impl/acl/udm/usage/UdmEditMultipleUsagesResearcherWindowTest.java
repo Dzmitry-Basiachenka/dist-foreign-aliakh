@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -101,11 +102,7 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
     @Test
     public void testConstructor() {
         initEditWindow();
-        assertEquals("Edit multiple UDM Usages", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(215, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Edit multiple UDM Usages", 650, 215, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
@@ -183,27 +180,29 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
         Whitebox.setInternalState(window, expectedUdmUsages);
-        updateFields();
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> map =
+            Whitebox.getInternalState(window, "udmUsageDtoToFieldValuesMap");
+        map.forEach((usage, audit) -> verifyUpdatedUdmUsage(expectedUdmUsages, usage));
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
-        udmUsages.forEach(udmUsageDto -> verifyUpdatedUdmUsages(expectedUdmUsages, udmUsageDto));
     }
 
     @Test
+    //TODO{aazarenka} rewrite test
     public void testUpdateStatusField() throws ValidationException {
         UdmUsageAuditFieldToValuesMap fieldToValuesMap = new UdmUsageAuditFieldToValuesMap();
         fieldToValuesMap.putFieldWithValues("Detail Status", UsageStatusEnum.RH_FOUND.name(),
             UsageStatusEnum.INELIGIBLE.name());
-        UdmUsageDto expectedUdmUsages = buildUdmUsageDto();
-        expectedUdmUsages.setStatus(UsageStatusEnum.INELIGIBLE);
+        UdmUsageDto expectedUdmUsage = buildUdmUsageDto();
+        expectedUdmUsage.setStatus(UsageStatusEnum.INELIGIBLE);
         Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> udmUsageDtoToFieldValuesMap =
-            ImmutableMap.of(expectedUdmUsages, fieldToValuesMap);
+            ImmutableMap.of(expectedUdmUsage, fieldToValuesMap);
         udmUsages = Collections.singleton(buildUdmUsageDto());
         binder = createMock(Binder.class);
-        binder.writeBean(expectedUdmUsages);
+        binder.writeBean(expectedUdmUsage);
         expectLastCall().once();
         controller.updateUsages(UdmUsageAuditFieldToValuesMap.getDtoToAuditReasonsMap(udmUsageDtoToFieldValuesMap),
             true, StringUtils.EMPTY);
@@ -212,35 +211,18 @@ public class UdmEditMultipleUsagesResearcherWindowTest {
         expectLastCall().once();
         replay(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
         window = new UdmEditMultipleUsagesResearcherWindow(controller, udmUsages, saveButtonClickListener);
-        Whitebox.setInternalState(window, expectedUdmUsages);
-        ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
-        statusEnumComboBox.setValue(UsageStatusEnum.INELIGIBLE);
+        Whitebox.setInternalState(window, expectedUdmUsage);
         Whitebox.setInternalState(window, binder);
         Button saveButton = Whitebox.getInternalState(window, "saveButton");
         saveButton.setEnabled(true);
         saveButton.click();
+        Map<UdmUsageDto, UdmUsageAuditFieldToValuesMap> map =
+            Whitebox.getInternalState(window, "udmUsageDtoToFieldValuesMap");
+        map.forEach((usage, audit) -> verifyUpdatedUdmUsage(expectedUdmUsage, usage));
         verify(controller, binder, saveButtonClickListener, ForeignSecurityUtils.class);
-        udmUsages.forEach(udmUsageDto -> verifyUpdatedUdmUsages(expectedUdmUsages, udmUsageDto));
     }
 
-    @SuppressWarnings("unchecked")
-    private void updateFields() {
-        ComboBox<UsageStatusEnum> statusEnumComboBox = (ComboBox<UsageStatusEnum>) getComponent(0).getComponent(1);
-        statusEnumComboBox.setValue(UsageStatusEnum.INELIGIBLE);
-        TextField wrWrkInstField = (TextField) getComponent(1).getComponent(1);
-        wrWrkInstField.setValue("1234567");
-        ComboBox<UdmActionReason> actionReasonComboBox = (ComboBox<UdmActionReason>) getComponent(2).getComponent(1);
-        actionReasonComboBox.setValue(buildActionReason(NEW_REASON));
-        TextField commentField = (TextField) getComponent(3).getComponent(1);
-        commentField.setValue(NEW_COMMENT);
-    }
-
-    private HorizontalLayout getComponent(int number) {
-        VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
-        return (HorizontalLayout) verticalLayout.getComponent(number);
-    }
-
-    private void verifyUpdatedUdmUsages(UdmUsageDto expectedUdmUsageDto, UdmUsageDto actualUdmUsageDto) {
+    private void verifyUpdatedUdmUsage(UdmUsageDto expectedUdmUsageDto, UdmUsageDto actualUdmUsageDto) {
         assertEquals(expectedUdmUsageDto.getStatus(), actualUdmUsageDto.getStatus());
         assertEquals(expectedUdmUsageDto.getWrWrkInst(), actualUdmUsageDto.getWrWrkInst());
         assertEquals(expectedUdmUsageDto.getActionReason(), actualUdmUsageDto.getActionReason());
