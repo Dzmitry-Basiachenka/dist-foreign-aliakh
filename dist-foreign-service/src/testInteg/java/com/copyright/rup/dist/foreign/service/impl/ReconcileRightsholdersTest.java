@@ -39,14 +39,13 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "reconcile-rightsholders-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
 public class ReconcileRightsholdersTest {
 
+    private static final String FOLDER_NAME = "reconcile-rightsholders-integration-test/";
     private static final String SERVICE_FEE_16 = "0.16000";
     private static final String SERVICE_FEE_32 = "0.32000";
     private static final String BATCH_NAME = "Test Batch 2";
@@ -64,6 +63,7 @@ public class ReconcileRightsholdersTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "reconciliation-without-discrepancies.groovy")
     public void testReconciliationWithoutDiscrepancies() {
         testBuilder
             .forScenario(buildScenario("be66bae9-fa89-499a-8485-fb9e445bedd9", "Test Reconcile rightsholders 1"))
@@ -82,6 +82,7 @@ public class ReconcileRightsholdersTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "reconciliation-with-discrepancies.groovy")
     public void testReconciliationWithDiscrepancies() {
         testBuilder
             .forScenario(buildScenario("04263c90-cb54-44f0-b354-a901586e5801", "Test Reconcile rightsholders 2"))

@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -41,15 +40,15 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-//TODO: split test data into separate files for each test method
-@TestData(fileName = "create-scenario-data-init.groovy")
 @TestExecutionListeners(
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-@Transactional
 public class CreateScenarioIntegrationTest {
 
+    private static final String FOLDER_NAME = "create-scenario-integration-test/";
+    private static final String CREATE_FAS_SCENARIO = FOLDER_NAME + "create-fas-scenario.groovy";
+    private static final String CREATE_NTS_SCENARIO = FOLDER_NAME + "create-nts-scenario.groovy";
     private static final String RIGHTSHOLDER_ID_1 = "038bf4aa-b6cc-430a-9b32-655954d95278";
     private static final String RIGHTSHOLDER_ID_2 = "019acfde-91be-43aa-8871-6305642bcb2c";
     private static final String RIGHTSHOLDER_ID_3 = "00d4ae90-5fe7-47bf-ace1-781c8d76d4da";
@@ -83,6 +82,7 @@ public class CreateScenarioIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = CREATE_FAS_SCENARIO)
     public void testCreateFasScenario() {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
@@ -117,6 +117,7 @@ public class CreateScenarioIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = CREATE_FAS_SCENARIO)
     public void testCreateFasScenarioNoRollupsNoPreferences() {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
@@ -151,6 +152,7 @@ public class CreateScenarioIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "create-cla-scenario.groovy")
     public void testCreateClaScenario() {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
@@ -182,6 +184,7 @@ public class CreateScenarioIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = CREATE_NTS_SCENARIO)
     public void testCreateNtsScenario() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
@@ -214,6 +217,7 @@ public class CreateScenarioIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = CREATE_NTS_SCENARIO)
     public void testCreateNtsScenarioWithPostServiceFeeAmount() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
