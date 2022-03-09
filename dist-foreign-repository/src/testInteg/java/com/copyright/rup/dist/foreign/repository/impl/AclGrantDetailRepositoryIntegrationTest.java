@@ -11,10 +11,12 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,6 +143,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getRhName(), actualGrantDetail.getRhName());
         assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
         assertEquals(expectedGrantDetail.getGrantPeriod(), actualGrantDetail.getGrantPeriod());
+        assertEquals(expectedGrantDetail.getEditable(), actualGrantDetail.getEditable());
         assertEquals(expectedGrantDetail.getCreateDate(), actualGrantDetail.getCreateDate());
         assertEquals(expectedGrantDetail.getUpdateDate(), actualGrantDetail.getUpdateDate());
         assertEquals(expectedGrantDetail, actualGrantDetail);
