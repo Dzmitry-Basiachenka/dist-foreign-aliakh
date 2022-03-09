@@ -72,4 +72,9 @@ public class UdmReportService implements IUdmReportService {
     public void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
         udmReportRepository.writeUdmCompletedAssignmentsCsvReport(reportFilter, outputStream);
     }
+
+    @Override
+    public void writeUdmUsageEditsInBaselineCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        udmReportRepository.writeUdmUsageEditsInBaselineCsvReport(reportFilter, outputStream);
+    }
 }
