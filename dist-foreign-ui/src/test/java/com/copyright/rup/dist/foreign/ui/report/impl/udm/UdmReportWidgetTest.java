@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsRep
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsageEditsInBaselineReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmVerifiedDetailsBySourceReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
@@ -51,9 +52,12 @@ import java.util.function.Supplier;
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class UdmReportWidgetTest {
 
-    private static final String COMPLETED_ASSIGNMENT_REPORT = "Completed Assignments by Employee Report";
+    private static final String WEEKLY_SURVEY_REPORT = "Weekly Survey Report";
+    private static final String SURVEY_LICENSEE_REPORT = "Survey Licensee Report";
     private static final String VERIFIED_DETAILS_BY_SOURCE_REPORT = "Verified Details by Source Report";
-    private static final String USABLE_DETAILS_BY_COUNTRY = "Usable Details by Country Report";
+    private static final String USABLE_DETAILS_BY_COUNTRY_REPORT = "Usable Details by Country Report";
+    private static final String USAGE_EDITS_IN_BASELINE_REPORT = "Usage Edits in Baseline Report";
+    private static final String COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT = "Completed Assignments by Employee Report";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
     private UdmReportWidget udmReportWidget;
@@ -101,7 +105,7 @@ public class UdmReportWidgetTest {
         verifyAll();
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
         assertEquals(1, menuItems.size());
-        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(0).getText());
+        assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(0).getText());
     }
 
     @Test
@@ -120,7 +124,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getUdmWeeklySurveyReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption("Weekly Survey Report");
+        widget.setCaption(WEEKLY_SURVEY_REPORT);
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
@@ -136,7 +140,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getUdmSurveyLicenseeReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption("Survey Licensee Report");
+        widget.setCaption(SURVEY_LICENSEE_REPORT);
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
@@ -153,7 +157,7 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getUdmVerifiedDetailsBySourceReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption("Verified Details by Source Report");
+        widget.setCaption(VERIFIED_DETAILS_BY_SOURCE_REPORT);
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
@@ -170,12 +174,29 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getUdmUsableDetailsByCountryReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption(USABLE_DETAILS_BY_COUNTRY);
+        widget.setCaption(USABLE_DETAILS_BY_COUNTRY_REPORT);
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
         replayAll();
         selectMenuItem(3);
+        verifyAll();
+    }
+
+    @Test
+    public void testUdmUsageEditsInBaselineReportSelected() {
+        UdmUsageEditsInBaselineReportWidget widget = createMock(UdmUsageEditsInBaselineReportWidget.class);
+        IUdmUsageEditsInBaselineReportController controller =
+            createMock(IUdmUsageEditsInBaselineReportController.class);
+        setSpecialistExpectations();
+        expect(udmReportController.getUdmUsageEditsInBaselineReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(widget).once();
+        widget.setCaption(USAGE_EDITS_IN_BASELINE_REPORT);
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(4);
         verifyAll();
     }
 
@@ -186,12 +207,12 @@ public class UdmReportWidgetTest {
         setSpecialistExpectations();
         expect(udmReportController.getCompletedAssignmentsReportController()).andReturn(controller).once();
         expect(controller.initWidget()).andReturn(widget).once();
-        widget.setCaption("Completed Assignments by Employee Report");
+        widget.setCaption(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT);
         expectLastCall().once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
         replayAll();
-        selectMenuItem(4);
+        selectMenuItem(5);
         verifyAll();
     }
 
@@ -224,12 +245,13 @@ public class UdmReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(5, menuItems.size());
-        assertEquals("Weekly Survey Report", menuItems.get(0).getText());
-        assertEquals("Survey Licensee Report", menuItems.get(1).getText());
+        assertEquals(6, menuItems.size());
+        assertEquals(WEEKLY_SURVEY_REPORT, menuItems.get(0).getText());
+        assertEquals(SURVEY_LICENSEE_REPORT, menuItems.get(1).getText());
         assertEquals(VERIFIED_DETAILS_BY_SOURCE_REPORT, menuItems.get(2).getText());
-        assertEquals(USABLE_DETAILS_BY_COUNTRY, menuItems.get(3).getText());
-        assertEquals(COMPLETED_ASSIGNMENT_REPORT, menuItems.get(4).getText());
+        assertEquals(USABLE_DETAILS_BY_COUNTRY_REPORT, menuItems.get(3).getText());
+        assertEquals(USAGE_EDITS_IN_BASELINE_REPORT, menuItems.get(4).getText());
+        assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(5).getText());
     }
 
     private void setSpecialistExpectations() {

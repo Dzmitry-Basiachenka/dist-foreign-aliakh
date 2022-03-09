@@ -49,6 +49,10 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
             String usableDetailsByCountry = ForeignUi.getMessage("menu.report.usable_details_by_country");
             rootItem.addItem(usableDetailsByCountry, menuItem -> this.openReportWindow(usableDetailsByCountry,
                 controller.getUdmUsableDetailsByCountryReportController()));
+            String usageEditsInBaselineReport = ForeignUi.getMessage("menu.report.usage_edits_in_baseline_report");
+            rootItem.addItem(usageEditsInBaselineReport, menuItem ->
+                this.openReportWindow(usageEditsInBaselineReport,
+                    controller.getUdmUsageEditsInBaselineReportController()));
         }
         String completeAssignmentsReport = ForeignUi.getMessage("menu.report.completed_assignments_report");
         rootItem.addItem(completeAssignmentsReport, menuItem ->
