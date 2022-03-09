@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -13,13 +14,17 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Implementation of {@link IAclGrantDetailWidget}.
@@ -39,6 +44,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     private Grid<AclGrantDetailDto> aclGrantDetailsGrid;
     private DataProvider<AclGrantDetailDto, Void> dataProvider;
     private MenuBar grantSetMenuBar;
+    private Button editButton;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -66,6 +72,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     public IMediator initMediator() {
         AclGrantDetailMediator mediator = new AclGrantDetailMediator();
         mediator.setGrantSetMenuBar(grantSetMenuBar);
+        mediator.setEditButton(editButton);
         return mediator;
     }
 
@@ -95,8 +102,10 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             }, AclGrantDetailDto::getId);
         aclGrantDetailsGrid = new Grid<>(dataProvider);
         addColumns();
-        aclGrantDetailsGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        aclGrantDetailsGrid.setSelectionMode(SelectionMode.MULTI);
         aclGrantDetailsGrid.setSizeFull();
+        aclGrantDetailsGrid.addSelectionListener(
+            event -> editButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         VaadinUtils.addComponentStyle(aclGrantDetailsGrid, "acl-grant-details-grid");
     }
 
@@ -105,8 +114,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         aclGrantDetailsGrid.setFooterVisible(true);
         footer.getCell(addColumn(AclGrantDetailDto::getLicenseType, "table.column.license_type", "licenseType", 200))
             .setText(String.format(FOOTER_LABEL, 0));
-        footer.join(
-            addColumn(AclGrantDetailDto::getTypeOfUseStatus, "table.column.tou_status", "typeOfUseStatus", 150),
+        footer.join(addColumn(AclGrantDetailDto::getTypeOfUseStatus, "table.column.tou_status", "typeOfUseStatus", 150),
             addColumn(AclGrantDetailDto::getGrantStatus, "table.column.grant_status", "grantStatus", 120),
             addColumn(value -> BooleanUtils.toYNString(value.getEligible()), "table.column.eligible", "eligible", 100),
             addColumn(AclGrantDetailDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100),
@@ -132,7 +140,8 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
 
     private HorizontalLayout initToolbarLayout() {
         initGrantSetMenuBar();
-        HorizontalLayout toolbar = new HorizontalLayout(grantSetMenuBar);
+        initEditButtonLayout();
+        HorizontalLayout toolbar = new HorizontalLayout(grantSetMenuBar, editButton);
         toolbar.setMargin(true);
         VaadinUtils.addComponentStyle(toolbar, "acl-grant-details-toolbar");
         return toolbar;
@@ -140,11 +149,17 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
 
     private void initGrantSetMenuBar() {
         grantSetMenuBar = new MenuBar();
-        MenuBar.MenuItem menuItem =
-            grantSetMenuBar.addItem(ForeignUi.getMessage("menu.caption.grant_set"), null, null);
+        MenuBar.MenuItem menuItem = grantSetMenuBar.addItem(ForeignUi.getMessage("menu.caption.grant_set"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclGrantSetWindow(controller)));
         VaadinUtils.addComponentStyle(grantSetMenuBar, "acl-grant-set-menu-bar");
         VaadinUtils.addComponentStyle(grantSetMenuBar, "v-menubar-df");
+    }
+
+    private void initEditButtonLayout() {
+        editButton = Buttons.createButton(ForeignUi.getMessage("button.edit"));
+        editButton.setEnabled(false);
+        editButton.addClickListener(event -> Windows.showModalWindow(new AclEditGrantDetailWindow()));
+        VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
     }
 }

@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -88,8 +89,11 @@ public class AclGrantDetailWidgetTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
+        assertEquals(2, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Grant Set", Collections.singletonList("Create"));
+        Component button = layout.getComponent(1);
+        assertTrue(button instanceof Button);
+        assertEquals("Edit", button.getCaption());
     }
 
     private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {

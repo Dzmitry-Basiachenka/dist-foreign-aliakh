@@ -52,15 +52,6 @@ public class AclEditGrantDetailWindow extends Window {
         return rootLayout;
     }
 
-    private HorizontalLayout initButtonsLayout() {
-        Button closeButton = Buttons.createCloseButton(this);
-        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
-        saveButton.setEnabled(false);
-        Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
-        discardButton.addClickListener(event -> discardFields());
-        return new HorizontalLayout(saveButton, discardButton, closeButton);
-    }
-
     private void initGrantStatusComboBox() {
         grantStatusField = new ComboBox<>(ForeignUi.getMessage("label.grant_status"));
         grantStatusField.setItems("GRANT", "DENY");
@@ -79,6 +70,15 @@ public class AclEditGrantDetailWindow extends Window {
         eligibleFlag.setItems("Y", "N");
         eligibleFlag.setSizeFull();
         VaadinUtils.addComponentStyle(eligibleFlag, "acl-eligible-flag-field");
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        Button closeButton = Buttons.createCloseButton(this);
+        Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
+        saveButton.setEnabled(false);
+        Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
+        discardButton.addClickListener(event -> discardFields());
+        return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
     private void discardFields() {
