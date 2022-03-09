@@ -261,4 +261,14 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
             outputStream -> udmReportRepository.writeUdmCompletedAssignmentsCsvReport(reportFilter, outputStream),
             "udm/completed_assignments_empty_report.csv");
     }
+
+    @Test
+    public void testWriteUdmUsageEditsInBaselineCsvReport() {
+        // TODO implement the test
+    }
+
+    @Test
+    public void testWriteUdmUsageEditsInBaselineEmptyCsvReport() {
+        // TODO implement the test
+    }
 }
