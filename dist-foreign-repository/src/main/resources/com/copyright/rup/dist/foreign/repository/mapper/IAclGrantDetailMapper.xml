@@ -28,6 +28,7 @@
         <result property="rhName" column="rh_name"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="grantPeriod" column="grant_period"/>
+        <result property="editable" column="is_editable"/>
     </resultMap>
 
     <sql id="aclGrantDetailColumns">
@@ -92,6 +93,7 @@
             r.name rh_name,
             type_of_use,
             grant_period,
+            gs.is_editable,
             gd.created_datetime,
             gd.updated_datetime
         from ${schema}.df_acl_grant_detail gd
