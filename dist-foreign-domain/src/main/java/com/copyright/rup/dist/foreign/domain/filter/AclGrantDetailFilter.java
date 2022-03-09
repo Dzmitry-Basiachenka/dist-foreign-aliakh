@@ -20,6 +20,15 @@ import java.util.Set;
 public class AclGrantDetailFilter {
 
     private Set<String> grantSetNames = new HashSet<>();
+    private Set<String> licenseTypes = new HashSet<>();
+    private Set<String> grantStatuses = new HashSet<>();
+    private Set<String> typeOfUses = new HashSet<>();
+    private Integer grantSetPeriod;
+    private FilterExpression<Number> wrWrkInstExpression = new FilterExpression<>();
+    private FilterExpression<Number> rhAccountNumberExpression = new FilterExpression<>();
+    private FilterExpression<String> rhNameExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> eligibleExpression = new FilterExpression<>();
+    private FilterExpression<Boolean> editableExpression = new FilterExpression<>();
 
     /**
      * Default constructor.
@@ -35,6 +44,15 @@ public class AclGrantDetailFilter {
     public AclGrantDetailFilter(AclGrantDetailFilter filter) {
         if (null != filter) {
             setGrantSetNames(filter.getGrantSetNames());
+            setLicenseTypes(filter.getLicenseTypes());
+            setGrantStatuses(filter.getGrantStatuses());
+            setTypeOfUses(filter.getTypeOfUses());
+            setGrantSetPeriod(filter.getGrantSetPeriod());
+            setWrWrkInstExpression(new FilterExpression<>(filter.getWrWrkInstExpression()));
+            setRhAccountNumberExpression(new FilterExpression<>(filter.getRhAccountNumberExpression()));
+            setRhNameExpression(new FilterExpression<>(filter.getRhNameExpression()));
+            setEligibleExpression(new FilterExpression<>(filter.getEligibleExpression()));
+            setEditableExpression(new FilterExpression<>(filter.getEditableExpression()));
         }
     }
 
@@ -46,11 +64,92 @@ public class AclGrantDetailFilter {
         this.grantSetNames = grantSetNames;
     }
 
+    public Set<String> getLicenseTypes() {
+        return licenseTypes;
+    }
+
+    public void setLicenseTypes(Set<String> licenseTypes) {
+        this.licenseTypes = licenseTypes;
+    }
+
+    public Set<String> getGrantStatuses() {
+        return grantStatuses;
+    }
+
+    public void setGrantStatuses(Set<String> grantStatuses) {
+        this.grantStatuses = grantStatuses;
+    }
+
+    public Set<String> getTypeOfUses() {
+        return typeOfUses;
+    }
+
+    public void setTypeOfUses(Set<String> typeOfUses) {
+        this.typeOfUses = typeOfUses;
+    }
+
+    public Integer getGrantSetPeriod() {
+        return grantSetPeriod;
+    }
+
+    public void setGrantSetPeriod(Integer grantSetPeriod) {
+        this.grantSetPeriod = grantSetPeriod;
+    }
+
+    public FilterExpression<Number> getWrWrkInstExpression() {
+        return wrWrkInstExpression;
+    }
+
+    public void setWrWrkInstExpression(FilterExpression<Number> wrWrkInstExpression) {
+        this.wrWrkInstExpression = wrWrkInstExpression;
+    }
+
+    public FilterExpression<Number> getRhAccountNumberExpression() {
+        return rhAccountNumberExpression;
+    }
+
+    public void setRhAccountNumberExpression(FilterExpression<Number> rhAccountNumberExpression) {
+        this.rhAccountNumberExpression = rhAccountNumberExpression;
+    }
+
+    public FilterExpression<String> getRhNameExpression() {
+        return rhNameExpression;
+    }
+
+    public void setRhNameExpression(FilterExpression<String> rhNameExpression) {
+        this.rhNameExpression = rhNameExpression;
+    }
+
+    public FilterExpression<Boolean> getEligibleExpression() {
+        return eligibleExpression;
+    }
+
+    public void setEligibleExpression(FilterExpression<Boolean> eligibleExpression) {
+        this.eligibleExpression = eligibleExpression;
+    }
+
+    public FilterExpression<Boolean> getEditableExpression() {
+        return editableExpression;
+    }
+
+    public void setEditableExpression(FilterExpression<Boolean> editableExpression) {
+        this.editableExpression = editableExpression;
+    }
+
     /**
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return CollectionUtils.isEmpty(grantSetNames);
+        return CollectionUtils.isEmpty(grantSetNames)
+            && CollectionUtils.isEmpty(licenseTypes)
+            && CollectionUtils.isEmpty(grantStatuses)
+            && CollectionUtils.isEmpty(typeOfUses)
+            && null == grantSetPeriod
+            && wrWrkInstExpression.isEmpty()
+            && rhAccountNumberExpression.isEmpty()
+            && rhNameExpression.isEmpty()
+            && eligibleExpression.isEmpty()
+            && editableExpression.isEmpty();
     }
 
     @Override
@@ -64,6 +163,15 @@ public class AclGrantDetailFilter {
         AclGrantDetailFilter that = (AclGrantDetailFilter) obj;
         return new EqualsBuilder()
             .append(grantSetNames, that.grantSetNames)
+            .append(licenseTypes, that.licenseTypes)
+            .append(grantStatuses, that.grantStatuses)
+            .append(typeOfUses, that.typeOfUses)
+            .append(grantSetPeriod, that.grantSetPeriod)
+            .append(wrWrkInstExpression, that.wrWrkInstExpression)
+            .append(rhAccountNumberExpression, that.rhAccountNumberExpression)
+            .append(rhNameExpression, that.rhNameExpression)
+            .append(eligibleExpression, that.eligibleExpression)
+            .append(editableExpression, that.editableExpression)
             .isEquals();
     }
 
@@ -71,6 +179,15 @@ public class AclGrantDetailFilter {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(grantSetNames)
+            .append(licenseTypes)
+            .append(grantStatuses)
+            .append(typeOfUses)
+            .append(grantSetPeriod)
+            .append(wrWrkInstExpression)
+            .append(rhAccountNumberExpression)
+            .append(rhNameExpression)
+            .append(eligibleExpression)
+            .append(editableExpression)
             .toHashCode();
     }
 
@@ -78,6 +195,15 @@ public class AclGrantDetailFilter {
     public String toString() {
         return new ToStringBuilder(this)
             .append("grantSetNames", grantSetNames)
+            .append("licenseTypes", licenseTypes)
+            .append("grantStatuses", grantStatuses)
+            .append("typeOfUses", typeOfUses)
+            .append("grantSetPeriod", grantSetPeriod)
+            .append("wrWrkInstExpression", wrWrkInstExpression)
+            .append("rhAccountNumberExpression", rhAccountNumberExpression)
+            .append("rhNameExpression", rhNameExpression)
+            .append("eligibleExpression", eligibleExpression)
+            .append("editableExpression", editableExpression)
             .toString();
     }
 }
