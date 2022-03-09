@@ -291,20 +291,41 @@
         full join values_count values on usages.user_name = values.user_name
     </select>
 
-    <!-- TODO add WHERE clause -->
     <select id="findUdmUsageEditsInBaselineReportDtos" resultMap="udmUsageEditsInBaselineReportDtoResultMap">
+        with publish_to_baseline as (
+            select
+                min(a.updated_datetime) as updated_datetime,
+                a.df_udm_usage_uid
+            from ${schema}.df_udm_audit a
+            join ${schema}.df_udm_usage u on u.df_udm_usage_uid = a.df_udm_usage_uid
+            <where>
+                a.action_type_ind = 'PUBLISH_TO_BASELINE'
+                <if test="periods.size() > 0">
+                    and
+                    <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                        u.period = #{period}
+                    </foreach>
+                </if>
+                <if test="null != dateFrom and null != dateTo">
+                    and a.updated_datetime::date between #{dateFrom} and #{dateTo}
+                </if>
+            </where>
+            group by a.df_udm_usage_uid
+        )
         select
             u.df_udm_usage_uid,
-            action_type_ind,
-            action_reason,
-            wr_wrk_inst,
-            system_title,
-            period,
+            a.action_type_ind,
+            a.action_reason,
+            u.wr_wrk_inst,
+            u.system_title,
+            u.period,
             a.updated_datetime,
             a.updated_by_user
         from ${schema}.df_udm_audit a
         join ${schema}.df_udm_usage u on u.df_udm_usage_uid = a.df_udm_usage_uid
-        order by df_udm_usage_uid asc, updated_datetime desc, action_reason asc
+        join publish_to_baseline ptb on ptb.df_udm_usage_uid = a.df_udm_usage_uid
+        where a.updated_datetime > ptb.updated_datetime
+        order by u.updated_datetime desc, u.df_udm_usage_uid asc, a.updated_datetime desc
     </select>
 
     <select id="findUdmUsableDetailsByCountryReportDtos" parameterType="map" resultMap="udmUsableDetailsByCountryReportDtoResultMap">
