@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesByRhReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLiabilitiesSummaryByRhAndWorkReportDto;
 import com.copyright.rup.dist.foreign.domain.report.SalLicensee;
 import com.copyright.rup.dist.foreign.domain.report.SalUndistributedLiabilitiesReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UdmUsageEditsInBaselineReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UdmVerifiedDetailsBySourceReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UdmWeeklySurveyReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
@@ -132,7 +133,8 @@ public class DomainVerifierTest {
             {AclGrantSet.class},
             {AclGrantDetail.class},
             {AclGrantDetailDto.class},
-            {AclGrantDetailFilter.class}
+            {AclGrantDetailFilter.class},
+            {UdmUsageEditsInBaselineReportDto.class}
         };
         return Arrays.asList(testData);
     }
