@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeR
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageEditsInBaselineReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
@@ -110,6 +111,14 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         try (UdmCompletedAssignmentsReportHandler handler =
                  new UdmCompletedAssignmentsReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmCompletedAssignmentsReportDtos", filter, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmUsageEditsInBaselineCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
+        try (UdmUsageEditsInBaselineReportHandler handler =
+                 new UdmUsageEditsInBaselineReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmUsageEditsInBaselineReportDtos", reportFilter, handler);
         }
     }
 
