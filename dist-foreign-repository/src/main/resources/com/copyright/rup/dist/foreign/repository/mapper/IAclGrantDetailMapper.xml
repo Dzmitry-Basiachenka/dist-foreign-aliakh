@@ -121,6 +121,63 @@
                     gs.name = #{grantSetName}
                 </foreach>
             </if>
+            <if test="filter.licenseTypes.size() > 0">
+                and
+                <foreach collection="filter.licenseTypes" item="licenseType" open="(" separator=" or " close=")">
+                    gs.license_type = #{licenseType}
+                </foreach>
+            </if>
+            <if test="filter.grantStatuses.size() > 0">
+                and
+                <foreach collection="filter.grantStatuses" item="grantStatus" open="(" separator=" or " close=")">
+                    gd.grant_status = #{grantStatus}
+                </foreach>
+            </if>
+            <if test="filter.typeOfUses.size() > 0">
+                and
+                <foreach collection="filter.typeOfUses" item="typeOfUse" open="(" separator=" or " close=")">
+                    gd.type_of_use = #{typeOfUse}
+                </foreach>
+            </if>
+            <if test="null != filter.grantSetPeriod">
+                and gs.grant_period = #{filter.grantSetPeriod}
+            </if>
+            <if test="!filter.wrWrkInstExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="wr_wrk_inst"/>
+                    <property name="operator" value="filter.wrWrkInstExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.wrWrkInstExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.wrWrkInstExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.rhAccountNumberExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.numericFieldFilterExpression">
+                    <property name="column" value="gd.rh_account_number"/>
+                    <property name="operator" value="filter.rhAccountNumberExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.rhAccountNumberExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.rhAccountNumberExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.rhNameExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.textFieldFilterExpression">
+                    <property name="column" value="r.name"/>
+                    <property name="operator" value="filter.rhNameExpression.operator"/>
+                    <property name="fieldFirstValue" value="${filter.rhNameExpression.fieldFirstValue}"/>
+                    <property name="fieldSecondValue" value="${filter.rhNameExpression.fieldSecondValue}"/>
+                </include>
+            </if>
+            <if test="!filter.eligibleExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="is_eligible"/>
+                    <property name="operator" value="filter.eligibleExpression.operator"/>
+                </include>
+            </if>
+            <if test="!filter.editableExpression.isEmpty()">
+                <include refid="IUdmCommonMapper.booleanFieldFilterExpression">
+                    <property name="column" value="gs.is_editable"/>
+                    <property name="operator" value="filter.editableExpression.operator"/>
+                </include>
+            </if>
         </where>
     </sql>
 
