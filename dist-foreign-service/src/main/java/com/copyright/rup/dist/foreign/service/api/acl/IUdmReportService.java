@@ -90,4 +90,12 @@ public interface IUdmReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmCompletedAssignmentsCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Usage Edits in Baseline Report into csv output stream.
+     *
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmUsageEditsInBaselineCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }

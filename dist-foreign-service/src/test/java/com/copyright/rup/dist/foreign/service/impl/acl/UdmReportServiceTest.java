@@ -151,4 +151,18 @@ public class UdmReportServiceTest {
         udmReportRepository.writeUdmVerifiedDetailsBySourceReport(filter, outputStream);
         verify(udmReportRepository);
     }
+
+    @Test
+    public void testWriteUdmUsageEditsInBaselineCsvReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        UdmReportFilter filter = new UdmReportFilter();
+        filter.setPeriods(Collections.singleton(202112));
+        filter.setDateFrom(LocalDate.of(2021, 11, 21));
+        filter.setDateTo(LocalDate.of(2021, 11, 28));
+        udmReportRepository.writeUdmUsageEditsInBaselineCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmUsageEditsInBaselineCsvReport(filter, outputStream);
+        verify(udmReportRepository);
+    }    
 }
