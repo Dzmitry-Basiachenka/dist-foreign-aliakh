@@ -10,6 +10,7 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL grant detail controller.
@@ -79,4 +80,11 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return initialized {@link IAclGrantDetailFilterWidget}
      */
     IAclGrantDetailFilterWidget initAclGrantDetailFilterWidget();
+
+    /**
+     * Updates ACL grants.
+     *
+     * @param aclGrantDetailDtos set of {@link AclGrantDetailDto} for update
+     */
+    void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos);
 }
