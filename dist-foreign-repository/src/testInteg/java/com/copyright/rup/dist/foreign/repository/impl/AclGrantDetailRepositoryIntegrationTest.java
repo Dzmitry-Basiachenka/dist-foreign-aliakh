@@ -10,6 +10,8 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -54,8 +56,9 @@ public class AclGrantDetailRepositoryIntegrationTest {
     private static final String UDM_GRANT_DETAIL_UID_1 = "8676271a-9298-4e8b-ad46-3a864f6c655c";
     private static final String UDM_GRANT_DETAIL_UID_2 = "bc696696-e46f-4fbd-85c7-4c509b370deb";
     private static final String UDM_GRANT_DETAIL_UID_3 = "ce59e8f3-de93-4fef-9cfb-47eb8c0175cc";
-    private static final String GRANT_STATUS = "Grant";
-    private static final String TYPE_OF_USE = "Digital";
+    private static final String GRANT_STATUS = "GRANT";
+    private static final String DIGITAL_TOU = "DIGITAL";
+    private static final String PRINT_TOU = "PRINT";
     private static final String TYPE_OF_USE_STATUS = "Digital Only";
     private static final Long WR_WRK_INST = 122825347L;
     private static final String SYSTEM_TITLE = "Wall Street journal";
@@ -89,19 +92,36 @@ public class AclGrantDetailRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
         filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetPeriod(202106);
+        filter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
+        filter.setLicenseTypes(Collections.singleton("ACL"));
+        filter.setTypeOfUses(Collections.singleton(PRINT_TOU));
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, 28511, null));
+        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Greenleaf", null));
+        filter.setEditableExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setEligibleExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         assertEquals(1, aclGrantDetailRepository.findCountByFilter(filter));
     }
 
+    //TODO {dbasiachenka} implement test for each filter separately
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilter() {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
         filter.setGrantSetNames(Collections.singleton(ACL_GRANT_SET_NAME));
+        filter.setGrantSetPeriod(202106);
+        filter.setGrantStatuses(Collections.singleton(GRANT_STATUS));
+        filter.setLicenseTypes(Collections.singleton("ACL"));
+        filter.setTypeOfUses(Collections.singleton(PRINT_TOU));
+        filter.setRhAccountNumberExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, 28511, null));
+        filter.setRhNameExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "Greenleaf", null));
+        filter.setEditableExpression(new FilterExpression<>(FilterOperatorEnum.Y));
+        filter.setEligibleExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         List<AclGrantDetailDto> values = aclGrantDetailRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
         verifyAclGrantDetailDto(loadExpectedDtos("json/acl/acl_grant_detail_dto.json").get(0), values.get(0));
     }
-    
+
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
@@ -154,7 +174,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         grantDetail.setId(UDM_GRANT_DETAIL_UID_1);
         grantDetail.setGrantSetId(UDM_GRANT_SET_UID);
         grantDetail.setGrantStatus(GRANT_STATUS);
-        grantDetail.setTypeOfUse(TYPE_OF_USE);
+        grantDetail.setTypeOfUse(DIGITAL_TOU);
         grantDetail.setTypeOfUseStatus(TYPE_OF_USE_STATUS);
         grantDetail.setWrWrkInst(WR_WRK_INST);
         grantDetail.setSystemTitle(SYSTEM_TITLE);
