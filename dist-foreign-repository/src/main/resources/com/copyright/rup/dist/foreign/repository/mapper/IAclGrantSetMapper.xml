@@ -58,4 +58,10 @@
         from ${schema}.df_acl_grant_set
         order by updated_datetime desc
     </select>
+
+    <select id="findGrantPeriods" resultType="int">
+        select distinct grant_period
+        from ${schema}.df_acl_grant_set
+        order by grant_period desc
+    </select>
 </mapper>

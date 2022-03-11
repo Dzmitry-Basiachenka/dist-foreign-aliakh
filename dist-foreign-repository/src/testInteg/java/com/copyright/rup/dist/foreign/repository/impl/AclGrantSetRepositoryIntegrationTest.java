@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
 
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -75,6 +77,14 @@ public class AclGrantSetRepositoryIntegrationTest {
         assertEquals(2, grantSets.size());
         assertEquals("8e5930c0-318c-4cf3-bde7-452a2d572f03", grantSets.get(0).getId());
         assertEquals("b4f502c7-583f-4bb8-aa37-7d60db3a9cb1", grantSets.get(1).getId());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-grant-periods.groovy")
+    public void testFindGrantPeriods() {
+        List<Integer> grantSets = aclGrantSetRepository.findGrantPeriods();
+        assertEquals(3, grantSets.size());
+        assertEquals(Arrays.asList(202212, 202112, 202012), grantSets);
     }
 
     private AclGrantSet buildAclGrantSet() {

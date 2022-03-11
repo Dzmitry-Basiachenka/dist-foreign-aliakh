@@ -22,4 +22,11 @@ public interface IAclGrantDetailFilterController extends IFilterController<IAclG
      * @return list of all {@link AclGrantSet}s
      */
     List<AclGrantSet> getAllAclGrantSets();
+
+    /**
+     * Gets list of grant periods.
+     *
+     * @return list of grant periods
+     */
+    List<Integer> getGrantPeriods();
 }

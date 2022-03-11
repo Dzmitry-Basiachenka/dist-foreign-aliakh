@@ -39,4 +39,9 @@ public class AclGrantDetailFilterController extends CommonController<IAclGrantDe
     public List<AclGrantSet> getAllAclGrantSets() {
         return aclGrantSetService.getAll();
     }
+
+    @Override
+    public List<Integer> getGrantPeriods() {
+        return aclGrantSetService.getGrantPeriods();
+    }
 }

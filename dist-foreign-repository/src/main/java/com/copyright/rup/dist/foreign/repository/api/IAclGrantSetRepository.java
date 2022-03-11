@@ -44,4 +44,11 @@ public interface IAclGrantSetRepository {
      * @return list of all {@link AclGrantSet}s
      */
     List<AclGrantSet> findAll();
+
+    /**
+     * Finds list of grant periods.
+     *
+     * @return list of grant periods
+     */
+    List<Integer> findGrantPeriods();
 }
