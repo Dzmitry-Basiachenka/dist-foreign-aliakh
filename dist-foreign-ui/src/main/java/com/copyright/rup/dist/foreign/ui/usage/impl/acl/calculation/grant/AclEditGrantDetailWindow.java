@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -47,11 +48,9 @@ public class AclEditGrantDetailWindow extends Window {
     private ComboBox<String> grantStatusField;
     private TextField rhAccountNumberField;
     private TextField rhNameField;
-    private ComboBox<String> eligibleFlag;
+    private ComboBox<String> eligibleFlagField;
     private Button saveButton;
-    private String newGrantStatusValue;
-    private String newRhAccountNumberValue;
-    private String newEligibleValue;
+    private Rightsholder rightsholder = new Rightsholder();
 
     /**
      * Constructor.
@@ -79,7 +78,7 @@ public class AclEditGrantDetailWindow extends Window {
         initGrantStatusComboBox();
         initRhName();
         initEligibleFlagComboBox();
-        rootLayout.addComponents(grantStatusField, initRhAccountNumberLayout(), rhNameField, eligibleFlag,
+        rootLayout.addComponents(grantStatusField, initRhAccountNumberLayout(), rhNameField, eligibleFlagField,
             buttonsLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         rootLayout.setSizeFull();
@@ -88,10 +87,7 @@ public class AclEditGrantDetailWindow extends Window {
 
     private void initGrantStatusComboBox() {
         grantStatusField = new ComboBox<>(ForeignUi.getMessage("label.grant_status"));
-        grantStatusField.addValueChangeListener(event -> {
-            this.newGrantStatusValue = grantStatusField.getValue();
-            refreshSaveButton(event);
-        });
+        grantStatusField.addValueChangeListener(this::refreshSaveButton);
         grantStatusField.setItems("GRANT", "DENY");
         grantStatusField.setSizeFull();
         VaadinUtils.addComponentStyle(grantStatusField, "acl-grant-status-field");
@@ -100,10 +96,7 @@ public class AclEditGrantDetailWindow extends Window {
     private HorizontalLayout initRhAccountNumberLayout() {
         rhAccountNumberField = new TextField(ForeignUi.getMessage("label.rh_account_number"));
         rhAccountNumberField.setSizeFull();
-        rhAccountNumberField.addValueChangeListener(event -> {
-            this.newRhAccountNumberValue = rhAccountNumberField.getValue();
-            refreshSaveButton(event);
-        });
+        rhAccountNumberField.addValueChangeListener(this::refreshSaveButton);
         binder.forField(rhAccountNumberField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
             .withValidator(new NumericValidator())
@@ -111,6 +104,15 @@ public class AclEditGrantDetailWindow extends Window {
             .validate();
         VaadinUtils.addComponentStyle(rhAccountNumberField, "acl-rh-account-number-field");
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        verifyButton.addClickListener(event -> {
+            if (Objects.isNull(rhAccountNumberField.getErrorMessage())) {
+                rightsholder = controller.getRightsholder(
+                    NumberUtils.createLong(StringUtils.trimToNull(rhAccountNumberField.getValue())));
+                if (Objects.nonNull(rightsholder.getAccountNumber())) {
+                    rhNameField.setValue(rightsholder.getName());
+                }
+            }
+        });
         VaadinUtils.addComponentStyle(rhAccountNumberField, "acl-rh-account-number-field");
         HorizontalLayout rhAccountNumberLayout = new HorizontalLayout(rhAccountNumberField, verifyButton);
         rhAccountNumberLayout.setSizeFull();
@@ -134,14 +136,11 @@ public class AclEditGrantDetailWindow extends Window {
     }
 
     private void initEligibleFlagComboBox() {
-        eligibleFlag = new ComboBox<>(ForeignUi.getMessage("label.eligible"));
-        eligibleFlag.addValueChangeListener(event -> {
-            this.newEligibleValue = eligibleFlag.getValue();
-            refreshSaveButton(event);
-        });
-        eligibleFlag.setItems("Y", "N");
-        eligibleFlag.setSizeFull();
-        VaadinUtils.addComponentStyle(eligibleFlag, "acl-eligible-flag-field");
+        eligibleFlagField = new ComboBox<>(ForeignUi.getMessage("label.eligible"));
+        eligibleFlagField.addValueChangeListener(this::refreshSaveButton);
+        eligibleFlagField.setItems("Y", "N");
+        eligibleFlagField.setSizeFull();
+        VaadinUtils.addComponentStyle(eligibleFlagField, "acl-eligible-flag-field");
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -163,17 +162,18 @@ public class AclEditGrantDetailWindow extends Window {
     }
 
     private void updateGrants() {
-        //todo will be initialized after implement logic to verify RH account
-        String newRhName = StringUtils.EMPTY;
+        boolean doUpdateTouStatus =
+            StringUtils.isNotEmpty(grantStatusField.getValue()) || Objects.nonNull(rightsholder.getAccountNumber());
         selectedGrants.forEach(grant -> {
-            setValue(newGrantStatusValue, grant::setGrantStatus);
-            setValue(newRhAccountNumberValue,
-                value -> grant.setRhAccountNumber(NumberUtils.createLong(StringUtils.trimToNull(value))));
-            setValue(newRhName, grant::setRhName);
-            setValue(newEligibleValue, value -> grant.setEligible(
-                StringUtils.isNotEmpty(value) ? "Y".equals(value) : null));
+            if (Objects.nonNull(rightsholder.getAccountNumber())) {
+                grant.setRhAccountNumber(rightsholder.getAccountNumber());
+                grant.setRhName(rightsholder.getName());
+            }
+            setValue(grantStatusField.getValue(), grant::setGrantStatus);
+            setValue(eligibleFlagField.getValue(),
+                value -> grant.setEligible(StringUtils.isNotEmpty(value) ? "Y".equals(value) : null));
         });
-        controller.updateAclGrants(selectedGrants);
+        controller.updateAclGrants(selectedGrants, doUpdateTouStatus);
     }
 
     private void setValue(String value, Consumer<String> setter) {
@@ -185,7 +185,7 @@ public class AclEditGrantDetailWindow extends Window {
     private void discardFields() {
         grantStatusField.clear();
         rhAccountNumberField.clear();
-        eligibleFlag.clear();
+        eligibleFlagField.clear();
     }
 
     private void refreshSaveButton(ValueChangeEvent<String> event) {

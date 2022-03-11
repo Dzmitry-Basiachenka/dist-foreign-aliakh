@@ -13,10 +13,12 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
@@ -51,6 +53,7 @@ public class AclGrantDetailControllerTest {
     private IAclGrantSetService aclGrantSetService;
     private IAclGrantDetailService aclGrantDetailService;
     private IAclGrantDetailFilterController aclGrantDetailFilterController;
+    private IPrmIntegrationService prmIntegrationService;
     private IAclGrantDetailWidget aclGrantDetailWidget;
 
     @Before
@@ -60,10 +63,12 @@ public class AclGrantDetailControllerTest {
         aclGrantDetailService = createMock(IAclGrantDetailService.class);
         aclGrantDetailFilterController = createMock(IAclGrantDetailFilterController.class);
         aclGrantDetailWidget = createMock(IAclGrantDetailWidget.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(controller, udmBaselineService);
         Whitebox.setInternalState(controller, aclGrantSetService);
         Whitebox.setInternalState(controller, aclGrantDetailFilterController);
         Whitebox.setInternalState(controller, aclGrantDetailService);
+        Whitebox.setInternalState(controller, prmIntegrationService);
     }
 
     @Test
@@ -126,6 +131,29 @@ public class AclGrantDetailControllerTest {
         replay(aclGrantSetService);
         assertEquals(1, controller.insertAclGrantSet(buildAclGrantSet()));
         verify(aclGrantSetService);
+    }
+
+    @Test
+    public void testGetRightsholder() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(123456789L);
+        rightsholder.setName("Rh Name");
+        expect(prmIntegrationService.getRightsholder(123456789L)).andReturn(rightsholder);
+        replay(prmIntegrationService);
+        Rightsholder actualRightsholder = controller.getRightsholder(123456789L);
+        assertNotNull(actualRightsholder);
+        assertEquals(rightsholder.getAccountNumber(), actualRightsholder.getAccountNumber());
+        assertEquals(rightsholder.getName(), actualRightsholder.getName());
+        verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testNotFoundGetRightsholder() {
+        expect(prmIntegrationService.getRightsholder(123456789L)).andReturn(new Rightsholder());
+        replay(prmIntegrationService);
+        Rightsholder actualRightsholder = controller.getRightsholder(123456789L);
+        assertNotNull(actualRightsholder);
+        verify(prmIntegrationService);
     }
 
     private AclGrantSet buildAclGrantSet() {
