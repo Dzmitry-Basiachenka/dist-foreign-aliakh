@@ -26,6 +26,8 @@ import com.vaadin.ui.components.grid.FooterRow;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.Set;
+
 /**
  * Implementation of {@link IAclGrantDetailWidget}.
  * <p>
@@ -159,7 +161,15 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     private void initEditButtonLayout() {
         editButton = Buttons.createButton(ForeignUi.getMessage("button.edit"));
         editButton.setEnabled(false);
-        editButton.addClickListener(event -> Windows.showModalWindow(new AclEditGrantDetailWindow()));
+        editButton.addClickListener(event -> {
+            Set<AclGrantDetailDto> selectedGrants = aclGrantDetailsGrid.getSelectedItems();
+            if (selectedGrants.stream().allMatch(AclGrantDetailDto::getEditable)) {
+                Windows.showModalWindow(
+                    new AclEditGrantDetailWindow(selectedGrants, controller, saveEvent -> refresh()));
+            } else {
+                Windows.showNotificationWindow("One of selected grants is not editable");
+            }
+        });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
     }
 }

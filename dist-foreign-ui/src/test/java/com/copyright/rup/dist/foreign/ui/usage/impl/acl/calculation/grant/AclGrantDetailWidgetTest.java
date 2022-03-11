@@ -3,18 +3,27 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -25,10 +34,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -40,6 +53,8 @@ import java.util.stream.IntStream;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({AclGrantDetailWidget.class, ForeignSecurityUtils.class, Windows.class})
 public class AclGrantDetailWidgetTest {
 
     private AclGrantDetailWidget aclGrantDetailWidget;
@@ -47,13 +62,55 @@ public class AclGrantDetailWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclGrantDetailController.class);
         expect(controller.initAclGrantDetailFilterWidget()).andReturn(new AclGrantDetailFilterWidget()).once();
     }
 
     @Test
-    public void testWidgetStructure() {
-        replay(controller);
+    public void testWidgetStructureForSpecialist() {
+        setSpecialistExpectations();
+        verifyStructure(true, true);
+    }
+
+    @Test
+    public void testWidgetStructureForManager() {
+        setManagerExpectations();
+        verifyStructure(true, false);
+    }
+
+    @Test
+    public void testWidgetStructureForViewOnly() {
+        setViewOnlyExpectations();
+        verifyStructure(false, false);
+    }
+
+    @Test
+    public void testEditClickButton() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
+        grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
+        grantDetailDto.setEditable(true);
+        AclEditGrantDetailWindow mockWindow = createMock(AclEditGrantDetailWindow.class);
+        Set<AclGrantDetailDto> grants = Collections.singleton(grantDetailDto);
+        expectNew(AclEditGrantDetailWindow.class, eq(grants),eq(controller), anyObject(ClickListener.class))
+            .andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class);
+        initWidget();
+        Grid<AclGrantDetailDto> grid =
+            (Grid<AclGrantDetailDto>) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(1);
+        grid.setItems(grants);
+        grid.select(grantDetailDto);
+        Button editButton = (Button) getButtonsLayout().getComponent(1);
+        editButton.click();
+        verify(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class);
+    }
+
+    private void verifyStructure(boolean... buttonsVisibility) {
+        replay(controller, ForeignSecurityUtils.class);
         initWidget();
         assertTrue(aclGrantDetailWidget.isLocked());
         assertEquals(200, aclGrantDetailWidget.getSplitPosition(), 0);
@@ -64,7 +121,7 @@ public class AclGrantDetailWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0));
+        verifyToolbarLayout(layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("License Type", 200.0, -1),
@@ -81,25 +138,30 @@ public class AclGrantDetailWidgetTest {
             Triple.of("Grant Period", 110.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
     }
 
-    private void verifyToolbarLayout(Component component) {
+    private void verifyToolbarLayout(Component component, boolean... buttonsVisibility) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Grant Set", Collections.singletonList("Create"));
+        verifyButtonsLayout(layout, buttonsVisibility);
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
+        verifyMenuBar(layout.getComponent(0), "Grant Set", Collections.singletonList("Create"), buttonsVisibility[0]);
+        verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
         Component button = layout.getComponent(1);
         assertTrue(button instanceof Button);
         assertEquals("Edit", button.getCaption());
     }
 
-    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
+    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems, boolean isVisible) {
         assertTrue(component instanceof MenuBar);
         MenuBar menuBar = (MenuBar) component;
-        assertTrue(menuBar.isVisible());
+        assertEquals(isVisible, menuBar.isVisible());
         List<MenuBar.MenuItem> parentItems = menuBar.getItems();
         assertEquals(1, parentItems.size());
         MenuBar.MenuItem item = parentItems.get(0);
@@ -110,9 +172,38 @@ public class AclGrantDetailWidgetTest {
             .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
+    private void verifyButton(Component component, String name, boolean isVisible) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(name, button.getCaption());
+        assertEquals(isVisible, button.isVisible());
+    }
+
     private void initWidget() {
         aclGrantDetailWidget = new AclGrantDetailWidget();
         aclGrantDetailWidget.setController(controller);
         aclGrantDetailWidget.init();
+        aclGrantDetailWidget.initMediator().applyPermissions();
+    }
+
+    private void setSpecialistExpectations() {
+        setPermissionsExpectations(true, false);
+    }
+
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true);
+    }
+
+    private void setViewOnlyExpectations() {
+        setPermissionsExpectations(false, false);
+    }
+
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager) {
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+    }
+
+    private HorizontalLayout getButtonsLayout() {
+        return (HorizontalLayout) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(0);
     }
 }

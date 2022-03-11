@@ -17,8 +17,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
-
 import com.vaadin.shared.data.sort.SortDirection;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclGrantDetailController}.
@@ -75,6 +76,11 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
         IAclGrantDetailFilterWidget widget = aclGrantDetailFilterController.initWidget();
         widget.addListener(FilterChangedEvent.class, this, IAclGrantDetailController.ON_FILTER_CHANGED);
         return widget;
+    }
+
+    @Override
+    public void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos) {
+        //TODO will implement later
     }
 
     @Override
