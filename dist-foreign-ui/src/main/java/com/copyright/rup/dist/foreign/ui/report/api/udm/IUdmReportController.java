@@ -37,4 +37,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return Udm Usable Details by Country Report controller.
      */
     IUdmUsableDetailsByCountryReportController getUdmUsableDetailsByCountryReportController();
+
+    /**
+     * @return UDM Usage Edits in Baseline Report controller.
+     */
+    IUdmUsageEditsInBaselineReportController getUdmUsageEditsInBaselineReportController();
 }

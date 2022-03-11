@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsageEditsInBaselineReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmVerifiedDetailsBySourceReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -37,6 +38,8 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     private IUdmVerifiedDetailsBySourceReportController udmVerifiedDetailsBySourceReportController;
     @Autowired
     private IUdmUsableDetailsByCountryReportController udmUsableDetailsByCountryReportController;
+    @Autowired
+    private IUdmUsageEditsInBaselineReportController udmUsageEditsInBaselineReportController;
 
     @Override
     public IUdmWeeklySurveyReportController getUdmWeeklySurveyReportController() {
@@ -61,6 +64,11 @@ public class UdmReportController extends CommonController<IUdmReportWidget> impl
     @Override
     public IUdmUsableDetailsByCountryReportController getUdmUsableDetailsByCountryReportController() {
         return udmUsableDetailsByCountryReportController;
+    }
+
+    @Override
+    public IUdmUsageEditsInBaselineReportController getUdmUsageEditsInBaselineReportController() {
+        return udmUsageEditsInBaselineReportController;
     }
 
     @Override
