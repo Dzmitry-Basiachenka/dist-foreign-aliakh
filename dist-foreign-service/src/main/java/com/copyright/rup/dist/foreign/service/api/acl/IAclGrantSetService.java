@@ -37,4 +37,11 @@ public interface IAclGrantSetService {
      * @return list of all {@link AclGrantSet}s
      */
     List<AclGrantSet> getAll();
+
+    /**
+     * Gets list of grant periods.
+     *
+     * @return list of grant periods
+     */
+    List<Integer> getGrantPeriods();
 }

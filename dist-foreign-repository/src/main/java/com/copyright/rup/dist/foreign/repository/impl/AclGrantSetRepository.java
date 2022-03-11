@@ -39,4 +39,9 @@ public class AclGrantSetRepository extends BaseRepository implements IAclGrantSe
     public List<AclGrantSet> findAll() {
         return selectList("IAclGrantSetMapper.findAll");
     }
+
+    @Override
+    public List<Integer> findGrantPeriods() {
+        return selectList("IAclGrantSetMapper.findGrantPeriods");
+    }
 }

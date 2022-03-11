@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterCont
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -15,6 +16,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.stream.Collectors;
 
@@ -34,6 +36,7 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
     private AclGrantDetailFilter appliedGrantDetailFilter = new AclGrantDetailFilter();
     private AclGrantSetFilterWidget aclGrantSetFilterWidget;
     private Button applyButton;
+    private Button moreFiltersButton;
 
     @Override
     public AclGrantDetailFilter getFilter() {
@@ -78,8 +81,11 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
     }
 
     private VerticalLayout initFiltersLayout() {
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildGrandSetFilter());
+        initMoreFiltersButton();
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildGrandSetFilter(),
+            moreFiltersButton);
         verticalLayout.setMargin(false);
+        VaadinUtils.setButtonsAutoDisabled(moreFiltersButton);
         return verticalLayout;
     }
 
@@ -92,6 +98,20 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
         });
         VaadinUtils.addComponentStyle(aclGrantSetFilterWidget, "acl-grant-sets-filter");
         return aclGrantSetFilterWidget;
+    }
+
+    private void initMoreFiltersButton() {
+        moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
+        moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
+        moreFiltersButton.addClickListener(event -> {
+            AclGrantDetailFiltersWindow aclGrantDetailFiltersWindow =
+                new AclGrantDetailFiltersWindow(controller, grantDetailFilter);
+            Windows.showModalWindow(aclGrantDetailFiltersWindow);
+            aclGrantDetailFiltersWindow.addCloseListener(closeEvent -> {
+                grantDetailFilter = aclGrantDetailFiltersWindow.getAppliedGrantDetailFilter();
+                filterChanged();
+            });
+        });
     }
 
     private HorizontalLayout initButtonsLayout() {

@@ -9,10 +9,12 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,6 +50,15 @@ public class AclGrantDetailFilterControllerTest {
         expect(aclGrantSetService.getAll()).andReturn(grantSets).once();
         replay(aclGrantSetService);
         assertSame(grantSets, controller.getAllAclGrantSets());
+        verify(aclGrantSetService);
+    }
+
+    @Test
+    public void testGetGrantPeriods() {
+        List<Integer> grantPeriods = Arrays.asList(202212, 202206, 202112);
+        expect(aclGrantSetService.getGrantPeriods()).andReturn(grantPeriods).once();
+        replay(aclGrantSetService);
+        assertSame(grantPeriods, controller.getGrantPeriods());
         verify(aclGrantSetService);
     }
 }

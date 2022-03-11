@@ -67,4 +67,9 @@ public class AclGrantSetService implements IAclGrantSetService {
     public List<AclGrantSet> getAll() {
         return aclGrantSetRepository.findAll();
     }
+
+    @Override
+    public List<Integer> getGrantPeriods() {
+        return aclGrantSetRepository.findGrantPeriods();
+    }
 }

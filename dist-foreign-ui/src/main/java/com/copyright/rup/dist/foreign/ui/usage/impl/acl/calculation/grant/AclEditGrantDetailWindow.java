@@ -170,7 +170,8 @@ public class AclEditGrantDetailWindow extends Window {
             setValue(newRhAccountNumberValue,
                 value -> grant.setRhAccountNumber(NumberUtils.createLong(StringUtils.trimToNull(value))));
             setValue(newRhName, grant::setRhName);
-            setValue(newEligibleValue, value -> grant.setEligible(StringUtils.isNotEmpty(value) ? "Y".equals(value) : null));
+            setValue(newEligibleValue, value -> grant.setEligible(
+                StringUtils.isNotEmpty(value) ? "Y".equals(value) : null));
         });
         controller.updateAclGrants(selectedGrants);
     }
