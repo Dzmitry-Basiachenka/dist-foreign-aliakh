@@ -7,12 +7,14 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 
@@ -22,6 +24,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -62,7 +65,7 @@ public class AclEditGrantDetailWindowTest {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
         grantDetailDto.setEditable(true);
-        controller.updateAclGrants(Collections.singleton(grantDetailDto));
+        controller.updateAclGrants(Collections.singleton(grantDetailDto), false);
         expectLastCall().once();
         saveButtonClickListener.buttonClick(anyObject(ClickEvent.class));
         expectLastCall().once();
@@ -74,6 +77,27 @@ public class AclEditGrantDetailWindowTest {
         saveButton.setEnabled(true);
         saveButton.click();
         verify(controller, saveButtonClickListener);
+    }
+
+    @Test
+    public void testVerifyButtonClickListener() {
+        AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
+        grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(1000006530L);
+        rightsholder.setName("Hachette Books Group");
+        expect(controller.getRightsholder(1000006530L)).andReturn(rightsholder).once();
+        replay(controller);
+        window =
+            new AclEditGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
+        HorizontalLayout rhLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
+        TextField rhAccountNumberField = (TextField) rhLayout.getComponent(0);
+        rhAccountNumberField.setValue("1000006530");
+        Button verifyButton = (Button) rhLayout.getComponent(1);
+        verifyButton.click();
+        TextField rhNameField = (TextField) ((VerticalLayout) window.getContent()).getComponent(2);
+        assertEquals("Hachette Books Group", rhNameField.getValue());
+        verify(controller);
     }
 
     private void verifyRootLayout(Component component) {

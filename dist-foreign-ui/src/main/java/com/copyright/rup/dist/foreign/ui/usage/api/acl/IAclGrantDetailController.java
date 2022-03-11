@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -85,6 +86,15 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * Updates ACL grants.
      *
      * @param aclGrantDetailDtos set of {@link AclGrantDetailDto} for update
+     * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
      */
-    void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos);
+    void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
+
+    /**
+     * Gets {@link Rightsholder} from PRM by account number.
+     *
+     * @param accountNumber rightsholder account number
+     * @return instance of {@link Rightsholder}
+     */
+    Rightsholder getRightsholder(Long accountNumber);
 }

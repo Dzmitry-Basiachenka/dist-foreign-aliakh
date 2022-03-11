@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
@@ -16,6 +18,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidg
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.google.common.base.MoreObjects;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
@@ -50,6 +53,8 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     private IAclGrantDetailService aclGrantDetailService;
     @Autowired
     private IAclGrantDetailFilterController aclGrantDetailFilterController;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Override
     public int getBeansCount() {
@@ -79,7 +84,12 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
-    public void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos) {
+    public Rightsholder getRightsholder(Long accountNumber) {
+        return MoreObjects.firstNonNull(prmIntegrationService.getRightsholder(accountNumber), new Rightsholder());
+    }
+
+    @Override
+    public void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
         //TODO will implement later
     }
 
