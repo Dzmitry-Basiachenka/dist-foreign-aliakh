@@ -32,4 +32,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Verified Details by Source Report controller.
      */
     IUdmVerifiedDetailsBySourceReportController getUdmVerifiedDetailsBySourceReportController();
+
+    /**
+     * @return Udm Usable Details by Country Report controller.
+     */
+    IUdmUsableDetailsByCountryReportController getUdmUsableDetailsByCountryReportController();
 }
