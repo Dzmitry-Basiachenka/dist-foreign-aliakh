@@ -92,6 +92,7 @@
         <typeAlias alias="AclGrantSetPeriodsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.AclGrantSetPeriodsTypeHandler"/>
         <typeAlias alias="WrWrkInstSystemTitlePair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToSystemTitlesResultHandler$WrWrkInstSystemTitlePair"/>
         <typeAlias alias="UdmUsageEditsInBaselineReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmUsageEditsInBaselineReportDto"/>
+        <typeAlias alias="UdmUsableDetailsByCountryReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmUsableDetailsByCountryReportDto"/>
     </typeAliases>
 
     <typeHandlers>

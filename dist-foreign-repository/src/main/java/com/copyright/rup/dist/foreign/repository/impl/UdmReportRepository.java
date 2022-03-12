@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCs
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmSurveyLicenseeReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsableDetailsByCountryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerResearcher;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
@@ -119,6 +120,14 @@ public class UdmReportRepository extends BaseRepository implements IUdmReportRep
         try (UdmUsageEditsInBaselineReportHandler handler =
                  new UdmUsageEditsInBaselineReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmUsageEditsInBaselineReportDtos", reportFilter, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmUsableDetailsByCountryCsvReport(UdmReportFilter filter, OutputStream outputStream) {
+        try (UdmUsableDetailsByCountryReportHandler handler =
+                 new UdmUsableDetailsByCountryReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmUsableDetailsByCountryReportDtos", filter, handler);
         }
     }
 

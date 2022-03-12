@@ -56,6 +56,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         FOLDER_NAME + "write-verified-details-by-source-csv-report.groovy";
     private static final String WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT =
         FOLDER_NAME + "write-completed-assignments-csv-report.groovy";
+    private static final String WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT =
+        FOLDER_NAME + "write-usable-details-by-country-csv-report.groovy";
 
     @Autowired
     private IUdmReportRepository udmReportRepository;
@@ -260,6 +262,30 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmCompletedAssignmentsCsvReport(reportFilter, outputStream),
             "udm/completed_assignments_empty_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT)
+    public void testUsableDetailsByCountryReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
+        reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(reportFilter, outputStream),
+            "udm/usable_details_by_source_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT)
+    public void testUsableDetailsByCountryEmptyReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setDateFrom(LocalDate.of(2018, 2, 1));
+        reportFilter.setDateTo(LocalDate.of(2019, 1, 1));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(reportFilter, outputStream),
+            "udm/usable_details_by_source_empty_report.csv");
     }
 
     @Test
