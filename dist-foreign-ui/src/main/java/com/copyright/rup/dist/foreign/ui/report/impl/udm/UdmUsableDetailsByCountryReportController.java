@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
@@ -30,6 +31,8 @@ public class UdmUsableDetailsByCountryReportController extends CommonController<
 
     @Autowired
     private IUdmUsageService udmUsageService;
+    @Autowired
+    private IUdmReportService udmReportService;
 
     @Override
     public List<Integer> getAllPeriods() {
@@ -39,7 +42,7 @@ public class UdmUsableDetailsByCountryReportController extends CommonController<
     @Override
     public IStreamSource getCsvStreamSource() {
         return new ByteArrayStreamSource("usable_details_by_country_report_",
-            os -> {/*TODO implement service logic*/});
+            os -> udmReportService.writeUdmUsableDetailsByCountryCsvReport(getWidget().getReportFilter(), os));
     }
 
     @Override

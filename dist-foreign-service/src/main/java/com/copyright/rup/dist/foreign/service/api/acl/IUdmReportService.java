@@ -98,4 +98,12 @@ public interface IUdmReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmUsageEditsInBaselineCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Usable Details by Country Report into csv output stream.
+     *
+     * @param reportFilter instance of {@link UdmReportFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmUsableDetailsByCountryCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
 }
