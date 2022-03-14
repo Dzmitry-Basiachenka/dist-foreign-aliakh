@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
@@ -154,6 +155,15 @@ public class AclGrantDetailControllerTest {
         Rightsholder actualRightsholder = controller.getRightsholder(123456789L);
         assertNotNull(actualRightsholder);
         verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testUpdateAclGrantDetails() {
+        aclGrantDetailService.updateGrants(Collections.singleton(new AclGrantDetailDto()), true);
+        expectLastCall().once();
+        replay(aclGrantDetailService);
+        controller.updateAclGrants(Collections.singleton(new AclGrantDetailDto()), true);
+        verify(aclGrantDetailService);
     }
 
     private AclGrantSet buildAclGrantSet() {

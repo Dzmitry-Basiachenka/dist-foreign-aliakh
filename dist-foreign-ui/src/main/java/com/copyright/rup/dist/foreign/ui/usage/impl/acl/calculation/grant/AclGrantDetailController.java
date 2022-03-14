@@ -90,7 +90,7 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
 
     @Override
     public void updateAclGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
-        //TODO will implement later
+        aclGrantDetailService.updateGrants(aclGrantDetailDtos, doUpdateTouStatus);
     }
 
     @Override

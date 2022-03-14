@@ -59,4 +59,15 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
             escapePropertyForMyBatisSqlFragment(filterCopy.getRhNameExpression()));
         return filterCopy;
     }
+
+    @Override
+    public void updateGrant(AclGrantDetailDto grant) {
+        //TODO will implement later
+    }
+
+    @Override
+    public AclGrantDetailDto findPairForGrantById(String grantId) {
+        //TODO will be implement later
+        return null;
+    }
 }

@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for ACL grant sets and grant details.
@@ -43,4 +44,12 @@ public interface IAclGrantDetailService {
      * @return the list of {@link AclGrantDetailDto}s
      */
     List<AclGrantDetailDto> getDtos(AclGrantDetailFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Updates ACL grants.
+     *
+     * @param aclGrantDetailDtos set of {@link AclGrantDetailDto}
+     * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
+     */
+    void updateGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
 }
