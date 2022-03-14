@@ -74,6 +74,16 @@
         <result property="updateUser" column="updated_by_user"/>
     </resultMap>
 
+    <resultMap id="udmUsableDetailsByCountryReportDtoResultMap" type="UdmUsableDetailsByCountryReportDto">
+        <result property="period" column="period"/>
+        <result property="channel" column="channel"/>
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="country" column="survey_country"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="totalCount" column="total_count"/>
+    </resultMap>
+
     <sql id="commonUdmFilterWhereClauses">
         <where>
             <if test="null != channel">
@@ -295,5 +305,31 @@
         from ${schema}.df_udm_audit a
         join ${schema}.df_udm_usage u on u.df_udm_usage_uid = a.df_udm_usage_uid
         order by df_udm_usage_uid asc, updated_datetime desc, action_reason asc
+    </select>
+
+    <select id="findUdmUsableDetailsByCountryReportDtos" parameterType="map" resultMap="udmUsableDetailsByCountryReportDtoResultMap">
+        select
+            u.period,
+            ub.channel,
+            ub.usage_origin,
+            u.survey_country,
+            u.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            count(1) as total_count
+        from ${schema}.df_detail_licensee_class dlc
+        join ${schema}.df_udm_usage u on dlc.detail_licensee_class_id = u.detail_licensee_class_id
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        <where>
+            <if test="periods.size() > 0">
+                and
+                <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                    u.period = #{period}
+                </foreach>
+            </if>
+            <if test="null != dateFrom and null != dateTo">
+                and u.created_datetime::date between #{dateFrom} and #{dateTo}
+            </if>
+        </where>
+        group by u.period, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
     </select>
 </mapper>
