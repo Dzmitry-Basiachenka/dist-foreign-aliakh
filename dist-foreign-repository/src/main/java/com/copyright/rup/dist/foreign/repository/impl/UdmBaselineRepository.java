@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmBaselineRepository extends UdmBaseRepository implements IUdmBaselineRepository {
+public class UdmBaselineRepository extends AclBaseRepository implements IUdmBaselineRepository {
 
     private static final int PARTITION_SIZE_FOR_POPULATING = 16000; // Max count of allowed parameters for 2 variables
     private static final String FILTER_KEY = "filter";

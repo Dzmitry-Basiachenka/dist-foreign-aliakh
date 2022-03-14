@@ -31,7 +31,7 @@ import java.util.Set;
  * @author Uladzislau Shalamitski
  */
 @Repository
-public class UdmUsageRepository extends UdmBaseRepository implements IUdmUsageRepository {
+public class UdmUsageRepository extends AclBaseRepository implements IUdmUsageRepository {
 
     private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String FILTER_KEY = "filter";

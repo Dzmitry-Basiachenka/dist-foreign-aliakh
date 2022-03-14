@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Anton Azarenka
  */
-public class UdmBaselineAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
+public class UdmBaselineAppliedFilterWidget extends CommonAclAppliedFilterPanel {
 
     /**
      * Constructor.

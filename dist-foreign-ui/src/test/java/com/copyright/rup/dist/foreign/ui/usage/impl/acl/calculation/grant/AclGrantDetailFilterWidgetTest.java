@@ -55,18 +55,20 @@ public class AclGrantDetailFilterWidgetTest {
 
     private AclGrantDetailFilterWidget widget;
     private IAclGrantDetailFilterController controller;
+    private AclGrantDetailAppliedFilterWidget appliedFilterWidget;
 
     @Before
     public void setUp() {
         controller = createMock(IAclGrantDetailFilterController.class);
-        widget = new AclGrantDetailFilterWidget();
+        appliedFilterWidget = createMock(AclGrantDetailAppliedFilterWidget.class);
+        widget = new AclGrantDetailFilterWidget(controller);
         widget.setController(controller);
     }
 
     @Test
     public void testInit() {
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
@@ -74,8 +76,12 @@ public class AclGrantDetailFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall();
+        replay(appliedFilterWidget);
         widget.init();
         widget.clearFilter();
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -88,6 +94,7 @@ public class AclGrantDetailFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().isEmpty());
+        verify(appliedFilterWidget);
     }
 
     @Test
@@ -101,7 +108,11 @@ public class AclGrantDetailFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall().times(2);
+        replay(appliedFilterWidget);
         widget.init();
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -114,6 +125,7 @@ public class AclGrantDetailFilterWidgetTest {
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
+        verify(appliedFilterWidget);
     }
 
     @Test

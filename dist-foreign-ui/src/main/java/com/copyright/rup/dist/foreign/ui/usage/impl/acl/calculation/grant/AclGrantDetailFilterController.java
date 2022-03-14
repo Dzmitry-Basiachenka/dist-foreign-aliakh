@@ -32,7 +32,7 @@ public class AclGrantDetailFilterController extends CommonController<IAclGrantDe
 
     @Override
     protected IAclGrantDetailFilterWidget instantiateWidget() {
-        return new AclGrantDetailFilterWidget();
+        return new AclGrantDetailFilterWidget(this);
     }
 
     @Override

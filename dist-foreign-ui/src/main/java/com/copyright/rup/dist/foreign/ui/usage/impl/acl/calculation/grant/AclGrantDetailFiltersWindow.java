@@ -188,7 +188,7 @@ public class AclGrantDetailFiltersWindow extends Window {
             .withValidator(value -> validateIntegerFromToValues(wrWrkInstFromField, wrWrkInstToField),
                 ForeignUi.getMessage(GRATER_OR_EQUAL_VALIDATION_MESSAGE,
                     ForeignUi.getMessage("label.wr_wrk_inst_from")))
-            .bind(filter -> Objects.toString(filter.getWrWrkInstExpression().getFieldFirstValue(), StringUtils.EMPTY),
+            .bind(filter -> Objects.toString(filter.getWrWrkInstExpression().getFieldSecondValue(), StringUtils.EMPTY),
                 (filter, value) -> filter.getWrWrkInstExpression()
                     .setFieldSecondValue(NumberUtils.createLong(StringUtils.trimToNull(value))));
         filterBinder.forField(wrWrkInstOperatorComboBox)

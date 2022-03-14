@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
+package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -28,14 +28,14 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public abstract class CommonUdmAppliedFilterPanel extends Panel {
+public abstract class CommonAclAppliedFilterPanel extends Panel {
 
     private static final String LIST_SEPARATOR = ", ";
 
     /**
      * Constructor.
      */
-    public CommonUdmAppliedFilterPanel() {
+    public CommonAclAppliedFilterPanel() {
         setWidth(265, Unit.PIXELS);
         setHeight(700, Unit.PIXELS);
         setStyleName(Cornerstone.FORMLAYOUT_LIGHT);

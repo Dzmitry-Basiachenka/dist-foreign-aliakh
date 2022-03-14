@@ -29,7 +29,7 @@ import java.util.Set;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmValueRepository extends UdmBaseRepository implements IUdmValueRepository {
+public class UdmValueRepository extends AclBaseRepository implements IUdmValueRepository {
 
     @Override
     public void insert(UdmValue value) {

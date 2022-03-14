@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
- * Represents case UDM repository.
+ * Represents repository case for ACL product family.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-class UdmBaseRepository extends BaseRepository {
+class AclBaseRepository extends BaseRepository {
 
     /**
      * Escapes filter expression that is used inside a MyBatis 'sql' fragment.

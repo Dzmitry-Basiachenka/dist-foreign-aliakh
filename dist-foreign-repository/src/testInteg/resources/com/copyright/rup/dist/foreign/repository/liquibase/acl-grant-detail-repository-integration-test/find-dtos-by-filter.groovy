@@ -13,7 +13,30 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'bc7107a8-a098-47f9-b28c-d7e8bb8704f2')
             column(name: 'rh_account_number', value: 2000024497)
-            column(name: 'name', value: 'Alexander Stille')
+            column(name: 'name', value: 'Alexander Stille !@#$%^&*()_+-=?/\\\'"}{][<>')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
+            column(name: 'df_acl_grant_set_uid', value: '9782d7c2-e3af-4fe9-b0ab-7ffe546a0a2e')
+            column(name: 'name', value: 'ACL Grant Set 2022')
+            column(name: 'grant_period', value: 202206)
+            column(name: 'periods', value: '[202206]')
+            column(name: 'license_type', value: 'VGW')
+            column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: 'dfa139d5-a821-4744-bf89-affeb5411395')
+            column(name: 'df_acl_grant_set_uid', value: '9782d7c2-e3af-4fe9-b0ab-7ffe546a0a2e')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'type_of_use_status', value: 'Digital Only')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: false)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
@@ -31,7 +54,7 @@ databaseChangeLog {
             column(name: 'grant_status', value: 'GRANT')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'type_of_use_status', value: 'Print Only')
-            column(name: 'wr_wrk_inst', value: '122820638')
+            column(name: 'wr_wrk_inst', value: 122820638)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'rh_account_number', value: 1000028511)
             column(name: 'is_eligible', value: true)
@@ -54,7 +77,7 @@ databaseChangeLog {
             column(name: 'grant_status', value: 'GRANT')
             column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'type_of_use_status', value: 'Print&Digital')
-            column(name: 'wr_wrk_inst', value: '122820628')
+            column(name: 'wr_wrk_inst', value: 122820628)
             column(name: 'system_title', value: 'Scientific American')
             column(name: 'rh_account_number', value: 2000024497)
             column(name: 'is_eligible', value: false)

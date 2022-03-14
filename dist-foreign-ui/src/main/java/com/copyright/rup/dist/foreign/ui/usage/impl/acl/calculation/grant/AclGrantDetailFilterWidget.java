@@ -37,6 +37,17 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
     private AclGrantSetFilterWidget aclGrantSetFilterWidget;
     private Button applyButton;
     private Button moreFiltersButton;
+    private final AclGrantDetailAppliedFilterWidget appliedFilterWidget;
+
+    /**
+     * Constructor.
+     *
+     * @param controller instance of {@link AclGrantDetailFilterController}
+     */
+    public AclGrantDetailFilterWidget(IAclGrantDetailFilterController controller) {
+        this.controller = controller;
+        appliedFilterWidget = new AclGrantDetailAppliedFilterWidget();
+    }
 
     @Override
     public AclGrantDetailFilter getFilter() {
@@ -56,7 +67,10 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
     @Override
     @SuppressWarnings("unchecked")
     public IAclGrantDetailFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
+        setExpandRatio(appliedFilterWidget, 1f);
+        setSizeFull();
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-grant-detail-filter-widget");
         return this;
@@ -65,6 +79,7 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
     @Override
     public void applyFilter() {
         appliedGrantDetailFilter = new AclGrantDetailFilter(grantDetailFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedGrantDetailFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -130,5 +145,11 @@ public class AclGrantDetailFilterWidget extends VerticalLayout implements IAclGr
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label("Applied Filters:");
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "acl-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }
