@@ -25,7 +25,7 @@ import java.util.Objects;
  * @author Anton Azarenka
  */
 @Repository
-public class UdmBaselineValueRepository extends UdmBaseRepository implements IUdmBaselineValueRepository {
+public class UdmBaselineValueRepository extends AclBaseRepository implements IUdmBaselineValueRepository {
 
     @Override
     public List<Integer> findPeriods() {

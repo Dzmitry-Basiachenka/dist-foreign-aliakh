@@ -6,10 +6,11 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
+
 import org.junit.Test;
 
 /**
- * Verifies {@link UdmBaseRepository}.
+ * Verifies {@link AclBaseRepository}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -17,16 +18,16 @@ import org.junit.Test;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmBaseRepositoryTest {
+public class AclBaseRepositoryTest {
 
-    private final UdmBaseRepository udmBaseRepository = new UdmBaseRepository();
+    private final AclBaseRepository aclBaseRepository = new AclBaseRepository();
 
     @Test
     public void testEscapePropertyForMyBatisSqlFragment() {
         String value = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
         FilterExpression<String> filterExpression = new FilterExpression<>(FilterOperatorEnum.EQUALS, value, value);
         FilterExpression<String> escapedFilterExpression =
-            udmBaseRepository.escapePropertyForMyBatisSqlFragment(filterExpression);
+            aclBaseRepository.escapePropertyForMyBatisSqlFragment(filterExpression);
         assertNotSame(filterExpression, escapedFilterExpression);
         assertEquals(filterExpression.getOperator(), escapedFilterExpression.getOperator());
         assertEquals("!\"#$\\%&''()*+,-./:;<=>?@[\\\\]^\\_`{|}~", escapedFilterExpression.getFieldFirstValue());
@@ -38,7 +39,7 @@ public class UdmBaseRepositoryTest {
         String value = "value";
         FilterExpression<String> filterExpression = new FilterExpression<>(null, value, value);
         FilterExpression<String> escapedFilterExpression =
-            udmBaseRepository.escapePropertyForMyBatisSqlFragment(filterExpression);
+            aclBaseRepository.escapePropertyForMyBatisSqlFragment(filterExpression);
         assertSame(filterExpression, escapedFilterExpression);
     }
 }

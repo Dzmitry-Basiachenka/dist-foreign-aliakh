@@ -51,7 +51,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     @Override
     @SuppressWarnings("unchecked")
     public IAclGrantDetailWidget init() {
-        setSplitPosition(200, Unit.PIXELS);
+        setSplitPosition(270, Unit.PIXELS);
         setFirstComponent(controller.initAclGrantDetailFilterWidget());
         setSecondComponent(initGrantDetailsLayout());
         setLocked(true);

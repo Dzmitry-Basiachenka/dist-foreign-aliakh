@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -64,7 +65,9 @@ public class AclGrantDetailWidgetTest {
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclGrantDetailController.class);
-        expect(controller.initAclGrantDetailFilterWidget()).andReturn(new AclGrantDetailFilterWidget()).once();
+        AclGrantDetailFilterWidget filterWidget =
+            new AclGrantDetailFilterWidget(createMock(IAclGrantDetailFilterController.class));
+        expect(controller.initAclGrantDetailFilterWidget()).andReturn(filterWidget).once();
     }
 
     @Test
@@ -113,7 +116,7 @@ public class AclGrantDetailWidgetTest {
         replay(controller, ForeignSecurityUtils.class);
         initWidget();
         assertTrue(aclGrantDetailWidget.isLocked());
-        assertEquals(200, aclGrantDetailWidget.getSplitPosition(), 0);
+        assertEquals(270, aclGrantDetailWidget.getSplitPosition(), 0);
         verifyWindow(aclGrantDetailWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(aclGrantDetailWidget.getFirstComponent() instanceof AclGrantDetailFilterWidget);
         Component secondComponent = aclGrantDetailWidget.getSecondComponent();

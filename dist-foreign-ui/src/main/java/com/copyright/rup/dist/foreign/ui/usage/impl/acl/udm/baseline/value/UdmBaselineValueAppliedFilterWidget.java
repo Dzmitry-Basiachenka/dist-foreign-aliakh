@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Anton Azarenka
  */
-public class UdmBaselineValueAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
+public class UdmBaselineValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
 
     /**
      * Constructor.

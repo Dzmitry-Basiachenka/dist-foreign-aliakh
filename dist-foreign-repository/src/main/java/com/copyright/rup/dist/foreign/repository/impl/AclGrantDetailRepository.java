@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.Objects;
  * @author Aliaksandr Liakh
  */
 @Repository
-public class AclGrantDetailRepository extends BaseRepository implements IAclGrantDetailRepository {
+public class AclGrantDetailRepository extends AclBaseRepository implements IAclGrantDetailRepository {
 
     @Override
     public void insert(AclGrantDetail grantDetail) {
@@ -40,15 +41,22 @@ public class AclGrantDetailRepository extends BaseRepository implements IAclGran
     @Override
     public int findCountByFilter(AclGrantDetailFilter filter) {
         return selectOne("IAclGrantDetailMapper.findCountByFilter",
-            ImmutableMap.of("filter", Objects.requireNonNull(filter)));
+            ImmutableMap.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));
     }
 
     @Override
     public List<AclGrantDetailDto> findDtosByFilter(AclGrantDetailFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
         return selectList("IAclGrantDetailMapper.findDtosByFilter", parameters);
+    }
+
+    private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {
+        AclGrantDetailFilter filterCopy = new AclGrantDetailFilter(aclGrantDetailFilter);
+        filterCopy.setRhNameExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getRhNameExpression()));
+        return filterCopy;
     }
 }

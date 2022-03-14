@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmAppliedFilterPanel;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public class UdmUsageAppliedFilterWidget extends CommonUdmAppliedFilterPanel {
+public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
 
     private final IUdmUsageFilterController controller;
 
