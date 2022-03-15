@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterCont
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -73,19 +72,19 @@ public class AclGrantDetailWidgetTest {
     @Test
     public void testWidgetStructureForSpecialist() {
         setSpecialistExpectations();
-        verifyStructure(true, true);
+        verifyStructure(true, true, true);
     }
 
     @Test
     public void testWidgetStructureForManager() {
         setManagerExpectations();
-        verifyStructure(true, false);
+        verifyStructure(true, false, true);
     }
 
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyStructure(false, false);
+        verifyStructure(false, false, true);
     }
 
     @Test
@@ -124,7 +123,7 @@ public class AclGrantDetailWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyToolbarLayout(layout.getComponent(0), buttonsVisibility);
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("License Type", 200.0, -1),
@@ -144,21 +143,10 @@ public class AclGrantDetailWidgetTest {
         verify(controller, ForeignSecurityUtils.class);
     }
 
-    private void verifyToolbarLayout(Component component, boolean... buttonsVisibility) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertTrue(layout.isSpacing());
-        assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
-        verifyButtonsLayout(layout, buttonsVisibility);
-    }
-
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         verifyMenuBar(layout.getComponent(0), "Grant Set", Collections.singletonList("Create"), buttonsVisibility[0]);
         verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
-        Component button = layout.getComponent(1);
-        assertTrue(button instanceof Button);
-        assertEquals("Edit", button.getCaption());
+        verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
     }
 
     private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems, boolean isVisible) {

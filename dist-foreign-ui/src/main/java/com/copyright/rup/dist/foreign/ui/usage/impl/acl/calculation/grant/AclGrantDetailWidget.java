@@ -80,7 +80,8 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
 
     private VerticalLayout initGrantDetailsLayout() {
         initGrantDetailsGrid();
-        VerticalLayout layout = new VerticalLayout(initToolbarLayout(), aclGrantDetailsGrid);
+        initGrantSetMenuBar();
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), aclGrantDetailsGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -140,15 +141,6 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             .setWidth(width);
     }
 
-    private HorizontalLayout initToolbarLayout() {
-        initGrantSetMenuBar();
-        initEditButtonLayout();
-        HorizontalLayout toolbar = new HorizontalLayout(grantSetMenuBar, editButton);
-        toolbar.setMargin(true);
-        VaadinUtils.addComponentStyle(toolbar, "acl-grant-details-toolbar");
-        return toolbar;
-    }
-
     private void initGrantSetMenuBar() {
         grantSetMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem = grantSetMenuBar.addItem(ForeignUi.getMessage("menu.caption.grant_set"), null, null);
@@ -158,7 +150,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         VaadinUtils.addComponentStyle(grantSetMenuBar, "v-menubar-df");
     }
 
-    private void initEditButtonLayout() {
+    private HorizontalLayout initButtonsLayout() {
         editButton = Buttons.createButton(ForeignUi.getMessage("button.edit"));
         editButton.setEnabled(false);
         editButton.addClickListener(event -> {
@@ -171,5 +163,11 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             }
         });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        exportButton.addClickListener(event -> {});
+        HorizontalLayout layout = new HorizontalLayout(grantSetMenuBar, editButton, exportButton);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "acl-grant-detail-buttons");
+        return layout;
     }
 }
