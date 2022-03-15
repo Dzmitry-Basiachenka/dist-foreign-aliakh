@@ -1,3 +1,24 @@
+15.1.6
+-
+* B-71752 FDA: Edit ACL Grant Set: implement edit window
+* B-71752 FDA: Edit ACL Grant Set: adjust logic to get grants details
+* B-71752 FDA: Edit ACL Grant Set: add Edit button to Grant Set tab
+* B-71752 FDA: Edit ACL Grant Set: adjust Edit Grants Window and implement validations for fields
+* B-71752 FDA: Edit ACL Grant Set: implement logic to verify RH in PRM
+* B-71790 FDA: Grant Set Filters: add fields for AclGrantDetailFilter
+* B-71790 FDA: Grant Set Filters: implement applied filter panel for ACL grant details
+* B-71790 FDA: Grant Set Filters: update SQL query to retrive grant details by applied filter
+* B-71790 FDA: Grant Set Filters: refine AclGrantDetailFilterWidget and implement AclGrantDetailFiltersWindow
+* B-70851 FDA: Report for usage edits in baseline: implement domain object
+* B-70851 FDA: Report for usage edits in baseline: implement repository
+* B-70851 FDA: Report for usage edits in baseline: implement service
+* B-70851 FDA: Report for usage edits in baseline: implement widget and controller
+* B-70851 FDA: Report for usage edits in baseline: implement menu item
+* B-71021 FDA: Usable Details by Country Report: Implement filter window for report generation
+* B-71021 FDA: Usable Details by Country Report: Refactor a condition for availability export button
+* B-71021 FDA: Usable Details by Country Report: Implement report handler and SQL select
+* B-71021 FDA: Usable Details by Country Report: Implement service and export csv report functionality
+
 15.1.5
 -
 * B-72269 FDA: Tech Debt: move Liquibase scripts for UdmUsageAuditRepositoryIntegrationTest into a separate folder
@@ -893,7 +914,7 @@
 
 13.1.11
 -
-*  B-65718 FDA: Batch Processing View: implement Batch Status widget for FAS
+* B-65718 FDA: Batch Processing View: implement Batch Status widget for FAS
 * B-65718 FDA: Batch Processing View: apply logic to retrieve batches not associated with scenarios for provided start date
 * B-65718 FDA: Batch Processing View: fix Checkstyle issue
 * B-65718 FDA: Batch Processing View: implement Batch Status tab on UI
@@ -945,7 +966,7 @@
 
 13.1.2
 -
-*  B-59009 FDA: Update SAL usages with distribution data from LM: implement service logic and adjust paid consumer to update SAL paid usages
+* B-59009 FDA: Update SAL usages with distribution data from LM: implement service logic and adjust paid consumer to update SAL paid usages
 
 13.1.1
 -
@@ -1537,7 +1558,7 @@
 
 9.1.22
 -
-*  B-56847 Tech Debt: FDA: adjust AaclUsage domain object to remove redundant fields for Agg and LC class detail
+* B-56847 Tech Debt: FDA: adjust AaclUsage domain object to remove redundant fields for Agg and LC class detail
 * B-54909 FDA: AACL Reports: Work Shares by Aggregate Licensee Class: implement common widget and controller for scenario specific reports
 * B-55007 FDA: AACL Exports: Scenario-specific usage details: implement Export Details  button to scenario  window
 * B-56278 FDA: Submit and Approve an AACL scenario: Add buttons
@@ -2575,7 +2596,7 @@ integration
 
 5.1.9
 -
-*  B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: add withdrawn_amount column to df_fund_pool table
+* B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: add withdrawn_amount column to df_fund_pool table
 * B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: fix checkstyle issue
 * B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: make changes based on comments in CR-DIST-FOREIGN-97
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement service to create NTS withdrawn fund pool
@@ -2685,7 +2706,7 @@ integration
 
 4.1.43
 -
-*  B-49462 Tech Debt: FDA: remove environment prefix from internal SQS endoints
+* B-49462 Tech Debt: FDA: remove environment prefix from internal SQS endoints
 * B-49462 Tech Debt: FDA: Rename service and repository methods after skipping audit writing during loading Fund Pool batch
 * B-49462 Tech Debt: FDA: adjust loggers during processing NTS usage batch
 * B-49462 Tech Debt: FDA: profile distinct usage processors, remove ForeignPerformanceAspect
