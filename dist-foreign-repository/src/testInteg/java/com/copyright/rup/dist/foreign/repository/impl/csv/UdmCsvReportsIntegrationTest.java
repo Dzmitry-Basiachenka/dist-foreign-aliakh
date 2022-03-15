@@ -268,7 +268,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     @TestData(fileName = WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT)
     public void testUsableDetailsByCountryReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
-        reportFilter.setPeriods(Collections.singleton(202006));
+        reportFilter.setPeriods(ImmutableSet.of(202006, 202106));
         reportFilter.setDateFrom(LocalDate.of(2020, 2, 1));
         reportFilter.setDateTo(LocalDate.of(2023, 1, 1));
         assertFilesWithExecutor(
