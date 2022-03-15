@@ -51,4 +51,19 @@ public interface IAclGrantDetailRepository {
      * @return the list of {@link AclGrantDetailDto}
      */
     List<AclGrantDetailDto> findDtosByFilter(AclGrantDetailFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Updates ACL grant.
+     *
+     * @param grant set of {@link AclGrantDetailDto}
+     */
+    void updateGrant(AclGrantDetailDto grant);
+
+    /**
+     * Finds grants by WrWrkInsts.
+     *
+     * @param grantId uid of grant detail
+     * @return instance of {@link AclGrantDetailDto}
+     */
+   AclGrantDetailDto findPairForGrantById(String grantId);
 }
