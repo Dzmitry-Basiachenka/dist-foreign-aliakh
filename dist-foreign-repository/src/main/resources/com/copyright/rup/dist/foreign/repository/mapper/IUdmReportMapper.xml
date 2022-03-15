@@ -331,5 +331,6 @@
             </if>
         </where>
         group by u.period, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
+        order by u.period desc, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
     </select>
 </mapper>
