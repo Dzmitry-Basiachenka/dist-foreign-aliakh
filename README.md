@@ -1,3 +1,14 @@
+15.1.7
+-
+* B-71753 FDA: Export ACL Grant Set: implement export button for Grant Set tab
+* B-71752 FDA: Edit ACL Grant Set: implement logic to update TOU status
+* B-71021 FDA: Usable Details by Country Report: change sort order
+* B-71021 FDA: Usable Details by Country Report: make changes based on comments in code review
+* B-71753 FDA: Export ACL Grant Set: implement backend logic to generate report
+* B-70851 FDA: Report for usage edits in baseline: implement query to generate the report
+* B-71752 FDA: Edit ACL Grant Set: implement query to update ACL grant
+* B-72772 Tech Debt: FDA: update rightsholders job to include UDM tables
+
 15.1.6
 -
 * B-71752 FDA: Edit ACL Grant Set: implement edit window
