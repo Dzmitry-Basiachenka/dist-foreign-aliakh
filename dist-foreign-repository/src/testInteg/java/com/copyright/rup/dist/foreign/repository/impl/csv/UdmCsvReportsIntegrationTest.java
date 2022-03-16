@@ -56,6 +56,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         FOLDER_NAME + "write-verified-details-by-source-csv-report.groovy";
     private static final String WRITE_COMPLETED_ASSIGNMENTS_CSV_REPORT =
         FOLDER_NAME + "write-completed-assignments-csv-report.groovy";
+    private static final String WRITE_USAGE_EDITS_IN_BASELINE_CSV_REPORT =
+        FOLDER_NAME + "write-usage-edits-in-baseline-csv-report.groovy";
     private static final String WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT =
         FOLDER_NAME + "write-usable-details-by-country-csv-report.groovy";
 
@@ -265,6 +267,30 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     }
 
     @Test
+    @TestData(fileName = WRITE_USAGE_EDITS_IN_BASELINE_CSV_REPORT)
+    public void testWriteUsageEditsInBaselineCsvReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202106));
+        reportFilter.setDateFrom(LocalDate.of(2020, 4, 15));
+        reportFilter.setDateTo(LocalDate.of(2020, 4, 16));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmUsageEditsInBaselineCsvReport(reportFilter, outputStream),
+            "udm/usage_edits_in_baseline_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_USAGE_EDITS_IN_BASELINE_CSV_REPORT)
+    public void testWriteUsageEditsInBaselineEmptyCsvReport() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202106));
+        reportFilter.setDateFrom(LocalDate.of(2020, 4, 16));
+        reportFilter.setDateTo(LocalDate.of(2020, 4, 17));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmUsageEditsInBaselineCsvReport(reportFilter, outputStream),
+            "udm/usage_edits_in_baseline_empty_report.csv");
+    }
+
+    @Test
     @TestData(fileName = WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT)
     public void testUsableDetailsByCountryReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
@@ -286,15 +312,5 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(reportFilter, outputStream),
             "udm/usable_details_by_source_empty_report.csv");
-    }
-
-    @Test
-    public void testWriteUdmUsageEditsInBaselineCsvReport() {
-        // TODO implement the test
-    }
-
-    @Test
-    public void testWriteUdmUsageEditsInBaselineEmptyCsvReport() {
-        // TODO implement the test
     }
 }

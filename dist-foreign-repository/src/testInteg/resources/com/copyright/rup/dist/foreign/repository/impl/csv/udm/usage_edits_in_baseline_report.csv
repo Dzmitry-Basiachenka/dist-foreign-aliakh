@@ -1,0 +1,7 @@
+Detail ID,Action Type,Action Reason,Wr Wrk Inst,System Title,Usage Period,Updated Date,Updated By
+0a60b477-66dd-4308-87dc-65a40c01cbec,USAGE_EDIT,The field 'Reported Pub Type' was edited. Old Value is 'Journal'. New Value is 'Book',20008506,"Colloids and surfaces. B, Biointerfaces",202106,04/15/2020 8:08 AM,user@copyright.com
+0a60b477-66dd-4308-87dc-65a40c01cbec,REMOVE_FROM_BASELINE,another reason,20008506,"Colloids and surfaces. B, Biointerfaces",202106,04/15/2020 8:06 AM,user@copyright.com
+0a60b477-66dd-4308-87dc-65a40c01cbec,USAGE_EDIT,The field 'Reported Pub Type' was edited. Old Value is 'Book'. New Value is 'Journal',20008506,"Colloids and surfaces. B, Biointerfaces",202106,04/15/2020 8:04 AM,user@copyright.com
+1f876f61-6750-4488-b280-65112de6d217,USAGE_EDIT,The field 'Comment' was edited. Old Value is 'another comment'. New Value is 'some comment',306985867,"Tenside, surfactants, detergents",202106,04/15/2020 8:07 AM,user@copyright.com
+1f876f61-6750-4488-b280-65112de6d217,REMOVE_FROM_BASELINE,some reason,306985867,"Tenside, surfactants, detergents",202106,04/15/2020 8:05 AM,user@copyright.com
+1f876f61-6750-4488-b280-65112de6d217,USAGE_EDIT,The field 'Comment' was edited. Old Value is 'some comment'. New Value is 'another comment',306985867,"Tenside, surfactants, detergents",202106,04/15/2020 8:03 AM,user@copyright.com
