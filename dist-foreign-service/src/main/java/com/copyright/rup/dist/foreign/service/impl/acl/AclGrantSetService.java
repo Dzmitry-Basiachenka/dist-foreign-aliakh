@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclGrantSetService}.
@@ -40,6 +42,8 @@ public class AclGrantSetService implements IAclGrantSetService {
     private IAclGrantSetRepository aclGrantSetRepository;
     @Autowired
     private IAclGrantDetailService aclGrantDetailService;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Transactional
     @Override
@@ -53,6 +57,8 @@ public class AclGrantSetService implements IAclGrantSetService {
             udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()), userName);
         aclGrantSetRepository.insert(grantSet);
         aclGrantDetailService.insert(grantDetails);
+        rightsholderService.updateRightsholders(
+            grantDetails.stream().map(AclGrantDetail::getRhAccountNumber).collect(Collectors.toSet()));
         LOGGER.info("Insert ACL grant set. Finished. AclGrantSet={}, AclGrantDetailsCount={}, UserName={}",
             grantSet, grantDetails.size(), userName);
         return grantDetails.size();
