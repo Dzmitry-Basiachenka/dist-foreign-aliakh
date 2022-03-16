@@ -62,12 +62,11 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
 
     @Override
     public void updateGrant(AclGrantDetailDto grant) {
-        //TODO will implement later
+        update("IAclGrantDetailMapper.update", Objects.requireNonNull(grant));
     }
 
     @Override
     public AclGrantDetailDto findPairForGrantById(String grantId) {
-        //TODO will be implement later
-        return null;
+        return selectOne("IAclGrantDetailMapper.findPairForGrantById", Objects.requireNonNull(grantId));
     }
 }
