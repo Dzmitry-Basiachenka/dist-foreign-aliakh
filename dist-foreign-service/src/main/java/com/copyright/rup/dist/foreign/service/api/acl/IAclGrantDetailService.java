@@ -52,4 +52,11 @@ public interface IAclGrantDetailService {
      * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
      */
     void updateGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
+
+    /**
+     * Deletes ACL grant details by ACL grant set id.
+     *
+     * @param grantSetId id of the {@link com.copyright.rup.dist.foreign.domain.AclGrantSet}
+     */
+    void deleteGrantDetails(String grantSetId);
 }

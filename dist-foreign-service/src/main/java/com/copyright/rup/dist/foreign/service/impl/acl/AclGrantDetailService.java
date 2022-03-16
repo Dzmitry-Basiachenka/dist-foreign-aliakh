@@ -84,6 +84,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         }
     }
 
+    @Override
+    public void deleteGrantDetails(String grantSetId) {
+        aclGrantDetailRepository.deleteByGrantSetId(grantSetId);
+    }
+
     private void updateTypeOfUseStatus(List<AclGrantDetailDto> grants) {
         List<AclGrantDetailDto> grantDetailDtos =
             grants.stream()
