@@ -75,10 +75,7 @@ public class UdmUsableDetailsByCountryReportWidget extends Window implements IUd
         return udmReportFilter;
     }
 
-    /**
-     * Init content.
-     */
-    public void initContent() {
+    private void initContent() {
         initPeriodFilter();
         initDatesFilter();
         VerticalLayout content =
