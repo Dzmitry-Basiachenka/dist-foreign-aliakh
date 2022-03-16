@@ -1,0 +1,21 @@
+[
+  {
+    "id": "883c61f6-3e78-418a-ba97-2890a2ffa46b",
+    "licenseType": "VGW",
+    "typeOfUseStatus": "Different RH",
+    "grantStatus": "GRANT",
+    "eligible": true,
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "rhAccountNumber": 1000019896,
+    "rhName": "Karnac Books Ltd.",
+    "typeOfUse": "PRINT",
+    "grantPeriod": 202206,
+    "editable": false,
+    "version": 1,
+    "createDate": 1611979200000,
+    "updateDate": 1612065600000,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM"
+  }
+]

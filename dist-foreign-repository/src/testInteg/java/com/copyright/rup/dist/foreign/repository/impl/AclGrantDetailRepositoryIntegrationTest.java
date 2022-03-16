@@ -52,7 +52,7 @@ import java.util.stream.IntStream;
 public class AclGrantDetailRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-grant-detail-repository-integration-test/";
-    private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";    
+    private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
     private static final String ACL_GRANT_SET_UID = "384a380e-c6ef-4af2-a282-96f4b1570fdd";
     private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
     private static final String ACL_GRANT_DETAIL_UID_1 = "8676271a-9298-4e8b-ad46-3a864f6c655c";
@@ -374,7 +374,38 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(ACL_GRANT_DETAIL_UID_4, ACL_GRANT_DETAIL_UID_3, "createDate");
         assertSortingFindDtosByFilter(ACL_GRANT_DETAIL_UID_4, ACL_GRANT_DETAIL_UID_3, "updateDate");
     }
-    
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-grant-details.groovy")
+    public void testUpdateGrantsDetails() {
+        AclGrantDetailDto expectedGrantDetailDto = loadExpectedDtos("json/acl/acl_grant_detail_for_update.json").get(0);
+        aclGrantDetailRepository.updateGrant(expectedGrantDetailDto);
+        AclGrantDetailFilter aclGrantDetailFilter = new AclGrantDetailFilter();
+        aclGrantDetailFilter.setGrantSetNames(Collections.singleton("ACL Grant Set 2022"));
+        aclGrantDetailFilter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
+        aclGrantDetailFilter.setRhAccountNumberExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, 1000019896L, null));
+        AclGrantDetailDto actualGrantDetailDto =
+            aclGrantDetailRepository.findDtosByFilter(aclGrantDetailFilter, null, null).get(0);
+        verifyAclGrantDetailDto(expectedGrantDetailDto, actualGrantDetailDto);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update-grant-details.groovy")
+    public void testFindPairForGrant() {
+        AclGrantDetailDto expectedGrantDetail = loadExpectedDtos("json/acl/acl_pair_grant_detail_dto.json").get(0);
+        AclGrantDetailDto actualGrantDetail =
+            aclGrantDetailRepository.findPairForGrantById("883c61f6-3e78-418a-ba97-2890a2ffa46b");
+        assertEquals("882f4daf-87ea-4ae7-b63e-740e760e5973", actualGrantDetail.getId());
+        assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
+        assertEquals(expectedGrantDetail.getGrantStatus(), actualGrantDetail.getGrantStatus());
+        assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
+        assertEquals(expectedGrantDetail.getWrWrkInst(), actualGrantDetail.getWrWrkInst());
+        assertEquals(expectedGrantDetail.getRhAccountNumber(), actualGrantDetail.getRhAccountNumber());
+        assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
+    }
+
     private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail) {
         assertEquals(expectedGrantDetail.getId(), actualGrantDetail.getId());
         assertEquals(expectedGrantDetail.getGrantSetId(), actualGrantDetail.getGrantSetId());
@@ -394,7 +425,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         int usagesCount = aclGrantDetailRepository.findCountByFilter(filter);
         assertEquals(count, usagesCount);
     }
-    
+
     private void verifyAclGrantDetailDto(AclGrantDetailDto expectedGrantDetail, AclGrantDetailDto actualGrantDetail) {
         assertEquals(expectedGrantDetail.getLicenseType(), actualGrantDetail.getLicenseType());
         assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
@@ -438,7 +469,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
     private Sort buildSort() {
         return new Sort("updateDate", Sort.Direction.ASC);
     }
-    
+
     private List<AclGrantDetailDto> loadExpectedDtos(String fileName) {
         List<AclGrantDetailDto> grantDetails = new ArrayList<>();
         try {
@@ -450,7 +481,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         }
         return grantDetails;
     }
-    
+
     private void assertSortingFindDtosByFilter(String grandtDetailIdAsc, String grantDetailIdDesc,
                                                String sortProperty) {
         AclGrantDetailFilter filter = new AclGrantDetailFilter();
@@ -460,5 +491,5 @@ public class AclGrantDetailRepositoryIntegrationTest {
         grantDetails =
             aclGrantDetailRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.DESC));
         assertEquals(grantDetailIdDesc, grantDetails.get(0).getId());
-    }    
+    }
 }

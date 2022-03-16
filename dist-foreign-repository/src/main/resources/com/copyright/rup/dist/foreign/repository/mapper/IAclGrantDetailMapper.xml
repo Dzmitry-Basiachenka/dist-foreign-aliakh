@@ -44,34 +44,6 @@
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
-    <insert id="insert" parameterType="AclGrantDetail">
-        insert into ${schema}.df_acl_grant_detail (
-            <include refid="aclGrantDetailColumns"/>
-        ) values (
-            #{id},
-            #{grantSetId},
-            #{grantStatus},
-            #{typeOfUse},
-            #{typeOfUseStatus},
-            #{wrWrkInst},
-            #{systemTitle},
-            #{rhAccountNumber},
-            #{eligible},
-            <include refid="StoredEntityMapper.insert"/>
-        )
-    </insert>
-
-    <select id="findByIds" resultMap="aclGrantDetailResultMap">
-        select
-            <include refid="aclGrantDetailColumns"/>
-        from ${schema}.df_acl_grant_detail
-        where df_acl_grant_detail_uid in
-            <foreach collection="list" item="grantDetailId" open="(" separator="," close=")">
-                #{grantDetailId}
-            </foreach>
-        order by df_acl_grant_detail_uid
-    </select>
-
     <sql id="selectCountByFilterSql">
         select count(1)
         from ${schema}.df_acl_grant_detail gd
@@ -221,6 +193,61 @@
             </when>
         </choose>
     </sql>
+
+    <update id="update" parameterType="AclGrantDetailDto">
+        update ${schema}.df_acl_grant_detail
+        set
+            grant_status = #{grantStatus},
+            type_of_use_status = #{typeOfUseStatus},
+            rh_account_number = #{rhAccountNumber},
+            is_eligible = #{eligible}
+        where df_acl_grant_detail_uid = #{id}
+    </update>
+
+    <select id="findPairForGrantById" resultMap="aclGrantDetailDtoResultMap" parameterType="string">
+        select
+            gd.df_acl_grant_detail_uid,
+            gd.df_acl_grant_set_uid,
+            gd.grant_status,
+            gd.type_of_use,
+            gd.type_of_use_status,
+            gd.wr_wrk_inst,
+            gd.rh_account_number,
+            gd.is_eligible
+        from ${schema}.df_acl_grant_detail gd
+        left join ${schema}.df_acl_grant_detail gd2 on gd.df_acl_grant_set_uid = gd2.df_acl_grant_set_uid
+            and gd2.wr_wrk_inst = gd.wr_wrk_inst
+            and gd.df_acl_grant_detail_uid != #{grantId}
+        where gd2.df_acl_grant_detail_uid = #{grantId}
+    </select>
+
+    <insert id="insert" parameterType="AclGrantDetail">
+        insert into ${schema}.df_acl_grant_detail (
+            <include refid="aclGrantDetailColumns"/>
+        ) values (
+            #{id},
+            #{grantSetId},
+            #{grantStatus},
+            #{typeOfUse},
+            #{typeOfUseStatus},
+            #{wrWrkInst},
+            #{systemTitle},
+            #{rhAccountNumber},
+            #{eligible},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findByIds" resultMap="aclGrantDetailResultMap">
+        select
+            <include refid="aclGrantDetailColumns"/>
+        from ${schema}.df_acl_grant_detail
+        where df_acl_grant_detail_uid in
+            <foreach collection="list" item="grantDetailId" open="(" separator="," close=")">
+                #{grantDetailId}
+            </foreach>
+        order by df_acl_grant_detail_uid
+    </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
         <include refid="IAclGrantDetailMapper.selectCountByFilterSql"/>
