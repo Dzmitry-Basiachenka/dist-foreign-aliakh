@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -164,7 +165,9 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        exportButton.addClickListener(event -> {});
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportAclGrantDetailsStreamSource().getSource());
+        fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(grantSetMenuBar, editButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "acl-grant-detail-buttons");

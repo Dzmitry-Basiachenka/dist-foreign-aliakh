@@ -15,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
@@ -38,10 +39,12 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 /**
@@ -59,6 +62,7 @@ public class AclGrantDetailWidgetTest {
 
     private AclGrantDetailWidget aclGrantDetailWidget;
     private IAclGrantDetailController controller;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
@@ -67,6 +71,9 @@ public class AclGrantDetailWidgetTest {
         AclGrantDetailFilterWidget filterWidget =
             new AclGrantDetailFilterWidget(createMock(IAclGrantDetailFilterController.class));
         expect(controller.initAclGrantDetailFilterWidget()).andReturn(filterWidget).once();
+        streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
     }
 
     @Test
@@ -100,7 +107,7 @@ public class AclGrantDetailWidgetTest {
             .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class);
+        replay(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
         initWidget();
         Grid<AclGrantDetailDto> grid =
             (Grid<AclGrantDetailDto>) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(1);
@@ -108,11 +115,11 @@ public class AclGrantDetailWidgetTest {
         grid.select(grantDetailDto);
         Button editButton = (Button) getButtonsLayout().getComponent(1);
         editButton.click();
-        verify(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class);
+        verify(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
     }
 
     private void verifyStructure(boolean... buttonsVisibility) {
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller, ForeignSecurityUtils.class, streamSource);
         initWidget();
         assertTrue(aclGrantDetailWidget.isLocked());
         assertEquals(270, aclGrantDetailWidget.getSplitPosition(), 0);
@@ -140,7 +147,7 @@ public class AclGrantDetailWidgetTest {
             Triple.of("Grant Period", 110.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller, ForeignSecurityUtils.class, streamSource);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
@@ -192,6 +199,7 @@ public class AclGrantDetailWidgetTest {
     private void setPermissionsExpectations(boolean isSpecialist, boolean isManager) {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
         expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+        expect(controller.getExportAclGrantDetailsStreamSource()).andReturn(streamSource).once();
     }
 
     private HorizontalLayout getButtonsLayout() {

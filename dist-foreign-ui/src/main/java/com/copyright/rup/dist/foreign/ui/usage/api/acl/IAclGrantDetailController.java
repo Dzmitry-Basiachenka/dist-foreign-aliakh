@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -97,4 +98,9 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return instance of {@link Rightsholder}
      */
     Rightsholder getRightsholder(Long accountNumber);
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportAclGrantDetailsStreamSource();
 }

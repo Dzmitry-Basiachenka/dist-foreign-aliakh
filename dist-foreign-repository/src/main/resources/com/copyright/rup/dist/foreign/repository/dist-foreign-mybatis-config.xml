@@ -144,5 +144,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUdmProxyValueMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantSetMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantDetailMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclCalculationReportMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
@@ -8,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
@@ -55,6 +58,10 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     private IAclGrantDetailFilterController aclGrantDetailFilterController;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private IAclCalculationReportService aclCalculationReportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public int getBeansCount() {
@@ -106,6 +113,12 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
+    }
+
+    @Override
+    public IStreamSource getExportAclGrantDetailsStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_grant_set_",
+            pos -> aclCalculationReportService.writeAclGrantDetailCsvReport(getFilter(), pos));
     }
 
     @Override
