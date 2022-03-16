@@ -238,6 +238,83 @@ databaseChangeLog {
             column(name: 'reported_value', value: 2500)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage_batch') {
+            column(name: 'df_udm_usage_batch_uid', value: 'b8e6d1b4-9873-4597-ab05-a230ea94dcb5')
+            column(name: 'name', value: 'UDM Processing Batch 1')
+            column(name: 'period', value: 202012)
+            column(name: 'usage_origin', value: 'RFA')
+            column(name: 'channel', value: 'CCC')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
+            column(name: 'df_udm_usage_uid', value: '8f0a4bdb-c832-4dc1-b5c9-493f235eb9be')
+            column(name: 'df_udm_usage_batch_uid', value: 'b8e6d1b4-9873-4597-ab05-a230ea94dcb5')
+            column(name: 'original_detail_id', value: 'OGN994GHHSB987')
+            column(name: 'period', value: '202012')
+            column(name: 'period_end_date', value: '2020-12-31')
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'assignee', value: 'wjohn@copyright.com')
+            column(name: 'wr_wrk_inst', value: 306985867)
+            column(name: 'rh_account_number', value: 2580011451)
+            column(name: 'reported_title', value: 'Colloids and surfaces. B, Biointerfaces')
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'reported_standard_number', value: '0927-7765')
+            column(name: 'standard_number', value: '1873-7773')
+            column(name: 'reported_pub_type', value: 'Not Shared')
+            column(name: 'publication_format', value: 'Digital')
+            column(name: 'article', value: 'Tenside, surfactants, detergents')
+            column(name: 'language', value: 'English')
+            column(name: 'company_id', value: 1138)
+            column(name: 'company_name', value: 'Alcon Laboratories, Inc.')
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'survey_respondent', value: 'c6615155-f82b-402c-8f22-77e2722ae448')
+            column(name: 'ip_address', value: '192.168.211.211')
+            column(name: 'survey_country', value: 'Portugal')
+            column(name: 'usage_date', value: '2020-05-10')
+            column(name: 'survey_start_date', value: '2020-04-20')
+            column(name: 'survey_end_date', value: '2020-05-15')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'reported_type_of_use', value: 'PRINT_COPIES')
+            column(name: 'annualized_copies', value: 4)
+            column(name: 'quantity', value: 3)
+            column(name: 'annual_multiplier', value: 1)
+            column(name: 'statistical_multiplier', value: 1)
+            column(name: 'annualized_copies', value: 300)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value') {
+            column(name: 'df_udm_value_uid', value: 'ea889cae-c977-4a7a-a565-729ebff93165')
+            column(name: 'period', value: 211512)
+            column(name: 'status_ind', value: "NEW")
+            column(name: 'rh_account_number', value: 1000002854)
+            column(name: 'wr_wrk_inst', value: 28908508)
+            column(name: 'system_title', value: 'Artifacts in video compression')
+            column(name: 'standard_number', value: '0927-7765')
+            column(name: 'publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'assignee', value: 'jjohn@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
+            column(name: 'df_acl_grant_set_uid', value: '7aff4f60-a735-400e-a70f-ca2716febab6')
+            column(name: 'name', value: 'ACL Grant Set 2021')
+            column(name: 'grant_period', value: 202106)
+            column(name: 'periods', value: '[202106]')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '87536b9f-6a47-43ea-9605-46b4a2b93729')
+            column(name: 'df_acl_grant_set_uid', value: '7aff4f60-a735-400e-a70f-ca2716febab6')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+        }
+
         rollback {
             dbRollback
         }

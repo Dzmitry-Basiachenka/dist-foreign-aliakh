@@ -56,6 +56,18 @@
         select distinct new_rh_account_number
         from ${schema}.df_rightsholder_discrepancy
         where new_rh_account_number is not null
+        union
+        select distinct rh_account_number
+        from ${schema}.df_udm_usage
+        where rh_account_number is not null
+        union
+        select distinct rh_account_number
+        from ${schema}.df_udm_value
+        where rh_account_number is not null
+        union
+        select distinct rh_account_number
+        from ${schema}.df_acl_grant_detail
+        where rh_account_number is not null
     </select>
 
     <delete id="deleteByAccountNumber" parameterType="long">

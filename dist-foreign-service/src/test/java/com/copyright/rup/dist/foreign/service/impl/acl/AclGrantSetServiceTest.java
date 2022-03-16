@@ -12,11 +12,13 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
@@ -59,6 +61,7 @@ public class AclGrantSetServiceTest {
     private IAclGrantService aclGrantService;
     private IAclGrantSetRepository aclGrantSetRepository;
     private IAclGrantDetailService aclGrantDetailService;
+    private IRightsholderService rightsholderService;
 
     @Before
     public void setUp() {
@@ -67,10 +70,12 @@ public class AclGrantSetServiceTest {
         aclGrantService = createMock(IAclGrantService.class);
         aclGrantSetRepository = createMock(IAclGrantSetRepository.class);
         aclGrantDetailService = createMock(IAclGrantDetailService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(aclGrantSetService, udmBaselineRepository);
         Whitebox.setInternalState(aclGrantSetService, aclGrantService);
         Whitebox.setInternalState(aclGrantSetService, aclGrantSetRepository);
         Whitebox.setInternalState(aclGrantSetService, aclGrantDetailService);
+        Whitebox.setInternalState(aclGrantSetService, rightsholderService);
     }
 
     @Test
@@ -79,6 +84,7 @@ public class AclGrantSetServiceTest {
         AclGrantSet grantSet = buildAclGrantSet();
         AclGrantDetail grantDetail = new AclGrantDetail();
         grantDetail.setWrWrkInst(WR_WRK_INST);
+        grantDetail.setRhAccountNumber(7000813806L);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()))
             .andReturn(ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE)).once();
@@ -89,6 +95,8 @@ public class AclGrantSetServiceTest {
         grantDetail.setSystemTitle(SYSTEM_TITLE);
         aclGrantDetailService.insert(eq(Lists.newArrayList(grantDetail)));
         expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(7000813806L)))
+            .andReturn(Collections.singletonList(new Rightsholder()));
         replay(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
         assertEquals(1, aclGrantSetService.insert(grantSet));
