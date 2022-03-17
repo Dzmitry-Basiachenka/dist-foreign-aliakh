@@ -70,10 +70,7 @@ public class CompletedAssignmentsReportWidget extends Window implements IComplet
         return udmReportFilter;
     }
 
-    /**
-     * Init content.
-     */
-    public void initContent() {
+    private void initContent() {
         initPeriodFilter();
         initUserNamesFilter();
         initDatesFilter();

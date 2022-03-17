@@ -66,10 +66,7 @@ public class UdmUsageEditsInBaselineReportWidget extends Window implements IUdmU
         return reportFilter;
     }
 
-    /**
-     * Init content.
-     */
-    public void initContent() {
+    private void initContent() {
         initPeriodFilter();
         initDatesFilter();
         VerticalLayout content = new VerticalLayout(periodFilterWidget, dateFromWidget, dateToWidget,
