@@ -85,10 +85,7 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
         return udmReportFilter;
     }
 
-    /**
-     * Init content.
-     */
-    public void initContent() {
+    private void initContent() {
         initChannelFilter();
         initUsageOriginFilter();
         initPeriodFilter();
