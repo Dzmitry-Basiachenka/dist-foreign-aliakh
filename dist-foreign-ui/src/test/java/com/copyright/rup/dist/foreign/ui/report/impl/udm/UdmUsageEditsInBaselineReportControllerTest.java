@@ -91,7 +91,7 @@ public class UdmUsageEditsInBaselineReportControllerTest {
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, udmReportService, udmUsageService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("usage_edits_in_baseline_01_02_2021_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals("usage_edits_in_baseline_report_01_02_2021_03_04.csv", streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(filter, reportFilterCapture.getValue());
         assertNotNull(osCapture.getValue());

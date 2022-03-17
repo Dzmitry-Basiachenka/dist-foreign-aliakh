@@ -40,7 +40,7 @@ public class UdmUsageEditsInBaselineReportController extends CommonController<IU
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("usage_edits_in_baseline_",
+        return new ByteArrayStreamSource("usage_edits_in_baseline_report_",
             os -> udmReportService.writeUdmUsageEditsInBaselineCsvReport(getWidget().getReportFilter(), os));
     }
 
