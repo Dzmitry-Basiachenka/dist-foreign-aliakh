@@ -160,7 +160,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
                 Windows.showModalWindow(
                     new AclEditGrantDetailWindow(selectedGrants, controller, saveEvent -> refresh()));
             } else {
-                Windows.showNotificationWindow("One of selected grants is not editable");
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.grant_not_editable"));
             }
         });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");

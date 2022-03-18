@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
                 aclGrantDetailDtos.stream().collect(Collectors.groupingBy(AclGrantDetailDto::getWrWrkInst));
             wrWrkInstToGrants.forEach((wrWrkInst, grants) -> {
                 if (grants.size() == TYPE_OF_USE_COUNT) {
-                    grants.add(aclGrantDetailRepository.findPairForGrantById(grants.get(0).getId()));
+                    AclGrantDetailDto pairForGrant =
+                        aclGrantDetailRepository.findPairForGrantById(grants.get(0).getId());
+                    if (Objects.nonNull(pairForGrant)) {
+                        grants.add(pairForGrant);
+                    }
                 }
                 updateTypeOfUseStatus(grants);
                 grants.forEach(grant -> aclGrantDetailRepository.updateGrant(grant));

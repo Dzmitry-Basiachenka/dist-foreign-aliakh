@@ -60,7 +60,7 @@ public interface IAclGrantDetailRepository {
     void updateGrant(AclGrantDetailDto grant);
 
     /**
-     * Finds grants by WrWrkInsts.
+     * Finds pair for grant by id.
      *
      * @param grantId uid of grant detail
      * @return instance of {@link AclGrantDetailDto}
