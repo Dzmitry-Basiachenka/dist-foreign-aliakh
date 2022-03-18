@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.common.LicenseTypeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
@@ -16,20 +17,15 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.Validator;
-import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +33,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,28 +44,33 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclGrantDetailFiltersWindow extends Window {
+public class AclGrantDetailFiltersWindow extends CommonAclFiltersWindow {
 
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
-    private static final List<FilterOperatorEnum> BOOLEAN_ITEMS =
-        Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
-    private static final int ONE = 1;
+    private static final FilterOperatorEnum[] NUMERIC_OPERATOR_ITEMS =
+        new FilterOperatorEnum[]{FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
+            FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, FilterOperatorEnum.BETWEEN};
 
     private final Binder<AclGrantDetailFilter> filterBinder = new Binder<>();
     private final ComboBox<Integer> grantSetPeriodComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.grant_set_period"));
     private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
     private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
-    private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox = buildNumericOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox =
+        buildNumericOperatorComboBox(NUMERIC_OPERATOR_ITEMS);
     private final TextField rhAccountNumberFromField =
         new TextField(ForeignUi.getMessage("label.rh_account_number_from"));
     private final TextField rhAccountNumberToField = new TextField(ForeignUi.getMessage("label.rh_account_number_to"));
-    private final ComboBox<FilterOperatorEnum> rhAccountNumberOperatorComboBox = buildNumericOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> rhAccountNumberOperatorComboBox =
+        buildNumericOperatorComboBox(NUMERIC_OPERATOR_ITEMS);
     private final TextField rhNameField = new TextField(ForeignUi.getMessage("label.rh_name"));
-    private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox = buildTextOperatorComboBox();
+    private final ComboBox<FilterOperatorEnum> rhNameOperatorComboBox =
+        buildTextOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.CONTAINS);
     private final ComboBox<FilterOperatorEnum> eligibleComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.eligible"));
     private final ComboBox<FilterOperatorEnum> editableComboBox =
@@ -162,7 +162,6 @@ public class AclGrantDetailFiltersWindow extends Window {
         filterBinder.forField(grantSetPeriodComboBox)
             .bind(AclGrantDetailFilter::getGrantSetPeriod, AclGrantDetailFilter::setGrantSetPeriod);
         grantSetPeriodComboBox.setItems(controller.getGrantPeriods());
-        grantSetPeriodComboBox.setPageLength(16);
         grantSetPeriodComboBox.setSelectedItem(aclGrantDetailFilter.getGrantSetPeriod());
         grantSetPeriodComboBox.setSizeFull();
         grantSetPeriodComboBox.setWidth(50, Unit.PERCENTAGE);
@@ -196,7 +195,7 @@ public class AclGrantDetailFiltersWindow extends Window {
                     filter.getWrWrkInstExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getWrWrkInstExpression().setOperator(value));
         wrWrkInstOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(wrWrkInstFromField, wrWrkInstToField, event.getValue()));
+            event -> updateOperatorField(filterBinder, wrWrkInstFromField, wrWrkInstToField, event.getValue()));
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox);
         applyCommonNumericFieldFormatting(horizontalLayout, wrWrkInstFromField, wrWrkInstToField);
@@ -234,7 +233,7 @@ public class AclGrantDetailFiltersWindow extends Window {
                     filter.getRhAccountNumberExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getRhAccountNumberExpression().setOperator(value));
         rhAccountNumberOperatorComboBox.addValueChangeListener(event ->
-            updateOperatorField(rhAccountNumberFromField, rhAccountNumberToField, event.getValue()));
+            updateOperatorField(filterBinder, rhAccountNumberFromField, rhAccountNumberToField, event.getValue()));
         HorizontalLayout horizontalLayout =
             new HorizontalLayout(rhAccountNumberFromField, rhAccountNumberToField, rhAccountNumberOperatorComboBox);
         applyCommonNumericFieldFormatting(horizontalLayout, rhAccountNumberFromField, rhAccountNumberToField);
@@ -255,7 +254,7 @@ public class AclGrantDetailFiltersWindow extends Window {
                     filter.getRhNameExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getRhNameExpression().setOperator(value));
         rhNameOperatorComboBox.addValueChangeListener(
-            event -> updateOperatorField(rhNameField, event.getValue()));
+            event -> updateOperatorField(filterBinder, rhNameField, event.getValue()));
         HorizontalLayout horizontalLayout = new HorizontalLayout(rhNameField, rhNameOperatorComboBox);
         applyCommonTextFieldFormatting(horizontalLayout, rhNameField);
         VaadinUtils.addComponentStyle(rhNameField, "acl-grant-detail-rh-name-filter");
@@ -270,9 +269,9 @@ public class AclGrantDetailFiltersWindow extends Window {
         filterBinder.forField(editableComboBox)
             .bind(filter -> filter.getEditableExpression().getOperator(),
                 (filter, value) -> filter.getEditableExpression().setOperator(value));
-        populateComboBox(eligibleComboBox, aclGrantDetailFilter.getEligibleExpression().getOperator(),
+        populateFlagComboBox(eligibleComboBox, aclGrantDetailFilter.getEligibleExpression().getOperator(),
             "acl-grant-detail-eligible-filter");
-        populateComboBox(editableComboBox, aclGrantDetailFilter.getEditableExpression().getOperator(),
+        populateFlagComboBox(editableComboBox, aclGrantDetailFilter.getEditableExpression().getOperator(),
             "acl-grant-detail-editable-filter");
         HorizontalLayout horizontalLayout = new HorizontalLayout(eligibleComboBox, editableComboBox);
         horizontalLayout.setSizeFull();
@@ -295,114 +294,6 @@ public class AclGrantDetailFiltersWindow extends Window {
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilters());
         return new HorizontalLayout(saveButton, clearButton, closeButton);
-    }
-
-    //TODO investigate ability to move it to common class
-    private ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox() {
-        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
-            FilterOperatorEnum.BETWEEN);
-    }
-
-    //TODO investigate ability to move it to common class
-    private ComboBox<FilterOperatorEnum> buildTextOperatorComboBox() {
-        return buildOperatorComboBox(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
-            FilterOperatorEnum.CONTAINS);
-    }
-
-    //TODO investigate ability to move it to common class
-    private ComboBox<FilterOperatorEnum> buildOperatorComboBox(FilterOperatorEnum... items) {
-        ComboBox<FilterOperatorEnum> filterOperatorComboBox = new ComboBox<>(ForeignUi.getMessage("label.operator"));
-        filterOperatorComboBox.setWidth(230, Unit.PIXELS);
-        filterOperatorComboBox.setEmptySelectionAllowed(false);
-        filterOperatorComboBox.setItems(items);
-        filterOperatorComboBox.setSelectedItem(FilterOperatorEnum.EQUALS);
-        return filterOperatorComboBox;
-    }
-
-    //TODO investigate ability to move it to common class
-    private void populateComboBox(ComboBox<FilterOperatorEnum> comboBox, FilterOperatorEnum selectedItem,
-                                  String componentId) {
-        comboBox.setItems(BOOLEAN_ITEMS);
-        comboBox.setSizeFull();
-        comboBox.setSelectedItem(selectedItem);
-        VaadinUtils.addComponentStyle(comboBox, componentId);
-    }
-
-    //TODO investigate ability to move it to common class
-    private Validator<String> getNumberStringLengthValidator(int maxLength) {
-        return new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", maxLength), 0, maxLength);
-    }
-
-    //TODO investigate ability to move it to common class
-    private SerializablePredicate<String> getBetweenOperatorValidator(TextField textField,
-                                                                      ComboBox<FilterOperatorEnum> operatorComboBox) {
-        return value -> FilterOperatorEnum.BETWEEN != operatorComboBox.getValue()
-            || StringUtils.isNotBlank(textField.getValue());
-    }
-
-    //TODO investigate ability to move it to common class
-    private void updateOperatorField(TextField fromField, TextField toField, FilterOperatorEnum filterOperator) {
-        if (0 == filterOperator.getArgumentsNumber()) {
-            fromField.clear();
-            fromField.setEnabled(false);
-            toField.clear();
-            toField.setEnabled(false);
-        } else if (ONE == filterOperator.getArgumentsNumber()) {
-            fromField.setEnabled(true);
-            toField.clear();
-            toField.setEnabled(false);
-        } else {
-            fromField.setEnabled(true);
-            toField.setEnabled(true);
-        }
-        filterBinder.validate();
-    }
-
-    //TODO investigate ability to move it to common class
-    private void updateOperatorField(TextField textField, FilterOperatorEnum filterOperator) {
-        if (0 == filterOperator.getArgumentsNumber()) {
-            textField.clear();
-            textField.setEnabled(false);
-        } else {
-            textField.setEnabled(true);
-        }
-        filterBinder.validate();
-    }
-
-    //TODO investigate ability to move it to common class
-    private void applyCommonNumericFieldFormatting(HorizontalLayout mainLayout, Component firstComponent,
-                                                   Component secondComponent) {
-        mainLayout.setSizeFull();
-        firstComponent.setSizeFull();
-        mainLayout.setExpandRatio(firstComponent, 0.5f);
-        secondComponent.setSizeFull();
-        mainLayout.setExpandRatio(secondComponent, 0.5f);
-    }
-
-    //TODO investigate ability to move it to common class
-    private boolean validateIntegerFromToValues(TextField fromField, TextField toField) {
-        String fromValue = fromField.getValue();
-        String toValue = toField.getValue();
-        NumericValidator numericValidator = new NumericValidator();
-        return StringUtils.isEmpty(fromValue)
-            || StringUtils.isEmpty(toValue)
-            || !numericValidator.isValid(fromValue)
-            || !numericValidator.isValid(toValue)
-            || 0 <= Long.valueOf(toValue.trim()).compareTo(Long.valueOf(fromValue.trim()));
-    }
-
-    //TODO investigate ability to move it to common class
-    private Validator<String> getTextStringLengthValidator(int maxLength) {
-        return new StringLengthValidator(ForeignUi.getMessage("field.error.length", maxLength), 0, maxLength);
-    }
-
-    //TODO investigate ability to move it to common class
-    private void applyCommonTextFieldFormatting(HorizontalLayout mainLayout, Component component) {
-        mainLayout.setSizeFull();
-        component.setSizeFull();
-        mainLayout.setExpandRatio(component, 1f);
     }
 
     private void clearFilters() {

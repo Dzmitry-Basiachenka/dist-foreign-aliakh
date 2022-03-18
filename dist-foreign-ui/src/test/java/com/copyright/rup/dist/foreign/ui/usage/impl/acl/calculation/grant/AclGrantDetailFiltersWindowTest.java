@@ -197,7 +197,7 @@ public class AclGrantDetailFiltersWindowTest {
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
         assertEquals(6, verticalLayout.getComponentCount());
-        verifyItemsFilterLayout(verticalLayout.getComponent(0), "License Type", "Grant Status", "Types of Use");
+        verifyItemsFilterLayout(verticalLayout.getComponent(0), "License Types", "Grant Statuses", "Types of Use");
         verifyComboBox(verticalLayout.getComponent(1), "Grant Set Period", Unit.PERCENTAGE, 50, true,
             Arrays.asList(202212, 202112));
         verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(2), "Wr Wrk Inst From", "Wr Wrk Inst To");

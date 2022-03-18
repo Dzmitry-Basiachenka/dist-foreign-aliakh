@@ -10,8 +10,8 @@ import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.DetailLicenseeClassFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationFormatFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ReportedPubTypeFilterWidget;
@@ -55,7 +55,7 @@ import java.util.function.Function;
  *
  * @author Ihar Suvorau
  */
-public class UdmUsageFiltersWindow extends CommonUdmFiltersWindow {
+public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";

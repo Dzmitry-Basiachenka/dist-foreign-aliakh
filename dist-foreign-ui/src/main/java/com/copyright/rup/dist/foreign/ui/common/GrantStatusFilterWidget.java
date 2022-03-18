@@ -40,7 +40,7 @@ public class GrantStatusFilterWidget extends BaseUdmItemsFilterWidget<String>
      * @param selectedItemsIds set of selected items
      */
     public GrantStatusFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
-        super(ForeignUi.getMessage("label.grant_status"));
+        super(ForeignUi.getMessage("label.grant_statuses"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
         setLabelValue(selectedItemsIds.size());

@@ -9,8 +9,8 @@ import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.AssigneeFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmFiltersWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -47,7 +47,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmValueFiltersWindow extends CommonUdmFiltersWindow {
+public class UdmValueFiltersWindow extends CommonAclFiltersWindow {
 
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");

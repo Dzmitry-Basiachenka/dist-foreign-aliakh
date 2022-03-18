@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm;
+package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Represents common logic for creating additional UDM filters.
+ * Represents common logic for creating additional ACL filters.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -35,7 +35,7 @@ import java.util.function.Predicate;
  *
  * @author Aliaksandr Liakh
  */
-public abstract class CommonUdmFiltersWindow extends Window {
+public abstract class CommonAclFiltersWindow extends Window {
 
     private static final List<FilterOperatorEnum> FLAG_ITEMS =
         Arrays.asList(FilterOperatorEnum.Y, FilterOperatorEnum.N);
@@ -54,6 +54,16 @@ public abstract class CommonUdmFiltersWindow extends Window {
     }
 
     /**
+     * Builds text operator combobox.
+     *
+     * @param items {@link FilterOperatorEnum} items
+     * @return text operator combobox
+     */
+    protected ComboBox<FilterOperatorEnum> buildTextOperatorComboBox(FilterOperatorEnum... items) {
+        return buildOperatorComboBox(items);
+    }
+
+    /**
      * Builds numeric operator combobox.
      *
      * @return numeric operator combobox
@@ -63,6 +73,16 @@ public abstract class CommonUdmFiltersWindow extends Window {
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.LESS_THAN, FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO,
             FilterOperatorEnum.BETWEEN, FilterOperatorEnum.IS_NULL, FilterOperatorEnum.IS_NOT_NULL);
+    }
+
+    /**
+     * Builds numeric operator combobox.
+     *
+     * @param items {@link FilterOperatorEnum} items
+     * @return numeric operator combobox
+     */
+    protected ComboBox<FilterOperatorEnum> buildNumericOperatorComboBox(FilterOperatorEnum... items) {
+        return buildOperatorComboBox(items);
     }
 
     /**
