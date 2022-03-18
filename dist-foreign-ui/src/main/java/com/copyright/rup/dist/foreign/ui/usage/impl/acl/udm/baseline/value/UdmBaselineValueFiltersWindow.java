@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmFiltersWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclFiltersWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -39,7 +39,7 @@ import java.util.Objects;
  *
  * @author Anton Azarenka
  */
-public class UdmBaselineValueFiltersWindow extends CommonUdmFiltersWindow {
+public class UdmBaselineValueFiltersWindow extends CommonAclFiltersWindow {
 
     private static final List<FilterOperatorEnum> FLAG_ITEMS = Arrays.asList(FilterOperatorEnum.Y,
         FilterOperatorEnum.N);

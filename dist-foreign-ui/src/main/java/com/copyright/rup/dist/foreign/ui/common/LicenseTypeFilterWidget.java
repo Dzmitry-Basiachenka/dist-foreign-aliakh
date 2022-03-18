@@ -40,7 +40,7 @@ public class LicenseTypeFilterWidget extends BaseUdmItemsFilterWidget<String>
      * @param selectedItemsIds set of selected items
      */
     public LicenseTypeFilterWidget(Supplier<List<String>> supplier, Set<String> selectedItemsIds) {
-        super(ForeignUi.getMessage("label.license_type"));
+        super(ForeignUi.getMessage("label.license_types"));
         this.supplier = supplier;
         this.selectedItemsIds.addAll(selectedItemsIds);
         setLabelValue(selectedItemsIds.size());
