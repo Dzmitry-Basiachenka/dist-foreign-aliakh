@@ -1,3 +1,10 @@
+15.1.8
+-
+* B-71753 FDA: Export ACL Grant Set: implement integration test to cover report
+* B-70851 FDA: Report for usage edits in baseline: make changes based on comments in code review
+* B-70851 FDA: Report for usage edits in baseline: rename report prefix
+* CDP-1043: FDA: Edit ACL Grant Set: Exception occurs after setting grant status to 'Deny' for Print Only or Digital Only grants
+
 15.1.7
 -
 * B-71753 FDA: Export ACL Grant Set: implement export button for Grant Set tab
