@@ -46,7 +46,7 @@ public class CompletedAssignmentsReportController extends CommonController<IComp
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("completed_assignments_by_employee_",
+        return new ByteArrayStreamSource("completed_assignments_by_employee_report_",
             os -> udmReportService.writeUdmCompletedAssignmentsCsvReport(getWidget().getReportFilter(), os));
     }
 
