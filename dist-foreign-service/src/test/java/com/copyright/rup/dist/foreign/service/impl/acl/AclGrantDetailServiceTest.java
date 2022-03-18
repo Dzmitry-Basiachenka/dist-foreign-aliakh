@@ -196,6 +196,20 @@ public class AclGrantDetailServiceTest {
         verify(aclGrantDetailRepository);
     }
 
+    @Test
+    public void testUpdateSingleGrant() {
+        expect(aclGrantDetailRepository.findPairForGrantById(ACL_GRANT_ID_2)).andReturn(null).once();
+        Capture<AclGrantDetailDto> grantDetailDtoCapture1 = EasyMock.newCapture();
+        aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture1));
+        expectLastCall().once();
+        AclGrantDetailDto expectedGrantForUpdate =
+            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY");
+        replay(aclGrantDetailRepository);
+        aclGrantDetailService.updateGrants(Collections.singleton(expectedGrantForUpdate), true);
+        verifyCaptureItems(grantDetailDtoCapture1, expectedGrantForUpdate);
+        verify(aclGrantDetailRepository);
+    }
+
     private void verifyCaptureItems(Capture<AclGrantDetailDto> capture, AclGrantDetailDto expectedGrantDetailDto) {
         AclGrantDetailDto actualGrantDetailDto = capture.getValue();
         assertEquals(expectedGrantDetailDto.getId(), actualGrantDetailDto.getId());

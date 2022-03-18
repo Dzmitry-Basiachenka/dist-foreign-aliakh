@@ -177,7 +177,7 @@ public class AclEditGrantDetailWindow extends Window {
     }
 
     private void setValue(String value, Consumer<String> setter) {
-        if (Objects.nonNull(value) && StringUtils.isNotEmpty(value)) {
+        if (StringUtils.isNotEmpty(value)) {
             setter.accept(value);
         }
     }
