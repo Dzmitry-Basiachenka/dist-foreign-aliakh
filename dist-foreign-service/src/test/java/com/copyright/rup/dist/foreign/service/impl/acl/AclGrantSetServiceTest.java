@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
@@ -136,6 +137,21 @@ public class AclGrantSetServiceTest {
         replay(aclGrantSetRepository);
         assertSame(grantPeriods, aclGrantSetService.getGrantPeriods());
         verify(aclGrantSetRepository);
+    }
+
+    @Test
+    public void testDeleteAclGrantSet() {
+        mockStatic(RupContextUtils.class);
+        AclGrantSet grantSet = buildAclGrantSet();
+        grantSet.setId(RupPersistUtils.generateUuid());
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aclGrantDetailService.deleteGrantDetails(grantSet.getId());
+        expectLastCall().once();
+        aclGrantSetRepository.deleteById(grantSet.getId());
+        expectLastCall().once();
+        replay(RupContextUtils.class, aclGrantDetailService, aclGrantSetRepository);
+        aclGrantSetService.deleteAclGrantSet(grantSet);
+        verify(RupContextUtils.class, aclGrantDetailService, aclGrantSetRepository);
     }
 
     private AclGrantSet buildAclGrantSet() {

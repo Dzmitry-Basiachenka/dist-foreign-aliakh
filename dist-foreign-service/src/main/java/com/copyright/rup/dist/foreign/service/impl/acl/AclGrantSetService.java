@@ -78,4 +78,14 @@ public class AclGrantSetService implements IAclGrantSetService {
     public List<Integer> getGrantPeriods() {
         return aclGrantSetRepository.findGrantPeriods();
     }
+
+    @Override
+    @Transactional
+    public void deleteAclGrantSet(AclGrantSet grantSet) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete ACL grant set. Started. GrantSetName={}, UserName={}", grantSet.getName(), userName);
+        aclGrantDetailService.deleteGrantDetails(grantSet.getId());
+        aclGrantSetRepository.deleteById(grantSet.getId());
+        LOGGER.info("Delete ACL grant set. Finished. GrantSetName={}, UserName={}", grantSet.getName(), userName);
+    }
 }

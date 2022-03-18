@@ -44,4 +44,11 @@ public interface IAclGrantSetService {
      * @return list of grant periods
      */
     List<Integer> getGrantPeriods();
+
+    /**
+     * Deletes ACL grant set.
+     *
+     * @param grantSet instance of {@link AclGrantSet}
+     */
+    void deleteAclGrantSet(AclGrantSet grantSet);
 }
