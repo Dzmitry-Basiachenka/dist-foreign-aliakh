@@ -69,4 +69,9 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
     public AclGrantDetailDto findPairForGrantById(String grantId) {
         return selectOne("IAclGrantDetailMapper.findPairForGrantById", Objects.requireNonNull(grantId));
     }
+
+    @Override
+    public void deleteByGrantSetId(String grantSetId) {
+        delete("IAclGrantDetailMapper.deleteByGrantSetId", Objects.requireNonNull(grantSetId));
+    }
 }

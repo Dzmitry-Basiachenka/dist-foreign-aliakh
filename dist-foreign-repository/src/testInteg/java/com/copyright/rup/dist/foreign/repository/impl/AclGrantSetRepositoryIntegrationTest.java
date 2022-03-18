@@ -87,6 +87,16 @@ public class AclGrantSetRepositoryIntegrationTest {
         assertEquals(Arrays.asList(202212, 202112, 202012), grantSets);
     }
 
+    @Test
+    @TestData(fileName = "rollback-only.groovy")
+    public void testDeleteById() {
+        AclGrantSet grantSet = buildAclGrantSet();
+        aclGrantSetRepository.insert(grantSet);
+        assertEquals(1, aclGrantSetRepository.findAll().size());
+        aclGrantSetRepository.deleteById(grantSet.getId());
+        assertEquals(0, aclGrantSetRepository.findAll().size());
+    }
+
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setId(ACL_GRANT_SET_ID);

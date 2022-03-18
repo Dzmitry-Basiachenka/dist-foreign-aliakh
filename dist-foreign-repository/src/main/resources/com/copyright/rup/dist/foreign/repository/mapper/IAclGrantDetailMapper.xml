@@ -257,4 +257,9 @@
             fetchSize="${usageSelectFetchSize}">
         <include refid="IAclGrantDetailMapper.selectDtosByFilterSql"/>
     </select>
+
+    <delete id="deleteByGrantSetId" parameterType="string">
+        delete from ${schema}.df_acl_grant_detail
+        where df_acl_grant_set_uid = #{grantSetId}
+    </delete>
 </mapper>

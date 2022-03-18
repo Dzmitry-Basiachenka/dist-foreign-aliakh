@@ -65,5 +65,12 @@ public interface IAclGrantDetailRepository {
      * @param grantId uid of grant detail
      * @return instance of {@link AclGrantDetailDto}
      */
-   AclGrantDetailDto findPairForGrantById(String grantId);
+    AclGrantDetailDto findPairForGrantById(String grantId);
+
+    /**
+     * Deletes ACL grant details by ACL grant set id.
+     *
+     * @param grantSetId id of the {@link com.copyright.rup.dist.foreign.domain.AclGrantSet}
+     */
+    void deleteByGrantSetId(String grantSetId);
 }

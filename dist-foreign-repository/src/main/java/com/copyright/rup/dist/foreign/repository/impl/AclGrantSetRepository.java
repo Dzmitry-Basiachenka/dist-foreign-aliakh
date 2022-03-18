@@ -21,7 +21,7 @@ import java.util.Objects;
 public class AclGrantSetRepository extends BaseRepository implements IAclGrantSetRepository {
 
     @Override
-    public void insert(AclGrantSet grantSet)  {
+    public void insert(AclGrantSet grantSet) {
         insert("IAclGrantSetMapper.insert", Objects.requireNonNull(grantSet));
     }
 
@@ -43,5 +43,10 @@ public class AclGrantSetRepository extends BaseRepository implements IAclGrantSe
     @Override
     public List<Integer> findGrantPeriods() {
         return selectList("IAclGrantSetMapper.findGrantPeriods");
+    }
+
+    @Override
+    public void deleteById(String grantSetId) {
+        delete("IAclGrantSetMapper.deleteById", Objects.requireNonNull(grantSetId));
     }
 }

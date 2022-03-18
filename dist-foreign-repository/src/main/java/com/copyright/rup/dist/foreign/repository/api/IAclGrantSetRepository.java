@@ -51,4 +51,11 @@ public interface IAclGrantSetRepository {
      * @return list of grant periods
      */
     List<Integer> findGrantPeriods();
+
+    /**
+     * Deletes ACL grant set by id.
+     *
+     * @param grantSetId id of the {@link AclGrantSet}
+     */
+    void deleteById(String grantSetId);
 }
