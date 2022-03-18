@@ -103,7 +103,7 @@ public class AclGrantDetailWidgetTest {
         grantDetailDto.setEditable(true);
         AclEditGrantDetailWindow mockWindow = createMock(AclEditGrantDetailWindow.class);
         Set<AclGrantDetailDto> grants = Collections.singleton(grantDetailDto);
-        expectNew(AclEditGrantDetailWindow.class, eq(grants),eq(controller), anyObject(ClickListener.class))
+        expectNew(AclEditGrantDetailWindow.class, eq(grants), eq(controller), anyObject(ClickListener.class))
             .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
@@ -151,7 +151,7 @@ public class AclGrantDetailWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
-        verifyMenuBar(layout.getComponent(0), "Grant Set", Collections.singletonList("Create"), buttonsVisibility[0]);
+        verifyMenuBar(layout.getComponent(0), "Grant Set", Arrays.asList("Create", "View"), buttonsVisibility[0]);
         verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
         verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
     }
