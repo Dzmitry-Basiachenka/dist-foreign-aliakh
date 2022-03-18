@@ -111,6 +111,17 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
+    public List<AclGrantSet> getAllAclGrantSets() {
+        return aclGrantSetService.getAll();
+    }
+
+    @Override
+    public void deleteAclGrantSet(AclGrantSet grantSet) {
+        aclGrantSetService.deleteAclGrantSet(grantSet);
+        aclGrantDetailFilterController.getWidget().clearFilter();
+    }
+
+    @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
     }

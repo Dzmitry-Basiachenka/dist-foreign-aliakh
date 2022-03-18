@@ -161,6 +161,28 @@ public class AclGrantDetailControllerTest {
     }
 
     @Test
+    public void testGetAllAclGrantSets()  {
+        List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
+        expect(aclGrantSetService.getAll()).andReturn(grantSets).once();
+        replay(aclGrantSetService);
+        assertEquals(grantSets, controller.getAllAclGrantSets());
+        verify(aclGrantSetService);
+    }
+
+    @Test
+    public void testDeleteAclGrantSet()  {
+        AclGrantSet grantSet = new AclGrantSet();
+        aclGrantSetService.deleteAclGrantSet(grantSet);
+        expectLastCall().once();
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        aclGrantDetailFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+        controller.deleteAclGrantSet(grantSet);
+        verify(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+    }
+
+    @Test
     public void testGetRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(123456789L);
