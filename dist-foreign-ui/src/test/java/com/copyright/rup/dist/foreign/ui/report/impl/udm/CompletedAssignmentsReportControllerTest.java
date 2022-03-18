@@ -102,7 +102,8 @@ public class CompletedAssignmentsReportControllerTest {
         expectLastCall().once();
         replay(OffsetDateTime.class, widget, udmReportService, udmUsageService);
         IStreamSource streamSource = controller.getCsvStreamSource();
-        assertEquals("completed_assignments_by_employee_01_02_2021_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals("completed_assignments_by_employee_report_01_02_2021_03_04.csv",
+            streamSource.getSource().getKey().get());
         assertNotNull(streamSource.getSource().getValue().get());
         assertEquals(filter, reportFilterCapture.getValue());
         assertNotNull(osCapture.getValue());
