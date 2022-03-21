@@ -175,15 +175,6 @@ public class AclGrantDetailControllerTest {
     }
 
     @Test
-    public void testNotFoundGetRightsholder() {
-        expect(prmIntegrationService.getRightsholder(123456789L)).andReturn(new Rightsholder());
-        replay(prmIntegrationService);
-        Rightsholder actualRightsholder = controller.getRightsholder(123456789L);
-        assertNotNull(actualRightsholder);
-        verify(prmIntegrationService);
-    }
-
-    @Test
     public void testUpdateAclGrantDetails() {
         aclGrantDetailService.updateGrants(Collections.singleton(new AclGrantDetailDto()), true);
         expectLastCall().once();

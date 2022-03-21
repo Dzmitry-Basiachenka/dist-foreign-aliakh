@@ -10,7 +10,6 @@ import com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceService;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -68,12 +67,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public Rightsholder getRightsholder(Long accountNumber) {
-        Rightsholder result = null;
-        List<Rightsholder> rightsholders = getRightsholders(Sets.newHashSet(accountNumber));
-        if (!rightsholders.isEmpty()) {
-            result = rightsholders.get(0);
-        }
-        return result;
+        return getRightsholders(Collections.singleton(accountNumber)).stream().findFirst().orElse(null);
     }
 
     @Override

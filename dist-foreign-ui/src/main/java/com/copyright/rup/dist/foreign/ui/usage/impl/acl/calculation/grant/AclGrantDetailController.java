@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidg
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.google.common.base.MoreObjects;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
@@ -92,7 +91,7 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
 
     @Override
     public Rightsholder getRightsholder(Long accountNumber) {
-        return MoreObjects.firstNonNull(prmIntegrationService.getRightsholder(accountNumber), new Rightsholder());
+        return prmIntegrationService.getRightsholder(accountNumber);
     }
 
     @Override

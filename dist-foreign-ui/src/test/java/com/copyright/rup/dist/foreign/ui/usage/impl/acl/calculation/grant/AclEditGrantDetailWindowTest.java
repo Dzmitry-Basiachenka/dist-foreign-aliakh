@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -22,6 +23,7 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -80,6 +82,30 @@ public class AclEditGrantDetailWindowTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void testDiscardButtonClickListener() {
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        ComboBox<String> grantStatusField = (ComboBox<String>) content.getComponent(0);
+        grantStatusField.setValue("GRANT");
+        HorizontalLayout rhLayout = (HorizontalLayout) content.getComponent(1);
+        TextField rhAccountNumberField = (TextField) rhLayout.getComponent(0);
+        rhAccountNumberField.setValue("123456789");
+        TextField rhName = (TextField) content.getComponent(2);
+        rhName.setValue("Rightsholder name");
+        ComboBox<String> eligibleFlagField = (ComboBox<String>) content.getComponent(3);
+        eligibleFlagField.setValue("Y");
+        replay(controller, saveButtonClickListener);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(4);
+        Button discardButton = (Button) buttonsLayout.getComponent(1);
+        discardButton.click();
+        assertNull(grantStatusField.getValue());
+        assertTrue(rhAccountNumberField.getValue().isEmpty());
+        assertTrue(rhName.getValue().isEmpty());
+        assertNull(eligibleFlagField.getValue());
+        verify(controller, saveButtonClickListener);
+    }
+
+    @Test
     public void testVerifyButtonClickListener() {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
@@ -92,8 +118,10 @@ public class AclEditGrantDetailWindowTest {
             new AclEditGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
         HorizontalLayout rhLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         TextField rhAccountNumberField = (TextField) rhLayout.getComponent(0);
-        rhAccountNumberField.setValue("1000006530");
         Button verifyButton = (Button) rhLayout.getComponent(1);
+        rhAccountNumberField.setValue("");
+        verifyButton.click();
+        rhAccountNumberField.setValue("1000006530");
         verifyButton.click();
         TextField rhNameField = (TextField) ((VerticalLayout) window.getContent()).getComponent(2);
         assertEquals("Hachette Books Group", rhNameField.getValue());
