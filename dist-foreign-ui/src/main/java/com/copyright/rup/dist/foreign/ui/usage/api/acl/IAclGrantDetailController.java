@@ -77,6 +77,20 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     int insertAclGrantSet(AclGrantSet aclGrantSet);
 
     /**
+     * Gets list of all ACL grant sets.
+     *
+     * @return list of all {@link AclGrantSet}s
+     */
+    List<AclGrantSet> getAllAclGrantSets();
+
+    /**
+     * Deletes {@link AclGrantSet} with all its ACL grant details.
+     *
+     * @param grantSet {@link AclGrantSet} to delete
+     */
+    void deleteAclGrantSet(AclGrantSet grantSet);
+
+    /**
      * Initializes {@link IAclGrantDetailFilterWidget}.
      *
      * @return initialized {@link IAclGrantDetailFilterWidget}
