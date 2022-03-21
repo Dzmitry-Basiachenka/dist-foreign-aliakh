@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -27,12 +29,12 @@ import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,8 +45,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ViewUdmBatchWindow}.
@@ -82,21 +82,24 @@ public class ViewUdmBatchWindowTest {
 
     @Test
     public void testStructure() {
-        assertEquals("View UDM Usage Batch", viewUdmBatchWindow.getCaption());
-        verifySize(viewUdmBatchWindow);
+        verifyWindow(viewUdmBatchWindow, "View UDM Usage Batch", 1000, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) viewUdmBatchWindow.getContent();
         assertEquals(3, content.getComponentCount());
-        assertEquals(SearchWidget.class, content.getComponent(0).getClass());
+        assertTrue(content.getComponent(0) instanceof SearchWidget);
         Component component = content.getComponent(1);
-        assertEquals(Grid.class, component.getClass());
-        verifyGrid((Grid) component);
-        assertEquals(1, content.getExpandRatio(component), 0);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(2);
-        assertEquals(2, buttonsLayout.getComponentCount());
-        Button deleteButton = (Button) buttonsLayout.getComponent(0);
-        Button closeButton = (Button) buttonsLayout.getComponent(1);
-        assertEquals("Delete", deleteButton.getCaption());
-        assertEquals("Close", closeButton.getCaption());
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Usage Batch Name", -1.0, 1),
+            Triple.of("Period", 180.0, -1),
+            Triple.of("Usage Origin", 180.0, -1),
+            Triple.of("Channel", 120.0, -1),
+            Triple.of("Created By", 170.0, -1),
+            Triple.of("Created Date", 170.0, -1)
+        ));
+        verifyButtonsLayout(content.getComponent(2), "Delete", "Close");
+        assertEquals("view-udm-batch-window", viewUdmBatchWindow.getStyleName());
+        assertEquals("view-udm-batch-window", viewUdmBatchWindow.getId());
     }
 
     @Test
@@ -166,31 +169,13 @@ public class ViewUdmBatchWindowTest {
     public void testPerformSearch() {
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(viewUdmBatchWindow, searchWidget);
-        expect(udmBatchGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.EMPTY_LIST)).once();
+        expect(udmBatchGrid.getDataProvider()).andReturn(new ListDataProvider(Collections.emptyList())).once();
         expect(searchWidget.getSearchValue()).andReturn("Search").once();
         udmBatchGrid.recalculateColumnWidths();
         expectLastCall().once();
         replay(searchWidget, udmBatchGrid);
         viewUdmBatchWindow.performSearch();
         verify(searchWidget, udmBatchGrid);
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(1000, component.getWidth(), 0);
-        assertEquals(550, component.getHeight(), 0);
-        assertEquals(Sizeable.Unit.PIXELS, component.getHeightUnits());
-        assertEquals(Sizeable.Unit.PIXELS, component.getWidthUnits());
-    }
-
-    @SuppressWarnings(UNCHECKED)
-    private void verifyGrid(Grid grid) {
-        assertNull(grid.getCaption());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "Period", "Usage Origin", "Channel",
-            "Created By", "Created Date"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(-1.0, 180.0, 180.0, 120.0, 170.0, 170.0),
-            columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 
     private Button.ClickListener getDeleteButtonClickListener() {
