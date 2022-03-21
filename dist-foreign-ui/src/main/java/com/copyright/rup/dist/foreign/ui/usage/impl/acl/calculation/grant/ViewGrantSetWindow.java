@@ -41,7 +41,7 @@ public class ViewGrantSetWindow extends Window implements SearchWidget.ISearchCo
      */
     public ViewGrantSetWindow(IAclGrantDetailController controller) {
         this.controller = controller;
-        setWidth(700, Unit.PIXELS);
+        setWidth(600, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_grant_set.search"));

@@ -74,7 +74,7 @@ public class ViewGrantSetWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View Grant Set", 700, 550, Sizeable.Unit.PIXELS);
+        verifyWindow(window, "View Grant Set", 600, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         assertTrue(content.getComponent(0) instanceof SearchWidget);
