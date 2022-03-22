@@ -101,13 +101,13 @@ public class AclGrantDetailWidgetTest {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setId("884c8968-28fa-48ef-b13e-01571a8902fa");
         grantDetailDto.setEditable(true);
-        AclEditGrantDetailWindow mockWindow = createMock(AclEditGrantDetailWindow.class);
+        EditAclGrantDetailWindow mockWindow = createMock(EditAclGrantDetailWindow.class);
         Set<AclGrantDetailDto> grants = Collections.singleton(grantDetailDto);
-        expectNew(AclEditGrantDetailWindow.class, eq(grants), eq(controller), anyObject(ClickListener.class))
+        expectNew(EditAclGrantDetailWindow.class, eq(grants), eq(controller), anyObject(ClickListener.class))
             .andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
-        replay(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
+        replay(controller, Windows.class, EditAclGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
         initWidget();
         Grid<AclGrantDetailDto> grid =
             (Grid<AclGrantDetailDto>) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(1);
@@ -115,7 +115,7 @@ public class AclGrantDetailWidgetTest {
         grid.select(grantDetailDto);
         Button editButton = (Button) getButtonsLayout().getComponent(1);
         editButton.click();
-        verify(controller, Windows.class, AclEditGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
+        verify(controller, Windows.class, EditAclGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
     }
 
     private void verifyStructure(boolean... buttonsVisibility) {

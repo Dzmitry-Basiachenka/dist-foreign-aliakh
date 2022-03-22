@@ -148,7 +148,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclGrantSetWindow(controller)));
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
-            item -> Windows.showModalWindow(new ViewGrantSetWindow(controller)));
+            item -> Windows.showModalWindow(new ViewAclGrantSetWindow(controller)));
         VaadinUtils.addComponentStyle(grantSetMenuBar, "acl-grant-set-menu-bar");
         VaadinUtils.addComponentStyle(grantSetMenuBar, "v-menubar-df");
     }
@@ -160,7 +160,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             Set<AclGrantDetailDto> selectedGrants = aclGrantDetailsGrid.getSelectedItems();
             if (selectedGrants.stream().allMatch(AclGrantDetailDto::getEditable)) {
                 Windows.showModalWindow(
-                    new AclEditGrantDetailWindow(selectedGrants, controller, saveEvent -> refresh()));
+                    new EditAclGrantDetailWindow(selectedGrants, controller, saveEvent -> refresh()));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.grant_not_editable"));
             }
