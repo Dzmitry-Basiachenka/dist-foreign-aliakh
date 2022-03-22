@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 
 import com.google.common.collect.Lists;
@@ -54,12 +55,15 @@ public class AclGrantDetailServiceTest {
 
     private IAclGrantDetailService aclGrantDetailService;
     private IAclGrantDetailRepository aclGrantDetailRepository;
+    private IRightsholderService rightsholderService;
 
     @Before
     public void setUp() {
         aclGrantDetailService = new AclGrantDetailService();
         aclGrantDetailRepository = createMock(IAclGrantDetailRepository.class);
+        rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(aclGrantDetailService, aclGrantDetailRepository);
+        Whitebox.setInternalState(aclGrantDetailService, rightsholderService);
     }
 
     @Test
@@ -111,9 +115,9 @@ public class AclGrantDetailServiceTest {
     public void testUpdateGrants() {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         aclGrantDetailRepository.updateGrant(grantDetailDto);
-        replay(aclGrantDetailRepository);
+        replay(aclGrantDetailRepository, rightsholderService);
         aclGrantDetailService.updateGrants(Collections.singleton(grantDetailDto), false);
-        verify(aclGrantDetailRepository);
+        verify(aclGrantDetailRepository, rightsholderService);
     }
 
     @Test
@@ -145,6 +149,9 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grant6));
         expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
+            .andReturn(Collections.emptyList()).once();
+        replay(aclGrantDetailRepository, rightsholderService);
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS),
             buildGrantDto(
@@ -153,7 +160,6 @@ public class AclGrantDetailServiceTest {
             buildGrantDto("20e05f23-eeef-45fd-89d2-1bc87efa98df", 232167525L, DIFFERENT_RH_TOU_STATUS, 2000072827L,
                 DIGITAL_TOU, GRANT_STATUS)
         );
-        replay(aclGrantDetailRepository);
         aclGrantDetailService.updateGrants(new HashSet<>(aclGrantDetailDtos), true);
         verifyCaptureItems(grant1, buildGrantDto(
             "20e05f23-eeef-45fd-89d2-1bc87efa98df", 232167525L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU,
@@ -171,7 +177,7 @@ public class AclGrantDetailServiceTest {
             GRANT_STATUS));
         verifyCaptureItems(grant5, buildGrantDto(
             ACL_GRANT_ID_2, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS));
-        verify(aclGrantDetailRepository);
+        verify(aclGrantDetailRepository, rightsholderService);
     }
 
     @Test
@@ -185,7 +191,9 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture2));
         expectLastCall().once();
-        replay(aclGrantDetailRepository);
+        expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
+            .andReturn(Collections.emptyList()).once();
+        replay(aclGrantDetailRepository, rightsholderService);
         aclGrantDetailService.updateGrants(Collections.singleton(
                 buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY")),
             true);
@@ -193,7 +201,7 @@ public class AclGrantDetailServiceTest {
             buildGrantDto(ACL_GRANT_ID_1, 123456789L, "Print Only", 2000072827L, PRINT_TOU, GRANT_STATUS));
         verifyCaptureItems(grantDetailDtoCapture1,
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY"));
-        verify(aclGrantDetailRepository);
+        verify(aclGrantDetailRepository, rightsholderService);
     }
 
     @Test

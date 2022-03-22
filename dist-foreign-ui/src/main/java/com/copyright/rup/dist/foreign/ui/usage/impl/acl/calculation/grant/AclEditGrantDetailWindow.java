@@ -105,10 +105,10 @@ public class AclEditGrantDetailWindow extends Window {
         VaadinUtils.addComponentStyle(rhAccountNumberField, "acl-rh-account-number-field");
         Button verifyButton = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         verifyButton.addClickListener(event -> {
-            if (Objects.isNull(rhAccountNumberField.getErrorMessage())) {
-                rightsholder = controller.getRightsholder(
-                    NumberUtils.createLong(StringUtils.trimToNull(rhAccountNumberField.getValue())));
-                if (Objects.nonNull(rightsholder.getAccountNumber())) {
+            String rhAccountNumber = StringUtils.trimToNull(rhAccountNumberField.getValue());
+            if (Objects.nonNull(rhAccountNumber) && Objects.isNull(rhAccountNumberField.getErrorMessage())) {
+                rightsholder = controller.getRightsholder(NumberUtils.createLong(rhAccountNumber));
+                if (Objects.nonNull(rightsholder)) {
                     rhNameField.setValue(rightsholder.getName());
                 }
             }
@@ -185,6 +185,7 @@ public class AclEditGrantDetailWindow extends Window {
     private void discardFields() {
         grantStatusField.clear();
         rhAccountNumberField.clear();
+        rhNameField.clear();
         eligibleFlagField.clear();
     }
 

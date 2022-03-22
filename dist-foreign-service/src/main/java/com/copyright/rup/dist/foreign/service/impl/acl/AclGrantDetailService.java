@@ -9,8 +9,10 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     @Autowired
     private IAclGrantDetailRepository aclGrantDetailRepository;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Transactional
     @Override
@@ -81,6 +85,12 @@ public class AclGrantDetailService implements IAclGrantDetailService {
             });
         } else {
             aclGrantDetailDtos.forEach(grant -> aclGrantDetailRepository.updateGrant(grant));
+        }
+        Set<Long> accountNumbers = aclGrantDetailDtos.stream().map(AclGrantDetailDto::getRhAccountNumber)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+        if (CollectionUtils.isNotEmpty(accountNumbers)) {
+            rightsholderService.updateRightsholders(accountNumbers);
         }
     }
 
