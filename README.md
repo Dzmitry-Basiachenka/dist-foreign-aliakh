@@ -1,3 +1,15 @@
+15.1.9
+-
+* B-71755 FDA: View/Delete Grant Set: implement repositories to remove grant set and grant details
+* B-67667 FDA: Completed Assignments by Employee Report: rename report prefix
+* B-71755 FDA: View/Delete Grant Set: implement services to remove grant set and grant details
+* B-72772 FDA: Tech Debt: reuse common logic in ACL grant detail additional filters
+* B-71755 FDA: View/Delete Grant Set: implement grant set controller
+* B-71755 FDA: View/Delete Grant Set: implement grant set widget
+* B-71755 FDA: View/Delete Grant Set: implement View menu item
+* CDP-1044 FDA: Edit Grants Window: Exception occurs after clicking 'Verify' button, if 'RH Account #' field is empty
+* B-71755 FDA: View/Delete Grant Set: make button Delete available for Specialist only
+
 15.1.8
 -
 * B-71753 FDA: Export ACL Grant Set: implement integration test to cover report
