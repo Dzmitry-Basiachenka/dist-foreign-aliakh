@@ -17,7 +17,7 @@ databaseChangeLog {
             column(name: 'df_udm_usage_uid', value: 'f66db625-b810-477d-bc2a-20c638ea9274')
             column(name: 'df_udm_usage_batch_uid', value: '7649518a-33a5-4929-8956-0c4ed0714250')
             column(name: 'original_detail_id', value: 'OGN674GHHSB987')
-            column(name: 'period', value: '202012')
+            column(name: 'period', value: 202012)
             column(name: 'period_end_date', value: '2020-12-31')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'assignee', value: 'wjohn@copyright.com')
