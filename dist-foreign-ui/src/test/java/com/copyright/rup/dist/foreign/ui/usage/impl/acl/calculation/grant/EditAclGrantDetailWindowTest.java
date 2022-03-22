@@ -35,7 +35,7 @@ import org.junit.Test;
 import java.util.Collections;
 
 /**
- * Verifies {@link AclEditGrantDetailWindow}.
+ * Verifies {@link EditAclGrantDetailWindow}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -43,17 +43,17 @@ import java.util.Collections;
  *
  * @author Anton Azarenka
  */
-public class AclEditGrantDetailWindowTest {
+public class EditAclGrantDetailWindowTest {
 
     private IAclGrantDetailController controller;
     private ClickListener saveButtonClickListener;
-    private AclEditGrantDetailWindow window;
+    private EditAclGrantDetailWindow window;
 
     @Before
     public void setUp() {
         controller = createMock(IAclGrantDetailController.class);
         saveButtonClickListener = createMock(ClickListener.class);
-        window = new AclEditGrantDetailWindow(Collections.EMPTY_SET, controller, saveButtonClickListener);
+        window = new EditAclGrantDetailWindow(Collections.EMPTY_SET, controller, saveButtonClickListener);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class AclEditGrantDetailWindowTest {
         expectLastCall().once();
         replay(controller, saveButtonClickListener);
         window =
-            new AclEditGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
+            new EditAclGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
         HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(4);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
         saveButton.setEnabled(true);
@@ -115,7 +115,7 @@ public class AclEditGrantDetailWindowTest {
         expect(controller.getRightsholder(1000006530L)).andReturn(rightsholder).once();
         replay(controller);
         window =
-            new AclEditGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
+            new EditAclGrantDetailWindow(Collections.singleton(grantDetailDto), controller, saveButtonClickListener);
         HorizontalLayout rhLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
         TextField rhAccountNumberField = (TextField) rhLayout.getComponent(0);
         Button verifyButton = (Button) rhLayout.getComponent(1);

@@ -43,7 +43,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Verifies {@link ViewGrantSetWindow}.
+ * Verifies {@link ViewAclGrantSetWindow}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -52,10 +52,10 @@ import java.util.Collections;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewGrantSetWindow.class})
-public class ViewGrantSetWindowTest {
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewAclGrantSetWindow.class})
+public class ViewAclGrantSetWindowTest {
 
-    private ViewGrantSetWindow window;
+    private ViewAclGrantSetWindow window;
     private Grid<AclGrantSet> aclGrantSetGrid;
     private IAclGrantDetailController controller;
 
@@ -64,9 +64,10 @@ public class ViewGrantSetWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclGrantDetailController.class);
         aclGrantSetGrid = createMock(Grid.class);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
         expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(buildAclGrantSet()));
         replay(ForeignSecurityUtils.class, controller);
-        window = new ViewGrantSetWindow(controller);
+        window = new ViewAclGrantSetWindow(controller);
         Whitebox.setInternalState(window, "grid", aclGrantSetGrid);
         verify(ForeignSecurityUtils.class, controller);
         reset(ForeignSecurityUtils.class, controller);

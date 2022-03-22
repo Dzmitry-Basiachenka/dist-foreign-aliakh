@@ -39,7 +39,7 @@ import java.util.function.Consumer;
  *
  * @author Anton Azarenka
  */
-public class AclEditGrantDetailWindow extends Window {
+public class EditAclGrantDetailWindow extends Window {
 
     private final Binder<AclGrantDetailDto> binder = new Binder<>();
     private final IAclGrantDetailController controller;
@@ -59,7 +59,7 @@ public class AclEditGrantDetailWindow extends Window {
      * @param controller     instance of {@link IAclGrantDetailController}
      * @param clickListener  action that should be performed after Save button was clicked
      */
-    public AclEditGrantDetailWindow(Set<AclGrantDetailDto> selectedGrants, IAclGrantDetailController controller,
+    public EditAclGrantDetailWindow(Set<AclGrantDetailDto> selectedGrants, IAclGrantDetailController controller,
                                     ClickListener clickListener) {
         this.controller = controller;
         this.selectedGrants = selectedGrants;

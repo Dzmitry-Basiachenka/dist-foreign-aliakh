@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Aliaksandr Liakh
  */
-public class ViewGrantSetWindow extends Window implements SearchWidget.ISearchController {
+public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearchController {
 
     private final SearchWidget searchWidget;
     private final IAclGrantDetailController controller;
@@ -39,7 +39,7 @@ public class ViewGrantSetWindow extends Window implements SearchWidget.ISearchCo
      *
      * @param controller instance of {@link IAclGrantDetailController}
      */
-    public ViewGrantSetWindow(IAclGrantDetailController controller) {
+    public ViewAclGrantSetWindow(IAclGrantDetailController controller) {
         this.controller = controller;
         setWidth(600, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
@@ -47,6 +47,7 @@ public class ViewGrantSetWindow extends Window implements SearchWidget.ISearchCo
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_grant_set.search"));
         initGrantSetsGrid();
         HorizontalLayout buttonsLayout = initButtons();
+        initMediator();
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, buttonsLayout);
         layout.setSizeFull();
         layout.setExpandRatio(grid, 1);
@@ -108,6 +109,12 @@ public class ViewGrantSetWindow extends Window implements SearchWidget.ISearchCo
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "view-acl-grant-set-buttons");
         return layout;
+    }
+
+    private void initMediator() {
+        ViewAclGrantSetMediator mediator = new ViewAclGrantSetMediator();
+        mediator.setDeleteButton(deleteButton);
+        mediator.applyPermissions();
     }
 
     private void deleteGrantSet(AclGrantSet grantSet) {
