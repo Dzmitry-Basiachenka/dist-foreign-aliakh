@@ -78,7 +78,7 @@
                 <include refid="IAclGrantDetailMapper.chooseSortProperty"/>
             </when>
             <otherwise>
-                gd.updated_datetime desc
+                wr_wrk_inst
             </otherwise>
         </choose>,
         gd.df_acl_grant_detail_uid
