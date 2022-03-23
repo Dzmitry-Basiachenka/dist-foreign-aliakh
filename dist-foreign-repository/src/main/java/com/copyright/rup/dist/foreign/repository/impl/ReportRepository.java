@@ -2,11 +2,8 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
@@ -72,7 +69,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -85,11 +81,9 @@ import java.util.stream.Collectors;
  * @author Ihar Suvorau
  */
 @Repository
-public class ReportRepository extends BaseRepository implements IReportRepository {
+public class ReportRepository extends CommonReportRepository implements IReportRepository {
 
-    private static final int REPORT_BATCH_SIZE = 100000;
     private static final String FILTER_KEY = "filter";
-    private static final String PAGEABLE_KEY = "pageable";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";
@@ -564,24 +558,6 @@ public class ReportRepository extends BaseRepository implements IReportRepositor
             parameters.put("periodEndYearFrom", Objects.requireNonNull(periodEndYearFrom));
             parameters.put("periodEndYearTo", Objects.requireNonNull(periodEndYearTo));
             getTemplate().select("IReportMapper.findSalHistoricalItemBankDetailsReportDtos", parameters, handler);
-        }
-    }
-
-    private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
-                                       Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
-        writeCsvReportByParts(countMethodName, selectMethodName, parameters, true, handlerSupplier);
-    }
-
-    private void writeCsvReportByParts(String countMethodName, String selectMethodName, Map<String, Object> parameters,
-                                       boolean precondition, Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
-        int size = selectOne(countMethodName, parameters);
-        try (BaseCsvReportHandler handler = handlerSupplier.get()) {
-            if (precondition && 0 < size) {
-                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
-                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select(selectMethodName, parameters, handler);
-                }
-            }
         }
     }
 
