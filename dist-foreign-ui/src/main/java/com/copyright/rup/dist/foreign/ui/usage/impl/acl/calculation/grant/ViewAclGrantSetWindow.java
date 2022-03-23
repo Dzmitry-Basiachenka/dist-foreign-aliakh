@@ -53,7 +53,7 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_grant_set"));
+        setCaption(ForeignUi.getMessage("window.view_acl_grant_set"));
         VaadinUtils.addComponentStyle(this, "view-acl-grant-set-window");
     }
 
