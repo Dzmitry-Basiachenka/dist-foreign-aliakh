@@ -24,9 +24,6 @@ import java.util.Objects;
 @Repository
 public class AclCalculationReportRepository extends CommonReportRepository implements IAclCalculationReportRepository {
 
-    private static final int REPORT_UDM_BATCH_SIZE = 100000;
-    private static final String PAGEABLE_KEY = "pageable";
-
     @Override
     public void writeAclGrantDetailCsvReport(AclGrantDetailFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
