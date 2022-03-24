@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
+import com.copyright.rup.dist.foreign.ui.common.validator.DateValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.ICompletedAssignmentsReportWidget;
@@ -21,7 +22,6 @@ import com.vaadin.ui.Window;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -114,12 +114,7 @@ public class CompletedAssignmentsReportWidget extends Window implements IComplet
         });
         VaadinUtils.addComponentStyle(dateToWidget, "date-to-filter");
         dateBinder.forField(dateToWidget)
-            .withValidator(value -> {
-                LocalDate dateFromWidgetValue = dateFromWidget.getValue();
-                LocalDate dateToWidgetValue = dateToWidget.getValue();
-                return Objects.isNull(dateFromWidgetValue) && Objects.isNull(dateToWidgetValue)
-                    || 0 <= dateToWidgetValue.compareTo(dateFromWidgetValue);
-            }, ForeignUi.getMessage("field.error.greater_or_equal_to", ForeignUi.getMessage("label.from_date")))
+            .withValidator(new DateValidator(ForeignUi.getMessage("label.from_date"), dateFromWidget, dateToWidget))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }

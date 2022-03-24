@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.impl.CsvStreamSource;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
+import com.copyright.rup.dist.foreign.ui.common.validator.DateValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonReportWidget;
@@ -136,13 +137,8 @@ public class UdmCommonReportWidget extends Window implements IUdmCommonReportWid
         });
         VaadinUtils.addComponentStyle(dateToWidget, "date-to-filter");
         dateBinder.forField(dateToWidget)
-            .withValidator(value -> {
-                LocalDate dateFromWidgetValue = dateFromWidget.getValue();
-                LocalDate dateToWidgetValue = dateToWidget.getValue();
-                return Objects.isNull(dateFromWidgetValue) && Objects.isNull(dateToWidgetValue)
-                    || 0 <= dateToWidgetValue.compareTo(dateFromWidgetValue);
-            }, ForeignUi.getMessage("field.error.greater_or_equal_to",
-                ForeignUi.getMessage("label.date_report_from", dateCaption)))
+            .withValidator(new DateValidator(ForeignUi.getMessage("label.date_report_from", dateCaption),
+                dateFromWidget, dateToWidget))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
