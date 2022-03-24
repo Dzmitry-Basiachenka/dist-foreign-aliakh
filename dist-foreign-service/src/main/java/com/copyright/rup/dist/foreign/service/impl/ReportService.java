@@ -8,7 +8,10 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.ISalReportRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
@@ -41,7 +44,13 @@ import java.util.stream.Collectors;
 public class ReportService implements IReportService {
 
     @Autowired
-    private IReportRepository reportRepository;
+    private IAaclReportRepository aaclReportRepository;
+    @Autowired
+    private IFasReportRepository fasReportRepository;
+    @Autowired
+    private INtsReportRepository ntsReportRepository;
+    @Autowired
+    private ISalReportRepository salReportRepository;
     @Autowired
     private IFasUsageService fasUsageService;
     @Autowired
@@ -52,142 +61,142 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeFasUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeFasUsageCsvReport(filter, pipedOutputStream);
+        fasReportRepository.writeFasUsageCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeNtsUsageCsvReport(filter, pipedOutputStream);
+        ntsReportRepository.writeNtsUsageCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeAaclUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAaclUsagesCsvReport(filter, pipedOutputStream);
+        aaclReportRepository.writeAaclUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeSalUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeSalUsagesCsvReport(filter, pipedOutputStream);
+        salReportRepository.writeSalUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeFasScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            reportRepository.writeArchivedFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            fasReportRepository.writeArchivedFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
-            reportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            fasReportRepository.writeFasScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
     }
 
     @Override
     public void writeNtsScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            reportRepository.writeArchivedNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            ntsReportRepository.writeArchivedNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
-            reportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
+            ntsReportRepository.writeNtsScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
     }
 
     @Override
     public void writeAaclScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            reportRepository.writeArchivedAaclScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
+            aaclReportRepository.writeArchivedAaclScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
         } else {
-            reportRepository.writeAaclScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
+            aaclReportRepository.writeAaclScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
         }
     }
 
     @Override
     public void writeSalScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            reportRepository.writeArchivedSalScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
+            salReportRepository.writeArchivedSalScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
         } else {
-            reportRepository.writeSalScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
+            salReportRepository.writeSalScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream);
         }
     }
 
     @Override
     public void writeScenarioRightsholderTotalsCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
-            reportRepository.writeArchivedScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
+            fasReportRepository.writeArchivedScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         } else {
-            reportRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
+            fasReportRepository.writeScenarioRightsholderTotalsCsvReport(scenario.getId(), outputStream);
         }
     }
 
     @Override
     public void writeWorkSharesByAggLcClassSummaryCsvReport(Scenario scenario, OutputStream outputStream) {
-        reportRepository.
+        aaclReportRepository.
             writeWorkSharesByAggLcClassSummaryCsvReport(scenario.getId(), scenario.getStatus(), outputStream);
     }
 
     @Override
     public void writeWorkSharesByAggLcClassCsvReport(Scenario scenario, OutputStream outputStream) {
-        reportRepository.writeWorkSharesByAggLcClassCsvReport(scenario.getId(), scenario.getStatus(), outputStream);
+        aaclReportRepository.writeWorkSharesByAggLcClassCsvReport(scenario.getId(), scenario.getStatus(), outputStream);
     }
 
     @Override
     public void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAuditFasCsvReport(filter, pipedOutputStream);
+        fasReportRepository.writeAuditFasCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAuditAaclCsvReport(filter, pipedOutputStream);
+        aaclReportRepository.writeAuditAaclCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAuditNtsCsvReport(filter, pipedOutputStream);
+        ntsReportRepository.writeAuditNtsCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAuditSalCsvReport(filter, pipedOutputStream);
+        salReportRepository.writeAuditSalCsvReport(filter, pipedOutputStream);
     }
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
                                                        Set<String> productFamilies) {
-        reportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee,
-            productFamilies);
+        fasReportRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream,
+            defaultEstimatedServiceFee, productFamilies);
     }
 
     @Override
     public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
-        reportRepository.writeAaclBaselineUsagesCsvReport(numberOfYears, outputStream);
+        aaclReportRepository.writeAaclBaselineUsagesCsvReport(numberOfYears, outputStream);
     }
 
     @Override
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
-        reportRepository.writeFasBatchSummaryCsvReport(outputStream);
+        fasReportRepository.writeFasBatchSummaryCsvReport(outputStream);
     }
 
     @Override
     public void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream) {
-        reportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream);
+        ntsReportRepository.writeNtsWithdrawnBatchSummaryCsvReport(outputStream);
     }
 
     @Override
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
-        reportRepository.writeResearchStatusCsvReport(outputStream);
+        fasReportRepository.writeResearchStatusCsvReport(outputStream);
     }
 
     @Override
     public void writeFasServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                   OutputStream outputStream) {
-        reportRepository.writeFasServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
+        fasReportRepository.writeFasServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
             fasUsageService.getClaAccountNumber(), defaultEstimatedServiceFee);
     }
 
     @Override
     public void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream) {
-        reportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream, defaultEstimatedServiceFee);
+        ntsReportRepository.writeNtsServiceFeeTrueUpCsvReport(scenario, outputStream, defaultEstimatedServiceFee);
     }
 
     @Override
     public void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream) {
-        reportRepository.writeSummaryMarketCsvReport(
+        fasReportRepository.writeSummaryMarketCsvReport(
             batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), outputStream);
     }
 
@@ -206,44 +215,44 @@ public class ReportService implements IReportService {
     @Override
     public void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
-        reportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
+        fasReportRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
     }
 
     @Override
     public void writeWorkClassificationCsvReport(Set<String> batchesIds, String searchValue,
                                                  PipedOutputStream pipedOutputStream) {
         if (CollectionUtils.isNotEmpty(batchesIds)) {
-            reportRepository.writeWorkClassificationCsvReport(batchesIds, searchValue, pipedOutputStream);
+            ntsReportRepository.writeWorkClassificationCsvReport(batchesIds, searchValue, pipedOutputStream);
         } else {
-            reportRepository.writeWorkClassificationCsvReport(searchValue, pipedOutputStream);
+            ntsReportRepository.writeWorkClassificationCsvReport(searchValue, pipedOutputStream);
         }
     }
 
     @Override
     public void writeFasExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                                        PipedOutputStream pipedOutputStream) {
-        reportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
+        fasReportRepository.writeFasExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
     }
 
     @Override
     public void writeAaclExcludeDetailsByPayeeCsvReport(ExcludePayeeFilter filter, Set<Long> selectedAccountNumbers,
                                                         PipedOutputStream pipedOutputStream) {
-        reportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
+        aaclReportRepository.writeAaclExcludeDetailsByPayeeCsvReport(filter, selectedAccountNumbers, pipedOutputStream);
     }
 
     @Override
     public void writeAaclUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
-        reportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
+        aaclReportRepository.writeAaclUndistributedLiabilitiesCsvReport(outputStream);
     }
 
     @Override
     public void writeNtsUndistributedLiabilitiesReport(OutputStream outputStream) {
-        reportRepository.writeNtsUndistributedLiabilitiesCsvReport(defaultEstimatedServiceFee, outputStream);
+        ntsReportRepository.writeNtsUndistributedLiabilitiesCsvReport(defaultEstimatedServiceFee, outputStream);
     }
 
     @Override
     public void writeSalLiabilitiesByRhReport(List<Scenario> scenarios, OutputStream outputStream) {
-        reportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream);
+        salReportRepository.writeSalLiabilitiesByRhCsvReport(scenarios, outputStream);
     }
 
     @Override
@@ -257,23 +266,23 @@ public class ReportService implements IReportService {
     @Override
     public void writeSalLiabilitiesSummaryByRhAndWorkCsvReport(List<Scenario> scenarios,
                                                                OutputStream outputStream) {
-        reportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
+        salReportRepository.writeSalLiabilitiesSummaryByRhAndWorkCsvReport(scenarios, outputStream);
     }
 
     @Override
     public void writeSalUndistributedLiabilitiesCsvReport(OutputStream outputStream) {
-        reportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream);
+        salReportRepository.writeSalUndistributedLiabilitiesCsvReport(outputStream);
     }
 
     @Override
     public void writeSalFundPoolsCsvReport(int distributionYear, OutputStream outputStream) {
-        reportRepository.writeSalFundPoolsCsvReport(distributionYear, outputStream);
+        salReportRepository.writeSalFundPoolsCsvReport(distributionYear, outputStream);
     }
 
     @Override
     public void writeSalHistoricalItemBankDetailsReport(Long licenseeAccountNumber, Integer periodEndYearFrom,
                                                         Integer periodEndYearTo, OutputStream outputStream) {
-        reportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
+        salReportRepository.writeSalHistoricalItemBankDetailsReport(licenseeAccountNumber, periodEndYearFrom,
             periodEndYearTo, outputStream);
     }
 }

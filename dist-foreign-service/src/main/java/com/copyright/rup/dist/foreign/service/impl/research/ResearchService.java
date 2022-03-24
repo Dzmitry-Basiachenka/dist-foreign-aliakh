@@ -3,7 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl.research;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -31,14 +32,16 @@ public class ResearchService implements IResearchService {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IReportRepository reportRepository;
+    private IAaclReportRepository aaclReportRepository;
+    @Autowired
+    private IFasReportRepository fasReportRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
 
     @Override
     @Transactional
     public void sendForResearch(UsageFilter filter, OutputStream outputStream) {
-        Set<String> usageIds = reportRepository.writeUsagesForResearchAndFindIds(filter, outputStream);
+        Set<String> usageIds = fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
         }
@@ -49,7 +52,7 @@ public class ResearchService implements IResearchService {
     @Override
     @Transactional
     public void sendForClassification(UsageFilter filter, OutputStream outputStream) {
-        Set<String> usageIds = reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream);
+        Set<String> usageIds = aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
         }

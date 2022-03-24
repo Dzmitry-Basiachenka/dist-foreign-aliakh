@@ -10,7 +10,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
@@ -36,18 +37,21 @@ import java.util.Set;
 public class ResearchServiceTest {
 
     private IUsageRepository usageRepository;
-    private IReportRepository reportRepository;
+    private IAaclReportRepository aaclReportRepository;
+    private IFasReportRepository fasReportRepository;
     private IUsageAuditService usageAuditService;
     private ResearchService researchService;
 
     @Before
     public void setUp() {
         usageRepository = createMock(IUsageRepository.class);
-        reportRepository = createMock(IReportRepository.class);
+        aaclReportRepository = createMock(IAaclReportRepository.class);
+        fasReportRepository = createMock(IFasReportRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         researchService = new ResearchService();
         Whitebox.setInternalState(researchService, usageRepository);
-        Whitebox.setInternalState(researchService, reportRepository);
+        Whitebox.setInternalState(researchService, aaclReportRepository);
+        Whitebox.setInternalState(researchService, fasReportRepository);
         Whitebox.setInternalState(researchService, usageAuditService);
     }
 
@@ -59,7 +63,7 @@ public class ResearchServiceTest {
         String usageId2 = RupPersistUtils.generateUuid();
         Set<String> usageIds = new HashSet<>();
         Collections.addAll(usageIds, usageId1, usageId2);
-        expect(reportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
+        expect(fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
             .andReturn(usageIds)
             .once();
         usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
@@ -68,21 +72,21 @@ public class ResearchServiceTest {
         expectLastCall().once();
         usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
         expectLastCall().once();
-        replay(usageRepository, reportRepository, usageAuditService);
+        replay(usageRepository, fasReportRepository, usageAuditService);
         researchService.sendForResearch(filter, outputStream);
-        verify(usageRepository, reportRepository, usageAuditService);
+        verify(usageRepository, fasReportRepository, usageAuditService);
     }
 
     @Test
     public void testSendForResearchNoUsages() {
         UsageFilter filter = new UsageFilter();
         OutputStream outputStream = new ByteArrayOutputStream();
-        expect(reportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
+        expect(fasReportRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
             .andReturn(Collections.emptySet())
             .once();
-        replay(reportRepository, usageAuditService);
+        replay(fasReportRepository, usageAuditService);
         researchService.sendForResearch(filter, outputStream);
-        verify(reportRepository, usageAuditService);
+        verify(fasReportRepository, usageAuditService);
     }
 
     @Test
@@ -93,7 +97,7 @@ public class ResearchServiceTest {
         String usageId2 = RupPersistUtils.generateUuid();
         Set<String> usageIds = new HashSet<>();
         Collections.addAll(usageIds, usageId1, usageId2);
-        expect(reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
+        expect(aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
             .andReturn(usageIds)
             .once();
         usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
@@ -104,20 +108,20 @@ public class ResearchServiceTest {
         usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_RESEARCH,
             "Usage detail was sent for classification");
         expectLastCall().once();
-        replay(usageRepository, reportRepository, usageAuditService);
+        replay(usageRepository, aaclReportRepository, usageAuditService);
         researchService.sendForClassification(filter, outputStream);
-        verify(usageRepository, reportRepository, usageAuditService);
+        verify(usageRepository, aaclReportRepository, usageAuditService);
     }
 
     @Test
     public void testSendForClassificationNoUsages() {
         UsageFilter filter = new UsageFilter();
         OutputStream outputStream = new ByteArrayOutputStream();
-        expect(reportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
+        expect(aaclReportRepository.writeUsagesForClassificationAndFindIds(filter, outputStream))
             .andReturn(Collections.emptySet())
             .once();
-        replay(reportRepository, usageAuditService);
+        replay(aaclReportRepository, usageAuditService);
         researchService.sendForClassification(filter, outputStream);
-        verify(reportRepository, usageAuditService);
+        verify(aaclReportRepository, usageAuditService);
     }
 }
