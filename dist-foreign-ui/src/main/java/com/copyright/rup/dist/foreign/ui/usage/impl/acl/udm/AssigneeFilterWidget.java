@@ -91,4 +91,8 @@ public class AssigneeFilterWidget extends BaseUdmItemsFilterWidget<String>
         VaadinUtils.addComponentStyle(filterWindow, "assignee-filter-window");
         return filterWindow;
     }
+
+    public Set<String> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }
