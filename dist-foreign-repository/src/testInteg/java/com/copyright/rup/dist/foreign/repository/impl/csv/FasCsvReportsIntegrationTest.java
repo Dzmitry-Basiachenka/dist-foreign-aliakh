@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IFasReportRepository;
 
 import com.google.common.collect.Sets;
 
@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Integration tests for csv reports for FAS product family.
+ * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.FasReportRepository}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -60,7 +60,7 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
     private static final String EMPTY_REPORT = "fas/audit_usages_report_empty.csv";
 
     @Autowired
-    private IReportRepository reportRepository;
+    private IFasReportRepository reportRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -283,13 +283,5 @@ public class FasCsvReportsIntegrationTest extends CsvReportsTestHelper {
             Arrays.asList("d016d9c2-5460-41bf-837c-8598cf00b651", "d016d9c2-5460-41bf-837c-8598cf00b652",
                 "f1a40b56-54f1-4a46-90fa-77946c2f7805", "d016d9c2-5460-41bf-837c-8598cf00b658"), outputStream),
             "fas/summary_of_market_report.csv");
-    }
-
-    @Test
-    @TestData(fileName = WRITE_BATCH_SUMMARY_CSV_REPORT)
-    public void testWriteWorkClassificationCsvReportWithEmptySearch() throws Exception {
-        assertFilesWithExecutor(
-            outputStream -> reportRepository.writeWorkClassificationCsvReport("99999999", outputStream),
-            "fas/work_classification_report_empty.csv");
     }
 }

@@ -7,7 +7,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.INtsReportRepository;
 
 import com.google.common.collect.Sets;
 
@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * Integration tests for csv reports for NTS product family.
+ * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.NtsReportRepository}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -50,7 +50,7 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
     private static final String EMPTY_REPORT = "nts/audit_usages_report_empty.csv";
 
     @Autowired
-    private IReportRepository reportRepository;
+    private INtsReportRepository reportRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -201,5 +201,13 @@ public class NtsCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> reportRepository.writeWorkClassificationCsvReport("987654321", outputStream),
             "nts/work_classification_report_by_search.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_WORK_CLASSIFICATION_CSV_REPORT)
+    public void testWriteWorkClassificationCsvReportWithEmptySearch() throws Exception {
+        assertFilesWithExecutor(
+            outputStream -> reportRepository.writeWorkClassificationCsvReport("99999999", outputStream),
+            "nts/work_classification_report_empty.csv");
     }
 }

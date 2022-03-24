@@ -6,7 +6,7 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.ISalReportRepository;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Integration tests for csv reports for SAL product family.
+ * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.SalReportRepository}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -47,7 +47,7 @@ public class SalCsvReportsIntegrationTest extends CsvReportsTestHelper {
     private static final String EMPTY_REPORT = "sal/audit_usages_report_empty.csv";
     
     @Autowired
-    private IReportRepository reportRepository;
+    private ISalReportRepository reportRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {

@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IReportRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAaclReportRepository;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * Integration tests for csv reports for AACL product family.
+ * Integration test for {@link com.copyright.rup.dist.foreign.repository.impl.AaclReportRepository}.
  * <p>
  * Copyright (C) 2021 copyright.com
  * <p>
@@ -56,7 +56,7 @@ public class AaclCsvReportsIntegrationTest extends CsvReportsTestHelper {
     private static final String AACL_SCENARIO_ID = "42ad575b-5d0d-4d82-b1c5-d0982f6f6f1b";
 
     @Autowired
-    private IReportRepository reportRepository;
+    private IAaclReportRepository reportRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {

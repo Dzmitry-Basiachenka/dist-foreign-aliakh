@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -57,5 +58,19 @@ public class CommonReportRepository extends BaseRepository {
                                          Map<String, Object> parameters,
                                          Supplier<? extends BaseCsvReportHandler> handlerSupplier) {
         writeCsvReportByParts(countMethodName, selectMethodName, parameters, true, handlerSupplier);
+    }
+
+    /**
+     * Escapes audit filter fields that are used in SQL LIKE pattern ('%', '_' and '\').
+     *
+     * @param auditFilter instance of {@link AuditFilter}
+     * @return instance of {@link AuditFilter} with applied sql like pattern
+     */
+    protected AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }
