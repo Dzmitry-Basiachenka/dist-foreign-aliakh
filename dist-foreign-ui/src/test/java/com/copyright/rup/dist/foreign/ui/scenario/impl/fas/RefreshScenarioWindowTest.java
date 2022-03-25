@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -17,12 +21,11 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -31,8 +34,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RefreshScenarioWindow}.
@@ -50,13 +51,45 @@ public class RefreshScenarioWindowTest {
     @Test
     public void testStructure() {
         RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, null);
-        assertEquals("Refresh Scenario", window.getCaption());
-        assertEquals(400, window.getHeight(), 0);
-        assertEquals(800, window.getWidth(), 0);
+        verifyWindow(window, "Refresh Scenario", 800, 400, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        assertTrue(content.getComponent(1) instanceof Grid);
+        Grid grid = (Grid) content.getComponent(1);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Detail Status", -1.0, -1),
+            Triple.of("Product Family", -1.0, -1),
+            Triple.of("Usage Batch Name", 135.0, -1),
+            Triple.of("RRO Account #", -1.0, -1),
+            Triple.of("RRO Name", 135.0, -1),
+            Triple.of("RH Account #", -1.0, -1),
+            Triple.of("RH Name", 300.0, -1),
+            Triple.of("Wr Wrk Inst", -1.0, -1),
+            Triple.of("System Title", 300.0, -1),
+            Triple.of("Standard Number", 125.0, -1),
+            Triple.of("Standard Number Type", 155.0, -1),
+            Triple.of("Fiscal Year", -1.0, -1),
+            Triple.of("Payment Date", -1.0, -1),
+            Triple.of("Title", 300.0, -1),
+            Triple.of("Article", 135.0, -1),
+            Triple.of("Publisher", 135.0, -1),
+            Triple.of("Pub Date", 80.0, -1),
+            Triple.of("Number of Copies", -1.0, -1),
+            Triple.of("Reported Value", 113.0, -1),
+            Triple.of("Gross Amt in USD", 130.0, -1),
+            Triple.of("Batch Amt in USD", 130.0, -1),
+            Triple.of("Market", 135.0, -1),
+            Triple.of("Market Period From", 150.0, -1),
+            Triple.of("Market Period To", 145.0, -1),
+            Triple.of("Author", 300.0, -1),
+            Triple.of("Comment", 200.0, -1)
+        ));
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        verifyButtonsLayout(content.getComponent(2), "Ok", "Cancel");
+        HorizontalLayout horizontalLayout = (HorizontalLayout) content.getComponent(2);
+        assertTrue(horizontalLayout.isSpacing());
+        assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
     }
 
     @Test
@@ -96,39 +129,5 @@ public class RefreshScenarioWindowTest {
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(controller, clickEvent, Windows.class);
-    }
-
-    private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
-        Grid grid = (Grid) component;
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name", "RRO Account #",
-            "RRO Name", "RH Account #", "RH Name", "Wr Wrk Inst", "System Title", "Standard Number",
-            "Standard Number Type", "Fiscal Year", "Payment Date", "Title", "Article",
-            "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Gross Amt in USD", "Batch Amt in USD",
-            "Market", "Market Period From", "Market Period To", "Author", "Comment"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        verifySize(grid);
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(2, horizontalLayout.getComponentCount());
-        Button okButton = (Button) horizontalLayout.getComponent(0);
-        assertEquals("Ok", okButton.getCaption());
-        assertEquals("Ok", okButton.getId());
-        Button cancelButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Cancel", cancelButton.getCaption());
-        assertEquals("Cancel", cancelButton.getId());
-        assertTrue(horizontalLayout.isSpacing());
-        assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }

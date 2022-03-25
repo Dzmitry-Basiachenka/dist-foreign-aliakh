@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -92,10 +94,7 @@ public class FasScenarioWidgetTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals("Scenario name", scenarioWidget.getCaption());
-        assertEquals("view-scenario-widget", scenarioWidget.getId());
-        assertEquals(95, scenarioWidget.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, scenarioWidget.getHeightUnits());
+        verifyWindow(scenarioWidget, "Scenario name", 100, 95, Unit.PERCENTAGE);
         assertFalse(scenarioWidget.isDraggable());
         assertFalse(scenarioWidget.isResizable());
         VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
@@ -139,7 +138,7 @@ public class FasScenarioWidgetTest {
         assertEquals(Unit.PERCENTAGE, searchWidget.getWidthUnits());
         assertEquals(Alignment.MIDDLE_CENTER, horizontalLayout.getComponentAlignment(searchWidget));
         assertTrue(horizontalLayout.isSpacing());
-        verifySize(horizontalLayout);
+        verifyWindow(horizontalLayout, null, 100, 100, Unit.PERCENTAGE);
     }
 
     private void verifyGrid(Component component) {
@@ -147,7 +146,7 @@ public class FasScenarioWidgetTest {
         Grid grid = (Grid) component;
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
-            "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
+                "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
@@ -180,10 +179,4 @@ public class FasScenarioWidgetTest {
         assertEquals(new MarginInfo(false, true, true, false), horizontalLayout.getMargin());
     }
 
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
 }

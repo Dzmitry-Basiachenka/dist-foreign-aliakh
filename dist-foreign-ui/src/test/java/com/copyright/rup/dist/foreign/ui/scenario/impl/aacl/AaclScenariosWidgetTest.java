@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -7,7 +11,6 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -29,13 +32,12 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWi
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -43,6 +45,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -54,7 +57,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AaclScenariosWidget}.
@@ -113,7 +115,14 @@ public class AaclScenariosWidgetTest {
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
         assertTrue(component instanceof Grid);
-        verifyGrid((Grid) component);
+        Grid grid = (Grid) component;
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Name", -1.0, 1),
+            Triple.of("Created Date", 100.0, -1),
+            Triple.of("Status", 130.0, -1)
+        ));
+        assertEquals("scenarios-table", grid.getId());
         component = layout.getComponent(1);
         assertTrue(component instanceof Panel);
         verifyPanel((Panel) component);
@@ -208,18 +217,8 @@ public class AaclScenariosWidgetTest {
     }
 
     private void verifyPanel(Panel panel) {
-        verifySize(panel);
+        verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
         assertNull(panel.getContent());
-    }
-
-    private void verifyGrid(Grid grid) {
-        verifySize(grid);
-        assertEquals("scenarios-table", grid.getId());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Name", "Created Date", "Status"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        Column createDateColumn = columns.get(2);
-        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
@@ -244,13 +243,6 @@ public class AaclScenariosWidgetTest {
         assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
 
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
     private void verifyScenarioMetadataPanel() {
         Panel panel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
         assertEquals("scenarios-metadata", panel.getId());
@@ -261,15 +253,15 @@ public class AaclScenariosWidgetTest {
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
         assertEquals(11, layout.getComponentCount());
-        verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
-        verifyMetadataLabel(layout.getComponent(1),
-            "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>");
-        verifyMetadataLabel(layout.getComponent(2),
-            "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>");
-        verifyMetadataLabel(layout.getComponent(3),
-            "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>");
-        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
-        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
+        verifyLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com", ContentMode.HTML, -1.0f);
+        verifyLabel(layout.getComponent(1),
+            "<b>Gross Amt in USD: </b><span class='label-amount'>10,000.00</span>", ContentMode.HTML, -1.0f);
+        verifyLabel(layout.getComponent(2),
+            "<b>Service Fee Amt in USD: </b><span class='label-amount'>3,200.00</span>", ContentMode.HTML, -1.0f);
+        verifyLabel(layout.getComponent(3),
+            "<b>Net Amt in USD: </b><span class='label-amount'>6,800.00</span>", ContentMode.HTML, -1.0f);
+        verifyLabel(layout.getComponent(4), "<b>Description: </b>Description", ContentMode.HTML, -1.0f);
+        verifyLabel(layout.getComponent(5), SELECTION_CRITERIA, ContentMode.HTML, -1.0f);
         Component fundPool = layout.getComponent(6);
         assertTrue(fundPool instanceof Button);
         assertEquals("Fund Pool", fundPool.getCaption());

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -16,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -32,6 +35,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -42,8 +46,6 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link FasScenariosWidget}.
@@ -168,18 +170,19 @@ public class FasScenariosWidgetTest {
     }
 
     private void verifyPanel(Panel panel) {
-        verifySize(panel);
+        verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
         assertNull(panel.getContent());
     }
 
     private void verifyGrid(Grid grid) {
-        verifySize(grid);
+        verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals("scenarios-table", grid.getId());
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Name", "Created Date", "Status"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-        Column createDateColumn = columns.get(2);
-        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Name", -1.0, 1),
+            Triple.of("Created Date", 100.0, -1),
+            Triple.of("Status", 130.0, -1)
+        ));
+        assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
@@ -205,13 +208,6 @@ public class FasScenariosWidgetTest {
         assertEquals(isEnabled, button.isEnabled());
         assertTrue(button.isDisableOnClick());
         assertEquals(2, button.getListeners(ClickEvent.class).size());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 
     private void verifyScenarioMetadataPanel() {
