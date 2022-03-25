@@ -45,15 +45,12 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";
     private static final String STATUSES = "statuses";
-    private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
-    private static final String FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME =
-        "IReportMapper.findArchivedScenarioUsageDtosCount";
 
     @Override
     public void writeSalUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts("IReportMapper.findSalUsagesCountByFilter", "IReportMapper.findSalUsageReportDtos",
+        writeCsvReportByParts("ISalReportMapper.findSalUsagesCountByFilter", "ISalReportMapper.findSalUsageReportDtos",
             parameters, !filter.isEmpty(),
             () -> new SalUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
@@ -62,7 +59,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     public void writeAuditSalCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findSalUsagesCountForAudit", "IReportMapper.findAuditSalReportDtos",
+        writeCsvReportByParts("ISalReportMapper.findSalUsagesCountForAudit", "ISalReportMapper.findAuditSalReportDtos",
             parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditSalCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
@@ -78,7 +75,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
             parameters.put("scenarioIds", Objects.requireNonNull(scenarios).stream()
                 .map(Scenario::getId)
                 .collect(Collectors.toList()));
-            getTemplate().select("IReportMapper.findSalLiabilitiesByRhReportDtos", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalLiabilitiesByRhReportDtos", parameters, handler);
             handler.writeScenarioNames(scenarios);
         }
     }
@@ -93,7 +90,8 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
             parameters.put("scenarioIds", Objects.requireNonNull(scenarios).stream()
                 .map(Scenario::getId)
                 .collect(Collectors.toList()));
-            getTemplate().select("IReportMapper.findSalLiabilitiesSummaryByRhAndWorkReportDtos", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalLiabilitiesSummaryByRhAndWorkReportDtos", parameters,
+                handler);
             handler.writeScenarioNames(scenarios);
         }
     }
@@ -102,8 +100,8 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     public void writeArchivedSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findSalArchivedScenarioUsageReportDtos", parameters,
+        writeCsvReportByParts("ISalReportMapper.findArchivedScenarioUsageDtosCount",
+            "ISalReportMapper.findSalArchivedScenarioUsageReportDtos", parameters,
             () -> new SalScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -111,8 +109,8 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
     public void writeSalScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findSalScenarioUsageReportDtos", parameters,
+        writeCsvReportByParts("ISalReportMapper.findScenarioUsageDtosCount",
+            "ISalReportMapper.findSalScenarioUsageReportDtos", parameters,
             () -> new SalScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -124,7 +122,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS, ScenarioStatusEnum.SUBMITTED,
                 ScenarioStatusEnum.APPROVED));
-            getTemplate().select("IReportMapper.findSalUndistributedLiabilitiesReportDtos", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
 
@@ -135,7 +133,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
             parameters.put(PRODUCT_FAMILY, FdaConstants.SAL_PRODUCT_FAMILY);
             parameters.put("distributionYear", Objects.requireNonNull(distributionYear));
-            getTemplate().select("IReportMapper.findSalFundPoolsByDistYear", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalFundPoolsByDistYear", parameters, handler);
         }
     }
 
@@ -150,7 +148,7 @@ public class SalReportRepository extends CommonReportRepository implements ISalR
             parameters.put("licenseeAccountNumber", Objects.requireNonNull(licenseeAccountNumber));
             parameters.put("periodEndYearFrom", Objects.requireNonNull(periodEndYearFrom));
             parameters.put("periodEndYearTo", Objects.requireNonNull(periodEndYearTo));
-            getTemplate().select("IReportMapper.findSalHistoricalItemBankDetailsReportDtos", parameters, handler);
+            getTemplate().select("ISalReportMapper.findSalHistoricalItemBankDetailsReportDtos", parameters, handler);
         }
     }
 }

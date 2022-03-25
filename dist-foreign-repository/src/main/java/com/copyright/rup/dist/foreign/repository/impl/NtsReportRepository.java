@@ -43,11 +43,6 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";
     private static final String STATUSES = "statuses";
-    private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
-    private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
-    private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
-    private static final String FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME =
-        "IReportMapper.findArchivedScenarioUsageDtosCount";
 
     @Override
     public void writeNtsServiceFeeTrueUpCsvReport(Scenario scenario, OutputStream outputStream,
@@ -58,7 +53,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
                 Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
                 parameters.put("scenarioId", Objects.requireNonNull(scenario.getId()));
                 parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
-                getTemplate().select("IReportMapper.findNtsServiceFeeTrueUpReportDtos", parameters, handler);
+                getTemplate().select("INtsReportMapper.findNtsServiceFeeTrueUpReportDtos", parameters, handler);
             }
         }
     }
@@ -68,8 +63,9 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME, "IReportMapper.findScenarioUsageReportDtos",
-            parameters, () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
+        writeCsvReportByParts("INtsReportMapper.findScenarioUsageDtosCount",
+            "INtsReportMapper.findScenarioUsageReportDtos", parameters,
+            () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
     @Override
@@ -77,8 +73,8 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
+        writeCsvReportByParts("INtsReportMapper.findArchivedScenarioUsageDtosCount",
+            "INtsReportMapper.findArchivedScenarioUsageReportDtos", parameters,
             () -> new NtsScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
@@ -86,15 +82,16 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     public void writeNtsUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts(FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME, FIND_USAGE_REPORT_DTOS_METHOD_NAME, parameters,
-            !filter.isEmpty(), () -> new NtsUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+        writeCsvReportByParts("INtsReportMapper.findUsagesCountByFilter", "INtsReportMapper.findUsageReportDtos",
+            parameters, !filter.isEmpty(),
+            () -> new NtsUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
     public void writeAuditNtsCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
+        writeCsvReportByParts("INtsReportMapper.findUsagesCountForAudit", "INtsReportMapper.findAuditReportDtos",
             parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditNtsCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
@@ -105,8 +102,8 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("batchesIds", Objects.requireNonNull(batchesIds));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        writeCsvReportByParts("IReportMapper.findWorkClassificationCountByBatchIds",
-            "IReportMapper.findWorkClassificationByBatchIds", parameters,
+        writeCsvReportByParts("INtsReportMapper.findWorkClassificationCountByBatchIds",
+            "INtsReportMapper.findWorkClassificationByBatchIds", parameters,
             () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -115,8 +112,8 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         parameters.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
-        writeCsvReportByParts("IReportMapper.findWorkClassificationCountBySearch",
-            "IReportMapper.findWorkClassificationBySearch", parameters,
+        writeCsvReportByParts("INtsReportMapper.findWorkClassificationCountBySearch",
+            "INtsReportMapper.findWorkClassificationBySearch", parameters,
             () -> new WorkClassificationCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -124,7 +121,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
     public void writeNtsWithdrawnBatchSummaryCsvReport(OutputStream outputStream) {
         try (NtsWithdrawnBatchSummaryReportHandler handler =
                  new NtsWithdrawnBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findNtsWithdrawnBatchSummaryReportDtos", handler);
+            getTemplate().select("INtsReportMapper.findNtsWithdrawnBatchSummaryReportDtos", handler);
         }
     }
 
@@ -137,7 +134,7 @@ public class NtsReportRepository extends CommonReportRepository implements INtsR
             parameters.put("estimatedServiceFee", estimatedServiceFee);
             parameters.put(PRODUCT_FAMILY, FdaConstants.NTS_PRODUCT_FAMILY);
             parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
-            getTemplate().select("IReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
+            getTemplate().select("INtsReportMapper.findNtsUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
 }

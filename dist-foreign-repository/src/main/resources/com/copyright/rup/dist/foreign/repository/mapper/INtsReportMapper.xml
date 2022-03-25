@@ -1,0 +1,182 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="INtsReportMapper">
+
+    <resultMap id="ntsUndistributedLiabilitiesReportDtoResultMap" type="UndistributedLiabilitiesReportDto">
+        <result property="grossAmount" column="usages_gross_amount"/>
+        <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
+        <result property="estimatedNetAmount" column="estimated_net_amount"/>
+        <result property="estimatedServiceFee" column="estimated_service_fee"/>
+    </resultMap>
+
+    <resultMap id="ntsServiceFeeTrueUpReportDtoResultMap" type="NtsServiceFeeTrueUpReportDto">
+        <result property="batchGrossAmount" column="batch_gross_amount"/>
+        <result property="preServiceFeeAmount" column="pre_service_fee_amount"/>
+        <result property="preServiceFeeFunds" column="pre_service_fee_funds"/>
+        <result property="postServiceFeeAmount" column="post_service_fee_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="estimatedServiceFee" column="estimated_service_fee"/>
+        <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
+        <result property="estimatedNetAmount" column="estimated_net_amount"/>
+        <result property="grossAmountSentToLm" column="gross_amount_sent_to_lm"/>
+        <result property="serviceFeeSentToLm" column="service_fee_sent_to_lm"/>
+        <result property="serviceFeeAmountSentToLm" column="service_fee_amount_sent_to_lm"/>
+        <result property="netAmountSentToLm" column="net_amount_sent_to_lm"/>
+        <result property="serviceFeeTrueUpAmount" column="service_fee_true_up"/>
+    </resultMap>
+
+    <resultMap id="ntsWithdrawnBatchSummaryReportDtoResultMap" type="NtsWithDrawnBatchSummaryReportDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="batchName" column="batch_name"/>
+        <result property="rroAccountNumber" column="rro_account_number"/>
+        <result property="rroName" column="rro_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="batchGrossAmount" column="gross_amount"/>
+        <result property="ntsDetailsCount" column="nts_details_count"/>
+        <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
+    </resultMap>
+
+    <select id="findNtsUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="ntsUndistributedLiabilitiesReportDtoResultMap">
+        select
+            usages_gross_amount,
+            usages_gross_amount * #{estimatedServiceFee}  as estimated_service_fee_amount,
+            usages_gross_amount - (usages_gross_amount * #{estimatedServiceFee}) estimated_net_amount,
+            #{estimatedServiceFee} as estimated_service_fee
+        from (
+            select
+                sum(u.gross_amount) usages_gross_amount
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map sufb on ub.df_usage_batch_uid = sufb.df_usage_batch_uid
+            left join ${schema}.df_scenario_usage_filter f on sufb.df_scenario_usage_filter_uid = f.df_scenario_usage_filter_uid
+            left join ${schema}.df_scenario s on f.df_scenario_uid = s.df_scenario_uid
+            where ub.product_family = #{productFamily}
+                and (s.status_ind is null or s.status_ind not in
+                    <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                        #{status}
+                    </foreach>)
+        ) as reportInfo
+        where usages_gross_amount != 0
+        group by reportInfo.usages_gross_amount
+    </select>
+
+    <select id="findNtsWithdrawnBatchSummaryReportDtos" resultMap="ntsWithdrawnBatchSummaryReportDtoResultMap">
+        select
+            batch_name,
+            rro_account_number,
+            rro_name,
+            payment_date,
+            gross_amount,
+            nts_details_count,
+            nts_details_gross_amount,
+            created_datetime
+        from ${schema}.v_nts_withdrawn_batch_summary_report
+        order by batch_name
+    </select>
+
+    <select id="findNtsServiceFeeTrueUpReportDtos" resultMap="ntsServiceFeeTrueUpReportDtoResultMap">
+        select
+            batch_gross_amount,
+            pre_service_fee_funds,
+            pre_service_fee_amount,
+            post_service_fee_amount,
+            gross_amount,
+            estimated_service_fee,
+            estimated_service_fee_amount,
+            batch_gross_amount - estimated_service_fee_amount estimated_net_amount,
+            gross_amount_sent_to_lm,
+            net_amount_sent_to_lm,
+            service_fee_amount_sent_to_lm,
+            service_fee_amount_sent_to_lm / gross_amount_sent_to_lm service_fee_sent_to_lm,
+            estimated_service_fee_amount - service_fee_amount_sent_to_lm service_fee_true_up
+        from (
+            select
+                batch_gross_amount,
+                pre_service_fee_funds,
+                pre_service_fee_amount,
+                post_service_fee_amount,
+                batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount + post_service_fee_amount gross_amount,
+                #{defaultEstimatedServiceFee} estimated_service_fee,
+                (batch_gross_amount + pre_service_fee_funds + pre_service_fee_amount) * #{defaultEstimatedServiceFee} estimated_service_fee_amount
+            from (
+                select
+                    coalesce(fp.total_amount, 0) pre_service_fee_funds,
+                    (s.nts_fields ->> 'pre_service_fee_amount')::numeric pre_service_fee_amount,
+                    (s.nts_fields ->> 'post_service_fee_amount')::numeric post_service_fee_amount
+                from ${schema}.df_scenario s
+                left join ${schema}.df_fund_pool fp on fp.df_fund_pool_uid = s.nts_fields ->> 'pre_service_fee_fund_uid'
+                where s.df_scenario_uid = #{scenarioId}
+            ) scenario_amounts
+            <!-- concatenating 2 column sets: both tables always have a single row -->
+            cross join (
+                select sum((ub.nts_fields ->> 'stm_amount')::numeric + (ub.nts_fields ->> 'non_stm_amount')::numeric) batch_gross_amount
+                from ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map batch_filter
+                join ${schema}.df_scenario_usage_filter f on f.df_scenario_usage_filter_uid = batch_filter.df_scenario_usage_filter_uid
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = batch_filter.df_usage_batch_uid
+                where f.df_scenario_uid = #{scenarioId}
+            ) batch_amounts
+        ) estimated_amounts
+        <!-- concatenating 2 column sets: both tables always have a single row -->
+        cross join (
+            select
+                sum(gross_amount) gross_amount_sent_to_lm,
+                sum(net_amount) net_amount_sent_to_lm,
+                sum(service_fee_amount) service_fee_amount_sent_to_lm
+            from ${schema}.df_usage_archive
+            where df_scenario_uid = #{scenarioId}
+        ) sent_to_lm_amounts
+    </select>
+
+    <select id="findScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findArchivedScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive ua
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
+        <include refid="IUsageMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findArchivedScenarioUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap">
+        <include refid="IUsageArchiveMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findUsageReportDtos" resultMap="IUsageMapper.usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findUsagesCountForAudit" resultType="int" parameterType="map">
+        <include refid="IUsageMapper.selectCountForAuditSql"/>
+    </select>
+
+    <select id="findAuditReportDtos" resultMap="IUsageMapper.usageDtoResultMap" parameterType="map">
+        <include refid="IUsageMapper.selectForAuditSql"/>
+    </select>
+
+    <select id="findWorkClassificationCountByBatchIds" resultType="int" parameterType="map">
+        <include refid="IWorkClassificationMapper.findCountByBatchIdsSql"/>
+    </select>
+
+    <select id="findWorkClassificationByBatchIds" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
+        <include refid="IWorkClassificationMapper.findByBatchIdsSql"/>
+    </select>
+
+    <select id="findWorkClassificationCountBySearch" resultType="int" parameterType="map">
+        <include refid="IWorkClassificationMapper.findCountBySearchSql"/>
+    </select>
+
+    <select id="findWorkClassificationBySearch" resultMap="IWorkClassificationMapper.workClassificationResultMap" parameterType="map">
+        <include refid="IWorkClassificationMapper.findBySearchSql"/>
+    </select>
+</mapper>

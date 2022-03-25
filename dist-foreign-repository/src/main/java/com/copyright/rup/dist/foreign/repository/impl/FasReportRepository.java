@@ -58,11 +58,8 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     private static final String FILTER_KEY = "filter";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String STATUSES = "statuses";
-    private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IReportMapper.findUsageReportDtos";
-    private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IReportMapper.findUsagesCountByFilter";
-    private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
-    private static final String FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME =
-        "IReportMapper.findArchivedScenarioUsageDtosCount";
+    private static final String FIND_USAGE_REPORT_DTOS_METHOD_NAME = "IFasReportMapper.findUsageReportDtos";
+    private static final String FIND_USAGES_COUNT_BY_FILTER_METHOD_NAME = "IFasReportMapper.findUsagesCountByFilter";
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
@@ -76,7 +73,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         parameters.put("productFamilies", productFamilies);
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
+            getTemplate().select("IFasReportMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
 
@@ -96,7 +93,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
             parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put("status", UsageStatusEnum.SENT_TO_LM);
             parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
-            getTemplate().select("IReportMapper.findFasServiceFeeTrueUpReportDtos", parameters, handler);
+            getTemplate().select("IFasReportMapper.findFasServiceFeeTrueUpReportDtos", parameters, handler);
         }
     }
 
@@ -104,7 +101,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     public void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream) {
         try (SummaryMarketReportHandler handler =
                  new SummaryMarketReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findSummaryMarketReportDtos", Objects.requireNonNull(batchIds),
+            getTemplate().select("IFasReportMapper.findSummaryMarketReportDtos", Objects.requireNonNull(batchIds),
                 handler);
         }
     }
@@ -113,7 +110,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
         try (FasBatchSummaryReportHandler handler =
                  new FasBatchSummaryReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findFasBatchSummaryReportDtos", handler);
+            getTemplate().select("IFasReportMapper.findFasBatchSummaryReportDtos", handler);
         }
     }
 
@@ -121,7 +118,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
         try (ResearchStatusReportHandler handler =
                  new ResearchStatusReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findResearchStatusReportDtos", handler);
+            getTemplate().select("IFasReportMapper.findResearchStatusReportDtos", handler);
         }
     }
 
@@ -134,7 +131,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         parameters.put(STATUSES, statuses);
         try (OwnershipAdjustmentReportHandler handler =
                  new OwnershipAdjustmentReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findOwnershipAdjustmentReportDtos", parameters, handler);
+            getTemplate().select("IFasReportMapper.findOwnershipAdjustmentReportDtos", parameters, handler);
         }
     }
 
@@ -143,8 +140,9 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME, "IReportMapper.findScenarioUsageReportDtos",
-            parameters, () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
+        writeCsvReportByParts("IFasReportMapper.findScenarioUsageDtosCount",
+            "IFasReportMapper.findScenarioUsageReportDtos", parameters,
+            () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
     @Override
@@ -152,8 +150,8 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         Objects.requireNonNull(pipedOutputStream);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findArchivedScenarioUsageReportDtos", parameters,
+        writeCsvReportByParts("IFasReportMapper.findArchivedScenarioUsageDtosCount",
+            "IFasReportMapper.findArchivedScenarioUsageReportDtos", parameters,
             () -> new FasScenarioUsagesCsvReportHandler(pipedOutputStream));
     }
 
@@ -165,7 +163,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
         try (ScenarioRightsholderTotalsCsvReportHandler handler =
                  new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IReportMapper.findRightsholderTotalsHoldersReportDtos", parameters, handler);
+            getTemplate().select("IFasReportMapper.findRightsholderTotalsHoldersReportDtos", parameters, handler);
         }
     }
 
@@ -178,7 +176,8 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
         parameters.put("sort", new Sort("rightsholder.accountNumber", Direction.ASC));
         try (ScenarioRightsholderTotalsCsvReportHandler handler =
                  new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IReportMapper.findArchivedRightsholderTotalsHoldersReportDtos", parameters, handler);
+            getTemplate().select("IFasReportMapper.findArchivedRightsholderTotalsHoldersReportDtos", parameters,
+                handler);
         }
     }
 
@@ -205,7 +204,7 @@ public class FasReportRepository extends CommonReportRepository implements IFasR
     public void writeAuditFasCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findUsagesCountForAudit", "IReportMapper.findAuditReportDtos",
+        writeCsvReportByParts("IFasReportMapper.findUsagesCountForAudit", "IFasReportMapper.findAuditReportDtos",
             parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditFasCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
