@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -23,6 +27,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.Validator;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -33,6 +38,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.GridSelectionModel;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,10 +52,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link FasExcludePayeeWidget}.
@@ -90,18 +94,26 @@ public class FasExcludePayeeWidgetTest {
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude Details By Payee", widget.getCaption());
+        verifyWindow(widget, "Exclude Details By Payee", 1200, 500, Unit.PIXELS);
         assertEquals("exclude-details-by-payee-window", widget.getId());
-        assertEquals(500, widget.getHeight(), 0);
-        assertEquals(1200, widget.getWidth(), 0);
         assertTrue(widget.isDraggable());
         assertTrue(widget.isResizable());
         HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         assertEquals(3, content.getComponentCount());
         verifyToolbar(content.getComponent(0));
-        verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        assertTrue(content.getComponent(1) instanceof Grid);
+        Grid grid = (Grid) content.getComponent(1);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Payee Account #", -1.0, -1),
+            Triple.of("Payee Name", -1.0, -1),
+            Triple.of("Gross Amt in USD", -1.0, -1),
+            Triple.of("Service Fee Amount", -1.0, -1),
+            Triple.of("Net Amt in USD", -1.0, -1),
+            Triple.of("Participating", -1.0, -1)
+        ));
+        verifyButtonsLayout(content.getComponent(2), "Exclude Details", "Redesignate Details", "Clear",
+            "Close");
     }
 
     @Test
@@ -249,32 +261,6 @@ public class FasExcludePayeeWidgetTest {
         Button button = (Button) component;
         assertEquals("Export", button.getCaption());
         assertEquals(1, button.getExtensions().size());
-    }
-
-    private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
-        Grid grid = (Grid) component;
-        List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "Gross Amt in USD", "Service Fee Amount",
-            "Net Amt in USD", "Participating"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(4, horizontalLayout.getComponentCount());
-        verifyButton((Button) horizontalLayout.getComponent(0), "Exclude Details");
-        verifyButton((Button) horizontalLayout.getComponent(1), "Redesignate Details");
-        verifyButton((Button) horizontalLayout.getComponent(2), "Clear");
-        verifyButton((Button) horizontalLayout.getComponent(3), "Close");
-        assertTrue(horizontalLayout.isSpacing());
-        assertEquals(new MarginInfo(false, false), horizontalLayout.getMargin());
-    }
-
-    private void verifyButton(Button button, String name) {
-        assertEquals(name, button.getCaption());
-        assertEquals(name.replaceAll(" ", "_"), button.getId());
     }
 
     private void initWidget() {

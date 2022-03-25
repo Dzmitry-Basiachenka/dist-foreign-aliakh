@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -20,12 +23,14 @@ import com.copyright.rup.dist.foreign.domain.PayeeTotalHolder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclExcludePayeeFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Sets;
 import com.vaadin.data.Validator;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -36,6 +41,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.GridSelectionModel;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +58,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AaclExcludePayeeWidget}.
@@ -94,17 +99,23 @@ public class AaclExcludePayeeWidgetTest {
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude Details By Payee", widget.getCaption());
-        assertEquals("exclude-details-by-payee-window", widget.getId());
-        assertEquals(500, widget.getHeight(), 0);
-        assertEquals(1200, widget.getWidth(), 0);
+        verifyWindow(widget, "Exclude Details By Payee", 1200, 500, Unit.PIXELS);
         assertTrue(widget.isDraggable());
         assertTrue(widget.isResizable());
+        assertEquals("exclude-details-by-payee-window", widget.getId());
         HorizontalSplitPanel splitPanel = (HorizontalSplitPanel) widget.getContent();
         VerticalLayout content = (VerticalLayout) splitPanel.getSecondComponent();
         assertEquals(3, content.getComponentCount());
         verifyToolbar(content.getComponent(0));
-        verifyGrid(content.getComponent(1));
+        Grid grid = (Grid) content.getComponent(1);
+        assertTrue(content.getComponent(1) instanceof Grid);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Payee Account #", -1.0, -1),
+            Triple.of("Payee Name", -1.0, -1),
+            Triple.of("Gross Amt in USD", -1.0, -1),
+            Triple.of("Service Fee Amount", -1.0, -1),
+            Triple.of("Net Amt in USD", -1.0, -1)
+        ));
         verifyButtonsLayout(content.getComponent(2));
     }
 
@@ -198,29 +209,11 @@ public class AaclExcludePayeeWidgetTest {
         assertEquals(1, button.getExtensions().size());
     }
 
-    private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
-        Grid grid = (Grid) component;
-        List<Grid.Column> columns = grid.getColumns();
-        assertEquals(
-            Arrays.asList("Payee Account #", "Payee Name", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-    }
-
     private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
+        UiTestHelper.verifyButtonsLayout(component, "Exclude Details", "Clear", "Close");
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        verifyButton((Button) horizontalLayout.getComponent(0), "Exclude Details");
-        verifyButton((Button) horizontalLayout.getComponent(1), "Clear");
-        verifyButton((Button) horizontalLayout.getComponent(2), "Close");
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, false), horizontalLayout.getMargin());
-    }
-
-    private void verifyButton(Button button, String name) {
-        assertEquals(name, button.getCaption());
-        assertEquals(name.replaceAll(" ", "_"), button.getId());
     }
 
     private void initWidget() {

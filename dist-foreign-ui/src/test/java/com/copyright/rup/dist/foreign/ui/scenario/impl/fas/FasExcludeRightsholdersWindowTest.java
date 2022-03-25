@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -14,16 +17,14 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasScenarioController
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
-
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.SerializablePredicate;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
@@ -66,13 +67,11 @@ public class FasExcludeRightsholdersWindowTest {
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude RH Details for Source RRO #: 1000009522", window.getCaption());
-        assertEquals(500, window.getHeight(), 0);
-        assertEquals(830, window.getWidth(), 0);
+        verifyWindow(window, "Exclude RH Details for Source RRO #: 1000009522", 830, 500, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyButtonsLayout(content.getComponent(2), "Confirm", "Clear", "Close");
     }
 
     @Test
@@ -103,23 +102,6 @@ public class FasExcludeRightsholdersWindowTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button confirmButton = (Button) horizontalLayout.getComponent(0);
-        assertEquals("Confirm", confirmButton.getCaption());
-        assertEquals("Confirm", confirmButton.getId());
-        Button clearButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Clear", clearButton.getCaption());
-        assertEquals("Clear", clearButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
-        assertEquals("Close", closeButton.getCaption());
-        assertEquals("Close", closeButton.getId());
-        assertTrue(horizontalLayout.isSpacing());
-        assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
     }
 
     private RightsholderPayeePair buildRightsholderPayeePair(Rightsholder rightsholder, Rightsholder payee) {
