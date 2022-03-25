@@ -86,4 +86,8 @@ public class TypeOfUseFilterWidget extends BaseUdmItemsFilterWidget<String>
         VaadinUtils.addComponentStyle(filterWindow, "type-of-use-filter-window");
         return filterWindow;
     }
+
+    public Set<String> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }

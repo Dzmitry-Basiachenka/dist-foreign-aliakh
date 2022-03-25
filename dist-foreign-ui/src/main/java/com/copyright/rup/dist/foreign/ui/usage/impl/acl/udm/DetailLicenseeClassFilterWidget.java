@@ -89,4 +89,8 @@ public class DetailLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget<De
         VaadinUtils.addComponentStyle(filterWindow, "detail-licensee-class-filter-window");
         return filterWindow;
     }
+
+    public Set<DetailLicenseeClass> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }

@@ -86,4 +86,8 @@ public class PublicationFormatFilterWidget extends BaseUdmItemsFilterWidget<Stri
         VaadinUtils.addComponentStyle(filterWindow, "publication-format-filter-window");
         return filterWindow;
     }
+
+    public Set<String> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }

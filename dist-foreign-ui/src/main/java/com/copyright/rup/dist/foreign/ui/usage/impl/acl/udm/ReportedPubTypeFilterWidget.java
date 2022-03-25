@@ -86,4 +86,8 @@ public class ReportedPubTypeFilterWidget extends BaseUdmItemsFilterWidget<String
         VaadinUtils.addComponentStyle(filterWindow, "reported-pub-type-filter-window");
         return filterWindow;
     }
+
+    public Set<String> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }

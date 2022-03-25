@@ -42,7 +42,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -171,37 +170,32 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private void initAssigneeFilterWidget() {
         assigneeFilterWidget = new AssigneeFilterWidget(controller::getAssignees, usageFilter.getAssignees());
-        assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
-            usageFilter.setAssignees(saveEvent.getSelectedItemsIds()));
+        assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initReportedPublicationTypeFilterWidget() {
         reportedPubTypeFilterWidget =
             new ReportedPubTypeFilterWidget(controller::getPublicationTypes, usageFilter.getReportedPubTypes());
-        reportedPubTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
-            usageFilter.setReportedPubTypes(saveEvent.getSelectedItemsIds()));
+        reportedPubTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initPublicationFormatFilterWidget() {
         publicationFormatFilterWidget =
             new PublicationFormatFilterWidget(controller::getPublicationFormats, usageFilter.getPubFormats());
-        publicationFormatFilterWidget.addFilterSaveListener(
-            (IFilterSaveListener<String>) saveEvent -> usageFilter.setPubFormats(saveEvent.getSelectedItemsIds()));
+        publicationFormatFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initDetailLicenseeClassFilterWidget() {
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
-        detailLicenseeClassFilterWidget.addFilterSaveListener(
-            (IFilterSaveListener<DetailLicenseeClass>) saveEvent ->
-                usageFilter.setDetailLicenseeClasses(saveEvent.getSelectedItemsIds()));
+        detailLicenseeClassFilterWidget.addFilterSaveListener((IFilterSaveListener<DetailLicenseeClass>) saveEvent ->
+        {});
     }
 
     private void initTypeOfUseFilterWidget() {
         typeOfUseFilterWidget =
             new TypeOfUseFilterWidget(controller::getTypeOfUses, usageFilter.getReportedTypeOfUses());
-        typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent ->
-            usageFilter.setReportedTypeOfUses(saveEvent.getSelectedItemsIds()));
+        typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private HorizontalLayout initAssigneeLicenseeClassLayout() {
@@ -639,6 +633,11 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
         saveButton.addClickListener(event -> {
             try {
                 filterBinder.writeBean(usageFilter);
+                usageFilter.setAssignees(assigneeFilterWidget.getSelectedItemsIds());
+                usageFilter.setReportedPubTypes(reportedPubTypeFilterWidget.getSelectedItemsIds());
+                usageFilter.setPubFormats(publicationFormatFilterWidget.getSelectedItemsIds());
+                usageFilter.setDetailLicenseeClasses(detailLicenseeClassFilterWidget.getSelectedItemsIds());
+                usageFilter.setReportedTypeOfUses(typeOfUseFilterWidget.getSelectedItemsIds());
                 close();
             } catch (ValidationException e) {
                 Windows.showValidationErrorWindow(
@@ -656,11 +655,6 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void clearFilters() {
-        usageFilter.setAssignees(new HashSet<>());
-        usageFilter.setDetailLicenseeClasses(new HashSet<>());
-        usageFilter.setReportedPubTypes(new HashSet<>());
-        usageFilter.setReportedTypeOfUses(new HashSet<>());
-        usageFilter.setPubFormats(new HashSet<>());
         assigneeFilterWidget.reset();
         detailLicenseeClassFilterWidget.reset();
         reportedPubTypeFilterWidget.reset();
