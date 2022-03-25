@@ -124,7 +124,10 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderDiscrepancyMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IWorkClassificationMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IFundPoolMapper.xml"/>
-        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IReportMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAaclReportMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IFasReportMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/INtsReportMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ISalReportMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IPublicationTypeMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/ILicenseeClassMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchStatusMapper.xml"/>

@@ -1,0 +1,206 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAaclReportMapper">
+
+    <resultMap id="workSharesByAggLcClassReportDtoResultMap" type="WorkSharesByAggLcClassReportDto">
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClass.discipline" column="aggregate_licensee_discipline"/>
+        <result property="aggregateLicenseeClass.enrollmentProfile" column="aggregate_licensee_enrollment"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="title"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="volumeShare" column="volume_share"/>
+        <result property="valueShare" column="value_share"/>
+        <result property="totalShare" column="total_share"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
+    <resultMap id="aaclUndistributedLiabilitiesReportResultMap" type="FundPool" extends="IFundPoolMapper.fundPoolResultMap">
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
+        <result property="netAmount" column="net_amount"/>
+    </resultMap>
+
+    <resultMap id="aaclBaselineUsageDtoMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="aaclUsage.baselineId" column="baseline_uid"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="aaclUsage.usageAge.period" column="usage_period"/>
+        <result property="aaclUsage.usageSource" column="usage_source"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="aaclUsage.numberOfPages" column="number_of_pages"/>
+        <result property="aaclUsage.detailLicenseeClass.id" column="detail_licensee_class_id"/>
+        <result property="aaclUsage.detailLicenseeClass.enrollmentProfile" column="detail_licensee_enrollment"/>
+        <result property="aaclUsage.detailLicenseeClass.discipline" column="detail_licensee_discipline"/>
+        <result property="aaclUsage.publicationType.name" column="pub_type_name"/>
+        <result property="aaclUsage.publicationType.weight" column="publication_type_weight"/>
+        <result property="aaclUsage.originalPublicationType" column="original_publication_type"/>
+        <result property="aaclUsage.institution" column="institution"/>
+        <result property="comment" column="comment"/>
+    </resultMap>
+
+    <sql id="workSharesByAggLcClassSummaryFromWhereClauses">
+        from ${schema}.df_scenario s
+        join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_aacl uaacl on u.${usage_uid_column} = uaacl.df_usage_aacl_uid
+        join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = uaacl.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
+        where u.df_scenario_uid = #{scenarioId}
+        group by alc.aggregate_licensee_class_id, aggregate_licensee_discipline, aggregate_licensee_enrollment
+        order by alc.aggregate_licensee_class_id
+    </sql>
+
+    <sql id="workSharesByAggLcClassFromWhereClauses">
+        from ${schema}.df_scenario s
+        join ${schema}.${usage_table} u on s.df_scenario_uid = u.df_scenario_uid
+        join ${schema}.df_usage_aacl uaacl on u.${usage_uid_column} = uaacl.df_usage_aacl_uid
+        join jsonb_array_elements(s.aacl_fields -> 'detailLicenseeClasses') detailLicenseeClasses
+            on (detailLicenseeClasses ->> 'detailLicenseeClassId')::int = uaacl.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc
+            on (detailLicenseeClasses ->> 'aggregateLicenseeClassId')::int = alc.aggregate_licensee_class_id
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        group by alc.aggregate_licensee_class_id, aggregate_licensee_discipline, aggregate_licensee_enrollment,
+            wr_wrk_inst, system_title, rh.rh_account_number, rh.name
+        order by alc.aggregate_licensee_class_id
+    </sql>
+
+    <select id="findScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findArchivedScenarioUsageDtosCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive ua
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findAaclUndistributedLiabilitiesReportFundPools" parameterType="map"
+            resultMap="aaclUndistributedLiabilitiesReportResultMap">
+        select
+            f.name,
+            f.total_amount,
+            f.total_amount * #{serviceFee} as service_fee_amount,
+            f.total_amount - (f.total_amount * #{serviceFee}) as net_amount
+        from apps.df_fund_pool f
+        left join apps.df_scenario s on s.aacl_fields ->> 'fund_pool_uid' = f.df_fund_pool_uid
+        where f.product_family = #{productFamily}
+            and (s.status_ind is null or s.status_ind in
+                <foreach collection="statuses" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>)
+        order by f.name
+    </select>
+
+    <select id="findWorkSharesByAggLcClassSummaryReportDtos" parameterType="map"
+            resultMap="workSharesByAggLcClassReportDtoResultMap">
+        select
+            alc.aggregate_licensee_class_id,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            sum(uaacl.total_share) total_share
+        <choose>
+            <when test="status in archivedStatuses">
+                <include refid="workSharesByAggLcClassSummaryFromWhereClauses">
+                    <property name="usage_table" value="df_usage_archive"/>
+                    <property name="usage_uid_column" value="df_usage_archive_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                <include refid="workSharesByAggLcClassSummaryFromWhereClauses">
+                    <property name="usage_table" value="df_usage"/>
+                    <property name="usage_uid_column" value="df_usage_uid"/>
+                </include>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findWorkSharesByAggLcClassReportDtos" parameterType="map"
+            resultMap="workSharesByAggLcClassReportDtoResultMap">
+        select
+            alc.aggregate_licensee_class_id,
+            alc.discipline aggregate_licensee_discipline,
+            alc.enrollment_profile aggregate_licensee_enrollment,
+            wr_wrk_inst,
+            system_title title,
+            rh.rh_account_number,
+            rh.name rh_name,
+            sum(uaacl.total_share) total_share,
+            sum(uaacl.volume_share) volume_share,
+            sum(uaacl.value_share) value_share,
+            sum(u.net_amount) net_amount
+        <choose>
+            <when test="status in archivedStatuses">
+                <include refid="workSharesByAggLcClassFromWhereClauses">
+                    <property name="usage_table" value="df_usage_archive"/>
+                    <property name="usage_uid_column" value="df_usage_archive_uid"/>
+                </include>
+            </when>
+            <otherwise>
+                <include refid="workSharesByAggLcClassFromWhereClauses">
+                    <property name="usage_table" value="df_usage"/>
+                    <property name="usage_uid_column" value="df_usage_uid"/>
+                </include>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAaclBaselineUsages" parameterType="int" resultMap="aaclBaselineUsageDtoMap">
+        select
+            df_usage_baseline_aacl_uid baseline_uid,
+            wr_wrk_inst,
+            usage_period,
+            usage_source,
+            number_of_copies,
+            number_of_pages,
+            dlc.detail_licensee_class_id,
+            dlc.enrollment_profile detail_licensee_enrollment,
+            discipline detail_licensee_discipline,
+            pt.name pub_type_name,
+            publication_type_weight,
+            original_publication_type,
+            institution,
+            comment,
+            u.updated_by_user,
+            u.updated_datetime
+        from ${schema}.df_usage_baseline_aacl u
+        join ${schema}.df_publication_type pt on pt.df_publication_type_uid = u.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on dlc.detail_licensee_class_id = u.detail_licensee_class_id
+        where usage_period in (
+            select distinct usage_period
+            from ${schema}.df_usage_baseline_aacl
+            order by usage_period desc
+            limit #{numberOfYears}
+        )
+        order by usage_period desc, df_usage_baseline_aacl_uid
+    </select>
+
+    <select id="findAaclScenarioUsageReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap">
+        <include refid="IAaclUsageMapper.selectDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findAaclArchivedScenarioUsageReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap">
+        <include refid="IAaclUsageMapper.selectArchivedDtoByScenarioIdSql"/>
+    </select>
+
+    <select id="findAaclUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IAaclUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findAaclUsageReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAaclUsageMapper.selectDtosByFilterSql"/>
+    </select>
+
+    <select id="findAaclUsagesCountForAudit" resultType="int" parameterType="map">
+        <include refid="IAaclUsageMapper.selectCountForAuditSql"/>
+    </select>
+
+    <select id="findAuditAaclReportDtos" resultMap="IAaclUsageMapper.aaclUsageDtoResultMap" parameterType="map">
+        <include refid="IAaclUsageMapper.selectForAuditSql"/>
+    </select>
+</mapper>

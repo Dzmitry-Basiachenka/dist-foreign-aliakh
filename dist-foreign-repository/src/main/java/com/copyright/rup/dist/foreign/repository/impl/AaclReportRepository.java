@@ -46,9 +46,6 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String PRODUCT_FAMILY = "productFamily";
     private static final String STATUSES = "statuses";
-    private static final String FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME = "IReportMapper.findScenarioUsageDtosCount";
-    private static final String FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME =
-        "IReportMapper.findArchivedScenarioUsageDtosCount";
 
     @Override
     public void writeWorkSharesByAggLcClassSummaryCsvReport(String scenarioId, ScenarioStatusEnum status,
@@ -59,7 +56,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
         try (WorkSharesByAggLcClassSummaryReportHandler handler =
                  new WorkSharesByAggLcClassSummaryReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findWorkSharesByAggLcClassSummaryReportDtos", parameters, handler);
+            getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassSummaryReportDtos", parameters, handler);
         }
     }
 
@@ -72,7 +69,7 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         parameters.put("archivedStatuses", Arrays.asList(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED));
         try (WorkSharesByAggLcClassReportHandler handler =
                  new WorkSharesByAggLcClassReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findWorkSharesByAggLcClassReportDtos", parameters, handler);
+            getTemplate().select("IAaclReportMapper.findWorkSharesByAggLcClassReportDtos", parameters, handler);
         }
     }
 
@@ -80,8 +77,8 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     public void writeAaclUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts("IReportMapper.findAaclUsagesCountByFilter", "IReportMapper.findAaclUsageReportDtos",
-            parameters, !filter.isEmpty(),
+        writeCsvReportByParts("IAaclReportMapper.findAaclUsagesCountByFilter",
+            "IAaclReportMapper.findAaclUsageReportDtos", parameters, !filter.isEmpty(),
             () -> new AaclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -90,8 +87,8 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
         Set<String> usageIds = new HashSet<>();
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        writeCsvReportByParts("IReportMapper.findAaclUsagesCountByFilter", "IReportMapper.findAaclUsageReportDtos",
-            parameters, !Objects.requireNonNull(filter).isEmpty(),
+        writeCsvReportByParts("IAaclReportMapper.findAaclUsagesCountByFilter",
+            "IAaclReportMapper.findAaclUsageReportDtos", parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new SendForClassificationCsvReportHandler(Objects.requireNonNull(outputStream), usageIds));
         return usageIds;
     }
@@ -100,8 +97,8 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     public void writeAuditAaclCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
         parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
-        writeCsvReportByParts("IReportMapper.findAaclUsagesCountForAudit", "IReportMapper.findAuditAaclReportDtos",
-            parameters, !Objects.requireNonNull(filter).isEmpty(),
+        writeCsvReportByParts("IAaclReportMapper.findAaclUsagesCountForAudit",
+            "IAaclReportMapper.findAuditAaclReportDtos", parameters, !Objects.requireNonNull(filter).isEmpty(),
             () -> new AuditAaclCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -109,8 +106,8 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     public void writeArchivedAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_ARCHIVED_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findAaclArchivedScenarioUsageReportDtos", parameters,
+        writeCsvReportByParts("IAaclReportMapper.findArchivedScenarioUsageDtosCount",
+            "IAaclReportMapper.findAaclArchivedScenarioUsageReportDtos", parameters,
             () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
@@ -118,16 +115,16 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
     public void writeAaclScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        writeCsvReportByParts(FIND_SCENARIO_USAGE_DTOS_COUNT_METHOD_NAME,
-            "IReportMapper.findAaclScenarioUsageReportDtos",
-            parameters, () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+        writeCsvReportByParts("IAaclReportMapper.findScenarioUsageDtosCount",
+            "IAaclReportMapper.findAaclScenarioUsageReportDtos", parameters,
+            () -> new AaclScenarioUsagesCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 
     @Override
     public void writeAaclBaselineUsagesCsvReport(int numberOfYears, OutputStream outputStream) {
         try (AaclBaselineUsagesCsvReportHandler handler =
                  new AaclBaselineUsagesCsvReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IReportMapper.findAaclBaselineUsages", numberOfYears, handler);
+            getTemplate().select("IAaclReportMapper.findAaclBaselineUsages", numberOfYears, handler);
         }
     }
 
@@ -153,7 +150,8 @@ public class AaclReportRepository extends CommonReportRepository implements IAac
             parameters.put(PRODUCT_FAMILY, FdaConstants.AACL_PRODUCT_FAMILY);
             parameters.put(STATUSES, Arrays.asList(ScenarioStatusEnum.IN_PROGRESS,
                 ScenarioStatusEnum.SUBMITTED, ScenarioStatusEnum.APPROVED));
-            getTemplate().select("IReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters, handler);
+            getTemplate().select("IAaclReportMapper.findAaclUndistributedLiabilitiesReportFundPools", parameters,
+                handler);
         }
     }
 }
