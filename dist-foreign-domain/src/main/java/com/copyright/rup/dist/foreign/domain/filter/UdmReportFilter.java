@@ -78,14 +78,14 @@ public class UdmReportFilter {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UdmReportFilter that = (UdmReportFilter) o;
+        UdmReportFilter that = (UdmReportFilter) obj;
         return new EqualsBuilder()
             .append(periods, that.periods)
             .append(userNames, that.userNames)

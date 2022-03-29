@@ -364,54 +364,54 @@ public class UdmUsageDto extends StoredEntity<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UdmUsageDto udmUsage = (UdmUsageDto) o;
+        UdmUsageDto that = (UdmUsageDto) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(period, udmUsage.period)
-            .append(periodEndDate, udmUsage.periodEndDate)
-            .append(usageOrigin, udmUsage.usageOrigin)
-            .append(channel, udmUsage.channel)
-            .append(status, udmUsage.status)
-            .append(originalDetailId, udmUsage.originalDetailId)
-            .append(usageDate, udmUsage.usageDate)
-            .append(standardNumber, udmUsage.standardNumber)
-            .append(reportedStandardNumber, udmUsage.reportedStandardNumber)
-            .append(assignee, udmUsage.assignee)
-            .append(rhAccountNumber, udmUsage.rhAccountNumber)
-            .append(rhName, udmUsage.rhName)
-            .append(wrWrkInst, udmUsage.wrWrkInst)
-            .append(reportedTitle, udmUsage.reportedTitle)
-            .append(systemTitle, udmUsage.systemTitle)
-            .append(article, udmUsage.article)
-            .append(reportedPubType, udmUsage.reportedPubType)
-            .append(language, udmUsage.language)
-            .append(pubFormat, udmUsage.pubFormat)
-            .append(typeOfUse, udmUsage.typeOfUse)
-            .append(reportedTypeOfUse, udmUsage.reportedTypeOfUse)
-            .append(quantity, udmUsage.quantity)
-            .append(surveyRespondent, udmUsage.surveyRespondent)
-            .append(companyId, udmUsage.companyId)
-            .append(surveyCountry, udmUsage.surveyCountry)
-            .append(ipAddress, udmUsage.ipAddress)
-            .append(surveyStartDate, udmUsage.surveyStartDate)
-            .append(surveyEndDate, udmUsage.surveyEndDate)
-            .append(actionReason, udmUsage.actionReason)
-            .append(ineligibleReason, udmUsage.ineligibleReason)
-            .append(detailLicenseeClass, udmUsage.detailLicenseeClass)
-            .append(companyName, udmUsage.companyName)
-            .append(annualMultiplier, udmUsage.annualMultiplier)
-            .append(statisticalMultiplier, udmUsage.statisticalMultiplier)
-            .append(annualizedCopies, udmUsage.annualizedCopies)
-            .append(comment, udmUsage.comment)
-            .append(researchUrl, udmUsage.researchUrl)
-            .append(baselineFlag, udmUsage.baselineFlag)
+            .appendSuper(super.equals(obj))
+            .append(period, that.period)
+            .append(periodEndDate, that.periodEndDate)
+            .append(usageOrigin, that.usageOrigin)
+            .append(channel, that.channel)
+            .append(status, that.status)
+            .append(originalDetailId, that.originalDetailId)
+            .append(usageDate, that.usageDate)
+            .append(standardNumber, that.standardNumber)
+            .append(reportedStandardNumber, that.reportedStandardNumber)
+            .append(assignee, that.assignee)
+            .append(rhAccountNumber, that.rhAccountNumber)
+            .append(rhName, that.rhName)
+            .append(wrWrkInst, that.wrWrkInst)
+            .append(reportedTitle, that.reportedTitle)
+            .append(systemTitle, that.systemTitle)
+            .append(article, that.article)
+            .append(reportedPubType, that.reportedPubType)
+            .append(language, that.language)
+            .append(pubFormat, that.pubFormat)
+            .append(typeOfUse, that.typeOfUse)
+            .append(reportedTypeOfUse, that.reportedTypeOfUse)
+            .append(quantity, that.quantity)
+            .append(surveyRespondent, that.surveyRespondent)
+            .append(companyId, that.companyId)
+            .append(surveyCountry, that.surveyCountry)
+            .append(ipAddress, that.ipAddress)
+            .append(surveyStartDate, that.surveyStartDate)
+            .append(surveyEndDate, that.surveyEndDate)
+            .append(actionReason, that.actionReason)
+            .append(ineligibleReason, that.ineligibleReason)
+            .append(detailLicenseeClass, that.detailLicenseeClass)
+            .append(companyName, that.companyName)
+            .append(annualMultiplier, that.annualMultiplier)
+            .append(statisticalMultiplier, that.statisticalMultiplier)
+            .append(annualizedCopies, that.annualizedCopies)
+            .append(comment, that.comment)
+            .append(researchUrl, that.researchUrl)
+            .append(baselineFlag, that.baselineFlag)
             .isEquals();
     }
 

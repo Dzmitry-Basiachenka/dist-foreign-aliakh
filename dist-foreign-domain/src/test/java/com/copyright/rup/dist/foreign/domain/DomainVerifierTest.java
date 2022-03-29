@@ -136,7 +136,9 @@ public class DomainVerifierTest {
             {AclGrantDetailDto.class},
             {AclGrantDetailFilter.class},
             {UdmUsageEditsInBaselineReportDto.class},
-            {UdmUsableDetailsByCountryReportDto.class}
+            {UdmUsableDetailsByCountryReportDto.class},
+            {AclUsageBatch.class},
+            {AclUsageDto.class}
         };
         return Arrays.asList(testData);
     }
