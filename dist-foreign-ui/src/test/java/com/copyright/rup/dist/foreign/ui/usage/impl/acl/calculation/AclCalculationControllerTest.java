@@ -7,6 +7,7 @@ import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,11 +26,14 @@ public class AclCalculationControllerTest {
 
     private final AclCalculationController controller = new AclCalculationController();
 
+    private IAclUsageController aclUsageController;
     private IAclGrantDetailController aclGrantDetailController;
 
     @Before
     public void setUp() {
+        aclUsageController = createMock(IAclUsageController.class);
         aclGrantDetailController = createMock(IAclGrantDetailController.class);
+        Whitebox.setInternalState(controller, aclUsageController);
         Whitebox.setInternalState(controller, aclGrantDetailController);
     }
 
@@ -38,6 +42,11 @@ public class AclCalculationControllerTest {
         IAclCalculationWidget widget = controller.instantiateWidget();
         assertNotNull(widget);
         assertEquals(AclCalculationWidget.class, widget.getClass());
+    }
+
+    @Test
+    public void testGetAclUsageController() {
+        assertSame(aclUsageController, controller.getAclUsageController());
     }
 
     @Test
