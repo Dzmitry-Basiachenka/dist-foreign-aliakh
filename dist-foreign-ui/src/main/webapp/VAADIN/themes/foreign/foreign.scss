@@ -92,8 +92,8 @@
         background-position: center center;
     }
 
-    /*=== Styles for empty Baseline and Audit grids ===*/
-    .empty-baseline-grid .v-grid-tablewrapper, .empty-audit-grid .v-grid-tablewrapper {
+    /*=== Styles for empty Baseline, Audit, ACL Usages grids ===*/
+    .empty-baseline-grid .v-grid-tablewrapper, .empty-audit-grid .v-grid-tablewrapper, .empty-acl-usages-grid .v-grid-tablewrapper {
         background-image: url("img/empty_table.png");
         background-repeat: no-repeat;
         background-position: center center;
