@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,18 +8,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents UDM baseline dto.
+ * Represents ACL usage DTO.
  * <p>
- * Copyright (C) 2021 copyright.com
+ * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 09/01/21
+ * Date: 03/30/2022
  *
- * @author Dzmitry Basiachenka
+ * @author Aliaksandr Liakh
  */
-public class UdmBaselineDto extends StoredEntity<String> {
+public class AclUsageDto extends StoredEntity<String> {
 
-    private Integer period;
+    private String usageBatchId;
     private UdmUsageOriginEnum usageOrigin;
+    private UdmChannelEnum channel;
+    private Integer period;
     private String originalDetailId;
     private Long wrWrkInst;
     private String systemTitle;
@@ -29,17 +30,17 @@ public class UdmBaselineDto extends StoredEntity<String> {
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private String surveyCountry;
-    private UdmChannelEnum channel;
+    private String pubTypeName;
+    private BigDecimal contentUnitPrice;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
-    private String valueId;
 
-    public Integer getPeriod() {
-        return period;
+    public String getUsageBatchId() {
+        return usageBatchId;
     }
 
-    public void setPeriod(Integer period) {
-        this.period = period;
+    public void setUsageBatchId(String usageBatchId) {
+        this.usageBatchId = usageBatchId;
     }
 
     public UdmUsageOriginEnum getUsageOrigin() {
@@ -48,6 +49,22 @@ public class UdmBaselineDto extends StoredEntity<String> {
 
     public void setUsageOrigin(UdmUsageOriginEnum usageOrigin) {
         this.usageOrigin = usageOrigin;
+    }
+
+    public UdmChannelEnum getChannel() {
+        return channel;
+    }
+
+    public void setChannel(UdmChannelEnum channel) {
+        this.channel = channel;
+    }
+
+    public Integer getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(Integer period) {
+        this.period = period;
     }
 
     public String getOriginalDetailId() {
@@ -114,12 +131,20 @@ public class UdmBaselineDto extends StoredEntity<String> {
         this.surveyCountry = surveyCountry;
     }
 
-    public UdmChannelEnum getChannel() {
-        return channel;
+    public String getPubTypeName() {
+        return pubTypeName;
     }
 
-    public void setChannel(UdmChannelEnum channel) {
-        this.channel = channel;
+    public void setPubTypeName(String pubTypeName) {
+        this.pubTypeName = pubTypeName;
+    }
+
+    public BigDecimal getContentUnitPrice() {
+        return contentUnitPrice;
+    }
+
+    public void setContentUnitPrice(BigDecimal contentUnitPrice) {
+        this.contentUnitPrice = contentUnitPrice;
     }
 
     public String getTypeOfUse() {
@@ -138,14 +163,6 @@ public class UdmBaselineDto extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
-    public String getValueId() {
-        return valueId;
-    }
-
-    public void setValueId(String valueId) {
-        this.valueId = valueId;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -154,11 +171,13 @@ public class UdmBaselineDto extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UdmBaselineDto that = (UdmBaselineDto) obj;
+        AclUsageDto that = (AclUsageDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(period, that.period)
+            .append(usageBatchId, that.usageBatchId)
             .append(usageOrigin, that.usageOrigin)
+            .append(channel, that.channel)
+            .append(period, that.period)
             .append(originalDetailId, that.originalDetailId)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
@@ -167,10 +186,10 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(surveyCountry, that.surveyCountry)
-            .append(channel, that.channel)
+            .append(pubTypeName, that.pubTypeName)
+            .append(contentUnitPrice, that.contentUnitPrice)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
-            .append(valueId, that.valueId)
             .isEquals();
     }
 
@@ -178,8 +197,10 @@ public class UdmBaselineDto extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(period)
+            .append(usageBatchId)
             .append(usageOrigin)
+            .append(channel)
+            .append(period)
             .append(originalDetailId)
             .append(wrWrkInst)
             .append(systemTitle)
@@ -188,10 +209,10 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append(aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName)
             .append(surveyCountry)
-            .append(channel)
+            .append(pubTypeName)
+            .append(contentUnitPrice)
             .append(typeOfUse)
             .append(annualizedCopies)
-            .append(valueId)
             .toHashCode();
     }
 
@@ -199,8 +220,10 @@ public class UdmBaselineDto extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("period", period)
+            .append("usageBatchId", usageBatchId)
             .append("usageOrigin", usageOrigin)
+            .append("channel", channel)
+            .append("period", period)
             .append("originalDetailId", originalDetailId)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
@@ -209,10 +232,10 @@ public class UdmBaselineDto extends StoredEntity<String> {
             .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("surveyCountry", surveyCountry)
-            .append("channel", channel)
+            .append("pubTypeName", pubTypeName)
+            .append("contentUnitPrice", contentUnitPrice)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
-            .append("valueId", valueId)
             .toString();
     }
 }

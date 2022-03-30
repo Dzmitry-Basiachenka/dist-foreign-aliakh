@@ -55,20 +55,20 @@ public class UdmBatch extends StoredEntity<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (null == o || getClass() != o.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UdmBatch udmBatch = (UdmBatch) o;
+        UdmBatch that = (UdmBatch) obj;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(period, udmBatch.period)
-            .append(name, udmBatch.name)
-            .append(usageOrigin, udmBatch.usageOrigin)
-            .append(channel, udmBatch.channel)
+            .appendSuper(super.equals(obj))
+            .append(period, that.period)
+            .append(name, that.name)
+            .append(usageOrigin, that.usageOrigin)
+            .append(channel, that.channel)
             .isEquals();
     }
 
