@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Mapper to/from JSON for {@link Set} of ACL grant set periods.
+ * Mapper to/from JSON for {@link Set} of periods.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetPeriodsJsonMapper {
+public class PeriodsJsonMapper {
 
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
     private static final TypeReference<Set<Integer>> TYPE_REFERENCE = new TypeReference<Set<Integer>>() {};

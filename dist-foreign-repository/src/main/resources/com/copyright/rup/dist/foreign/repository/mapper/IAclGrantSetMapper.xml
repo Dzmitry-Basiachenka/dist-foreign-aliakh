@@ -8,7 +8,7 @@
         <result property="id" column="df_acl_grant_set_uid"/>
         <result property="name" column="name"/>
         <result property="grantPeriod" column="grant_period"/>
-        <result property="periods" column="periods" typeHandler="AclGrantSetPeriodsTypeHandler"/>
+        <result property="periods" column="periods" typeHandler="PeriodsTypeHandler"/>
         <result property="licenseType" column="license_type"/>
         <result property="editable" column="is_editable"/>
     </resultMap>
@@ -30,7 +30,7 @@
             #{id},
             #{name},
             #{grantPeriod},
-            #{periods, typeHandler=AclGrantSetPeriodsTypeHandler},
+            #{periods, typeHandler=PeriodsTypeHandler},
             #{licenseType},
             #{editable},
             <include refid="StoredEntityMapper.insert"/>

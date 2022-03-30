@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.repository.impl.converter.json.AclGrantSetPeriodsJsonMapper;
+import com.copyright.rup.dist.foreign.repository.impl.converter.json.PeriodsJsonMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Implementation of {@link BaseTypeHandler} for {@link Set} of ACL grant set periods.
+ * Implementation of {@link BaseTypeHandler} for {@link Set} of periods.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -23,9 +23,9 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetPeriodsTypeHandler extends BaseTypeHandler<Set<Integer>> {
+public class PeriodsTypeHandler extends BaseTypeHandler<Set<Integer>> {
 
-    private static final AclGrantSetPeriodsJsonMapper JSON_MAPPER = new AclGrantSetPeriodsJsonMapper();
+    private static final PeriodsJsonMapper JSON_MAPPER = new PeriodsJsonMapper();
 
     @Override
     public void setNonNullParameter(PreparedStatement statement, int parameterIndex,

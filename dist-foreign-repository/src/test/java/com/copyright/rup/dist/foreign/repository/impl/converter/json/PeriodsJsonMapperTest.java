@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * Verifies {@link AclGrantSetPeriodsJsonMapper}.
+ * Verifies {@link PeriodsJsonMapper}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -19,9 +19,9 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetPeriodsJsonMapperTest {
+public class PeriodsJsonMapperTest {
 
-    private final AclGrantSetPeriodsJsonMapper jsonMapper = new AclGrantSetPeriodsJsonMapper();
+    private final PeriodsJsonMapper jsonMapper = new PeriodsJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {
