@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * Verifies {@link AclGrantSetPeriodsTypeHandler}.
+ * Verifies {@link PeriodsTypeHandler}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -27,13 +27,13 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class AclGrantSetPeriodsTypeHandlerTest {
+public class PeriodsTypeHandlerTest {
 
     private static final String COLUMN_NAME = "periods";
     private static final int COLUMN_INDEX = 1;
     private static final int PARAMETER_INDEX = 1;
 
-    private final AclGrantSetPeriodsTypeHandler typeHandler = new AclGrantSetPeriodsTypeHandler();
+    private final PeriodsTypeHandler typeHandler = new PeriodsTypeHandler();
 
     @Test
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
