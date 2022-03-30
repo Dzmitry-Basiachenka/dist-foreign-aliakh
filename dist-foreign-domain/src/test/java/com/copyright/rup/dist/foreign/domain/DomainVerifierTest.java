@@ -138,7 +138,8 @@ public class DomainVerifierTest {
             {UdmUsageEditsInBaselineReportDto.class},
             {UdmUsableDetailsByCountryReportDto.class},
             {AclUsageBatch.class},
-            {AclUsageDto.class}
+            {AclUsageDto.class},
+            {AclIneligibleRightsholder.class}
         };
         return Arrays.asList(testData);
     }
