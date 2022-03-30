@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
@@ -48,6 +49,11 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     @Override
     public IAclUsageFilterWidget initAclUsageFilterWidget() {
         return aclUsageFilterController.initWidget();
+    }
+
+    @Override
+    public void onFilterChanged(FilterChangedEvent event) {
+        getWidget().refresh();
     }
 
     @Override

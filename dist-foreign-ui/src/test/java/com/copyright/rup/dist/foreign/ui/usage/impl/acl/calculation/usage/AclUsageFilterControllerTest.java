@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
+
+import java.util.Collections;
 
 /**
  * Verifies {@link AclUsageFilterController}.
@@ -20,5 +23,11 @@ public class AclUsageFilterControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertNotNull(controller.instantiateWidget());
+    }
+
+    @Test
+    public void testGetAllAclUsageBatches() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(), controller.getAllAclUsageBatches());
     }
 }
