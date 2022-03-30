@@ -48,6 +48,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
     private DataProvider<AclGrantDetailDto, Void> dataProvider;
     private MenuBar grantSetMenuBar;
     private Button editButton;
+    private Button uploadButton;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -76,6 +77,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         AclGrantDetailMediator mediator = new AclGrantDetailMediator();
         mediator.setGrantSetMenuBar(grantSetMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setUploadButton(uploadButton);
         return mediator;
     }
 
@@ -166,11 +168,13 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             }
         });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
+        uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
+        uploadButton.addClickListener(event -> Windows.showModalWindow(new UploadGrantDetailWindow()));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportAclGrantDetailsStreamSource().getSource());
         fileDownloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(grantSetMenuBar, editButton, exportButton);
+        HorizontalLayout layout = new HorizontalLayout(grantSetMenuBar, uploadButton, editButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "acl-grant-detail-buttons");
         return layout;

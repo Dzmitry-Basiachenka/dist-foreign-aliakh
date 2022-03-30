@@ -19,12 +19,14 @@ public class AclGrantDetailMediator implements IMediator {
 
     private MenuBar grantSetMenuBar;
     private Button editButton;
+    private Button uploadButton;
 
     @Override
     public void applyPermissions() {
         grantSetMenuBar.setVisible(ForeignSecurityUtils.hasSpecialistPermission()
             || ForeignSecurityUtils.hasManagerPermission());
         editButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        uploadButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
     }
 
     public void setGrantSetMenuBar(MenuBar grantSetMenuBar) {
@@ -33,5 +35,9 @@ public class AclGrantDetailMediator implements IMediator {
 
     public void setEditButton(Button editButton) {
         this.editButton = editButton;
+    }
+
+    public void setUploadButton(Button uploadButton) {
+        this.uploadButton = uploadButton;
     }
 }

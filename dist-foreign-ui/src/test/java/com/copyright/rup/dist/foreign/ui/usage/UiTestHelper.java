@@ -103,7 +103,7 @@ public final class UiTestHelper {
      * @param loadButton load button
      * @param fields     fields
      */
-    public static void verifyLoadClickListener(Button loadButton, Collection<? extends AbstractField<?>> fields) {
+    public static void verifyLoadClickListener(Button loadButton, Collection<? extends AbstractComponent> fields) {
         mockStatic(Windows.class);
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
