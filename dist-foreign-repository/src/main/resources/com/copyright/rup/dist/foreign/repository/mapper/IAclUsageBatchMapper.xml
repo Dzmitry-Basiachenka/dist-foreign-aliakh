@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclUsageBatchMapper">
+
+    <resultMap id="aclUsageBatchResultMap" type="aclUsageBatch" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_usage_batch_uid"/>
+        <result property="name" column="name"/>
+        <result property="distributionPeriod" column="distribution_period"/>
+        <result property="periods" column="periods" typeHandler="PeriodsTypeHandler"/>
+        <result property="editable" column="is_editable"/>
+    </resultMap>
+
+    <sql id="aclUsageBatchColumns">
+        df_acl_usage_batch_uid,
+        name,
+        distribution_period,
+        periods,
+        is_editable,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <select id="isAclUsageBatchExist" parameterType="string" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_acl_usage_batch
+            where name = #{usageBatchName}
+        )
+    </select>
+
+    <insert id="insert" parameterType="aclUsageBatch">
+        insert into ${schema}.df_acl_usage_batch (
+            <include refid="aclUsageBatchColumns"/>
+        ) values (
+            #{id},
+            #{name},
+            #{distributionPeriod},
+            #{periods, typeHandler=PeriodsTypeHandler},
+            #{editable},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findById" resultMap="aclUsageBatchResultMap" parameterType="string">
+        select
+            <include refid="aclUsageBatchColumns"/>
+        from ${schema}.df_acl_usage_batch
+        where df_acl_usage_batch_uid = #{usageBatchId}
+    </select>
+</mapper>

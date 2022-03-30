@@ -93,6 +93,8 @@
         <typeAlias alias="WrWrkInstSystemTitlePair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToSystemTitlesResultHandler$WrWrkInstSystemTitlePair"/>
         <typeAlias alias="UdmUsageEditsInBaselineReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmUsageEditsInBaselineReportDto"/>
         <typeAlias alias="UdmUsableDetailsByCountryReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmUsableDetailsByCountryReportDto"/>
+        <typeAlias alias="AclUsageBatch" type="com.copyright.rup.dist.foreign.domain.AclUsageBatch"/>
+        <typeAlias alias="AclUsageDto" type="com.copyright.rup.dist.foreign.domain.AclUsageDto"/>
     </typeAliases>
 
     <typeHandlers>
@@ -148,5 +150,7 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantSetMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclGrantDetailMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclCalculationReportMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageBatchMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageMapper.xml"/>
     </mappers>
 </configuration>
