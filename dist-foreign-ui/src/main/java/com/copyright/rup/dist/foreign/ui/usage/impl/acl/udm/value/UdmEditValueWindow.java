@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmValueWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -327,11 +328,16 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
         String fieldName = ForeignUi.getMessage("label.value_status");
         valueStatusComboBox.setSizeFull();
         valueStatusComboBox.setEmptySelectionAllowed(false);
-        valueStatusComboBox.setItems(UdmValueStatusEnum.NEW,
-            UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
-            UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
-            UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
-            UdmValueStatusEnum.RESEARCH_COMPLETE);
+        if (ForeignSecurityUtils.hasResearcherPermission()) {
+            valueStatusComboBox.setItems(UdmValueStatusEnum.NEW,
+                UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE);
+        } else {
+            valueStatusComboBox.setItems(UdmValueStatusEnum.NEW,
+                UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD,
+                UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE,
+                UdmValueStatusEnum.NEEDS_FURTHER_REVIEW,
+                UdmValueStatusEnum.RESEARCH_COMPLETE);
+        }
         valueStatusComboBox.setSelectedItem(udmValue.getStatus());
         valueStatusComboBox.addValueChangeListener(
             event -> fieldToValueChangesMap.updateFieldValue(fieldName, event.getValue().name()));

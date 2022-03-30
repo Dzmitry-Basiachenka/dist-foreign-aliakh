@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -29,6 +30,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
@@ -238,6 +240,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testPriceFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         verifyField(priceField, StringUtils.EMPTY, null, true);
@@ -273,6 +276,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testCurrencyComboBoxValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
@@ -293,6 +297,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testPriceInUsdRecalculation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         ComboBox<Currency> currencyComboBox = Whitebox.getInternalState(window, "currencyComboBox");
@@ -337,6 +342,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testPriceYearFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceYearField = Whitebox.getInternalState(window, "priceYearField");
         String yearValidationMessage = "Field value should be in range from 1950 to 2099";
@@ -357,6 +363,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testPriceSourceFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         TextField priceSourceField = Whitebox.getInternalState(window, "priceSourceField");
@@ -372,12 +379,14 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testPriceCommentFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "priceCommentField"), 1000);
     }
 
     @Test
     public void testPriceFlagRecalculation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         TextField priceFlagField = Whitebox.getInternalState(window, "priceFlagField");
@@ -394,6 +403,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testContentFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         verifyField(contentField, StringUtils.EMPTY, null, true);
@@ -429,6 +439,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testContentSourceFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         TextField contentSourceField = Whitebox.getInternalState(window, "contentSourceField");
@@ -445,12 +456,14 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testContentCommentFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "contentCommentField"), 1000);
     }
 
     @Test
     public void testContentFlagRecalculation() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         TextField contentFlagField = Whitebox.getInternalState(window, "contentFlagField");
@@ -467,6 +480,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testRecalculateContentUnitPrice() {
+        setSpecialistExpectations();
         initEditWindow();
         TextField priceInUsdField = Whitebox.getInternalState(window, "priceInUsdField");
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
@@ -491,6 +505,7 @@ public class UdmEditValueWindowTest {
 
     @Test
     public void testCommentFieldValidation() {
+        setSpecialistExpectations();
         initEditWindow();
         verifyLengthValidation(Whitebox.getInternalState(window, "commentField"), 1000);
     }
@@ -520,6 +535,36 @@ public class UdmEditValueWindowTest {
         assertNull(udmValue.getPriceSource());
         assertNull(udmValue.getPriceComment());
         verify(controller, saveButtonClickListener, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testInitValueStatusResearcher() {
+        setResearcherExpectations();
+        initEditWindow();
+        ComboBox<UdmValueStatusEnum> valueStatusComboBox = Whitebox.getInternalState(window, "valueStatusComboBox");
+        Collection<?> statusValues = ((ListDataProvider<?>) valueStatusComboBox.getDataProvider()).getItems();
+        assertEquals(2, statusValues.size());
+        assertTrue(statusValues.contains(UdmValueStatusEnum.NEW));
+        assertFalse(statusValues.contains(UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD));
+        assertTrue(statusValues.contains(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE));
+        assertFalse(statusValues.contains(UdmValueStatusEnum.NEEDS_FURTHER_REVIEW));
+        assertFalse(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
+        assertFalse(statusValues.contains(UdmValueStatusEnum.PUBLISHED));
+    }
+
+    @Test
+    public void testInitValueStatusSpecialist() {
+        setSpecialistExpectations();
+        initEditWindow();
+        ComboBox<UdmValueStatusEnum> valueStatusComboBox = Whitebox.getInternalState(window, "valueStatusComboBox");
+        Collection<?> statusValues = ((ListDataProvider<?>) valueStatusComboBox.getDataProvider()).getItems();
+        assertEquals(5, statusValues.size());
+        assertTrue(statusValues.contains(UdmValueStatusEnum.NEW));
+        assertTrue(statusValues.contains(UdmValueStatusEnum.RSCHD_IN_THE_PREV_PERIOD));
+        assertTrue(statusValues.contains(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE));
+        assertTrue(statusValues.contains(UdmValueStatusEnum.NEEDS_FURTHER_REVIEW));
+        assertTrue(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
+        assertFalse(statusValues.contains(UdmValueStatusEnum.PUBLISHED));
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
@@ -775,5 +820,9 @@ public class UdmEditValueWindowTest {
 
     private void setSpecialistExpectations() {
         setPermissionsExpectations(true, false, false);
+    }
+
+    private void setResearcherExpectations() {
+        setPermissionsExpectations(false, false, true);
     }
 }
