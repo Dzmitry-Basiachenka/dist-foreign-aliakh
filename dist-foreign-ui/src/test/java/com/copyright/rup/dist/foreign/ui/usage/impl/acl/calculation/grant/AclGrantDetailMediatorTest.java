@@ -36,6 +36,7 @@ public class AclGrantDetailMediatorTest {
 
     private final MenuBar grantSetMenuBar = new MenuBar();
     private final Button editButton = new Button();
+    private final Button uploadButton = new Button();
     private AclGrantDetailMediator mediator;
 
     @Before
@@ -43,40 +44,44 @@ public class AclGrantDetailMediatorTest {
         mediator = new AclGrantDetailMediator();
         mediator.setGrantSetMenuBar(grantSetMenuBar);
         mediator.setEditButton(editButton);
+        mediator.setUploadButton(uploadButton);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).times(2);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).times(3);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(grantSetMenuBar.isVisible());
         assertTrue(editButton.isVisible());
+        assertTrue(uploadButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyManagerPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(3);
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(grantSetMenuBar.isVisible());
         assertFalse(editButton.isVisible());
+        assertFalse(uploadButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(3);
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(grantSetMenuBar.isVisible());
         assertFalse(editButton.isVisible());
+        assertFalse(uploadButton.isVisible());
         verify(SecurityUtils.class);
     }
 }

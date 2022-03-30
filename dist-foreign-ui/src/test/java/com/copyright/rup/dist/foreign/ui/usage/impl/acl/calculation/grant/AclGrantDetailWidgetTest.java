@@ -79,23 +79,38 @@ public class AclGrantDetailWidgetTest {
     @Test
     public void testWidgetStructureForSpecialist() {
         setSpecialistExpectations();
-        verifyStructure(true, true, true);
+        verifyStructure(true, true, true, true);
     }
 
     @Test
     public void testWidgetStructureForManager() {
         setManagerExpectations();
-        verifyStructure(true, false, true);
+        verifyStructure(true, false, false, true);
     }
 
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyStructure(false, false, true);
+        verifyStructure(false, false, false, true);
     }
 
     @Test
-    public void testEditClickButton() throws Exception {
+    public void testUploadButtonClick() throws Exception {
+        mockStatic(Windows.class);
+        setSpecialistExpectations();
+        UploadGrantDetailWindow mockWindow = createMock(UploadGrantDetailWindow.class);
+        expectNew(UploadGrantDetailWindow.class).andReturn(mockWindow).once();
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(controller, Windows.class, UploadGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
+        initWidget();
+        Button editButton = (Button) getButtonsLayout().getComponent(1);
+        editButton.click();
+        verify(controller, Windows.class, UploadGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
+    }
+
+    @Test
+    public void testEditButtonClick() throws Exception {
         mockStatic(Windows.class);
         setSpecialistExpectations();
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
@@ -113,7 +128,7 @@ public class AclGrantDetailWidgetTest {
             (Grid<AclGrantDetailDto>) ((VerticalLayout) aclGrantDetailWidget.getSecondComponent()).getComponent(1);
         grid.setItems(grants);
         grid.select(grantDetailDto);
-        Button editButton = (Button) getButtonsLayout().getComponent(1);
+        Button editButton = (Button) getButtonsLayout().getComponent(2);
         editButton.click();
         verify(controller, Windows.class, EditAclGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
     }
@@ -152,8 +167,9 @@ public class AclGrantDetailWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         verifyMenuBar(layout.getComponent(0), "Grant Set", Arrays.asList("Create", "View"), buttonsVisibility[0]);
-        verifyButton(layout.getComponent(1), "Edit", buttonsVisibility[1]);
-        verifyButton(layout.getComponent(2), "Export", buttonsVisibility[2]);
+        verifyButton(layout.getComponent(1), "Upload", buttonsVisibility[1]);
+        verifyButton(layout.getComponent(2), "Edit", buttonsVisibility[2]);
+        verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);
     }
 
     private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems, boolean isVisible) {

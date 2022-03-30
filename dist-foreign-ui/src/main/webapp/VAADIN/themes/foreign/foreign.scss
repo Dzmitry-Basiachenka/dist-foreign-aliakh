@@ -192,7 +192,12 @@
     }
 
    /**==== Error for upload field ====*/
-   .usage-upload-window .v-customcomponent-error .v-textfield, .researched-usages-upload-window .v-customcomponent-error .v-textfield {
+   .usage-upload-window .v-customcomponent-error .v-textfield,
+   .researched-usages-upload-window .v-customcomponent-error .v-textfield,
+   .aacl-fund-pool-upload-window .v-customcomponent-error .v-textfield,
+   .classified-usages-upload-window .v-customcomponent-error .v-textfield,
+   .udm-batch-usage-upload-window .v-customcomponent-error .v-textfield,
+   .upload-grant-detail-window .v-customcomponent-error .v-textfield {
         border:red 1px solid !important;
    }
 
