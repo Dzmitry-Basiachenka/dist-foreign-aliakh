@@ -1,0 +1,22 @@
+[
+  {
+    "usageBatchId": "1fa04580-af0a-4c57-8470-37ae9c06bea1",
+    "usageOrigin": "SS",
+    "channel": "CCC",
+    "period": 202112,
+    "originalDetailId": "OGN674GHHSB007",
+    "wrWrkInst": 306985867,
+    "systemTitle": "Tenside, surfactants, detergents",
+    "detailLicenseeClassId": 2,
+    "detailLicenseeClassName": "Textiles, Apparel, etc.",
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "United States",
+    "pubTypeName": "BK",
+    "contentUnitPrice": 5.0000000000,
+    "typeOfUse": "PRINT",
+    "annualizedCopies": 1.00000,
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com"
+  }
+]

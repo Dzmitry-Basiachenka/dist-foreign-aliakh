@@ -1,7 +1,7 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-    changeSet(id: '2022-00-31-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+    changeSet(id: '2022-01-31-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment('Inserting test data for testIsGrantSetExist')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
