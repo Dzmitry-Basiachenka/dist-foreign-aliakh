@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -43,6 +44,7 @@ public class AclUsageWidgetTest {
         controller = createMock(IAclUsageController.class);
         aclUsageWidget = new AclUsageWidget();
         Whitebox.setInternalState(aclUsageWidget, controller);
+        expect(controller.initAclUsageFilterWidget()).andReturn(new AclUsageFilterWidget()).once();
     }
 
     @Test

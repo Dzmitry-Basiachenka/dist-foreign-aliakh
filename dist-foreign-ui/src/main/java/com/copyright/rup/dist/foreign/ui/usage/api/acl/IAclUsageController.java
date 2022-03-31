@@ -32,4 +32,11 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return list of items to be displayed on UI
      */
     List<AclUsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+
+    /**
+     * Initializes {@link IAclUsageFilterWidget}.
+     *
+     * @return initialized {@link IAclUsageFilterWidget}
+     */
+    IAclUsageFilterWidget initAclUsageFilterWidget();
 }
