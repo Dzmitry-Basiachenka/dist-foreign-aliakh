@@ -1,0 +1,114 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclUsageMapper">
+
+    <resultMap id="aclUsageDtoResultMap" type="AclUsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_usage_uid"/>
+        <result property="usageBatchId" column="df_acl_usage_batch_uid"/>
+        <result property="usageOrigin" column="usage_origin"/>
+        <result property="channel" column="channel"/>
+        <result property="period" column="period"/>
+        <result property="originalDetailId" column="original_detail_id"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
+        <result property="surveyCountry" column="survey_country"/>
+        <result property="pubTypeName" column="pub_type_name"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="typeOfUse" column="type_of_use"/>
+        <result property="annualizedCopies" column="annualized_copies"/>
+    </resultMap>
+
+    <sql id="aclUsageColumns">
+        df_acl_usage_uid,
+        df_acl_usage_batch_uid,
+        usage_origin,
+        channel,
+        period,
+        original_detail_id,
+        wr_wrk_inst,
+        system_title,
+        detail_licensee_class_id,
+        survey_country,
+        publication_type_uid,
+        content_unit_price,
+        type_of_use,
+        annualized_copies,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <sql id="aclUsageDtoColumns">
+        df_acl_usage_uid,
+        df_acl_usage_batch_uid,
+        usage_origin,
+        channel,
+        period,
+        original_detail_id,
+        wr_wrk_inst,
+        system_title,
+        u.detail_licensee_class_id,
+        dlc.description detail_licensee_class_name,
+        alc.aggregate_licensee_class_id,
+        alc.description aggregate_licensee_class_name,
+        survey_country,
+        pt.name pub_type_name,
+        content_unit_price,
+        type_of_use,
+        annualized_copies,
+        u.created_datetime,
+        u.updated_datetime,
+        u.created_by_user,
+        u.updated_by_user,
+        u.record_version
+    </sql>
+
+    <select id="populateAclUsages" parameterType="map" resultType="string">
+        insert into ${schema}.df_acl_usage (
+            <include refid="aclUsageColumns"/>
+        )
+        select
+            uuid_generate_v4(),
+            #{usageBatchId},
+            ub.usage_origin,
+            ub.channel,
+            u.period,
+            u.original_detail_id,
+            u.wr_wrk_inst,
+            u.system_title,
+            u.detail_licensee_class_id,
+            u.survey_country,
+            v.publication_type_uid,
+            v.content_unit_price,
+            u.type_of_use,
+            u.annualized_copies,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_udm_usage u
+        join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
+        join ${schema}.df_udm_value v on u.df_udm_value_uid = v.df_udm_value_uid
+        where u.is_baseline_flag = true
+            and
+            <foreach collection="periods" item="period" open="(" separator=" or " close=")">
+                u.period = #{period}
+            </foreach>
+        returning df_acl_usage_uid
+    </select>
+
+    <select id="findByIds" resultMap="aclUsageDtoResultMap">
+        select
+            <include refid="aclUsageDtoColumns"/>
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where df_acl_usage_uid in
+            <foreach collection="list" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
+        order by df_acl_usage_uid
+    </select>
+</mapper>
