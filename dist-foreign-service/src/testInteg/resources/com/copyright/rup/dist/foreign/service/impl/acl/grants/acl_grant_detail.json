@@ -1,0 +1,23 @@
+[
+  {
+    "wrWrkInst": 269040891,
+    "rhAccountNumber": 1000000026,
+    "typeOfUse": "PRINT",
+    "grantStatus": "GRANT",
+    "eligible": true
+  },
+  {
+    "wrWrkInst": 269040891,
+    "rhAccountNumber": 1000000027,
+    "typeOfUse": "DIGITAL",
+    "grantStatus": "GRANT",
+    "eligible": true
+  },
+  {
+    "wrWrkInst": 107039807,
+    "rhAccountNumber": 1000002854,
+    "typeOfUse": "PRINT",
+    "grantStatus": "GRANT",
+    "eligible": true
+  }
+]

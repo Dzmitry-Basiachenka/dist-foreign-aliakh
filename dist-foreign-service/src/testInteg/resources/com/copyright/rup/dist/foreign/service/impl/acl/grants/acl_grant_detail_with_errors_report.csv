@@ -1,0 +1,3 @@
+WR_WRK_INST,TYPE_OF_USE,RH_ACCOUNT_NUMBER,Line,Error Reason
+1234567890,PRINT&DIGITAL,1234567890123456789,2,WR_WRK_INST: Field value should not exceed 9 characters; TYPE_OF_USE: Field value should not exceed 7 characters; RH_ACCOUNT_NUMBER: Field value should not exceed 18 characters
+not a number,PRINT,not a number,3,WR_WRK_INST: Field value should be positive number; WR_WRK_INST: Field value should not exceed 9 characters; RH_ACCOUNT_NUMBER: Field value should be positive number

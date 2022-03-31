@@ -156,4 +156,12 @@ public class CsvProcessorFactory {
             new CountryValidator(prmIntegrationService));
         return processor;
     }
+
+    /**
+     * @return instance of {@link AclGrantDetailCsvProcessor}.
+     */
+    public AclGrantDetailCsvProcessor getAclGrantDetailCvsProcessor() {
+        //TODO add business validation
+        return new AclGrantDetailCsvProcessor();
+    }
 }
