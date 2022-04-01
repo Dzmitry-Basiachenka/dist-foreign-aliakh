@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,4 +13,14 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  * @author Dzmitry Basiachenka
  */
 public interface IAclUsageFilterWidget extends IFilterWidget<IAclUsageFilterController> {
+
+    /**
+     * @return {@link AclUsageFilter}.
+     */
+    AclUsageFilter getFilter();
+
+    /**
+     * @return applied {@link AclUsageFilter}.
+     */
+    AclUsageFilter getAppliedFilter();
 }

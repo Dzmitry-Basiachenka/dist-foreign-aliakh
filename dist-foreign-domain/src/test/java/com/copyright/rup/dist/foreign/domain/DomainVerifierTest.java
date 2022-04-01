@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterBetweenExpression;
@@ -139,7 +140,8 @@ public class DomainVerifierTest {
             {UdmUsableDetailsByCountryReportDto.class},
             {AclUsageBatch.class},
             {AclUsageDto.class},
-            {AclIneligibleRightsholder.class}
+            {AclIneligibleRightsholder.class},
+            {AclUsageFilter.class}
         };
         return Arrays.asList(testData);
     }

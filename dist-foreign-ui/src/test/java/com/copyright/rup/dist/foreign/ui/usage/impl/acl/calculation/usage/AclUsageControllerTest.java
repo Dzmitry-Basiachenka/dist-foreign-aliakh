@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
+
 import org.junit.Test;
 
 import java.util.Collections;
@@ -34,6 +36,8 @@ public class AclUsageControllerTest {
 
     @Test
     public void testInstantiateWidget() {
-        assertNotNull(controller.instantiateWidget());
+        IAclUsageWidget widget = controller.instantiateWidget();
+        assertNotNull(widget);
+        assertEquals(AclUsageWidget.class, widget.getClass());
     }
 }
