@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -18,7 +19,9 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+
 import com.google.common.collect.Sets;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +29,9 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclUsageBatchService}.
@@ -88,6 +94,15 @@ public class AclUsageBatchServiceTest {
         assertEquals(usageBatch.getCreateUser(), USER_NAME);
         assertEquals(usageBatch.getUpdateUser(), USER_NAME);
         verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
+    }
+
+    @Test
+    public void testGetAll() {
+        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        expect(aclUsageBatchRepository.findAll()).andReturn(usageBatches).once();
+        replay(aclUsageBatchRepository);
+        assertSame(usageBatches, aclUsageBatchService.getAll());
+        verify(aclUsageBatchRepository);
     }
 
     private AclUsageBatch buildAclUsageBatch() {

@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 
+import java.util.List;
+
 /**
  * Represents interface of repository for ACL usage batches.
  * <p>
@@ -35,4 +37,11 @@ public interface IAclUsageBatchRepository {
      * @return {@link AclUsageBatch} with the given id or {@code null} if none exists
      */
     AclUsageBatch findById(String usageBatchId);
+
+    /**
+     * Finds list of {@link AclUsageBatch}es.
+     *
+     * @return list of {@link AclUsageBatch}es
+     */
+    List<AclUsageBatch> findAll();
 }

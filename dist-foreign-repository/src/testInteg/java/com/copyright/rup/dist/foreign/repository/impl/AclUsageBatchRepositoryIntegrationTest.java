@@ -9,13 +9,18 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
+
 import com.google.common.collect.Sets;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclUsageBatchRepository}.
@@ -55,22 +60,45 @@ public class AclUsageBatchRepositoryIntegrationTest {
         AclUsageBatch usageBatch = buildAclUsageBatch();
         aclUsageBatchRepository.insert(usageBatch);
         AclUsageBatch actualUsageBatch = aclUsageBatchRepository.findById(ACL_USAGE_BATCH_ID);
-        assertNotNull(actualUsageBatch);
-        assertEquals(usageBatch.getId(), actualUsageBatch.getId());
-        assertEquals(usageBatch.getName(), actualUsageBatch.getName());
-        assertEquals(usageBatch.getDistributionPeriod(), actualUsageBatch.getDistributionPeriod());
-        assertEquals(usageBatch.getPeriods(), actualUsageBatch.getPeriods());
-        assertEquals(usageBatch.getEditable(), actualUsageBatch.getEditable());
-        assertEquals(usageBatch, actualUsageBatch);
+        verifyAclUsageBatch(usageBatch, actualUsageBatch);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    public void testFindAll() {
+        AclUsageBatch aclUsageBatch1 = buildAclUsageBatch("dd559563-379d-4632-abea-922d2821746d",
+            "ACL Usage Batch 2022", 202212, Sets.newHashSet(202206, 202212), true);
+        AclUsageBatch aclUsageBatch2 = buildAclUsageBatch("446fba70-c15b-45ae-b53d-ba0de3dad0b5",
+            "ACL Usage Batch 2021", 202112, Sets.newHashSet(202106, 202112), false);
+        List<AclUsageBatch> usageBatches = aclUsageBatchRepository.findAll();
+        assertEquals(2, usageBatches.size());
+        verifyAclUsageBatch(aclUsageBatch1, usageBatches.get(0));
+        verifyAclUsageBatch(aclUsageBatch2, usageBatches.get(1));
     }
 
     private AclUsageBatch buildAclUsageBatch() {
+        return buildAclUsageBatch(ACL_USAGE_BATCH_ID, ACL_USAGE_BATCH_NAME, 202112, Sets.newHashSet(202106, 202112),
+            true);
+    }
+
+    private AclUsageBatch buildAclUsageBatch(String id, String name, Integer distributionPeriod, Set<Integer> periods,
+                                             boolean isEditable) {
         AclUsageBatch usageBatch = new AclUsageBatch();
-        usageBatch.setId(ACL_USAGE_BATCH_ID);
-        usageBatch.setName(ACL_USAGE_BATCH_NAME);
-        usageBatch.setDistributionPeriod(202112);
-        usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
-        usageBatch.setEditable(true);
+        usageBatch.setId(id);
+        usageBatch.setName(name);
+        usageBatch.setDistributionPeriod(distributionPeriod);
+        usageBatch.setPeriods(periods);
+        usageBatch.setEditable(isEditable);
         return usageBatch;
+    }
+
+    private void verifyAclUsageBatch(AclUsageBatch expectedUsageBatch, AclUsageBatch actualUsageBatch) {
+        assertNotNull(actualUsageBatch);
+        assertEquals(expectedUsageBatch.getId(), actualUsageBatch.getId());
+        assertEquals(expectedUsageBatch.getName(), actualUsageBatch.getName());
+        assertEquals(expectedUsageBatch.getDistributionPeriod(), actualUsageBatch.getDistributionPeriod());
+        assertEquals(expectedUsageBatch.getPeriods(), actualUsageBatch.getPeriods());
+        assertEquals(expectedUsageBatch.getEditable(), actualUsageBatch.getEditable());
+        assertEquals(expectedUsageBatch, actualUsageBatch);
     }
 }

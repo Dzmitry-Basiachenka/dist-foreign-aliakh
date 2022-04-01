@@ -48,4 +48,11 @@
         from ${schema}.df_acl_usage_batch
         where df_acl_usage_batch_uid = #{usageBatchId}
     </select>
+
+    <select id="findAll" resultMap="aclUsageBatchResultMap">
+        select
+            <include refid="aclUsageBatchColumns"/>
+        from ${schema}.df_acl_usage_batch
+        order by updated_datetime desc
+    </select>
 </mapper>

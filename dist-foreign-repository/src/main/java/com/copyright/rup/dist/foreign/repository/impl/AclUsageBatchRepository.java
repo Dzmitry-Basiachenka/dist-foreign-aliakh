@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,5 +33,10 @@ public class AclUsageBatchRepository extends BaseRepository implements IAclUsage
     @Override
     public AclUsageBatch findById(String usageBatchId) {
         return selectOne("IAclUsageBatchMapper.findById", Objects.requireNonNull(usageBatchId));
+    }
+
+    @Override
+    public List<AclUsageBatch> findAll() {
+        return selectList("IAclUsageBatchMapper.findAll");
     }
 }

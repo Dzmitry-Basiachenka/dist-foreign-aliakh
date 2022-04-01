@@ -1,11 +1,21 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
-import static org.junit.Assert.assertEquals;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclUsageFilterController}.
@@ -19,6 +29,13 @@ import java.util.Collections;
 public class AclUsageFilterControllerTest {
 
     private final AclUsageFilterController controller = new AclUsageFilterController();
+    private IAclUsageBatchService aclUsageBatchService;
+
+    @Before
+    public void setUp() {
+        aclUsageBatchService = createMock(IAclUsageBatchService.class);
+        Whitebox.setInternalState(controller, aclUsageBatchService);
+    }
 
     @Test
     public void testInstantiateWidget() {
@@ -27,7 +44,10 @@ public class AclUsageFilterControllerTest {
 
     @Test
     public void testGetAllAclUsageBatches() {
-        //TODO {dbasiachenka} implement
-        assertEquals(Collections.emptyList(), controller.getAllAclUsageBatches());
+        List<AclUsageBatch> aclUsageBatches = Collections.singletonList(new AclUsageBatch());
+        expect(aclUsageBatchService.getAll()).andReturn(aclUsageBatches).once();
+        replay(aclUsageBatchService);
+        assertSame(aclUsageBatches, controller.getAllAclUsageBatches());
+        verify(aclUsageBatchService);
     }
 }
