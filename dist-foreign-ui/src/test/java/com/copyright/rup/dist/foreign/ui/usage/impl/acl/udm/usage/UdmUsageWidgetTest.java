@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -68,7 +70,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmUsageWidget}.
@@ -811,20 +812,6 @@ public class UdmUsageWidgetTest {
         Button button = (Button) component;
         assertEquals(name, button.getCaption());
         assertEquals(isVisible, button.isVisible());
-    }
-
-    private void verifyMenuBar(Component component, String menuBarName, boolean isVisible, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        assertEquals(isVisible, menuBar.isVisible());
-        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuBar.MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuBar.MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private void verifyGrid(Grid grid, List<String> expectedColumns) {

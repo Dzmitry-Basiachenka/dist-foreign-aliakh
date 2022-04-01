@@ -147,7 +147,7 @@ public class AclGrantSetServiceTest {
 
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
-        grantSet.setName("ACL Grant Set 2021");
+        grantSet.setName(ACL_GRANT_SET_NAME);
         grantSet.setGrantPeriod(202112);
         grantSet.setPeriods(Sets.newHashSet(202106, 202112));
         grantSet.setLicenseType("ACL");

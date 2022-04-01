@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -64,7 +65,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link NtsUsageWidget}.
@@ -386,8 +386,8 @@ public class NtsUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Fund Pool", Arrays.asList("Load", "View"));
-        verifyMenuBar(layout.getComponent(1), "Additional Funds", Arrays.asList("Create", "View"));
+        verifyMenuBar(layout.getComponent(0), "Fund Pool", true, Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Additional Funds", true, Arrays.asList("Create", "View"));
         assertEquals("Assign Classification", layout.getComponent(2).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
         Component component = layout.getComponent(4);
@@ -402,19 +402,6 @@ public class NtsUsageWidgetTest {
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(NTS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
         expect(controller.getAdditionalFundsNotAttachedToScenario()).andReturn(Collections.emptyList()).once();
-    }
-
-    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        List<MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private List<MenuItem> getMenuBarItems(int menuBarIndex) {

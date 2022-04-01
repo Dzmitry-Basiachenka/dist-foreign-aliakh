@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -60,7 +62,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UdmValueWidget}.
@@ -416,7 +417,7 @@ public class UdmValueWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Populate Value Batch");
-        verifyMenuBar(layout.getComponent(1), "Assignment", Arrays.asList("Assign", "Unassign"));
+        verifyMenuBar(layout.getComponent(1), "Assignment", true, Arrays.asList("Assign", "Unassign"));
         verifyButton(layout.getComponent(2), "Calculate Proxies");
         verifyButton(layout.getComponent(3), "Publish");
     }
@@ -426,20 +427,6 @@ public class UdmValueWidgetTest {
         Button button = (Button) component;
         assertEquals(name, button.getCaption());
         assertTrue(button.isVisible());
-    }
-
-    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        assertTrue(menuBar.isVisible());
-        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuBar.MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuBar.MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private UdmValueDto buildUdmValueDto(String valueId, String assignee) {
