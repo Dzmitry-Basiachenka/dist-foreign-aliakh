@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 
+import java.util.List;
+
 /**
  * Represents interface of repository for ACL usage batches.
  * <p>
@@ -28,4 +30,11 @@ public interface IAclUsageBatchService {
      * @return count of inserted ACL usages
      */
     int insert(AclUsageBatch usageBatch);
+
+    /**
+     * Gets list of all {@link AclUsageBatch}es.
+     *
+     * @return list of all {@link AclUsageBatch}es
+     */
+    List<AclUsageBatch> getAll();
 }

@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Implementation of {@link IAclUsageBatchService}.
  * <p>
@@ -49,5 +51,10 @@ public class AclUsageBatchService implements IAclUsageBatchService {
         LOGGER.info("Insert ACL usage batch. Finished. AclUsageBatch={}, AclUsagesCount={}, UserName={}",
             usageBatch, count, userName);
         return count;
+    }
+
+    @Override
+    public List<AclUsageBatch> getAll() {
+        return aclUsageBatchRepository.findAll();
     }
 }
