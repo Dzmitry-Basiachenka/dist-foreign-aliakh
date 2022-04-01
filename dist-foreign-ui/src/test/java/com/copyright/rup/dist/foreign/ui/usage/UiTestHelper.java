@@ -32,9 +32,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
+import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -175,6 +177,17 @@ public final class UiTestHelper {
     }
 
     /**
+     * Sets text field value.
+     *
+     * @param window instance of {@link Window}
+     * @param field  name of the text field
+     * @param value  value
+     */
+    public static void setTextFieldValue(Window window, String field, String value) {
+        ((TextField) Whitebox.getInternalState(window, field)).setValue(value);
+    }
+
+    /**
      * Verifies text field.
      *
      * @param component UI component
@@ -185,6 +198,18 @@ public final class UiTestHelper {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
+    }
+
+    /**
+     * Sets combobox value.
+     *
+     * @param window instance of {@link Window}
+     * @param field  name of the combobox
+     * @param value  value
+     */
+    @SuppressWarnings("unchecked")
+    public static void setComboBoxValue(Window window, String field, String value) {
+        ((ComboBox<String>) Whitebox.getInternalState(window, field)).setValue(value);
     }
 
     /**
