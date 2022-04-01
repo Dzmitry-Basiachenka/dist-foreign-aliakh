@@ -53,7 +53,7 @@ import java.util.List;
 public class AclGrantSetServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
-    private static final String GRANT_SET_NAME = "ACL Grant Set 2021";
+    private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
     private static final Long WR_WRK_INST = 122825347L;
     private static final String SYSTEM_TITLE = "Wall Street journal";
 
@@ -107,17 +107,17 @@ public class AclGrantSetServiceTest {
 
     @Test
     public void testIsGrantSetExist() {
-        expect(aclGrantSetRepository.isGrantSetExist(GRANT_SET_NAME)).andReturn(true).once();
+        expect(aclGrantSetRepository.isGrantSetExist(ACL_GRANT_SET_NAME)).andReturn(true).once();
         replay(aclGrantSetRepository);
-        assertTrue(aclGrantSetService.isGrantSetExist(GRANT_SET_NAME));
+        assertTrue(aclGrantSetService.isGrantSetExist(ACL_GRANT_SET_NAME));
         verify(aclGrantSetRepository);
     }
 
     @Test
     public void testIsGrantSetNotExist() {
-        expect(aclGrantSetRepository.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).once();
+        expect(aclGrantSetRepository.isGrantSetExist(ACL_GRANT_SET_NAME)).andReturn(false).once();
         replay(aclGrantSetRepository);
-        assertFalse(aclGrantSetService.isGrantSetExist(GRANT_SET_NAME));
+        assertFalse(aclGrantSetService.isGrantSetExist(ACL_GRANT_SET_NAME));
         verify(aclGrantSetRepository);
     }
 
