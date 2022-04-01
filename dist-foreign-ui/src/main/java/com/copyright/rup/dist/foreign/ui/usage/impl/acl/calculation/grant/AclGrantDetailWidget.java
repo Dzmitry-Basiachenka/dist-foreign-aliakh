@@ -169,7 +169,7 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
         });
         VaadinUtils.addComponentStyle(editButton, "acl-edit-grant");
         uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
-        uploadButton.addClickListener(event -> Windows.showModalWindow(new UploadGrantDetailWindow()));
+        uploadButton.addClickListener(event -> Windows.showModalWindow(new UploadGrantDetailWindow(controller)));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportAclGrantDetailsStreamSource().getSource());

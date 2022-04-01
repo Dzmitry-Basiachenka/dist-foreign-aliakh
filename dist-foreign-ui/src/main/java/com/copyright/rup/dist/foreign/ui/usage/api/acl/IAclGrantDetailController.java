@@ -2,8 +2,11 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -117,4 +120,21 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return instance of {@link IStreamSource} for export.
      */
     IStreamSource getExportAclGrantDetailsStreamSource();
+
+    /**
+     * Gets instance of CSV processor to upload grant details.
+     *
+     * @param grantSetId ID of selected Grant Set
+     * @return instance of {@link AclGrantDetailCsvProcessor}
+     */
+    AclGrantDetailCsvProcessor getCsvProcessor(String grantSetId);
+
+    /**
+     * Return instance of {@link IStreamSource} for errors result.
+     *
+     * @param fileName         name of processed file
+     * @param processingResult information about errors
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<AclGrantDetail> processingResult);
 }

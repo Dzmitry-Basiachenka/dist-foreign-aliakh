@@ -6,6 +6,8 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
@@ -14,6 +16,8 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportServi
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
@@ -21,6 +25,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidg
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
@@ -61,6 +66,8 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     private IAclCalculationReportService aclCalculationReportService;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private CsvProcessorFactory csvProcessorFactory;
 
     @Override
     public int getBeansCount() {
@@ -129,6 +136,19 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     public IStreamSource getExportAclGrantDetailsStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_grant_set_",
             pos -> aclCalculationReportService.writeAclGrantDetailCsvReport(getFilter(), pos));
+    }
+
+    @Override
+    public IStreamSource getErrorResultStreamSource(String fileName,
+                                                    ProcessingResult<AclGrantDetail> processingResult) {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
+            processingResult::writeToFile);
+    }
+
+    @Override
+    public AclGrantDetailCsvProcessor getCsvProcessor(String grantSetId) {
+        return csvProcessorFactory.getAclGrantDetailCvsProcessor(grantSetId);
     }
 
     @Override

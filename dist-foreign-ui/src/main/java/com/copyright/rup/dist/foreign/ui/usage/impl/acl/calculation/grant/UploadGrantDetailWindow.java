@@ -1,7 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ErrorUploadWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -19,7 +26,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Window to upload ACL Grant details.
@@ -32,14 +38,19 @@ import java.util.Collections;
  */
 public class UploadGrantDetailWindow extends Window {
 
+    private final IAclGrantDetailController controller;
     private final Binder<String> binder = new Binder<>();
+    private final Binder<AclGrantSet> grantSetBinder = new Binder<>();
     private final UploadField uploadField = new UploadField();
-    private final ComboBox<String> comboBox = new ComboBox<>(ForeignUi.getMessage("label.grant_set"));
+    private final ComboBox<AclGrantSet> comboBox = new ComboBox<>(ForeignUi.getMessage("label.grant_set"));
 
     /**
      * Default constructor.
+     *
+     * @param controller instance of {@link IAclGrantDetailController}
      */
-    public UploadGrantDetailWindow() {
+    public UploadGrantDetailWindow(IAclGrantDetailController controller) {
+        this.controller = controller;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_grant_detail"));
         setResizable(false);
@@ -55,7 +66,33 @@ public class UploadGrantDetailWindow extends Window {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return binder.isValid();
+        return binder.isValid() && grantSetBinder.isValid();
+    }
+
+    /**
+     * Handles upload button click.
+     */
+    void onUploadClicked() {
+        if (isValid()) {
+            try {
+                AclGrantDetailCsvProcessor processor =
+                    controller.getCsvProcessor(comboBox.getSelectedItem().get().getId());
+                ProcessingResult<AclGrantDetail> result = processor.process(uploadField.getStreamToUploadedFile());
+                if (result.isSuccessful()) {
+                    close();
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.upload_completed", result.get().size()));
+                } else {
+                    Windows.showModalWindow(
+                        new ErrorUploadWindow(controller.getErrorResultStreamSource(uploadField.getValue(), result),
+                            ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
+                }
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            }
+        } else {
+            Windows.showValidationErrorWindow(Arrays.asList(comboBox, uploadField));
+        }
     }
 
     private ComponentContainer initRootLayout() {
@@ -68,14 +105,16 @@ public class UploadGrantDetailWindow extends Window {
         return rootLayout;
     }
 
-    private ComboBox<String> initGrantSetComboBox() {
+    private ComboBox<AclGrantSet> initGrantSetComboBox() {
         comboBox.setSizeFull();
         comboBox.setRequiredIndicatorVisible(true);
         comboBox.setEmptySelectionAllowed(false);
-        comboBox.setItems(Collections.emptyList());
-        binder.forField(comboBox)
-            .withValidator(new RequiredValidator())
-            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue);
+        comboBox.setItems(controller.getAllAclGrantSets());
+        comboBox.setItemCaptionGenerator(AclGrantSet::getName);
+        grantSetBinder.forField(comboBox)
+            .asRequired(ForeignUi.getMessage("field.error.empty"))
+            .bind(bean -> bean, (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         return comboBox;
     }
 
@@ -96,13 +135,7 @@ public class UploadGrantDetailWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         Button uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
-        uploadButton.addClickListener(event -> {
-            if (binder.isValid()) {
-                close();
-            } else {
-                Windows.showValidationErrorWindow(Arrays.asList(comboBox, uploadField));
-            }
-        });
+        uploadButton.addClickListener(event -> onUploadClicked());
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(uploadButton, closeButton);
         return horizontalLayout;

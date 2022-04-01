@@ -6,10 +6,24 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadCli
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -28,7 +42,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Verifies {@link UploadGrantDetailWindow}.
@@ -43,11 +59,16 @@ import java.util.Arrays;
 @PrepareForTest({Windows.class, SecurityUtils.class, UploadGrantDetailWindow.class})
 public class UploadGrantDetailWindowTest {
 
+    private final IAclGrantDetailController controller = createMock(IAclGrantDetailController.class);
+    private final AclGrantSet grantSet = buildGrantSet();
     private UploadGrantDetailWindow window;
 
     @Test
     public void testConstructor() {
-        window = new UploadGrantDetailWindow();
+        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(grantSet)).once();
+        replay(controller);
+        window = new UploadGrantDetailWindow(controller);
+        verify(controller);
         verifyWindow(window, "Upload Grant Details", 350, 170, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
@@ -55,24 +76,67 @@ public class UploadGrantDetailWindowTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testIsValid() {
-        window = new UploadGrantDetailWindow();
+        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(grantSet)).once();
+        replay(controller);
+        window = new UploadGrantDetailWindow(controller);
+        verify(controller);
         assertFalse(window.isValid());
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        Whitebox.getInternalState(window, ComboBox.class).setValue("Grant Set");
+        Whitebox.getInternalState(window, ComboBox.class).setValue(grantSet);
         assertTrue(window.isValid());
+    }
+
+    @Test
+    public void testOnUploadClicked() {
+        mockStatic(Windows.class);
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
+        AclGrantDetailCsvProcessor processor = createMock(AclGrantDetailCsvProcessor.class);
+        ProcessingResult<AclGrantDetail> result = buildProcessingResult();
+        window = createPartialMock(UploadGrantDetailWindow.class, "isValid");
+        Whitebox.setInternalState(window, controller);
+        Whitebox.setInternalState(window, uploadField);
+        ComboBox<AclGrantSet> grantSetComboBox = new ComboBox<>();
+        grantSetComboBox.setSelectedItem(grantSet);
+        Whitebox.setInternalState(window, grantSetComboBox);
+        expect(window.isValid()).andReturn(true).once();
+        expect(controller.getCsvProcessor(grantSet.getId())).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(result).once();
+        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(Windows.class, window, controller, processor, uploadField);
+        window.onUploadClicked();
+        verify(Windows.class, window, controller, processor, uploadField);
     }
 
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(3, verticalLayout.getComponentCount());
-        verifyComboBox(verticalLayout.getComponent(0), "Grant Set", false);
+        verifyComboBox(verticalLayout.getComponent(0), "Grant Set", false, grantSet);
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyButtonsLayout(verticalLayout.getComponent(2), "Upload", "Close");
         Button loadButton = (Button) ((HorizontalLayout) (verticalLayout.getComponent(2))).getComponent(0);
         verifyLoadClickListener(loadButton, Arrays.asList(Whitebox.getInternalState(window, "comboBox"),
             Whitebox.getInternalState(window, "uploadField")));
+    }
+
+    private AclGrantSet buildGrantSet() {
+        AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId("670f75dc-f5ef-43be-9a46-9b3a82a25ef7");
+        aclGrantSet.setName("Grant Set 202106");
+        return aclGrantSet;
+    }
+
+    private ProcessingResult<AclGrantDetail> buildProcessingResult() {
+        ProcessingResult<AclGrantDetail> result = new ProcessingResult<>();
+        try {
+            Whitebox.invokeMethod(result, "addRecord", new AclGrantDetail());
+        } catch (Exception e) {
+            fail();
+        }
+        return result;
     }
 }
