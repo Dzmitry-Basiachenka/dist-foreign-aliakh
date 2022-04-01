@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -225,6 +226,18 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         replay(aclGrantDetailRepository);
         aclGrantDetailService.deleteGrantDetails(grantSetId);
+        verify(aclGrantDetailRepository);
+    }
+
+    @Test
+    public void testIsGrantDetailExist() {
+        String grantSetId = "5a7b38d3-55e2-44a1-bb0a-62948c81b2d6";
+        expect(aclGrantDetailRepository.isGrantDetailExist(grantSetId, 123456789L, PRINT_TOU)).andReturn(true).once();
+        expect(aclGrantDetailRepository.isGrantDetailExist(grantSetId, 123456789L, DIGITAL_TOU))
+            .andReturn(false).once();
+        replay(aclGrantDetailRepository);
+        assertTrue(aclGrantDetailService.isGrantDetailExist(grantSetId, 123456789L, PRINT_TOU));
+        assertFalse(aclGrantDetailService.isGrantDetailExist(grantSetId, 123456789L, DIGITAL_TOU));
         verify(aclGrantDetailRepository);
     }
 

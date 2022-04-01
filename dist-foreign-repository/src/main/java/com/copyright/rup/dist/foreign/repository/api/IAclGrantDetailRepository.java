@@ -73,4 +73,14 @@ public interface IAclGrantDetailRepository {
      * @param grantSetId id of the {@link com.copyright.rup.dist.foreign.domain.AclGrantSet}
      */
     void deleteByGrantSetId(String grantSetId);
+
+    /**
+     * Checks whether ACL grant detail with provided Wr Wrk Inst and Type of Use exists for specified Grant Set.
+     *
+     * @param grantSetId id of the {@link com.copyright.rup.dist.foreign.domain.AclGrantSet}
+     * @param wrWrkInst Wr Wrk Inst
+     * @param typeOfUse Type of Use
+     * @return {@code true} if grant detail with provided Wr Wrk Inst and Type of Use exists, otherwise {@code false}
+     */
+    boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse);
 }

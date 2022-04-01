@@ -74,4 +74,13 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
     public void deleteByGrantSetId(String grantSetId) {
         delete("IAclGrantDetailMapper.deleteByGrantSetId", Objects.requireNonNull(grantSetId));
     }
+
+    @Override
+    public boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("grantSetId", Objects.requireNonNull(grantSetId));
+        parameters.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
+        parameters.put("typeOfUse", Objects.requireNonNull(typeOfUse));
+        return selectOne("IAclGrantDetailMapper.isGrantDetailExist", parameters);
+    }
 }

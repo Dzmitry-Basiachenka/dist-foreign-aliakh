@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -413,6 +415,17 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(1, aclGrantDetailRepository.findByIds(grantDetailIds).size());
         aclGrantDetailRepository.deleteByGrantSetId("0d651beb-e536-4854-aed7-50f068c369ba");
         assertEquals(0, aclGrantDetailRepository.findByIds(grantDetailIds).size());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "is-grant-detail-exist.groovy")
+    public void isGrantDetailExist() {
+        String fundPoolId = "d8b01f8f-b8e0-4127-9997-4ffe79f201b2";
+        assertTrue(aclGrantDetailRepository.isGrantDetailExist(fundPoolId, 122820638L, DIGITAL_TOU));
+        assertFalse(aclGrantDetailRepository.isGrantDetailExist(fundPoolId, 122820638L, PRINT_TOU));
+        assertTrue(aclGrantDetailRepository.isGrantDetailExist(fundPoolId, 269040891L, PRINT_TOU));
+        assertFalse(
+            aclGrantDetailRepository.isGrantDetailExist("0d651beb-e536-4854-aed7-50f068c369ba", 269040891L, PRINT_TOU));
     }
 
     private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail) {

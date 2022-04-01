@@ -262,4 +262,14 @@
         delete from ${schema}.df_acl_grant_detail
         where df_acl_grant_set_uid = #{grantSetId}
     </delete>
+
+    <select id="isGrantDetailExist" parameterType="map" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_acl_grant_detail
+            where df_acl_grant_set_uid = #{grantSetId}
+                and wr_wrk_inst = #{wrWrkInst}
+                and type_of_use = #{typeOfUse}
+        )
+    </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesServic
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsage
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.CompanyIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.CountryValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.GrantDetailDuplicateValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ItemBankWorkPortionIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.OriginalDetailIdValidator;
@@ -63,6 +65,8 @@ public class CsvProcessorFactory {
     private IUdmUsageService udmUsageService;
     @Autowired
     private IUdmTypeOfUseService udmTypeOfUseService;
+    @Autowired
+    private IAclGrantDetailService grantDetailService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -158,10 +162,14 @@ public class CsvProcessorFactory {
     }
 
     /**
-     * @return instance of {@link AclGrantDetailCsvProcessor}.
+     * Gets ACL Grant Detail CSV processor for specified grant set.
+     *
+     * @param grantSetId identifier of Grant Set
+     * @return instance of {@link AclGrantDetailCsvProcessor}
      */
-    public AclGrantDetailCsvProcessor getAclGrantDetailCvsProcessor() {
-        //TODO add business validation
-        return new AclGrantDetailCsvProcessor();
+    public AclGrantDetailCsvProcessor getAclGrantDetailCvsProcessor(String grantSetId) {
+        AclGrantDetailCsvProcessor processor =  new AclGrantDetailCsvProcessor();
+        processor.addBusinessValidators(new GrantDetailDuplicateValidator(grantDetailService, grantSetId));
+        return processor;
     }
 }

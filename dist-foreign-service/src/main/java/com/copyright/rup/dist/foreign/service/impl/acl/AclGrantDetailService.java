@@ -99,6 +99,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         aclGrantDetailRepository.deleteByGrantSetId(grantSetId);
     }
 
+    @Override
+    public boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse) {
+        return aclGrantDetailRepository.isGrantDetailExist(grantSetId, wrWrkInst, typeOfUse);
+    }
+
     private void updateTypeOfUseStatus(List<AclGrantDetailDto> grants) {
         List<AclGrantDetailDto> grantDetailDtos =
             grants.stream()
