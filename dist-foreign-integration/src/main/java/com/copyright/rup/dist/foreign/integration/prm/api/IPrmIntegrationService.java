@@ -2,10 +2,12 @@ package com.copyright.rup.dist.foreign.integration.prm.api;
 
 import com.copyright.rup.dist.common.domain.Country;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
 
 import com.google.common.collect.Table;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -147,4 +149,13 @@ public interface IPrmIntegrationService {
      * @return map from rightsholder ids to STM rightsholders flag
      */
     Map<String, Boolean> getStmRightsholderPreferenceMap(Set<String> rightsholdersIds, String productFamily);
+
+    /**
+     * Gets set of {@link AclIneligibleRightsholder}s.
+     *
+     * @param periodEndDate period end date
+     * @param licenseType   licenseType
+     * @return set of {@link AclIneligibleRightsholder}s
+     */
+    Set<AclIneligibleRightsholder> getIneligibleRightsholders(LocalDate periodEndDate, String licenseType);
 }
