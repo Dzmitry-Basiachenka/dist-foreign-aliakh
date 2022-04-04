@@ -114,14 +114,6 @@ public class AclGrantSetServiceTest {
     }
 
     @Test
-    public void testIsGrantSetNotExist() {
-        expect(aclGrantSetRepository.isGrantSetExist(ACL_GRANT_SET_NAME)).andReturn(false).once();
-        replay(aclGrantSetRepository);
-        assertFalse(aclGrantSetService.isGrantSetExist(ACL_GRANT_SET_NAME));
-        verify(aclGrantSetRepository);
-    }
-
-    @Test
     public void testGetAll() {
         List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
         expect(aclGrantSetRepository.findAll()).andReturn(grantSets).once();
