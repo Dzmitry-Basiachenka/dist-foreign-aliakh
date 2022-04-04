@@ -28,6 +28,8 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportServi
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
+import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
@@ -79,6 +81,7 @@ public class AclGrantDetailControllerTest {
     private IAclGrantDetailFilterWidget aclGrantDetailFilterWidget;
     private IAclCalculationReportService aclCalculationReportService;
     private IStreamSourceHandler streamSourceHandler;
+    private CsvProcessorFactory csvProcessorFactory;
 
     @Before
     public void setUp() {
@@ -90,6 +93,7 @@ public class AclGrantDetailControllerTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         aclGrantDetailFilterWidget = createMock(IAclGrantDetailFilterWidget.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
+        csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         Whitebox.setInternalState(controller, udmBaselineService);
         Whitebox.setInternalState(controller, aclGrantSetService);
@@ -97,6 +101,7 @@ public class AclGrantDetailControllerTest {
         Whitebox.setInternalState(controller, aclGrantDetailService);
         Whitebox.setInternalState(controller, prmIntegrationService);
         Whitebox.setInternalState(controller, aclCalculationReportService);
+        Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
     }
 
@@ -203,6 +208,16 @@ public class AclGrantDetailControllerTest {
         replay(aclGrantDetailService);
         controller.updateAclGrants(Collections.singleton(new AclGrantDetailDto()), true);
         verify(aclGrantDetailService);
+    }
+
+    @Test
+    public void testGetCsvProcessor() {
+        String grantSetId = "9fec7e74-e9ba-4e3e-835c-db02a0575912";
+        AclGrantDetailCsvProcessor processor = new AclGrantDetailCsvProcessor();
+        expect(csvProcessorFactory.getAclGrantDetailCvsProcessor(grantSetId)).andReturn(processor).once();
+        replay(csvProcessorFactory);
+        assertSame(processor, controller.getCsvProcessor(grantSetId));
+        verify(csvProcessorFactory);
     }
 
     @Test

@@ -99,7 +99,7 @@ public class AclGrantDetailWidgetTest {
         mockStatic(Windows.class);
         setSpecialistExpectations();
         UploadGrantDetailWindow mockWindow = createMock(UploadGrantDetailWindow.class);
-        expectNew(UploadGrantDetailWindow.class).andReturn(mockWindow).once();
+        expectNew(UploadGrantDetailWindow.class, controller).andReturn(mockWindow).once();
         Windows.showModalWindow(mockWindow);
         expectLastCall().once();
         replay(controller, Windows.class, UploadGrantDetailWindow.class, ForeignSecurityUtils.class, streamSource);
