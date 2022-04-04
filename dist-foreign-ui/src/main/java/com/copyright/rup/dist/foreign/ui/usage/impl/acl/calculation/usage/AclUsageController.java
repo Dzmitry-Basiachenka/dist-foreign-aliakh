@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
@@ -33,6 +36,10 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
 
     @Autowired
     private IAclUsageFilterController aclUsageFilterController;
+    @Autowired
+    private IUdmUsageService udmUsageService;
+    @Autowired
+    private IAclUsageBatchService aclUsageBatchService;
 
     @Override
     public int getBeansCount() {
@@ -44,6 +51,21 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     public List<AclUsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         //TODO {dbasiachenka} implement
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<Integer> getAllPeriods() {
+        return udmUsageService.getPeriods();
+    }
+
+    @Override
+    public boolean isAclUsageBatchExist(String usageBatchName) {
+        return aclUsageBatchService.isAclUsageBatchExist(usageBatchName);
+    }
+
+    @Override
+    public int insertAclUsageBatch(AclUsageBatch usageBatch) {
+        return aclUsageBatchService.insert(usageBatch);
     }
 
     @Override

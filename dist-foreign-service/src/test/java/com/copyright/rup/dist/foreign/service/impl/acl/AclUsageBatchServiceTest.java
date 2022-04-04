@@ -71,14 +71,6 @@ public class AclUsageBatchServiceTest {
     }
 
     @Test
-    public void testIsUsageBatchNotExist() {
-        expect(aclUsageBatchRepository.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME)).andReturn(false).once();
-        replay(aclUsageBatchRepository);
-        assertFalse(aclUsageBatchService.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME));
-        verify(aclUsageBatchRepository);
-    }
-
-    @Test
     public void testInsert() {
         mockStatic(RupContextUtils.class);
         AclUsageBatch usageBatch = buildAclUsageBatch();

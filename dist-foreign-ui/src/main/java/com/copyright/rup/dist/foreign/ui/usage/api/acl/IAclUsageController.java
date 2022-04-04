@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -48,6 +49,29 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return list of items to be displayed on UI
      */
     List<AclUsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+
+    /**
+     * Gets list of all UDM usage periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getAllPeriods();
+
+    /**
+     * Checks whether ACL usage batch with provided name exists.
+     *
+     * @param usageBatchName name of the {@link AclUsageBatch}
+     * @return {@code true} if ACL usage batch with provided name exists, otherwise {@code false}
+     */
+    boolean isAclUsageBatchExist(String usageBatchName);
+
+    /**
+     * Inserts ACL usage batch with populated ACL usages.
+     *
+     * @param usageBatch instance of {@link AclUsageBatch}
+     * @return count of inserted ACL usages
+     */
+    int insertAclUsageBatch(AclUsageBatch usageBatch);
 
     /**
      * Initializes {@link IAclUsageFilterWidget}.
