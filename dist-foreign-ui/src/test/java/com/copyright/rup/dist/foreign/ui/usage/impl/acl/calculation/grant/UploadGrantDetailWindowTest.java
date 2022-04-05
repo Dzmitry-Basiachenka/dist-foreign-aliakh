@@ -20,7 +20,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
@@ -93,7 +93,7 @@ public class UploadGrantDetailWindowTest {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         AclGrantDetailCsvProcessor processor = createMock(AclGrantDetailCsvProcessor.class);
-        ProcessingResult<AclGrantDetail> result = buildProcessingResult();
+        ProcessingResult<AclGrantDetailDto> result = buildProcessingResult();
         window = createPartialMock(UploadGrantDetailWindow.class, "isValid");
         Whitebox.setInternalState(window, controller);
         Whitebox.setInternalState(window, uploadField);
@@ -102,8 +102,10 @@ public class UploadGrantDetailWindowTest {
         Whitebox.setInternalState(window, grantSetComboBox);
         expect(window.isValid()).andReturn(true).once();
         expect(controller.getCsvProcessor(grantSet.getId())).andReturn(processor).once();
-        expect(processor.process(anyObject())).andReturn(result).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        expect(processor.process(anyObject())).andReturn(result).once();
+        controller.insertAclGrantDetails(grantSet, result.get());
+        expectLastCall().once();
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
         replay(Windows.class, window, controller, processor, uploadField);
@@ -130,10 +132,10 @@ public class UploadGrantDetailWindowTest {
         return aclGrantSet;
     }
 
-    private ProcessingResult<AclGrantDetail> buildProcessingResult() {
-        ProcessingResult<AclGrantDetail> result = new ProcessingResult<>();
+    private ProcessingResult<AclGrantDetailDto> buildProcessingResult() {
+        ProcessingResult<AclGrantDetailDto> result = new ProcessingResult<>();
         try {
-            Whitebox.invokeMethod(result, "addRecord", new AclGrantDetail());
+            Whitebox.invokeMethod(result, "addRecord", new AclGrantDetailDto());
         } catch (Exception e) {
             fail();
         }

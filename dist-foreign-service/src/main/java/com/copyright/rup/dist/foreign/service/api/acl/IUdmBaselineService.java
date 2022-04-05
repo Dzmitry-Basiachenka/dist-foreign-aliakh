@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -48,6 +49,14 @@ public interface IUdmBaselineService {
      * @return threshold value for size of UDM records.
      */
     int getUdmRecordThreshold();
+
+    /**
+     * Gets map of wrWrkInsts to system titles.
+     *
+     * @param periods set of periods
+     * @return map of wrWrkInsts to system titles
+     */
+    Map<Long, String> getWrWrkInstToSystemTitles(Set<Integer> periods);
 
     /**
      * Deletes selected usages from baseline by their ids.

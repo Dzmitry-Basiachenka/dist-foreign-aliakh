@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
@@ -75,10 +75,11 @@ public class UploadGrantDetailWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                AclGrantDetailCsvProcessor processor =
-                    controller.getCsvProcessor(comboBox.getSelectedItem().get().getId());
-                ProcessingResult<AclGrantDetail> result = processor.process(uploadField.getStreamToUploadedFile());
+                AclGrantSet grantSet = comboBox.getSelectedItem().get();
+                AclGrantDetailCsvProcessor processor = controller.getCsvProcessor(grantSet.getId());
+                ProcessingResult<AclGrantDetailDto> result = processor.process(uploadField.getStreamToUploadedFile());
                 if (result.isSuccessful()) {
+                    controller.insertAclGrantDetails(grantSet, result.get());
                     close();
                     Windows.showNotificationWindow(
                         ForeignUi.getMessage("message.upload_completed", result.get().size()));

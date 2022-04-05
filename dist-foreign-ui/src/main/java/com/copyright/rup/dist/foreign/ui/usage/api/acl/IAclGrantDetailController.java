@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
@@ -80,6 +79,14 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     int insertAclGrantSet(AclGrantSet aclGrantSet);
 
     /**
+     * Inserts uploaded {@link AclGrantDetailDto}s to specified {@link AclGrantSet}.
+     *
+     * @param grantSet {@link AclGrantSet} to be updated
+     * @param details  list of details to insert
+     */
+    void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> details);
+
+    /**
      * Gets list of all ACL grant sets.
      *
      * @return list of all {@link AclGrantSet}s
@@ -136,5 +143,5 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @param processingResult information about errors
      * @return instance of {@link IStreamSource}
      */
-    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<AclGrantDetail> processingResult);
+    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<AclGrantDetailDto> processingResult);
 }

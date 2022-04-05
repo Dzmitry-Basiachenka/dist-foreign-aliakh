@@ -4,10 +4,11 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents interface of repository for ACL grant sets and grant details.
@@ -23,9 +24,17 @@ public interface IAclGrantDetailService {
     /**
      * Inserts ACL grant details.
      *
-     * @param grantDetails list of {link GrantDetail}
+     * @param grantDetails list of {@link AclGrantDetail}
      */
     void insert(List<AclGrantDetail> grantDetails);
+
+    /**
+     * Adds {@link AclGrantDetailDto}s to specified {@link AclGrantSet}.
+     *
+     * @param grantSet     {@link AclGrantSet} to be updated
+     * @param grantDetails list of details to insert
+     */
+    void addToGrantSet(AclGrantSet grantSet, List<AclGrantDetailDto> grantDetails);
 
     /**
      * Gets count of ACL grant details based on applied filter.
@@ -48,10 +57,10 @@ public interface IAclGrantDetailService {
     /**
      * Updates ACL grants.
      *
-     * @param aclGrantDetailDtos set of {@link AclGrantDetailDto}
+     * @param aclGrantDetailDtos collection of {@link AclGrantDetailDto}
      * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
      */
-    void updateGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
+    void updateGrants(Collection<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
 
     /**
      * Deletes ACL grant details by ACL grant set id.

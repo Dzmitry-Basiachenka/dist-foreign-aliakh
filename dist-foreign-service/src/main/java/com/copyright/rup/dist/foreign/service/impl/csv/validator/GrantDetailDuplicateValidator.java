@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 
 /**
@@ -13,7 +13,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
  *
  * @author Ihar Suvorau
  */
-public class GrantDetailDuplicateValidator implements DistCsvProcessor.IValidator<AclGrantDetail> {
+public class GrantDetailDuplicateValidator implements DistCsvProcessor.IValidator<AclGrantDetailDto> {
 
     private final IAclGrantDetailService grantDetailService;
     private final String grantSetId;
@@ -30,7 +30,7 @@ public class GrantDetailDuplicateValidator implements DistCsvProcessor.IValidato
     }
 
     @Override
-    public boolean isValid(AclGrantDetail grantDetail) {
+    public boolean isValid(AclGrantDetailDto grantDetail) {
         return !grantDetailService.isGrantDetailExist(grantSetId, grantDetail.getWrWrkInst(),
             grantDetail.getTypeOfUse());
     }

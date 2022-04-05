@@ -6,11 +6,13 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +47,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     private IAclGrantDetailRepository aclGrantDetailRepository;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUdmBaselineService udmBaselineService;
 
     @Transactional
     @Override
@@ -53,6 +58,28 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Insert ACL grant details. Started. AclGrantDetailsCount={}, UserName={}", size, userName);
         grantDetails.forEach(aclGrantDetail -> aclGrantDetailRepository.insert(aclGrantDetail));
         LOGGER.info("Insert ACL grant details. Finished. AclGrantDetailsCount={}, UserName={}", size, userName);
+    }
+
+    @Transactional
+    @Override
+    public void addToGrantSet(AclGrantSet grantSet, List<AclGrantDetailDto> grantDetails) {
+        int size = grantDetails.size();
+        String grantSetId = grantSet.getId();
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Upload ACL grant details. Started. GrantSetId={}, AclGrantDetailsCount={}, UserName={}",
+            grantSetId, size, userName);
+        Map<Long, String> workToTitlesMap = udmBaselineService.getWrWrkInstToSystemTitles(grantSet.getPeriods());
+        grantDetails
+            .stream()
+            .map(this::convertDtoToDetail)
+            .forEach(aclGrantDetail -> {
+                aclGrantDetail.setGrantSetId(grantSetId);
+                aclGrantDetail.setSystemTitle(workToTitlesMap.get(aclGrantDetail.getWrWrkInst()));
+                aclGrantDetailRepository.insert(aclGrantDetail);
+            });
+        updateGrants(grantDetails, true);
+        LOGGER.info("Upload ACL grant details. Finished. GrantSetId={}, AclGrantDetailsCount={}, UserName={}",
+            grantSetId, size, userName);
     }
 
     @Override
@@ -68,7 +95,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     }
 
     @Override
-    public void updateGrants(Set<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
+    public void updateGrants(Collection<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
         if (doUpdateTouStatus) {
             Map<Long, List<AclGrantDetailDto>> wrWrkInstToGrants =
                 aclGrantDetailDtos.stream().collect(Collectors.groupingBy(AclGrantDetailDto::getWrWrkInst));
@@ -86,12 +113,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         } else {
             aclGrantDetailDtos.forEach(grant -> aclGrantDetailRepository.updateGrant(grant));
         }
-        Set<Long> accountNumbers = aclGrantDetailDtos.stream().map(AclGrantDetailDto::getRhAccountNumber)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
-        if (CollectionUtils.isNotEmpty(accountNumbers)) {
-            rightsholderService.updateRightsholders(accountNumbers);
-        }
+        updateRightsholders(aclGrantDetailDtos);
     }
 
     @Override
@@ -107,7 +129,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     private void updateTypeOfUseStatus(List<AclGrantDetailDto> grants) {
         List<AclGrantDetailDto> grantDetailDtos =
             grants.stream()
-                .filter(grant -> "GRANT".equals(grant.getGrantStatus()))
+                .filter(grant -> Objects.nonNull(grant) && "GRANT".equals(grant.getGrantStatus()))
                 .collect(Collectors.toList());
         grantDetailDtos.forEach(grant -> {
             if (isDifferentRh(grantDetailDtos)) {
@@ -120,6 +142,15 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         });
     }
 
+    private void updateRightsholders(Collection<AclGrantDetailDto> aclGrantDetailDtos) {
+        Set<Long> accountNumbers = aclGrantDetailDtos.stream().map(AclGrantDetailDto::getRhAccountNumber)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+        if (CollectionUtils.isNotEmpty(accountNumbers)) {
+            rightsholderService.updateRightsholders(accountNumbers);
+        }
+    }
+
     private boolean isDifferentRh(List<AclGrantDetailDto> grants) {
         return grants.stream()
             .collect(Collectors.groupingBy(AclGrantDetailDto::getRhAccountNumber))
@@ -128,5 +159,17 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     private boolean isDifferentTypesOfUse(List<AclGrantDetailDto> grants) {
         return grants.size() > TYPE_OF_USE_COUNT;
+    }
+
+    private AclGrantDetail convertDtoToDetail(AclGrantDetailDto grantDetailDto) {
+        AclGrantDetail grantDetail = new AclGrantDetail();
+        grantDetail.setId(grantDetailDto.getId());
+        grantDetail.setEligible(grantDetailDto.getEligible());
+        grantDetail.setGrantStatus(grantDetailDto.getGrantStatus());
+        grantDetail.setRhAccountNumber(grantDetailDto.getRhAccountNumber());
+        grantDetail.setWrWrkInst(grantDetailDto.getWrWrkInst());
+        grantDetail.setTypeOfUse(grantDetailDto.getTypeOfUse());
+        grantDetail.setTypeOfUseStatus(grantDetailDto.getTypeOfUseStatus());
+        return grantDetail;
     }
 }

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -60,6 +62,11 @@ public class UdmBaselineService implements IUdmBaselineService {
     @Override
     public int getUdmRecordThreshold() {
         return udmRecordsThreshold;
+    }
+
+    @Override
+    public Map<Long, String> getWrWrkInstToSystemTitles(Set<Integer> periods) {
+        return baselineRepository.findWrWrkInstToSystemTitles(periods);
     }
 
     @Override

@@ -7,14 +7,14 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Processor for {@link AclGrantDetail}.
+ * Processor for {@link AclGrantDetailDto}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  *
  * @author Ihar Suvorau
  */
-public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetail> {
+public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetailDto> {
 
     @Override
     public List<String> getHeadersForValidation() {
@@ -30,7 +30,7 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetail>
     }
 
     @Override
-    public ICsvConverter<AclGrantDetail> getConverter() {
+    public ICsvConverter<AclGrantDetailDto> getConverter() {
         return new AaclFundPoolDetailConverter();
     }
 
@@ -38,9 +38,10 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetail>
     public void initPlainValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
-        addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
+        addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.TYPE_OF_USE, requiredValidator, new LengthValidator(7));
-        addPlainValidators(Header.RH_ACCOUNT_NUMBER, positiveNumberValidator, new LengthValidator(18));
+        addPlainValidators(Header.RH_ACCOUNT_NUMBER, requiredValidator, positiveNumberValidator,
+            new LengthValidator(18));
     }
 
     /**
@@ -65,7 +66,7 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetail>
     }
 
     /**
-     * Converts row to {@link AclGrantDetail}.
+     * Converts row to {@link AclGrantDetailDto}.
      * <p/>
      * Copyright (C) 2022 copyright.com
      * <p>
@@ -73,11 +74,11 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetail>
      *
      * @author Ihar Suvorau
      */
-    private class AaclFundPoolDetailConverter extends CommonCsvConverter<AclGrantDetail> {
+    private class AaclFundPoolDetailConverter extends CommonCsvConverter<AclGrantDetailDto> {
 
         @Override
-        public AclGrantDetail convert(String... row) {
-            AclGrantDetail detail = new AclGrantDetail();
+        public AclGrantDetailDto convert(String... row) {
+            AclGrantDetailDto detail = new AclGrantDetailDto();
             List<String> headers = getActualHeaders();
             detail.setId(RupPersistUtils.generateUuid());
             detail.setWrWrkInst(getLong(row, Header.WR_WRK_INST, headers));
