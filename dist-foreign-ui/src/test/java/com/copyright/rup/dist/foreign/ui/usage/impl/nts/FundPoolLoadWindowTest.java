@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.capture;
@@ -133,9 +134,9 @@ public class FundPoolLoadWindowTest {
         replay(usagesController);
         window = new FundPoolLoadWindow(usagesController);
         assertFalse(window.isValid());
-        setTextFieldValue(USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
         assertFalse(window.isValid());
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         TextField rhNameField = Whitebox.getInternalState(window, "accountNameField");
         rhNameField.setReadOnly(false);
@@ -144,24 +145,24 @@ public class FundPoolLoadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        setTextFieldValue(PERIOD_TO_FIELD, PERIOD_TO);
-        setTextFieldValue(PERIOD_FROM_FIELD, PERIOD_FROM);
+        setTextFieldValue(window, PERIOD_TO_FIELD, PERIOD_TO);
+        setTextFieldValue(window, PERIOD_FROM_FIELD, PERIOD_FROM);
         assertFalse(window.isValid());
-        setTextFieldValue(STM_FIELD, AMOUNT);
-        setTextFieldValue(NON_STM_FIELD, AMOUNT);
-        setTextFieldValue(STM_MIN_FIELD, MIN_AMOUNT);
-        setTextFieldValue(NON_STM_MIN_FIELD, MIN_AMOUNT);
+        setTextFieldValue(window, STM_FIELD, AMOUNT);
+        setTextFieldValue(window, NON_STM_FIELD, AMOUNT);
+        setTextFieldValue(window, STM_MIN_FIELD, MIN_AMOUNT);
+        setTextFieldValue(window, NON_STM_MIN_FIELD, MIN_AMOUNT);
         assertFalse(window.isValid());
-        setTextFieldValue(MARKET_VALIDATION_FIELD, "2");
+        setTextFieldValue(window, MARKET_VALIDATION_FIELD, "2");
         assertTrue(window.isValid());
-        setTextFieldValue(STM_FIELD, AMOUNT);
-        setTextFieldValue(NON_STM_FIELD, ZERO_AMOUNT);
+        setTextFieldValue(window, STM_FIELD, AMOUNT);
+        setTextFieldValue(window, NON_STM_FIELD, ZERO_AMOUNT);
         assertTrue(window.isValid());
-        setTextFieldValue(STM_FIELD, ZERO_AMOUNT);
-        setTextFieldValue(NON_STM_FIELD, AMOUNT);
+        setTextFieldValue(window, STM_FIELD, ZERO_AMOUNT);
+        setTextFieldValue(window, NON_STM_FIELD, AMOUNT);
         assertTrue(window.isValid());
-        setTextFieldValue(STM_FIELD, ZERO_AMOUNT);
-        setTextFieldValue(NON_STM_FIELD, "0");
+        setTextFieldValue(window, STM_FIELD, ZERO_AMOUNT);
+        setTextFieldValue(window, NON_STM_FIELD, "0");
         assertFalse(window.isValid());
         verify(usagesController);
     }
@@ -523,9 +524,5 @@ public class FundPoolLoadWindowTest {
 
     private void setTextField(String field, String value) {
         Whitebox.setInternalState(window, field, new TextField(field, value));
-    }
-
-    private void setTextFieldValue(String field, String value) {
-        ((TextField) Whitebox.getInternalState(window, field)).setValue(value);
     }
 }

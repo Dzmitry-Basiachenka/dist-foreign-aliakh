@@ -110,7 +110,7 @@ public class SalFundPoolLoadWindowTest {
         FundPool.SalFields salFields = new FundPool.SalFields();
         fundPool.setSalFields(salFields);
         expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(3);
-        expect(usagesController.calculateFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).times(1);
+        expect(usagesController.calculateFundPoolAmounts(anyObject(FundPool.class))).andReturn(fundPool).once();
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         assertFalse(binder.isValid());

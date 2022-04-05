@@ -167,7 +167,7 @@ public class UdmUsageFilterWidgetTest {
     @Test
     public void verifyApplyButtonClickListener() {
         appliedFilterWidget.refreshFilterPanel(anyObject());
-        expectLastCall().times(1);
+        expectLastCall().once();
         replay(appliedFilterWidget);
         widget.init();
         widget.clearFilter();

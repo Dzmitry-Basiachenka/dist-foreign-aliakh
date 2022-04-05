@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -85,13 +86,13 @@ public class CreateAdditionalFundWindowTest {
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         assertFalse(binder.isValid());
-        setTextFieldValue(FUND_NAME_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, FUND_NAME_FIELD, StringUtils.EMPTY);
         assertFalse(binder.isValid());
-        setTextFieldValue(FUND_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_NAME_FIELD, FUND_POOL_NAME);
         assertFalse(binder.isValid());
         setTextAreaValue(COMMENT_AREA, StringUtils.EMPTY);
         assertFalse(binder.isValid());
-        setTextFieldValue(FUND_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_NAME_FIELD, FUND_POOL_NAME);
         setTextAreaValue(COMMENT_AREA, "Comment");
         assertTrue(binder.isValid());
         verify(usagesController);
@@ -103,13 +104,13 @@ public class CreateAdditionalFundWindowTest {
         expect(usagesController.additionalFundExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(FUND_NAME_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, FUND_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, FUND_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(FUND_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldErrorMessage(binder, FUND_NAME_FIELD, FUND_POOL_EXISTS_ERROR_MESSAGE);
-        setTextFieldValue(FUND_NAME_FIELD, STRING_EXCEED_50_CHARACTERS);
+        setTextFieldValue(window, FUND_NAME_FIELD, STRING_EXCEED_50_CHARACTERS);
         verifyFieldErrorMessage(binder, FUND_NAME_FIELD, VALUE_EXCEED_50_CHARACTERS_ERROR_MESSAGE);
-        setTextFieldValue(FUND_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldIsValid(binder, FUND_NAME_FIELD);
         verify(usagesController);
     }
@@ -137,10 +138,6 @@ public class CreateAdditionalFundWindowTest {
         TextArea commentArea = (TextArea) component;
         assertEquals("Comment", commentArea.getCaption());
         assertEquals(StringUtils.EMPTY, commentArea.getValue());
-    }
-
-    private void setTextFieldValue(String field, String value) {
-        ((TextField) Whitebox.getInternalState(window, field)).setValue(value);
     }
 
     private void setTextAreaValue(String field, String value) {
