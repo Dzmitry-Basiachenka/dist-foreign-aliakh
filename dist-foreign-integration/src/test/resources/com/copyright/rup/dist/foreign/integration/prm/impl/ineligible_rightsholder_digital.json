@@ -1,0 +1,36 @@
+{
+    "response":
+    {
+        "status":
+        {
+            "code": "SUCCESS",
+            "message": "OK"
+        },
+        "content":
+        [
+            "java.util.ArrayList",
+            [
+                {
+                    "@class": "com.copyright.rup.party.domain.relationship.OrganizationRelationship",
+                    "version": 1,
+                    "createDate": "2015-05-19T14:18:32-0400",
+                    "updateDate": "2015-05-19T14:18:32-0400",
+                    "createUser": "dfahey@copyright.com",
+                    "updateUser": "dfahey@copyright.com",
+                    "id": "9711b41a-8cf3-4c23-a4b0-a77e85818529",
+                    "primaryOrganizationUid": "63319ddb-4a9d-4e86-aa88-1f046cd80ddf",
+                    "primaryOrgName": "CLA, The Copyright Licensing Agency Ltd.",
+                    "primaryExternalOrganizationKey": "2000152607",
+                    "relatedOrganizationUid": "0e630006-5606-41f5-bda1-1c2287858725",
+                    "relatedOrgName": "Dow Jones & Company, Inc.",
+                    "relatedExternalOrganizationKey": "1000008755",
+                    "pmLicenseProductUid": "*",
+                    "pmRelationshipTypeUid": "baseline-parent",
+                    "relationshipCode": "PARENT",
+                    "validBeginDate": "2015-05-19T00:00:00-0400",
+                    "validEndDate": "2099-01-01T00:00:00-0500"
+                }
+            ]
+        ]
+    }
+}

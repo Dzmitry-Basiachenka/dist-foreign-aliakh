@@ -7,7 +7,9 @@ import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceService;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIneligibleRightsholderService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import com.google.common.collect.Table;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +58,8 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")
     private IPrmPreferenceService prmPreferenceService;
+    @Autowired
+    private IPrmIneligibleRightsholderService ineligibleRightsholderService;
     @Value("$RUP{dist.foreign.service_fee.non_participating}")
     private BigDecimal rhNonParticipatingServiceFee;
     @Value("$RUP{dist.foreign.service_fee.participating}")
@@ -124,6 +129,11 @@ public class PrmIntegrationService implements IPrmIntegrationService {
         return getBooleanPreferencesMap(
             prmPreferenceService.getPreferencesMap(rightsholdersIds), rightsholdersIds,
             productFamily, FdaConstants.IS_RH_STM_IPRO_CODE);
+    }
+
+    @Override
+    public Set<AclIneligibleRightsholder> getIneligibleRightsholders(LocalDate periodEndDate, String licenseType) {
+        return ineligibleRightsholderService.getIneligibleRightsholders(periodEndDate, licenseType);
     }
 
     private boolean getBooleanPreference(Map<String, Table<String, String, Object>> preferencesMap,
