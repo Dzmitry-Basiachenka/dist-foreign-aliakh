@@ -1518,7 +1518,7 @@ public class UdmValueRepositoryIntegrationTest {
     public void testPublishToBaseline() {
         assertEquals(Arrays.asList("81226f4a-6a21-4529-97ad-5dab5c92bcce", "97226f4a-ca11-4529-bb59-5dab5c92b8ce"),
             udmValueRepository.publishToBaseline(211012, USER_NAME));
-        assertEquals(Collections.singletonList("fc3e7747-3d3b-4f07-93fb-f66c97d9f737"),
+        assertEquals(Arrays.asList("fc3e7747-3d3b-4f07-93fb-f66c97d9f737", "2e07c041-79e8-48e5-a875-229d5e0f5259"),
             udmValueRepository.publishToBaseline(211112, USER_NAME));
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setPeriods(Collections.singleton(211012));
@@ -1528,6 +1528,23 @@ public class UdmValueRepositoryIntegrationTest {
         filter.setPeriods(Collections.singleton(211112));
         verifyValueBaselineDto(
             loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_2.json"),
+            udmBaselineValueRepository.findDtosByFilter(filter, null, null));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "publish-to-baseline-republishing.groovy")
+    public void testPublishToBaselineRepublishing() {
+        assertEquals(Arrays.asList("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
+            udmValueRepository.publishToBaseline(202206, USER_NAME));
+        UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
+        filter.setPeriods(Collections.singleton(202206));
+        verifyValueBaselineDto(
+            loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_republishing.json"),
+            udmBaselineValueRepository.findDtosByFilter(filter, null, null));
+        assertEquals(Arrays.asList("b0cfa83a-6249-4aff-aac8-2567eb15fb9e", "3ee0c4f7-001b-4970-a484-4bf028e5eb27"),
+            udmValueRepository.publishToBaseline(202206, USER_NAME));
+        verifyValueBaselineDto(
+            loadExpectedValueBaselineDto("json/udm/udm_value_baseline_dto_republishing.json"),
             udmBaselineValueRepository.findDtosByFilter(filter, null, null));
     }
 
