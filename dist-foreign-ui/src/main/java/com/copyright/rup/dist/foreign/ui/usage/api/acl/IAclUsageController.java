@@ -26,7 +26,7 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * {@link #onFilterChanged(FilterChangedEvent)}.
      */
     Method ON_FILTER_CHANGED =
-        ReflectTools.findMethod(IAclGrantDetailController.class, "onFilterChanged", FilterChangedEvent.class);
+        ReflectTools.findMethod(IAclUsageController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
      * Handles changes of filter.

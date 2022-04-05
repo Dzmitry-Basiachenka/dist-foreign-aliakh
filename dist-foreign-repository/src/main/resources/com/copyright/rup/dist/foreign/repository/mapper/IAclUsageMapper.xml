@@ -44,7 +44,7 @@
 
     <sql id="aclUsageDtoColumns">
         df_acl_usage_uid,
-        df_acl_usage_batch_uid,
+        u.df_acl_usage_batch_uid,
         usage_origin,
         channel,
         period,
@@ -65,6 +65,105 @@
         u.created_by_user,
         u.updated_by_user,
         u.record_version
+    </sql>
+
+    <sql id="selectCountByFilterSql">
+        select count(1)
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IAclUsageMapper.aclUsageFilter"/>
+    </sql>
+
+    <sql id="selectDtosByFilterSql">
+        select
+            <include refid="aclUsageDtoColumns"/>
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        <include refid="IAclUsageMapper.aclUsageFilter"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IAclUsageMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>,
+        df_acl_usage_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="aclUsageFilter">
+        <where>
+            <if test="null != filter.usageBatchName">
+                and ub.name = #{filter.usageBatchName}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="chooseSortProperty">
+        <choose>
+            <when test="sort.property == 'detailId'">
+                df_acl_usage_uid <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'period'">
+                period <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageOrigin'">
+                usage_origin <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'channel'">
+                channel <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'usageDetailId'">
+                original_detail_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                wr_wrk_inst <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'systemTitle'">
+                system_title <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detLcId'">
+                u.detail_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'detLcName'">
+                dlc.description <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggLcId'">
+                alc.aggregate_licensee_class_id <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'aggLcName'">
+                alc.description <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'surveyCountry'">
+                survey_country <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'publicationType'">
+                pt.name <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'contentUnitPrice'">
+                content_unit_price <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'typeOfUse'">
+                type_of_use <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'annualizedCopies'">
+                annualized_copies <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateUser'">
+                u.updated_by_user <include refid="IUsageMapper.direction"/>
+            </when>
+            <when test="sort.property == 'updateDate'">
+                u.updated_datetime <include refid="IUsageMapper.direction"/>
+            </when>
+        </choose>
     </sql>
 
     <select id="populateAclUsages" parameterType="map" resultType="string">
@@ -110,5 +209,13 @@
                 #{usageId}
             </foreach>
         order by df_acl_usage_uid
+    </select>
+
+    <select id="findCountByFilter" parameterType="map" resultType="int">
+        <include refid="IAclUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findDtosByFilter" resultMap="aclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclUsageMapper.selectDtosByFilterSql"/>
     </select>
 </mapper>

@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
 import java.util.List;
 import java.util.Set;
@@ -33,4 +36,22 @@ public interface IAclUsageRepository {
      * @return list of {@link AclUsageDto}s
      */
     List<AclUsageDto> findByIds(List<String> usageIds);
+
+    /**
+     * Finds ACL usages count based on applied filter.
+     *
+     * @param filter instance of {@link AclUsageFilter}
+     * @return the count of usages
+     */
+    int findCountByFilter(AclUsageFilter filter);
+
+    /**
+     * Finds list of {@link AclUsageDto}s by ACL usage filter.
+     *
+     * @param filter   instance of {@link AclUsageFilter}
+     * @param pageable instance of {@link Pageable}
+     * @param sort     instance of {@link Sort}
+     * @return the list of {@link AclUsageDto}
+     */
+    List<AclUsageDto> findDtosByFilter(AclUsageFilter filter, Pageable pageable, Sort sort);
 }

@@ -51,7 +51,6 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
 
     @Override
     public void refresh() {
-        aclUsagesGrid.deselectAll();
         dataProvider.refreshAll();
     }
 

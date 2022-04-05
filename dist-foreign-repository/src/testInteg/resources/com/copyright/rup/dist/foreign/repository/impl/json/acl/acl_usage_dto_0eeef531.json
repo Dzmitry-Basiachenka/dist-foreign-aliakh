@@ -1,0 +1,23 @@
+[
+  {
+    "id": "0eeef531-b779-4b3b-827d-b44b2261c6db",
+    "usageBatchId": "ec80ea9b-ae5c-4a9d-b03a-4e82b599b433",
+    "usageOrigin": "RFA",
+    "channel": "CCC",
+    "period": 202112,
+    "originalDetailId": "OGN674GHHHB0111",
+    "wrWrkInst": 306985867,
+    "systemTitle": "Tenside, surfactants, detergents",
+    "detailLicenseeClassId": 2,
+    "detailLicenseeClassName": "Textiles, Apparel, etc.",
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "Portugal",
+    "pubTypeName": "BK",
+    "contentUnitPrice": 10.0000000000,
+    "typeOfUse": "PRINT",
+    "annualizedCopies": 1.00000,
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com"
+  }
+]

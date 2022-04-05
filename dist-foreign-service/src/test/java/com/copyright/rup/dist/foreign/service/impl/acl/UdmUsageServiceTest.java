@@ -327,7 +327,7 @@ public class UdmUsageServiceTest {
         List<UdmUsage> udmUsages = Arrays.asList(udmUsage1, udmUsage2);
         expect(udmUsageRepository.findByIds(udmUsageIds)).andReturn(udmUsages).once();
         replay(udmUsageRepository);
-        assertEquals(udmUsages, udmUsageRepository.findByIds(udmUsageIds));
+        assertEquals(udmUsages, udmUsageService.getUdmUsagesByIds(udmUsageIds));
         verify(udmUsageRepository);
     }
 
@@ -342,7 +342,7 @@ public class UdmUsageServiceTest {
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         expect(udmUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(udmUsages).once();
         replay(udmUsageRepository);
-        List<UdmUsageDto> result = udmUsageRepository.findDtosByFilter(filter, pageable, sort);
+        List<UdmUsageDto> result = udmUsageService.getUsageDtos(filter, pageable, sort);
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(udmUsageRepository);
