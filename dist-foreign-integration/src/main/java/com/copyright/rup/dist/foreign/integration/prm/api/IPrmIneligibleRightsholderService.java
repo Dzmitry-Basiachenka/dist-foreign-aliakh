@@ -18,6 +18,8 @@ public interface IPrmIneligibleRightsholderService {
 
     /**
      * Gets set of {@link AclIneligibleRightsholder}s.
+     * Gets ineligible rightsholders from PRM system by licence type and filters them by preference status,
+     * range of valid date and licence product
      *
      * @param periodEndDate period end date
      * @param licenseType   licenseType

@@ -6,6 +6,8 @@ import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 
 import com.google.common.collect.ImmutableSet;
@@ -49,6 +51,8 @@ public class AclGrantService implements IAclGrantService {
     @Autowired
     @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Override
     @Transactional
@@ -73,6 +77,20 @@ public class AclGrantService implements IAclGrantService {
             });
         });
         return grantDetails;
+    }
+
+    @Override
+    public void setEligibleFlag(List<AclGrantDetail> grantDetailDtos, LocalDate date, String licenseType) {
+        Set<AclIneligibleRightsholder> ineligibleRightsholders =
+            prmIntegrationService.getIneligibleRightsholders(date, licenseType);
+        grantDetailDtos.forEach(grant ->
+            ineligibleRightsholders.forEach(ineligibleRightsholder ->
+                grant.setEligible(getEligibleStatus(grant, ineligibleRightsholder))));
+    }
+
+    private boolean getEligibleStatus(AclGrantDetail grant, AclIneligibleRightsholder ineligibleRightsholder) {
+        return !(ineligibleRightsholder.getRhAccountNumber().equals(grant.getRhAccountNumber())
+            && ineligibleRightsholder.getTypeOfUse().equals(grant.getTypeOfUse()));
     }
 
     /**
