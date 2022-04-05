@@ -1,8 +1,14 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
+
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,5 +41,20 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public List<AclUsageDto> findByIds(List<String> usageIds) {
         return selectList("IAclUsageMapper.findByIds", Objects.requireNonNull(usageIds));
+    }
+
+    @Override
+    public int findCountByFilter(AclUsageFilter filter) {
+        return selectOne("IAclUsageMapper.findCountByFilter",
+            ImmutableMap.of("filter", Objects.requireNonNull(filter)));
+    }
+
+    @Override
+    public List<AclUsageDto> findDtosByFilter(AclUsageFilter filter, Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put("pageable", pageable);
+        parameters.put("sort", sort);
+        return selectList("IAclUsageMapper.findDtosByFilter", parameters);
     }
 }

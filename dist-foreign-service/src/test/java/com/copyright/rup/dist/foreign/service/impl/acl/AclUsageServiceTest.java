@@ -5,9 +5,17 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -47,5 +55,44 @@ public class AclUsageServiceTest {
         replay(aclUsageRepository);
         assertEquals(usageIds.size(), aclUsageService.populateAclUsages(usageBatchId, periods, userName));
         verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testGetCount() {
+        AclUsageFilter aclUsageFilter = buildAclUsageFilter();
+        expect(aclUsageRepository.findCountByFilter(aclUsageFilter)).andReturn(10).once();
+        replay(aclUsageRepository);
+        assertEquals(10, aclUsageService.getCount(aclUsageFilter));
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testGetCountEmptyFilter() {
+        assertEquals(0, aclUsageService.getCount(new AclUsageFilter()));
+    }
+
+    @Test
+    public void testGetDtos() {
+        List<AclUsageDto> aclUsageDtos = Collections.singletonList(new AclUsageDto());
+        Pageable pageable = new Pageable(0, 1);
+        Sort sort = new Sort("detailId", Sort.Direction.ASC);
+        AclUsageFilter filter = buildAclUsageFilter();
+        expect(aclUsageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(aclUsageDtos).once();
+        replay(aclUsageRepository);
+        assertSame(aclUsageDtos, aclUsageService.getDtos(filter, pageable, sort));
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testGetDtosEmptyFilter() {
+        List<AclUsageDto> result = aclUsageService.getDtos(new AclUsageFilter(), null, null);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    private AclUsageFilter buildAclUsageFilter() {
+        AclUsageFilter aclUsageFilter = new AclUsageFilter();
+        aclUsageFilter.setUsageBatchName("ACL Usage Batch 2021");
+        return aclUsageFilter;
     }
 }

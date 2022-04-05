@@ -1,19 +1,32 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 
 import com.google.common.collect.Sets;
+
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -38,25 +51,47 @@ public class AclUsageControllerTest {
 
     private IUdmUsageService udmUsageService;
     private IAclUsageBatchService aclUsageBatchService;
+    private IAclUsageService aclUsageService;
+    private IAclUsageFilterController aclUsageFilterController;
+    private IAclUsageFilterWidget aclUsageFilterWidget;
 
     @Before
     public void setUp() {
         udmUsageService = createMock(IUdmUsageService.class);
         aclUsageBatchService = createMock(IAclUsageBatchService.class);
+        aclUsageService = createMock(IAclUsageService.class);
+        aclUsageFilterController = createMock(IAclUsageFilterController.class);
+        aclUsageFilterWidget = createMock(IAclUsageFilterWidget.class);
         Whitebox.setInternalState(controller, udmUsageService);
         Whitebox.setInternalState(controller, aclUsageBatchService);
+        Whitebox.setInternalState(controller, aclUsageService);
+        Whitebox.setInternalState(controller, aclUsageFilterController);
     }
 
     @Test
     public void testLoadBeans() {
-        //TODO {dbasiachenka} implement
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 10, null));
+        List<AclUsageDto> aclUsageDtos = Collections.singletonList(new AclUsageDto());
+        AclUsageFilter filter = buildAclUsageFilter();
+        Capture<Pageable> pageableCapture = newCapture();
+        expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
+        expect(aclUsageFilterWidget.getAppliedFilter()).andReturn(filter);
+        expect(aclUsageService.getDtos(eq(filter), capture(pageableCapture), isNull())).andReturn(aclUsageDtos).once();
+        replay(aclUsageFilterController, aclUsageFilterWidget, aclUsageService);
+        assertSame(aclUsageDtos, controller.loadBeans(0, 10, null));
+        assertEquals(10, pageableCapture.getValue().getLimit());
+        assertEquals(0, pageableCapture.getValue().getOffset());
+        verify(aclUsageFilterController, aclUsageFilterWidget, aclUsageService);
     }
 
     @Test
     public void testGetBeansCount() {
-        //TODO {dbasiachenka} implement
-        assertEquals(0, controller.getBeansCount());
+        AclUsageFilter filter = buildAclUsageFilter();
+        expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
+        expect(aclUsageFilterWidget.getAppliedFilter()).andReturn(filter);
+        expect(aclUsageService.getCount(filter)).andReturn(10).once();
+        replay(aclUsageFilterController, aclUsageFilterWidget, aclUsageService);
+        assertEquals(10, controller.getBeansCount());
+        verify(aclUsageFilterController, aclUsageFilterWidget, aclUsageService);
     }
 
     @Test
@@ -98,5 +133,11 @@ public class AclUsageControllerTest {
         usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
+    }
+
+    private AclUsageFilter buildAclUsageFilter() {
+        AclUsageFilter aclUsageFilter = new AclUsageFilter();
+        aclUsageFilter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
+        return aclUsageFilter;
     }
 }
