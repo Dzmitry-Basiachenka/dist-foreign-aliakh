@@ -165,6 +165,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         AclGrantDetail grantDetail = new AclGrantDetail();
         grantDetail.setId(grantDetailDto.getId());
         grantDetail.setEligible(grantDetailDto.getEligible());
+        grantDetail.setManualUploadFlag(grantDetailDto.getManualUploadFlag());
         grantDetail.setGrantStatus(grantDetailDto.getGrantStatus());
         grantDetail.setRhAccountNumber(grantDetailDto.getRhAccountNumber());
         grantDetail.setWrWrkInst(grantDetailDto.getWrWrkInst());

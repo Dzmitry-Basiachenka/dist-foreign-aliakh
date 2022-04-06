@@ -309,6 +309,7 @@ public class AclGrantDetailServiceTest {
         assertEquals(expectedGrantDetailDto.getTypeOfUse(), actualGrantDetailDto.getTypeOfUse());
         assertEquals(expectedGrantDetailDto.getTypeOfUseStatus(), actualGrantDetailDto.getTypeOfUseStatus());
         assertEquals(expectedGrantDetailDto.getEligible(), actualGrantDetailDto.getEligible());
+        assertTrue(actualGrantDetailDto.getManualUploadFlag());
     }
 
     private void verifyGrantCapture(Capture<AclGrantDetail> capture, AclGrantDetail expectedGrantDetail) {
@@ -319,6 +320,7 @@ public class AclGrantDetailServiceTest {
         assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
         assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
         assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
+        assertTrue(actualGrantDetail.getManualUploadFlag());
     }
 
     private AclGrantDetail buildGrant(String id, Long wrWrkInst, String systemTitle, Long rhAccountNumber, String tou) {
@@ -329,6 +331,7 @@ public class AclGrantDetailServiceTest {
         grantDetail.setRhAccountNumber(rhAccountNumber);
         grantDetail.setTypeOfUse(tou);
         grantDetail.setGrantStatus(GRANT_STATUS);
+        grantDetail.setManualUploadFlag(true);
         return grantDetail;
     }
 
@@ -341,6 +344,7 @@ public class AclGrantDetailServiceTest {
         grantDetailDto.setRhAccountNumber(rhAccountNumber);
         grantDetailDto.setTypeOfUse(tou);
         grantDetailDto.setGrantStatus(grantStatus);
+        grantDetailDto.setManualUploadFlag(true);
         return grantDetailDto;
     }
 }

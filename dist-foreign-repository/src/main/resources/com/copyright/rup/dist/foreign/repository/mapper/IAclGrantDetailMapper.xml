@@ -14,6 +14,7 @@
         <result property="systemTitle" column="system_title"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="eligible" column="is_eligible"/>
+        <result property="manualUploadFlag" column="manual_upload_flag"/>
     </resultMap>
 
     <resultMap id="aclGrantDetailDtoResultMap" type="AclGrantDetailDto" extends="StoredEntityMapper.storedEntityResult">
@@ -29,6 +30,7 @@
         <result property="typeOfUse" column="type_of_use"/>
         <result property="grantPeriod" column="grant_period"/>
         <result property="editable" column="is_editable"/>
+        <result property="manualUploadFlag" column="manual_upload_flag"/>
     </resultMap>
 
     <sql id="aclGrantDetailColumns">
@@ -41,6 +43,7 @@
         system_title,
         rh_account_number,
         is_eligible,
+        manual_upload_flag,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -66,6 +69,7 @@
             type_of_use,
             grant_period,
             gs.is_editable,
+            manual_upload_flag,
             gd.created_datetime,
             gd.updated_datetime
         from ${schema}.df_acl_grant_detail gd
@@ -191,6 +195,9 @@
             <when test="sort.property == 'updateDate'">
                 gd.updated_datetime <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'manualUploadFlag'">
+                manual_upload_flag <include refid="IUsageMapper.direction"/>
+            </when>
         </choose>
     </sql>
 
@@ -213,7 +220,8 @@
             gd.type_of_use_status,
             gd.wr_wrk_inst,
             gd.rh_account_number,
-            gd.is_eligible
+            gd.is_eligible,
+            gd.manual_upload_flag
         from ${schema}.df_acl_grant_detail gd
         left join ${schema}.df_acl_grant_detail gd2 on gd.df_acl_grant_set_uid = gd2.df_acl_grant_set_uid
             and gd2.wr_wrk_inst = gd.wr_wrk_inst
@@ -234,6 +242,7 @@
             #{systemTitle},
             #{rhAccountNumber},
             #{eligible},
+            #{manualUploadFlag},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

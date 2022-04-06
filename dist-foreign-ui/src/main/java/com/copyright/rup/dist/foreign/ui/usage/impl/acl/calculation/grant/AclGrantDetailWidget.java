@@ -130,12 +130,25 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             addColumn(AclGrantDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addColumn(value -> DateUtils.format(value.getCreateDate()), "table.column.created_date", "createDate", 100),
             addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate", 100),
-            addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 110));
+            addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 110),
+            addBooleanColumn(AclGrantDetailDto::getManualUploadFlag, "table.column.manual_upload_flag",
+                "manualUploadFlag", 150));
     }
 
     private Column<AclGrantDetailDto, ?> addColumn(ValueProvider<AclGrantDetailDto, ?> valueProvider,
                                                    String captionProperty, String columnId, double width) {
         return aclGrantDetailsGrid.addColumn(valueProvider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true)
+            .setSortProperty(columnId)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private Column<AclGrantDetailDto, ?> addBooleanColumn(ValueProvider<AclGrantDetailDto, Boolean> valueProvider,
+                                                          String captionProperty, String columnId, double width) {
+        return aclGrantDetailsGrid.addColumn(value -> BooleanUtils.toYNString(valueProvider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)

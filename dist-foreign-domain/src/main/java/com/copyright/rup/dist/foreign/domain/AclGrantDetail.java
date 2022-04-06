@@ -24,6 +24,7 @@ public class AclGrantDetail extends StoredEntity<String> {
     private String systemTitle;
     private Long rhAccountNumber;
     private Boolean eligible;
+    private Boolean manualUploadFlag;
 
     public String getGrantSetId() {
         return grantSetId;
@@ -89,6 +90,14 @@ public class AclGrantDetail extends StoredEntity<String> {
         this.eligible = eligible;
     }
 
+    public Boolean getManualUploadFlag() {
+        return manualUploadFlag;
+    }
+
+    public void setManualUploadFlag(Boolean manualUploadFlag) {
+        this.manualUploadFlag = manualUploadFlag;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -108,6 +117,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append(systemTitle, that.systemTitle)
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(eligible, that.eligible)
+            .append(manualUploadFlag, that.manualUploadFlag)
             .isEquals();
     }
 
@@ -123,6 +133,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append(systemTitle)
             .append(rhAccountNumber)
             .append(eligible)
+            .append(manualUploadFlag)
             .toHashCode();
     }
 
@@ -138,6 +149,7 @@ public class AclGrantDetail extends StoredEntity<String> {
             .append("systemTitle", systemTitle)
             .append("rhAccountNumber", rhAccountNumber)
             .append("eligible", eligible)
+            .append("manualUploadFlag", manualUploadFlag)
             .toString();
     }
 }

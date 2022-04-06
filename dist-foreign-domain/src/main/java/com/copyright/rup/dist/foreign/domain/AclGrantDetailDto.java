@@ -28,6 +28,7 @@ public class AclGrantDetailDto extends StoredEntity<String> {
     private String typeOfUse;
     private Integer grantPeriod;
     private Boolean editable;
+    private Boolean manualUploadFlag;
 
     public String getLicenseType() {
         return licenseType;
@@ -117,6 +118,14 @@ public class AclGrantDetailDto extends StoredEntity<String> {
         this.editable = editable;
     }
 
+    public Boolean getManualUploadFlag() {
+        return manualUploadFlag;
+    }
+
+    public void setManualUploadFlag(Boolean manualUploadFlag) {
+        this.manualUploadFlag = manualUploadFlag;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -139,6 +148,7 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .append(typeOfUse, that.typeOfUse)
             .append(grantPeriod, that.grantPeriod)
             .append(editable, that.editable)
+            .append(manualUploadFlag, that.manualUploadFlag)
             .isEquals();
     }
 
@@ -157,6 +167,7 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .append(typeOfUse)
             .append(grantPeriod)
             .append(editable)
+            .append(manualUploadFlag)
             .toHashCode();
     }
 
@@ -175,6 +186,7 @@ public class AclGrantDetailDto extends StoredEntity<String> {
             .append("typeOfUse", typeOfUse)
             .append("grantPeriod", grantPeriod)
             .append("editable", editable)
+            .append("manualUploadFlag", manualUploadFlag)
             .toString();
     }
 }

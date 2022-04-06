@@ -5,6 +5,7 @@
     "typeOfUseStatus": "Different RH",
     "grantStatus": "GRANT",
     "eligible": true,
+    "manualUploadFlag": false,
     "wrWrkInst": 122820638,
     "systemTitle": "Technology review",
     "rhAccountNumber": 1000019896,

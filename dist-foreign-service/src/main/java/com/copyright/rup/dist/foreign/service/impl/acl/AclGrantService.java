@@ -132,6 +132,7 @@ public class AclGrantService implements IAclGrantService {
         aclGrantDetail.setGrantSetId(grantSetId);
         aclGrantDetail.setGrantStatus(grantStatus);
         aclGrantDetail.setEligible(true);
+        aclGrantDetail.setManualUploadFlag(false);
         aclGrantDetail.setTypeOfUse(grant.getTypeOfUse());
         aclGrantDetail.setRhAccountNumber(grant.getWorkGroupOwnerOrgNumber().longValueExact());
         aclGrantDetail.setWrWrkInst(grant.getWrWrkInst());

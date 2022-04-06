@@ -305,4 +305,18 @@ databaseChangeLog {
                     constraintName: 'uk_df_acl_usage_original_detail_id')
         }
     }
+
+    changeSet(id: '2022-04-06-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-71754 FDA: Uploading works to a Grant set: add manual_upload_flag column to df_acl_grant_detail tables")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'manual_upload_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Manual Upload Flag') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail', columnName: 'manual_upload_flag')
+        }
+    }
 }
