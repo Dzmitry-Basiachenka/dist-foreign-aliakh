@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 
@@ -11,6 +13,8 @@ import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 
 import com.google.common.collect.ImmutableSet;
@@ -46,6 +50,7 @@ public class AclGrantServiceTest {
     private static final String DENY = "DENY";
     private static final String PRINT = "PRINT";
     private static final String DIGITAL = "DIGITAL";
+    private static final String DIGITAL_ONLY = "Digital Only";
     private static final String ACL = "ACL";
     private static final String SYSTEM_TITLE = "Red Riding Hood's maths adventure";
     private static final Set<String> STATUS = ImmutableSet.of(GRANT, DENY);
@@ -54,11 +59,14 @@ public class AclGrantServiceTest {
 
     private final IAclGrantService aclGrantService = new AclGrantService();
     private IRmsRightsService rmsRightsService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
         rmsRightsService = createMock(IRmsRightsService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(aclGrantService, rmsRightsService);
+        Whitebox.setInternalState(aclGrantService, prmIntegrationService);
         Whitebox.setInternalState(aclGrantService, RIGHTS_PARTITION_SIZE);
     }
 
@@ -77,6 +85,22 @@ public class AclGrantServiceTest {
         IntStream.range(0, actualGrantDetails.size()).forEach(i ->
             verifyAclGrantDetails(expectedGrantDetails.get(i), actualGrantDetails.get(i)));
         verify(rmsRightsService);
+    }
+
+    @Test
+    public void testSetEligibleFlag() {
+        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
+        expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.now(), ACL))
+            .andReturn(ineligibleRightsholders).once();
+        List<AclGrantDetail> grantDetailDtos = Arrays.asList(
+            buildAclGrantDetail(DIGITAL, 1000000001L, 309812565L, DIGITAL_ONLY, SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(DIGITAL, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", GRANT)
+        );
+        replay(prmIntegrationService);
+        aclGrantService.setEligibleFlag(grantDetailDtos, LocalDate.now(), ACL);
+        assertFalse(grantDetailDtos.get(0).getEligible());
+        assertTrue(grantDetailDtos.get(1).getEligible());
+        verify(prmIntegrationService);
     }
 
     private void verifyAclGrantDetails(AclGrantDetail expectedDetail, AclGrantDetail actualDetail) {
@@ -138,32 +162,41 @@ public class AclGrantServiceTest {
                 PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
             buildAclGrantDetail(
                 DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", GRANT),
-            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, DIGITAL_ONLY, SYSTEM_TITLE, GRANT),
             buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", GRANT),
-            buildAclGrantDetail(DIGITAL, 1000046080L, 578123123L, "Digital Only", SYSTEM_TITLE, GRANT),
-            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(DIGITAL, 1000046080L, 578123123L, DIGITAL_ONLY, SYSTEM_TITLE, GRANT),
+            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, DIGITAL_ONLY, SYSTEM_TITLE, GRANT),
             buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE, GRANT)
         );
     }
 
     private Set<RmsGrant> buildRmsGrants() {
         return new HashSet<>(Arrays.asList(
-            buildRmsGrant(PRINT, new BigDecimal("1000025853"), 144114260L, GRANT, LocalDate.of(2021,6,30)),
-            buildRmsGrant(DIGITAL, new BigDecimal("2000017000"), 309812565L, GRANT, LocalDate.of(2020,6,30)),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019,6,30)),
-            buildRmsGrant(PRINT, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019,6,30)),
-            buildRmsGrant(PRINT, new BigDecimal("1000002760"), 136797639L, GRANT, LocalDate.of(2015,6,30)),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000014080"), 136797639L, GRANT, LocalDate.of(2015,6,30)),
-            buildRmsGrant(DIGITAL, new BigDecimal("1000046080"), 578123123L, GRANT, LocalDate.of(2020,12,31)),
-            buildRmsGrant(PRINT, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2010,12,31)),
-            buildRmsGrant(DIGITAL, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2017,12,31)),
-            buildRmsGrant(PRINT, new BigDecimal("700009877"), 4875964316L, GRANT, LocalDate.of(2017,12,31)),
-            buildRmsGrant(DIGITAL, new BigDecimal("700009877"), 4875964316L, DENY, LocalDate.of(2017,12,31)),
-            buildRmsGrant(PRINT, new BigDecimal("700009989"), 4875964317L, GRANT, LocalDate.of(2010,12,31)),
-            buildRmsGrant(DIGITAL, new BigDecimal("7000099877"), 4875964317L, DENY, LocalDate.of(2017,12,31)),
-            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017,12,31)),
-            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017,12,31))
+            buildRmsGrant(PRINT, new BigDecimal("1000025853"), 144114260L, GRANT, LocalDate.of(2021, 6, 30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("2000017000"), 309812565L, GRANT, LocalDate.of(2020, 6, 30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019, 6, 30)),
+            buildRmsGrant(PRINT, new BigDecimal("1000004023"), 159246556L, GRANT, LocalDate.of(2019, 6, 30)),
+            buildRmsGrant(PRINT, new BigDecimal("1000002760"), 136797639L, GRANT, LocalDate.of(2015, 6, 30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000014080"), 136797639L, GRANT, LocalDate.of(2015, 6, 30)),
+            buildRmsGrant(DIGITAL, new BigDecimal("1000046080"), 578123123L, GRANT, LocalDate.of(2020, 12, 31)),
+            buildRmsGrant(PRINT, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2010, 12, 31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("600009865"), 4875964215L, GRANT, LocalDate.of(2017, 12, 31)),
+            buildRmsGrant(PRINT, new BigDecimal("700009877"), 4875964316L, GRANT, LocalDate.of(2017, 12, 31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("700009877"), 4875964316L, DENY, LocalDate.of(2017, 12, 31)),
+            buildRmsGrant(PRINT, new BigDecimal("700009989"), 4875964317L, GRANT, LocalDate.of(2010, 12, 31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099877"), 4875964317L, DENY, LocalDate.of(2017, 12, 31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017, 12, 31)),
+            buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017, 12, 31))
         ));
+    }
+
+    private AclIneligibleRightsholder buildIneligibleRightsholder() {
+        AclIneligibleRightsholder rightsholder = new AclIneligibleRightsholder();
+        rightsholder.setOrganizationId("87ab019d-6a93-4296-9ad6-c6340f3d9509");
+        rightsholder.setLicenseType(ACL);
+        rightsholder.setTypeOfUse("DIGITAL");
+        rightsholder.setRhAccountNumber(1000000001L);
+        return rightsholder;
     }
 
     private RmsGrant buildRmsGrant(String typeOfUse, BigDecimal ownerOrgNumber, Long wrWrkInst, String grantStatus,
