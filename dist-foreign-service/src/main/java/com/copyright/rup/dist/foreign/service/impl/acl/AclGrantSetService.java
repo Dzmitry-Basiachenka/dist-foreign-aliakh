@@ -6,11 +6,11 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class AclGrantSetService implements IAclGrantSetService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
-    private IUdmBaselineRepository udmBaselineRepository;
+    private IUdmBaselineService udmBaselineService;
     @Autowired
     private IAclGrantService aclGrantService;
     @Autowired
@@ -54,7 +54,7 @@ public class AclGrantSetService implements IAclGrantSetService {
         grantSet.setCreateUser(userName);
         grantSet.setUpdateUser(userName);
         List<AclGrantDetail> grantDetails = aclGrantService.createAclGrantDetails(grantSet,
-            udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()), userName);
+            udmBaselineService.getWrWrkInstToSystemTitles(grantSet.getPeriods()), userName);
         aclGrantSetRepository.insert(grantSet);
         aclGrantDetailService.insert(grantDetails);
         rightsholderService.updateRightsholders(

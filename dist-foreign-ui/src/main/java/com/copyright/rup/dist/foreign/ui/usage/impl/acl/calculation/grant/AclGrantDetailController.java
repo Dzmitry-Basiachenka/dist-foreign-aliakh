@@ -7,7 +7,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
@@ -117,6 +116,11 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
+    public void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> details) {
+        aclGrantDetailService.addToGrantSet(grantSet, details);
+    }
+
+    @Override
     public List<AclGrantSet> getAllAclGrantSets() {
         return aclGrantSetService.getAll();
     }
@@ -140,7 +144,7 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
 
     @Override
     public IStreamSource getErrorResultStreamSource(String fileName,
-                                                    ProcessingResult<AclGrantDetail> processingResult) {
+                                                    ProcessingResult<AclGrantDetailDto> processingResult) {
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
             processingResult::writeToFile);

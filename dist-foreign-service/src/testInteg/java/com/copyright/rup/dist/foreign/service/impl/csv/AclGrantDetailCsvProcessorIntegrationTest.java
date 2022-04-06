@@ -11,7 +11,7 @@ import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
+import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +73,7 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
     @Test
     @TestData(fileName = "acl-grant-detail-csv-processor-integration-test/test-processor.groovy")
     public void testProcessorWithErrors() throws Exception {
-        ProcessingResult<AclGrantDetail> result = processFile("acl_grant_detail_with_errors.csv");
+        ProcessingResult<AclGrantDetailDto> result = processFile("acl_grant_detail_with_errors.csv");
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(pos));
@@ -98,10 +98,10 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
     }
 
     private void verifyProcessorResult(String fileName) throws IOException {
-        ProcessingResult<AclGrantDetail> result = processFile(fileName);
+        ProcessingResult<AclGrantDetailDto> result = processFile(fileName);
         assertNotNull(result);
-        List<AclGrantDetail> actualDetails = result.get();
-        List<AclGrantDetail> expectedDetails = loadExpectedDetails();
+        List<AclGrantDetailDto> actualDetails = result.get();
+        List<AclGrantDetailDto> expectedDetails = loadExpectedDetails();
         int expectedSize = 3;
         assertEquals(expectedSize, actualDetails.size());
         assertEquals(expectedSize, expectedDetails.size());
@@ -110,8 +110,8 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
         );
     }
 
-    private ProcessingResult<AclGrantDetail> processFile(String file) throws IOException {
-        ProcessingResult<AclGrantDetail> result;
+    private ProcessingResult<AclGrantDetailDto> processFile(String file) throws IOException {
+        ProcessingResult<AclGrantDetailDto> result;
         try (InputStream is = this.getClass().getResourceAsStream(BASE_PATH + "/" + file);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
@@ -122,7 +122,7 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void assertDetail(AclGrantDetail expectedDetail, AclGrantDetail actualDetail) {
+    private void assertDetail(AclGrantDetailDto expectedDetail, AclGrantDetailDto actualDetail) {
         assertNotNull(actualDetail.getId());
         assertEquals(expectedDetail.getWrWrkInst(), actualDetail.getWrWrkInst());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
@@ -131,10 +131,10 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
         assertTrue(actualDetail.getEligible());
     }
 
-    private List<AclGrantDetail> loadExpectedDetails() throws IOException {
+    private List<AclGrantDetailDto> loadExpectedDetails() throws IOException {
         String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "acl_grant_detail.json");
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(content, new TypeReference<List<AclGrantDetail>>() {
+        return mapper.readValue(content, new TypeReference<List<AclGrantDetailDto>>() {
         });
     }
 }

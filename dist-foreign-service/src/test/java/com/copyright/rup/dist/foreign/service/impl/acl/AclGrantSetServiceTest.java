@@ -17,11 +17,11 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUdmBaselineRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -57,7 +57,7 @@ public class AclGrantSetServiceTest {
     private static final String SYSTEM_TITLE = "Wall Street journal";
 
     private IAclGrantSetService aclGrantSetService;
-    private IUdmBaselineRepository udmBaselineRepository;
+    private IUdmBaselineService udmBaselineService;
     private IAclGrantService aclGrantService;
     private IAclGrantSetRepository aclGrantSetRepository;
     private IAclGrantDetailService aclGrantDetailService;
@@ -66,12 +66,12 @@ public class AclGrantSetServiceTest {
     @Before
     public void setUp() {
         aclGrantSetService = new AclGrantSetService();
-        udmBaselineRepository = createMock(IUdmBaselineRepository.class);
+        udmBaselineService = createMock(IUdmBaselineService.class);
         aclGrantService = createMock(IAclGrantService.class);
         aclGrantSetRepository = createMock(IAclGrantSetRepository.class);
         aclGrantDetailService = createMock(IAclGrantDetailService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        Whitebox.setInternalState(aclGrantSetService, udmBaselineRepository);
+        Whitebox.setInternalState(aclGrantSetService, udmBaselineService);
         Whitebox.setInternalState(aclGrantSetService, aclGrantService);
         Whitebox.setInternalState(aclGrantSetService, aclGrantSetRepository);
         Whitebox.setInternalState(aclGrantSetService, aclGrantDetailService);
@@ -86,7 +86,7 @@ public class AclGrantSetServiceTest {
         grantDetail.setWrWrkInst(WR_WRK_INST);
         grantDetail.setRhAccountNumber(7000813806L);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        expect(udmBaselineRepository.findWrWrkInstToSystemTitles(grantSet.getPeriods()))
+        expect(udmBaselineService.getWrWrkInstToSystemTitles(grantSet.getPeriods()))
             .andReturn(ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE)).once();
         expect(aclGrantService.createAclGrantDetails(grantSet, ImmutableMap.of(WR_WRK_INST, SYSTEM_TITLE), USER_NAME))
             .andReturn(Collections.singletonList(grantDetail)).once();
@@ -97,10 +97,10 @@ public class AclGrantSetServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Collections.singleton(7000813806L)))
             .andReturn(Collections.singletonList(new Rightsholder()));
-        replay(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
+        replay(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
         assertEquals(1, aclGrantSetService.insert(grantSet));
-        verify(RupContextUtils.class, udmBaselineRepository, aclGrantService, aclGrantSetRepository,
+        verify(RupContextUtils.class, udmBaselineService, aclGrantService, aclGrantSetRepository,
             aclGrantDetailService);
     }
 
