@@ -8,9 +8,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -23,6 +25,9 @@ import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
@@ -37,7 +42,8 @@ import java.util.Collections;
  *
  * @author Dzmitry Basiachenka
  */
-// TODO verify permissions
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ForeignSecurityUtils.class)
 public class AclUsageWidgetTest {
 
     private AclUsageWidget aclUsageWidget;
@@ -45,6 +51,7 @@ public class AclUsageWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclUsageController.class);
         aclUsageWidget = new AclUsageWidget();
         Whitebox.setInternalState(aclUsageWidget, controller);
@@ -52,10 +59,28 @@ public class AclUsageWidgetTest {
     }
 
     @Test
-    public void testWidgetStructure() {
-        replay(controller);
+    public void testWidgetStructureForSpecialist() {
+        setSpecialistExpectations();
+        verifyWidgetStructure(true);
+    }
+
+    @Test
+    public void testWidgetStructureForManager() {
+        setManagerExpectations();
+        verifyWidgetStructure(false);
+    }
+
+    @Test
+    public void testWidgetStructureForViewOnly() {
+        setViewOnlyExpectations();
+        verifyWidgetStructure(false);
+    }
+
+    private void verifyWidgetStructure(boolean... buttonsVisibility) {
+        replay(ForeignSecurityUtils.class, controller);
         aclUsageWidget.init();
-        verify(controller);
+        aclUsageWidget.initMediator().applyPermissions();
+        verify(ForeignSecurityUtils.class, controller);
         assertTrue(aclUsageWidget.isLocked());
         assertEquals(270, aclUsageWidget.getSplitPosition(), 0);
         verifyWindow(aclUsageWidget, null, 100, 100, Unit.PERCENTAGE);
@@ -65,7 +90,7 @@ public class AclUsageWidgetTest {
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
-        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0), buttonsVisibility);
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 200.0, -1),
@@ -90,13 +115,30 @@ public class AclUsageWidgetTest {
         assertEquals(1, layout.getExpandRatio(grid), 0);
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Create"));
+    private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], Collections.singletonList("Create"));
     }
 
     private void verifyGridFooter(Grid grid) {
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Usages Count: 0", footerRow.getCell("detailId").getText());
+    }
+
+    private void setSpecialistExpectations() {
+        setPermissionsExpectations(true, false);
+    }
+
+    private void setManagerExpectations() {
+        setPermissionsExpectations(false, true);
+    }
+
+    private void setViewOnlyExpectations() {
+        setPermissionsExpectations(false, false);
+    }
+
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager) {
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
+        expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
     }
 }

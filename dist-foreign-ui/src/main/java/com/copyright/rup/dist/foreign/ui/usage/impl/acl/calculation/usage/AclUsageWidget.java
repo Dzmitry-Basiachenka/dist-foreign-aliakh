@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataPr
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Grid;
@@ -32,7 +33,6 @@ import java.util.function.Function;
  *
  * @author Dzmitry Basiachenka
  */
-// TODO implement permissions
 public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-acl-usages-grid";
@@ -62,6 +62,13 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     @Override
     public void setController(IAclUsageController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        AclUsageMediator mediator = new AclUsageMediator();
+        mediator.setAclUsageBatchMenuBar(aclUsageBatchMenuBar);
+        return mediator;
     }
 
     private VerticalLayout initUsagesLayout() {
