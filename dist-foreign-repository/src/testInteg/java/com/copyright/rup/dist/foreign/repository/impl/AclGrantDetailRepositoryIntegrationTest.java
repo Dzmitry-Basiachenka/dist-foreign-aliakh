@@ -462,7 +462,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getEditable(), actualGrantDetail.getEditable());
         assertEquals(expectedGrantDetail.getCreateDate(), actualGrantDetail.getCreateDate());
         assertEquals(expectedGrantDetail.getUpdateDate(), actualGrantDetail.getUpdateDate());
-        assertEquals(expectedGrantDetail, actualGrantDetail);
+        assertEquals(expectedGrantDetail.getManualUploadFlag(), actualGrantDetail.getManualUploadFlag());
     }
 
     private void assertFilteringFindDtosByFilter(Consumer<AclGrantDetailFilter> consumer, String... detailIds) {
@@ -485,6 +485,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         grantDetail.setSystemTitle(SYSTEM_TITLE);
         grantDetail.setRhAccountNumber(7000813806L);
         grantDetail.setEligible(ELIGIBLE);
+        grantDetail.setManualUploadFlag(false);
         return grantDetail;
     }
 

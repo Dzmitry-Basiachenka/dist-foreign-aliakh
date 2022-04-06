@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.common.caching.api.ICacheService;
@@ -91,6 +92,7 @@ public class AclGrantServiceIntegrationTest {
         assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
         assertEquals(expectedDetail.getCreateUser(), actualDetail.getCreateUser());
         assertEquals(expectedDetail.getUpdateUser(), actualDetail.getUpdateUser());
+        assertFalse(actualDetail.getManualUploadFlag());
     }
 
     private List<AclGrantDetail> buildAclGrantDetails() {

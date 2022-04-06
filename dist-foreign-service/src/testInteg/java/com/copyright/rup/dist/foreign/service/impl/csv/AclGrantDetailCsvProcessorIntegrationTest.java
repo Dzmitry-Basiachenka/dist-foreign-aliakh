@@ -128,6 +128,7 @@ public class AclGrantDetailCsvProcessorIntegrationTest {
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
         assertEquals(expectedDetail.getGrantStatus(), actualDetail.getGrantStatus());
+        assertTrue(actualDetail.getManualUploadFlag());
         assertTrue(actualDetail.getEligible());
     }
 

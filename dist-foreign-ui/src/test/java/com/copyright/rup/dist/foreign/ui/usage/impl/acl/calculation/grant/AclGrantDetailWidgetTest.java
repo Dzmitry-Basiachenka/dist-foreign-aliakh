@@ -156,7 +156,8 @@ public class AclGrantDetailWidgetTest {
             Triple.of("TOU", 120.0, -1),
             Triple.of("Created Date", 100.0, -1),
             Triple.of("Updated Date", 100.0, -1),
-            Triple.of("Grant Period", 110.0, -1)));
+            Triple.of("Grant Period", 110.0, -1),
+            Triple.of("Manual Upload Flag", 150.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(1, layout.getExpandRatio(grid), 0);
         verify(controller, ForeignSecurityUtils.class, streamSource);

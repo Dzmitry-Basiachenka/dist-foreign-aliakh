@@ -115,6 +115,7 @@ public class AclGrantServiceTest {
         assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
         assertEquals(expectedDetail.getCreateUser(), actualDetail.getCreateUser());
         assertEquals(expectedDetail.getUpdateUser(), actualDetail.getUpdateUser());
+        assertFalse(actualDetail.getManualUploadFlag());
     }
 
     private Map<Long, String> createWrWrkInstToSystemTitleMap() {

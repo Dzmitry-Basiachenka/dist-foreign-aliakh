@@ -5,6 +5,7 @@
     "typeOfUseStatus": "Print&Digital",
     "grantStatus": "GRANT",
     "eligible": false,
+    "manualUploadFlag": false,
     "wrWrkInst": 122820638,
     "systemTitle": "Technology review",
     "rhAccountNumber": 1000028511,
