@@ -291,4 +291,18 @@ databaseChangeLog {
             dropTable(tableName: 'df_acl_usage_batch', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2022-04-06-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-71795 FDA: Create ACL usage batch: drop unique constraint for column df_acl_usage.original_detail_id")
+
+        dropUniqueConstraint(schemaName: dbAppsSchema,
+                tableName: 'df_acl_usage',
+                constraintName: 'uk_df_acl_usage_original_detail_id')
+        rollback {
+            addUniqueConstraint(schemaName: dbAppsSchema,
+                    tableName: 'df_acl_usage',
+                    columnNames: 'original_detail_id',
+                    constraintName: 'uk_df_acl_usage_original_detail_id')
+        }
+    }
 }
