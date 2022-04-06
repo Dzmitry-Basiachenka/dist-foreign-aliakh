@@ -98,7 +98,7 @@ public class AclUsageBatchServiceTest {
 
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
-        usageBatch.setName("ACL Usage Batch 2021");
+        usageBatch.setName(ACL_USAGE_BATCH_NAME);
         usageBatch.setDistributionPeriod(202112);
         usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
         usageBatch.setEditable(true);

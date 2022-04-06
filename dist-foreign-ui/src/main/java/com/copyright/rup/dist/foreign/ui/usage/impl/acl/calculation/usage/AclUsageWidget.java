@@ -7,13 +7,16 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -29,6 +32,7 @@ import java.util.function.Function;
  *
  * @author Dzmitry Basiachenka
  */
+// TODO implement permissions
 public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-acl-usages-grid";
@@ -37,6 +41,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     private IAclUsageController controller;
     private Grid<AclUsageDto> aclUsagesGrid;
     private DataProvider<AclUsageDto, Void> dataProvider;
+    private MenuBar aclUsageBatchMenuBar;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -61,7 +66,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
 
     private VerticalLayout initUsagesLayout() {
         initUsagesGrid();
-        VerticalLayout layout = new VerticalLayout(aclUsagesGrid);
+        initAclUsageBatchMenuBar();
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), aclUsagesGrid);
         layout.setSizeFull();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -88,6 +94,23 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
         aclUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
         aclUsagesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(aclUsagesGrid, "acl-usages-grid");
+    }
+
+    private void initAclUsageBatchMenuBar() {
+        aclUsageBatchMenuBar = new MenuBar();
+        MenuBar.MenuItem menuItem =
+            aclUsageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
+        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+            item -> Windows.showModalWindow(new CreateAclUsageBatchWindow(controller)));
+        VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "acl-usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "v-menubar-df");
+    }
+
+    private HorizontalLayout initButtonsLayout() {
+        HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar);
+        layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "acl-usage-buttons");
+        return layout;
     }
 
     private void addColumns() {

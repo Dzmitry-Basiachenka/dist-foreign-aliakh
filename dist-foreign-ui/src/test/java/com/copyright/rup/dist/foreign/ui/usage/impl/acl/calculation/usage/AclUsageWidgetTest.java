@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -15,6 +16,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
@@ -24,6 +26,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Verifies {@link AclUsageWidget}.
@@ -34,6 +37,7 @@ import java.util.Arrays;
  *
  * @author Dzmitry Basiachenka
  */
+// TODO verify permissions
 public class AclUsageWidgetTest {
 
     private AclUsageWidget aclUsageWidget;
@@ -60,8 +64,10 @@ public class AclUsageWidgetTest {
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
         verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
-        assertEquals(1, layout.getComponentCount());
-        verifyGrid((Grid) layout.getComponent(0), Arrays.asList(
+        assertEquals(2, layout.getComponentCount());
+        verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
+        Grid grid = (Grid) layout.getComponent(1);
+        verifyGrid(grid, Arrays.asList(
             Triple.of("Detail ID", 200.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("Usage Origin", 100.0, -1),
@@ -80,8 +86,12 @@ public class AclUsageWidgetTest {
             Triple.of("Annualized Copies", 130.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
-        verifyGridFooter((Grid) layout.getComponent(0));
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);
+        verifyGridFooter(grid);
+        assertEquals(1, layout.getExpandRatio(grid), 0);
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Collections.singletonList("Create"));
     }
 
     private void verifyGridFooter(Grid grid) {

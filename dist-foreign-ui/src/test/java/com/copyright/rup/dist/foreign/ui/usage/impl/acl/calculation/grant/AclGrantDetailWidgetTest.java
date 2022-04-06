@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -28,10 +29,8 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,10 +41,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link AclGrantDetailWidget}.
@@ -161,29 +158,15 @@ public class AclGrantDetailWidgetTest {
             Triple.of("Updated Date", 100.0, -1),
             Triple.of("Grant Period", 110.0, -1)));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+        assertEquals(1, layout.getExpandRatio(grid), 0);
         verify(controller, ForeignSecurityUtils.class, streamSource);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
-        verifyMenuBar(layout.getComponent(0), "Grant Set", Arrays.asList("Create", "View"), buttonsVisibility[0]);
+        verifyMenuBar(layout.getComponent(0), "Grant Set", buttonsVisibility[0], Arrays.asList("Create", "View"));
         verifyButton(layout.getComponent(1), "Upload", buttonsVisibility[1]);
         verifyButton(layout.getComponent(2), "Edit", buttonsVisibility[2]);
         verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);
-    }
-
-    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems, boolean isVisible) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        assertEquals(isVisible, menuBar.isVisible());
-        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuBar.MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuBar.MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private void verifyButton(Component component, String name, boolean isVisible) {

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -114,15 +115,15 @@ public class SalFundPoolLoadWindowTest {
         replay(usagesController);
         Binder<FundPool> binder = Whitebox.getInternalState(window, BINDER_FIELD);
         assertFalse(binder.isValid());
-        setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2020 GDC");
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "500");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2.0");
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "100009522");
-        setTextFieldValue(LICENSEE_NAME_FIELD, "Medical Journal of Pakistan");
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "5");
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, "FY2020 GDC");
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, "500");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "2.0");
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, "100009522");
+        setTextFieldValue(window, LICENSEE_NAME_FIELD, "Medical Journal of Pakistan");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "5");
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
         setLocalDateWidgetValue(DATE_RECEIVED_FIELD, LocalDate.of(2020, 12, 12));
         assertTrue(binder.isValid());
         verify(usagesController);
@@ -134,15 +135,15 @@ public class SalFundPoolLoadWindowTest {
         expect(usagesController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).times(2);
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(FUND_POOL_NAME_FIELD, SPACES_STRING);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, FUND_POOL_EXISTS_ERROR_MESSAGE);
-        setTextFieldValue(FUND_POOL_NAME_FIELD, StringUtils.repeat('a', 51));
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, StringUtils.repeat('a', 51));
         verifyFieldErrorMessage(binder, FUND_POOL_NAME_FIELD, String.format(FIELD_LENGTH_ERROR_MESSAGE, 50));
-        setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         verifyFieldIsValid(binder, FUND_POOL_NAME_FIELD);
         verify(usagesController);
     }
@@ -151,13 +152,13 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidAssessmentName() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, ASSESSMENT_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, SPACES_STRING);
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, ASSESSMENT_NAME_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, StringUtils.repeat('a', 256));
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, StringUtils.repeat('a', 256));
         verifyFieldErrorMessage(binder, ASSESSMENT_NAME_FIELD, String.format(FIELD_LENGTH_ERROR_MESSAGE, 255));
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2019 HTR");
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, "FY2019 HTR");
         verifyFieldIsValid(binder, ASSESSMENT_NAME_FIELD);
         verify(usagesController);
     }
@@ -166,19 +167,19 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidGrossAmount() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, SPACES_STRING);
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "-10");
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, "-10");
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, ZERO);
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "10000000000.34");
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, "10000000000.34");
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, ZERO);
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GROSS_AMOUNT_FIELD, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GROSS_AMOUNT_FIELD, " 5000.56 ");
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, " 5000.56 ");
         verifyFieldIsValid(binder, GROSS_AMOUNT_FIELD);
         verify(usagesController);
     }
@@ -187,17 +188,17 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidItemBankSplitPercent() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, SPACES_STRING);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, ZERO);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, ZERO);
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "120.0");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "120.0");
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
         verifyFieldErrorMessage(binder, ITEM_BANK_SPLIT_PERCENT_FIELD, ITEM_BANK_SPLIT_PERCENT_ERROR_MESSAGE);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 97.3 ");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, " 97.3 ");
         verifyFieldIsValid(binder, ITEM_BANK_SPLIT_PERCENT_FIELD);
         verify(usagesController);
     }
@@ -206,24 +207,24 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidGradeKto5NumberOfStudents() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "123456789102");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, NO_NUM_OF_STUDENTS_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "8");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "8");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
         verifyFieldErrorMessage(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "5");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 2.0 ");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "5");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, " 2.0 ");
         verifyFieldIsValid(binder, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }
@@ -232,24 +233,24 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidGrade6to8NumberOfStudents() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "123456789102");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "98.34");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "98.34");
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, NO_NUM_OF_STUDENTS_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "8");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "8");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "100.0");
         verifyFieldErrorMessage(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "6");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 3.0 ");
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "6");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, " 3.0 ");
         verifyFieldIsValid(binder, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }
@@ -258,24 +259,24 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidGrade9to12NumberOfStudents() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "123456789102");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "123456789102");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "94.0");
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "97.34");
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, NO_NUM_OF_STUDENTS_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "8");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "100");
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "8");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "100");
         verifyFieldErrorMessage(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, NUM_OF_STUDENTS_NOT_ZERO_ERROR_MESSAGE);
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "8");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, " 5.0 ");
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, "8");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, " 5.0 ");
         verifyFieldIsValid(binder, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD);
         verify(usagesController);
     }
@@ -284,15 +285,15 @@ public class SalFundPoolLoadWindowTest {
     public void testIsValidLicenseeAccountNumber() {
         replay(usagesController);
         Binder binder = Whitebox.getInternalState(window, BINDER_FIELD);
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, StringUtils.EMPTY);
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, StringUtils.EMPTY);
         verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, SPACES_STRING);
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, SPACES_STRING);
         verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, EMPTY_FIELD_ERROR_MESSAGE);
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "10000000000");
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, "10000000000");
         verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, "Field value should not exceed 10 digits");
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "value");
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, "value");
         verifyFieldErrorMessage(binder, ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only");
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "1000000000");
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, "1000000000");
         verifyFieldIsValid(binder, ACCOUNT_NUMBER_FIELD);
         verify(usagesController);
     }
@@ -308,15 +309,15 @@ public class SalFundPoolLoadWindowTest {
         Windows.showNotificationWindow("Upload has been successfully completed");
         expectLastCall().once();
         replay(usagesController, Windows.class);
-        setTextFieldValue(FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
-        setTextFieldValue(ASSESSMENT_NAME_FIELD, "FY2020 COG");
-        setTextFieldValue(GROSS_AMOUNT_FIELD, "1000");
-        setTextFieldValue(ITEM_BANK_SPLIT_PERCENT_FIELD, "2.5");
-        setTextFieldValue(ACCOUNT_NUMBER_FIELD, "1000008985");
-        setTextFieldValue(LICENSEE_NAME_FIELD, "FarmField Inc.");
-        setTextFieldValue(GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
-        setTextFieldValue(GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "5");
-        setTextFieldValue(GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, ASSESSMENT_NAME_FIELD, "FY2020 COG");
+        setTextFieldValue(window, GROSS_AMOUNT_FIELD, "1000");
+        setTextFieldValue(window, ITEM_BANK_SPLIT_PERCENT_FIELD, "2.5");
+        setTextFieldValue(window, ACCOUNT_NUMBER_FIELD, "1000008985");
+        setTextFieldValue(window, LICENSEE_NAME_FIELD, "FarmField Inc.");
+        setTextFieldValue(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD, "10");
+        setTextFieldValue(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD, "5");
+        setTextFieldValue(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD, ZERO);
         setLocalDateWidgetValue(DATE_RECEIVED_FIELD, LocalDate.of(2020, 12, 12));
         VerticalLayout rootLayout = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) rootLayout.getComponent(9);
@@ -414,10 +415,6 @@ public class SalFundPoolLoadWindowTest {
         loadButton.click();
         verify(Windows.class);
         reset(Windows.class);
-    }
-
-    private void setTextFieldValue(String field, String value) {
-        ((TextField) Whitebox.getInternalState(window, field)).setValue(value);
     }
 
     private void setLocalDateWidgetValue(String field, LocalDate value) {

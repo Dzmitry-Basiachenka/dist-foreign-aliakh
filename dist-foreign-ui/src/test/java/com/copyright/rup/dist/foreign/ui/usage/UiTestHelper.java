@@ -30,6 +30,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 
 import com.vaadin.ui.Window;
@@ -145,6 +146,29 @@ public final class UiTestHelper {
             .map(ValidationResult::getErrorMessage)
             .collect(Collectors.toList());
         assertEquals(!isValid, errorMessages.contains(message));
+    }
+
+    /**
+     * Verifies menu bar.
+     *
+     * @param component        instance of {@link Component}
+     * @param menuBarName      menu bar name
+     * @param isMenuBarVisible menu bar visibility
+     * @param menuItemNames    menu item names
+     */
+    public static void verifyMenuBar(Component component, String menuBarName, boolean isMenuBarVisible,
+                                     List<String> menuItemNames) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        assertEquals(isMenuBarVisible, menuBar.isVisible());
+        List<MenuBar.MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuBar.MenuItem item = parentItems.get(0);
+        assertEquals(menuBarName, item.getText());
+        List<MenuBar.MenuItem> childItems = item.getChildren();
+        assertEquals(menuItemNames.size(), childItems.size());
+        IntStream.range(0, menuItemNames.size())
+            .forEach(index -> assertEquals(menuItemNames.get(index), childItems.get(index).getText()));
     }
 
     /**

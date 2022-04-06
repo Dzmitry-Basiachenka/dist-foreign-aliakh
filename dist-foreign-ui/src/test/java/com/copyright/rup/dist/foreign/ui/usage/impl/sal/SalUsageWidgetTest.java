@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -35,11 +38,10 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,10 +54,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link SalUsageWidget}.
@@ -109,8 +108,43 @@ public class SalUsageWidgetTest {
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyGrid((Grid) layout.getComponent(1));
-        assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
+        Grid grid = (Grid) layout.getComponent(1);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("Detail ID", 130.0, -1),
+            Triple.of("Detail Status", 115.0, -1),
+            Triple.of("Detail Type", 115.0, -1),
+            Triple.of("Product Family", 125.0, -1),
+            Triple.of("Usage Batch Name", 145.0, -1),
+            Triple.of("Period End Date", 115.0, -1),
+            Triple.of("Licensee Account #", 150.0, -1),
+            Triple.of("Licensee Name", 300.0, -1),
+            Triple.of("RH Account #", 115.0, -1),
+            Triple.of("RH Name", 300.0, -1),
+            Triple.of("Wr Wrk Inst", 110.0, -1),
+            Triple.of("System Title", 300.0, -1),
+            Triple.of("Standard Number", 140.0, -1),
+            Triple.of("Standard Number Type", 155.0, -1),
+            Triple.of("Assessment Name", 180.0, -1),
+            Triple.of("Assessment Type", 150.0, -1),
+            Triple.of("Date of Scored Assessment", 200.0, -1),
+            Triple.of("Reported Work Portion ID", 180.0, -1),
+            Triple.of("Reported Title", 170.0, -1),
+            Triple.of("Reported Article or Chapter Title", 240.0, -1),
+            Triple.of("Reported Standard Number", 200.0, -1),
+            Triple.of("Reported Author", 150.0, -1),
+            Triple.of("Reported Publisher", 150.0, -1),
+            Triple.of("Reported Publication Date", 200.0, -1),
+            Triple.of("Reported Page Range", 150.0, -1),
+            Triple.of("Reported Vol/Number/Series", 200.0, -1),
+            Triple.of("Reported Media Type", 150.0, -1),
+            Triple.of("Coverage Year", 115.0, -1),
+            Triple.of("Question Identifier", 150.0, -1),
+            Triple.of("Grade", 115.0, -1),
+            Triple.of("Grade Group", 115.0, -1),
+            Triple.of("States", 115.0, -1),
+            Triple.of("Number of Views", 150.0, -1),
+            Triple.of("Comment", 115.0, -1)));
+        assertEquals(1, layout.getExpandRatio(grid), 0);
     }
 
     @Test
@@ -369,41 +403,15 @@ public class SalUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyMenuBar(layout.getComponent(0), "Usage Batch",
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true,
             Arrays.asList("Load Item Bank", "Load Usage Data", "View"));
-        verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Arrays.asList("Load", "View"));
         Button updateRightsholdersButton = (Button) layout.getComponent(2);
         assertEquals("Update Rightsholders", updateRightsholdersButton.getCaption());
         Button addToScenarioButton = (Button) layout.getComponent(3);
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
         Button exportButton = (Button) layout.getComponent(4);
         assertEquals("Export", exportButton.getCaption());
-    }
-
-    private void verifyMenuBar(Component component, String menuName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        List<MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuItem item = parentItems.get(0);
-        assertEquals(menuName, item.getText());
-        List<MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
-    }
-
-    private void verifyGrid(Grid grid) {
-        List<Grid.Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Detail Type", "Product Family", "Usage Batch Name",
-            "Period End Date", "Licensee Account #", "Licensee Name", "RH Account #", "RH Name", "Wr Wrk Inst",
-            "System Title", "Standard Number", "Standard Number Type", "Assessment Name", "Assessment Type",
-            "Date of Scored Assessment", "Reported Work Portion ID", "Reported Title",
-            "Reported Article or Chapter Title", "Reported Standard Number", "Reported Author", "Reported Publisher",
-            "Reported Publication Date", "Reported Page Range", "Reported Vol/Number/Series", "Reported Media Type",
-            "Coverage Year", "Question Identifier", "Grade", "Grade Group", "States", "Number of Views", "Comment"),
-            columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        verifySize(grid);
     }
 
     private void prepareCreateScenarioExpectation() {
