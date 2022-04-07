@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
@@ -89,6 +90,11 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
+    }
+
+    @Override
+    public void onUsageBatchCreated(UsageBatchCreatedEvent event) {
+        aclUsageFilterController.getWidget().updateUsageBatchesInFilterWidget();
     }
 
     @Override

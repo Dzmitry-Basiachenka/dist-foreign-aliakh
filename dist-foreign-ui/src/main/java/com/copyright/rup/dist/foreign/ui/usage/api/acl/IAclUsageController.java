@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -29,11 +30,24 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
         ReflectTools.findMethod(IAclUsageController.class, "onFilterChanged", FilterChangedEvent.class);
 
     /**
+     * {@link #onUsageBatchCreated(UsageBatchCreatedEvent)}.
+     */
+    Method ON_USAGE_BATCH_CREATED =
+        ReflectTools.findMethod(IAclUsageController.class, "onUsageBatchCreated", UsageBatchCreatedEvent.class);
+
+    /**
      * Handles changes of filter.
      *
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * Handles usage batch creation.
+     *
+     * @param event event
+     */
+    void onUsageBatchCreated(UsageBatchCreatedEvent event);
 
     /**
      * @return number of items.

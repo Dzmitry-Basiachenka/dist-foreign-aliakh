@@ -18,8 +18,10 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -28,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -49,6 +52,20 @@ public class AclUsageFilterWidgetTest {
     public void setUp() {
         controller = createMock(IAclUsageFilterController.class);
         widget.setController(controller);
+    }
+
+    @Test
+    public void testUpdateUsageBatchesInFilterWidget() {
+        AclUsageBatch usageBatch = buildAclUsageBatch();
+        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(usageBatch)).times(2);
+        replay(controller);
+        widget.init();
+        widget.updateUsageBatchesInFilterWidget();
+        ComboBox<String> usageBatchNameComboBox = Whitebox.getInternalState(widget, "usageBatchNameComboBox");
+        Collection<?> usageBatchNames = ((ListDataProvider<?>) usageBatchNameComboBox.getDataProvider()).getItems();
+        assertEquals(1, usageBatchNames.size());
+        assertTrue(usageBatchNames.contains(usageBatch.getName()));
+        verify(controller);
     }
 
     @Test

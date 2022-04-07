@@ -9,6 +9,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBo
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
@@ -16,15 +17,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
+import com.vaadin.event.EventRouter;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -106,18 +110,24 @@ public class CreateAclUsageBatchWindowTest {
 
     @Test
     public void testOnCreateClicked() {
-        mockStatic(Windows.class);
+        window = createPartialMock(CreateAclUsageBatchWindow.class, new String[]{"isValid", "close"}, controller);
+        expect(window.isValid()).andReturn(true).once();
+        EventRouter eventRouter = createPartialMock(EventRouter.class, "fireEvent");
+        Whitebox.setInternalState(window, "eventRouter", eventRouter);
+        eventRouter.fireEvent(anyObject(UsageBatchCreatedEvent.class));
+        expectLastCall().once();
+        window.close();
+        expectLastCall().once();
+        expect(controller.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME)).andReturn(false).once();
         Capture<AclUsageBatch> usageBatchCapture = newCapture();
+        expect(controller.insertAclUsageBatch(capture(usageBatchCapture))).andReturn(1).once();
+        mockStatic(Windows.class);
         Windows.showNotificationWindow("Creation completed: 1 record(s) were stored successfully");
         expectLastCall().once();
-        expect(controller.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME)).andReturn(false).times(2);
-        expect(controller.insertAclUsageBatch(capture(usageBatchCapture))).andReturn(1).once();
-        replay(Windows.class, controller);
-        window = new CreateAclUsageBatchWindow(controller);
+        replay(window, controller, Windows.class);
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, ACL_USAGE_BATCH_NAME);
         setTextFieldValue(window, DISTRIBUTION_PERIOD_YEAR_FIELD, DISTRIBUTION_PERIOD_YEAR);
         setComboBoxValue(window, DISTRIBUTION_PERIOD_MONTH_COMBOBOX, DISTRIBUTION_PERIOD_MONTH);
-        setTextFieldValue(window, PERIOD_VALIDATION_FIELD, PERIODS_COUNT);
         Whitebox.setInternalState(window, "selectedPeriods", PERIODS);
         window.onCreateClicked();
         AclUsageBatch usageBatch = usageBatchCapture.getValue();
@@ -125,7 +135,7 @@ public class CreateAclUsageBatchWindowTest {
         assertEquals(DISTRIBUTION_PERIOD, usageBatch.getDistributionPeriod());
         assertEquals(PERIODS, usageBatch.getPeriods());
         assertTrue(usageBatch.getEditable());
-        verify(Windows.class, controller);
+        verify(window, controller, Windows.class);
     }
 
     @Test
