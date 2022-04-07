@@ -1,3 +1,34 @@
+15.1.11
+-
+* B-72772 FDA: Tech Debt: remove quotes around period field in Liquibase scripts  
+* B-72772 Tech Debt: introduce common report repository with common logic for report generation 
+* B-72772 Tech Debt: remove unused constants 
+* B-72772 FDA: Tech Debt: apply default order by wr_wrk_inst for ACL grant details 
+* B-71755 FDA: View/Delete Grant Set: update window caption 
+* B-72772 FDA: Tech Debt: split report repository by product families 
+* B-72772 FDA: Tech Debt: Introduce common date filter validator for report widgets 
+* B-72772 Tech Debt: adjust UI unit tests 
+* B-72772 FDA: Tech Debt: fix multiselect widgets in additional filters after clicking button Clear 
+* B-72772 FDA: Tech Debt: split report mapper by product families 
+* B-71795 FDA: Create ACL usage batch: implement domain objects 
+* B-71795 FDA: Create ACL usage batch: implement Liquibase script 
+* B-71795 FDA: Create ACL usage batch: rename common classes that handle set of periods across different repositories 
+* B-70731 FDA: Researcher Role enhancement for values: change value status visibility depending on role 
+* B-71754 FDA: Uploading works to a Grant set: implement UI components to upload Grant Details 
+* B-55079 FDA: UI usage batch view: implement ACL usages widget and add Usages sub-tab on Calculations tab 
+* B-68113 FDA: Get ineligible RH's from PRM and update the Grant Set: implement domain model for backend logic 
+* B-71795 FDA: Create ACL usage batch: implement MyBatis mappings 
+* B-55079 FDA: UI usage batch view: implement filter widget for ACL usages 
+* B-71795 FDA: Create ACL usage batch: implement usage batch and usage repositories 
+* B-71754 FDA & ACL: Uploading works to a Grant set: implement CSV processor to get grants from file 
+* B-71795 FDA: Create ACL usage batch: implement usage batch and usage services 
+* B-55079 FDA: UI usage batch view: add Usage Batch Name filter for ACL usages 
+* B-71754 FDA & ACL: Uploading works to a Grant set: implement grant detail duplicate validation 
+* B-55079 FDA: UI usage batch view: implement backend logic to get all ACL usage batches 
+* B-71795 FDA: Create ACL usage batch: implement usage controller 
+* B-71754 FDA: Uploading works to a Grant set: apply CSV processor on upload window 
+* B-71795 FDA: Create ACL usage batch: remove redundant imports 
+
 15.1.10
 -
 * B-71755 FDA: View/Delete Grant Set: update window caption
