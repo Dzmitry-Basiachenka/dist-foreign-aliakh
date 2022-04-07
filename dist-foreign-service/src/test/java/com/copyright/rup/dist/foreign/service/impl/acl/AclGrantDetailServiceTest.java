@@ -4,16 +4,18 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -31,6 +33,9 @@ import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
@@ -47,6 +52,8 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RupContextUtils.class)
 public class AclGrantDetailServiceTest {
 
     private static final String ACL_GRANT_SET_NAME = "ACL Grant Set 2021";
@@ -59,6 +66,7 @@ public class AclGrantDetailServiceTest {
     private static final String GRANT_STATUS = "GRANT";
     private static final String PRINT_DIGITAL_TOU_STATUS = "Print&Digital";
     private static final String DIFFERENT_RH_TOU_STATUS = "Different RH";
+    private static final String USER_NAME = "user@copyright.com";
 
     private IAclGrantDetailService aclGrantDetailService;
     private IAclGrantDetailRepository aclGrantDetailRepository;
@@ -123,11 +131,16 @@ public class AclGrantDetailServiceTest {
 
     @Test
     public void testUpdateGrants() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
+        grantDetailDto.setGrantStatus("Grant");
         aclGrantDetailRepository.updateGrant(grantDetailDto);
-        replay(aclGrantDetailRepository, rightsholderService);
+        expectLastCall().once();
+        replay(aclGrantDetailRepository, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Collections.singleton(grantDetailDto), false);
-        verify(aclGrantDetailRepository, rightsholderService);
+        assertEquals(USER_NAME, grantDetailDto.getUpdateUser());
+        verify(aclGrantDetailRepository, RupContextUtils.class);
     }
 
     @Test
@@ -189,6 +202,8 @@ public class AclGrantDetailServiceTest {
 
     @Test
     public void testUpdateGrantWithUpdatedRh() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         Capture<AclGrantDetailDto> grant1 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grant2 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grant3 = EasyMock.newCapture();
@@ -218,7 +233,7 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
             .andReturn(Collections.emptyList()).once();
-        replay(aclGrantDetailRepository, rightsholderService);
+        replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS),
             buildGrantDto("cb75a763-9317-4b8f-9f1c-d2c5f6c59a0c", 306985867L, PRINT_DIGITAL_TOU_STATUS, 2000072827L,
@@ -239,11 +254,13 @@ public class AclGrantDetailServiceTest {
             buildGrantDto(ACL_GRANT_ID_4, 232167525L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS));
         verifyGrantDtoCapture(grant5,
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS));
-        verify(aclGrantDetailRepository, rightsholderService);
+        verify(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
     }
 
     @Test
     public void testUpdateGrantWithStatus() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         AclGrantDetailDto grantDetailToUpdate = buildGrantDto(
             ACL_GRANT_ID_1, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS);
         Capture<AclGrantDetailDto> grantDetailDtoCapture1 = EasyMock.newCapture();
@@ -255,28 +272,30 @@ public class AclGrantDetailServiceTest {
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Collections.singleton(2000072827L)))
             .andReturn(Collections.emptyList()).once();
-        replay(aclGrantDetailRepository, rightsholderService);
+        replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Collections.singleton(buildGrantDto(ACL_GRANT_ID_2, 123456789L,
             PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY")), true);
         verifyGrantDtoCapture(grantDetailDtoCapture2,
             buildGrantDto(ACL_GRANT_ID_1, 123456789L, "Print Only", 2000072827L, PRINT_TOU, GRANT_STATUS));
         verifyGrantDtoCapture(grantDetailDtoCapture1,
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY"));
-        verify(aclGrantDetailRepository, rightsholderService);
+        verify(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
     }
 
     @Test
     public void testUpdateSingleGrant() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(aclGrantDetailRepository.findPairForGrantById(ACL_GRANT_ID_2)).andReturn(null).once();
         Capture<AclGrantDetailDto> grantDetailDtoCapture1 = EasyMock.newCapture();
         aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture1));
         expectLastCall().once();
         AclGrantDetailDto expectedGrantForUpdate =
             buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY");
-        replay(aclGrantDetailRepository);
+        replay(aclGrantDetailRepository, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Collections.singleton(expectedGrantForUpdate), true);
         verifyGrantDtoCapture(grantDetailDtoCapture1, expectedGrantForUpdate);
-        verify(aclGrantDetailRepository);
+        verify(aclGrantDetailRepository, RupContextUtils.class);
     }
 
     @Test
