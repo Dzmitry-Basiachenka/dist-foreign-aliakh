@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Objects;
+
 /**
  * Class represents a set of filtering criteria for ACL usages.
  * <p>
@@ -29,7 +31,7 @@ public class AclUsageFilter {
      * @param filter base filter
      */
     public AclUsageFilter(AclUsageFilter filter) {
-        if (null != filter) {
+        if (Objects.nonNull(filter)) {
             setUsageBatchName(filter.getUsageBatchName());
         }
     }
@@ -46,7 +48,7 @@ public class AclUsageFilter {
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return null == usageBatchName;
+        return Objects.isNull(usageBatchName);
     }
 
     @Override
