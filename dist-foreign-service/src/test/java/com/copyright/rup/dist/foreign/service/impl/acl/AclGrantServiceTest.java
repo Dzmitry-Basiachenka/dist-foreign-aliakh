@@ -74,17 +74,20 @@ public class AclGrantServiceTest {
     public void testCreateAclGrantDetails() {
         Map<Long, String> wrWrkInstToSystemTitles = createWrWrkInstToSystemTitleMap();
         LocalDate periodEndDate = LocalDate.of(2021, 6, 30);
+        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
         expect(
             rmsRightsService.getGrants(new ArrayList<>(wrWrkInstToSystemTitles.keySet()), periodEndDate, STATUS,
                 TYPE_OF_USES, Collections.singleton(ACL))).andReturn(buildRmsGrants()).once();
-        replay(rmsRightsService);
+        expect(prmIntegrationService.getIneligibleRightsholders(periodEndDate, ACL)).andReturn(ineligibleRightsholders)
+            .once();
+        replay(rmsRightsService, prmIntegrationService);
         List<AclGrantDetail> actualGrantDetails =
             aclGrantService.createAclGrantDetails(buildGrantSet(), wrWrkInstToSystemTitles, "SYSTEM");
         List<AclGrantDetail> expectedGrantDetails = buildAclGrantDetails();
         assertEquals(expectedGrantDetails.size(), actualGrantDetails.size());
         IntStream.range(0, actualGrantDetails.size()).forEach(i ->
             verifyAclGrantDetails(expectedGrantDetails.get(i), actualGrantDetails.get(i)));
-        verify(rmsRightsService);
+        verify(rmsRightsService, prmIntegrationService);
     }
 
     @Test

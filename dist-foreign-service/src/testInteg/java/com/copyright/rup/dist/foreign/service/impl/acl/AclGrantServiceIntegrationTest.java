@@ -72,6 +72,9 @@ public class AclGrantServiceIntegrationTest {
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_2.json", RMS_RESPONSE);
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_3.json", RMS_RESPONSE);
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_4.json", RMS_RESPONSE);
+        testHelper.expectPrmIneligibleParentCall("acl/ineligible.rightsholders/rightsholder_parents.json");
+        testHelper.expectPrmIneligibleCall("d145f685-994e-4b47-8748-c1ad375da3f9", "ACLPRINT",
+            "acl/ineligible.rightsholders/ineligible_rightsholder_print.json");
         List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
             createWrWrkInstToSystemTitleMap(), USER_NAME);
         assertEquals(8, actualDetails.size());
@@ -98,17 +101,17 @@ public class AclGrantServiceIntegrationTest {
     private List<AclGrantDetail> buildAclGrantDetails() {
         return Arrays.asList(
             buildAclGrantDetail(
-                DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class"),
+                DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class", true),
             buildAclGrantDetail(
-                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class"),
+                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", false),
             buildAclGrantDetail(
-                PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics"),
+                PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", false),
             buildAclGrantDetail(
-                DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics"),
-            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE),
-            buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!"),
-            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE),
-            buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE)
+                DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", true),
+            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE, true),
+            buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", true),
+            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE, true),
+            buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE, true)
         );
     }
 
@@ -128,10 +131,10 @@ public class AclGrantServiceIntegrationTest {
     }
 
     private AclGrantDetail buildAclGrantDetail(String typeOfUse, Long rhAccountNumber, Long wrWrkInst,
-                                               String typeOfUseStatus, String systemTitle) {
+                                               String typeOfUseStatus, String systemTitle, boolean eligible) {
         AclGrantDetail aclGrantDetail = new AclGrantDetail();
         aclGrantDetail.setGrantSetId("c72b8f6a-0923-43f8-b0d6-797de523de2d");
-        aclGrantDetail.setEligible(true);
+        aclGrantDetail.setEligible(eligible);
         aclGrantDetail.setTypeOfUse(typeOfUse);
         aclGrantDetail.setRhAccountNumber(rhAccountNumber);
         aclGrantDetail.setWrWrkInst(wrWrkInst);

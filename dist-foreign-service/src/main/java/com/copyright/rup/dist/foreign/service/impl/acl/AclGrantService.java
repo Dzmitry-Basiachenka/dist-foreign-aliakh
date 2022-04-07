@@ -76,6 +76,7 @@ public class AclGrantService implements IAclGrantService {
                 grantDetails.add(detail);
             });
         });
+        setEligibleFlag(grantDetails, periodEndDate, grantSet.getLicenseType());
         return grantDetails;
     }
 
@@ -83,14 +84,14 @@ public class AclGrantService implements IAclGrantService {
     public void setEligibleFlag(List<AclGrantDetail> grantDetailDtos, LocalDate date, String licenseType) {
         Set<AclIneligibleRightsholder> ineligibleRightsholders =
             prmIntegrationService.getIneligibleRightsholders(date, licenseType);
-        grantDetailDtos.forEach(grant ->
-            ineligibleRightsholders.forEach(ineligibleRightsholder ->
-                grant.setEligible(getEligibleStatus(grant, ineligibleRightsholder))));
+        grantDetailDtos.forEach(grant -> grant.setEligible(getEligibleStatus(grant, ineligibleRightsholders)));
     }
 
-    private boolean getEligibleStatus(AclGrantDetail grant, AclIneligibleRightsholder ineligibleRightsholder) {
-        return !(ineligibleRightsholder.getRhAccountNumber().equals(grant.getRhAccountNumber())
-            && ineligibleRightsholder.getTypeOfUse().equals(grant.getTypeOfUse()));
+    private boolean getEligibleStatus(AclGrantDetail grant, Set<AclIneligibleRightsholder> ineligibleRightsholders) {
+        return ineligibleRightsholders.stream()
+            .noneMatch(
+                ineligibleRightsholder -> ineligibleRightsholder.getRhAccountNumber().equals(grant.getRhAccountNumber())
+                    && ineligibleRightsholder.getTypeOfUse().equals(grant.getTypeOfUse()));
     }
 
     /**
@@ -131,7 +132,6 @@ public class AclGrantService implements IAclGrantService {
         aclGrantDetail.setId(RupPersistUtils.generateUuid());
         aclGrantDetail.setGrantSetId(grantSetId);
         aclGrantDetail.setGrantStatus(grantStatus);
-        aclGrantDetail.setEligible(true);
         aclGrantDetail.setManualUploadFlag(false);
         aclGrantDetail.setTypeOfUse(grant.getTypeOfUse());
         aclGrantDetail.setRhAccountNumber(grant.getWorkGroupOwnerOrgNumber().longValueExact());
