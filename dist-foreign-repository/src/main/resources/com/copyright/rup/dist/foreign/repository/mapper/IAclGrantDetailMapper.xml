@@ -207,7 +207,8 @@
             grant_status = #{grantStatus},
             type_of_use_status = #{typeOfUseStatus},
             rh_account_number = #{rhAccountNumber},
-            is_eligible = #{eligible}
+            is_eligible = #{eligible},
+            <include refid="StoredEntityMapper.update"/>
         where df_acl_grant_detail_uid = #{id}
     </update>
 

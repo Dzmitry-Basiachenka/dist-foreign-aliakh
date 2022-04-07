@@ -231,7 +231,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         filter.setEligibleExpression(new FilterExpression<>(FilterOperatorEnum.Y));
         List<AclGrantDetailDto> values = aclGrantDetailRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
-        verifyAclGrantDetailDto(loadExpectedDtos("json/acl/acl_grant_detail_dto.json").get(0), values.get(0));
+        verifyAclGrantDetailDto(loadExpectedDtos("json/acl/acl_grant_detail_dto.json").get(0), values.get(0), true);
     }
 
     @Test
@@ -390,7 +390,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
             new FilterExpression<>(FilterOperatorEnum.EQUALS, 1000019896L, null));
         AclGrantDetailDto actualGrantDetailDto =
             aclGrantDetailRepository.findDtosByFilter(aclGrantDetailFilter, null, null).get(0);
-        verifyAclGrantDetailDto(expectedGrantDetailDto, actualGrantDetailDto);
+        verifyAclGrantDetailDto(expectedGrantDetailDto, actualGrantDetailDto, false);
     }
 
     @Test
@@ -448,7 +448,8 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(count, usagesCount);
     }
 
-    private void verifyAclGrantDetailDto(AclGrantDetailDto expectedGrantDetail, AclGrantDetailDto actualGrantDetail) {
+    private void verifyAclGrantDetailDto(AclGrantDetailDto expectedGrantDetail, AclGrantDetailDto actualGrantDetail,
+                                         boolean isValidateDate) {
         assertEquals(expectedGrantDetail.getLicenseType(), actualGrantDetail.getLicenseType());
         assertEquals(expectedGrantDetail.getTypeOfUseStatus(), actualGrantDetail.getTypeOfUseStatus());
         assertEquals(expectedGrantDetail.getGrantStatus(), actualGrantDetail.getGrantStatus());
@@ -460,8 +461,13 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getTypeOfUse(), actualGrantDetail.getTypeOfUse());
         assertEquals(expectedGrantDetail.getGrantPeriod(), actualGrantDetail.getGrantPeriod());
         assertEquals(expectedGrantDetail.getEditable(), actualGrantDetail.getEditable());
+        assertEquals(expectedGrantDetail.getVersion(), actualGrantDetail.getVersion());
+        assertEquals(expectedGrantDetail.getCreateUser(), actualGrantDetail.getCreateUser());
+        assertEquals(expectedGrantDetail.getUpdateUser(), actualGrantDetail.getUpdateUser());
         assertEquals(expectedGrantDetail.getCreateDate(), actualGrantDetail.getCreateDate());
-        assertEquals(expectedGrantDetail.getUpdateDate(), actualGrantDetail.getUpdateDate());
+        if (isValidateDate) {
+            assertEquals(expectedGrantDetail.getUpdateDate(), actualGrantDetail.getUpdateDate());
+        }
         assertEquals(expectedGrantDetail.getManualUploadFlag(), actualGrantDetail.getManualUploadFlag());
     }
 

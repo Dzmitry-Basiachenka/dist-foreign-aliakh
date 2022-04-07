@@ -96,6 +96,7 @@ public class AclGrantDetailService implements IAclGrantDetailService {
 
     @Override
     public void updateGrants(Collection<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus) {
+        String userName = RupContextUtils.getUserName();
         if (doUpdateTouStatus) {
             Map<Long, List<AclGrantDetailDto>> wrWrkInstToGrants =
                 aclGrantDetailDtos.stream().collect(Collectors.groupingBy(AclGrantDetailDto::getWrWrkInst));
@@ -108,10 +109,16 @@ public class AclGrantDetailService implements IAclGrantDetailService {
                     }
                 }
                 updateTypeOfUseStatus(grants);
-                grants.forEach(grant -> aclGrantDetailRepository.updateGrant(grant));
+                grants.forEach(grant -> {
+                    grant.setUpdateUser(userName);
+                    aclGrantDetailRepository.updateGrant(grant);
+                });
             });
         } else {
-            aclGrantDetailDtos.forEach(grant -> aclGrantDetailRepository.updateGrant(grant));
+            aclGrantDetailDtos.forEach(grant -> {
+                grant.setUpdateUser(userName);
+                aclGrantDetailRepository.updateGrant(grant);
+            });
         }
         updateRightsholders(aclGrantDetailDtos);
     }
