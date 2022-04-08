@@ -19,7 +19,9 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
@@ -38,10 +40,12 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclGrantDetailService}.
@@ -64,6 +68,7 @@ public class AclGrantDetailServiceTest {
     private static final String PRINT_TOU = "PRINT";
     private static final String DIGITAL_TOU = "DIGITAL";
     private static final String GRANT_STATUS = "GRANT";
+    private static final String ACL = "ACL";
     private static final String PRINT_DIGITAL_TOU_STATUS = "Print&Digital";
     private static final String DIFFERENT_RH_TOU_STATUS = "Different RH";
     private static final String USER_NAME = "user@copyright.com";
@@ -72,6 +77,7 @@ public class AclGrantDetailServiceTest {
     private IAclGrantDetailRepository aclGrantDetailRepository;
     private IRightsholderService rightsholderService;
     private IUdmBaselineService udmBaselineService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
@@ -79,9 +85,11 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository = createMock(IAclGrantDetailRepository.class);
         rightsholderService = createMock(IRightsholderService.class);
         udmBaselineService = createMock(IUdmBaselineService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(aclGrantDetailService, aclGrantDetailRepository);
         Whitebox.setInternalState(aclGrantDetailService, rightsholderService);
         Whitebox.setInternalState(aclGrantDetailService, udmBaselineService);
+        Whitebox.setInternalState(aclGrantDetailService, prmIntegrationService);
     }
 
     @Test
@@ -144,7 +152,7 @@ public class AclGrantDetailServiceTest {
     }
 
     @Test
-    public void testInsertAclGrantDetails() {
+    public void testAddToGrantSet() {
         Capture<AclGrantDetail> grant1 = EasyMock.newCapture();
         Capture<AclGrantDetail> grant2 = EasyMock.newCapture();
         Capture<AclGrantDetail> grant3 = EasyMock.newCapture();
@@ -152,13 +160,13 @@ public class AclGrantDetailServiceTest {
         Capture<AclGrantDetailDto> grantDto2 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grantDto3 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grantDto4 = EasyMock.newCapture();
-        AclGrantSet grantSet = new AclGrantSet();
-        grantSet.setId("3eb28726-19de-487d-8397-02c1d5baa308");
-        grantSet.setPeriods(Sets.newHashSet(202106, 202112));
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
-            buildGrantDto(ACL_GRANT_ID_1, 123456789L, null, 2000072827L, DIGITAL_TOU, GRANT_STATUS),
-            buildGrantDto(ACL_GRANT_ID_2, 123456789L, null, 2000070936L, PRINT_TOU, GRANT_STATUS),
-            buildGrantDto(ACL_GRANT_ID_3, 232167525L, null, 1000014080L, DIGITAL_TOU, GRANT_STATUS));
+            buildGrantDto(ACL_GRANT_ID_1, 123456789L, null, 2000072827L, DIGITAL_TOU, GRANT_STATUS, true),
+            buildGrantDto(ACL_GRANT_ID_2, 123456789L, null, 2000070936L, PRINT_TOU, GRANT_STATUS, true),
+            buildGrantDto(ACL_GRANT_ID_3, 232167525L, null, 1000014080L, DIGITAL_TOU, GRANT_STATUS, false));
+        AclGrantSet grantSet = buildGrantSet();
+        expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.of(2021, 12, 31), ACL))
+            .andReturn(Collections.singleton(buildIneligibleRightsholder())).once();
         aclGrantDetailRepository.insert(capture(grant1));
         expectLastCall().once();
         aclGrantDetailRepository.insert(capture(grant2));
@@ -175,29 +183,30 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository.updateGrant(capture(grantDto2));
         expectLastCall().once();
         expect(aclGrantDetailRepository.findPairForGrantById(ACL_GRANT_ID_3)).andReturn(
-            buildGrantDto(ACL_GRANT_ID_4, 232167525L, "Print Only", 1000014080L, PRINT_TOU, GRANT_STATUS)).once();
+            buildGrantDto(ACL_GRANT_ID_4, 232167525L, "Print Only", 1000014080L, PRINT_TOU, GRANT_STATUS, true)).once();
         aclGrantDetailRepository.updateGrant(capture(grantDto3));
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grantDto4));
         expectLastCall().once();
         expect(rightsholderService.updateRightsholders(Sets.newHashSet(1000014080L, 2000072827L, 2000070936L)))
             .andReturn(Collections.emptyList()).once();
-        replay(aclGrantDetailRepository, rightsholderService, udmBaselineService);
+        replay(aclGrantDetailRepository, rightsholderService, udmBaselineService, prmIntegrationService);
         aclGrantDetailService.addToGrantSet(grantSet, aclGrantDetailDtos);
         verifyGrantCapture(grant1,
-            buildGrant(ACL_GRANT_ID_1, 123456789L, "BIOCHEMISTRY (MOSCOW)", 2000072827L, DIGITAL_TOU));
+            buildGrant(ACL_GRANT_ID_1, 123456789L, "BIOCHEMISTRY (MOSCOW)", 2000072827L, DIGITAL_TOU, true));
         verifyGrantCapture(grant2,
-            buildGrant(ACL_GRANT_ID_2, 123456789L, "BIOCHEMISTRY (MOSCOW)", 2000070936L, PRINT_TOU));
-        verifyGrantCapture(grant3, buildGrant(ACL_GRANT_ID_3, 232167525L, "100 ROAD MOVIES", 1000014080L, DIGITAL_TOU));
+            buildGrant(ACL_GRANT_ID_2, 123456789L, "BIOCHEMISTRY (MOSCOW)", 2000070936L, PRINT_TOU, true));
+        verifyGrantCapture(grant3,
+            buildGrant(ACL_GRANT_ID_3, 232167525L, "100 ROAD MOVIES", 1000014080L, DIGITAL_TOU, false));
         verifyGrantDtoCapture(grantDto1, buildGrantDto(ACL_GRANT_ID_3, 232167525L, PRINT_DIGITAL_TOU_STATUS,
-            1000014080L, DIGITAL_TOU, GRANT_STATUS));
+            1000014080L, DIGITAL_TOU, GRANT_STATUS, false));
         verifyGrantDtoCapture(grantDto2, buildGrantDto(ACL_GRANT_ID_4, 232167525L, PRINT_DIGITAL_TOU_STATUS,
-            1000014080L, PRINT_TOU, GRANT_STATUS));
+            1000014080L, PRINT_TOU, GRANT_STATUS, true));
         verifyGrantDtoCapture(grantDto3, buildGrantDto(ACL_GRANT_ID_1, 123456789L, DIFFERENT_RH_TOU_STATUS,
-            2000072827L, DIGITAL_TOU, GRANT_STATUS));
+            2000072827L, DIGITAL_TOU, GRANT_STATUS, true));
         verifyGrantDtoCapture(grantDto4, buildGrantDto(ACL_GRANT_ID_2, 123456789L, DIFFERENT_RH_TOU_STATUS,
-            2000070936L, PRINT_TOU, GRANT_STATUS));
-        verify(aclGrantDetailRepository, rightsholderService, udmBaselineService);
+            2000070936L, PRINT_TOU, GRANT_STATUS, true));
+        verify(aclGrantDetailRepository, rightsholderService, udmBaselineService, prmIntegrationService);
     }
 
     @Test
@@ -212,13 +221,13 @@ public class AclGrantDetailServiceTest {
         Capture<AclGrantDetailDto> grant6 = EasyMock.newCapture();
         expect(aclGrantDetailRepository.findPairForGrantById(ACL_GRANT_ID_2)).andReturn(
             buildGrantDto(ACL_GRANT_ID_1, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000070936L, PRINT_TOU,
-                GRANT_STATUS)).once();
+                GRANT_STATUS, true)).once();
         expect(aclGrantDetailRepository.findPairForGrantById("cb75a763-9317-4b8f-9f1c-d2c5f6c59a0c")).andReturn(
             buildGrantDto(ACL_GRANT_ID_3, 306985867L, PRINT_DIGITAL_TOU_STATUS, 1000014080L, DIGITAL_TOU,
-                GRANT_STATUS)).once();
+                GRANT_STATUS, true)).once();
         expect(aclGrantDetailRepository.findPairForGrantById("20e05f23-eeef-45fd-89d2-1bc87efa98df")).andReturn(
             buildGrantDto(ACL_GRANT_ID_4, 232167525L, DIFFERENT_RH_TOU_STATUS, 2000072827L, PRINT_TOU,
-                GRANT_STATUS)).once();
+                GRANT_STATUS, true)).once();
         aclGrantDetailRepository.updateGrant(capture(grant1));
         expectLastCall().once();
         aclGrantDetailRepository.updateGrant(capture(grant2));
@@ -235,25 +244,26 @@ public class AclGrantDetailServiceTest {
             .andReturn(Collections.emptyList()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         List<AclGrantDetailDto> aclGrantDetailDtos = Arrays.asList(
-            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS),
+            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS,
+                true),
             buildGrantDto("cb75a763-9317-4b8f-9f1c-d2c5f6c59a0c", 306985867L, PRINT_DIGITAL_TOU_STATUS, 2000072827L,
-                PRINT_TOU, GRANT_STATUS),
+                PRINT_TOU, GRANT_STATUS, true),
             buildGrantDto("20e05f23-eeef-45fd-89d2-1bc87efa98df", 232167525L, DIFFERENT_RH_TOU_STATUS, 2000072827L,
-                DIGITAL_TOU, GRANT_STATUS)
+                DIGITAL_TOU, GRANT_STATUS, true)
         );
         aclGrantDetailService.updateGrants(new HashSet<>(aclGrantDetailDtos), true);
         verifyGrantDtoCapture(grant1, buildGrantDto("20e05f23-eeef-45fd-89d2-1bc87efa98df", 232167525L,
-            PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS));
+            PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS, true));
         verifyGrantDtoCapture(grant3, buildGrantDto("cb75a763-9317-4b8f-9f1c-d2c5f6c59a0c", 306985867L,
-            DIFFERENT_RH_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS));
-        verifyGrantDtoCapture(grant6,
-            buildGrantDto(ACL_GRANT_ID_1, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000070936L, PRINT_TOU, GRANT_STATUS));
-        verifyGrantDtoCapture(grant4,
-            buildGrantDto(ACL_GRANT_ID_3, 306985867L, DIFFERENT_RH_TOU_STATUS, 1000014080L, DIGITAL_TOU, GRANT_STATUS));
-        verifyGrantDtoCapture(grant2,
-            buildGrantDto(ACL_GRANT_ID_4, 232167525L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS));
-        verifyGrantDtoCapture(grant5,
-            buildGrantDto(ACL_GRANT_ID_2, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000072827L, DIGITAL_TOU, GRANT_STATUS));
+            DIFFERENT_RH_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS, true));
+        verifyGrantDtoCapture(grant6, buildGrantDto(ACL_GRANT_ID_1, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000070936L,
+            PRINT_TOU, GRANT_STATUS, true));
+        verifyGrantDtoCapture(grant4, buildGrantDto(ACL_GRANT_ID_3, 306985867L, DIFFERENT_RH_TOU_STATUS, 1000014080L,
+            DIGITAL_TOU, GRANT_STATUS, true));
+        verifyGrantDtoCapture(grant2, buildGrantDto(ACL_GRANT_ID_4, 232167525L, PRINT_DIGITAL_TOU_STATUS, 2000072827L,
+            PRINT_TOU, GRANT_STATUS, true));
+        verifyGrantDtoCapture(grant5, buildGrantDto(ACL_GRANT_ID_2, 123456789L, DIFFERENT_RH_TOU_STATUS, 2000072827L,
+            DIGITAL_TOU, GRANT_STATUS, true));
         verify(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
     }
 
@@ -262,7 +272,7 @@ public class AclGrantDetailServiceTest {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         AclGrantDetailDto grantDetailToUpdate = buildGrantDto(
-            ACL_GRANT_ID_1, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS);
+            ACL_GRANT_ID_1, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, PRINT_TOU, GRANT_STATUS, true);
         Capture<AclGrantDetailDto> grantDetailDtoCapture1 = EasyMock.newCapture();
         Capture<AclGrantDetailDto> grantDetailDtoCapture2 = EasyMock.newCapture();
         expect(aclGrantDetailRepository.findPairForGrantById(ACL_GRANT_ID_2)).andReturn(grantDetailToUpdate).once();
@@ -274,11 +284,12 @@ public class AclGrantDetailServiceTest {
             .andReturn(Collections.emptyList()).once();
         replay(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Collections.singleton(buildGrantDto(ACL_GRANT_ID_2, 123456789L,
-            PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY")), true);
+            PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY", true)), true);
         verifyGrantDtoCapture(grantDetailDtoCapture2,
-            buildGrantDto(ACL_GRANT_ID_1, 123456789L, "Print Only", 2000072827L, PRINT_TOU, GRANT_STATUS));
+            buildGrantDto(ACL_GRANT_ID_1, 123456789L, "Print Only", 2000072827L, PRINT_TOU, GRANT_STATUS, true));
         verifyGrantDtoCapture(grantDetailDtoCapture1,
-            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY"));
+            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY",
+                true));
         verify(aclGrantDetailRepository, rightsholderService, RupContextUtils.class);
     }
 
@@ -291,11 +302,29 @@ public class AclGrantDetailServiceTest {
         aclGrantDetailRepository.updateGrant(capture(grantDetailDtoCapture1));
         expectLastCall().once();
         AclGrantDetailDto expectedGrantForUpdate =
-            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY");
+            buildGrantDto(ACL_GRANT_ID_2, 123456789L, PRINT_DIGITAL_TOU_STATUS, 2000072827L, DIGITAL_TOU, "DENY", true);
         replay(aclGrantDetailRepository, RupContextUtils.class);
         aclGrantDetailService.updateGrants(Collections.singleton(expectedGrantForUpdate), true);
         verifyGrantDtoCapture(grantDetailDtoCapture1, expectedGrantForUpdate);
         verify(aclGrantDetailRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testSetEligibleFlag() {
+        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
+        expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.of(2020, 1, 1), ACL))
+            .andReturn(ineligibleRightsholders).once();
+        List<AclGrantDetail> grantDetailDtos = Arrays.asList(
+            buildGrant("20f14f70-8f35-478d-98d9-dde62ab5754c", 1000000001L, "100 ROAD MOVIES", 1000014080L, DIGITAL_TOU,
+                true),
+            buildGrant("52cc9af9-4e35-45ac-91f8-4882af975044", 1000025853L, "I've discovered energy!", 144114260L,
+                DIGITAL_TOU, true)
+        );
+        replay(prmIntegrationService);
+        aclGrantDetailService.setEligibleFlag(grantDetailDtos, LocalDate.of(2020, 1, 1), ACL);
+        assertFalse(grantDetailDtos.get(0).getEligible());
+        assertTrue(grantDetailDtos.get(1).getEligible());
+        verify(prmIntegrationService);
     }
 
     @Test
@@ -342,7 +371,8 @@ public class AclGrantDetailServiceTest {
         assertTrue(actualGrantDetail.getManualUploadFlag());
     }
 
-    private AclGrantDetail buildGrant(String id, Long wrWrkInst, String systemTitle, Long rhAccountNumber, String tou) {
+    private AclGrantDetail buildGrant(String id, Long wrWrkInst, String systemTitle, Long rhAccountNumber, String tou,
+                                      boolean eligibleFlag) {
         AclGrantDetail grantDetail = new AclGrantDetail();
         grantDetail.setId(id);
         grantDetail.setWrWrkInst(wrWrkInst);
@@ -351,11 +381,12 @@ public class AclGrantDetailServiceTest {
         grantDetail.setTypeOfUse(tou);
         grantDetail.setGrantStatus(GRANT_STATUS);
         grantDetail.setManualUploadFlag(true);
+        grantDetail.setEligible(eligibleFlag);
         return grantDetail;
     }
 
     private AclGrantDetailDto buildGrantDto(String id, Long wrWrkInst, String touStatus, Long rhAccountNumber,
-                                            String tou, String grantStatus) {
+                                            String tou, String grantStatus, boolean eligibleFlag) {
         AclGrantDetailDto grantDetailDto = new AclGrantDetailDto();
         grantDetailDto.setId(id);
         grantDetailDto.setWrWrkInst(wrWrkInst);
@@ -364,6 +395,25 @@ public class AclGrantDetailServiceTest {
         grantDetailDto.setTypeOfUse(tou);
         grantDetailDto.setGrantStatus(grantStatus);
         grantDetailDto.setManualUploadFlag(true);
+        grantDetailDto.setEligible(eligibleFlag);
         return grantDetailDto;
+    }
+
+    private AclGrantSet buildGrantSet() {
+        AclGrantSet grantSet = new AclGrantSet();
+        grantSet.setId("3eb28726-19de-487d-8397-02c1d5baa308");
+        grantSet.setPeriods(Sets.newHashSet(202106, 202112));
+        grantSet.setGrantPeriod(202112);
+        grantSet.setLicenseType(ACL);
+        return grantSet;
+    }
+
+    private AclIneligibleRightsholder buildIneligibleRightsholder() {
+        AclIneligibleRightsholder rightsholder = new AclIneligibleRightsholder();
+        rightsholder.setOrganizationId("87ab019d-6a93-4296-9ad6-c6340f3d9509");
+        rightsholder.setLicenseType(ACL);
+        rightsholder.setTypeOfUse(DIGITAL_TOU);
+        rightsholder.setRhAccountNumber(1000014080L);
+        return rightsholder;
     }
 }

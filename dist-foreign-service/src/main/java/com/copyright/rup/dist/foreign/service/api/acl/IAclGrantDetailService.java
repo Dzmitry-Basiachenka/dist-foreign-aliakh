@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -61,6 +62,16 @@ public interface IAclGrantDetailService {
      * @param doUpdateTouStatus  <code>true</code> if system should update TOU status
      */
     void updateGrants(Collection<AclGrantDetailDto> aclGrantDetailDtos, boolean doUpdateTouStatus);
+
+    /**
+     * Sets eligible flag to grant based on ineligible rightsholder on PRM.
+     * Sets <code>ineligible</code> if ineligible rightsholder and grant have similar account numbers and types of use.
+     *
+     * @param grantDetailDtos list of {@link AclGrantDetail}
+     * @param date            period end date
+     * @param licenseType     license type
+     */
+    void setEligibleFlag(List<AclGrantDetail> grantDetailDtos, LocalDate date, String licenseType);
 
     /**
      * Deletes ACL grant details by ACL grant set id.

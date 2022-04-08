@@ -6,8 +6,7 @@ import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
-import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 
 import com.google.common.collect.ImmutableSet;
@@ -52,7 +51,7 @@ public class AclGrantService implements IAclGrantService {
     @Qualifier("df.service.rmsCacheService")
     private IRmsRightsService rmsRightsService;
     @Autowired
-    private IPrmIntegrationService prmIntegrationService;
+    private IAclGrantDetailService grantDetailService;
 
     @Override
     @Transactional
@@ -76,22 +75,8 @@ public class AclGrantService implements IAclGrantService {
                 grantDetails.add(detail);
             });
         });
-        setEligibleFlag(grantDetails, periodEndDate, grantSet.getLicenseType());
+        grantDetailService.setEligibleFlag(grantDetails, periodEndDate, grantSet.getLicenseType());
         return grantDetails;
-    }
-
-    @Override
-    public void setEligibleFlag(List<AclGrantDetail> grantDetailDtos, LocalDate date, String licenseType) {
-        Set<AclIneligibleRightsholder> ineligibleRightsholders =
-            prmIntegrationService.getIneligibleRightsholders(date, licenseType);
-        grantDetailDtos.forEach(grant -> grant.setEligible(getEligibleStatus(grant, ineligibleRightsholders)));
-    }
-
-    private boolean getEligibleStatus(AclGrantDetail grant, Set<AclIneligibleRightsholder> ineligibleRightsholders) {
-        return ineligibleRightsholders.stream()
-            .noneMatch(
-                ineligibleRightsholder -> ineligibleRightsholder.getRhAccountNumber().equals(grant.getRhAccountNumber())
-                    && ineligibleRightsholder.getTypeOfUse().equals(grant.getTypeOfUse()));
     }
 
     /**
