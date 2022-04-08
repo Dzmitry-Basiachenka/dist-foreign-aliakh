@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AaclDetailLicenseeClassValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclGrantDetailDuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedWrWrkInstValidator;
@@ -168,8 +169,9 @@ public class CsvProcessorFactory {
      * @return instance of {@link AclGrantDetailCsvProcessor}
      */
     public AclGrantDetailCsvProcessor getAclGrantDetailCvsProcessor(String grantSetId) {
-        AclGrantDetailCsvProcessor processor =  new AclGrantDetailCsvProcessor();
-        processor.addBusinessValidators(new GrantDetailDuplicateValidator(grantDetailService, grantSetId));
+        AclGrantDetailCsvProcessor processor = new AclGrantDetailCsvProcessor();
+        processor.addBusinessValidators(new GrantDetailDuplicateValidator(grantDetailService, grantSetId),
+            new AclGrantDetailDuplicateInFileValidator());
         return processor;
     }
 }

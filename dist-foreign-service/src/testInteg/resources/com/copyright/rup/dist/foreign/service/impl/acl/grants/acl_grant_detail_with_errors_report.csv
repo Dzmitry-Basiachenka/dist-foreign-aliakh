@@ -1,5 +1,8 @@
 WR_WRK_INST,TYPE_OF_USE,RH_ACCOUNT_NUMBER,Line,Error Reason
 ,,,2,WR_WRK_INST: Field is required and cannot be null or empty; TYPE_OF_USE: Field is required and cannot be null or empty; RH_ACCOUNT_NUMBER: Field is required and cannot be null or empty
-1234567890,PRINT&DIGITAL,1234567890123456789,3,WR_WRK_INST: Field value should not exceed 9 characters; TYPE_OF_USE: Field value should not exceed 7 characters; RH_ACCOUNT_NUMBER: Field value should not exceed 18 characters
-not a number,PRINT,not a number,4,WR_WRK_INST: Field value should be positive number; WR_WRK_INST: Field value should not exceed 9 characters; RH_ACCOUNT_NUMBER: Field value should be positive number
-122820638,DIGITAL,1000002859,5,Grant with Wr Wrk Inst and Type of Use already present in grant set
+1234567890,PRINT&DIGITAL,1234567890123456789,4,WR_WRK_INST: Field value should not exceed 9 characters; TYPE_OF_USE: Field value should not exceed 7 characters; RH_ACCOUNT_NUMBER: Field value should not exceed 18 characters
+not a number,PRINT,not a number,5,WR_WRK_INST: Field value should be positive number; WR_WRK_INST: Field value should not exceed 9 characters; RH_ACCOUNT_NUMBER: Field value should be positive number
+122820638,DIGITAL,1000002811,6,Grant with Wr Wrk Inst and Type of Use already present in grant set
+122820638,PRINT,1000002859,7,Grant with Wr Wrk Inst and Type of Use already present in file
+122820638,DIGITAL,1000002812,8,Grant with Wr Wrk Inst and Type of Use already present in grant set; Grant with Wr Wrk Inst and Type of Use already present in file
+122820638,PRINT,1000002813,9,Grant with Wr Wrk Inst and Type of Use already present in file
