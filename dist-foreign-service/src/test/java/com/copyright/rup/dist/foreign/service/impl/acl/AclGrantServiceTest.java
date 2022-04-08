@@ -1,11 +1,15 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
 
@@ -13,12 +17,12 @@ import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
-import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantService;
 
 import com.google.common.collect.ImmutableSet;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -59,57 +63,41 @@ public class AclGrantServiceTest {
 
     private final IAclGrantService aclGrantService = new AclGrantService();
     private IRmsRightsService rmsRightsService;
-    private IPrmIntegrationService prmIntegrationService;
+    private IAclGrantDetailService grantDetailService;
 
     @Before
     public void setUp() {
         rmsRightsService = createMock(IRmsRightsService.class);
-        prmIntegrationService = createMock(IPrmIntegrationService.class);
+        grantDetailService = createMock(IAclGrantDetailService.class);
         Whitebox.setInternalState(aclGrantService, rmsRightsService);
-        Whitebox.setInternalState(aclGrantService, prmIntegrationService);
+        Whitebox.setInternalState(aclGrantService, grantDetailService);
         Whitebox.setInternalState(aclGrantService, RIGHTS_PARTITION_SIZE);
     }
 
     @Test
     public void testCreateAclGrantDetails() {
         Map<Long, String> wrWrkInstToSystemTitles = createWrWrkInstToSystemTitleMap();
+        Capture<List<AclGrantDetail>> detailsCapture = newCapture();
         LocalDate periodEndDate = LocalDate.of(2021, 6, 30);
-        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
         expect(
             rmsRightsService.getGrants(new ArrayList<>(wrWrkInstToSystemTitles.keySet()), periodEndDate, STATUS,
                 TYPE_OF_USES, Collections.singleton(ACL))).andReturn(buildRmsGrants()).once();
-        expect(prmIntegrationService.getIneligibleRightsholders(periodEndDate, ACL)).andReturn(ineligibleRightsholders)
-            .once();
-        replay(rmsRightsService, prmIntegrationService);
+        grantDetailService.setEligibleFlag(capture(detailsCapture), eq(periodEndDate), eq(ACL));
+        expectLastCall().once();
+        replay(rmsRightsService, grantDetailService);
         List<AclGrantDetail> actualGrantDetails =
             aclGrantService.createAclGrantDetails(buildGrantSet(), wrWrkInstToSystemTitles, "SYSTEM");
+        assertSame(detailsCapture.getValue(), actualGrantDetails);
         List<AclGrantDetail> expectedGrantDetails = buildAclGrantDetails();
         assertEquals(expectedGrantDetails.size(), actualGrantDetails.size());
         IntStream.range(0, actualGrantDetails.size()).forEach(i ->
             verifyAclGrantDetails(expectedGrantDetails.get(i), actualGrantDetails.get(i)));
-        verify(rmsRightsService, prmIntegrationService);
-    }
-
-    @Test
-    public void testSetEligibleFlag() {
-        Set<AclIneligibleRightsholder> ineligibleRightsholders = Collections.singleton(buildIneligibleRightsholder());
-        expect(prmIntegrationService.getIneligibleRightsholders(LocalDate.now(), ACL))
-            .andReturn(ineligibleRightsholders).once();
-        List<AclGrantDetail> grantDetailDtos = Arrays.asList(
-            buildAclGrantDetail(DIGITAL, 1000000001L, 309812565L, DIGITAL_ONLY, SYSTEM_TITLE, GRANT),
-            buildAclGrantDetail(DIGITAL, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", GRANT)
-        );
-        replay(prmIntegrationService);
-        aclGrantService.setEligibleFlag(grantDetailDtos, LocalDate.now(), ACL);
-        assertFalse(grantDetailDtos.get(0).getEligible());
-        assertTrue(grantDetailDtos.get(1).getEligible());
-        verify(prmIntegrationService);
+        verify(rmsRightsService, grantDetailService);
     }
 
     private void verifyAclGrantDetails(AclGrantDetail expectedDetail, AclGrantDetail actualDetail) {
         assertNotNull(actualDetail.getId());
         assertEquals(expectedDetail.getGrantSetId(), actualDetail.getGrantSetId());
-        assertEquals(expectedDetail.getEligible(), actualDetail.getEligible());
         assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
         assertEquals(expectedDetail.getTypeOfUseStatus(), actualDetail.getTypeOfUseStatus());
         assertEquals(expectedDetail.getWrWrkInst(), actualDetail.getWrWrkInst());
@@ -192,15 +180,6 @@ public class AclGrantServiceTest {
             buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017, 12, 31)),
             buildRmsGrant(DIGITAL, new BigDecimal("7000099888"), 4875964318L, DENY, LocalDate.of(2017, 12, 31))
         ));
-    }
-
-    private AclIneligibleRightsholder buildIneligibleRightsholder() {
-        AclIneligibleRightsholder rightsholder = new AclIneligibleRightsholder();
-        rightsholder.setOrganizationId("87ab019d-6a93-4296-9ad6-c6340f3d9509");
-        rightsholder.setLicenseType(ACL);
-        rightsholder.setTypeOfUse("DIGITAL");
-        rightsholder.setRhAccountNumber(1000000001L);
-        return rightsholder;
     }
 
     private RmsGrant buildRmsGrant(String typeOfUse, BigDecimal ownerOrgNumber, Long wrWrkInst, String grantStatus,

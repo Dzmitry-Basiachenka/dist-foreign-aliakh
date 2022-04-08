@@ -8,7 +8,9 @@ import com.copyright.rup.dist.foreign.domain.AclGrantDetail;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclGrantTypeOfUseStatusEnum;
+import com.copyright.rup.dist.foreign.domain.AclIneligibleRightsholder;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantDetailRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +52,8 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     private IRightsholderService rightsholderService;
     @Autowired
     private IUdmBaselineService udmBaselineService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Transactional
     @Override
@@ -69,14 +74,16 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         LOGGER.info("Upload ACL grant details. Started. GrantSetId={}, AclGrantDetailsCount={}, UserName={}",
             grantSetId, size, userName);
         Map<Long, String> workToTitlesMap = udmBaselineService.getWrWrkInstToSystemTitles(grantSet.getPeriods());
-        grantDetails
-            .stream()
-            .map(this::convertDtoToDetail)
+        grantDetails.stream().map(this::convertDtoToDetail)
             .forEach(aclGrantDetail -> {
                 aclGrantDetail.setGrantSetId(grantSetId);
                 aclGrantDetail.setSystemTitle(workToTitlesMap.get(aclGrantDetail.getWrWrkInst()));
                 aclGrantDetailRepository.insert(aclGrantDetail);
             });
+        Set<AclIneligibleRightsholder> ineligibleRightsholders =
+            prmIntegrationService.getIneligibleRightsholders(createPeriodEndDate(grantSet.getGrantPeriod()),
+                grantSet.getLicenseType());
+        grantDetails.forEach(grant -> grant.setEligible(getEligibleStatus(grant, ineligibleRightsholders)));
         updateGrants(grantDetails, true);
         LOGGER.info("Upload ACL grant details. Finished. GrantSetId={}, AclGrantDetailsCount={}, UserName={}",
             grantSetId, size, userName);
@@ -124,6 +131,13 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     }
 
     @Override
+    public void setEligibleFlag(List<AclGrantDetail> grantDetails, LocalDate date, String licenseType) {
+        Set<AclIneligibleRightsholder> ineligibleRightsholders =
+            prmIntegrationService.getIneligibleRightsholders(date, licenseType);
+        grantDetails.forEach(grant -> grant.setEligible(getEligibleStatus(grant, ineligibleRightsholders)));
+    }
+
+    @Override
     public void deleteGrantDetails(String grantSetId) {
         aclGrantDetailRepository.deleteByGrantSetId(grantSetId);
     }
@@ -131,6 +145,13 @@ public class AclGrantDetailService implements IAclGrantDetailService {
     @Override
     public boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse) {
         return aclGrantDetailRepository.isGrantDetailExist(grantSetId, wrWrkInst, typeOfUse);
+    }
+
+    private boolean getEligibleStatus(AclGrantDetail grant, Set<AclIneligibleRightsholder> ineligibleRightsholders) {
+        return ineligibleRightsholders.stream()
+            .noneMatch(
+                ineligibleRightsholder -> ineligibleRightsholder.getRhAccountNumber().equals(grant.getRhAccountNumber())
+                    && ineligibleRightsholder.getTypeOfUse().equals(grant.getTypeOfUse()));
     }
 
     private void updateTypeOfUseStatus(List<AclGrantDetailDto> grants) {
@@ -179,5 +200,11 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         grantDetail.setTypeOfUse(grantDetailDto.getTypeOfUse());
         grantDetail.setTypeOfUseStatus(grantDetailDto.getTypeOfUseStatus());
         return grantDetail;
+    }
+
+    private LocalDate createPeriodEndDate(Integer period) {
+        int year = period / 100;
+        int month = period % 100;
+        return 6 == month ? LocalDate.of(year, month, 30) : LocalDate.of(year, month, 31);
     }
 }
