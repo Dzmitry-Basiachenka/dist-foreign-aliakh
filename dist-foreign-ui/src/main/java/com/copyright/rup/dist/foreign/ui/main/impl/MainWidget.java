@@ -36,40 +36,40 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     private IMainWidgetController controller;
 
-    private SwitchableWidget<IUdmWidget, IUdmController> udmWidget;
-    private SwitchableWidget<IAclCalculationWidget, IAclCalculationController> aclCalculationWidget;
     private SwitchableWidget<ICommonUsageWidget, ICommonUsageController> usagesWidget;
     private SwitchableWidget<ICommonScenariosWidget, ICommonScenariosController> scenariosWidget;
     private SwitchableWidget<ICommonAuditWidget, ICommonAuditController> auditWidget;
     private SwitchableWidget<ICommonBatchStatusWidget, ICommonBatchStatusController> batchStatusWidget;
+    private SwitchableWidget<IUdmWidget, IUdmController> udmWidget;
+    private SwitchableWidget<IAclCalculationWidget, IAclCalculationController> aclCalculationWidget;
 
-    private Tab udmTab;
-    private Tab calculationsTab;
     private Tab usagesTab;
     private Tab scenarioTab;
     private Tab auditTab;
     private Tab batchStatusTab;
+    private Tab udmTab;
+    private Tab calculationsTab;
 
     @Override
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        udmWidget = new SwitchableWidget<>(controller.getUdmControllerProvider(), widget -> {});
-        aclCalculationWidget = new SwitchableWidget<>(controller.getAclCalculationControllerProvider(), widget -> {});
         usagesWidget = new SwitchableWidget<>(controller.getUsagesControllerProvider(),
             widget -> widget.addListener(ScenarioCreateEvent.class,
                 controller, IMainWidgetController.ON_SCENARIO_CREATED));
         scenariosWidget = new SwitchableWidget<>(controller.getScenariosControllerProvider(), widget -> {});
         auditWidget = new SwitchableWidget<>(controller.getAuditControllerProvider(), widget -> {});
         batchStatusWidget = new SwitchableWidget<>(controller.getBatchStatusControllerProvider(), widget -> {});
-        udmTab = addTab(udmWidget, ForeignUi.getMessage("tab.udm"));
-        udmTab.getComponent().addStyleName("sub-tab");
-        calculationsTab = addTab(aclCalculationWidget, ForeignUi.getMessage("tab.calculations"));
-        calculationsTab.getComponent().addStyleName("sub-tab");
+        udmWidget = new SwitchableWidget<>(controller.getUdmControllerProvider(), widget -> {});
+        aclCalculationWidget = new SwitchableWidget<>(controller.getAclCalculationControllerProvider(), widget -> {});
         usagesTab = addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         scenarioTab = addTab(scenariosWidget, ForeignUi.getMessage("tab.scenario"));
         auditTab = addTab(auditWidget, ForeignUi.getMessage("tab.audit"));
         batchStatusTab = addTab(batchStatusWidget, ForeignUi.getMessage("tab.batch_status"));
+        udmTab = addTab(udmWidget, ForeignUi.getMessage("tab.udm"));
+        udmTab.getComponent().addStyleName("sub-tab");
+        calculationsTab = addTab(aclCalculationWidget, ForeignUi.getMessage("tab.calculations"));
+        calculationsTab.getComponent().addStyleName("sub-tab");
         addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         updateProductFamily();
         return this;
@@ -77,13 +77,13 @@ public class MainWidget extends TabSheet implements IMainWidget {
 
     @Override
     public void updateProductFamily() {
-        udmTab.setVisible(udmWidget.updateProductFamily());
-        calculationsTab.setVisible(aclCalculationWidget.updateProductFamily()
-            && !ForeignSecurityUtils.hasResearcherPermission());
         usagesTab.setVisible(usagesWidget.updateProductFamily());
         scenarioTab.setVisible(scenariosWidget.updateProductFamily());
         auditTab.setVisible(auditWidget.updateProductFamily());
         batchStatusTab.setVisible(batchStatusWidget.updateProductFamily());
+        udmTab.setVisible(udmWidget.updateProductFamily());
+        calculationsTab.setVisible(aclCalculationWidget.updateProductFamily()
+            && !ForeignSecurityUtils.hasResearcherPermission());
     }
 
     @Override
