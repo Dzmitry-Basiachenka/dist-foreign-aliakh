@@ -49,9 +49,29 @@ public class AclGrantServiceIntegrationTest {
     private static final String GRANT = "GRANT";
     private static final String PRINT = "PRINT";
     private static final String DIGITAL = "DIGITAL";
-    private static final String SYSTEM_TITLE = "Red Riding Hood's maths adventure";
+    private static final String SYSTEM_TITLE_1 = "Red Riding Hood's maths adventure";
+    private static final String SYSTEM_TITLE_2 = "Embracing watershed politics";
+    private static final String SYSTEM_TITLE_3 = "Farewell to the leftist working class";
+    private static final String SYSTEM_TITLE_4 = "I've discovered energy!";
     private static final String RMS_RESPONSE = "acl/grants/rms_grants_response.json";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String DIFFERENT_RH = "Different RH";
+    private static final String PRINT_DIGITAL = "Print&Digital";
+    private static final String DIGITAL_ONLY = "Digital Only";
+    private static final String PRINT_ONLY = "Print Only";
+    private static final Long WR_WRK_INST_1 = 136797639L;
+    private static final Long WR_WRK_INST_2 = 159246556L;
+    private static final Long WR_WRK_INST_3 = 309812565L;
+    private static final Long WR_WRK_INST_4 = 144114260L;
+    private static final Long WR_WRK_INST_5 = 4875964215L;
+    private static final Long WR_WRK_INST_6 = 4875964316L;
+    private static final Long RH_ACCOUNT_1 = 1000014080L;
+    private static final Long RH_ACCOUNT_2 = 1000002760L;
+    private static final Long RH_ACCOUNT_3 = 1000004023L;
+    private static final Long RH_ACCOUNT_4 = 2000017000L;
+    private static final Long RH_ACCOUNT_5 = 1000025853L;
+    private static final Long RH_ACCOUNT_6 = 600009865L;
+    private static final Long RH_ACCOUNT_7 = 700009877L;
 
     @Autowired
     private IAclGrantService grantService;
@@ -66,19 +86,81 @@ public class AclGrantServiceIntegrationTest {
     }
 
     @Test
-    public void testCreateAclGrantDetails() {
+    public void testCreateAclGrantDetailsWithPrintIneligible() {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_1.json", RMS_RESPONSE);
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_2.json", RMS_RESPONSE);
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_3.json", RMS_RESPONSE);
         testHelper.expectGetRmsRights("acl/grants/rms_grants_request_4.json", RMS_RESPONSE);
-        testHelper.expectPrmIneligibleParentCall("acl/ineligible.rightsholders/rightsholder_parents.json");
+        testHelper.expectPrmIneligibleParentCall("acl/ineligible.rightsholders/rightsholder_parents_acl_print.json");
         testHelper.expectPrmIneligibleCall("d145f685-994e-4b47-8748-c1ad375da3f9", "ACLPRINT",
             "acl/ineligible.rightsholders/ineligible_rightsholder_print.json");
         List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
             createWrWrkInstToSystemTitleMap(), USER_NAME);
         assertEquals(8, actualDetails.size());
         List<AclGrantDetail> expectedDetails = buildAclGrantDetails();
+        IntStream.range(0, actualDetails.size()).forEach(i ->
+            verifyAclGrantDetails(expectedDetails.get(i), actualDetails.get(i)));
+    }
+
+    @Test
+    public void testCreateNonEligibleAclGrantDetails() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_1.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_2.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_3.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_4.json", RMS_RESPONSE);
+        testHelper.expectPrmIneligibleParentCall("acl/ineligible.rightsholders/rightsholder_parents_acl.json");
+        testHelper.expectPrmIneligibleCall("4ae6bd83-07f0-44fe-836c-af233c0ea0af", "ACLDIGITAL",
+            "acl/ineligible.rightsholders/ineligible_rightsholder_acldigital.json");
+        testHelper.expectPrmIneligibleCall("d145f685-994e-4b47-8748-c1ad375da3f9", "ACLPRINT",
+            "acl/ineligible.rightsholders/ineligible_rightsholder_aclprint.json");
+        List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
+            createWrWrkInstToSystemTitleMap(), USER_NAME);
+        assertEquals(8, actualDetails.size());
+        List<AclGrantDetail> expectedDetails = Arrays.asList(
+            buildAclGrantDetail(
+                DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
+            buildAclGrantDetail(
+                DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, false),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_7, WR_WRK_INST_6, PRINT_ONLY, SYSTEM_TITLE_1, false));
+        IntStream.range(0, actualDetails.size()).forEach(i ->
+            verifyAclGrantDetails(expectedDetails.get(i), actualDetails.get(i)));
+    }
+
+    @Test
+    public void testCreateAclGrantDetailsWithDigitalIneligible() {
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_1.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_2.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_3.json", RMS_RESPONSE);
+        testHelper.expectGetRmsRights("acl/grants/rms_grants_request_4.json", RMS_RESPONSE);
+        testHelper.expectPrmIneligibleParentCall("acl/ineligible.rightsholders/rightsholder_parents_acl_digital.json");
+        testHelper.expectPrmIneligibleCall("4ae6bd83-07f0-44fe-836c-af233c0ea0af", "ACLDIGITAL",
+            "acl/ineligible.rightsholders/ineligible_rightsholder_acldigital.json");
+        List<AclGrantDetail> actualDetails = grantService.createAclGrantDetails(buildGrantSet(),
+            createWrWrkInstToSystemTitleMap(), USER_NAME);
+        assertEquals(8, actualDetails.size());
+        List<AclGrantDetail> expectedDetails = Arrays.asList(
+            buildAclGrantDetail(
+                DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, true),
+            buildAclGrantDetail(
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, true),
+            buildAclGrantDetail(
+                DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, true),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, false),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_7, WR_WRK_INST_6, PRINT_ONLY, SYSTEM_TITLE_1, true));
         IntStream.range(0, actualDetails.size()).forEach(i ->
             verifyAclGrantDetails(expectedDetails.get(i), actualDetails.get(i)));
     }
@@ -101,32 +183,32 @@ public class AclGrantServiceIntegrationTest {
     private List<AclGrantDetail> buildAclGrantDetails() {
         return Arrays.asList(
             buildAclGrantDetail(
-                DIGITAL, 1000014080L, 136797639L, "Different RH", "Farewell to the leftist working class", true),
+                DIGITAL, RH_ACCOUNT_1, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, true),
             buildAclGrantDetail(
-                PRINT, 1000002760L, 136797639L, "Different RH", "Farewell to the leftist working class", false),
+                PRINT, RH_ACCOUNT_2, WR_WRK_INST_1, DIFFERENT_RH, SYSTEM_TITLE_3, false),
             buildAclGrantDetail(
-                PRINT, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", false),
+                PRINT, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, false),
             buildAclGrantDetail(
-                DIGITAL, 1000004023L, 159246556L, "Print&Digital", "Embracing watershed politics", true),
-            buildAclGrantDetail(DIGITAL, 2000017000L, 309812565L, "Digital Only", SYSTEM_TITLE, true),
-            buildAclGrantDetail(PRINT, 1000025853L, 144114260L, "Print Only", "I've discovered energy!", true),
-            buildAclGrantDetail(DIGITAL, 600009865L, 4875964215L, "Digital Only", SYSTEM_TITLE, true),
-            buildAclGrantDetail(PRINT, 700009877L, 4875964316L, "Print Only", SYSTEM_TITLE, true)
+                DIGITAL, RH_ACCOUNT_3, WR_WRK_INST_2, PRINT_DIGITAL, SYSTEM_TITLE_2, true),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_4, WR_WRK_INST_3, DIGITAL_ONLY, SYSTEM_TITLE_1, true),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_5, WR_WRK_INST_4, PRINT_ONLY, SYSTEM_TITLE_4, true),
+            buildAclGrantDetail(DIGITAL, RH_ACCOUNT_6, WR_WRK_INST_5, DIGITAL_ONLY, SYSTEM_TITLE_1, true),
+            buildAclGrantDetail(PRINT, RH_ACCOUNT_7, WR_WRK_INST_6, PRINT_ONLY, SYSTEM_TITLE_1, true)
         );
     }
 
     private Map<Long, String> createWrWrkInstToSystemTitleMap() {
         Map<Long, String> wrWrkInstToSystemTitles = new TreeMap<>(Comparator.naturalOrder());
-        wrWrkInstToSystemTitles.put(144114260L, "I've discovered energy!");
-        wrWrkInstToSystemTitles.put(309812565L, SYSTEM_TITLE);
-        wrWrkInstToSystemTitles.put(159246556L, "Embracing watershed politics");
-        wrWrkInstToSystemTitles.put(136797639L, "Farewell to the leftist working class");
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_4, SYSTEM_TITLE_4);
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_3, SYSTEM_TITLE_1);
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_2, SYSTEM_TITLE_2);
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_1, SYSTEM_TITLE_3);
         wrWrkInstToSystemTitles.put(12345678L, "Autologous and cancer stem cell gene therapy");
-        wrWrkInstToSystemTitles.put(578123123L, SYSTEM_TITLE);
-        wrWrkInstToSystemTitles.put(4875964215L, SYSTEM_TITLE);
-        wrWrkInstToSystemTitles.put(4875964316L, SYSTEM_TITLE);
-        wrWrkInstToSystemTitles.put(4875964317L, SYSTEM_TITLE);
-        wrWrkInstToSystemTitles.put(4875964318L, SYSTEM_TITLE);
+        wrWrkInstToSystemTitles.put(578123123L, SYSTEM_TITLE_1);
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_5, SYSTEM_TITLE_1);
+        wrWrkInstToSystemTitles.put(WR_WRK_INST_6, SYSTEM_TITLE_1);
+        wrWrkInstToSystemTitles.put(4875964317L, SYSTEM_TITLE_1);
+        wrWrkInstToSystemTitles.put(4875964318L, SYSTEM_TITLE_1);
         return wrWrkInstToSystemTitles;
     }
 
