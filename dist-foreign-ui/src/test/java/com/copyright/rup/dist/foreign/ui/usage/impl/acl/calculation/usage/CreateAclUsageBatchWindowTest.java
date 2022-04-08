@@ -87,7 +87,7 @@ public class CreateAclUsageBatchWindowTest {
     @Test
     public void testConstructor() {
         window = new CreateAclUsageBatchWindow(controller);
-        verifyWindow(window, "Create ACL Usage Batch", 400, 210, Unit.PIXELS);
+        verifyWindow(window, "Create ACL Usage Batch", 400, 215, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
