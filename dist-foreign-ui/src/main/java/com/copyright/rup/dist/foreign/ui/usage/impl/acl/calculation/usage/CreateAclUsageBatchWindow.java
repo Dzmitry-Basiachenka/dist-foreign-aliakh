@@ -63,7 +63,7 @@ public class CreateAclUsageBatchWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_acl_usage_batch"));
         setResizable(false);
         setWidth(400, Unit.PIXELS);
-        setHeight(210, Unit.PIXELS);
+        setHeight(215, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-usage-batch-window");
     }
 
