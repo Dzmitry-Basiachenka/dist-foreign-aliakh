@@ -1,0 +1,76 @@
+{
+  "response":
+  {
+    "status":
+    {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content":
+    [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.relationship.OrganizationRelationship",
+          "version": 1,
+          "createDate": "2015-05-19T14:18:32-0400",
+          "updateDate": "2015-05-19T14:18:32-0400",
+          "createUser": "dfahey@copyright.com",
+          "updateUser": "dfahey@copyright.com",
+          "id": "9711b41a-8cf3-4c23-a4b0-a77e85818529",
+          "primaryOrganizationUid": "4ae6bd83-07f0-44fe-836c-af233c0ea0af",
+          "primaryOrgName": "Dow Jones & Company, Inc.",
+          "primaryExternalOrganizationKey": "1000014080",
+          "relatedOrganizationUid": "5d9660f1-134d-4072-839d-dded56baa206",
+          "relatedOrgName": "1000 FRIENDS OF OREGON",
+          "relatedExternalOrganizationKey": "1000004023",
+          "pmLicenseProductUid": "ACLDIGITAL",
+          "pmRelationshipTypeUid": "baseline-parent",
+          "relationshipCode": "PARENT",
+          "validBeginDate": "2015-05-19T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.relationship.OrganizationRelationship",
+          "version": 1,
+          "createDate": "2015-05-19T14:18:32-0400",
+          "updateDate": "2015-05-19T14:18:32-0400",
+          "createUser": "dfahey@copyright.com",
+          "updateUser": "dfahey@copyright.com",
+          "id": "9711b41a-8cf3-4c23-a4b0-a77e85818529",
+          "primaryOrganizationUid": "4ae6bd83-07f0-44fe-836c-af233c0ea0af",
+          "primaryOrgName": "Dow Jones & Company, Inc.",
+          "primaryExternalOrganizationKey": "1000014080",
+          "relatedOrganizationUid": "8b243da8-ab42-41c4-aee2-68a03add5940",
+          "relatedOrgName": "1000 FRIENDS OF OREGON",
+          "relatedExternalOrganizationKey": "2000017000",
+          "pmLicenseProductUid": "ACLDIGITAL",
+          "pmRelationshipTypeUid": "baseline-parent",
+          "relationshipCode": "PARENT",
+          "validBeginDate": "2015-05-19T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.relationship.OrganizationRelationship",
+          "version": 1,
+          "createDate": "2015-05-19T14:18:32-0400",
+          "updateDate": "2015-05-19T14:18:32-0400",
+          "createUser": "dfahey@copyright.com",
+          "updateUser": "dfahey@copyright.com",
+          "id": "9711b41a-8cf3-4c23-a4b0-a77e85818529",
+          "primaryOrganizationUid": "4ae6bd83-07f0-44fe-836c-af233c0ea0af",
+          "primaryOrgName": "Dow Jones & Company, Inc.",
+          "primaryExternalOrganizationKey": "2000152607",
+          "relatedOrganizationUid": "a795fc85-fb06-4d0e-9677-c57af6829afb",
+          "relatedOrgName": "1000 FRIENDS OF OREGON",
+          "relatedExternalOrganizationKey": "600009865",
+          "pmLicenseProductUid": "ACLDIGITAL",
+          "pmRelationshipTypeUid": "baseline-parent",
+          "relationshipCode": "PARENT",
+          "validBeginDate": "2015-05-19T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500"
+        }
+      ]
+    ]
+  }
+}
