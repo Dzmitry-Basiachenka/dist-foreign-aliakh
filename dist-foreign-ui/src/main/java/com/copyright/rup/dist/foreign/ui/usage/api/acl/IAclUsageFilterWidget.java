@@ -23,4 +23,9 @@ public interface IAclUsageFilterWidget extends IFilterWidget<IAclUsageFilterCont
      * @return applied {@link AclUsageFilter}.
      */
     AclUsageFilter getAppliedFilter();
+
+    /**
+     * Updates usage batches in filter widget.
+     */
+    void updateUsageBatchesInFilterWidget();
 }
