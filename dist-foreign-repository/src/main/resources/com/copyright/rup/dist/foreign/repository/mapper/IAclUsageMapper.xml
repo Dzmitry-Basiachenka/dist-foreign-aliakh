@@ -181,14 +181,14 @@
             u.system_title,
             u.detail_licensee_class_id,
             u.survey_country,
-            v.publication_type_uid,
-            v.content_unit_price,
+            vb.publication_type_uid,
+            vb.content_unit_price,
             u.type_of_use,
             u.annualized_copies,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid
-        join ${schema}.df_udm_value v on u.df_udm_value_uid = v.df_udm_value_uid
+        join ${schema}.df_udm_value_baseline vb on u.df_udm_value_uid = vb.df_udm_value_baseline_uid
         where u.is_baseline_flag = true
             and
             <foreach collection="periods" item="period" open="(" separator=" or " close=")">

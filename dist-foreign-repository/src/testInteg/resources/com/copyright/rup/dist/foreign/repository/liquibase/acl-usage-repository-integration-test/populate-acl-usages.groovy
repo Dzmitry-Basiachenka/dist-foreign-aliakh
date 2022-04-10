@@ -34,6 +34,19 @@ databaseChangeLog {
             column(name: 'content_unit_price', value: 5.0000000000)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_udm_value_baseline') {
+            column(name: 'df_udm_value_baseline_uid', value: '316612be-054b-4959-8d04-889d1f19f70b')
+            column(name: 'period', value: 202112)
+            column(name: 'wr_wrk_inst', value: 306985867)
+            column(name: 'system_title', value: 'Tenside, surfactants, detergents')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'price', value: 5.0000000000)
+            column(name: 'price_flag', value: true)
+            column(name: 'content', value: 1)
+            column(name: 'content_flag', value: true)
+            column(name: 'content_unit_price', value: 5.0000000000)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_usage') {
             column(name: 'df_udm_usage_uid', value: '22241298-5c9e-4222-8fc1-5ee80c0e48f1')
             column(name: 'df_udm_usage_batch_uid', value: '6eb08947-be9e-4c4b-95a3-ca6012cae23d')
