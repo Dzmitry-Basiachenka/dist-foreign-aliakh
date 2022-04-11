@@ -1,3 +1,15 @@
+15.1.12
+-
+* CDP-1045 FDA: ACL Grant Set: 'Updated Date' column doesn't change it's value after editing grant record
+* CDP-1046 FDA: Create scenario for any product family: User is not redirected to scenarios tab after confirming scenario creation
+* B-68113 FDA: Get ineligible RH's from PRM and update the Grant Set: implement integration tests for create grant details
+* B-71754 FDA: Uploading works to a Grant set: implement duplicate in file validation
+* B-71754 FDA: Uploading works to a Grant set: apply ineligible service for upload grant details functionality
+* B-71795 FDA: Create ACL usage batch: fix window appearance at default zoom level in a browser
+* B-71795 FDA: Create ACL usage batch: use the correct table df_udm_value_baseline
+* B-71795 FDA: Create ACL usage batch: implement filter update after usage batch creation
+* B-72772 FDA: Tech Debt: remove quotes around period field in Liquibase scripts
+
 15.1.11
 -
 * B-72772 FDA: Tech Debt: remove quotes around period field in Liquibase scripts  
