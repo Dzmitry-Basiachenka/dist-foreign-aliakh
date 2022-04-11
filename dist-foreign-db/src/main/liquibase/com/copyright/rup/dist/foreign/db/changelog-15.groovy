@@ -319,4 +319,21 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail', columnName: 'manual_upload_flag')
         }
     }
+
+    changeSet(id: '2022-04-10-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-71795 FDA: Create ACL usage batch: add not null constrains to " +
+                "columns publication_type_uid, detail_licensee_class_id in table df_acl_usage")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'publication_type_uid', columnDataType: 'VARCHAR(255)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'detail_licensee_class_id', columnDataType: 'INTEGER')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'publication_type_uid', columnDataType: 'VARCHAR(255)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'detail_licensee_class_id', columnDataType: 'INTEGER')
+        }
+    }
 }
