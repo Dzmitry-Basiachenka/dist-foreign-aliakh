@@ -46,11 +46,6 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
     }
 
     @Override
-    public void updateUsageBatchesInFilterWidget() {
-        refreshFilterValues();
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public IAclUsageFilterWidget init() {
         addComponents(initFiltersLayout(), initButtonsLayout());
