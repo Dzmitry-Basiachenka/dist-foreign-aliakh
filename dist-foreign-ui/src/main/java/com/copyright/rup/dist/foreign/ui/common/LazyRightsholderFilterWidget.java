@@ -83,7 +83,7 @@ public class LazyRightsholderFilterWidget extends BaseItemsFilterWidget<Rightsho
     @Override
     public CommonFilterWindow<Rightsholder> showFilterWindow() {
         LazyFilterWindow<Rightsholder> filterWindow =
-            new LazyFilterWindow<>(ForeignUi.getMessage("window.filter_format", "Rightsholder"), this);
+            new LazyFilterWindow<>(ForeignUi.getMessage("window.filter_format", "Rightsholders"), this);
         Windows.showModalWindow(filterWindow);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.rightsholder"));
