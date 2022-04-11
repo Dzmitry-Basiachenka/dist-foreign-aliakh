@@ -32,7 +32,7 @@ public abstract class CommonStatusFilterWidget extends BaseItemsFilterWidget<Usa
      * Constructor.
      */
     protected CommonStatusFilterWidget() {
-        super(ForeignUi.getMessage("label.status"));
+        super(ForeignUi.getMessage("label.statuses"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class CommonStatusFilterWidget extends BaseItemsFilterWidget<Usa
     @Override
     public FilterWindow<UsageStatusEnum> showFilterWindow() {
         FilterWindow<UsageStatusEnum> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.status_filter"), this);
+            Windows.showFilterWindow(ForeignUi.getMessage("window.statuses_filter"), this);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         VaadinUtils.addComponentStyle(filterWindow, "status-filter-window");
         return filterWindow;

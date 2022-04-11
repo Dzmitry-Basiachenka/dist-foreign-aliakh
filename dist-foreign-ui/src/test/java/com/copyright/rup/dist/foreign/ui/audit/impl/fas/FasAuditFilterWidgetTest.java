@@ -75,7 +75,7 @@ public class FasAuditFilterWidgetTest {
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
         component = widget.getComponent(3);
         assertTrue(component instanceof CommonStatusFilterWidget);
-        verifyFilterWidget((CommonStatusFilterWidget) component, "Status");
+        verifyFilterWidget((CommonStatusFilterWidget) component, "Statuses");
         verifyTextField(widget.getComponent(4), "Event ID");
         verifyTextField(widget.getComponent(5), "Dist. Name");
         component = widget.getComponent(6);

@@ -109,7 +109,7 @@ public class CommonStatusFilterWidgetTest {
         CommonStatusFilterWidget widget = new FasStatusFilterWidget();
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
-        expect(Windows.showFilterWindow("Status filter", widget)).andReturn(filterWindow).once();
+        expect(Windows.showFilterWindow("Statuses filter", widget)).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(EnumSet.noneOf(UsageStatusEnum.class));
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn(null).once();

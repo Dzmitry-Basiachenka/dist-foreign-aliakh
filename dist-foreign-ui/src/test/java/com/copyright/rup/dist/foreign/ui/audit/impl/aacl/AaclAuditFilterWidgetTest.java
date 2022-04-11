@@ -81,7 +81,7 @@ public class AaclAuditFilterWidgetTest {
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
         component = widget.getComponent(3);
         assertTrue(component instanceof CommonStatusFilterWidget);
-        verifyFilterWidget((CommonStatusFilterWidget) component, "Status");
+        verifyFilterWidget((CommonStatusFilterWidget) component, "Statuses");
         verifyComboBox(widget.getComponent(4), "Usage Period", true, USAGE_PERIOD);
         verifyTextField(widget.getComponent(5), "Event ID");
         verifyTextField(widget.getComponent(6), "Dist. Name");
