@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
@@ -108,11 +107,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
         aclUsageBatchMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
             aclUsageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
-        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null, item -> {
-            CreateAclUsageBatchWindow window = new CreateAclUsageBatchWindow(controller);
-            window.addListener(UsageBatchCreatedEvent.class, controller, IAclUsageController.ON_USAGE_BATCH_CREATED);
-            Windows.showModalWindow(window);
-        });
+        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+            item -> Windows.showModalWindow(new CreateAclUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "acl-usage-batch-menu-bar");
         VaadinUtils.addComponentStyle(aclUsageBatchMenuBar, "v-menubar-df");
     }

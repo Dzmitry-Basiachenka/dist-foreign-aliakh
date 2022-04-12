@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -73,7 +72,6 @@ public class CreateAclUsageBatchWindow extends Window {
     void onCreateClicked() {
         if (isValid()) {
             int usagesCount = aclUsageController.insertAclUsageBatch(buildAclUsageBatch());
-            fireEvent(new UsageBatchCreatedEvent(this));
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", usagesCount));
         } else {

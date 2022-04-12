@@ -4,15 +4,15 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.newCapture;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
@@ -21,14 +21,12 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
-import com.copyright.rup.dist.foreign.ui.usage.api.UsageBatchCreatedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 
 import com.google.common.collect.Sets;
 
-import com.vaadin.ui.Component;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -117,19 +115,12 @@ public class AclUsageControllerTest {
     @Test
     public void testInsertAclUsageBatch() {
         expect(aclUsageBatchService.insert(buildAclUsageBatch())).andReturn(1).once();
-        replay(aclUsageBatchService);
-        assertEquals(1, controller.insertAclUsageBatch(buildAclUsageBatch()));
-        verify(aclUsageBatchService);
-    }
-
-    @Test
-    public void testOnUsageBatchCreated() {
         expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
-        aclUsageFilterWidget.updateUsageBatchesInFilterWidget();
+        aclUsageFilterWidget.clearFilter();
         expectLastCall().once();
-        replay(aclUsageFilterController);
-        controller.onUsageBatchCreated(new UsageBatchCreatedEvent(createMock(Component.class)));
-        verify(aclUsageFilterController);
+        replay(aclUsageFilterController, aclUsageFilterWidget, aclUsageBatchService);
+        assertEquals(1, controller.insertAclUsageBatch(buildAclUsageBatch()));
+        verify(aclUsageFilterController, aclUsageFilterWidget, aclUsageBatchService);
     }
 
     @Test
