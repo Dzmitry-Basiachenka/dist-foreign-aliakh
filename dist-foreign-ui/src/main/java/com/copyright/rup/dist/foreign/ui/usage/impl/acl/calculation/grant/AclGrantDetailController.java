@@ -111,13 +111,16 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     }
 
     @Override
-    public int insertAclGrantSet(AclGrantSet aclGrantSet) {
-        return aclGrantSetService.insert(aclGrantSet);
+    public int insertAclGrantSet(AclGrantSet grantSet) {
+        int grantDetailsCount = aclGrantSetService.insert(grantSet);
+        aclGrantDetailFilterController.getWidget().clearFilter();
+        return grantDetailsCount;
     }
 
     @Override
     public void insertAclGrantDetails(AclGrantSet grantSet, List<AclGrantDetailDto> details) {
         aclGrantDetailService.addToGrantSet(grantSet, details);
+        aclGrantDetailFilterController.getWidget().clearFilter();
     }
 
     @Override

@@ -49,6 +49,7 @@ import java.io.PipedOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -159,14 +160,32 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testInsertAclGrantSet() {
-        expect(aclGrantSetService.insert(buildAclGrantSet())).andReturn(1).once();
-        replay(aclGrantSetService);
-        assertEquals(1, controller.insertAclGrantSet(buildAclGrantSet()));
-        verify(aclGrantSetService);
+        AclGrantSet grantSet = buildAclGrantSet();
+        expect(aclGrantSetService.insert(grantSet)).andReturn(1).once();
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        aclGrantDetailFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+        assertEquals(1, controller.insertAclGrantSet(grantSet));
+        verify(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
     }
 
     @Test
-    public void testGetAllAclGrantSets()  {
+    public void testInsertAclGrantDetails() {
+        AclGrantSet grantSet = buildAclGrantSet();
+        List<AclGrantDetailDto> grantDetails = new ArrayList<>();
+        aclGrantDetailService.addToGrantSet(grantSet, grantDetails);
+        expectLastCall().once();
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        aclGrantDetailFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclGrantDetailService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+        controller.insertAclGrantDetails(grantSet, grantDetails);
+        verify(aclGrantDetailService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+    }
+
+    @Test
+    public void testGetAllAclGrantSets() {
         List<AclGrantSet> grantSets = Collections.singletonList(new AclGrantSet());
         expect(aclGrantSetService.getAll()).andReturn(grantSets).once();
         replay(aclGrantSetService);
@@ -175,7 +194,7 @@ public class AclGrantDetailControllerTest {
     }
 
     @Test
-    public void testDeleteAclGrantSet()  {
+    public void testDeleteAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
         aclGrantSetService.deleteAclGrantSet(grantSet);
         expectLastCall().once();
