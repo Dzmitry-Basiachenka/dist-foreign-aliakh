@@ -65,7 +65,10 @@ public class UploadGrantDetailWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(grantSet)).once();
+        AclGrantSet nonEditableGrantSet = buildGrantSet();
+        nonEditableGrantSet.setId("0a789e01-7444-42f3-a135-ab259bdf41ff");
+        nonEditableGrantSet.setEditable(false);
+        expect(controller.getAllAclGrantSets()).andReturn(Arrays.asList(nonEditableGrantSet, grantSet)).once();
         replay(controller);
         window = new UploadGrantDetailWindow(controller);
         verify(controller);
@@ -129,6 +132,7 @@ public class UploadGrantDetailWindowTest {
         AclGrantSet aclGrantSet = new AclGrantSet();
         aclGrantSet.setId("670f75dc-f5ef-43be-9a46-9b3a82a25ef7");
         aclGrantSet.setName("Grant Set 202106");
+        aclGrantSet.setEditable(true);
         return aclGrantSet;
     }
 
