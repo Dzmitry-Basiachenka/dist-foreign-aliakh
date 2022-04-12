@@ -26,6 +26,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Window to upload ACL Grant details.
@@ -110,7 +111,8 @@ public class UploadGrantDetailWindow extends Window {
         comboBox.setSizeFull();
         comboBox.setRequiredIndicatorVisible(true);
         comboBox.setEmptySelectionAllowed(false);
-        comboBox.setItems(controller.getAllAclGrantSets());
+        comboBox.setItems(
+            controller.getAllAclGrantSets().stream().filter(AclGrantSet::getEditable).collect(Collectors.toList()));
         comboBox.setItemCaptionGenerator(AclGrantSet::getName);
         grantSetBinder.forField(comboBox)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
