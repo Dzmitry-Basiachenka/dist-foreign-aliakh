@@ -9,6 +9,8 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberVa
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,7 +84,7 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetailD
             List<String> headers = getActualHeaders();
             detail.setId(RupPersistUtils.generateUuid());
             detail.setWrWrkInst(getLong(row, Header.WR_WRK_INST, headers));
-            detail.setTypeOfUse(getString(row, Header.TYPE_OF_USE, headers));
+            detail.setTypeOfUse(StringUtils.upperCase(getString(row, Header.TYPE_OF_USE, headers)));
             detail.setRhAccountNumber(getLong(row, Header.RH_ACCOUNT_NUMBER, headers));
             detail.setGrantStatus("GRANT");
             detail.setEligible(true);
