@@ -94,6 +94,8 @@ public class UdmUsageFiltersWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = "  123  ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String DECIMAL_VALIDATION_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
     private UdmUsageFiltersWindow window;
@@ -579,8 +581,8 @@ public class UdmUsageFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
     }
 
     private void verifyCommonOperationValidations(TextField fromField, TextField toField,

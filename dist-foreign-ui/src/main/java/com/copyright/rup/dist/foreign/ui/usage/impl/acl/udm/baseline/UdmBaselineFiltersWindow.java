@@ -4,7 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.NumericValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
@@ -50,7 +50,6 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
 
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
-    private static final String NOT_NUMERIC_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
 
@@ -205,7 +204,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initAnnualizedCopiesLayout() {
         annualizedCopiesTo.setEnabled(false);
         filterBinder.forField(annualizedCopiesFrom)
-            .withValidator(new AmountValidator(NOT_NUMERIC_VALIDATION_MESSAGE))
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesFrom, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .bind(filter ->
@@ -213,7 +212,7 @@ public class UdmBaselineFiltersWindow extends CommonAclFiltersWindow {
                 (filter, value) -> filter.getAnnualizedCopiesExpression()
                     .setFieldFirstValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(annualizedCopiesTo)
-            .withValidator(new AmountValidator(NOT_NUMERIC_VALIDATION_MESSAGE))
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(annualizedCopiesTo, annualizedCopiesOperatorComboBox),
                 BETWEEN_OPERATOR_VALIDATION_MESSAGE)
             .withValidator(value -> validateBigDecimalFromToValues(annualizedCopiesFrom, annualizedCopiesTo),
