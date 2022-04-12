@@ -69,6 +69,8 @@ public class UdmBaselineFiltersWindowTest {
     private static final String SPACES_STRING = "   ";
     private static final String CAPTION_OPERATOR = "Operator";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String DECIMAL_VALIDATION_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         "Field value should be populated for Between Operator";
 
@@ -318,8 +320,8 @@ public class UdmBaselineFiltersWindowTest {
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, "1.2345677",
             "Field value should be greater or equal to Annualized Copies From", false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
     }
 
     private void verifyIntegerOperationValidations(TextField fromField, TextField toField,
