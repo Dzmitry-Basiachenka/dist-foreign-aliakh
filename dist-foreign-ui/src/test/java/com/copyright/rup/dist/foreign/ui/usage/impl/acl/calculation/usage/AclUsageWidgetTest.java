@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -12,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 
@@ -26,12 +28,15 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AclUsageWidget}.
@@ -48,39 +53,43 @@ public class AclUsageWidgetTest {
 
     private AclUsageWidget aclUsageWidget;
     private IAclUsageController controller;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclUsageController.class);
+        streamSource = PowerMock.createMock(IStreamSource.class);
         aclUsageWidget = new AclUsageWidget();
         Whitebox.setInternalState(aclUsageWidget, controller);
         expect(controller.initAclUsageFilterWidget()).andReturn(new AclUsageFilterWidget()).once();
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(PowerMock.createMock(Supplier.class),
+            PowerMock.createMock(Supplier.class))).once();
+        expect(controller.getExportAclUsagesStreamSource()).andReturn(streamSource).once();
     }
 
     @Test
     public void testWidgetStructureForSpecialist() {
         setSpecialistExpectations();
-        verifyWidgetStructure(true);
+        verifyWidgetStructure(true, true);
     }
 
     @Test
     public void testWidgetStructureForManager() {
         setManagerExpectations();
-        verifyWidgetStructure(false);
+        verifyWidgetStructure(false, true);
     }
 
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyWidgetStructure(false);
+        verifyWidgetStructure(false, true);
     }
 
     private void verifyWidgetStructure(boolean... buttonsVisibility) {
-        replay(ForeignSecurityUtils.class, controller);
+        replay(ForeignSecurityUtils.class, controller, streamSource);
         aclUsageWidget.init();
         aclUsageWidget.initMediator().applyPermissions();
-        verify(ForeignSecurityUtils.class, controller);
         assertTrue(aclUsageWidget.isLocked());
         assertEquals(270, aclUsageWidget.getSplitPosition(), 0);
         verifyWindow(aclUsageWidget, null, 100, 100, Unit.PERCENTAGE);
@@ -113,10 +122,12 @@ public class AclUsageWidgetTest {
             Triple.of("Updated Date", 110.0, -1)));
         verifyGridFooter(grid);
         assertEquals(1, layout.getExpandRatio(grid), 0);
+        verify(ForeignSecurityUtils.class, controller, streamSource);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout, boolean... buttonsVisibility) {
         verifyMenuBar(layout.getComponent(0), "Usage Batch", buttonsVisibility[0], Collections.singletonList("Create"));
+        verifyButton(layout.getComponent(1), "Export", buttonsVisibility[1]);
     }
 
     private void verifyGridFooter(Grid grid) {

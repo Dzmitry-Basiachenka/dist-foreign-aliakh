@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 
 import org.junit.BeforeClass;
@@ -37,6 +38,7 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
 
     private static final String FOLDER_NAME = "acl-calculation-csv-reports-integration-test/";
     private static final String WRITE_GRANT_DETAIL_CSV_REPORT = FOLDER_NAME + "write-grant-detail-csv-report.groovy";
+    private static final String WRITE_USAGE_CSV_REPORT = FOLDER_NAME + "write-usage-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -64,6 +66,26 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         filter.setGrantSetPeriod(202212);
         assertFilesWithExecutor(
             outputStream -> aclCalculationReportRepository.writeAclGrantDetailCsvReport(filter, outputStream),
-            "acl/grant_detail_empty_report.csv");
+            "acl/grant_detail_report_empty.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageCsvReport() throws IOException {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName("ACL Usage Batch 2022");
+        assertFilesWithExecutor(
+            outputStream -> aclCalculationReportRepository.writeAclUsageCsvReport(filter, outputStream),
+            "acl/usages_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_USAGE_CSV_REPORT)
+    public void testWriteUsageEmptyCsvReport() throws IOException {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName("Empty batch");
+        assertFilesWithExecutor(
+            outputStream -> aclCalculationReportRepository.writeAclUsageCsvReport(filter, outputStream),
+            "acl/usages_report_empty.csv");
     }
 }

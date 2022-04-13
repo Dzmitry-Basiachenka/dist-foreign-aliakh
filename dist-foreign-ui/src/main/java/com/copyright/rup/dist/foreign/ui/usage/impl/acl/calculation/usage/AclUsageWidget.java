@@ -6,13 +6,16 @@ import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
@@ -114,7 +117,11 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     }
 
     private HorizontalLayout initButtonsLayout() {
-        HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar);
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportAclUsagesStreamSource().getSource());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "acl-usage-buttons");
         return layout;

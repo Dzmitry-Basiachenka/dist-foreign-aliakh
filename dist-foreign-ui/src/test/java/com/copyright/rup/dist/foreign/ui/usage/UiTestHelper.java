@@ -32,8 +32,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
-
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -198,6 +198,20 @@ public final class UiTestHelper {
      */
     public static void verifyButtonsVisibility(Map<Component, Boolean> mapButtonToVisible) {
         mapButtonToVisible.forEach((component, isVisible) -> assertEquals(isVisible, component.isVisible()));
+    }
+
+    /**
+     * Verifies button.
+     *
+     * @param component button component
+     * @param caption   header of button
+     * @param isVisible {@code true} if button is visible, {@code false} otherwise
+     */
+    public static void verifyButton(Component component, String caption, boolean isVisible) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(caption, button.getCaption());
+        assertEquals(isVisible, button.isVisible());
     }
 
     /**

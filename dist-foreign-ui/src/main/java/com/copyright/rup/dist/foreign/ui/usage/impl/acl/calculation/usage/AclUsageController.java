@@ -1,11 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
@@ -48,6 +51,10 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     private IAclUsageBatchService aclUsageBatchService;
     @Autowired
     private IAclUsageService aclUsageService;
+    @Autowired
+    private IAclCalculationReportService aclCalculationReportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public int getBeansCount() {
@@ -91,6 +98,12 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     @Override
     public void onFilterChanged(FilterChangedEvent event) {
         getWidget().refresh();
+    }
+
+    @Override
+    public IStreamSource getExportAclUsagesStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_acl_usage_",
+            pos -> aclCalculationReportService.writeAclUsageCsvReport(getFilter(), pos));
     }
 
     @Override

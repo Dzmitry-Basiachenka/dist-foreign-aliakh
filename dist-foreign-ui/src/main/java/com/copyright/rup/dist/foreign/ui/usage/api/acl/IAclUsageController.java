@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -79,4 +80,9 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return initialized {@link IAclUsageFilterWidget}
      */
     IAclUsageFilterWidget initAclUsageFilterWidget();
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportAclUsagesStreamSource();
 }
