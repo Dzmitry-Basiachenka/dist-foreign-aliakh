@@ -1,3 +1,13 @@
+15.1.13
+-
+* B-72773: Tech Debt: FDA: rename captions for Rightsholder and Status multiple filters
+* B-71795 FDA: Create ACL usage batch: clean filter after usage batch creation
+* CDP-1047 FDA: Upload works to a Grant Set: Exception occurs after uploading a grant record with TOU that is specified not in upper case
+* B-68113 FDA&ACL: Get ineligible RH's from PRM and update the Grant Se: update users name in tests data
+* B-72773 Tech Debt: FDA: fix issue related to validation message on usage filter window
+* B-71754 FDA: Uploading works to a Grant set: display only editable Grant Sets to select on upload window
+* B-72773 FDA: Tech Debt: clear filter after creating ACL grant set and uploading ACL grant details
+
 15.1.12
 -
 * CDP-1045 FDA: ACL Grant Set: 'Updated Date' column doesn't change it's value after editing grant record
