@@ -114,6 +114,7 @@ public class UploadGrantDetailWindow extends Window {
         comboBox.setItems(
             controller.getAllAclGrantSets().stream().filter(AclGrantSet::getEditable).collect(Collectors.toList()));
         comboBox.setItemCaptionGenerator(AclGrantSet::getName);
+        VaadinUtils.addComponentStyle(comboBox, "grant-details-upload-combo-box");
         grantSetBinder.forField(comboBox)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(bean -> bean, (bean, fieldValue) -> bean = fieldValue)

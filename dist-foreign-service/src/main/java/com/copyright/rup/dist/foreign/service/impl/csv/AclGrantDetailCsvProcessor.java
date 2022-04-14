@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.GrantTypeOfUseValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,7 +42,8 @@ public class AclGrantDetailCsvProcessor extends DistCsvProcessor<AclGrantDetailD
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(Header.TYPE_OF_USE, requiredValidator, new LengthValidator(7));
+        addPlainValidators(Header.TYPE_OF_USE, requiredValidator, new LengthValidator(7),
+            new GrantTypeOfUseValidator());
         addPlainValidators(Header.RH_ACCOUNT_NUMBER, requiredValidator, positiveNumberValidator,
             new LengthValidator(18));
     }
