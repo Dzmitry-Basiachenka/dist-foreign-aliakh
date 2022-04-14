@@ -1,3 +1,7 @@
+15.1.14
+-
+* B-69901 FDA: Export usage batch: implement usage export functionality on ACL Usages tab
+
 15.1.13
 -
 * B-72773: Tech Debt: FDA: rename captions for Rightsholder and Status multiple filters
