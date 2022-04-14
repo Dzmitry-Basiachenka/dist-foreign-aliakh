@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
 
@@ -31,5 +33,14 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
         writeCsvReportByParts("IAclCalculationReportMapper.findAclGrantDetailsCountByFilter",
             "IAclCalculationReportMapper.findAclGrantDetailDtosByFilter", parameters, !filter.isEmpty(),
             () -> new AclGrantDetailCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAclUsageCsvReport(AclUsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        writeCsvReportByParts("IAclCalculationReportMapper.findAclUsagesCountByFilter",
+            "IAclCalculationReportMapper.findAclUsageDtosByFilter", parameters, !filter.isEmpty(),
+            () -> new AclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 }

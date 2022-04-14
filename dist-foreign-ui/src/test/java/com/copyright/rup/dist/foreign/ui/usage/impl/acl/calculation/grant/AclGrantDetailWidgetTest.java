@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -71,6 +72,7 @@ public class AclGrantDetailWidgetTest {
         streamSource = createMock(IStreamSource.class);
         expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
             createMock(Supplier.class))).once();
+        expect(controller.getExportAclGrantDetailsStreamSource()).andReturn(streamSource).once();
     }
 
     @Test
@@ -170,13 +172,6 @@ public class AclGrantDetailWidgetTest {
         verifyButton(layout.getComponent(3), "Export", buttonsVisibility[3]);
     }
 
-    private void verifyButton(Component component, String name, boolean isVisible) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals(name, button.getCaption());
-        assertEquals(isVisible, button.isVisible());
-    }
-
     private void initWidget() {
         aclGrantDetailWidget = new AclGrantDetailWidget();
         aclGrantDetailWidget.setController(controller);
@@ -199,7 +194,6 @@ public class AclGrantDetailWidgetTest {
     private void setPermissionsExpectations(boolean isSpecialist, boolean isManager) {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
         expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
-        expect(controller.getExportAclGrantDetailsStreamSource()).andReturn(streamSource).once();
     }
 
     private HorizontalLayout getButtonsLayout() {

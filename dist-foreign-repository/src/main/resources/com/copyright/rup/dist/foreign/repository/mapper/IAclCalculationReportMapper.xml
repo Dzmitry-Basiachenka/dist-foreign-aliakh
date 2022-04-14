@@ -10,4 +10,12 @@
     <select id="findAclGrantDetailDtosByFilter" resultMap="IAclGrantDetailMapper.aclGrantDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IAclGrantDetailMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="findAclUsagesCountByFilter" parameterType="map" resultType="int">
+        <include refid="IAclUsageMapper.selectCountByFilterSql"/>
+    </select>
+
+    <select id="findAclUsageDtosByFilter" resultMap="IAclUsageMapper.aclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclUsageMapper.selectDtosByFilterSql"/>
+    </select>
 </mapper>

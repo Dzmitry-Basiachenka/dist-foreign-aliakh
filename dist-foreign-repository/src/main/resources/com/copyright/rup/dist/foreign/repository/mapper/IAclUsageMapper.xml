@@ -79,7 +79,7 @@
 
     <sql id="selectDtosByFilterSql">
         select
-            <include refid="aclUsageDtoColumns"/>
+            <include refid="IAclUsageMapper.aclUsageDtoColumns"/>
         from ${schema}.df_acl_usage u
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
@@ -199,7 +199,7 @@
 
     <select id="findByIds" resultMap="aclUsageDtoResultMap">
         select
-            <include refid="aclUsageDtoColumns"/>
+            <include refid="IAclUsageMapper.aclUsageDtoColumns"/>
         from ${schema}.df_acl_usage u
         join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id

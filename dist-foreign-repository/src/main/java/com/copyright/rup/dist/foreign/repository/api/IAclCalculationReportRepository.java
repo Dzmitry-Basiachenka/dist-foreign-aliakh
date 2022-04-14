@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
+import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
 import java.io.PipedOutputStream;
 
@@ -23,4 +24,13 @@ public interface IAclCalculationReportRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAclGrantDetailCsvReport(AclGrantDetailFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Finds ACL usages according to given {@link AclUsageFilter} and writes them to the output stream in
+     * CSV format.
+     *
+     * @param filter            instance of {@link AclUsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAclUsageCsvReport(AclUsageFilter filter, PipedOutputStream pipedOutputStream);
 }
