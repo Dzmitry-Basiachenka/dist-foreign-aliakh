@@ -1,3 +1,7 @@
+15.1.15
+-
+* CDP-1047 FDA: Upload works to a Grant Set: Exception occurs after uploading a grant record with TOU that is specified not in upper case
+
 15.1.14
 -
 * B-69901 FDA: Export usage batch: implement usage export functionality on ACL Usages tab
