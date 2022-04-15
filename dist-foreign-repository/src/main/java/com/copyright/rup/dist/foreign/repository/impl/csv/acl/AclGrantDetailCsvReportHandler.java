@@ -21,7 +21,7 @@ public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGran
 
     private static final List<String> HEADERS = Arrays.asList("License Type", "TOU Status", "Grant Status", "Eligible",
         "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "TOU", "Created Date", "Updated Date",
-        "Grant Period");
+        "Grant Period", "Manual Upload Flag");
 
     /**
      * Constructor.
@@ -47,6 +47,7 @@ public class AclGrantDetailCsvReportHandler extends BaseCsvReportHandler<AclGran
         beanProperties.add(convertDateToString(bean.getCreateDate()));
         beanProperties.add(convertDateToString(bean.getUpdateDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getGrantPeriod()));
+        beanProperties.add(bean.getManualUploadFlag() ? "Y" : "N");
         return beanProperties;
     }
 
