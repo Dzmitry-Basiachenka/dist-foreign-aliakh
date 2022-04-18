@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -29,6 +30,8 @@ public class AclCalculationController extends CommonController<IAclCalculationWi
     private IAclUsageController aclUsageController;
     @Autowired
     private IAclGrantDetailController aclGrantDetailController;
+    @Autowired
+    private IAclFundPoolController aclFundPoolController;
 
     @Override
     public IAclUsageController getAclUsageController() {
@@ -38,6 +41,11 @@ public class AclCalculationController extends CommonController<IAclCalculationWi
     @Override
     public IAclGrantDetailController getAclGrantDetailController() {
         return aclGrantDetailController;
+    }
+
+    @Override
+    public IAclFundPoolController getAclFundPoolController() {
+        return aclFundPoolController;
     }
 
     @Override

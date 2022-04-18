@@ -22,4 +22,9 @@ public interface IAclCalculationController extends IController<IAclCalculationWi
      * @return instance of {@link IAclGrantDetailController}.
      */
     IAclGrantDetailController getAclGrantDetailController();
+
+    /**
+     * @return instance of {@link IAclFundPoolController}.
+     */
+    IAclFundPoolController getAclFundPoolController();
 }
