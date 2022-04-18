@@ -7,7 +7,14 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
+import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -28,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link AclUsageRepository}.
@@ -52,6 +61,36 @@ public class AclUsageRepositoryIntegrationTest {
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_UID_1 = "8ff48add-0eea-4fe3-81d0-3264c6779936";
     private static final String ACL_USAGE_UID_2 = "0eeef531-b779-4b3b-827d-b44b2261c6db";
+    private static final String ACL_USAGE_UID_3 = "2ba0fab7-746d-41e0-87b5-c2b3997ce0ae";
+    private static final String ACL_USAGE_UID_4 = "dfc0f9f4-2c50-4e1f-ad1a-a29fc2f9f4cd";
+    private static final String ACL_USAGE_UID_5 = "1e9ab4dd-8526-4309-9c54-20226c48cd27";
+    private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
+    private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
+    private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
+        Collections.singleton(buildDetailLicenseeClass(2));
+    private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
+        Collections.singleton(buildAggregateLicenseeClass(51));
+    private static final Set<PublicationType> PUB_TYPES = Collections.singleton(buildPubType("BK"));
+    private static final Set<String> TYPE_OF_USES = Collections.singleton("PRINT");
+    private static final String USAGE_DETAIL_ID = "OGN674GHHHB0111";
+    private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "ogn674ghhhb0111";
+    private static final String USAGE_DETAIL_ID_FRAGMENT = "OGN674";
+    private static final String USAGE_DETAIL_ID_WITH_METASYMBOLS = "OGN554GHHSG005 !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final int WR_WRK_INST_1 = 123822477;
+    private static final int WR_WRK_INST_2 = 306985867;
+    private static final String SYSTEM_TITLE = "The Wall Street journal";
+    private static final String SYSTEM_TITLE_DIFFERENT_CASE = "THe WAll STReet JOURnal";
+    private static final String SYSTEM_TITLE_FRAGMENT = "JOURnal";
+    private static final String SYSTEM_TITLE_WITH_METASYMBOLS = "The New York times !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final String SURVEY_COUNTRY = "Portugal";
+    private static final String SURVEY_COUNTRY_DIFFERENT_CASE = "PORTugal";
+    private static final String SURVEY_COUNTRY_FRAGMENT = "Port";
+    private static final String SURVEY_COUNTRY_WITH_METASYMBOLS = "Spain !@#$%^&*()_+-=?/\\'\"}{][<>";
+    private static final int CONTENT_UNIT_PRICE_1 = 7;
+    private static final int CONTENT_UNIT_PRICE_2 = 9;
+    private static final int ANNUALIZED_COPIES_1 = 1;
+    private static final int ANNUALIZED_COPIES_2 = 3;
     private static final String USER_NAME = "user@copyright.com";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -79,37 +118,500 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindCountByFilter() {
-        assertEquals(1, aclUsageRepository.findCountByFilter(buildAclUsageFilter()));
+    public void testFindCountByAllFilters() {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
+        filter.setUsageOrigin(USAGE_ORIGIN);
+        filter.setChannel(CHANNEL);
+        filter.setPeriods(PERIODS);
+        filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES);
+        filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES);
+        filter.setPubTypes(PUB_TYPES);
+        filter.setTypeOfUses(TYPE_OF_USES);
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_2, null));
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
+        filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
+        filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
+        assertEquals(1, aclUsageRepository.findCountByFilter(filter));
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
-    public void testFindDtosByFilter() {
-        List<AclUsageDto> values = aclUsageRepository.findDtosByFilter(buildAclUsageFilter(), null, buildSort());
+    public void testFindCountByFilterUsageOrigin() {
+        assertFilteringFindCountByFilter(filter -> filter.setUsageOrigin(USAGE_ORIGIN), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterChannel() {
+        assertFilteringFindCountByFilter(filter -> filter.setChannel(CHANNEL), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterPeriods() {
+        assertFilteringFindCountByFilter(filter -> filter.setPeriods(PERIODS), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterDetailLicenseeClasses() {
+        assertFilteringFindCountByFilter(filter -> filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAggregateLicenseeClasses() {
+        assertFilteringFindCountByFilter(filter -> filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterPubTypes() {
+        assertFilteringFindCountByFilter(filter -> filter.setPubTypes(PUB_TYPES), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterTypeOfUses() {
+        assertFilteringFindCountByFilter(filter -> filter.setTypeOfUses(TYPE_OF_USES), 2);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterUsageDetailId() {
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterWrWrkInst() {
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_1, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, WR_WRK_INST_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, WR_WRK_INST_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, WR_WRK_INST_1, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, WR_WRK_INST_2, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, WR_WRK_INST_2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, WR_WRK_INST_1, WR_WRK_INST_2)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSystemTitle() {
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_DIFFERENT_CASE, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterSurveyCountry() {
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_FRAGMENT, null)), 0);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_FRAGMENT, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_DIFFERENT_CASE, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_FRAGMENT, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)), 1);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterContentUnitPrice() {
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE_1, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, CONTENT_UNIT_PRICE_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, CONTENT_UNIT_PRICE_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE_1, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, CONTENT_UNIT_PRICE_2, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE_2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, CONTENT_UNIT_PRICE_1, CONTENT_UNIT_PRICE_2)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindCountByFilterAnnualizedCopies() {
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, ANNUALIZED_COPIES_1, null)), 1);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, ANNUALIZED_COPIES_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, ANNUALIZED_COPIES_1, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, ANNUALIZED_COPIES_1, null)), 4);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, ANNUALIZED_COPIES_2, null)), 2);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, ANNUALIZED_COPIES_2, null)), 3);
+        assertFilteringFindCountByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, ANNUALIZED_COPIES_1, ANNUALIZED_COPIES_2)), 3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByAllFilters() {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
+        filter.setUsageOrigin(USAGE_ORIGIN);
+        filter.setChannel(CHANNEL);
+        filter.setPeriods(PERIODS);
+        filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES);
+        filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES);
+        filter.setPubTypes(PUB_TYPES);
+        filter.setTypeOfUses(TYPE_OF_USES);
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_2, null));
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null));
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
+        filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 10, null));
+        filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
+        List<AclUsageDto> values = aclUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
         verifyAclUsageDto(loadExpectedDtos("json/acl/acl_usage_dto_0eeef531.json").get(0), values.get(0), false);
     }
 
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageOrigin() {
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageOrigin(USAGE_ORIGIN),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterChannel() {
+        assertFilteringFindDtosByFilter(filter -> filter.setChannel(CHANNEL),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterPeriods() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPeriods(PERIODS),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterDetailLicenseeClasses() {
+        assertFilteringFindDtosByFilter(filter -> filter.setDetailLicenseeClasses(DETAIL_LICENSEE_CLASSES),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAggregateLicenseeClasses() {
+        assertFilteringFindDtosByFilter(filter -> filter.setAggregateLicenseeClasses(AGGREGATE_LICENSEE_CLASSES),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterPubTypes() {
+        assertFilteringFindDtosByFilter(filter -> filter.setPubTypes(PUB_TYPES),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterTypeOfUses() {
+        assertFilteringFindDtosByFilter(filter -> filter.setTypeOfUses(TYPE_OF_USES),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterUsageDetailId() {
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
+            ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_FRAGMENT, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID, null)),
+            ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_FRAGMENT, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, USAGE_DETAIL_ID_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterWrWrkInst() {
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST_1, null)),
+            ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, WR_WRK_INST_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, WR_WRK_INST_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, WR_WRK_INST_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, WR_WRK_INST_2, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, WR_WRK_INST_2, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setWrWrkInstExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, WR_WRK_INST_1, WR_WRK_INST_2)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSystemTitle() {
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null)),
+            ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_FRAGMENT, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE, null)),
+            ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_FRAGMENT, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSystemTitleExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SYSTEM_TITLE_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterSurveyCountry() {
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_FRAGMENT, null)));
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY, null)),
+            ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_FRAGMENT, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_DIFFERENT_CASE, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_FRAGMENT, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setSurveyCountryExpression(
+            new FilterExpression<>(FilterOperatorEnum.CONTAINS, SURVEY_COUNTRY_WITH_METASYMBOLS, null)),
+            ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterContentUnitPrice() {
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE_1, null)),
+            ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, CONTENT_UNIT_PRICE_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, CONTENT_UNIT_PRICE_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, CONTENT_UNIT_PRICE_2, null)),
+            ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, CONTENT_UNIT_PRICE_2, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setContentUnitPriceExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, CONTENT_UNIT_PRICE_1, CONTENT_UNIT_PRICE_2)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
+    public void testFindDtosByFilterAnnualizedCopies() {
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, ANNUALIZED_COPIES_1, null)),
+            ACL_USAGE_UID_2);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, ANNUALIZED_COPIES_1, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, ANNUALIZED_COPIES_1, null)),
+            ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, ANNUALIZED_COPIES_1, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4, ACL_USAGE_UID_5);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN, ANNUALIZED_COPIES_2, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.LESS_THAN_OR_EQUALS_TO, ANNUALIZED_COPIES_2, null)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+        assertFilteringFindDtosByFilter(filter -> filter.setAnnualizedCopiesExpression(
+            new FilterExpression<>(FilterOperatorEnum.BETWEEN, ANNUALIZED_COPIES_1, ANNUALIZED_COPIES_2)),
+            ACL_USAGE_UID_2, ACL_USAGE_UID_3, ACL_USAGE_UID_4);
+    }
+
+    @Test
+    @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "detailId");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "period");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "usageOrigin");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "channel");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "usageDetailId");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "wrWrkInst");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "systemTitle");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "detLcId");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_4, "detailId");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_1, "period");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "usageOrigin");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_3, "channel");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_4, "usageDetailId");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_5, "wrWrkInst");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_4, "systemTitle");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_5, "detLcId");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "detLcName");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "aggLcId");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "aggLcName");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "surveyCountry");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "publicationType");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "contentUnitPrice");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "typeOfUse");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "annualizedCopies");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_4, "aggLcId");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "aggLcName");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "surveyCountry");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "publicationType");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_1, "contentUnitPrice");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "typeOfUse");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "annualizedCopies");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "updateUser");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "updateDate");
     }
@@ -153,24 +655,53 @@ public class AclUsageRepositoryIntegrationTest {
         return usages;
     }
 
-    private AclUsageFilter buildAclUsageFilter() {
-        AclUsageFilter filter = new AclUsageFilter();
-        filter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
-        return filter;
+    private static DetailLicenseeClass buildDetailLicenseeClass(int id) {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(id);
+        return detailLicenseeClass;
+    }
+
+    private static AggregateLicenseeClass buildAggregateLicenseeClass(int id) {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(id);
+        return aggregateLicenseeClass;
+    }
+
+    private static PublicationType buildPubType(String name) {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setName(name);
+        return publicationType;
     }
 
     private Sort buildSort() {
         return new Sort("updateDate", Sort.Direction.ASC);
     }
 
-    private void assertSortingFindDtosByFilter(String grandtDetailIdAsc, String grantDetailIdDesc,
-                                               String sortProperty) {
+    private void assertFilteringFindCountByFilter(Consumer<AclUsageFilter> consumer, int count) {
         AclUsageFilter filter = new AclUsageFilter();
-        List<AclUsageDto> grantDetails =
+        filter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
+        consumer.accept(filter);
+        int usagesCount = aclUsageRepository.findCountByFilter(filter);
+        assertEquals(count, usagesCount);
+    }
+
+    private void assertFilteringFindDtosByFilter(Consumer<AclUsageFilter> consumer, String... usageIds) {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
+        consumer.accept(filter);
+        List<AclUsageDto> usages = aclUsageRepository.findDtosByFilter(filter, null, buildSort());
+        assertEquals(usageIds.length, usages.size());
+        IntStream.range(0, usageIds.length)
+            .forEach(index -> assertEquals(usageIds[index], usages.get(index).getId()));
+    }
+
+    private void assertSortingFindDtosByFilter(String usageIdAsc, String usageIdDesc, String sortProperty) {
+        AclUsageFilter filter = new AclUsageFilter();
+        List<AclUsageDto> usages =
             aclUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.ASC));
-        assertEquals(grandtDetailIdAsc, grantDetails.get(0).getId());
-        grantDetails =
+        assertEquals(usageIdAsc, usages.get(0).getId());
+        usages =
             aclUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.DESC));
-        assertEquals(grantDetailIdDesc, grantDetails.get(0).getId());
+        assertEquals(usageIdDesc, usages.get(0).getId());
     }
 }
