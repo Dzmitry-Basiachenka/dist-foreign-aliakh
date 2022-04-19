@@ -82,4 +82,9 @@ public class UdmReportService implements IUdmReportService {
     public void writeUdmUsableDetailsByCountryCsvReport(UdmReportFilter reportFilter, OutputStream outputStream) {
         udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(reportFilter, outputStream);
     }
+
+    @Override
+    public void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream) {
+        udmReportRepository.writeUdmValuesByStatusCsvReport(period, outputStream);
+    }
 }

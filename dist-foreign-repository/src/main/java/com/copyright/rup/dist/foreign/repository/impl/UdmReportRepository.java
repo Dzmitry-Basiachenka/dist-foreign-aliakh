@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageEditsInBaselineReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmValuesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
@@ -122,6 +123,14 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
         try (UdmUsableDetailsByCountryReportHandler handler =
                  new UdmUsableDetailsByCountryReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmUsableDetailsByCountryReportDtos", filter, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream) {
+        try (UdmValuesByStatusReportHandler handler =
+                 new UdmValuesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmValuesByStatusReportDtos", period, handler);
         }
     }
 

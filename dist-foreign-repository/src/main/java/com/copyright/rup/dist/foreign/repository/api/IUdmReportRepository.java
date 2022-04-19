@@ -110,4 +110,12 @@ public interface IUdmReportRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUdmUsableDetailsByCountryCsvReport(UdmReportFilter reportFilter, OutputStream outputStream);
+
+    /**
+     * Writes UDM Value by Status Report into csv output stream.
+     *
+     * @param period instance of {@link Integer}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream);
 }

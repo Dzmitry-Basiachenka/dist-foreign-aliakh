@@ -60,6 +60,8 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         FOLDER_NAME + "write-usage-edits-in-baseline-csv-report.groovy";
     private static final String WRITE_USABLE_DETAILS_BY_COUNTRY_CSV_REPORT =
         FOLDER_NAME + "write-usable-details-by-country-csv-report.groovy";
+    private static final String WRITE_VALUES_BY_STATUS_CSV_REPORT =
+        FOLDER_NAME + "write-values-by-status-csv-report.groovy";
 
     @Autowired
     private IUdmReportRepository udmReportRepository;
@@ -312,5 +314,21 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
         assertFilesWithExecutor(
             outputStream -> udmReportRepository.writeUdmUsableDetailsByCountryCsvReport(reportFilter, outputStream),
             "udm/usable_details_by_source_empty_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_VALUES_BY_STATUS_CSV_REPORT)
+    public void testValuesByStatusReport() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmValuesByStatusCsvReport(202206, outputStream),
+            "udm/values_by_status_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_VALUES_BY_STATUS_CSV_REPORT)
+    public void testValuesByStatusEmptyReport() throws IOException {
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmValuesByStatusCsvReport(202212, outputStream),
+            "udm/values_by_status_empty_report.csv");
     }
 }

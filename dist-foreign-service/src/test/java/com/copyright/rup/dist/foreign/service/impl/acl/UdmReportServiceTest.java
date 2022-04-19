@@ -179,4 +179,14 @@ public class UdmReportServiceTest {
         udmReportService.writeUdmUsableDetailsByCountryCsvReport(filter, outputStream);
         verify(udmReportRepository);
     }
+
+    @Test
+    public void testWriteUdmValueByStatusCsvReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        udmReportRepository.writeUdmValuesByStatusCsvReport(202212, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmValuesByStatusCsvReport(202212, outputStream);
+        verify(udmReportRepository);
+    }
 }
