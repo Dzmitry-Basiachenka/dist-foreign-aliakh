@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmSurveyLicenseeReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsableDetailsByCountryReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsageEditsInBaselineReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmUsagesByStatusReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmVerifiedDetailsBySourceReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmWeeklySurveyReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.report.ReportStreamSource;
@@ -58,6 +59,7 @@ public class UdmReportWidgetTest {
     private static final String USABLE_DETAILS_BY_COUNTRY_REPORT = "Usable Details by Country Report";
     private static final String USAGE_EDITS_IN_BASELINE_REPORT = "Usage Edits in Baseline Report";
     private static final String COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT = "Completed Assignments by Employee Report";
+    private static final String USAGE_DETAILS_BY_STATUS_REPORT = "Usage Details by Status Report";
 
     private final IUdmReportController udmReportController = createMock(IUdmReportController.class);
     private UdmReportWidget udmReportWidget;
@@ -104,8 +106,9 @@ public class UdmReportWidgetTest {
         udmReportWidget.refresh();
         verifyAll();
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(1, menuItems.size());
+        assertEquals(2, menuItems.size());
         assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(0).getText());
+        assertEquals(USAGE_DETAILS_BY_STATUS_REPORT, menuItems.get(1).getText());
     }
 
     @Test
@@ -217,6 +220,22 @@ public class UdmReportWidgetTest {
     }
 
     @Test
+    public void testUsageDetailsByStatusReportSelected() {
+        UdmCommonStatusReportWidget widget = createMock(UdmCommonStatusReportWidget.class);
+        IUdmUsagesByStatusReportController controller = createMock(IUdmUsagesByStatusReportController.class);
+        setSpecialistExpectations();
+        expect(udmReportController.getUdmUsagesByStatusReportController()).andReturn(controller).once();
+        expect(controller.initWidget()).andReturn(widget).once();
+        widget.setCaption(USAGE_DETAILS_BY_STATUS_REPORT);
+        expectLastCall().once();
+        Windows.showModalWindow(widget);
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(6);
+        verifyAll();
+    }
+
+    @Test
     public void testReportStreamSource() {
         setSpecialistExpectations();
         String fileName = "weekly_survey_report_01_02_2021_03_04.csv";
@@ -245,13 +264,14 @@ public class UdmReportWidgetTest {
     private void assertReportsMenu() {
         assertEquals(1, CollectionUtils.size(udmReportWidget.getItems()));
         List<MenuItem> menuItems = udmReportWidget.getItems().get(0).getChildren();
-        assertEquals(6, menuItems.size());
+        assertEquals(7, menuItems.size());
         assertEquals(WEEKLY_SURVEY_REPORT, menuItems.get(0).getText());
         assertEquals(SURVEY_LICENSEE_REPORT, menuItems.get(1).getText());
         assertEquals(VERIFIED_DETAILS_BY_SOURCE_REPORT, menuItems.get(2).getText());
         assertEquals(USABLE_DETAILS_BY_COUNTRY_REPORT, menuItems.get(3).getText());
         assertEquals(USAGE_EDITS_IN_BASELINE_REPORT, menuItems.get(4).getText());
         assertEquals(COMPLETED_ASSIGNMENTS_BY_EMPLOYEE_REPORT, menuItems.get(5).getText());
+        assertEquals(USAGE_DETAILS_BY_STATUS_REPORT, menuItems.get(6).getText());
     }
 
     private void setSpecialistExpectations() {

@@ -42,4 +42,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Usage Edits in Baseline Report controller.
      */
     IUdmUsageEditsInBaselineReportController getUdmUsageEditsInBaselineReportController();
+
+    /**
+     * @return UDM Usages by Status Report controller.
+     */
+    IUdmUsagesByStatusReportController getUdmUsagesByStatusReportController();
 }
