@@ -33,6 +33,12 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     }
 
     @Override
+    public boolean isFundPoolExist(String name) {
+        //todo will implement later
+        return false;
+    }
+
+    @Override
     protected IAclFundPoolWidget instantiateWidget() {
         return new AclFundPoolWidget();
     }
