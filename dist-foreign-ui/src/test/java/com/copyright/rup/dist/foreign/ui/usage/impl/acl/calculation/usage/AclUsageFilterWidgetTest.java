@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -27,6 +28,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -137,10 +139,24 @@ public class AclUsageFilterWidgetTest {
         expectLastCall().once();
         replay(clickEvent, Windows.class, controller);
         widget.init();
-        ClickListener clickListener = (ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
-            .getListeners(ClickEvent.class).iterator().next();
+        ClickListener clickListener =
+            (ClickListener) (getMoreFiltersButton()).getListeners(ClickEvent.class).iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class, controller);
+    }
+
+    @Test
+    public void testMoreFiltersButton() {
+        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        replay(controller);
+        widget.init();
+        Button moreFiltersButton = getMoreFiltersButton();
+        ComboBox<String> usageBatchNameComboBox = Whitebox.getInternalState(widget, "usageBatchNameComboBox");
+        assertNull(usageBatchNameComboBox.getValue());
+        assertFalse(moreFiltersButton.isEnabled());
+        usageBatchNameComboBox.setValue(ACL_USAGE_BATCH_NAME);
+        assertTrue(moreFiltersButton.isEnabled());
+        verify(controller);
     }
 
     private AclUsageBatch buildAclUsageBatch() {
@@ -165,6 +181,10 @@ public class AclUsageFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton");
+    }
+
+    private Button getMoreFiltersButton() {
+        return Whitebox.getInternalState(widget, "moreFiltersButton");
     }
 
     private void verifyFiltersLabel(Component component) {
