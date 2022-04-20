@@ -215,6 +215,22 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies more filters button.
+     *
+     * @param component      button component
+     * @param listenersCount count of listeners applied to the button
+     */
+    public static void verifyMoreFiltersButton(Component component, int listenersCount) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals("More Filters", component.getCaption());
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
+        Collection<?> listeners = button.getListeners(ClickEvent.class);
+        assertTrue(CollectionUtils.isNotEmpty(listeners));
+        assertEquals(listenersCount, listeners.size());
+    }
+
+    /**
      * Sets text field value.
      *
      * @param window instance of {@link Window}
