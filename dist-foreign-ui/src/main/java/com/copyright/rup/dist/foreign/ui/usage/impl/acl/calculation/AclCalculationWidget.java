@@ -32,6 +32,7 @@ public class AclCalculationWidget extends TabSheet implements IAclCalculationWid
         this.addStyleName(Cornerstone.MAIN_TABSHEET);
         this.addStyleName("sub-tabsheet");
         initAndAddTab(() -> aclCalculationController.getAclUsageController(), "tab.usages");
+        initAndAddTab(() -> aclCalculationController.getAclFundPoolController(), "tab.fund_pool");
         initAndAddTab(() -> aclCalculationController.getAclGrantDetailController(), "tab.grant_set");
         setSizeFull();
         return this;
