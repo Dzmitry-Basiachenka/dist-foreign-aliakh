@@ -18,6 +18,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +79,9 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
     }
 
     private void filterChanged() {
-        applyButton.setEnabled(!aclUsageFilter.equals(appliedAclUsageFilter));
+        applyButton.setEnabled(
+            Objects.nonNull(aclUsageFilter.getUsageBatchName()) && !aclUsageFilter.equals(appliedAclUsageFilter));
+        moreFiltersButton.setEnabled(Objects.nonNull(aclUsageFilter.getUsageBatchName()));
     }
 
     private void refreshFilter() {
@@ -113,6 +116,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
 
     private void initMoreFiltersButton() {
         moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
+        moreFiltersButton.setEnabled(false);
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
         moreFiltersButton.addClickListener(event -> {
             AclUsageFiltersWindow aclUsageFiltersWindow = new AclUsageFiltersWindow();
