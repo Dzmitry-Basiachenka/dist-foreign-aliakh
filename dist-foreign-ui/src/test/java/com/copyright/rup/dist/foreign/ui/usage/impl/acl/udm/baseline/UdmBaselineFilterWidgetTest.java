@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -33,7 +34,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -143,7 +143,7 @@ public class UdmBaselineFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyComboBox(verticalLayout.getComponent(3), "Channel", true, UdmChannelEnum.values());
-        verifyMoreFiltersButton(verticalLayout.getComponent(4));
+        verifyMoreFiltersButton(verticalLayout.getComponent(4), 1);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -176,15 +176,6 @@ public class UdmBaselineFilterWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(1, listeners.size());
         assertNotNull(listeners.iterator().next());
-    }
-
-    private void verifyMoreFiltersButton(Component component) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals("More Filters", component.getCaption());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        Collection<?> listeners = button.getListeners(Button.ClickEvent.class);
-        assertEquals(1, listeners.size());
     }
 
     private Button getApplyButton() {

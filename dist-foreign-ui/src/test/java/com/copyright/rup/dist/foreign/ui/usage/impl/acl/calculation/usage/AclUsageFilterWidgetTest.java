@@ -2,30 +2,40 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.Sets;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
@@ -39,6 +49,8 @@ import java.util.Collections;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
 public class AclUsageFilterWidgetTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2022";
@@ -116,6 +128,21 @@ public class AclUsageFilterWidgetTest {
         verify(controller);
     }
 
+    @Test
+    public void verifyMoreFiltersButtonClickListener() {
+        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Windows.showModalWindow(anyObject(AclUsageFiltersWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, controller);
+        widget.init();
+        ClickListener clickListener = (ClickListener) ((Button) Whitebox.getInternalState(widget, "moreFiltersButton"))
+            .getListeners(ClickEvent.class).iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class, controller);
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch aclUsageBatch = new AclUsageBatch();
         aclUsageBatch.setId("7f2037ba-7fb0-4222-8454-cd84f7e1a617");
@@ -129,10 +156,15 @@ public class AclUsageFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(2, verticalLayout.getComponentCount());
+        assertEquals(3, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyComboBox(verticalLayout.getComponent(1), "Usage Batch Name", true,
             Collections.singletonList(ACL_USAGE_BATCH_NAME));
+        verifyMoreFiltersButton(verticalLayout.getComponent(2), 1);
+    }
+
+    private Button getApplyButton() {
+        return Whitebox.getInternalState(widget, "applyButton");
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -140,9 +172,5 @@ public class AclUsageFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private Button getApplyButton() {
-        return Whitebox.getInternalState(widget, "applyButton");
     }
 }

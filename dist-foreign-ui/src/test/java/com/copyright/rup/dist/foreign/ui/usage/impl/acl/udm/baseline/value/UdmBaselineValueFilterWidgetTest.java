@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.junit.Assert.assertEquals;
@@ -29,7 +30,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -173,7 +172,7 @@ public class UdmBaselineValueFilterWidgetTest {
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Pub Types");
-        verifyMoreFiltersButton(verticalLayout.getComponent(3));
+        verifyMoreFiltersButton(verticalLayout.getComponent(3), 2);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -181,15 +180,6 @@ public class UdmBaselineValueFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private void verifyMoreFiltersButton(Component component) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals("More Filters", component.getCaption());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
     }
 
     private Button getApplyButton() {

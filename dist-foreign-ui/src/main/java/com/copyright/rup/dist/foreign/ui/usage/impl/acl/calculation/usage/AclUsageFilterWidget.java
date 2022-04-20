@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -15,6 +16,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
 
     private IAclUsageFilterController controller;
     private Button applyButton;
+    private Button moreFiltersButton;
     private ComboBox<String> usageBatchNameComboBox;
     private AclUsageFilter aclUsageFilter = new AclUsageFilter();
     private AclUsageFilter appliedAclUsageFilter = new AclUsageFilter();
@@ -91,7 +94,9 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
 
     private VerticalLayout initFiltersLayout() {
         initUsageBatchNameFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), usageBatchNameComboBox);
+        initMoreFiltersButton();
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), usageBatchNameComboBox,
+            moreFiltersButton);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -104,6 +109,16 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
             filterChanged();
         });
         VaadinUtils.addComponentStyle(usageBatchNameComboBox, "acl-usage-batch-name-filter");
+    }
+
+    private void initMoreFiltersButton() {
+        moreFiltersButton = new Button(ForeignUi.getMessage("label.more_filters"));
+        moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
+        moreFiltersButton.addClickListener(event -> {
+            AclUsageFiltersWindow aclUsageFiltersWindow = new AclUsageFiltersWindow();
+            Windows.showModalWindow(aclUsageFiltersWindow);
+            aclUsageFiltersWindow.addCloseListener(closeEvent -> filterChanged());
+        });
     }
 
     private Label buildFiltersHeaderLabel() {

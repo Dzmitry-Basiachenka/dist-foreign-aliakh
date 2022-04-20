@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -35,7 +36,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -193,7 +193,7 @@ public class UdmValueFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Pub Types");
         verifyComboBox(verticalLayout.getComponent(3), "Status", true, VALUE_STATUSES);
-        verifyMoreFiltersButton(verticalLayout.getComponent(4));
+        verifyMoreFiltersButton(verticalLayout.getComponent(4), 2);
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -201,13 +201,6 @@ public class UdmValueFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private void verifyMoreFiltersButton(Component component) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals("More Filters", component.getCaption());
-        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
     }
 
     private void verifyButtonsLayout(Component component) {
