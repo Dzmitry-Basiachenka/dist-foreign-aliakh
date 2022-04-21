@@ -60,6 +60,9 @@ public class UdmReportWidget extends MenuBar implements IUdmReportWidget {
         String usagesByStatusReport = ForeignUi.getMessage("menu.report.usages_by_status_report");
         rootItem.addItem(usagesByStatusReport,
             menuItem -> this.openReportWindow(usagesByStatusReport, controller.getUdmUsagesByStatusReportController()));
+        String valuesByStatusReport = ForeignUi.getMessage("menu.report.values_by_status_report");
+        rootItem.addItem(valuesByStatusReport,
+            menuItem -> this.openReportWindow(valuesByStatusReport, controller.getUdmValuesByStatusReportController()));
     }
 
     @Override

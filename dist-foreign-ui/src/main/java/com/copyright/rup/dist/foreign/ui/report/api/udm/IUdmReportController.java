@@ -47,4 +47,9 @@ public interface IUdmReportController extends IController<IUdmReportWidget> {
      * @return UDM Usages by Status Report controller.
      */
     IUdmUsagesByStatusReportController getUdmUsagesByStatusReportController();
+
+    /**
+     * @return UDM Values by Status Report controller.
+     */
+    IUdmValuesByStatusReportController getUdmValuesByStatusReportController();
 }
