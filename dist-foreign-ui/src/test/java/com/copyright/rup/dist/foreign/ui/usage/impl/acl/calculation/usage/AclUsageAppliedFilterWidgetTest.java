@@ -54,8 +54,7 @@ public class AclUsageAppliedFilterWidgetTest {
         verifyLabel(verticalLayout.getComponent(6), "Pub Types", "BK - Book");
         verifyLabel(verticalLayout.getComponent(7), "Types of Use", "PRINT");
         verifyLabel(verticalLayout.getComponent(8), "Usage Detail ID", "EQUALS", "OGN674GHHHB0153");
-        verifyLabel(verticalLayout.getComponent(9), "Wr Wrk Inst From", "Wr Wrk Inst To", "BETWEEN",
-            "100000000", "200000000");
+        verifyLabel(verticalLayout.getComponent(9), "Wr Wrk Inst From", "Wr Wrk Inst To", "BETWEEN", "1", "100000000");
         verifyLabel(verticalLayout.getComponent(10), "System Title", "CONTAINS", "journal");
         verifyLabel(verticalLayout.getComponent(11), "Survey Country", "DOES_NOT_EQUAL", "Portugal");
         verifyLabel(verticalLayout.getComponent(12), "Content Unit Price From", "GREATER_THAN", "1");
@@ -91,7 +90,7 @@ public class AclUsageAppliedFilterWidgetTest {
         filter.setPubTypes(Collections.singleton(buildPubType("BK", "Book")));
         filter.setTypeOfUses(Collections.singleton("PRINT"));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "OGN674GHHHB0153", null));
-        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 100000000, 200000000));
+        filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 100000000));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "journal", null));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.DOES_NOT_EQUAL, "Portugal", null));
         filter.setContentUnitPriceExpression(new FilterExpression<>(FilterOperatorEnum.GREATER_THAN, 1, null));

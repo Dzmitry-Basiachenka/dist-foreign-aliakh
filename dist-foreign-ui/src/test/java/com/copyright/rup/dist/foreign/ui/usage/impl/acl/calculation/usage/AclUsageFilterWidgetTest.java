@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
 
 import static org.easymock.EasyMock.anyObject;
@@ -24,6 +25,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.Sets;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -56,12 +58,16 @@ import java.util.Collections;
 public class AclUsageFilterWidgetTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2022";
-    private final AclUsageFilterWidget widget = new AclUsageFilterWidget();
+
+    private AclUsageFilterWidget widget;
+    private AclUsageAppliedFilterWidget appliedFilterWidget;
     private IAclUsageFilterController controller;
 
     @Before
     public void setUp() {
+        appliedFilterWidget = createMock(AclUsageAppliedFilterWidget.class);
         controller = createMock(IAclUsageFilterController.class);
+        widget = new AclUsageFilterWidget(controller);
         widget.setController(controller);
     }
 
@@ -70,19 +76,24 @@ public class AclUsageFilterWidgetTest {
         expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
         replay(controller);
         assertSame(widget, widget.init());
-        assertEquals(2, widget.getComponentCount());
+        assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1), "Apply", "Clear");
+        verifyLabel(widget.getComponent(2), "Applied Filters:", ContentMode.TEXT, -1.0f);
+        assertTrue(widget.getComponent(3) instanceof AclUsageAppliedFilterWidget);
         verify(controller);
     }
 
     @Test
     public void testApplyFilter() {
         expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
-        replay(controller);
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall();
+        replay(controller, appliedFilterWidget);
         widget.init();
         widget.clearFilter();
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -95,7 +106,7 @@ public class AclUsageFilterWidgetTest {
         applyButton.click();
         assertFalse(applyButton.isEnabled());
         assertFalse(widget.getAppliedFilter().isEmpty());
-        verify(controller);
+        verify(controller, appliedFilterWidget);
     }
 
     @Test
@@ -113,8 +124,11 @@ public class AclUsageFilterWidgetTest {
     @Test
     public void testClearFilter() {
         expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
-        replay(controller);
+        appliedFilterWidget.refreshFilterPanel(anyObject());
+        expectLastCall().times(2);
+        replay(controller, appliedFilterWidget);
         widget.init();
+        Whitebox.setInternalState(widget, appliedFilterWidget);
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
@@ -127,7 +141,7 @@ public class AclUsageFilterWidgetTest {
         assertTrue(widget.getFilter().isEmpty());
         assertTrue(widget.getAppliedFilter().isEmpty());
         assertFalse(applyButton.isEnabled());
-        verify(controller);
+        verify(controller, appliedFilterWidget);
     }
 
     @Test
