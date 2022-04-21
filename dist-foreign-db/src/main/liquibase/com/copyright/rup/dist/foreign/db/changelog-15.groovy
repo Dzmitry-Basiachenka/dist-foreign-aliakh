@@ -336,4 +336,25 @@ databaseChangeLog {
                     columnName: 'detail_licensee_class_id', columnDataType: 'INTEGER')
         }
     }
+
+    changeSet(id: '2022-04-21-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-71795 FDA: Create ACL usage batch: add not null constrains to " +
+                "columns system_title, content_unit_price, annualized_copies in table df_acl_usage")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'content_unit_price', columnDataType: 'NUMERIC (38,10)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'annualized_copies', columnDataType: 'NUMERIC(38,5)')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'content_unit_price', columnDataType: 'NUMERIC (38,10)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'annualized_copies', columnDataType: 'NUMERIC(38,5)')
+        }
+    }
 }
