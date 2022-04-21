@@ -84,6 +84,12 @@
         <result property="totalCount" column="total_count"/>
     </resultMap>
 
+    <resultMap id="udmValuesByStatusReportDtoResultMap" type="UdmValuesByStatusReportDto">
+        <result property="status" column="status_ind"/>
+        <result property="assignee" column="assignee"/>
+        <result property="count" column="count"/>
+    </resultMap>
+
     <sql id="commonUdmFilterWhereClauses">
         <where>
             <if test="null != channel">
@@ -353,5 +359,21 @@
         </where>
         group by u.period, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
         order by u.period desc, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
+    </select>
+
+    <select id="findUdmValuesByStatusReportDtos" parameterType="int" resultMap="udmValuesByStatusReportDtoResultMap">
+        select
+            status_ind,
+            coalesce(assignee, 'unassigned') assignee,
+            count(1)
+        from ${schema}.df_udm_value
+        <where>
+            status_ind != 'RESEARCH_COMPLETE'
+            <if test="null != period">
+                and period = #{period}
+            </if>
+        </where>
+        group by status_ind, assignee
+        order by status_ind, assignee
     </select>
 </mapper>

@@ -95,6 +95,7 @@
         <typeAlias alias="UdmUsableDetailsByCountryReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmUsableDetailsByCountryReportDto"/>
         <typeAlias alias="AclUsageBatch" type="com.copyright.rup.dist.foreign.domain.AclUsageBatch"/>
         <typeAlias alias="AclUsageDto" type="com.copyright.rup.dist.foreign.domain.AclUsageDto"/>
+        <typeAlias alias="UdmValuesByStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmValuesByStatusReportDto"/>
     </typeAliases>
 
     <typeHandlers>
