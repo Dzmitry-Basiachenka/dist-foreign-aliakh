@@ -38,6 +38,17 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
     private ComboBox<String> usageBatchNameComboBox;
     private AclUsageFilter aclUsageFilter = new AclUsageFilter();
     private AclUsageFilter appliedAclUsageFilter = new AclUsageFilter();
+    private final AclUsageAppliedFilterWidget appliedFilterWidget;
+
+    /**
+     * Constructor.
+     *
+     * @param controller instance of {@link IAclUsageFilterController}
+     */
+    public AclUsageFilterWidget(IAclUsageFilterController controller) {
+        this.controller = controller;
+        appliedFilterWidget = new AclUsageAppliedFilterWidget();
+    }
 
     @Override
     public AclUsageFilter getFilter() {
@@ -52,8 +63,10 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
     @Override
     @SuppressWarnings("unchecked")
     public IAclUsageFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
+        addComponents(initFiltersLayout(), initButtonsLayout(), buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
         refreshFilter();
+        setExpandRatio(appliedFilterWidget, 1f);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-usage-filter-widget");
         return this;
@@ -62,6 +75,7 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
     @Override
     public void applyFilter() {
         appliedAclUsageFilter = new AclUsageFilter(aclUsageFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedAclUsageFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -141,5 +155,11 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "acl-usage-filter-buttons");
         return horizontalLayout;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "acl-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }

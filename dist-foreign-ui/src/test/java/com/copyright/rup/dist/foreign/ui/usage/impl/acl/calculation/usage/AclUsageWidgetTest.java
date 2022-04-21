@@ -17,6 +17,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -28,7 +29,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -59,12 +59,13 @@ public class AclUsageWidgetTest {
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(IAclUsageController.class);
-        streamSource = PowerMock.createMock(IStreamSource.class);
+        streamSource = createMock(IStreamSource.class);
         aclUsageWidget = new AclUsageWidget();
         Whitebox.setInternalState(aclUsageWidget, controller);
-        expect(controller.initAclUsageFilterWidget()).andReturn(new AclUsageFilterWidget()).once();
-        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(PowerMock.createMock(Supplier.class),
-            PowerMock.createMock(Supplier.class))).once();
+        AclUsageFilterWidget filterWidget = new AclUsageFilterWidget(createMock(IAclUsageFilterController.class));
+        expect(controller.initAclUsageFilterWidget()).andReturn(filterWidget).once();
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
         expect(controller.getExportAclUsagesStreamSource()).andReturn(streamSource).once();
     }
 

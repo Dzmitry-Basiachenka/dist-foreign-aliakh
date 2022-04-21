@@ -37,6 +37,6 @@ public class AclUsageFilterController extends CommonController<IAclUsageFilterWi
 
     @Override
     protected IAclUsageFilterWidget instantiateWidget() {
-        return new AclUsageFilterWidget();
+        return new AclUsageFilterWidget(this);
     }
 }
