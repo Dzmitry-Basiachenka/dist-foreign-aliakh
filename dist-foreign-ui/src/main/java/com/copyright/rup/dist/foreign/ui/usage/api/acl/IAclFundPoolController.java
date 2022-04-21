@@ -19,4 +19,12 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
      * @return initialized {@link IAclUsageFilterWidget}
      */
     IAclFundPoolFilterWidget initAclFundPoolFilterWidget();
+
+    /**
+     * Checks whether {@link com.copyright.rup.dist.foreign.domain.AclFundPool} with the name already exists.
+     *
+     * @param name ACL fund pool name
+     * @return {@code true} - if fund pool exists, {@code false} - otherwise
+     */
+    boolean isFundPoolExist(String name);
 }

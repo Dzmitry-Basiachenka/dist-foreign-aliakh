@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -12,10 +13,14 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
 
 /**
  * Verifies {@link AclFundPoolWidget}.
@@ -46,6 +51,9 @@ public class AclFundPoolWidgetTest {
         assertTrue(widget.isLocked());
         assertEquals(270, widget.getSplitPosition(), 0);
         verifyWindow(widget, null, 100, 100, Unit.PERCENTAGE);
+        VerticalLayout layout = (VerticalLayout) widget.getSecondComponent();
+        verifyMenuBar(((HorizontalLayout) layout.getComponent(0)).getComponent(0), "Fund Pool", true,
+            Collections.singletonList("Create"));
         verify(controller);
     }
 }
