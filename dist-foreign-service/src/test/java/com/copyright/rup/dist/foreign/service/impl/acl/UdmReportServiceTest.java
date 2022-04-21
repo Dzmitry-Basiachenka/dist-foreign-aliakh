@@ -189,4 +189,14 @@ public class UdmReportServiceTest {
         udmReportService.writeUdmValuesByStatusCsvReport(202212, outputStream);
         verify(udmReportRepository);
     }
+
+    @Test
+    public void testWriteUdmUsagesByStatusCsvReport() {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        udmReportRepository.writeUdmUsagesByStatusCsvReport(202212, outputStream);
+        expectLastCall().once();
+        replay(udmReportRepository);
+        udmReportService.writeUdmUsagesByStatusCsvReport(202212, outputStream);
+        verify(udmReportRepository);
+    }
 }

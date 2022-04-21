@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUdmReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmAssigneesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmBaselineUsageCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmCompletedAssignmentsReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmProxyValueCsvReportHandler;
@@ -15,7 +16,6 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportH
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerSpecialistManager;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageCsvReportHandlerView;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmUsageEditsInBaselineReportHandler;
-import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmValuesByStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmVerifiedDetailsBySourceReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.UdmWeeklySurveyReportHandler;
 
@@ -128,9 +128,17 @@ public class UdmReportRepository extends CommonReportRepository implements IUdmR
 
     @Override
     public void writeUdmValuesByStatusCsvReport(Integer period, OutputStream outputStream) {
-        try (UdmValuesByStatusReportHandler handler =
-                 new UdmValuesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
+        try (UdmAssigneesByStatusReportHandler handler =
+                 new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUdmReportMapper.findUdmValuesByStatusReportDtos", period, handler);
+        }
+    }
+
+    @Override
+    public void writeUdmUsagesByStatusCsvReport(Integer period, OutputStream outputStream) {
+        try (UdmAssigneesByStatusReportHandler handler =
+                 new UdmAssigneesByStatusReportHandler(Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUdmReportMapper.findUdmUsagesByStatusReportDtos", period, handler);
         }
     }
 

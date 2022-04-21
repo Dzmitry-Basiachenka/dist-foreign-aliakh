@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
-import com.copyright.rup.dist.foreign.domain.report.UdmValuesByStatusReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UdmAssigneeStatusReportDto;
 
 import com.google.common.collect.ImmutableList;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write UDM Values by Status Report.
+ * Implementation of {@link BaseCsvReportHandler} to write UDM Assignees by Status Report.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Mikita Maistrenka
  */
-public class UdmValuesByStatusReportHandler extends BaseCsvReportHandler<UdmValuesByStatusReportDto> {
+public class UdmAssigneesByStatusReportHandler extends BaseCsvReportHandler<UdmAssigneeStatusReportDto> {
 
     private static final List<String> HEADERS = ImmutableList.of("Status", "Assignee", "Count");
 
@@ -27,12 +27,12 @@ public class UdmValuesByStatusReportHandler extends BaseCsvReportHandler<UdmValu
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public UdmValuesByStatusReportHandler(OutputStream outputStream) {
+    public UdmAssigneesByStatusReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
     @Override
-    protected List<String> getBeanProperties(UdmValuesByStatusReportDto bean) {
+    protected List<String> getBeanProperties(UdmAssigneeStatusReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(bean.getStatus());
         beanProperties.add(bean.getAssignee());

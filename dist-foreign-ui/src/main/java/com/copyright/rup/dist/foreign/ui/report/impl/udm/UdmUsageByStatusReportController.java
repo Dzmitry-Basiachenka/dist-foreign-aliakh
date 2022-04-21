@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.udm.IUdmCommonStatusReportWidget;
@@ -30,6 +31,8 @@ public class UdmUsageByStatusReportController extends CommonController<IUdmCommo
 
     @Autowired
     private IUdmUsageService udmUsageService;
+    @Autowired
+    private IUdmReportService udmReportService;
 
     @Override
     public List<Integer> getPeriods() {
@@ -38,8 +41,8 @@ public class UdmUsageByStatusReportController extends CommonController<IUdmCommo
 
     @Override
     public IStreamSource getCsvStreamSource() {
-        return new ByteArrayStreamSource("usage_details_by_status_report_", os -> {
-        });
+        return new ByteArrayStreamSource("usage_details_by_status_report_",
+            os -> udmReportService.writeUdmUsagesByStatusCsvReport(getWidget().getSelectedPeriod(), os));
     }
 
     @Override

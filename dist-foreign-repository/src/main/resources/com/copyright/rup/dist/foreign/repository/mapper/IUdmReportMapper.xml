@@ -84,7 +84,7 @@
         <result property="totalCount" column="total_count"/>
     </resultMap>
 
-    <resultMap id="udmValuesByStatusReportDtoResultMap" type="UdmValuesByStatusReportDto">
+    <resultMap id="udmAssigneeByStatusReportDtoResultMap" type="UdmAssigneeStatusReportDto">
         <result property="status" column="status_ind"/>
         <result property="assignee" column="assignee"/>
         <result property="count" column="count"/>
@@ -361,18 +361,30 @@
         order by u.period desc, ub.channel, ub.usage_origin, u.survey_country, u.detail_licensee_class_id, detail_licensee_class_name
     </select>
 
-    <select id="findUdmValuesByStatusReportDtos" parameterType="int" resultMap="udmValuesByStatusReportDtoResultMap">
+    <select id="findUdmValuesByStatusReportDtos" parameterType="int" resultMap="udmAssigneeByStatusReportDtoResultMap">
         select
             status_ind,
             coalesce(assignee, 'unassigned') assignee,
             count(1)
         from ${schema}.df_udm_value
-        <where>
-            status_ind != 'RESEARCH_COMPLETE'
-            <if test="null != period">
-                and period = #{period}
-            </if>
-        </where>
+        where status_ind != 'RESEARCH_COMPLETE'
+        <if test="null != period">
+            and period = #{period}
+        </if>
+        group by status_ind, assignee
+        order by status_ind, assignee
+    </select>
+
+    <select id="findUdmUsagesByStatusReportDtos" parameterType="int" resultMap="udmAssigneeByStatusReportDtoResultMap">
+        select
+            status_ind,
+            coalesce(assignee, 'unassigned') assignee,
+            count(1)
+        from ${schema}.df_udm_usage
+        where status_ind not in ('ELIGIBLE', 'INELIGIBLE')
+        <if test="null != period">
+            and period = #{period}
+        </if>
         group by status_ind, assignee
         order by status_ind, assignee
     </select>
