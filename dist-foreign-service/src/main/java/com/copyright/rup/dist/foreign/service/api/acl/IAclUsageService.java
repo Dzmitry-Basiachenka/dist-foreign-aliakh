@@ -46,4 +46,11 @@ public interface IAclUsageService {
      * @return the list of {@link AclUsageDto}s
      */
     List<AclUsageDto> getDtos(AclUsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Gets all available periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }

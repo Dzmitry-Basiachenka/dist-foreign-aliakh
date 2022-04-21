@@ -25,8 +25,10 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link PeriodFilterWidget}.
@@ -92,5 +94,13 @@ public class PeriodFilterWidgetTest {
         assertEquals(Collections.singletonList(String.valueOf(PERIOD)),
             providerCapture.getValue().apply(PERIOD));
         verify(filterWindow, Windows.class);
+    }
+
+    @Test
+    public void testConstructorWithSelectedItems() {
+        Set<Integer> selectedPeriods = Collections.singleton(202206);
+        PeriodFilterWidget widget = new PeriodFilterWidget(() -> Arrays.asList(202212, 202206), selectedPeriods);
+        assertEquals(selectedPeriods, widget.getSelectedItemsIds());
+        assertEquals("Periods", widget.getComponent(1).getCaption());
     }
 }

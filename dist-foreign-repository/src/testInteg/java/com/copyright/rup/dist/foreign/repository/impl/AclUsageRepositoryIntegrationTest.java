@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -32,6 +33,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +60,7 @@ public class AclUsageRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-usage-repository-integration-test/";
     private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
+    private static final String FIND_PERIODS = FOLDER_NAME + "find-periods.groovy";
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_UID_1 = "8ff48add-0eea-4fe3-81d0-3264c6779936";
     private static final String ACL_USAGE_UID_2 = "0eeef531-b779-4b3b-827d-b44b2261c6db";
@@ -614,6 +617,15 @@ public class AclUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "annualizedCopies");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_2, "updateUser");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "updateDate");
+    }
+
+    @Test
+    @TestData(fileName = FIND_PERIODS)
+    public void testFindPeriods() {
+        List<Integer> expectedPeriods = Arrays.asList(202212, 202112);
+        List<Integer> actualPeriods = aclUsageRepository.findPeriods();
+        assertFalse(actualPeriods.isEmpty());
+        assertEquals(expectedPeriods, actualPeriods);
     }
 
     private void verifyAclUsageDto(AclUsageDto expectedUsage, AclUsageDto actualUsage, boolean isValidateDates) {

@@ -54,4 +54,11 @@ public interface IAclUsageRepository {
      * @return the list of {@link AclUsageDto}
      */
     List<AclUsageDto> findDtosByFilter(AclUsageFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Finds list of periods from ACL usages.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 }

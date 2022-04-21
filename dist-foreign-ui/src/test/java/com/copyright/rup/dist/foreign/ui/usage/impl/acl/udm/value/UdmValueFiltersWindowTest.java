@@ -368,7 +368,7 @@ public class UdmValueFiltersWindowTest {
     }
 
     @Test
-    public void testlastCommentValidation() {
+    public void testLastCommentValidation() {
         validateCommentField("lastCommentField", "lastCommentOperatorComboBox");
     }
 

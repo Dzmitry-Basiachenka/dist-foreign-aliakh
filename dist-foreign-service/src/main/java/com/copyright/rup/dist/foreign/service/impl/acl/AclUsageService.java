@@ -45,4 +45,9 @@ public class AclUsageService implements IAclUsageService {
             ? aclUsageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
     }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return aclUsageRepository.findPeriods();
+    }
 }

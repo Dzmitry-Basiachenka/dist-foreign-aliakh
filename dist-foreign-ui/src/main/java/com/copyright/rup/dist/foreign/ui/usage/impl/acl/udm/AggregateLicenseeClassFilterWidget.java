@@ -89,4 +89,8 @@ public class AggregateLicenseeClassFilterWidget extends BaseUdmItemsFilterWidget
         VaadinUtils.addComponentStyle(filterWindow, "baseline-aggregate-licensee-class-filter-window");
         return filterWindow;
     }
+
+    public Set<AggregateLicenseeClass> getSelectedItemsIds() {
+        return selectedItemsIds;
+    }
 }

@@ -8,10 +8,17 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
@@ -28,13 +35,24 @@ import java.util.List;
  */
 public class AclUsageFilterControllerTest {
 
+    private static final String ACL_PRODUCT_FAMILY = "ACL";
     private final AclUsageFilterController controller = new AclUsageFilterController();
+
     private IAclUsageBatchService aclUsageBatchService;
+    private IAclUsageService aclUsageService;
+    private ILicenseeClassService licenseeClassService;
+    private IPublicationTypeService publicationTypeService;
 
     @Before
     public void setUp() {
         aclUsageBatchService = createMock(IAclUsageBatchService.class);
+        aclUsageService = createMock(IAclUsageService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
+        publicationTypeService = PowerMock.createMock(IPublicationTypeService.class);
         Whitebox.setInternalState(controller, aclUsageBatchService);
+        Whitebox.setInternalState(controller, aclUsageService);
+        Whitebox.setInternalState(controller, licenseeClassService);
+        Whitebox.setInternalState(controller, publicationTypeService);
     }
 
     @Test
@@ -49,5 +67,48 @@ public class AclUsageFilterControllerTest {
         replay(aclUsageBatchService);
         assertSame(aclUsageBatches, controller.getAllAclUsageBatches());
         verify(aclUsageBatchService);
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Collections.singletonList(202006);
+        expect(aclUsageService.getPeriods()).andReturn(periods).once();
+        replay(aclUsageService);
+        assertSame(periods, controller.getPeriods());
+        verify(aclUsageService);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassService.getDetailLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
+        verify(licenseeClassService);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClasses() {
+        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        expect(licenseeClassService.getAggregateLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertSame(licenseeClasses, controller.getAggregateLicenseeClasses());
+        verify(licenseeClassService);
+    }
+
+    @Test
+    public void testGetPublicationTypes() {
+        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType());
+        expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
+        replay(publicationTypeService);
+        assertSame(pubTypes, controller.getPublicationTypes());
+        verify(publicationTypeService);
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType pubType = new PublicationType();
+        pubType.setName("BK");
+        pubType.setDescription("Book");
+        return pubType;
     }
 }
