@@ -185,7 +185,7 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
     }
 
     private Label buildAppliedFiltersHeaderLabel() {
-        Label appliedFilterHeaderLabel = new Label("Applied Filters:");
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
         appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "udm-applied-filter-header");
         return appliedFilterHeaderLabel;
     }
