@@ -46,15 +46,26 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public int findCountByFilter(AclUsageFilter filter) {
         return selectOne("IAclUsageMapper.findCountByFilter",
-            ImmutableMap.of("filter", Objects.requireNonNull(filter)));
+            ImmutableMap.of("filter", escapeSqlLikePattern(Objects.requireNonNull(filter))));
     }
 
     @Override
     public List<AclUsageDto> findDtosByFilter(AclUsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("filter", Objects.requireNonNull(filter));
+        parameters.put("filter", escapeSqlLikePattern(Objects.requireNonNull(filter)));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
         return selectList("IAclUsageMapper.findDtosByFilter", parameters);
+    }
+
+    private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {
+        AclUsageFilter filterCopy = new AclUsageFilter(filter);
+        filterCopy.setUsageDetailIdExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getUsageDetailIdExpression()));
+        filterCopy.setSystemTitleExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSystemTitleExpression()));
+        filterCopy.setSurveyCountryExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getSurveyCountryExpression()));
+        return filterCopy;
     }
 }
