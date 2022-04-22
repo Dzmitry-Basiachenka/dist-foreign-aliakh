@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author Mikita Maistrenka
  */
-public class UdmValuesByStatusReportDto extends StoredEntity<String> {
+public class UdmAssigneeStatusReportDto extends StoredEntity<String> {
 
     private String status;
     private String assignee;
@@ -53,7 +53,7 @@ public class UdmValuesByStatusReportDto extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UdmValuesByStatusReportDto that = (UdmValuesByStatusReportDto) obj;
+        UdmAssigneeStatusReportDto that = (UdmAssigneeStatusReportDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(status, that.status)
