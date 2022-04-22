@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -12,6 +13,8 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWidget;
@@ -19,6 +22,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWi
 import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -29,7 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclUsageFiltersWindow}.
@@ -46,6 +52,8 @@ public class AclUsageFiltersWindowTest {
     private static final Integer LC_ID = 26;
     private static final String LC_DESCRIPTION = "Law Firms";
     private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final UdmUsageOriginEnum RFA_USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
+    private static final UdmChannelEnum CCC_CHANNEL = UdmChannelEnum.CCC;
 
     private AclUsageFiltersWindow window;
 
@@ -68,6 +76,17 @@ public class AclUsageFiltersWindowTest {
         usageFilter.setTypeOfUses(Sets.newHashSet("DIGITAL", PRINT_TYPE_OF_USE));
         window = new AclUsageFiltersWindow(createMock(IAclUsageFilterController.class), usageFilter);
         verifyFiltersData();
+    }
+
+    @Test
+    public void testSaveButtonClickListener() {
+        AclUsageFilter aclUsageFilter = Whitebox.getInternalState(window, USAGE_FILTER);
+        assertTrue(aclUsageFilter.isEmpty());
+        populateData();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) ((VerticalLayout) window.getContent()).getComponent(1);
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        saveButton.click();
+        assertEquals(buildExpectedFilter(), aclUsageFilter);
     }
 
     @Test
@@ -96,10 +115,12 @@ public class AclUsageFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(3, verticalLayout.getComponentCount());
+        assertEquals(4, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Periods", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Aggregate Licensee Classes", "Pub Types");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Types of Use");
+        verifyComboBoxLayout(verticalLayout.getComponent(3), "Usage Origin", Arrays.asList(UdmUsageOriginEnum.values()),
+            "Channel", Arrays.asList(UdmChannelEnum.values()));
     }
 
     private void verifyItemsFilterLayout(Component component, String firstCaption, String secondCaption) {
@@ -108,6 +129,14 @@ public class AclUsageFiltersWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyItemsFilterWidget(layout.getComponent(0), firstCaption);
         verifyItemsFilterWidget(layout.getComponent(1), secondCaption);
+    }
+
+    private void verifyComboBoxLayout(Component component, String firstCaption, List<?> firstItemList,
+                                      String secondCaption, List<?> secondItemList) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        verifyComboBox(layout.getComponent(0), firstCaption, true, firstItemList);
+        verifyComboBox(layout.getComponent(1), secondCaption, true, secondItemList);
     }
 
     private AclUsageFilter buildExpectedFilter() {
@@ -126,6 +155,8 @@ public class AclUsageFiltersWindowTest {
         filter.setAggregateLicenseeClasses(Collections.singleton(aggregateLicenseeClass));
         filter.setPubTypes(Collections.singleton(publicationType));
         filter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
+        filter.setUsageOrigin(RFA_USAGE_ORIGIN);
+        filter.setChannel(CCC_CHANNEL);
         return filter;
     }
 
@@ -135,10 +166,29 @@ public class AclUsageFiltersWindowTest {
         assertFilterWidgetLabelValue("aggregateLicenseeClassFilterWidget", "(1)");
         assertFilterWidgetLabelValue("pubTypeFilterWidget", "(1)");
         assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(2)");
+        assertComboBoxValue("usageOriginComboBox", RFA_USAGE_ORIGIN);
+        assertComboBoxValue("channelComboBox", CCC_CHANNEL);
     }
 
     private void assertFilterWidgetLabelValue(String filterName, String value) {
         BaseUdmItemsFilterWidget filterWidget = Whitebox.getInternalState(window, filterName);
         assertEquals(value, ((Label) filterWidget.getComponent(0)).getValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void assertComboBoxValue(String fieldName, T value) {
+        assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
+    }
+
+    private void populateData() {
+        AclUsageFilter aclUsageFilter = Whitebox.getInternalState(window, USAGE_FILTER);
+        aclUsageFilter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
+        populateComboBox("usageOriginComboBox", RFA_USAGE_ORIGIN);
+        populateComboBox("channelComboBox", CCC_CHANNEL);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void populateComboBox(String fieldName, T value) {
+        ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 }
