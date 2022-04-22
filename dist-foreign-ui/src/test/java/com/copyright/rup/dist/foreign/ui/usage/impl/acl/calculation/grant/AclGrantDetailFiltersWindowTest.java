@@ -350,6 +350,7 @@ public class AclGrantDetailFiltersWindowTest {
         assertFilterWidgetLabelValue("licenseTypeFilterWidget", "(1)");
         assertFilterWidgetLabelValue("grantStatusFilterWidget", "(1)");
         assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(1)");
+        assertComboBoxValue("grantSetPeriodComboBox", GRANT_SET_PERIOD);
         assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("rhAccountNumberFromField", RH_ACCOUNT_NUMBER.toString());

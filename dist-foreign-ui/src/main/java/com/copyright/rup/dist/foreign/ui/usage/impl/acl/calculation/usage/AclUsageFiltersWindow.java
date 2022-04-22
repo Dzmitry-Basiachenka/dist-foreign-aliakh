@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
+import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
@@ -23,6 +25,7 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
@@ -45,6 +48,10 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     private final Binder<AclUsageFilter> filterBinder = new Binder<>();
     private final AclUsageFilter usageFilter;
     private final IAclUsageFilterController controller;
+    private final ComboBox<UdmUsageOriginEnum> usageOriginComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
+    private final ComboBox<UdmChannelEnum> channelComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.channel"));
 
     private PeriodFilterWidget periodFilterWidget;
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
@@ -80,7 +87,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         initTypeOfUseFilterWidget();
         VerticalLayout fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
-            typeOfUseFilterWidget);
+            typeOfUseFilterWidget, initUsageOriginChannelLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
         return buildRootLayout(fieldsLayout);
@@ -124,6 +131,30 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
             usageFilter.getTypeOfUses());
         //TODO avoid using empty listeners
         typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
+    }
+
+    private HorizontalLayout initUsageOriginChannelLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(initUsageOriginFilter(), initChannelLayout());
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
+    private ComboBox<UdmUsageOriginEnum> initUsageOriginFilter() {
+        filterBinder.forField(usageOriginComboBox)
+            .bind(AclUsageFilter::getUsageOrigin, AclUsageFilter::setUsageOrigin);
+        usageOriginComboBox.setItems(UdmUsageOriginEnum.values());
+        usageOriginComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(usageOriginComboBox, "acl-usage-origin-filter");
+        return usageOriginComboBox;
+    }
+
+    private ComboBox<UdmChannelEnum> initChannelLayout() {
+        filterBinder.forField(channelComboBox)
+            .bind(AclUsageFilter::getChannel, AclUsageFilter::setChannel);
+        channelComboBox.setItems(UdmChannelEnum.values());
+        channelComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(channelComboBox, "acl-usage-channel-filter");
+        return channelComboBox;
     }
 
     private VerticalLayout buildRootLayout(VerticalLayout fieldsLayout) {
