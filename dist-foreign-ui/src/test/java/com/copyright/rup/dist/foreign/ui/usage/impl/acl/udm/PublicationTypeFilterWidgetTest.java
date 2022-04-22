@@ -28,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link PublicationTypeFilterWidget}.
@@ -94,6 +95,15 @@ public class PublicationTypeFilterWidgetTest {
         publicationTypeFilterWidget.showFilterWindow();
         assertEquals(Arrays.asList("OT", "Other"), providerCapture.getValue().apply(publicationType));
         verify(filterWindow, Windows.class);
+    }
+
+    @Test
+    public void testConstructorWithSelectedItems() {
+        Set<PublicationType> selectedPublicationTypes = Collections.singleton(publicationType);
+        PublicationTypeFilterWidget pubTypeFilterWidget =
+            new PublicationTypeFilterWidget(() -> Collections.singletonList(publicationType), selectedPublicationTypes);
+        assertEquals(selectedPublicationTypes, pubTypeFilterWidget.getSelectedItemsIds());
+        assertEquals("Pub Types", pubTypeFilterWidget.getComponent(1).getCaption());
     }
 
     private PublicationType buildPublicationType() {

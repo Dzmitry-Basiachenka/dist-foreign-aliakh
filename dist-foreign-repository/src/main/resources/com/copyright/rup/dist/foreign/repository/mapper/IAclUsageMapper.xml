@@ -302,4 +302,10 @@
     <select id="findDtosByFilter" resultMap="aclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IAclUsageMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct period
+        from ${schema}.df_acl_usage
+        order by period desc
+    </select>
 </mapper>

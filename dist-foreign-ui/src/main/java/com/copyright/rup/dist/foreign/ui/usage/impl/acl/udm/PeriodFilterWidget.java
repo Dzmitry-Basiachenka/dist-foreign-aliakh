@@ -6,7 +6,6 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.vaadin.data.ValueProvider;
 
@@ -27,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @author Anton Azarenka
  */
-public class PeriodFilterWidget extends BaseItemsFilterWidget<Integer>
+public class PeriodFilterWidget extends BaseUdmItemsFilterWidget<Integer>
     implements IFilterWindowController<Integer> {
 
     private final Supplier<List<Integer>> supplier;
@@ -41,6 +40,18 @@ public class PeriodFilterWidget extends BaseItemsFilterWidget<Integer>
     public PeriodFilterWidget(Supplier<List<Integer>> supplier) {
         super(ForeignUi.getMessage("label.periods"));
         this.supplier = supplier;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param supplier         period supplier
+     * @param selectedItemsIds set of selected items
+     */
+    public PeriodFilterWidget(Supplier<List<Integer>> supplier, Set<Integer> selectedItemsIds) {
+        this(supplier);
+        this.periods.addAll(selectedItemsIds);
+        setLabelValue(selectedItemsIds.size());
     }
 
     @Override
@@ -83,5 +94,9 @@ public class PeriodFilterWidget extends BaseItemsFilterWidget<Integer>
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.period"));
         VaadinUtils.addComponentStyle(filterWindow, "udm-values-periods-filter-window");
         return filterWindow;
+    }
+
+    public Set<Integer> getSelectedItemsIds() {
+        return periods;
     }
 }

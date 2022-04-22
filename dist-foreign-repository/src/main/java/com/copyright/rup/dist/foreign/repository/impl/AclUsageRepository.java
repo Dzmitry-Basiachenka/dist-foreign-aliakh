@@ -58,6 +58,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         return selectList("IAclUsageMapper.findDtosByFilter", parameters);
     }
 
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IAclUsageMapper.findPeriods");
+    }
+
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {
         AclUsageFilter filterCopy = new AclUsageFilter(filter);
         filterCopy.setUsageDetailIdExpression(

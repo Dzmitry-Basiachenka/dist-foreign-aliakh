@@ -47,6 +47,19 @@ public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<Public
         this.supplier = supplier;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param supplier         period supplier
+     * @param selectedItemsIds set of selected items
+     */
+    public PublicationTypeFilterWidget(Supplier<List<PublicationType>> supplier,
+                                       Set<PublicationType> selectedItemsIds) {
+        this(supplier);
+        this.selectedItemsIds.addAll(selectedItemsIds);
+        setLabelValue(selectedItemsIds.size());
+    }
+
     @Override
     public void reset() {
         super.reset();
@@ -88,5 +101,9 @@ public class PublicationTypeFilterWidget extends BaseUdmItemsFilterWidget<Public
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.publication_type"));
         VaadinUtils.addComponentStyle(filterWindow, "publication-type-filter-window");
         return filterWindow;
+    }
+
+    public Set<PublicationType> getSelectedItemsIds() {
+        return selectedItemsIds;
     }
 }

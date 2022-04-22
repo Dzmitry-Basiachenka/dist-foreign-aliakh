@@ -1,7 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -29,10 +36,36 @@ public class AclUsageFilterController extends CommonController<IAclUsageFilterWi
 
     @Autowired
     private IAclUsageBatchService aclUsageBatchService;
+    @Autowired
+    private IAclUsageService aclUsageService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
 
     @Override
     public List<AclUsageBatch> getAllAclUsageBatches() {
         return aclUsageBatchService.getAll();
+    }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return aclUsageService.getPeriods();
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<AggregateLicenseeClass> getAggregateLicenseeClasses() {
+        return licenseeClassService.getAggregateLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override

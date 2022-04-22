@@ -90,6 +90,15 @@ public class AclUsageServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Collections.singletonList(202006);
+        expect(aclUsageRepository.findPeriods()).andReturn(periods).once();
+        replay(aclUsageRepository);
+        assertSame(periods, aclUsageService.getPeriods());
+        verify(aclUsageRepository);
+    }
+
     private AclUsageFilter buildAclUsageFilter() {
         AclUsageFilter aclUsageFilter = new AclUsageFilter();
         aclUsageFilter.setUsageBatchName("ACL Usage Batch 2021");

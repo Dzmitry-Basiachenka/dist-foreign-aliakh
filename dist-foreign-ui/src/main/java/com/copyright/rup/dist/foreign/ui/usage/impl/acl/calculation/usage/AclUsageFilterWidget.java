@@ -133,9 +133,12 @@ public class AclUsageFilterWidget extends VerticalLayout implements IAclUsageFil
         moreFiltersButton.setEnabled(false);
         moreFiltersButton.addStyleName(ValoTheme.BUTTON_LINK);
         moreFiltersButton.addClickListener(event -> {
-            AclUsageFiltersWindow aclUsageFiltersWindow = new AclUsageFiltersWindow();
+            AclUsageFiltersWindow aclUsageFiltersWindow = new AclUsageFiltersWindow(controller, aclUsageFilter);
             Windows.showModalWindow(aclUsageFiltersWindow);
-            aclUsageFiltersWindow.addCloseListener(closeEvent -> filterChanged());
+            aclUsageFiltersWindow.addCloseListener(closeEvent -> {
+                aclUsageFilter = aclUsageFiltersWindow.getAppliedUsageFilter();
+                filterChanged();
+            });
         });
     }
 
