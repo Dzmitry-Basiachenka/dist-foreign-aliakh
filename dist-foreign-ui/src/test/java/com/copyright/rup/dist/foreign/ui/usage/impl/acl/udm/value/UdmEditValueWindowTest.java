@@ -549,7 +549,6 @@ public class UdmEditValueWindowTest {
         assertTrue(statusValues.contains(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE));
         assertFalse(statusValues.contains(UdmValueStatusEnum.NEEDS_FURTHER_REVIEW));
         assertFalse(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
-        assertFalse(statusValues.contains(UdmValueStatusEnum.PUBLISHED));
     }
 
     @Test
@@ -564,7 +563,6 @@ public class UdmEditValueWindowTest {
         assertTrue(statusValues.contains(UdmValueStatusEnum.PRELIM_RESEARCH_COMPLETE));
         assertTrue(statusValues.contains(UdmValueStatusEnum.NEEDS_FURTHER_REVIEW));
         assertTrue(statusValues.contains(UdmValueStatusEnum.RESEARCH_COMPLETE));
-        assertFalse(statusValues.contains(UdmValueStatusEnum.PUBLISHED));
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {

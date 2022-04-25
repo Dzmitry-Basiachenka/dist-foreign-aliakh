@@ -34,10 +34,5 @@ public enum UdmValueStatusEnum {
     /**
      * Status for UDM values when research complete.
      */
-    RESEARCH_COMPLETE,
-
-    /**
-     * Status for UDM values which is published.
-     */
-    PUBLISHED
+    RESEARCH_COMPLETE
 }

@@ -154,7 +154,7 @@ public class UdmValueWidgetTest {
         mockStatic(Windows.class);
         UdmValueDto udmValueDto = new UdmValueDto();
         udmValueDto.setId("861b9893-7797-47df-8e17-730e6d2da334");
-        udmValueDto.setStatus(UdmValueStatusEnum.PUBLISHED);
+        udmValueDto.setStatus(UdmValueStatusEnum.RESEARCH_COMPLETE);
         setResearcherExpectations();
         Windows.showNotificationWindow("You can assign only UDM values in statuses NEW, RSCHD_IN_THE_PREV_PERIOD");
         expectLastCall().once();
