@@ -1,3 +1,24 @@
+15.1.16
+-
+* B-69894 FDA: Usage batch filters: implement domain object
+* B-69894 FDA: Usage batch filters: implement MyBatis mapping
+* B-69894 FDA: Usage batch filters: implement empty additional filter window
+* B-69894 FDA: Usage batch filters: implement Usage Batch Name as a required filter
+* B-69894 FDA: Usage batch filters: implement repository
+* B-69894 FDA: Usage batch filters: add not null constrains to columns system_title, content_unit_price, annualized_copies in table df_acl_usage
+* B-69894 FDA: Usage batch filters: implement applied filters widget
+* B-69894 FDA: Usage batch filters: use applied filters widget
+* B-69894 FDA: Usage batch filters: implement multiselect widgets to additional filter window
+* B-69894 FDA: Usage batch filters: implement dropdown widgets to additional filter window
+* B-72823 FDA: Values by Status report: implement filter window for report generation
+* B-72823 FDA: Values by Status report: implement backend logic to generate report
+* B-71997 FDA: Usage Details by Status report: implement backend logic to generate report
+* B-71997 FDA: Usage Details by Status report: implement window to generate report
+* B-64276 FDA: Fund Pool creation: implement fund pool tab
+* B-64276 FDA: Fund Pool creation: Implement create  fund pool window with fields validation
+* B-71754 FDA: Uploading works to a Grant set: add manual upload flag to exported file
+* B-72773 Tech Debt: FDA: apply new 6_7 rup dependencies version
+
 15.1.15
 -
 * CDP-1047 FDA: Upload works to a Grant Set: Exception occurs after uploading a grant record with TOU that is specified not in upper case
