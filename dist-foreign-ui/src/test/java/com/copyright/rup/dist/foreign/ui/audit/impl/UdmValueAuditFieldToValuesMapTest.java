@@ -48,7 +48,7 @@ public class UdmValueAuditFieldToValuesMapTest {
     private static final Boolean PRICE_FLAG_OLD = false;
     private static final Boolean PRICE_FLAG_NEW = true;
     private static final UdmValueStatusEnum STATUS_OLD = UdmValueStatusEnum.RESEARCH_COMPLETE;
-    private static final UdmValueStatusEnum STATUS_NEW = UdmValueStatusEnum.PUBLISHED;
+    private static final UdmValueStatusEnum STATUS_NEW = UdmValueStatusEnum.NEW;
     private static final PublicationType PUBLICATION_TYPE_OLD;
     private static final PublicationType PUBLICATION_TYPE_NEW;
     private static final BigDecimal CONTENT_OLD = new BigDecimal("2.00");
@@ -307,12 +307,12 @@ public class UdmValueAuditFieldToValuesMapTest {
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
         fieldToValuesMap.updateFieldValue("Value Status", STATUS_NEW.toString());
         assertEquals(Collections.singletonList("The field 'Value Status' was edited. " +
-            "Old Value is 'RESEARCH_COMPLETE'. New Value is 'PUBLISHED'"), fieldToValuesMap.getActionReasons());
+            "Old Value is 'RESEARCH_COMPLETE'. New Value is 'NEW'"), fieldToValuesMap.getActionReasons());
         valueDto.setStatus(STATUS_NEW);
         fieldToValuesMap = new UdmValueAuditFieldToValuesMap(valueDto);
         fieldToValuesMap.updateFieldValue("Value Status", null);
         assertEquals(Collections.singletonList("The field 'Value Status' was edited. " +
-            "Old Value is 'PUBLISHED'. New Value is not specified"), fieldToValuesMap.getActionReasons());
+            "Old Value is 'NEW'. New Value is not specified"), fieldToValuesMap.getActionReasons());
     }
 
     @Test
