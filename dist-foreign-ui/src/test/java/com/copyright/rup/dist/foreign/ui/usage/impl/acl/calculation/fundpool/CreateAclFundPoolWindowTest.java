@@ -116,20 +116,18 @@ public class CreateAclFundPoolWindowTest {
             periodYearField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
             periodYearField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(periodYearField, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(periodYearField, "a", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
             periodYearField, "a955", binder, "Field value should contain numeric values only", false);
         validateFieldAndVerifyErrorMessage(
             periodYearField, "1949", binder, "Field value should be in range from 1950 to 2099", false);
         validateFieldAndVerifyErrorMessage(
             periodYearField, "2100", binder, "Field value should be in range from 1950 to 2099", false);
-        validateFieldAndVerifyErrorMessage(periodYearField, "1950", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 1950 ", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, "1999", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1950", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1950 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, null, true);
     }
 
     private void verifyRootLayout(Component component) {

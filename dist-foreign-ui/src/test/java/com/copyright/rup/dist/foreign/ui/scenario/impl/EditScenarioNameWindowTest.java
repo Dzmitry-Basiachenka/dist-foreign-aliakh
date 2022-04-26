@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -114,11 +116,11 @@ public class EditScenarioNameWindowTest {
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
         String emptyFieldValidationMessage = "Field value should be specified";
-        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
-        verifyField(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
-            false);
+        validateFieldAndVerifyErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
+            "Field value should not exceed 50 characters", false);
         verify(controller);
     }
 
@@ -156,15 +158,5 @@ public class EditScenarioNameWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

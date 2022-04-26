@@ -16,7 +16,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
+import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -140,12 +140,19 @@ public final class UiTestHelper {
     public static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
                                                           String message, boolean isValid) {
         field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
+        binder.validate();
+        List<HasValue<?>> fields = (List<HasValue<?>>) binder.getFields()
+            .filter(actualField -> actualField.equals(field))
             .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
+        assertEquals(1, fields.size());
+        AbstractField actualField = (AbstractField) fields.get(0);
+        assertNotNull(actualField);
+        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
+            ? actualField.getErrorMessage().toString()
+            : null;
+        assertEquals(value, actualField.getValue());
+        assertEquals(message, actualErrorMessage);
+        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     /**

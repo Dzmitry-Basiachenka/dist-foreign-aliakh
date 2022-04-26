@@ -129,7 +129,7 @@ public class AaclUsageBatchUploadWindowTest {
         window = new AaclUsageBatchUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        validateFieldAndVerifyErrorMessage(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(periodEndDate, "a", binder, "Field value should contain numeric values only",
             false);
         validateFieldAndVerifyErrorMessage(periodEndDate, "1000", binder,

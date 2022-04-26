@@ -169,12 +169,12 @@ public class CreateAclUsageBatchWindowTest {
             periodYearField, "1949", binder, INVALID_RANGE_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
             periodYearField, "2100", binder, INVALID_RANGE_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(periodYearField, "1950", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 1950 ", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, "1999", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, StringUtils.EMPTY, true);
-        validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1950", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1950 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, null, true);
     }
 
     @Test
