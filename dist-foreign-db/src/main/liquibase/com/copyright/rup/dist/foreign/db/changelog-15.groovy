@@ -357,4 +357,113 @@ databaseChangeLog {
                     columnName: 'annualized_copies', columnDataType: 'NUMERIC(38,5)')
         }
     }
+
+    changeSet(id: '2022-04-26-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-64276 FDA: Fund Pool creation: create df_acl_fund_pool, df_acl_fund_pool_detail tables")
+
+        createTable(tableName: 'df_acl_fund_pool', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL fund pools') {
+
+            column(name: 'df_acl_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of fund pool') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The fund pool period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'license_type', type: 'VARCHAR(10)', remarks: 'The license type') {
+                constraints(nullable: false)
+            }
+            column(name: 'is_manual', type: 'BOOLEAN', remarks: 'The manual upload flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tablespace: dbIndexTablespace,
+                tableName: 'df_acl_fund_pool',
+                columnNames: 'df_acl_fund_pool_uid',
+                constraintName: 'pk_df_acl_fund_pool_uid')
+
+        addUniqueConstraint(schemaName: dbAppsSchema,
+                tableName: 'df_acl_fund_pool',
+                columnNames: 'name',
+                constraintName: 'uk_df_acl_fund_pool_name')
+
+        createTable(tableName: 'df_acl_fund_pool_detail', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL fund pool details') {
+
+            column(name: 'df_acl_fund_pool_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool detail'){
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
+            column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Detail Licensee Class') {
+                constraints(nullable: false)
+            }
+            column(name: 'license_type', type: 'VARCHAR(10)', remarks: 'The license type') {
+                constraints(nullable: false)
+            }
+            column(name: 'type_of_use', type: 'VARCHAR(10)', remarks: 'The type of use') {
+                constraints(nullable: false)
+            }
+            column(name: 'net_amount', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The net amount') {
+                constraints(nullable: false)
+            }
+            column(name: 'gross_amount', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The gross amount') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_fund_pool_detail',
+                columnNames: 'df_acl_fund_pool_detail_uid',
+                constraintName: 'pk_df_acl_fund_pool_detail_uid')
+
+        rollback {
+            dropTable(tableName: 'df_acl_fund_pool_detail', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_acl_fund_pool', schemaName: dbAppsSchema)
+        }
+    }
 }
