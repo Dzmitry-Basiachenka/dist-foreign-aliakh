@@ -57,10 +57,14 @@ import java.util.function.Function;
  */
 public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
 
+    private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
     private static final String GRATER_OR_EQUAL_VALIDATION_MESSAGE = "field.error.greater_or_equal_to";
     private static final String EQUALS = "EQUALS";
+    private static final FilterOperatorEnum[] TEXT_OPERATOR_ITEMS =
+        new FilterOperatorEnum[]{FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+            FilterOperatorEnum.CONTAINS};
     private static final FilterOperatorEnum[] NUMERIC_OPERATOR_ITEMS =
         new FilterOperatorEnum[]{FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
             FilterOperatorEnum.GREATER_THAN, FilterOperatorEnum.GREATER_THAN_OR_EQUALS_TO, FilterOperatorEnum.LESS_THAN,
@@ -75,10 +79,19 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         new ComboBox<>(ForeignUi.getMessage("label.usage_origin"));
     private final ComboBox<UdmChannelEnum> channelComboBox =
         new ComboBox<>(ForeignUi.getMessage("label.channel"));
+    private final TextField usageDetailIdField = new TextField(ForeignUi.getMessage("label.usage_detail_id"));
+    private final ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox =
+        buildTextOperatorComboBox(TEXT_OPERATOR_ITEMS);
     private final TextField wrWrkInstFromField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_from"));
     private final TextField wrWrkInstToField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst_to"));
     private final ComboBox<FilterOperatorEnum> wrWrkInstOperatorComboBox =
         buildNumericOperatorComboBox(NUMERIC_OPERATOR_ITEMS);
+    private final TextField systemTitleField = new TextField(ForeignUi.getMessage("label.system_title"));
+    private final ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox =
+        buildTextOperatorComboBox(TEXT_OPERATOR_ITEMS);
+    private final TextField surveyCountryField = new TextField(ForeignUi.getMessage("label.survey_country"));
+    private final ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox =
+        buildTextOperatorComboBox(TEXT_OPERATOR_ITEMS);
     private final TextField contentUnitPriceFromField =
         new TextField(ForeignUi.getMessage("label.content_unit_price_from"));
     private final TextField contentUnitPriceToField =
@@ -125,7 +138,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         initTypeOfUseFilterWidget();
         VerticalLayout fieldsLayout = new VerticalLayout();
         fieldsLayout.addComponents(initPeriodDetailLicenseeClassLayout(), initAggregateLicenseeClassPubTypeLayout(),
-            typeOfUseFilterWidget, initUsageOriginChannelLayout(), initWrWrkInstLayout(), initContentUnitPriceLayout(),
+            typeOfUseFilterWidget, initUsageOriginChannelLayout(), initUsageDetailIdLayout(), initWrWrkInstLayout(),
+            initSystemTitleLayout(), initSurveyCountryLayout(), initContentUnitPriceLayout(),
             initAnnualizedCopiesLayout());
         filterBinder.readBean(usageFilter);
         filterBinder.validate();
@@ -196,6 +210,25 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         return channelComboBox;
     }
 
+    private HorizontalLayout initUsageDetailIdLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(usageDetailIdField, usageDetailIdOperatorComboBox);
+        filterBinder.forField(usageDetailIdField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 50), 0, 50))
+            .bind(filter -> filter.getUsageDetailIdExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getUsageDetailIdExpression()
+                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        populateOperatorFilters(usageDetailIdField, usageDetailIdOperatorComboBox,
+            usageFilter.getUsageDetailIdExpression());
+        usageDetailIdField.addValueChangeListener(event -> filterBinder.validate());
+        bindFilterOperator(usageDetailIdOperatorComboBox, AclUsageFilter::getUsageDetailIdExpression);
+        usageDetailIdOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(filterBinder, usageDetailIdField, event.getValue()));
+        applyCommonTextFieldFormatting(horizontalLayout, usageDetailIdField);
+        VaadinUtils.addComponentStyle(usageDetailIdField, "acl-usage-detail-id-filter");
+        VaadinUtils.addComponentStyle(usageDetailIdOperatorComboBox, "acl-usage-detail-id-operator-filter");
+        return horizontalLayout;
+    }
+
     private HorizontalLayout initWrWrkInstLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout(wrWrkInstFromField, wrWrkInstToField,
             wrWrkInstOperatorComboBox);
@@ -228,6 +261,43 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
         VaadinUtils.addComponentStyle(wrWrkInstFromField, "acl-usage-wr-wrk-inst-from-filter");
         VaadinUtils.addComponentStyle(wrWrkInstToField, "acl-usage-wr-wrk-inst-to-filter");
         VaadinUtils.addComponentStyle(wrWrkInstOperatorComboBox, "acl-usage-wr-wrk-inst-operator-filter");
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initSystemTitleLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(systemTitleField, systemTitleOperatorComboBox);
+        filterBinder.forField(systemTitleField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 2000), 0, 2000))
+            .bind(filter -> filter.getSystemTitleExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getSystemTitleExpression().setFieldFirstValue(StringUtils.trimToNull(value)));
+        populateOperatorFilters(systemTitleField, systemTitleOperatorComboBox,
+            usageFilter.getSystemTitleExpression());
+        systemTitleField.addValueChangeListener(event -> filterBinder.validate());
+        bindFilterOperator(systemTitleOperatorComboBox, AclUsageFilter::getSystemTitleExpression);
+        systemTitleOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(filterBinder, systemTitleField, event.getValue()));
+        applyCommonTextFieldFormatting(horizontalLayout, systemTitleField);
+        VaadinUtils.addComponentStyle(systemTitleField, "acl-usage-system-title-filter");
+        VaadinUtils.addComponentStyle(systemTitleOperatorComboBox, "acl-usage-system-title-operator-filter");
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initSurveyCountryLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout(surveyCountryField, surveyCountryOperatorComboBox);
+        filterBinder.forField(surveyCountryField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage(LENGTH_VALIDATION_MESSAGE, 100), 0, 100))
+            .bind(filter -> filter.getSurveyCountryExpression().getFieldFirstValue(),
+                (filter, value) -> filter.getSurveyCountryExpression()
+                    .setFieldFirstValue(StringUtils.trimToNull(value)));
+        populateOperatorFilters(surveyCountryField, surveyCountryOperatorComboBox,
+            usageFilter.getSurveyCountryExpression());
+        surveyCountryField.addValueChangeListener(event -> filterBinder.validate());
+        bindFilterOperator(surveyCountryOperatorComboBox, AclUsageFilter::getSurveyCountryExpression);
+        surveyCountryOperatorComboBox.addValueChangeListener(
+            event -> updateOperatorField(filterBinder, surveyCountryField, event.getValue()));
+        applyCommonTextFieldFormatting(horizontalLayout, surveyCountryField);
+        VaadinUtils.addComponentStyle(surveyCountryField, "acl-usage-survey-country-filter");
+        VaadinUtils.addComponentStyle(surveyCountryOperatorComboBox, "acl-usage-survey-country-operator-filter");
         return horizontalLayout;
     }
 
@@ -334,9 +404,9 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
                 usageFilter.setTypeOfUses(typeOfUseFilterWidget.getSelectedItemsIds());
                 close();
             } catch (ValidationException e) {
-                Windows.showValidationErrorWindow(Arrays.asList(wrWrkInstFromField, wrWrkInstToField,
-                    contentUnitPriceFromField, contentUnitPriceToField, annualizedCopiesFromField,
-                    annualizedCopiesToField));
+                Windows.showValidationErrorWindow(Arrays.asList(usageDetailIdField, wrWrkInstFromField,
+                    wrWrkInstToField, systemTitleField, surveyCountryField, contentUnitPriceFromField,
+                    contentUnitPriceToField, annualizedCopiesFromField, annualizedCopiesToField));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
