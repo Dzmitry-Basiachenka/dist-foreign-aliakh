@@ -1,0 +1,4 @@
+DET_LC_ID,FUND_POOL_TYPE,GROSS_AMOUNT,NET_AMOUNT,Line,Error Reason
+1,print,,100000000025.09,2,NET_AMOUNT: Field value should be greater than 0 after rounding; GROSS_AMOUNT: Field is required and cannot be null or empty
+3,PRINT,0,0,3,NET_AMOUNT: Field value should be greater than 0 after rounding; GROSS_AMOUNT: Field value should be greater than 0 after rounding
+,asdasd,as,sa,4,DET_LC_ID: Field is required and cannot be null or empty; FUND_POOL_TYPE: Field value should be PRINT or DIGITAL; NET_AMOUNT: Field value should be greater than 0 after rounding; GROSS_AMOUNT: Field value should be greater than 0 after rounding
