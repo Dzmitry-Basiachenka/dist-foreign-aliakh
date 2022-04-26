@@ -59,6 +59,7 @@ import java.util.stream.Collectors;
  */
 public class AclUsageFiltersWindowTest {
 
+    private static final String UNCHECKED = "unchecked";
     private static final String CAPTION_OPERATOR = "Operator";
     private static final String USAGE_FILTER = "usageFilter";
     private static final Integer LC_ID = 26;
@@ -66,7 +67,10 @@ public class AclUsageFiltersWindowTest {
     private static final String PRINT_TYPE_OF_USE = "PRINT";
     private static final UdmUsageOriginEnum RFA_USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CCC_CHANNEL = UdmChannelEnum.CCC;
+    private static final String USAGE_DETAIL_ID = "8d2a1c08-4678-4d50-acd3-7625bdc03da4";
     private static final Long WR_WRK_INST = 243904752L;
+    private static final String SYSTEM_TITLE = "Medical Journal";
+    private static final String SURVEY_COUNTRY = "Portugal";
     private static final BigDecimal CONTENT_UNIT_PRICE = new BigDecimal("25.0000000000");
     private static final String VALID_INTEGER = "123456789";
     private static final String VALID_DECIMAL = "1.2345678";
@@ -127,13 +131,45 @@ public class AclUsageFiltersWindowTest {
     }
 
     @Test
+    public void testUsageDetailIdFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(4);
+    }
+
+    @Test
     public void testWrWrkInstFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(4);
+        testNumericFilterOperatorChangeListener(5);
+    }
+
+    @Test
+    public void testSystemTitleFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(6);
+    }
+
+    @Test
+    public void testSurveyCountryFilterOperatorChangeListener() {
+        testTextFilterOperatorChangeListener(7);
+    }
+
+    @Test
+    public void testContentUnitPriceFilterOperatorChangeListener() {
+        testNumericFilterOperatorChangeListener(8);
     }
 
     @Test
     public void testAnnualizedCopiesFilterOperatorChangeListener() {
-        testNumericFilterOperatorChangeListener(6);
+        testNumericFilterOperatorChangeListener(9);
+    }
+
+    @Test
+    public void testUsageDetailIdValidation() {
+        TextField usageDetailIdField = Whitebox.getInternalState(window, "usageDetailIdField");
+        ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox =
+            Whitebox.getInternalState(window, "usageDetailIdOperatorComboBox");
+        assertTextOperatorComboBoxItems(usageDetailIdOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51),
+            "Field value should not exceed 50 characters", false);
     }
 
     @Test
@@ -145,6 +181,30 @@ public class AclUsageFiltersWindowTest {
         assertNumericOperatorComboBoxItems(wrWrkInstOperatorComboBox);
         verifyIntegerOperationValidations(wrWrkInstFromField, wrWrkInstToField, wrWrkInstOperatorComboBox,
             "Field value should be greater or equal to Wr Wrk Inst From", 9);
+    }
+
+    @Test
+    public void testSystemTitleValidation() {
+        TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
+        ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox =
+            Whitebox.getInternalState(window, "systemTitleOperatorComboBox");
+        assertTextOperatorComboBoxItems(systemTitleOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
+            "Field value should not exceed 2000 characters", false);
+    }
+
+    @Test
+    public void testSurveyCountryValidation() {
+        TextField surveyCountryField = Whitebox.getInternalState(window, "surveyCountryField");
+        ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox =
+            Whitebox.getInternalState(window, "surveyCountryOperatorComboBox");
+        assertTextOperatorComboBoxItems(surveyCountryOperatorComboBox);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101),
+            "Field value should not exceed 100 characters", false);
     }
 
     @Test
@@ -182,16 +242,19 @@ public class AclUsageFiltersWindowTest {
         Component panelContent = ((Panel) component).getContent();
         assertTrue(panelContent instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) panelContent;
-        assertEquals(7, verticalLayout.getComponentCount());
+        assertEquals(10, verticalLayout.getComponentCount());
         verifyItemsFilterLayout(verticalLayout.getComponent(0), "Periods", "Detail Licensee Classes");
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Aggregate Licensee Classes", "Pub Types");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Types of Use");
         verifyComboBoxLayout(verticalLayout.getComponent(3), "Usage Origin", Arrays.asList(UdmUsageOriginEnum.values()),
             "Channel", Arrays.asList(UdmChannelEnum.values()));
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(4), "Wr Wrk Inst From", "Wr Wrk Inst To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(5), "Content Unit Price From",
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(4), "Usage Detail ID");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(5), "Wr Wrk Inst From", "Wr Wrk Inst To");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(6), "System Title");
+        verifyFieldWithTextOperatorComponent(verticalLayout.getComponent(7), "Survey Country");
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(8), "Content Unit Price From",
             "Content Unit Price To");
-        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(6), "Annualized Copies From",
+        verifyFieldWithNumericOperatorComponent(verticalLayout.getComponent(9), "Annualized Copies From",
             "Annualized Copies To");
     }
 
@@ -223,6 +286,16 @@ public class AclUsageFiltersWindowTest {
         assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
     }
 
+    private void verifyFieldWithTextOperatorComponent(Component component, String caption) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
+        assertEquals(2, layout.getComponentCount());
+        assertTrue(layout.getComponent(0) instanceof TextField);
+        assertEquals(caption, layout.getComponent(0).getCaption());
+        assertTrue(layout.getComponent(1) instanceof ComboBox);
+        assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
+    }
+
     private AclUsageFilter buildExpectedFilter() {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(LC_ID);
@@ -241,7 +314,10 @@ public class AclUsageFiltersWindowTest {
         filter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
         filter.setUsageOrigin(RFA_USAGE_ORIGIN);
         filter.setChannel(CCC_CHANNEL);
+        filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, WR_WRK_INST, null));
+        filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SYSTEM_TITLE, null));
+        filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, SURVEY_COUNTRY, null));
         filter.setContentUnitPriceExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, CONTENT_UNIT_PRICE, null));
         filter.setAnnualizedCopiesExpression(
@@ -249,6 +325,7 @@ public class AclUsageFiltersWindowTest {
         return filter;
     }
 
+    @SuppressWarnings(UNCHECKED)
     private void testNumericFilterOperatorChangeListener(int index) {
         VerticalLayout verticalLayout = getFiltersLayout();
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
@@ -280,6 +357,21 @@ public class AclUsageFiltersWindowTest {
         assertTrue(toField.isEnabled());
     }
 
+    @SuppressWarnings(UNCHECKED)
+    private void testTextFilterOperatorChangeListener(int index) {
+        VerticalLayout verticalLayout = getFiltersLayout();
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(index);
+        TextField textField = (TextField) horizontalLayout.getComponent(0);
+        ComboBox<FilterOperatorEnum> operatorComboBox =
+            (ComboBox<FilterOperatorEnum>) horizontalLayout.getComponent(1);
+        assertEquals(FilterOperatorEnum.EQUALS, operatorComboBox.getValue());
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.DOES_NOT_EQUAL);
+        assertTrue(textField.isEnabled());
+        operatorComboBox.setValue(FilterOperatorEnum.CONTAINS);
+        assertTrue(textField.isEnabled());
+    }
+
     private VerticalLayout getFiltersLayout() {
         VerticalLayout verticalLayout = (VerticalLayout) window.getContent();
         return (VerticalLayout) ((Panel) verticalLayout.getComponent(0)).getContent();
@@ -293,8 +385,14 @@ public class AclUsageFiltersWindowTest {
         assertFilterWidgetLabelValue("typeOfUseFilterWidget", "(2)");
         assertComboBoxValue("usageOriginComboBox", RFA_USAGE_ORIGIN);
         assertComboBoxValue("channelComboBox", CCC_CHANNEL);
+        assertTextFieldValue("usageDetailIdField", USAGE_DETAIL_ID);
+        assertComboBoxValue("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("wrWrkInstFromField", WR_WRK_INST.toString());
         assertComboBoxValue("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
+        assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("surveyCountryField", SURVEY_COUNTRY);
+        assertComboBoxValue("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         assertComboBoxValue("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("annualizedCopiesFromField", "5.5");
@@ -306,7 +404,7 @@ public class AclUsageFiltersWindowTest {
         assertEquals(value, ((Label) filterWidget.getComponent(0)).getValue());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     private <T> void assertComboBoxValue(String fieldName, T value) {
         assertEquals(value, ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).getValue());
     }
@@ -320,21 +418,33 @@ public class AclUsageFiltersWindowTest {
         aclUsageFilter.setTypeOfUses(Collections.singleton(PRINT_TYPE_OF_USE));
         populateComboBox("usageOriginComboBox", RFA_USAGE_ORIGIN);
         populateComboBox("channelComboBox", CCC_CHANNEL);
+        populateTextField("usageDetailIdField", USAGE_DETAIL_ID);
+        populateComboBox("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("wrWrkInstFromField", WR_WRK_INST.toString());
         populateComboBox("wrWrkInstOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateTextField("systemTitleField", SYSTEM_TITLE);
+        populateComboBox("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
+        populateTextField("surveyCountryField", SURVEY_COUNTRY);
+        populateComboBox("surveyCountryOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("contentUnitPriceFromField", CONTENT_UNIT_PRICE.toString());
         populateComboBox("contentUnitPriceOperatorComboBox", FilterOperatorEnum.EQUALS);
         populateTextField("annualizedCopiesFromField", "5.5");
         populateComboBox("annualizedCopiesOperatorComboBox", FilterOperatorEnum.EQUALS);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     private <T> void populateComboBox(String fieldName, T value) {
         ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
     }
 
     private void populateTextField(String fieldName, String value) {
         ((TextField) Whitebox.getInternalState(window, fieldName)).setValue(value);
+    }
+
+    private void assertTextOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {
+        verifyComboBox(operatorComboBox, CAPTION_OPERATOR, Unit.PIXELS, 230, false,
+            Arrays.asList(FilterOperatorEnum.EQUALS, FilterOperatorEnum.DOES_NOT_EQUAL,
+                FilterOperatorEnum.CONTAINS));
     }
 
     private void assertNumericOperatorComboBoxItems(ComboBox<FilterOperatorEnum> operatorComboBox) {

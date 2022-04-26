@@ -652,8 +652,8 @@ public class UdmUsageFiltersWindowTest {
         assertComboBoxValue("reportedTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("systemTitleField", SYSTEM_TITLE);
         assertComboBoxValue("systemTitleOperatorComboBox", FilterOperatorEnum.EQUALS);
-        populateTextField("usageDetailIdField", USAGE_DETAIL_ID);
-        populateComboBox("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
+        assertTextFieldValue("usageDetailIdField", USAGE_DETAIL_ID);
+        assertComboBoxValue("usageDetailIdOperatorComboBox", FilterOperatorEnum.EQUALS);
         assertTextFieldValue("companyIdFromField", COMPANY_ID.toString());
         assertTextFieldValue("companyNameField", COMPANY_NAME);
         assertTextFieldValue("surveyRespondentField", SURVEY_RESPONDENT);
