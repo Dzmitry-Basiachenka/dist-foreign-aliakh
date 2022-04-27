@@ -1,3 +1,12 @@
+15.1.17
+-
+* B-72774 FDA: Tech Debt: delete PUBLISHED value status 
+* B-69894 FDA: Usage batch filters: implement numeric widgets to additional filter window
+* B-64276 FDA: Fund Pool creation: create DB tables to preserve ACL fund pool and ACL fund pool details 
+* B-69894 FDA: Usage batch filters: implement text widgets to additional filter window
+* B-64276 FDA: Fund Pool creation: implement logic to insert fund pool
+* B-64276 FDA: Fund Pool creation: implement logic to process upload file
+
 15.1.16
 -
 * B-69894 FDA: Usage batch filters: implement domain object
