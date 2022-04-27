@@ -174,4 +174,11 @@ public class CsvProcessorFactory {
             new AclGrantDetailDuplicateInFileValidator());
         return processor;
     }
+
+    /**
+     * @return instance of {@link AclFundPoolCsvProcessor}.
+     */
+    public AclFundPoolCsvProcessor getAclFundPoolCvsProcessor() {
+        return new AclFundPoolCsvProcessor();
+    }
 }
