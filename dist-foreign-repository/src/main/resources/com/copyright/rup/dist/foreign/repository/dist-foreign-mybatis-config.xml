@@ -96,6 +96,8 @@
         <typeAlias alias="AclUsageBatch" type="com.copyright.rup.dist.foreign.domain.AclUsageBatch"/>
         <typeAlias alias="AclUsageDto" type="com.copyright.rup.dist.foreign.domain.AclUsageDto"/>
         <typeAlias alias="UdmAssigneeStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmAssigneeStatusReportDto"/>
+        <typeAlias alias="AclFundPool" type="com.copyright.rup.dist.foreign.domain.AclFundPool"/>
+        <typeAlias alias="AclFundPoolDetail" type="com.copyright.rup.dist.foreign.domain.AclFundPoolDetail"/>
     </typeAliases>
 
     <typeHandlers>
@@ -153,5 +155,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclCalculationReportMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageBatchMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclFundPoolMapper.xml"/>
     </mappers>
 </configuration>

@@ -144,7 +144,8 @@ public class DomainVerifierTest {
             {AclIneligibleRightsholder.class},
             {AclUsageFilter.class},
             {UdmAssigneeStatusReportDto.class},
-            {AclFundPool.class}
+            {AclFundPool.class},
+            {AclFundPoolDetail.class}
         };
         return Arrays.asList(testData);
     }
