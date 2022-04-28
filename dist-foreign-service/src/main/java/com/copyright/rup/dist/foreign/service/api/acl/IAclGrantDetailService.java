@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represents interface of repository for ACL grant sets and grant details.
+ * Represents interface of service for grant details business logic.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
