@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
@@ -38,6 +39,8 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     @Autowired
     private IAclFundPoolFilterController aclFundPoolFilterController;
     @Autowired
+    private IAclFundPoolService fundPoolService;
+    @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
@@ -49,8 +52,7 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
 
     @Override
     public boolean isFundPoolExist(String name) {
-        //todo will implement later
-        return false;
+        return fundPoolService.fundPoolExists(name);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
 
     @Override
     public int loadFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
-        //todo will be implement later
+        fundPoolService.insertAclFundPool(fundPool, fundPoolDetails);
         return fundPoolDetails.size();
     }
 

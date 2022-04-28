@@ -2,12 +2,17 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
@@ -15,6 +20,9 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.math.BigDecimal;
+import java.util.Collections;
 
 /**
  * Verifies {@link AclFundPoolController}.
@@ -29,11 +37,14 @@ public class AclFundPoolControllerTest {
 
     private final AclFundPoolController controller = new AclFundPoolController();
     private CsvProcessorFactory csvProcessorFactory;
+    private IAclFundPoolService fundPoolService;
 
     @Before
     public void setUp() {
+        fundPoolService = createMock(IAclFundPoolService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
+        Whitebox.setInternalState(controller, fundPoolService);
     }
 
     @Test
@@ -50,5 +61,39 @@ public class AclFundPoolControllerTest {
         replay(csvProcessorFactory);
         assertSame(processor, controller.getCsvProcessor());
         verify(csvProcessorFactory);
+    }
+
+    @Test
+    public void testIsAclFundPoolExist() {
+        expect(fundPoolService.fundPoolExists("Fund Pool Name")).andReturn(true).once();
+        replay(fundPoolService);
+        assertTrue(controller.isFundPoolExist("Fund Pool Name"));
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testLoadFundPool() {
+        fundPoolService.insertAclFundPool(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
+        expectLastCall().once();
+        replay(fundPoolService);
+        int count = controller.loadFundPool(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
+        assertEquals(1, count);
+        verify(fundPoolService);
+    }
+
+    private AclFundPoolDetail buildFundPoolDetail() {
+        AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
+        aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");
+        aclFundPoolDetail.setLicenseType("ACL");
+        aclFundPoolDetail.setGrossAmount(new BigDecimal("0.55"));
+        return aclFundPoolDetail;
+    }
+
+    private AclFundPool buildFundPool() {
+        AclFundPool aclFundPool = new AclFundPool();
+        aclFundPool.setName("Fund Pool Name");
+        aclFundPool.setManualUploadFlag(true);
+        aclFundPool.setLicenseType("ACL");
+        return aclFundPool;
     }
 }
