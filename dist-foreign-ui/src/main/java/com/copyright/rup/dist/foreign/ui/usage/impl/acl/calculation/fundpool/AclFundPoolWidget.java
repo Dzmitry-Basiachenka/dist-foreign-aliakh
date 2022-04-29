@@ -5,6 +5,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
@@ -20,9 +22,10 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @author Anton Azarenka
  */
-public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundPoolWidget {
+public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundPoolWidget, IMediatorProvider {
 
     private IAclFundPoolController controller;
+    private MenuBar aclFundPoolMenuBar;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -35,6 +38,18 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
         return this;
     }
 
+    @Override
+    public void setController(IAclFundPoolController controller) {
+        this.controller = controller;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        AclFundPoolMediator mediator = new AclFundPoolMediator();
+        mediator.setFundPoolMenuBar(aclFundPoolMenuBar);
+        return mediator;
+    }
+
     private VerticalLayout initFundPoolLayout() {
         VerticalLayout layout = new VerticalLayout(initAclFundPoolMenuBar());
         layout.setSizeFull();
@@ -45,7 +60,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private HorizontalLayout initAclFundPoolMenuBar() {
-        MenuBar aclFundPoolMenuBar = new MenuBar();
+        aclFundPoolMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
             aclFundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
@@ -56,10 +71,5 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
         VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(layout, "acl-fund-pool-buttons");
         return layout;
-    }
-
-    @Override
-    public void setController(IAclFundPoolController controller) {
-        this.controller = controller;
     }
 }
