@@ -12,6 +12,9 @@ import com.copyright.rup.dist.foreign.service.api.acl.IUdmTypeOfUseService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AaclDetailLicenseeClassValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclDetailsLicenseeClassValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclFundPoolAmountValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclFundPoolDuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AclGrantDetailDuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.AggregateLicenseeClassValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ClassifiedUsageValidator;
@@ -179,6 +182,11 @@ public class CsvProcessorFactory {
      * @return instance of {@link AclFundPoolCsvProcessor}.
      */
     public AclFundPoolCsvProcessor getAclFundPoolCvsProcessor() {
-        return new AclFundPoolCsvProcessor();
+        AclFundPoolCsvProcessor processor = new AclFundPoolCsvProcessor();
+        processor.addBusinessValidators(
+            new AclFundPoolDuplicateInFileValidator(),
+            new AclFundPoolAmountValidator(),
+            new AclDetailsLicenseeClassValidator(licenseeClassService));
+        return processor;
     }
 }

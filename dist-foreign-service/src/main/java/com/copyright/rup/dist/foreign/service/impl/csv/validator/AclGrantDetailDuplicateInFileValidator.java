@@ -9,7 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The validator to check whether {@AclGrantDetail} with the same Wr Wrk Inst and Type Of Use doesn't exist in the file.
+ * The validator to check whether {@link AclGrantDetailDto} with the same Wr Wrk Inst and Type Of Use doesn't exist
+ * in the file.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
