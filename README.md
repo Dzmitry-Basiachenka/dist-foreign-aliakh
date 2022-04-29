@@ -1,3 +1,9 @@
+15.1.18
+-
+* B-64276 FDA: Fund Pool creation: implement logic to insert fund pool
+* B-72774 FDA: Tech Debt: change implementation methods of tests for validation fields and verification error messages
+* B-64276 FDA: Fund Pool creation: implement business validators
+
 15.1.17
 -
 * B-72774 FDA: Tech Debt: delete PUBLISHED value status 
