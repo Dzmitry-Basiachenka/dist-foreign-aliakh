@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 
@@ -200,11 +201,11 @@ public class CreateSalScenarioWindowTest {
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         String emptyFieldValidationMessage = "Field value should be specified";
-        verifyField(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
-        verifyField(scenarioName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, "   ", binder, emptyFieldValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
 
@@ -248,16 +249,6 @@ public class CreateSalScenarioWindowTest {
         Button confirmButton = (Button) buttonsLayout.getComponent(0);
         ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(createScenarioWindow));
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private static class TestCreateSalScenarioWindow extends CreateSalScenarioWindow {

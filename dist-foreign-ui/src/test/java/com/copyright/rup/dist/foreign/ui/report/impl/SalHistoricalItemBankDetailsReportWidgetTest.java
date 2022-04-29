@@ -91,12 +91,12 @@ public class SalHistoricalItemBankDetailsReportWidgetTest {
         validateFieldAndVerifyErrorMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(periodTo, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         periodTo.setValue("2001");
-        validateFieldAndVerifyErrorMessage(periodFrom, "2018", binder, INVALID_PERIOD_ERROR_MESSAGE, true);
+        validateFieldAndVerifyErrorMessage(periodFrom, "2018", binder, null, true);
         periodFrom.setValue("2001");
-        validateFieldAndVerifyErrorMessage(periodTo, "2018", binder, INVALID_PERIOD_ERROR_MESSAGE, true);
+        validateFieldAndVerifyErrorMessage(periodTo, "2018", binder, null, true);
         periodFrom.setValue("2005");
         validateFieldAndVerifyErrorMessage(periodTo, "2004", binder, INVALID_RELATION_ERROR_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(periodTo, "2005", binder, INVALID_RELATION_ERROR_MESSAGE, true);
+        validateFieldAndVerifyErrorMessage(periodTo, "2005", binder, null, true);
     }
 
     private void verifySize(SalHistoricalItemBankDetailsReportWidget widget) {
