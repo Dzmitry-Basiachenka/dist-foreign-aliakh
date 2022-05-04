@@ -236,6 +236,16 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
 
     @Test
     @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
+    public void testVerifiedDetailsBySourceReportByPeriod() throws IOException {
+        UdmReportFilter reportFilter = new UdmReportFilter();
+        reportFilter.setPeriods(Collections.singleton(202006));
+        assertFilesWithExecutor(
+            outputStream -> udmReportRepository.writeUdmVerifiedDetailsBySourceReport(reportFilter, outputStream),
+            "udm/verified_details_by_source_report_by_period.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_VERIFIED_DETAILS_BY_SOURCE_CSV_REPORT)
     public void testVerifiedDetailsBySourceEmptyReport() throws IOException {
         UdmReportFilter reportFilter = new UdmReportFilter();
         reportFilter.setChannel(UdmChannelEnum.CCC);
