@@ -33,7 +33,7 @@ public class AaclDrillDownByRightsholderWidget extends CommonDrillDownByRightsho
             UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
         addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 130);
         addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", 150);
-        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
+        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount_in_usd", "netAmount", 120);
         addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), "table.column.service_fee", "serviceFee",
             true, 115);
         addColumn(usage -> usage.getAaclUsage().getDetailLicenseeClass().getId(), "table.column.det_lc_id",

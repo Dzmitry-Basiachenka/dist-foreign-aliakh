@@ -151,7 +151,7 @@ public class AaclExcludePayeeWidget extends Window implements IAaclExcludePayeeW
         addAmountColumn(PayeeTotalHolder::getGrossTotal, "table.column.gross_amount_in_usd", "grossTotal");
         addAmountColumn(PayeeTotalHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
-        addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount", "netTotal");
+        addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount_in_usd", "netTotal");
         payeesGrid.getColumns().forEach(column -> column.setSortable(true));
     }
 
