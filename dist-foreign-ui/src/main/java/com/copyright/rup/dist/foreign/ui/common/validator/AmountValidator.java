@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AmountValidator extends AbstractValidator<String> {
 
-    private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d+)?";
+    private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d{1,10})?";
 
     /**
      * Constructor.
