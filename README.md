@@ -1,3 +1,7 @@
+5.1.19
+-
+* B-64276 FDA: Fund Pool creation: apply permissions for fund pool tab
+
 15.1.18
 -
 * B-64276 FDA: Fund Pool creation: implement logic to insert fund pool
