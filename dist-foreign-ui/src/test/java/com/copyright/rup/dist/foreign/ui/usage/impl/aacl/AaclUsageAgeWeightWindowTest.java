@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -22,10 +23,8 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWi
 
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -170,29 +169,21 @@ public class AaclUsageAgeWeightWindowTest {
         TextField weightField = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        validateFieldAndVerifyErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(weightField, "0", binder, null, true);
-        validateFieldAndVerifyErrorMessage(weightField, " 0.00 ", binder, null, true);
-        validateFieldAndVerifyErrorMessage(weightField, "125", binder, null, true);
-        validateFieldAndVerifyErrorMessage(weightField, "125.123456789", binder, null, true);
-        validateFieldAndVerifyErrorMessage(weightField, "9999999999.99", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage,
+            false);
+        verifyGridEditableFieldErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage,
+            false);
+        verifyGridEditableFieldErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, " 0.00 ", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "125", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "125.123456789", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "9999999999.99", binder, null, true);
     }
 
-    private static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
-                                                          String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
-    }
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {

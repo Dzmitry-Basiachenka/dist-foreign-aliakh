@@ -17,6 +17,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
@@ -153,6 +154,27 @@ public final class UiTestHelper {
         assertEquals(value, actualField.getValue());
         assertEquals(message, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
+    }
+
+    /**
+     * Verifies Grid field error message.
+     *
+     * @param field   field
+     * @param value   value of field
+     * @param binder  binder
+     * @param message error message
+     * @param isValid <code>true</code> if valid otherwise <code>false</code>
+     */
+    @SuppressWarnings(UNCHECKED)
+    public static void verifyGridEditableFieldErrorMessage(AbstractField field, String value, Binder binder,
+                                                           String message, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages = errors
+            .stream()
+            .map(ValidationResult::getErrorMessage)
+            .collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     /**

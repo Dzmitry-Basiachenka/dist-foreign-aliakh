@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -24,10 +25,8 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWi
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -190,33 +189,22 @@ public class PublicationTypeWeightsWindowTest {
         TextField publicationTypeWeight = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
             emptyFieldValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "99999999999", binder,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "99999999999", binder,
             positiveNumberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
             false);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "0", binder, null, true);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "125", binder, null, true);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
-        validateFieldAndVerifyErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
-    }
-
-    private static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
-                                                           String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages = errors
-            .stream()
-            .map(ValidationResult::getErrorMessage)
-            .collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "0", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "125", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
     }
 
     @SuppressWarnings("unchecked")
