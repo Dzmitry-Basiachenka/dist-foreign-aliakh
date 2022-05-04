@@ -79,7 +79,18 @@ public class AmountZeroValidatorTest {
             {"-15.55", true, false},
             {".55", true, false},
             {"874.", true, false},
-            {"15,687", true, false}
+            {"15,687", true, false},
+            {"0.1", false, true},
+            {"0.12", false, true},
+            {"0.123", false, true},
+            {"0.1234", false, true},
+            {"0.12345", false, true},
+            {"0.123456", false, true},
+            {"0.1234567", false, true},
+            {"0.12345678", false, true},
+            {"0.123456789", false, true},
+            {"0.1234567890", false, true},
+            {"0.12345678901", true, false}
         });
     }
 

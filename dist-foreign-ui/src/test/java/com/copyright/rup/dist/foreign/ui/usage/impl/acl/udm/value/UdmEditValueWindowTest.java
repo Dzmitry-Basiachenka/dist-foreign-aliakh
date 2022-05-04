@@ -125,8 +125,6 @@ public class UdmEditValueWindowTest {
         "Field value should be positive number or zero and should not exceed 10 digits";
     private static final String POSITIVE_AND_LENGTH_ERROR_MESSAGE =
         "Field value should be positive number and should not exceed 10 digits";
-    private static final String SCALE_VALIDATION_MESSAGE =
-        "Field value should not exceed 10 digits after the decimal point";
     private static final String PRICE_FIELD = "priceField";
     private static final String CONTENT_FIELD = "contentField";
 
@@ -260,7 +258,7 @@ public class UdmEditValueWindowTest {
         verifyField(priceField, "0.12345678", null, true);
         verifyField(priceField, "0.123456789", null, true);
         verifyField(priceField, "0.1234567890", null, true);
-        verifyField(priceField, "0.12345678901", SCALE_VALIDATION_MESSAGE, false);
+        verifyField(priceField, "0.12345678901", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
         verifyField(priceField, "1.1234567890", null, true);
         verifyField(priceField, "12.1234567890", null, true);
         verifyField(priceField, "123.1234567890", null, true);
@@ -423,7 +421,7 @@ public class UdmEditValueWindowTest {
         verifyField(contentField, "0.12345678", null, true);
         verifyField(contentField, "0.123456789", null, true);
         verifyField(contentField, "0.1234567890", null, true);
-        verifyField(contentField, "0.12345678901", SCALE_VALIDATION_MESSAGE, false);
+        verifyField(contentField, "0.12345678901", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
         verifyField(contentField, "1.1234567890", null, true);
         verifyField(contentField, "12.1234567890", null, true);
         verifyField(contentField, "123.1234567890", null, true);

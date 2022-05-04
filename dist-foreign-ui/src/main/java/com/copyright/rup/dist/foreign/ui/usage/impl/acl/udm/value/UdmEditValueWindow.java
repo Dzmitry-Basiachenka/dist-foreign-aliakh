@@ -20,7 +20,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Range;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueProvider;
@@ -59,7 +58,6 @@ import java.util.Objects;
 public class UdmEditValueWindow extends CommonUdmValueWindow {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
-    private static final Range<Integer> DECIMAL_SCALE_RANGE = Range.closed(0, 10);
 
     private final Binder<UdmValueDto> binder = new Binder<>();
     private final IUdmValueController controller;
@@ -370,9 +368,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new AmountValidator())
-            .withValidator(value -> StringUtils.isBlank(value) ||
-                    DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
-                ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
             .bind(fromBigDecimalToMoneyString(UdmValueDto::getPrice),
                 (bean, value) -> bean.setPrice(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
@@ -484,9 +479,6 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             .withValidator(value -> StringUtils.isBlank(value) || NumberUtils.isNumber(value.trim()),
                 NUMBER_VALIDATION_MESSAGE)
             .withValidator(new AmountZeroValidator())
-            .withValidator(value -> StringUtils.isBlank(value) ||
-                    DECIMAL_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
-                ForeignUi.getMessage("field.error.number_scale", DECIMAL_SCALE_RANGE.upperEndpoint()))
             .bind(fromBigDecimalToMoneyString(UdmValueDto::getContent),
                 (bean, value) -> bean.setContent(StringUtils.isNotBlank(value)
                     ? NumberUtils.createBigDecimal(value.trim()) : null));
