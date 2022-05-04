@@ -1,0 +1,9 @@
+Det LC ID,Det LC Name,Agg LC ID,Agg LC Name,Channel,Usage Origin,# of Details
+2,"Textiles, Apparel, etc.",51,Materials,CCC,SS,2
+3,"Lumber, Paper, etc.",51,Materials,CCC,RFA,1
+3,"Lumber, Paper, etc.",51,Materials,CCC,SS,2
+3,"Lumber, Paper, etc.",51,Materials,Rightsdirect,SS,1
+4,Publishing,57,Communications,CCC,SS,1
+13,Computers,13,Computers,CCC,SS,1
+22,Banks/Ins/RE/Holding Cos,56,Financial,Rightsdirect,RFA,1
+29,Consumer Services,29,Consumer Services,Rightsdirect,RFA,1

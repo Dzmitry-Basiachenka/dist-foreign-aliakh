@@ -103,7 +103,6 @@ public class CreateAclFundPoolWindow extends Window {
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
-            close();
         } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(fundPoolNameField, fundPoolPeriodYearField, fundPoolPeriodMonthComboBox,

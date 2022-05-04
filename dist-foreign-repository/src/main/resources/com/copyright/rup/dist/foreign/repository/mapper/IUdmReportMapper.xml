@@ -249,6 +249,7 @@
         </include>
         group by dlc.detail_licensee_class_id, alc.aggregate_licensee_class_id, ub.channel, ub.usage_origin, u.status_ind
         having u.status_ind = 'ELIGIBLE'
+        order by dlc.detail_licensee_class_id
     </select>
 
     <sql id="completedAssignmentsFilterWhereClauses">
