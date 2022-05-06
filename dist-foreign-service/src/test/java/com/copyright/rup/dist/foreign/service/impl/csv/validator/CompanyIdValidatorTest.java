@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class CompanyIdValidatorTest {
         companyInformation.setName("Albany International Corp.");
         companyInformation.setDetailLicenseeClassId(333);
         expect(telesalesService.getCompanyInformation(1136L)).andReturn(companyInformation).once();
-        expect(licenseeClassService.detailLicenseeClassExists(333)).andReturn(false).once();
+        expect(licenseeClassService.aclDetailLicenseeClassExists(333)).andReturn(false).once();
         replay(telesalesService, licenseeClassService);
         assertFalse(validator.isValid(usage));
         assertEquals("Detail Licensee Class ID for provided Company ID is invalid or empty",
@@ -75,7 +76,7 @@ public class CompanyIdValidatorTest {
         companyInformation.setName("Albany International Corp.");
         companyInformation.setDetailLicenseeClassId(1);
         expect(telesalesService.getCompanyInformation(1136L)).andReturn(companyInformation).once();
-        expect(licenseeClassService.detailLicenseeClassExists(1)).andReturn(true).once();
+        expect(licenseeClassService.aclDetailLicenseeClassExists(1)).andReturn(true).once();
         replay(telesalesService, licenseeClassService);
         assertTrue(validator.isValid(usage));
         assertTrue(StringUtils.isBlank(validator.getErrorMessage()));

@@ -114,7 +114,7 @@ public class LicenseeClassServiceTest {
     public void testDetailLicenseeClassExists() {
         expect(licenseeClassRepository.detailLicenseeClassExists(1)).andReturn(true).once();
         replay(licenseeClassRepository);
-        assertTrue(licenseeClassService.detailLicenseeClassExists(1));
+        assertTrue(licenseeClassService.aclDetailLicenseeClassExists(1));
         verify(licenseeClassRepository);
     }
 }

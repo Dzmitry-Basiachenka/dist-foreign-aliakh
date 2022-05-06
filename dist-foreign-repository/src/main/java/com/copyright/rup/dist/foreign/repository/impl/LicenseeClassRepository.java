@@ -35,7 +35,7 @@ public class LicenseeClassRepository extends BaseRepository implements ILicensee
 
     @Override
     public boolean detailLicenseeClassExists(Integer detailLicenseeClassId) {
-        return selectOne("ILicenseeClassMapper.detailLicenseeClassExists",
+        return selectOne("ILicenseeClassMapper.aclDetailLicenseeClassExists",
             Objects.requireNonNull(detailLicenseeClassId));
     }
 
