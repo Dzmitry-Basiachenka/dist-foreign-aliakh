@@ -31,7 +31,7 @@ public interface ILicenseeClassService {
      * @param detailLicenseeClassId detail licensee class id
      * @return {@code true} is detail licensee class exists, {@code false} - otherwise
      */
-    boolean detailLicenseeClassExists(Integer detailLicenseeClassId);
+    boolean aclDetailLicenseeClassExists(Integer detailLicenseeClassId);
 
     /**
      * Gets list of {@link AggregateLicenseeClass}es by product family.

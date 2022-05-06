@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.CompanyInformation;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
 import com.copyright.rup.dist.foreign.integration.telesales.api.ITelesalesService;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class CompanyIdValidator implements DistCsvProcessor.IValidator<UdmUsage>
             if (Objects.isNull(companyInformation) || StringUtils.isBlank(companyInformation.getName())) {
                 errorMessage = "Company ID or Company Name not found in Telesales";
             } else if (Objects.isNull(companyInformation.getDetailLicenseeClassId())
-                || !licenseeClassService.detailLicenseeClassExists(companyInformation.getDetailLicenseeClassId())) {
+                || !licenseeClassService.aclDetailLicenseeClassExists(companyInformation.getDetailLicenseeClassId())) {
                 errorMessage = "Detail Licensee Class ID for provided Company ID is invalid or empty";
             } else {
                 isValid = true;

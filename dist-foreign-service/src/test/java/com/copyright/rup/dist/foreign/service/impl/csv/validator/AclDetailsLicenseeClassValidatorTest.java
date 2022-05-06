@@ -37,11 +37,11 @@ public class AclDetailsLicenseeClassValidatorTest {
 
     @Test
     public void testIsValid() {
-        AclFundPoolDetail usage = buildFundPoolDetail(DET_LIC_CLASS_ID);
-        expect(licenseeClassService.detailLicenseeClassExists(DET_LIC_CLASS_ID))
+        AclFundPoolDetail fundPoolDetail = buildFundPoolDetail(DET_LIC_CLASS_ID);
+        expect(licenseeClassService.aclDetailLicenseeClassExists(DET_LIC_CLASS_ID))
             .andReturn(true).once();
         replay(licenseeClassService);
-        assertTrue(validator.isValid(usage));
+        assertTrue(validator.isValid(fundPoolDetail));
         verify(licenseeClassService);
     }
 

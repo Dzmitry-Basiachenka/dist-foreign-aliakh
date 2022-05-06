@@ -30,11 +30,13 @@
         )
     </select>
 
-    <select id="detailLicenseeClassExists" parameterType="integer" resultType="boolean">
+    <select id="aclDetailLicenseeClassExists" parameterType="integer" resultType="boolean">
         select exists (
             select
-            from ${schema}.df_detail_licensee_class
+            from ${schema}.df_detail_licensee_class dlc
+            join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
             where detail_licensee_class_id = #{detailLicenseeClassId}
+                and product_family = 'ACL'
         )
     </select>
 

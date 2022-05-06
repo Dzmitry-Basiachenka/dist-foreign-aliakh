@@ -28,7 +28,7 @@ public class AclDetailsLicenseeClassValidator implements DistCsvProcessor.IValid
 
     @Override
     public boolean isValid(AclFundPoolDetail fundPoolDetail) {
-        return licenseeClassService.detailLicenseeClassExists(fundPoolDetail.getDetailLicenseeClass().getId());
+        return licenseeClassService.aclDetailLicenseeClassExists(fundPoolDetail.getDetailLicenseeClass().getId());
     }
 
     @Override
