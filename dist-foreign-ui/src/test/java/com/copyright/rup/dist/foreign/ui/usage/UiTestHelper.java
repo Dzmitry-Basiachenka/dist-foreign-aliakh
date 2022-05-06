@@ -102,6 +102,18 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies label.
+     *
+     * @param component   UI component
+     * @param caption     caption
+     */
+    public static void verifyLabel(Component component, String caption) {
+        assertTrue(component instanceof Label);
+        Label label = (Label) component;
+        assertEquals(caption, label.getValue());
+    }
+
+    /**
      * Verifies listeners by fields.
      *
      * @param loadButton load button

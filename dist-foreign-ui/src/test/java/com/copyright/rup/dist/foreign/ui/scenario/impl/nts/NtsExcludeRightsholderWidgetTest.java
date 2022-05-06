@@ -1,30 +1,28 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies functionality on {@link NtsExcludeRightsholderWidget}.
@@ -59,37 +57,17 @@ public class NtsExcludeRightsholderWidgetTest {
 
     @Test
     public void testStructure() {
-        assertEquals("Exclude Details By Rightsholder", widget.getCaption());
-        assertEquals(500, widget.getHeight(), 0);
-        assertEquals(800, widget.getWidth(), 0);
+        UiTestHelper.verifyWindow(widget, "Exclude Details By Rightsholder", 800, 500, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyGrid(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
-    }
-
-    private void verifyGrid(Component component) {
-        assertEquals(Grid.class, component.getClass());
-        Grid grid = (Grid) component;
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Button confirmButton = (Button) horizontalLayout.getComponent(0);
-        assertEquals("Exclude Details", confirmButton.getCaption());
-        Button clearButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Clear", clearButton.getCaption());
-        assertEquals("Clear", clearButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
-        assertEquals("Close", closeButton.getCaption());
-        assertEquals("Close", closeButton.getId());
-        assertTrue(horizontalLayout.isSpacing());
-        assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
+        Grid grid = (Grid) content.getComponent(1);
+        verifyGrid(grid, Arrays.asList(
+            Triple.of("RH Account #", -1.0, -1),
+            Triple.of("RH Name", -1.0, -1),
+            Triple.of("Payee Account #", -1.0, -1),
+            Triple.of("Payee Name", -1.0, -1)
+        ));
+        verifyButtonsLayout(content.getComponent(2), "Exclude Details", "Clear", "Close");
     }
 
     private RightsholderPayeePair buildRightsholderPayeePair(Rightsholder rightsholder, Rightsholder payee) {
