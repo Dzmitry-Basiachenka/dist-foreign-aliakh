@@ -1,3 +1,11 @@
+5.1.20
+-
+* B-72774 FDA: Tech Debt: update amount validator to allow up to 10 digits after the decimal point
+* B-72774 Tech Debt: FDA: replace sorting by Det LC ID in Verified Details by Source report
+* B-72774 FDA: Tech Debt: introduce common method for verify Grid editable field error message
+* B-72774 Tech Debt: FDA: Move common logic to common class in unit test
+* B-64276 FDA: Fund Pool creation: fix issue with wrong detail licensee class id validation
+
 5.1.19
 -
 * B-64276 FDA: Fund Pool creation: apply permissions for fund pool tab
