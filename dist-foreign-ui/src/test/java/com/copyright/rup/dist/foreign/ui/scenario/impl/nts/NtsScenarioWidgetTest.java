@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -17,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.nts.INtsScenarioController;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -25,13 +29,13 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,9 +46,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link NtsScenarioWidget}.
@@ -115,7 +117,8 @@ public class NtsScenarioWidgetTest {
         assertEquals(4, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid(content.getComponent(1));
-        verifyEmptyScenarioLabel(((VerticalLayout) content.getComponent(2)).getComponent(0));
+        Label label = (Label) ((VerticalLayout) content.getComponent(2)).getComponent(0);
+        verifyLabel(label, "Scenario is empty due to all usages were excluded");
         verifyButtonsLayout(content.getComponent(3));
     }
 
@@ -139,16 +142,21 @@ public class NtsScenarioWidgetTest {
         assertEquals(Unit.PERCENTAGE, searchWidget.getWidthUnits());
         assertEquals(Alignment.MIDDLE_CENTER, horizontalLayout.getComponentAlignment(searchWidget));
         assertTrue(horizontalLayout.isSpacing());
-        verifySize(horizontalLayout);
+        verifyWindow(horizontalLayout, null, 100, 100, Unit.PERCENTAGE);
     }
 
     private void verifyGrid(Component component) {
-        assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
-        List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Gross Amt in USD",
-            "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("RH Account #", -1.0, 1),
+            Triple.of("RH Name", -1.0, 2),
+            Triple.of("Payee Account #", -1.0, 1),
+            Triple.of("Payee Name", -1.0, 2),
+            Triple.of("Gross Amt in USD", -1.0, 1),
+            Triple.of("Service Fee Amount", -1.0, 1),
+            Triple.of("Net Amt in USD", -1.0, 1),
+            Triple.of("Service Fee %", -1.0, 1)
+        ));
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("20,000.00", footerRow.getCell("grossTotal").getText());
@@ -156,10 +164,6 @@ public class NtsScenarioWidgetTest {
         assertEquals("13,600.00", footerRow.getCell("netTotal").getText());
     }
 
-    private void verifyEmptyScenarioLabel(Component component) {
-        assertEquals(Label.class, component.getClass());
-        assertEquals("Scenario is empty due to all usages were excluded", ((Label) component).getValue());
-    }
 
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
@@ -178,12 +182,5 @@ public class NtsScenarioWidgetTest {
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, true, true, false), horizontalLayout.getMargin());
-    }
-
-    private void verifySize(Component component) {
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(100, component.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
     }
 }
