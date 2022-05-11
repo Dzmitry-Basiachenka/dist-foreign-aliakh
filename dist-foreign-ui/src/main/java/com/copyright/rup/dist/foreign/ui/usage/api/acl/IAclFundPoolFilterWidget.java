@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
@@ -12,4 +13,14 @@ import com.copyright.rup.vaadin.widget.api.IFilterWidget;
  * @author Anton Azarenka
  */
 public interface IAclFundPoolFilterWidget extends IFilterWidget<IAclFundPoolFilterController> {
+
+    /**
+     * @return {@link AclFundPoolDetailFilter}.
+     */
+    AclFundPoolDetailFilter getFilter();
+
+    /**
+     * @return applied {@link AclFundPoolDetailFilter}.
+     */
+    AclFundPoolDetailFilter getAppliedFilter();
 }

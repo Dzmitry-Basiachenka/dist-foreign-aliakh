@@ -4,14 +4,15 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Grid;
@@ -44,8 +45,10 @@ public class AclFundPoolWidgetTest {
     public void setUp() {
         controller = createMock(IAclFundPoolController.class);
         widget = new AclFundPoolWidget();
+        AclFundPoolFilterWidget filterWidget =
+            new AclFundPoolFilterWidget(createMock(IAclFundPoolFilterController.class));
         Whitebox.setInternalState(widget, controller);
-        expect(controller.initAclFundPoolFilterWidget()).andReturn(new AclFundPoolFilterWidget()).once();
+        expect(controller.initAclFundPoolFilterWidget()).andReturn(filterWidget).once();
     }
 
     @Test
