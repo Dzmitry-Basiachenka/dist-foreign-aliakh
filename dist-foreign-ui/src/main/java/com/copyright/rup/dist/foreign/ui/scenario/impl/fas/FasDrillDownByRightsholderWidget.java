@@ -46,7 +46,7 @@ public class FasDrillDownByRightsholderWidget extends CommonDrillDownByRightshol
         addAmountColumn(UsageDto::getGrossAmount, "table.column.gross_amount_in_usd", "grossAmount", 130);
         addAmountColumn(UsageDto::getBatchGrossAmount, "table.column.batch_gross_amount", "batchGrossAmount", 130);
         addAmountColumn(UsageDto::getServiceFeeAmount, "table.column.service_fee_amount", "serviceFeeAmount", 150);
-        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount", "netAmount", 120);
+        addAmountColumn(UsageDto::getNetAmount, "table.column.net_amount_in_usd", "netAmount", 120);
         addColumn(usageDto -> formatServiceFee(usageDto.getServiceFee()), "table.column.service_fee", "serviceFee",
             true, 115);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);

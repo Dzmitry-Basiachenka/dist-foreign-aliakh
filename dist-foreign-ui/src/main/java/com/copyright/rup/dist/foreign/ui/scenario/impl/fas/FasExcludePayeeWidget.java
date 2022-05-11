@@ -146,7 +146,7 @@ public class FasExcludePayeeWidget extends Window implements IFasExcludePayeeWid
         addAmountColumn(PayeeTotalHolder::getGrossTotal, "table.column.gross_amount_in_usd", "grossTotal");
         addAmountColumn(PayeeTotalHolder::getServiceFeeTotal, "table.column.service_fee_amount",
             "serviceFeeTotal");
-        addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount", "netTotal");
+        addAmountColumn(PayeeTotalHolder::getNetTotal, "table.column.net_amount_in_usd", "netTotal");
         payeesGrid.addColumn(holder -> holder.isPayeeParticipating() ? 'Y' : 'N')
             .setCaption(ForeignUi.getMessage("table.column.participating"))
             .setSortProperty("payeeParticipating");
