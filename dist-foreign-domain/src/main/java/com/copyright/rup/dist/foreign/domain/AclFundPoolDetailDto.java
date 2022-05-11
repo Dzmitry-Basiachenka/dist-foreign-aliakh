@@ -18,7 +18,6 @@ public class AclFundPoolDetailDto extends AclFundPoolDetail {
     private String fundPoolName;
     private int period;
     private AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
-    private String source;
 
     public String getFundPoolName() {
         return fundPoolName;
@@ -44,14 +43,6 @@ public class AclFundPoolDetailDto extends AclFundPoolDetail {
         this.aggregateLicenseeClass = aggregateLicenseeClass;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -66,7 +57,6 @@ public class AclFundPoolDetailDto extends AclFundPoolDetail {
             .append(fundPoolName, that.fundPoolName)
             .append(period, that.period)
             .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
-            .append(source, that.source)
             .isEquals();
     }
 
@@ -77,7 +67,6 @@ public class AclFundPoolDetailDto extends AclFundPoolDetail {
             .append(fundPoolName)
             .append(period)
             .append(aggregateLicenseeClass)
-            .append(source)
             .toHashCode();
     }
 
@@ -88,7 +77,6 @@ public class AclFundPoolDetailDto extends AclFundPoolDetail {
             .append("fundPoolName", fundPoolName)
             .append("period", period)
             .append("aggregateLicenseeClass", aggregateLicenseeClass)
-            .append("source", source)
             .toString();
     }
 }

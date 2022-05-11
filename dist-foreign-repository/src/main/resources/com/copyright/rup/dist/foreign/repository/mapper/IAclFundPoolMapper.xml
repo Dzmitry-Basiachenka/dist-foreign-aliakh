@@ -24,6 +24,13 @@
         <result property="ldmtFlag" column="is_ldmt"/>
     </resultMap>
 
+    <resultMap id="aclFundPoolDetailDtoResultMap" type="AclFundPoolDetailDto" extends="aclFundPoolDetailResultMap">
+        <result property="period" column="period"/>
+        <result property="fundPoolName" column="fund_pool_name"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClass.description" column="aggregate_licensee_class_name"/>
+    </resultMap>
+
     <sql id="aclFundPoolColumns">
         df_acl_fund_pool_uid,
         name,
@@ -134,4 +141,69 @@
         )
         select count(*) from fund_pool_detail;
     </select>
+
+    <select id="findDtosByFilter" parameterType="map" resultMap="aclFundPoolDetailDtoResultMap">
+        select
+            df_acl_fund_pool_detail_uid,
+            fp.name fund_pool_name,
+            fp.period,
+            fpd.license_type,
+            fpd.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            alc.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name,
+            type_of_use,
+            net_amount,
+            gross_amount,
+            is_ldmt
+        from ${schema}.df_acl_fund_pool_detail fpd
+        join ${schema}.df_acl_fund_pool fp on fpd.df_acl_fund_pool_uid = fp.df_acl_fund_pool_uid
+        join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        <include refid="IAclFundPoolMapper.aclFundPoolDetailFilter"/>
+        order by fp.name, dlc.detail_licensee_class_id
+    </select>
+
+    <sql id="aclFundPoolDetailFilter">
+        <where>
+            <if test="filter.fundPoolNames.size() > 0">
+                and
+                <foreach collection="filter.fundPoolNames" item="fundPoolName" open="(" separator=" or " close=")">
+                    fp.name = #{fundPoolName}
+                </foreach>
+            </if>
+            <if test="filter.periods.size() > 0">
+                and
+                <foreach collection="filter.periods" item="period" open="(" separator=" or " close=")">
+                    fp.period = #{period}
+                </foreach>
+            </if>
+            <if test="filter.aggregateLicenseeClasses.size() > 0">
+                and
+                <foreach collection="filter.aggregateLicenseeClasses" item="aggregateLicenseeClass" open="(" separator=" or " close=")">
+                    <choose>
+                        <when test="null != aggregateLicenseeClass.id">
+                            alc.aggregate_licensee_class_id = #{aggregateLicenseeClass.id}
+                        </when>
+                    </choose>
+                </foreach>
+            </if>
+            <if test="filter.detailLicenseeClasses.size() > 0">
+                and
+                <foreach collection="filter.detailLicenseeClasses" item="detailLicenseeClass" open="(" separator=" or " close=")">
+                    <choose>
+                        <when test="null != detailLicenseeClass.id">
+                            fpd.detail_licensee_class_id = #{detailLicenseeClass.id}
+                        </when>
+                    </choose>
+                </foreach>
+            </if>
+            <if test="null != filter.licenseType">
+                and fp.license_type = #{filter.licenseType}
+            </if>
+            <if test="null != filter.fundPoolType">
+                and type_of_use = #{filter.fundPoolType}
+            </if>
+        </where>
+    </sql>
 </mapper>

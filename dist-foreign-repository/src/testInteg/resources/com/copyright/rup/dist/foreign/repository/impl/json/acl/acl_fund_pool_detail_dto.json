@@ -1,0 +1,20 @@
+[
+  {
+    "id": "b63d6874-38aa-4dbc-bbf9-ff0e860d50e5",
+    "fundPoolName": "ACL Fund Pool 202112",
+    "period": 202112,
+    "licenseType": "ACL",
+    "typeOfUse": "PRINT",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClass": {
+      "id": 51,
+      "description": "Materials"
+    },
+    "netAmount": 500.00,
+    "grossAmount": 590.12,
+    "ldmtFlag": false
+  }
+]
