@@ -466,4 +466,18 @@ databaseChangeLog {
             dropTable(tableName: 'df_acl_fund_pool', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2022-05-11-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: add is_ldmt column to df_acl_fund_pool_detail tables")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail') {
+            column(name: 'is_ldmt', type: 'BOOLEAN', defaultValue: false, remarks: 'The LDMT flag') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail', columnName: 'is_ldmt')
+        }
+    }
 }
