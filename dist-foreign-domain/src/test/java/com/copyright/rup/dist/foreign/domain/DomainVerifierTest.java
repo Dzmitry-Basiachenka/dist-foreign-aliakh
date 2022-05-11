@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -147,7 +148,8 @@ public class DomainVerifierTest {
             {AclFundPool.class},
             {AclFundPoolDetail.class},
             {AclFundPoolDetailDto.class},
-            {LdmtDetail.class}
+            {LdmtDetail.class},
+            {AclFundPoolDetailFilter.class}
         };
         return Arrays.asList(testData);
     }
