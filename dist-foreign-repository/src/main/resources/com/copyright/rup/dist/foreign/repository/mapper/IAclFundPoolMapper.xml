@@ -21,6 +21,7 @@
         <result property="typeOfUse" column="type_of_use"/>
         <result property="netAmount" column="net_amount"/>
         <result property="grossAmount" column="gross_amount"/>
+        <result property="ldmtFlag" column="is_ldmt"/>
     </resultMap>
 
     <sql id="aclFundPoolColumns">
@@ -40,6 +41,7 @@
         license_type,
         net_amount,
         gross_amount,
+        is_ldmt,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -82,6 +84,7 @@
             #{licenseType},
             #{netAmount},
             #{grossAmount},
+            #{ldmtFlag},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -95,7 +98,8 @@
             type_of_use,
             license_type,
             net_amount,
-            gross_amount
+            gross_amount,
+            is_ldmt
         from ${schema}.df_acl_fund_pool_detail fpd
         join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
         where fpd.df_acl_fund_pool_uid = #{fundPoolId}
