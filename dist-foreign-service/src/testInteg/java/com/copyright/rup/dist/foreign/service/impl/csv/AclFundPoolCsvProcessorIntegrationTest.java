@@ -127,6 +127,7 @@ public class AclFundPoolCsvProcessorIntegrationTest {
         assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getLicenseType(), actualDetail.getLicenseType());
+        assertEquals(expectedDetail.isLdmtFlag(), actualDetail.isLdmtFlag());
     }
 
     private List<AclFundPoolDetail> loadExpectedDetails() throws IOException {

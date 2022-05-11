@@ -93,6 +93,7 @@ public class AclFundPoolCsvProcessor extends DistCsvProcessor<AclFundPoolDetail>
             detail.setTypeOfUse(StringUtils.upperCase(getString(row, Header.FUND_POOL_TYPE, headers)));
             detail.setNetAmount(getBigDecimal(row, Header.NET_AMOUNT, headers));
             detail.setGrossAmount(getBigDecimal(row, Header.GROSS_AMOUNT, headers));
+            detail.setLdmtFlag(false);
             return detail;
         }
     }

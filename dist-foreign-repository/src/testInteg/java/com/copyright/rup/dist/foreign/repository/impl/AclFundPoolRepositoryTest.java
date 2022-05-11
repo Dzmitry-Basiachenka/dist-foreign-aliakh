@@ -88,6 +88,7 @@ public class AclFundPoolRepositoryTest {
         assertEquals(fundPoolDetail.getNetAmount(), aclFundPoolDetail.getNetAmount());
         assertEquals(fundPoolDetail.getLicenseType(), aclFundPoolDetail.getLicenseType());
         assertEquals(fundPoolDetail.getTypeOfUse(), aclFundPoolDetail.getTypeOfUse());
+        assertEquals(fundPoolDetail.isLdmtFlag(), aclFundPoolDetail.isLdmtFlag());
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
@@ -102,6 +103,7 @@ public class AclFundPoolRepositoryTest {
         aclFundPoolDetail.setLicenseType("ACL");
         aclFundPoolDetail.setNetAmount(new BigDecimal("32.00"));
         aclFundPoolDetail.setGrossAmount(new BigDecimal("50.00"));
+        aclFundPoolDetail.setLdmtFlag(false);
         return aclFundPoolDetail;
     }
 

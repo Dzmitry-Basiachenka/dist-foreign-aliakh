@@ -5,7 +5,8 @@
     },
     "typeOfUse": "PRINT",
     "grossAmount": 1000000000.09,
-    "netAmount": 1000000000.09
+    "netAmount": 1000000000.09,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -13,7 +14,8 @@
     },
     "typeOfUse": "PRINT",
     "grossAmount": 9999999999.00,
-    "netAmount": 9999999999.00
+    "netAmount": 9999999999.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -21,7 +23,8 @@
     },
     "typeOfUse": "DIGITAL",
     "grossAmount": 7.04,
-    "netAmount": 1.00
+    "netAmount": 1.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -29,7 +32,8 @@
     },
     "typeOfUse": "PRINT",
     "grossAmount": 505.01,
-    "netAmount": 91.00
+    "netAmount": 91.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -37,7 +41,8 @@
     },
     "typeOfUse": "PRINT",
     "grossAmount": 506.01,
-    "netAmount": 92.00
+    "netAmount": 92.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -45,7 +50,8 @@
     },
     "typeOfUse": "PRINT",
     "grossAmount": 507.01,
-    "netAmount": 93.00
+    "netAmount": 93.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -53,7 +59,8 @@
     },
     "typeOfUse": "DIGITAL",
     "grossAmount": 508.01,
-    "netAmount": 94.00
+    "netAmount": 94.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -61,7 +68,8 @@
     },
     "typeOfUse": "DIGITAL",
     "grossAmount": 60000.02,
-    "netAmount": 95.00
+    "netAmount": 95.00,
+    "ldmtFlag": false
   },
   {
     "detailLicenseeClass": {
@@ -69,6 +77,7 @@
     },
     "typeOfUse": "DIGITAL",
     "grossAmount": 6.03,
-    "netAmount": 1.00
+    "netAmount": 1.00,
+    "ldmtFlag": false
   }
 ]

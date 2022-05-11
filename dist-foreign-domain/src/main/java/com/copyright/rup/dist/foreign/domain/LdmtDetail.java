@@ -1,47 +1,35 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
- * Domain object to represent ACL fund pool detail.
+ * Domain object to represent LDMT detail received from Oracle.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 04/19/2022
+ * Date: 05/11/2022
  *
- * @author Anton Azarenka
+ * @author Aliaksandr Liakh
  */
-public class AclFundPoolDetail extends StoredEntity<String> {
+public class LdmtDetail extends StoredEntity<String> {
 
-    private String fundPoolId;
-    private DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+    private Integer detailLicenseeClassId;
     private String licenseType;
     private String typeOfUse;
-    private BigDecimal grossAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private boolean ldmtFlag;
+    private BigDecimal grossAmount;
+    private BigDecimal netAmount;
 
-    public String getFundPoolId() {
-        return fundPoolId;
+    public Integer getDetailLicenseeClassId() {
+        return detailLicenseeClassId;
     }
 
-    public void setFundPoolId(String fundPoolId) {
-        this.fundPoolId = fundPoolId;
-    }
-
-    public DetailLicenseeClass getDetailLicenseeClass() {
-        return detailLicenseeClass;
-    }
-
-    public void setDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
-        this.detailLicenseeClass = detailLicenseeClass;
+    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
+        this.detailLicenseeClassId = detailLicenseeClassId;
     }
 
     public String getLicenseType() {
@@ -76,14 +64,6 @@ public class AclFundPoolDetail extends StoredEntity<String> {
         this.netAmount = netAmount;
     }
 
-    public boolean isLdmtFlag() {
-        return ldmtFlag;
-    }
-
-    public void setLdmtFlag(boolean ldmtFlag) {
-        this.ldmtFlag = ldmtFlag;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -92,16 +72,14 @@ public class AclFundPoolDetail extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AclFundPoolDetail that = (AclFundPoolDetail) obj;
+        LdmtDetail that = (LdmtDetail) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(fundPoolId, that.fundPoolId)
-            .append(detailLicenseeClass, that.detailLicenseeClass)
+            .append(detailLicenseeClassId, that.detailLicenseeClassId)
             .append(licenseType, that.licenseType)
             .append(typeOfUse, that.typeOfUse)
             .append(grossAmount, that.grossAmount)
             .append(netAmount, that.netAmount)
-            .append(ldmtFlag, that.ldmtFlag)
             .isEquals();
     }
 
@@ -109,13 +87,11 @@ public class AclFundPoolDetail extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(fundPoolId)
-            .append(detailLicenseeClass)
+            .append(detailLicenseeClassId)
             .append(licenseType)
             .append(typeOfUse)
             .append(grossAmount)
             .append(netAmount)
-            .append(ldmtFlag)
             .toHashCode();
     }
 
@@ -123,13 +99,11 @@ public class AclFundPoolDetail extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("fundPoolId", fundPoolId)
-            .append("detailLicenseeClass", detailLicenseeClass)
+            .append("detailLicenseeClassId", detailLicenseeClassId)
             .append("licenseType", licenseType)
             .append("typeOfUse", typeOfUse)
             .append("grossAmount", grossAmount)
             .append("netAmount", netAmount)
-            .append("ldmtFlag", ldmtFlag)
             .toString();
     }
 }

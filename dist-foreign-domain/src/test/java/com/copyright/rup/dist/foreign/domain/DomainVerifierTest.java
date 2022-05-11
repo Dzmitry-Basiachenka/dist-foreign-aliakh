@@ -145,7 +145,8 @@ public class DomainVerifierTest {
             {AclUsageFilter.class},
             {UdmAssigneeStatusReportDto.class},
             {AclFundPool.class},
-            {AclFundPoolDetail.class}
+            {AclFundPoolDetail.class},
+            {LdmtDetail.class}
         };
         return Arrays.asList(testData);
     }
