@@ -42,8 +42,8 @@ import java.util.List;
 @PrepareForTest(RupPersistUtils.class)
 public class LdmtDetailConsumerTest {
 
-    private IAclFundPoolService aclFundPoolService;
     private LdmtDetailConsumer ldmtDetailConsumer;
+    private IAclFundPoolService aclFundPoolService;
 
     @Before
     public void setUp() {
