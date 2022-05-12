@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,6 +34,7 @@ public class AclUsageDto extends StoredEntity<String> {
     private BigDecimal contentUnitPrice;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
+    private boolean editable;
 
     public String getUsageBatchId() {
         return usageBatchId;
@@ -154,6 +156,14 @@ public class AclUsageDto extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -180,6 +190,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
+            .append(editable, that.editable)
             .isEquals();
     }
 
@@ -202,6 +213,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(contentUnitPrice)
             .append(typeOfUse)
             .append(annualizedCopies)
+            .append(editable)
             .toHashCode();
     }
 
@@ -224,6 +236,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("contentUnitPrice", contentUnitPrice)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
+            .append("editable", editable)
             .toString();
     }
 }

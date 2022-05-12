@@ -22,6 +22,7 @@
     "contentUnitPrice": 5.0000000000,
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
+    "editable": true,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
   }
