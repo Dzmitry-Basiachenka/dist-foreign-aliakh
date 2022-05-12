@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-@Component("df.service.ldmtDetailConsumer")
-public class LdmtDetailConsumer implements IConsumer<List<LdmtDetail>> {
+@Component("df.service.ldmtDetailsConsumer")
+public class LdmtDetailsConsumer implements IConsumer<List<LdmtDetail>> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 

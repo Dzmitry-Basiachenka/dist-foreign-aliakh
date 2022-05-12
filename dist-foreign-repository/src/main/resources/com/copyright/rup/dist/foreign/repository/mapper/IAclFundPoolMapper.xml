@@ -104,4 +104,20 @@
         join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
         where fpd.df_acl_fund_pool_uid = #{fundPoolId}
     </select>
+
+    <select id="findAllDetails" parameterType="string" resultMap="aclFundPoolDetailResultMap">
+        select
+            df_acl_fund_pool_detail_uid,
+            df_acl_fund_pool_uid,
+            fpd.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            type_of_use,
+            license_type,
+            net_amount,
+            gross_amount,
+            is_ldmt
+        from ${schema}.df_acl_fund_pool_detail fpd
+        join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        order by detail_licensee_class_id, type_of_use, license_type
+    </select>
 </mapper>

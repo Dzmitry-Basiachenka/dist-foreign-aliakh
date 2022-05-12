@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-@Component("df.service.ldmtDetailUnmarshaller")
-public class LdmtDetailUnmarshaller extends CommonMarshaller {
+@Component("df.service.ldmtDetailsUnmarshaller")
+public class LdmtDetailsUnmarshaller extends CommonMarshaller {
 
     private static final TypeReference<List<LdmtDetail>> TYPE_REFERENCE = new TypeReference<List<LdmtDetail>>() {};
 
@@ -33,7 +33,7 @@ public class LdmtDetailUnmarshaller extends CommonMarshaller {
     @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(List.class, new LdmtDetailDeserializer());
+        simpleModule.addDeserializer(List.class, new LdmtDetailsDeserializer());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link LdmtDetailDeserializer}.
+ * Verifies {@link LdmtDetailsDeserializer}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -23,9 +23,9 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class LdmtDetailDeserializerTest {
+public class LdmtDetailsDeserializerTest {
 
-    private final LdmtDetailDeserializer deserializer = new LdmtDetailDeserializer();
+    private final LdmtDetailsDeserializer deserializer = new LdmtDetailsDeserializer();
 
     @Test
     public void testDeserialize() throws IOException {

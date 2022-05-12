@@ -1,0 +1,16 @@
+[
+  {
+    "LICENCETYPE": "VGW",
+    "ICODE": "1",
+    "TYPEOFUSE": "DIGITAL",
+    "GROSSAMOUNT": "1328445.52",
+    "NETAMOUNT": "926835.08"
+  },
+  {
+    "LICENCETYPE": "ACL",
+    "ICODE": "2",
+    "TYPEOFUSE": "PHOTOCOPY",
+    "GROSSAMOUNT": "634420.48",
+    "NETAMOUNT": "450799.88"
+  }
+]

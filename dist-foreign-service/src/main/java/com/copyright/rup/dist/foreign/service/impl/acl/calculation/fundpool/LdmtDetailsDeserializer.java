@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author Aliaksandr Liakh
  */
-public class LdmtDetailDeserializer extends JsonDeserializer<List<LdmtDetail>> {
+public class LdmtDetailsDeserializer extends JsonDeserializer<List<LdmtDetail>> {
 
     private static final Map<String, String> TYPE_OF_USE_MAPPING = ImmutableMap.of(
         "PHOTOCOPY", "PRINT", "DIGITAL", "DIGITAL");

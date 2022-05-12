@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Verifies {@link LdmtDetailConsumer}.
+ * Verifies {@link LdmtDetailsConsumer}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -40,16 +40,16 @@ import java.util.List;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(RupPersistUtils.class)
-public class LdmtDetailConsumerTest {
+public class LdmtDetailsConsumerTest {
 
-    private LdmtDetailConsumer ldmtDetailConsumer;
+    private LdmtDetailsConsumer ldmtDetailsConsumer;
     private IAclFundPoolService aclFundPoolService;
 
     @Before
     public void setUp() {
-        ldmtDetailConsumer = new LdmtDetailConsumer();
+        ldmtDetailsConsumer = new LdmtDetailsConsumer();
         aclFundPoolService = createMock(IAclFundPoolService.class);
-        Whitebox.setInternalState(ldmtDetailConsumer, aclFundPoolService);
+        Whitebox.setInternalState(ldmtDetailsConsumer, aclFundPoolService);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class LdmtDetailConsumerTest {
         aclFundPoolService.insertAclFundPoolDetails(capture(fundPoolDetailsCapture));
         expectLastCall();
         replay(RupPersistUtils.class, aclFundPoolService);
-        ldmtDetailConsumer.consume(ldmtDetails);
+        ldmtDetailsConsumer.consume(ldmtDetails);
         verifyAclFundPoolDetails(ldmtDetail, fundPoolDetailsCapture.getValue());
         verify(RupPersistUtils.class, aclFundPoolService);
     }
