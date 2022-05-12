@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -11,6 +13,7 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL usage controller.
@@ -85,4 +88,25 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return instance of {@link IStreamSource} for export.
      */
     IStreamSource getExportAclUsagesStreamSource();
+
+    /**
+     * Gets list of all {@link PublicationType}s.
+     *
+     * @return list of {@link PublicationType}
+     */
+    List<PublicationType> getPublicationTypes();
+
+    /**
+     * Gets list of all {@link DetailLicenseeClass}es.
+     *
+     * @return list of detail licensee classes.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
+
+    /**
+     * Updates ACL usages.
+     *
+     * @param aclUsageDtos set of {@link AclUsageDto} to update
+     */
+    void updateUsages(Set<AclUsageDto> aclUsageDtos);
 }

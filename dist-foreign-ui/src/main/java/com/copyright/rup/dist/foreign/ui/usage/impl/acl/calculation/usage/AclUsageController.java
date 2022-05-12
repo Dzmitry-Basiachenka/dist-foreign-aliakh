@@ -7,6 +7,8 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
@@ -28,7 +30,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclUsageController}.
@@ -104,6 +108,23 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     public IStreamSource getExportAclUsagesStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> "export_acl_usage_",
             pos -> aclCalculationReportService.writeAclUsageCsvReport(getFilter(), pos));
+    }
+
+    @Override
+    public List<PublicationType> getPublicationTypes() {
+        //TODO {dbasiachenka} implement
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        //TODO {dbasiachenka} implement
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void updateUsages(Set<AclUsageDto> aclUsageDtos) {
+        //TODO {dbasiachenka} implement
     }
 
     @Override

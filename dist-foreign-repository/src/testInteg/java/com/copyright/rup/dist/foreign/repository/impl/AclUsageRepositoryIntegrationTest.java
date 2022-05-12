@@ -637,12 +637,13 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getOriginalDetailId(), actualUsage.getOriginalDetailId());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(expectedUsage.getDetailLicenseeClassId(), actualUsage.getDetailLicenseeClassId());
-        assertEquals(expectedUsage.getDetailLicenseeClassName(), actualUsage.getDetailLicenseeClassName());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getId(), actualUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getDescription(),
+            actualUsage.getDetailLicenseeClass().getDescription());
         assertEquals(expectedUsage.getAggregateLicenseeClassId(), actualUsage.getAggregateLicenseeClassId());
         assertEquals(expectedUsage.getAggregateLicenseeClassName(), actualUsage.getAggregateLicenseeClassName());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
-        assertEquals(expectedUsage.getPubTypeName(), actualUsage.getPubTypeName());
+        assertEquals(expectedUsage.getPublicationType().getName(), actualUsage.getPublicationType().getName());
         assertEquals(expectedUsage.getContentUnitPrice(), actualUsage.getContentUnitPrice());
         assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());

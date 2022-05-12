@@ -25,12 +25,11 @@ public class AclUsageDto extends StoredEntity<String> {
     private String originalDetailId;
     private Long wrWrkInst;
     private String systemTitle;
-    private Integer detailLicenseeClassId;
-    private String detailLicenseeClassName;
+    private DetailLicenseeClass detailLicenseeClass;
     private Integer aggregateLicenseeClassId;
     private String aggregateLicenseeClassName;
     private String surveyCountry;
-    private String pubTypeName;
+    private PublicationType publicationType;
     private BigDecimal contentUnitPrice;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
@@ -91,20 +90,12 @@ public class AclUsageDto extends StoredEntity<String> {
         this.systemTitle = systemTitle;
     }
 
-    public Integer getDetailLicenseeClassId() {
-        return detailLicenseeClassId;
+    public DetailLicenseeClass getDetailLicenseeClass() {
+        return detailLicenseeClass;
     }
 
-    public void setDetailLicenseeClassId(Integer detailLicenseeClassId) {
-        this.detailLicenseeClassId = detailLicenseeClassId;
-    }
-
-    public String getDetailLicenseeClassName() {
-        return detailLicenseeClassName;
-    }
-
-    public void setDetailLicenseeClassName(String detailLicenseeClassName) {
-        this.detailLicenseeClassName = detailLicenseeClassName;
+    public void setDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass) {
+        this.detailLicenseeClass = detailLicenseeClass;
     }
 
     public Integer getAggregateLicenseeClassId() {
@@ -131,12 +122,12 @@ public class AclUsageDto extends StoredEntity<String> {
         this.surveyCountry = surveyCountry;
     }
 
-    public String getPubTypeName() {
-        return pubTypeName;
+    public PublicationType getPublicationType() {
+        return publicationType;
     }
 
-    public void setPubTypeName(String pubTypeName) {
-        this.pubTypeName = pubTypeName;
+    public void setPublicationType(PublicationType publicationType) {
+        this.publicationType = publicationType;
     }
 
     public BigDecimal getContentUnitPrice() {
@@ -181,12 +172,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(originalDetailId, that.originalDetailId)
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
-            .append(detailLicenseeClassId, that.detailLicenseeClassId)
-            .append(detailLicenseeClassName, that.detailLicenseeClassName)
+            .append(detailLicenseeClass, that.detailLicenseeClass)
             .append(aggregateLicenseeClassId, that.aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(surveyCountry, that.surveyCountry)
-            .append(pubTypeName, that.pubTypeName)
+            .append(publicationType, that.publicationType)
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
@@ -204,12 +194,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(originalDetailId)
             .append(wrWrkInst)
             .append(systemTitle)
-            .append(detailLicenseeClassId)
-            .append(detailLicenseeClassName)
+            .append(detailLicenseeClass)
             .append(aggregateLicenseeClassId)
             .append(aggregateLicenseeClassName)
             .append(surveyCountry)
-            .append(pubTypeName)
+            .append(publicationType)
             .append(contentUnitPrice)
             .append(typeOfUse)
             .append(annualizedCopies)
@@ -227,12 +216,11 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("originalDetailId", originalDetailId)
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
-            .append("detailLicenseeClassId", detailLicenseeClassId)
-            .append("detailLicenseeClassName", detailLicenseeClassName)
+            .append("detailLicenseeClass", detailLicenseeClass)
             .append("aggregateLicenseeClassId", aggregateLicenseeClassId)
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("surveyCountry", surveyCountry)
-            .append("pubTypeName", pubTypeName)
+            .append("publicationType", publicationType)
             .append("contentUnitPrice", contentUnitPrice)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)

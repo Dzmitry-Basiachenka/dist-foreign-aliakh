@@ -7,12 +7,18 @@
     "originalDetailId": "OGN674GHHSB007",
     "wrWrkInst": 306985867,
     "systemTitle": "Tenside, surfactants, detergents",
-    "detailLicenseeClassId": 2,
-    "detailLicenseeClassName": "Textiles, Apparel, etc.",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
     "aggregateLicenseeClassId": 51,
     "aggregateLicenseeClassName": "Materials",
     "surveyCountry": "United States",
-    "pubTypeName": "BK",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book"
+    },
     "contentUnitPrice": 5.0000000000,
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
