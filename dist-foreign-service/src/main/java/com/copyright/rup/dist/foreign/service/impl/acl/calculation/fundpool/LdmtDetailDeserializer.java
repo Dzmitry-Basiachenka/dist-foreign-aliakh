@@ -36,12 +36,12 @@ public class LdmtDetailDeserializer extends JsonDeserializer<List<LdmtDetail>> {
         List<LdmtDetail> ldmtDetails = Lists.newArrayList();
         try {
             JsonNode tree = parser.readValueAsTree();
-            LOGGER.trace("Deserialize LDMT message. Received JSON={}", tree);
+            LOGGER.trace("Deserialize LDMT details. Received JSON={}", tree);
             for (JsonNode jsonNode : tree) {
                 ldmtDetails.add(buildLdmtDetail(jsonNode));
             }
         } catch (JsonParseException e) {
-            LOGGER.warn("Deserialize LDMT message. Failed", e);
+            LOGGER.warn("Deserialize LDMT details. Failed", e);
         }
         return ldmtDetails;
     }
