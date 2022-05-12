@@ -42,12 +42,12 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
         beanProperties.add(bean.getOriginalDetailId());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getSystemTitle());
-        beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClassId()));
-        beanProperties.add(bean.getDetailLicenseeClassName());
+        beanProperties.add(getBeanPropertyAsString(bean.getDetailLicenseeClass().getId()));
+        beanProperties.add(bean.getDetailLicenseeClass().getDescription());
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(bean.getSurveyCountry());
-        beanProperties.add(bean.getPubTypeName());
+        beanProperties.add(bean.getPublicationType().getName());
         beanProperties.add(getBeanBigDecimal(bean.getContentUnitPrice()));
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));

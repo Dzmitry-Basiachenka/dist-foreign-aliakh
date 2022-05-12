@@ -375,7 +375,8 @@
 
     .edit-udm-usage-window .v-caption,
     .multiple-edit-udm-usages-window .v-caption,
-    .edit-udm-value-window .v-caption {
+    .edit-udm-value-window .v-caption,
+    .edit-acl-usages-window .v-caption {
         visibility: hidden;
         height: 0px;
     }
@@ -384,7 +385,8 @@
     .multiple-edit-udm-usages-window .v-label.v-has-width,
     .edit-udm-value-window .v-label.v-has-width,
     .view-udm-usage-window .v-label.v-has-width,
-    .view-udm-value-window .v-label.v-has-width {
+    .view-udm-value-window .v-label.v-has-width,
+    .edit-acl-usages-window .v-label.v-has-width {
         margin-top: 3px;
     }
 

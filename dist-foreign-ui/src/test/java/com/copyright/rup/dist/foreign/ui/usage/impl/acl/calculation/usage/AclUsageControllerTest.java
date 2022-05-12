@@ -185,6 +185,23 @@ public class AclUsageControllerTest {
             aclCalculationReportService);
     }
 
+    @Test
+    public void testGetPublicationTypes() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(), controller.getPublicationTypes());
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(), controller.getDetailLicenseeClasses());
+    }
+
+    @Test
+    public void testUpdateUsages() {
+        //TODO {dbasiachenka} implement
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

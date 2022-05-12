@@ -13,12 +13,14 @@
         <result property="originalDetailId" column="original_detail_id"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="systemTitle" column="system_title"/>
-        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
-        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="detailLicenseeClass.id" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClass.description" column="detail_licensee_class_name"/>
         <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
         <result property="surveyCountry" column="survey_country"/>
-        <result property="pubTypeName" column="pub_type_name"/>
+        <result property="publicationType.id" column="pub_type_id"/>
+        <result property="publicationType.name" column="pub_type_name"/>
+        <result property="publicationType.description" column="pub_type_description"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
@@ -56,7 +58,9 @@
         alc.aggregate_licensee_class_id,
         alc.description aggregate_licensee_class_name,
         survey_country,
+        u.publication_type_uid pub_type_id,
         pt.name pub_type_name,
+        pt.description pub_type_description,
         content_unit_price,
         type_of_use,
         annualized_copies,
