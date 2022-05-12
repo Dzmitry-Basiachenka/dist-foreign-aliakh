@@ -21,4 +21,29 @@ public class AclFundPoolFilterControllerTest {
     public void testInstantiateWidget() {
         assertNotNull(controller.instantiateWidget());
     }
+
+    @Test
+    public void testGetFundPoolNames() {
+        //TODO will be implemented later
+    }
+
+    @Test
+    public void testGetPeriods() {
+        //TODO will be implemented later
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        //TODO will be implemented later
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClasses() {
+        //TODO will be implemented later
+    }
+
+    @Test
+    public void testGetLicenseTypes() {
+        //TODO will be implemented later
+    }
 }
