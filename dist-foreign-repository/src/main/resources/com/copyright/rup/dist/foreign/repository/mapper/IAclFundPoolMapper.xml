@@ -120,4 +120,18 @@
         join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
         order by detail_licensee_class_id, type_of_use, license_type
     </select>
+
+    <select id="addLdmtDetailsToFundPool" parameterType="map" resultType="int">
+        with fund_pool_detail as (
+            update ${schema}.df_acl_fund_pool_detail
+            set
+                df_acl_fund_pool_uid = #{fundPoolId},
+                <include refid="StoredEntityMapper.update"/>
+            where is_ldmt = true
+                and df_acl_fund_pool_uid is null
+                and license_type = #{licenseType}
+            returning 1
+        )
+        select count(*) from fund_pool_detail;
+    </select>
 </mapper>
