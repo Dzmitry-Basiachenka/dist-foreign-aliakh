@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
- * Verifies {@link LdmtDetailsBusinessValidator}.
+ * Verifies {@link LdmtDetailsValidator}.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -26,19 +26,20 @@ import java.util.Collections;
  *
  * @author Aliaksandr Liakh
  */
-public class LdmtDetailsBusinessValidatorTest {
+public class LdmtDetailsValidatorTest {
 
+    private static final String LDMT_DETAIL_0_IS_NOT_VALID = "LDMT detail #0 is not valid: [";
     private static final int DETAIL_LICENSEE_CLASS_ID = 1;
     private static final String INVALID_LICENSE_TYPE = "ACLPRINT";
     private static final String INVALID_TYPE_OF_USE = "EMAIL_COPY";
     private static final BigDecimal INVALID_AMOUNT = new BigDecimal("12345678901.23");
 
-    private LdmtDetailsBusinessValidator validator;
+    private LdmtDetailsValidator validator;
     private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
-        validator = new LdmtDetailsBusinessValidator();
+        validator = new LdmtDetailsValidator();
         licenseeClassService = createMock(ILicenseeClassService.class);
         Whitebox.setInternalState(validator, licenseeClassService);
     }
@@ -104,8 +105,8 @@ public class LdmtDetailsBusinessValidatorTest {
             validator.validate(Collections.singletonList(ldmtDetail));
             fail();
         } catch (ValidationException e) {
-            assertEquals("LDMT detail #0 is not valid: [" +
-                "The integer part of Gross Amount should be less or equal to 10 digits: 12345678901.23]",
+            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
+                    "The integer part of Gross Amount should be less or equal to 10 digits: 12345678901.23]",
                 e.getMessage());
         }
         verify(licenseeClassService);
@@ -121,7 +122,7 @@ public class LdmtDetailsBusinessValidatorTest {
             validator.validate(Collections.singletonList(ldmtDetail));
             fail();
         } catch (ValidationException e) {
-            assertEquals("LDMT detail #0 is not valid: [" +
+            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
                 "The integer part of Net Amount should be less or equal to 10 digits: 12345678901.23, " +
                 "Net Amount should be less than or equal to Gross Amount: 12345678901.23, 634420.48]", e.getMessage());
         }
@@ -138,7 +139,7 @@ public class LdmtDetailsBusinessValidatorTest {
             validator.validate(Collections.singletonList(ldmtDetail));
             fail();
         } catch (ValidationException e) {
-            assertEquals("LDMT detail #0 is not valid: [" +
+            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
                 "Net Amount should be less than or equal to Gross Amount: 634421.48, 634420.48]", e.getMessage());
         }
         verify(licenseeClassService);

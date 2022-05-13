@@ -162,13 +162,13 @@
             <from ref="sf.service.ldmt.details.endpoint"/>
             <log message="Consume LDMT details from Oracle. Body: ${body}"
                  loggingLevel="INFO" logName="com.copyright.rup.dist"/>
+            <bean ref="df.service.ldmtDetailsJsonValidator"/>
             <unmarshal>
                 <custom ref="df.service.ldmtDetailsUnmarshaller"/>
             </unmarshal>
             <log message="Receive LDMT details from Oracle. Body: ${body}"
                  loggingLevel="INFO" logName="com.copyright.rup.dist"/>
-            <bean ref="df.service.ldmtDetailsPlainValidator"/>
-            <bean ref="df.service.ldmtDetailsBusinessValidator"/>
+            <bean ref="df.service.ldmtDetailsValidator"/>
             <bean ref="df.service.ldmtDetailsConsumer"/>
 
             <onException useOriginalMessage="true">

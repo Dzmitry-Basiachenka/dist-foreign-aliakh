@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of {@link IValidator} to perform business validation for {@link LdmtDetail}s.
+ * Implementation of {@link IValidator} to perform validation for {@link LdmtDetail}s.
  * <p/>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
  * @author Aliaksandr Liakh
  */
 // TODO verify duplicated (Detail Licensee Class Id, Type of Use) pairs
-@Component("df.service.ldmtDetailsBusinessValidator")
-public class LdmtDetailsBusinessValidator implements IValidator<List<LdmtDetail>> {
+@Component("df.service.ldmtDetailsValidator")
+public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
 
-    private static final Set<String> LICENSE_TYPES = ImmutableSet.of("ACL", "VGW", "JACDCL", "MACL");
-    private static final Set<String> TYPE_OF_USES = ImmutableSet.of("PRINT", "DIGITAL");
+    private static final Set<String> LICENSE_TYPES = ImmutableSet.of("ACL", "JACDCL", "MACL", "VGW");
+    private static final Set<String> TYPE_OF_USES = ImmutableSet.of("DIGITAL", "PRINT");
 
     @Autowired
     private ILicenseeClassService licenseeClassService;

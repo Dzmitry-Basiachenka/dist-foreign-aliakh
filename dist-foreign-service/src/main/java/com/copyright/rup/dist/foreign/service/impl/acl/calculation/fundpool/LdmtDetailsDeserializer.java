@@ -28,7 +28,7 @@ import java.util.Map;
 public class LdmtDetailsDeserializer extends JsonDeserializer<List<LdmtDetail>> {
 
     private static final Map<String, String> TYPE_OF_USE_MAPPING = ImmutableMap.of(
-        "PHOTOCOPY", "PRINT", "DIGITAL", "DIGITAL");
+        "DIGITAL", "DIGITAL", "PHOTOCOPY", "PRINT");
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Override
