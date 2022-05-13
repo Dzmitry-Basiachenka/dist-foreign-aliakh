@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -18,13 +19,20 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.FooterRow;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -45,6 +53,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     private Grid<AclUsageDto> aclUsagesGrid;
     private DataProvider<AclUsageDto, Void> dataProvider;
     private MenuBar aclUsageBatchMenuBar;
+    private Button editButton;
+    private MultiSelectionModelImpl<AclUsageDto> gridSelectionModel;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -59,6 +69,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
 
     @Override
     public void refresh() {
+        aclUsagesGrid.deselectAll();
         dataProvider.refreshAll();
     }
 
@@ -71,6 +82,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     public IMediator initMediator() {
         AclUsageMediator mediator = new AclUsageMediator();
         mediator.setAclUsageBatchMenuBar(aclUsageBatchMenuBar);
+        mediator.setEditButton(editButton);
         return mediator;
     }
 
@@ -96,12 +108,13 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
                 } else {
                     aclUsagesGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
+                switchSelectAllCheckBoxVisibility(size);
                 aclUsagesGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
                 return size;
             }, AclUsageDto::getId);
         aclUsagesGrid = new Grid<>(dataProvider);
         addColumns();
-        aclUsagesGrid.setSelectionMode(Grid.SelectionMode.NONE);
+        initSelectionMode();
         aclUsagesGrid.setSizeFull();
         VaadinUtils.addComponentStyle(aclUsagesGrid, "acl-usages-grid");
     }
@@ -121,7 +134,18 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportAclUsagesStreamSource().getSource());
         fileDownloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar, exportButton);
+        editButton = Buttons.createButton(ForeignUi.getMessage("button.edit"));
+        editButton.setEnabled(false);
+        editButton.addClickListener(event -> {
+            Set<AclUsageDto> selectedUsages = aclUsagesGrid.getSelectedItems();
+            if (selectedUsages.stream().allMatch(AclUsageDto::isEditable)) {
+                Windows.showModalWindow(
+                    new EditAclUsageWindow(controller, selectedUsages, saveEvent -> refresh()));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.usage_not_editable"));
+            }
+        });
+        HorizontalLayout layout = new HorizontalLayout(aclUsageBatchMenuBar, editButton, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "acl-usage-buttons");
         return layout;
@@ -177,5 +201,24 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             .setSortProperty(columnId)
             .setHidable(true)
             .setWidth(width);
+    }
+
+    private void switchSelectAllCheckBoxVisibility(int beansCount) {
+        if (Objects.nonNull(gridSelectionModel) && ForeignSecurityUtils.hasSpecialistPermission()) {
+            gridSelectionModel.setSelectAllCheckBoxVisibility(
+                0 == beansCount ? SelectAllCheckBoxVisibility.HIDDEN : SelectAllCheckBoxVisibility.VISIBLE);
+            gridSelectionModel.beforeClientResponse(false);
+        }
+    }
+
+    private void initSelectionMode() {
+        if (ForeignSecurityUtils.hasSpecialistPermission()) {
+            gridSelectionModel =
+                (MultiSelectionModelImpl<AclUsageDto>) aclUsagesGrid.setSelectionMode(SelectionMode.MULTI);
+            aclUsagesGrid.addSelectionListener(
+                event -> editButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
+        } else {
+            aclUsagesGrid.setSelectionMode(SelectionMode.NONE);
+        }
     }
 }
