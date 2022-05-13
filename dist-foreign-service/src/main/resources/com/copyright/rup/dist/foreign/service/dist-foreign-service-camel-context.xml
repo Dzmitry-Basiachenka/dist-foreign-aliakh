@@ -108,6 +108,8 @@
         <endpoint id="df.service.internal.rights.endpoint.udm" uri="direct:df.service.rights.udm"/>
         <endpoint id="df.service.rights.endpoint.udm" uri="$RUP{dist.foreign.endpoint.rights.udm}"/>
 
+        <endpoint id="sf.service.ldmt.details.endpoint" uri="$RUP{dist.foreign.endpoint.ldmt.details}"/>
+
         <!--chunk-based endpoints finished -->
 
         <endpoint id="df.producer.job.status.internal" uri="direct:df.feeder.job.status"/>
@@ -152,6 +154,29 @@
                     <constant>true</constant>
                 </handled>
                 <log message="Exception during message processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
+        </route>
+
+        <route id="df.service.ldmtDetailsRoute">
+            <from ref="sf.service.ldmt.details.endpoint"/>
+            <log message="Consume LDMT details from Oracle. Body: ${body}"
+                 loggingLevel="INFO" logName="com.copyright.rup.dist"/>
+            <unmarshal>
+                <custom ref="df.service.ldmtDetailsUnmarshaller"/>
+            </unmarshal>
+            <log message="Receive LDMT details from Oracle. Body: ${body}"
+                 loggingLevel="INFO" logName="com.copyright.rup.dist"/>
+            <bean ref="df.service.ldmtDetailsPlainValidator"/>
+            <bean ref="df.service.ldmtDetailsBusinessValidator"/>
+            <bean ref="df.service.ldmtDetailsConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="Exception during LDMT details processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
                      loggingLevel="WARN" logName="com.copyright.rup.dist"/>
             </onException>
         </route>

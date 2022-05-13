@@ -1,0 +1,24 @@
+[
+  {
+    "detailLicenseeClass": {
+      "id": 1,
+      "description": "Food and Tobacco"
+    },
+    "licenseType": "VGW",
+    "typeOfUse": "DIGITAL",
+    "grossAmount": 1328445.52,
+    "netAmount": 926835.08,
+    "ldmtFlag": true
+  },
+  {
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "licenseType": "ACL",
+    "typeOfUse": "PRINT",
+    "grossAmount": 634420.48,
+    "netAmount": 450799.88,
+    "ldmtFlag": true
+  }
+]

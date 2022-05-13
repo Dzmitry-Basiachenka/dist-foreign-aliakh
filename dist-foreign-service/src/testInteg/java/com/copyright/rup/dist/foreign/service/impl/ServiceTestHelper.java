@@ -8,6 +8,8 @@ import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -29,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmValueAuditService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
+import com.copyright.rup.dist.foreign.service.impl.mock.LdmtDetailsConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
@@ -108,6 +111,9 @@ public class ServiceTestHelper {
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
+    @Autowired
+    @Qualifier("df.service.ldmtDetailsConsumer")
+    private LdmtDetailsConsumerMock ldmtDetailsConsumer;
 
     private MockRestServiceServer mockServer;
     private MockRestServiceServer asyncMockServer;
@@ -243,6 +249,14 @@ public class ServiceTestHelper {
         throws InterruptedException {
         doReceivePaidUsagesFromLm(
             String.format(TestUtils.fileToString(this.getClass(), paidUsagesMessageTemplateFile), usageIds.toArray()));
+    }
+
+    public void receiveLdtmDetailsFromOracle(String fileName) throws InterruptedException {
+        ldmtDetailsConsumer.setLatch(new CountDownLatch(1));
+        String message = TestUtils.fileToString(this.getClass(), fileName);
+        sqsClientMock.sendMessage("fda-test-ldmt-licensedata", message, Collections.emptyMap());
+        assertTrue(ldmtDetailsConsumer.getLatch().await(10, TimeUnit.SECONDS));
+        sqsClientMock.assertQueueMessagesReceived("fda-test-ldmt-licensedata");
     }
 
     // TODO: investigate the order of audit items committed in one transaction
@@ -425,6 +439,24 @@ public class ServiceTestHelper {
         });
     }
 
+    public void assertAclFundPoolDetails(List<AclFundPoolDetail> expectedValues, List<AclFundPoolDetail> actualValues) {
+        assertEquals(expectedValues.size(), expectedValues.size());
+        IntStream.range(0, expectedValues.size()).forEach(index -> {
+            AclFundPoolDetail expectedDetail = expectedValues.get(index);
+            AclFundPoolDetail actualDetail = actualValues.get(index);
+            assertEquals(expectedDetail.getFundPoolId(), actualDetail.getFundPoolId());
+            DetailLicenseeClass expectedDetailLicenseeClass = expectedDetail.getDetailLicenseeClass();
+            DetailLicenseeClass actualDetailLicenseeClass = actualDetail.getDetailLicenseeClass();
+            assertEquals(expectedDetailLicenseeClass.getId(), actualDetailLicenseeClass.getId());
+            assertEquals(expectedDetailLicenseeClass.getDescription(), actualDetailLicenseeClass.getDescription());
+            assertEquals(expectedDetail.getLicenseType(), actualDetail.getLicenseType());
+            assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
+            assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
+            assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
+            assertEquals(expectedDetail.isLdmtFlag(), actualDetail.isLdmtFlag());
+        });
+    }
+
     public List<UdmUsage> loadExpectedUdmUsages(String pathToUsageDtosFile) throws IOException {
         String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
         ObjectMapper mapper = new ObjectMapper();
@@ -467,6 +499,13 @@ public class ServiceTestHelper {
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
         return mapper.readValue(content, new TypeReference<List<UdmValueAuditItem>>() {
+        });
+    }
+
+    public List<AclFundPoolDetail> loadExpectedAclFundPoolDetails(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(content, new TypeReference<List<AclFundPoolDetail>>() {
         });
     }
 
