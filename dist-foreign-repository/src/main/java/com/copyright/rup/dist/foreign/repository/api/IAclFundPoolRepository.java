@@ -53,4 +53,14 @@ public interface IAclFundPoolRepository {
      * @return list of {@link AclFundPoolDetail}s
      */
     List<AclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Adds LDMT details to the fund pool.
+     *
+     * @param fundPoolId  fund pool id
+     * @param licenseType license type
+     * @param userName    user name
+     * @return count of added details
+     */
+    int addLdmtDetailsToFundPool(String fundPoolId, String licenseType, String userName);
 }

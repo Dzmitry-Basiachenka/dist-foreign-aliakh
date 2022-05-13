@@ -4,9 +4,11 @@ import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.repository.api.IAclFundPoolRepository;
 
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -44,5 +46,14 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     @Override
     public List<AclFundPoolDetail> findDetailsByFundPoolId(String fundPoolId) {
         return selectList("IAclFundPoolMapper.findDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
+    }
+
+    @Override
+    public int addLdmtDetailsToFundPool(String fundPoolId, String licenseType, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("fundPoolId", Objects.requireNonNull(fundPoolId));
+        parameters.put("licenseType", Objects.requireNonNull(licenseType));
+        parameters.put("updateUser", Objects.requireNonNull(userName));
+        return selectOne("IAclFundPoolMapper.addLdmtDetailsToFundPool", parameters);
     }
 }

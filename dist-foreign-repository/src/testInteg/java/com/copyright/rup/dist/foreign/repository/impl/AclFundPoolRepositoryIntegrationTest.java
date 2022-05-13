@@ -37,11 +37,12 @@ import java.util.List;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-public class AclFundPoolRepositoryTest {
+public class AclFundPoolRepositoryIntegrationTest {
 
     private static final String FOLDER_NAME = "acl-fund-pool-repository-integration-test/";
     private static final String ACL_FUND_POOL_ID = "97efb29e-dac7-4dd9-9942-1508853b8625";
     private static final String ACL_FUND_POOL_NAME = "ACL Fund Pool 2021";
+    private static final String USER_NAME = "user@copyright.com";
 
     @Autowired
     private AclFundPoolRepository repository;
@@ -89,6 +90,19 @@ public class AclFundPoolRepositoryTest {
         assertEquals(fundPoolDetail.getLicenseType(), aclFundPoolDetail.getLicenseType());
         assertEquals(fundPoolDetail.getTypeOfUse(), aclFundPoolDetail.getTypeOfUse());
         assertEquals(fundPoolDetail.isLdmtFlag(), aclFundPoolDetail.isLdmtFlag());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "add-ldmt-details-to-fund-pool.groovy")
+    public void testAddLdmtDetailsToFundPool() {
+        String fundPoolId = "39edbdfd-d732-4a78-9ecd-6a756c9f5b93";
+        assertEquals(1, repository.addLdmtDetailsToFundPool(fundPoolId, "ACL", USER_NAME));
+        List<AclFundPoolDetail> fundPoolDetails = repository.findDetailsByFundPoolId(fundPoolId);
+        assertEquals(1, fundPoolDetails.size());
+        AclFundPoolDetail fundPoolDetail = fundPoolDetails.get(0);
+        assertNotNull(fundPoolDetail);
+        assertEquals("b2f01b15-2193-4d91-ae5b-0834452e4788", fundPoolDetail.getId());
+        assertEquals(fundPoolId, fundPoolDetail.getFundPoolId());
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
