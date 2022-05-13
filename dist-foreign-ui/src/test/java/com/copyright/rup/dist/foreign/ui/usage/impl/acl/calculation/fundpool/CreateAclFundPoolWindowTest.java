@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setComboBoxValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
@@ -31,7 +33,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -44,8 +45,6 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * Verifies {@link CreateAclFundPoolWindow}.
@@ -60,14 +59,18 @@ import java.io.ByteArrayOutputStream;
 @PrepareForTest({Windows.class, CreateAclFundPoolWindow.class})
 public class CreateAclFundPoolWindowTest {
 
+    private static final String FUND_POOL_NAME_FIELD = "fundPoolNameField";
+    private static final String FUND_POOL_PERIOD_YEAR_FIELD = "fundPoolPeriodYearField";
+    private static final String FUND_POOL_PERIOD_MONTH_COMBO_BOX = "fundPoolPeriodMonthComboBox";
+    private static final String LICENSE_TYPE_COMBO_BOX = "licenseTypeComboBox";
+    private static final String LDMT_CHECK_BOX = "ldmtCheckBox";
     private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
     private static final String FUND_POOL_NAME = "Fund Pool Name";
-    private static final String PERIOD_YEAR = "2020";
+    private static final String PERIOD_YEAR = "2021";
     private static final String PERIOD_MONTH = "12";
-    private static final String ACL = "ACL";
+    private static final String LICENSE_TYPE = "ACL";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String SPACES_STRING = "   ";
-    private static final String METHOD_NAME = "getValue";
 
     private IAclFundPoolController controller;
     private CreateAclFundPoolWindow window;
@@ -91,16 +94,16 @@ public class CreateAclFundPoolWindowTest {
         replay(controller);
         window = new CreateAclFundPoolWindow(controller);
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "fundPoolPeriodYearField")).setValue(PERIOD_YEAR);
+        setTextFieldValue(window, FUND_POOL_PERIOD_YEAR_FIELD, PERIOD_YEAR);
         assertFalse(window.isValid());
-        ((ComboBox<String>) Whitebox.getInternalState(window, "fundPoolPeriodMonthComboBox")).setValue(PERIOD_MONTH);
+        setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
         assertFalse(window.isValid());
-        ((ComboBox<String>) Whitebox.getInternalState(window, "licenseTypeComboBox")).setValue(ACL);
+        setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
         assertFalse(window.isValid());
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "fundPoolNameField")).setValue(FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         assertTrue(window.isValid());
         verify(controller);
     }
@@ -112,7 +115,7 @@ public class CreateAclFundPoolWindowTest {
         replay(controller);
         window = new CreateAclFundPoolWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "fundPoolBinder");
-        TextField fundPoolNameFiled = Whitebox.getInternalState(window, "fundPoolNameField");
+        TextField fundPoolNameFiled = Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD);
         validateFieldAndVerifyErrorMessage(
             fundPoolNameFiled, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
@@ -129,7 +132,7 @@ public class CreateAclFundPoolWindowTest {
     public void testFundPoolYearFieldValidation() {
         window = new CreateAclFundPoolWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        TextField periodYearField = Whitebox.getInternalState(window, "fundPoolPeriodYearField");
+        TextField periodYearField = Whitebox.getInternalState(window, FUND_POOL_PERIOD_YEAR_FIELD);
         validateFieldAndVerifyErrorMessage(
             periodYearField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
@@ -149,43 +152,57 @@ public class CreateAclFundPoolWindowTest {
     }
 
     @Test
-    public void testOnUploadClickedValidFields() {
-        mockStatic(Windows.class);
-        UploadField uploadField = createPartialMock(UploadField.class, METHOD_NAME, "getStreamToUploadedFile");
-        AclFundPoolCsvProcessor processor = createMock(AclFundPoolCsvProcessor.class);
-        ComboBox periodMonth = createPartialMock(ComboBox.class, METHOD_NAME);
-        ComboBox licenseType = createPartialMock(ComboBox.class, METHOD_NAME);
-        CheckBox ldmtCheckBox = createPartialMock(CheckBox.class, METHOD_NAME);
-        ProcessingResult<AclFundPoolDetail> processingResult = buildCsvProcessingResult();
-        window = createPartialMock(CreateAclFundPoolWindow.class, "isValid");
-        Whitebox.setInternalState(window, "fundPoolController", controller);
-        Whitebox.setInternalState(window, "fundPoolNameField", new TextField("Fund Pool Name", "FP Name"));
-        Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, "fundPoolPeriodYearField", new TextField("Period Year", "2021"));
-        Whitebox.setInternalState(window, "fundPoolPeriodMonthComboBox", periodMonth);
-        Whitebox.setInternalState(window, "licenseTypeComboBox", licenseType);
-        Whitebox.setInternalState(window, "ldmtCheckBox", ldmtCheckBox);
+    public void testOnConfirmClickedManualValidFields() {
+        window = createPartialMock(CreateAclFundPoolWindow.class, new String[]{"isValid", "close"}, controller);
         expect(window.isValid()).andReturn(true).once();
+        window.close();
+        expectLastCall().once();
+        AclFundPoolCsvProcessor processor = createMock(AclFundPoolCsvProcessor.class);
         expect(controller.getCsvProcessor()).andReturn(processor).once();
+        ProcessingResult<AclFundPoolDetail> processingResult = buildCsvProcessingResult();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(periodMonth.getValue()).andReturn("12").once();
-        expect(licenseType.getValue()).andReturn(ACL).once();
-        expect(ldmtCheckBox.getValue()).andReturn(false).once();
-        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        expect(controller.loadFundPool(buildFundPool(), processingResult.get())).andReturn(1).once();
+        expect(controller.loadManualFundPool(buildFundPool(true), processingResult.get())).andReturn(1).once();
+        expect(controller.isFundPoolExist(FUND_POOL_NAME)).andReturn(false).once();
+        mockStatic(Windows.class);
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
-        replay(window, controller, Windows.class, processor, uploadField, periodMonth, licenseType, ldmtCheckBox);
-        window.manualUpload();
-        verify(window, controller, Windows.class, processor, uploadField, periodMonth, licenseType, ldmtCheckBox);
+        replay(window, controller, processor, Windows.class);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_PERIOD_YEAR_FIELD, PERIOD_YEAR);
+        setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
+        setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
+        ((CheckBox) Whitebox.getInternalState(window, LDMT_CHECK_BOX)).setValue(false);
+        window.onConfirmClickedManual();
+        verify(window, controller, processor, Windows.class);
     }
 
-    private AclFundPool buildFundPool() {
+    @Test
+    public void testOnConfirmClickedLdmtValidFields() {
+        window = createPartialMock(CreateAclFundPoolWindow.class, new String[]{"isValid", "close"}, controller);
+        expect(window.isValid()).andReturn(true).once();
+        window.close();
+        expectLastCall().once();
+        expect(controller.createLdmtFundPool(buildFundPool(false))).andReturn(1).once();
+        expect(controller.isFundPoolExist(FUND_POOL_NAME)).andReturn(false).once();
+        mockStatic(Windows.class);
+        Windows.showNotificationWindow("Creation completed: 1 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(window, controller, Windows.class);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_PERIOD_YEAR_FIELD, PERIOD_YEAR);
+        setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
+        setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
+        ((CheckBox) Whitebox.getInternalState(window, LDMT_CHECK_BOX)).setValue(true);
+        window.onConfirmClickedLdmt();
+        verify(window, controller, Windows.class);
+    }
+
+    private AclFundPool buildFundPool(boolean manualUploadFlag) {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setPeriod(202112);
-        aclFundPool.setName("FP Name");
-        aclFundPool.setLicenseType(ACL);
-        aclFundPool.setManualUploadFlag(true);
+        aclFundPool.setName(FUND_POOL_NAME);
+        aclFundPool.setLicenseType(LICENSE_TYPE);
+        aclFundPool.setManualUploadFlag(manualUploadFlag);
         return aclFundPool;
     }
 

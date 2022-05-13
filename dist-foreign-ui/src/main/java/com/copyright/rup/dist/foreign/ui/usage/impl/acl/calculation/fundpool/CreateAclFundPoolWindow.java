@@ -83,15 +83,26 @@ public class CreateAclFundPoolWindow extends Window {
     }
 
     /**
-     * Handles manual upload.
+     * Initiates LDMT ACL fund pool creating.
      */
-    void manualUpload() {
+    void onConfirmClickedLdmt() {
+        if (isValid()) {
+            int fundPoolDetailsCount = fundPoolController.createLdmtFundPool(buildFundPool());
+            close();
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", fundPoolDetailsCount));
+        }
+    }
+
+    /**
+     * Initiates manual ACL fund pool creating.
+     */
+    void onConfirmClickedManual() {
         if (isValid()) {
             try {
                 AclFundPoolCsvProcessor processor = fundPoolController.getCsvProcessor();
                 ProcessingResult<AclFundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
                 if (result.isSuccessful()) {
-                    int fundPoolDetailsCount = fundPoolController.loadFundPool(buildFundPool(), result.get());
+                    int fundPoolDetailsCount = fundPoolController.loadManualFundPool(buildFundPool(), result.get());
                     close();
                     Windows.showNotificationWindow(
                         ForeignUi.getMessage("message.upload_completed", fundPoolDetailsCount));
@@ -213,10 +224,9 @@ public class CreateAclFundPoolWindow extends Window {
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(event -> {
             if (ldmtCheckBox.getValue()) {
-                //TODO will implemented with B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle - technical
-                close();
+                onConfirmClickedLdmt();
             } else {
-                manualUpload();
+                onConfirmClickedManual();
             }
         });
         HorizontalLayout horizontalLayout = new HorizontalLayout();

@@ -34,10 +34,9 @@ public class AclFundPoolService implements IAclFundPoolService {
 
     @Transactional
     @Override
-    public void insertAclFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
+    public void insertManualAclFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Insert ACL fund pool with manual details. Started. AclFundPool={}, UserName={}", fundPool,
-            userName);
+        LOGGER.info("Insert manual ACL fund pool. Started. AclFundPool={}, UserName={}", fundPool, userName);
         fundPool.setId(RupPersistUtils.generateUuid());
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
@@ -47,22 +46,20 @@ public class AclFundPoolService implements IAclFundPoolService {
             detail.setLicenseType(fundPool.getLicenseType());
         });
         insertAclFundPoolDetails(fundPoolDetails);
-        LOGGER.info("Insert ACL fund pool with manual details. Finished. AclFundPool={}, UserName={}", fundPool,
-            userName);
+        LOGGER.info("Insert manual ACL fund pool. Finished. AclFundPool={}, UserName={}", fundPool, userName);
     }
 
     @Transactional
     @Override
-    public int insertAclFundPoolWithLdmtDetails(AclFundPool fundPool) {
+    public int insertLdmtAclFundPool(AclFundPool fundPool) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Insert ACL fund pool with LDMT details. Started. AclFundPool={}, UserName={}", fundPool, userName);
+        LOGGER.info("Insert LDMT ACL fund pool. Started. AclFundPool={}, UserName={}", fundPool, userName);
         fundPool.setId(RupPersistUtils.generateUuid());
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
         fundPoolRepository.insert(fundPool);
         int count = fundPoolRepository.addLdmtDetailsToFundPool(fundPool.getId(), fundPool.getLicenseType(), userName);
-        LOGGER.info("Insert ACL fund pool with LDMT details. Finished. AclFundPool={}, UserName={}", fundPool,
-            userName);
+        LOGGER.info("Insert LDMT ACL fund pool. Finished. AclFundPool={}, UserName={}", fundPool, userName);
         return count;
     }
 

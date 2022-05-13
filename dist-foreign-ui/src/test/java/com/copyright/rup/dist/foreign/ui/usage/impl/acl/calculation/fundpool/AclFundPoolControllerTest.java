@@ -72,11 +72,22 @@ public class AclFundPoolControllerTest {
     }
 
     @Test
-    public void testLoadFundPool() {
-        fundPoolService.insertAclFundPool(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
+    public void testLoadManualFundPool() {
+        AclFundPool fundPool = buildFundPool(true);
+        fundPoolService.insertManualAclFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
         expectLastCall().once();
         replay(fundPoolService);
-        int count = controller.loadFundPool(buildFundPool(), Collections.singletonList(buildFundPoolDetail()));
+        int count = controller.loadManualFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
+        assertEquals(1, count);
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testCreateLdmtFundPool() {
+        AclFundPool fundPool = buildFundPool(false);
+        expect(fundPoolService.insertLdmtAclFundPool(fundPool)).andReturn(1).once();
+        replay(fundPoolService);
+        int count = controller.createLdmtFundPool(fundPool);
         assertEquals(1, count);
         verify(fundPoolService);
     }
@@ -89,11 +100,11 @@ public class AclFundPoolControllerTest {
         return aclFundPoolDetail;
     }
 
-    private AclFundPool buildFundPool() {
+    private AclFundPool buildFundPool(boolean manualUploadFlag) {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setName("Fund Pool Name");
-        aclFundPool.setManualUploadFlag(true);
         aclFundPool.setLicenseType("ACL");
+        aclFundPool.setManualUploadFlag(manualUploadFlag);
         return aclFundPool;
     }
 }
