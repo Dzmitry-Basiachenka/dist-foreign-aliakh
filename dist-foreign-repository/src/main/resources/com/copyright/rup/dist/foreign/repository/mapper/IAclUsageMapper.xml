@@ -24,6 +24,7 @@
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
+        <result property="editable" column="is_editable"/>
     </resultMap>
 
     <sql id="aclUsageColumns">
@@ -64,6 +65,7 @@
         content_unit_price,
         type_of_use,
         annualized_copies,
+        is_editable,
         u.created_datetime,
         u.updated_datetime,
         u.created_by_user,
@@ -289,6 +291,7 @@
         select
             <include refid="IAclUsageMapper.aclUsageDtoColumns"/>
         from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
