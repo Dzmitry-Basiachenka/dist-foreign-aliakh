@@ -17,12 +17,20 @@ import java.util.List;
 public interface IAclFundPoolService {
 
     /**
-     * Inserts ACL fund pool.
+     * Inserts ACL fund pool with manual details.
      *
      * @param fundPool        instance of {@link AclFundPool}
      * @param fundPoolDetails instance of {@link AclFundPoolDetail}
      */
     void insertAclFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails);
+
+    /**
+     * Inserts ACL fund pool and adds unused LDMT details to it.
+     *
+     * @param fundPool instance of {@link AclFundPool}
+     * @return count of added details
+     */
+    int insertAclFundPoolWithLdmtDetails(AclFundPool fundPool);
 
     /**
      * Inserts ACL fund pool details.
