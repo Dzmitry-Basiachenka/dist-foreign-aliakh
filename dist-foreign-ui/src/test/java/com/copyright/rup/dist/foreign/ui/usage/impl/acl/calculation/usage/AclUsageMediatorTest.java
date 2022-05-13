@@ -8,7 +8,10 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.security.SecurityUtils;
+
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,12 +34,14 @@ public class AclUsageMediatorTest {
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
 
     private final MenuBar aclUsageBatchMenuBar = new MenuBar();
+    private final Button editButton = new Button("Edit");
     private AclUsageMediator mediator;
 
     @Before
     public void setUp() {
         mediator = new AclUsageMediator();
         mediator.setAclUsageBatchMenuBar(aclUsageBatchMenuBar);
+        mediator.setEditButton(editButton);
     }
 
     @Test
@@ -46,6 +51,7 @@ public class AclUsageMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(aclUsageBatchMenuBar.isVisible());
+        assertTrue(editButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -56,6 +62,7 @@ public class AclUsageMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(aclUsageBatchMenuBar.isVisible());
+        assertFalse(editButton.isVisible());
         verify(SecurityUtils.class);
     }
 }

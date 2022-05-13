@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
+
+import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
 
 /**
@@ -16,13 +18,20 @@ import com.vaadin.ui.MenuBar;
 public class AclUsageMediator implements IMediator {
 
     private MenuBar aclUsageBatchMenuBar;
+    private Button editButton;
 
     @Override
     public void applyPermissions() {
-        aclUsageBatchMenuBar.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
+        aclUsageBatchMenuBar.setVisible(isSpecialist);
+        editButton.setVisible(isSpecialist);
     }
 
     public void setAclUsageBatchMenuBar(MenuBar aclUsageBatchMenuBar) {
         this.aclUsageBatchMenuBar = aclUsageBatchMenuBar;
+    }
+
+    public void setEditButton(Button editButton) {
+        this.editButton = editButton;
     }
 }
