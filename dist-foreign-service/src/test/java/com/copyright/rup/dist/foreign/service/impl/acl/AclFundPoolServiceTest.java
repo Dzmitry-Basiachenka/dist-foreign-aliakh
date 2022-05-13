@@ -4,6 +4,9 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -12,6 +15,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclFundPoolRepository;
 
 import org.junit.Before;
@@ -23,6 +28,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclFundPoolService}.
@@ -90,6 +96,24 @@ public class AclFundPoolServiceTest {
         replay(RupContextUtils.class, fundPoolRepository);
         service.insertAclFundPoolDetails(Collections.singletonList(fundPoolDetail));
         verify(RupContextUtils.class, fundPoolRepository);
+    }
+
+    @Test
+    public void testGetDtos() {
+        List<AclFundPoolDetailDto> fundPoolDetails = Collections.singletonList(new AclFundPoolDetailDto());
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        filter.setLicenseType("ACL");
+        expect(fundPoolRepository.findDtosByFilter(filter)).andReturn(fundPoolDetails).once();
+        replay(fundPoolRepository);
+        assertSame(fundPoolDetails, service.getDtosByFilter(filter));
+        verify(fundPoolRepository);
+    }
+
+    @Test
+    public void testGetDtosEmptyFilter() {
+        List<AclFundPoolDetailDto> result = service.getDtosByFilter(new AclFundPoolDetailFilter());
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     private AclFundPoolDetail buildFundPoolDetail() {

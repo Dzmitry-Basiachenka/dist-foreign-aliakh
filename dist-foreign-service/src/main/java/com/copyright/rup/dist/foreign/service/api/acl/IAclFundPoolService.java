@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 
 import java.util.List;
 
@@ -46,4 +48,12 @@ public interface IAclFundPoolService {
      * @return {@code true} - if fund pool exists, {@code false} - otherwise
      */
     boolean fundPoolExists(String name);
+
+    /**
+     * Gets list of {@link AclFundPoolDetailDto}s by specified filter.
+     *
+     * @param filter applied {@link AclFundPoolDetailFilter}
+     * @return list of {@link AclFundPoolDetailDto}s
+     */
+    List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter);
 }

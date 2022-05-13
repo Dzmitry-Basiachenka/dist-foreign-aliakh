@@ -94,7 +94,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
             appliedFilterWidget);
         setExpandRatio(appliedFilterWidget, 1f);
         licenseTypeComboBox.setItems("ACL", "VGW", "JACDCL", "MACL");
-        fundPoolTypeComboBox.setItems("Print", "Digital");
+        fundPoolTypeComboBox.setItems("PRINT", "DIGITAL");
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-fund-pool-widget");
         return this;
