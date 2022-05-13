@@ -78,7 +78,7 @@ public class AclFundPoolNameFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<AclFundPool, List<String>>> providerCapture = newCapture();
-        expect(Windows.showFilterWindow(eq("Fund Pool Name filter"), same(aclFundPoolNameFilterWidget),
+        expect(Windows.showFilterWindow(eq("Fund Pool Names filter"), same(aclFundPoolNameFilterWidget),
             capture(providerCapture))).andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(Collections.emptySet());
         expectLastCall().once();

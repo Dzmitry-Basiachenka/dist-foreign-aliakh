@@ -43,8 +43,9 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
     private PeriodFilterWidget periodFilterWidget;
     private AggregateLicenseeClassFilterWidget aggregateLicenseeClassFilterWidget;
     private DetailLicenseeClassFilterWidget detailLicenseeClassFilterWidget;
-    private ComboBox<String> licenseTypesComboBox;
+    private ComboBox<String> licenseTypeComboBox;
     private ComboBox<String> fundPoolTypeComboBox;
+    private final AclFundPoolAppliedFilterWidget appliedFilterWidget;
 
     /**
      * Constructor.
@@ -53,6 +54,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
      */
     public AclFundPoolFilterWidget(IAclFundPoolFilterController controller) {
         this.controller = controller;
+        appliedFilterWidget = new AclFundPoolAppliedFilterWidget();
     }
 
     @Override
@@ -68,6 +70,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
     @Override
     public void applyFilter() {
         appliedAclFundPoolDetailFilter = new AclFundPoolDetailFilter(aclFundPoolDetailFilter);
+        appliedFilterWidget.refreshFilterPanel(appliedAclFundPoolDetailFilter);
         filterChanged();
         fireEvent(new FilterChangedEvent(this));
     }
@@ -78,7 +81,7 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
         periodFilterWidget.reset();
         aggregateLicenseeClassFilterWidget.reset();
         detailLicenseeClassFilterWidget.reset();
-        licenseTypesComboBox.clear();
+        licenseTypeComboBox.clear();
         fundPoolTypeComboBox.clear();
         aclFundPoolDetailFilter = new AclFundPoolDetailFilter();
         applyFilter();
@@ -87,8 +90,10 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
     @Override
     @SuppressWarnings("unchecked")
     public AclFundPoolFilterWidget init() {
-        addComponents(initFiltersLayout(), initButtonsLayout());
-        licenseTypesComboBox.setItems("ACL", "VGW", "JACDCL", "MACL");
+        addComponents(initFiltersLayout(), initButtonsLayout(),  buildAppliedFiltersHeaderLabel(),
+            appliedFilterWidget);
+        setExpandRatio(appliedFilterWidget, 1f);
+        licenseTypeComboBox.setItems("ACL", "VGW", "JACDCL", "MACL");
         fundPoolTypeComboBox.setItems("Print", "Digital");
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-fund-pool-widget");
@@ -101,11 +106,11 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
     }
 
     private VerticalLayout initFiltersLayout() {
-        initLicenseTypesFilter();
+        initLicenseTypeFilter();
         initFundPoolTypeFilter();
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildFundPoolNamesFilter(),
             buildPeriodFilter(), buildAggregateLicenseeClassFilter(), buildDetailLicenseeClassFilter(),
-            licenseTypesComboBox, fundPoolTypeComboBox);
+            licenseTypeComboBox, fundPoolTypeComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
@@ -153,14 +158,14 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
         return detailLicenseeClassFilterWidget;
     }
 
-    private void initLicenseTypesFilter() {
-        licenseTypesComboBox = new ComboBox<>(ForeignUi.getMessage("label.license_types"));
-        VaadinUtils.setMaxComponentsWidth(licenseTypesComboBox);
-        licenseTypesComboBox.addValueChangeListener(event -> {
-            aclFundPoolDetailFilter.setLicenseType(licenseTypesComboBox.getValue());
+    private void initLicenseTypeFilter() {
+        licenseTypeComboBox = new ComboBox<>(ForeignUi.getMessage("label.license_type"));
+        VaadinUtils.setMaxComponentsWidth(licenseTypeComboBox);
+        licenseTypeComboBox.addValueChangeListener(event -> {
+            aclFundPoolDetailFilter.setLicenseType(licenseTypeComboBox.getValue());
             filterChanged();
         });
-        VaadinUtils.addComponentStyle(licenseTypesComboBox, "acl-license-types-filter");
+        VaadinUtils.addComponentStyle(licenseTypeComboBox, "acl-license-types-filter");
     }
 
     private void initFundPoolTypeFilter() {
@@ -193,5 +198,11 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private Label buildAppliedFiltersHeaderLabel() {
+        Label appliedFilterHeaderLabel = new Label(ForeignUi.getMessage("label.applied_filters"));
+        appliedFilterHeaderLabel.addStyleNames(Cornerstone.LABEL_H2, "acl-applied-filter-header");
+        return appliedFilterHeaderLabel;
     }
 }
