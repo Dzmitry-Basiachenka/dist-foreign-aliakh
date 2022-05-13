@@ -43,13 +43,21 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
     AclFundPoolCsvProcessor getCsvProcessor();
 
     /**
-     * Inserts ACL fund pool and ACL fund pool details.
+     * Inserts manual ACL fund pool and ACL fund pool details.
      *
      * @param fundPool        {@link AclFundPool} instance
      * @param fundPoolDetails list of {@link AclFundPoolDetail}s
      * @return count of inserted usages
      */
-    int loadFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails);
+    int loadManualFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails);
+
+    /**
+     * Creates LDMT ACL fund pool and adds unused ACL fund pool details to it.
+     *
+     * @param fundPool {@link AclFundPool} instance
+     * @return count of added usages
+     */
+    int createLdmtFundPool(AclFundPool fundPool);
 
     /**
      * Return instance of {@link IStreamSource} for errors result.

@@ -49,7 +49,7 @@ public class AclFundPoolServiceTest {
     }
 
     @Test
-    public void testInsertAclFundPool() {
+    public void testInsertManualAclFundPool() {
         mockStatic(RupContextUtils.class);
         AclFundPool fundPool = buildFundPool();
         AclFundPoolDetail fundPoolDetail = buildFundPoolDetail();
@@ -59,12 +59,12 @@ public class AclFundPoolServiceTest {
         fundPoolRepository.insertDetail(fundPoolDetail);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository);
-        service.insertAclFundPool(fundPool, Collections.singletonList(fundPoolDetail));
+        service.insertManualAclFundPool(fundPool, Collections.singletonList(fundPoolDetail));
         verify(RupContextUtils.class, fundPoolRepository);
     }
 
     @Test
-    public void testInsertAclFundPoolWithLdmtDetails() {
+    public void testInsertLdmtAclFundPool() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         mockStatic(RupPersistUtils.class);
@@ -76,7 +76,7 @@ public class AclFundPoolServiceTest {
         expect(fundPoolRepository.addLdmtDetailsToFundPool(id, fundPool.getLicenseType(), USER_NAME))
             .andReturn(1).once();
         replay(RupContextUtils.class, RupPersistUtils.class, fundPoolRepository);
-        assertEquals(1, service.insertAclFundPoolWithLdmtDetails(fundPool));
+        assertEquals(1, service.insertLdmtAclFundPool(fundPool));
         verify(RupContextUtils.class, RupPersistUtils.class, fundPoolRepository);
     }
 

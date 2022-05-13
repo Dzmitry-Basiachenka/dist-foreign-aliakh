@@ -61,9 +61,14 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     }
 
     @Override
-    public int loadFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
-        fundPoolService.insertAclFundPool(fundPool, fundPoolDetails);
+    public int loadManualFundPool(AclFundPool fundPool, List<AclFundPoolDetail> fundPoolDetails) {
+        fundPoolService.insertManualAclFundPool(fundPool, fundPoolDetails);
         return fundPoolDetails.size();
+    }
+
+    @Override
+    public int createLdmtFundPool(AclFundPool fundPool) {
+        return fundPoolService.insertLdmtAclFundPool(fundPool);
     }
 
     @Override
