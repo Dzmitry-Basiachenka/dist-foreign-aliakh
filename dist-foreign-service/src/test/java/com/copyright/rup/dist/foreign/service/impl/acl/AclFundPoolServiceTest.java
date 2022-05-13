@@ -3,10 +3,12 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
@@ -32,7 +34,7 @@ import java.util.Collections;
  * @author Anton Azarenka
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class AclFundPoolServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
@@ -47,7 +49,7 @@ public class AclFundPoolServiceTest {
     }
 
     @Test
-    public void testInsert() {
+    public void testInsertAclFundPool() {
         mockStatic(RupContextUtils.class);
         AclFundPool fundPool = buildFundPool();
         AclFundPoolDetail fundPoolDetail = buildFundPoolDetail();
@@ -59,6 +61,23 @@ public class AclFundPoolServiceTest {
         replay(RupContextUtils.class, fundPoolRepository);
         service.insertAclFundPool(fundPool, Collections.singletonList(fundPoolDetail));
         verify(RupContextUtils.class, fundPoolRepository);
+    }
+
+    @Test
+    public void testInsertAclFundPoolWithLdmtDetails() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        mockStatic(RupPersistUtils.class);
+        String id = "b56e607d-5611-45cf-ba36-d421b9a8674c";
+        expect(RupPersistUtils.generateUuid()).andReturn(id).once();
+        AclFundPool fundPool = buildFundPool();
+        fundPoolRepository.insert(fundPool);
+        expectLastCall().once();
+        expect(fundPoolRepository.addLdmtDetailsToFundPool(id, fundPool.getLicenseType(), USER_NAME))
+            .andReturn(1).once();
+        replay(RupContextUtils.class, RupPersistUtils.class, fundPoolRepository);
+        assertEquals(1, service.insertAclFundPoolWithLdmtDetails(fundPool));
+        verify(RupContextUtils.class, RupPersistUtils.class, fundPoolRepository);
     }
 
     @Test
