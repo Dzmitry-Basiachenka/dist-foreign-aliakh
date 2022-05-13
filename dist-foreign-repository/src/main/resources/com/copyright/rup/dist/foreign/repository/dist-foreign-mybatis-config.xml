@@ -98,6 +98,7 @@
         <typeAlias alias="UdmAssigneeStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.UdmAssigneeStatusReportDto"/>
         <typeAlias alias="AclFundPool" type="com.copyright.rup.dist.foreign.domain.AclFundPool"/>
         <typeAlias alias="AclFundPoolDetail" type="com.copyright.rup.dist.foreign.domain.AclFundPoolDetail"/>
+        <typeAlias alias="AclFundPoolDetailDto" type="com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto"/>
     </typeAliases>
 
     <typeHandlers>

@@ -53,13 +53,6 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         return selectList("IAclGrantDetailMapper.findDtosByFilter", parameters);
     }
 
-    private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {
-        AclGrantDetailFilter filterCopy = new AclGrantDetailFilter(aclGrantDetailFilter);
-        filterCopy.setRhNameExpression(
-            escapePropertyForMyBatisSqlFragment(filterCopy.getRhNameExpression()));
-        return filterCopy;
-    }
-
     @Override
     public void updateGrant(AclGrantDetailDto grant) {
         update("IAclGrantDetailMapper.update", Objects.requireNonNull(grant));
@@ -82,5 +75,12 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         parameters.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
         parameters.put("typeOfUse", Objects.requireNonNull(typeOfUse));
         return selectOne("IAclGrantDetailMapper.isGrantDetailExist", parameters);
+    }
+
+    private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {
+        AclGrantDetailFilter filterCopy = new AclGrantDetailFilter(aclGrantDetailFilter);
+        filterCopy.setRhNameExpression(
+            escapePropertyForMyBatisSqlFragment(filterCopy.getRhNameExpression()));
+        return filterCopy;
     }
 }

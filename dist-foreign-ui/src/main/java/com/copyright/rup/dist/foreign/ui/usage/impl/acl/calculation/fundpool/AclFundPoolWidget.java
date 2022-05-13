@@ -87,7 +87,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
         addColumn(AclFundPoolDetailDto::getFundPoolName, "table.column.fund_pool_name", "fundPoolName", 250);
         addColumn(AclFundPoolDetailDto::getPeriod, "table.column.period", "period", 100);
         addColumn(AclFundPoolDetailDto::getLicenseType, "table.column.license_type", "licenseType", 100);
-        addColumn(AclFundPoolDetailDto::getSource, "table.column.source", "source", 100);
+        addColumn(detail -> detail.isLdmtFlag() ? "LDMT" : "Manual", "table.column.source", "source", 100);
         addColumn(detail -> detail.getDetailLicenseeClass().getId(), "table.column.det_lc_id", "detailLicenseeClassId",
             150);
         addColumn(detail -> detail.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name",

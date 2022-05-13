@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 
 import java.util.List;
 
@@ -45,6 +47,14 @@ public interface IAclFundPoolRepository {
      * @param detail instance of {@link AclFundPoolDetail}
      */
     void insertDetail(AclFundPoolDetail detail);
+
+    /**
+     * Finds list of {@link AclFundPoolDetailDto}s based on applied filter.
+     *
+     * @param filter instance of {@link AclFundPoolDetailFilter}
+     * @return list of {@link AclFundPoolDetailDto}s
+     */
+    List<AclFundPoolDetailDto> findDtosByFilter(AclFundPoolDetailFilter filter);
 
     /**
      * Finds {@link AclFundPoolDetail}s by {@link AclFundPool} id.

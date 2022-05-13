@@ -2,9 +2,12 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclFundPoolRepository;
 
 import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -41,6 +44,13 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     @Override
     public void insertDetail(AclFundPoolDetail detail) {
         insert("IAclFundPoolMapper.insertDetail", Objects.requireNonNull(detail));
+    }
+
+    @Override
+    public List<AclFundPoolDetailDto> findDtosByFilter(AclFundPoolDetailFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        return selectList("IAclFundPoolMapper.findDtosByFilter", parameters);
     }
 
     @Override
