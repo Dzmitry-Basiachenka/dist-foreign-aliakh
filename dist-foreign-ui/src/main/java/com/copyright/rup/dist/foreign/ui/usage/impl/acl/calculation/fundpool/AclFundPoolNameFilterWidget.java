@@ -40,7 +40,7 @@ public class AclFundPoolNameFilterWidget extends BaseItemsFilterWidget<AclFundPo
      * @param supplier {@link AclFundPool}s supplier
      */
     public AclFundPoolNameFilterWidget(Supplier<List<AclFundPool>> supplier) {
-        super(ForeignUi.getMessage("label.fund_pool.name"));
+        super(ForeignUi.getMessage("label.fund_pool.names"));
         this.supplier = supplier;
     }
 
@@ -77,7 +77,7 @@ public class AclFundPoolNameFilterWidget extends BaseItemsFilterWidget<AclFundPo
     @Override
     public FilterWindow<AclFundPool> showFilterWindow() {
         FilterWindow<AclFundPool> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.fund_pool_name_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage("window.fund_pool_names_filter"), this,
                 (ValueProvider<AclFundPool, List<String>>) bean -> Collections.singletonList(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSelectAllButtonVisible();
