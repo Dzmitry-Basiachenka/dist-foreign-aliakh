@@ -5,6 +5,8 @@ import com.copyright.rup.dist.common.integration.camel.ValidationException;
 import com.copyright.rup.dist.foreign.domain.LdmtDetail;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementation of {@link IValidator} to perform validation for {@link LdmtDetail}s.
@@ -25,7 +28,6 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-// TODO verify duplicated (Detail Licensee Class Id, Type of Use) pairs
 @Component("df.service.ldmtDetailsValidator")
 public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
 
@@ -44,12 +46,15 @@ public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
                 indexToErrors.put(i, errors);
             }
         }
-        if (!indexToErrors.isEmpty()) {
-            throw new ValidationException(indexToErrors
-                .entrySet()
-                .stream()
-                .map(entry -> String.format("LDMT detail #%d is not valid: %s", entry.getKey(), entry.getValue()))
-                .collect(Collectors.joining("\n")));
+        DuplicatesProcessor processor = new DuplicatesProcessor(ldmtDetails);
+        if (!indexToErrors.isEmpty() || processor.hasDuplicates()) {
+            throw new ValidationException(Stream.concat(
+                indexToErrors
+                    .entrySet()
+                    .stream()
+                    .map(entry -> String.format("LDMT detail #%d is not valid: %s", entry.getKey(), entry.getValue())),
+                processor.getErrorStream()
+            ).collect(Collectors.joining("; ")));
         }
     }
 
@@ -85,5 +90,41 @@ public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
 
     private int getDigitsCount(BigDecimal value) {
         return value.signum() == 0 ? 1 : value.precision() - value.scale();
+    }
+
+    /**
+     * Processor to find duplicate Detail Licensee Class Id, Type of Use pairs in the list of {@link LdmtDetail}s.
+     */
+    private static class DuplicatesProcessor {
+
+        private final List<LdmtDetail> ldmtDetails;
+        private final Map<Pair<Integer, String>, Integer> pairToCounts = new LinkedHashMap<>();
+
+        DuplicatesProcessor(List<LdmtDetail> ldmtDetails) {
+            this.ldmtDetails = ldmtDetails;
+            for (LdmtDetail ldmtDetail : ldmtDetails) {
+                Pair<Integer, String> pair =
+                    new ImmutablePair<>(ldmtDetail.getDetailLicenseeClassId(), ldmtDetail.getTypeOfUse());
+                pairToCounts.putIfAbsent(pair, 0);
+                pairToCounts.put(pair, pairToCounts.get(pair) + 1);
+            }
+        }
+
+        private boolean hasDuplicates() {
+            return ldmtDetails.size() != pairToCounts.size();
+        }
+
+        private String getErrorMessage() {
+            return "LDMT details contain duplicate Detail Licensee Class Id, Type of Use pairs: " +
+                pairToCounts.entrySet()
+                    .stream()
+                    .filter(entry -> entry.getValue() > 1)
+                    .map(entry -> String.format("(%s, %s)", entry.getKey().getKey(), entry.getKey().getValue()))
+                    .collect(Collectors.joining(", "));
+        }
+
+        private Stream<String> getErrorStream() {
+            return hasDuplicates() ? Stream.of(getErrorMessage()) : Stream.of();
+        }
     }
 }

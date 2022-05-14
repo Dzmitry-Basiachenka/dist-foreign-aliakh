@@ -65,7 +65,7 @@ public class LdmtDetailsJsonValidator {
                 .entrySet()
                 .stream()
                 .map(entry -> String.format("LDMT detail #%d is not valid: %s", entry.getKey(), entry.getValue()))
-                .collect(Collectors.joining("\n")));
+                .collect(Collectors.joining("; ")));
         }
     }
 
