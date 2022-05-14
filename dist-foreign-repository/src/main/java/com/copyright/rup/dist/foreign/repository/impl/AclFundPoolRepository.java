@@ -66,4 +66,14 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
         parameters.put("updateUser", Objects.requireNonNull(userName));
         return selectOne("IAclFundPoolMapper.addLdmtDetailsToFundPool", parameters);
     }
+
+    @Override
+    public List<AclFundPool> findAll() {
+        return selectList("IAclFundPoolMapper.findAllFundPools");
+    }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IAclFundPoolMapper.findPeriods");
+    }
 }

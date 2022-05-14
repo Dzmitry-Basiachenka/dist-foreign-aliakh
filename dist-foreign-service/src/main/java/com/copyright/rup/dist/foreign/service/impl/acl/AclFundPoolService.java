@@ -85,4 +85,14 @@ public class AclFundPoolService implements IAclFundPoolService {
     public List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter) {
         return !filter.isEmpty() ? fundPoolRepository.findDtosByFilter(filter) : Collections.emptyList();
     }
+
+    @Override
+    public List<AclFundPool> getAll() {
+        return fundPoolRepository.findAll();
+    }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return fundPoolRepository.findPeriods();
+    }
 }

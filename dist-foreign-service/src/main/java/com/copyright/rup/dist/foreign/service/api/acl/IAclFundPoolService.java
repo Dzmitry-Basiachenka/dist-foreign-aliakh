@@ -56,4 +56,18 @@ public interface IAclFundPoolService {
      * @return list of {@link AclFundPoolDetailDto}s
      */
     List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter);
+
+    /**
+     * Gets all ACL fund pools.
+     *
+     * @return list of all {@link AclFundPool}s
+     */
+    List<AclFundPool> getAll();
+
+    /**
+     * Gets all available periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }

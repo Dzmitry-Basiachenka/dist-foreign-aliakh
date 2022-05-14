@@ -73,4 +73,18 @@ public interface IAclFundPoolRepository {
      * @return count of added details
      */
     int addLdmtDetailsToFundPool(String fundPoolId, String licenseType, String userName);
+
+    /**
+     * Finds list of all ACL fund pools.
+     *
+     * @return list of all {@link AclFundPool}s
+     */
+    List<AclFundPool> findAll();
+
+    /**
+     * Finds list of periods from ACL fund pool.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 }

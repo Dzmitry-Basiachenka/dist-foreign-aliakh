@@ -19,6 +19,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,6 +44,7 @@ public class AclFundPoolRepositoryIntegrationTest {
     private static final String ACL_FUND_POOL_ID = "97efb29e-dac7-4dd9-9942-1508853b8625";
     private static final String ACL_FUND_POOL_NAME = "ACL Fund Pool 2021";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String LICENSE_TYPE = "ACL";
 
     @Autowired
     private AclFundPoolRepository repository;
@@ -96,13 +98,35 @@ public class AclFundPoolRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "add-ldmt-details-to-fund-pool.groovy")
     public void testAddLdmtDetailsToFundPool() {
         String fundPoolId = "39edbdfd-d732-4a78-9ecd-6a756c9f5b93";
-        assertEquals(1, repository.addLdmtDetailsToFundPool(fundPoolId, "ACL", USER_NAME));
+        assertEquals(1, repository.addLdmtDetailsToFundPool(fundPoolId, LICENSE_TYPE, USER_NAME));
         List<AclFundPoolDetail> fundPoolDetails = repository.findDetailsByFundPoolId(fundPoolId);
         assertEquals(1, fundPoolDetails.size());
         AclFundPoolDetail fundPoolDetail = fundPoolDetails.get(0);
         assertNotNull(fundPoolDetail);
         assertEquals("b2f01b15-2193-4d91-ae5b-0834452e4788", fundPoolDetail.getId());
         assertEquals(fundPoolId, fundPoolDetail.getFundPoolId());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    public void testFindAll() {
+        AclFundPool aclFundPool1 = buildAclFundPool("2d46b574-c1f3-4322-8b45-e322574bf057",
+            "ACL Fund Pool 202212", 202212, LICENSE_TYPE, true);
+        AclFundPool aclFundPool2 = buildAclFundPool("037a9464-fec3-43a2-a71e-711c620100d7",
+            "ACL Fund Pool 202206", 202206, "MACL", true);
+        List<AclFundPool> fundPools = repository.findAll();
+        assertEquals(2, fundPools.size());
+        verifyAclFundPool(aclFundPool1, fundPools.get(0));
+        verifyAclFundPool(aclFundPool2, fundPools.get(1));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
+    public void testFindPeriods() {
+        List<Integer> expectedPeriods = Arrays.asList(202212, 202206);
+        List<Integer> actualPeriods = repository.findPeriods();
+        assertFalse(actualPeriods.isEmpty());
+        assertEquals(expectedPeriods, actualPeriods);
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
@@ -114,11 +138,22 @@ public class AclFundPoolRepositoryIntegrationTest {
         detailLicenseeClass.setDescription("Fuels");
         aclFundPoolDetail.setDetailLicenseeClass(detailLicenseeClass);
         aclFundPoolDetail.setTypeOfUse("PRINT");
-        aclFundPoolDetail.setLicenseType("ACL");
+        aclFundPoolDetail.setLicenseType(LICENSE_TYPE);
         aclFundPoolDetail.setNetAmount(new BigDecimal("32.00"));
         aclFundPoolDetail.setGrossAmount(new BigDecimal("50.00"));
         aclFundPoolDetail.setLdmtFlag(false);
         return aclFundPoolDetail;
+    }
+
+    private AclFundPool buildAclFundPool(String id, String name, Integer period, String licenseType,
+                                         boolean manualUploadFlag) {
+        AclFundPool aclFundPool = new AclFundPool();
+        aclFundPool.setId(id);
+        aclFundPool.setName(name);
+        aclFundPool.setPeriod(period);
+        aclFundPool.setLicenseType(licenseType);
+        aclFundPool.setManualUploadFlag(manualUploadFlag);
+        return aclFundPool;
     }
 
     private AclFundPool buildAclFundPool() {
@@ -126,8 +161,18 @@ public class AclFundPoolRepositoryIntegrationTest {
         aclFundPool.setId(ACL_FUND_POOL_ID);
         aclFundPool.setName(ACL_FUND_POOL_NAME);
         aclFundPool.setPeriod(202106);
-        aclFundPool.setLicenseType("ACL");
+        aclFundPool.setLicenseType(LICENSE_TYPE);
         aclFundPool.setManualUploadFlag(true);
         return aclFundPool;
+    }
+
+    private void verifyAclFundPool(AclFundPool expectedFundPool, AclFundPool actualFundPool) {
+        assertNotNull(actualFundPool);
+        assertEquals(expectedFundPool.getId(), actualFundPool.getId());
+        assertEquals(expectedFundPool.getName(), actualFundPool.getName());
+        assertEquals(expectedFundPool.getPeriod(), actualFundPool.getPeriod());
+        assertEquals(expectedFundPool.getLicenseType(), actualFundPool.getLicenseType());
+        assertEquals(expectedFundPool.isManualUploadFlag(), actualFundPool.isManualUploadFlag());
+        assertEquals(expectedFundPool, actualFundPool);
     }
 }
