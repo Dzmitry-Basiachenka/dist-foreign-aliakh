@@ -2,15 +2,18 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
@@ -18,6 +21,9 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
@@ -33,7 +39,11 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RupContextUtils.class)
 public class AclUsageServiceTest {
+
+    private static final String USER_NAME = "user@copyright.com";
 
     private IAclUsageService aclUsageService;
     private IAclUsageRepository aclUsageRepository;
@@ -55,6 +65,19 @@ public class AclUsageServiceTest {
         replay(aclUsageRepository);
         assertEquals(usageIds.size(), aclUsageService.populateAclUsages(usageBatchId, periods, userName));
         verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testUpdateUsages() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        AclUsageDto aclUsageDto = new AclUsageDto();
+        aclUsageRepository.update(aclUsageDto);
+        expectLastCall().once();
+        replay(aclUsageRepository, RupContextUtils.class);
+        aclUsageService.updateUsages(Collections.singleton(aclUsageDto));
+        assertEquals(USER_NAME, aclUsageDto.getUpdateUser());
+        verify(aclUsageRepository, RupContextUtils.class);
     }
 
     @Test

@@ -39,6 +39,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     }
 
     @Override
+    public void update(AclUsageDto aclUsageDto) {
+        //TODO {dbasiachenka} implement
+    }
+
+    @Override
     public List<AclUsageDto> findByIds(List<String> usageIds) {
         return selectList("IAclUsageMapper.findByIds", Objects.requireNonNull(usageIds));
     }

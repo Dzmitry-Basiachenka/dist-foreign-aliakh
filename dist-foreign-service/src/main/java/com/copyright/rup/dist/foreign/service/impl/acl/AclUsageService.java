@@ -1,15 +1,20 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -26,12 +31,26 @@ import java.util.Set;
 @Service
 public class AclUsageService implements IAclUsageService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IAclUsageRepository aclUsageRepository;
 
     @Override
     public int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName) {
         return aclUsageRepository.populateAclUsages(usageBatchId, periods, userName).size();
+    }
+
+    @Transactional
+    @Override
+    public void updateUsages(Collection<AclUsageDto> aclUsageDtos) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.debug("Update ACL usages. Started. UsagesCount={}, UserName={}", aclUsageDtos.size(), userName);
+        aclUsageDtos.forEach(aclUsageDto -> {
+            aclUsageDto.setUpdateUser(userName);
+            aclUsageRepository.update(aclUsageDto);
+        });
+        LOGGER.debug("Update ACL usages. Finished. UsagesCount={}, UserName={}", aclUsageDtos.size(), userName);
     }
 
     @Override

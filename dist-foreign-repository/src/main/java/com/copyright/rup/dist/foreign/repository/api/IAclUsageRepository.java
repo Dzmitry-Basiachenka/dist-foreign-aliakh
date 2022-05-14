@@ -30,6 +30,13 @@ public interface IAclUsageRepository {
     List<String> populateAclUsages(String usageBatchId, Set<Integer> periods, String userName);
 
     /**
+     * Updates ACL usage.
+     *
+     * @param aclUsageDto instance of {@link AclUsageDto}
+     */
+    void update(AclUsageDto aclUsageDto);
+
+    /**
      * Finds ACL usages by their ids.
      *
      * @param usageIds list of ids of ACL usages
