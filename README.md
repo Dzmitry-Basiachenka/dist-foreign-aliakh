@@ -1,3 +1,24 @@
+5.1.21
+-
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Liquibase script
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: update domain objects
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement messages deserializer and unmarshaller
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement messages consumer
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Camel configuration
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement repository to create LDMT fund pools
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Camel configuration
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement service to create LDMT fund pools
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: update widget to create LDMT fund pools
+* B-72784 FDA&ACL: View Fund Pool details & Export: implement fund pool details UI grid
+* B-72784 FDA&ACL: View Fund Pool details & Export: implement AclFundPoolFilter domain object
+* B-72784 FDA&ACL: View Fund Pool details & Export: implement backend logic to retrieve data based on applied filters
+* B-72784 FDA&ACL: View Fund Pool details & Export: add service logic to apply filters to get data
+* B-69895 FDA: Usage batch edits: implement edit usage window
+* B-69895 FDA: Usage batch edits: add editable field to ACL usage dto object
+* B-69895 FDA: Usage batch edits: add Edit button and multi selection mode on Usages tab
+* B-72983 FDA: Fund Pool filters: implement UI Part of filters
+* B-72983 FDA: Fund Pool filters: implement applied filter widget and rename filters
+
 5.1.20
 -
 * B-72774 FDA: Tech Debt: update amount validator to allow up to 10 digits after the decimal point
