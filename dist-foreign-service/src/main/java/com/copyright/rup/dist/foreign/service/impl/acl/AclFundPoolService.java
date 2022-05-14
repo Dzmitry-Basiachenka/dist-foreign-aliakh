@@ -5,6 +5,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -76,5 +79,10 @@ public class AclFundPoolService implements IAclFundPoolService {
     @Override
     public boolean fundPoolExists(String name) {
         return fundPoolRepository.isFundPoolExists(name);
+    }
+
+    @Override
+    public List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter) {
+        return !filter.isEmpty() ? fundPoolRepository.findDtosByFilter(filter) : Collections.emptyList();
     }
 }

@@ -5,9 +5,11 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterWidget;
@@ -47,7 +49,14 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
 
     @Override
     public IAclFundPoolFilterWidget initAclFundPoolFilterWidget() {
-        return aclFundPoolFilterController.initWidget();
+        IAclFundPoolFilterWidget widget = aclFundPoolFilterController.initWidget();
+        widget.addListener(FilterChangedEvent.class, this, IAclFundPoolController.ON_FILTER_CHANGED);
+        return widget;
+    }
+
+    @Override
+    public void onFilterChanged(FilterChangedEvent event) {
+        getWidget().refresh();
     }
 
     @Override
@@ -69,6 +78,11 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     @Override
     public int createLdmtFundPool(AclFundPool fundPool) {
         return fundPoolService.insertLdmtAclFundPool(fundPool);
+    }
+
+    @Override
+    public List<AclFundPoolDetailDto> getDtos() {
+        return fundPoolService.getDtosByFilter(aclFundPoolFilterController.getWidget().getAppliedFilter());
     }
 
     @Override

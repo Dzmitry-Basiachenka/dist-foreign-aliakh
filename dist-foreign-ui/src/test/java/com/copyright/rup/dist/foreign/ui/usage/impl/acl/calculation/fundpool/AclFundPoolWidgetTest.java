@@ -49,6 +49,7 @@ public class AclFundPoolWidgetTest {
             new AclFundPoolFilterWidget(createMock(IAclFundPoolFilterController.class));
         Whitebox.setInternalState(widget, controller);
         expect(controller.initAclFundPoolFilterWidget()).andReturn(filterWidget).once();
+        expect(controller.getDtos()).andReturn(Collections.emptyList()).once();
     }
 
     @Test

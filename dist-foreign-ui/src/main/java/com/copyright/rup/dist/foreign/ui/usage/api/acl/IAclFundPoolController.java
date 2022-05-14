@@ -4,9 +4,14 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import com.vaadin.util.ReflectTools;
+
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -21,11 +26,24 @@ import java.util.List;
 public interface IAclFundPoolController extends IController<IAclFundPoolWidget> {
 
     /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IAclFundPoolController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
      * Initializes {@link IAclUsageFilterWidget}.
      *
      * @return initialized {@link IAclUsageFilterWidget}
      */
     IAclFundPoolFilterWidget initAclFundPoolFilterWidget();
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 
     /**
      * Checks whether {@link com.copyright.rup.dist.foreign.domain.AclFundPool} with the name already exists.
@@ -58,6 +76,11 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
      * @return count of added usages
      */
     int createLdmtFundPool(AclFundPool fundPool);
+
+    /**
+     * @return list of {@link AclFundPoolDetailDto}s by applied filter.
+     */
+    List<AclFundPoolDetailDto> getDtos();
 
     /**
      * Return instance of {@link IStreamSource} for errors result.

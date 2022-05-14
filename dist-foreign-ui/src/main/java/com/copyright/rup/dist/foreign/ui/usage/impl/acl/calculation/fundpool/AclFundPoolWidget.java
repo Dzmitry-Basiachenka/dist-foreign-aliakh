@@ -12,6 +12,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
 import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -22,7 +23,6 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.VerticalLayout;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.function.Function;
 
 /**
@@ -52,6 +52,12 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     @Override
+    public void refresh() {
+        aclFundPoolDetailGrid.deselectAll();
+        initDataProvider();
+    }
+
+    @Override
     public void setController(IAclFundPoolController controller) {
         this.controller = controller;
     }
@@ -75,12 +81,17 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private void initUsagesGrid() {
-        ListDataProvider<AclFundPoolDetailDto> dataProvider = new ListDataProvider<>(Collections.emptyList());
-        aclFundPoolDetailGrid = new Grid<>(dataProvider);
+        aclFundPoolDetailGrid = new Grid<>();
+        initDataProvider();
         addColumns();
         aclFundPoolDetailGrid.setSelectionMode(Grid.SelectionMode.NONE);
         aclFundPoolDetailGrid.setSizeFull();
         VaadinUtils.addComponentStyle(aclFundPoolDetailGrid, "acl-usages-grid");
+    }
+
+    private void initDataProvider() {
+        ListDataProvider<AclFundPoolDetailDto> dataProvider = DataProvider.ofCollection(controller.getDtos());
+        aclFundPoolDetailGrid.setDataProvider(dataProvider);
     }
 
     private void addColumns() {

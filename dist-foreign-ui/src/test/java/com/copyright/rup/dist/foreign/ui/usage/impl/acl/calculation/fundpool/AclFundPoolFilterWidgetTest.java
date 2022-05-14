@@ -132,7 +132,7 @@ public class AclFundPoolFilterWidgetTest {
         verifyComboBox(verticalLayout.getComponent(5), "License Type", true,
             Arrays.asList("ACL", "VGW", "JACDCL", "MACL"));
         verifyComboBox(verticalLayout.getComponent(6), "Fund Pool Type", true,
-            Arrays.asList("Print", "Digital"));
+            Arrays.asList("PRINT", "DIGITAL"));
     }
 
     private void verifyFiltersLabel(Component component) {

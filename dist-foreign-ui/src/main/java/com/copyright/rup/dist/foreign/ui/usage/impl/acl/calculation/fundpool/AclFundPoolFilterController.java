@@ -3,14 +3,17 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,6 +30,9 @@ import java.util.List;
 public class AclFundPoolFilterController extends CommonController<IAclFundPoolFilterWidget>
     implements IAclFundPoolFilterController {
 
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
+
     @Override
     protected IAclFundPoolFilterWidget instantiateWidget() {
         return new AclFundPoolFilterWidget(this);
@@ -35,24 +41,22 @@ public class AclFundPoolFilterController extends CommonController<IAclFundPoolFi
     @Override
     public List<AclFundPool> getFundPoolNames() {
         //TODO will be implemented later
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<Integer> getPeriods() {
         //TODO will be implemented later
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        //TODO will be implemented later
-        return null;
+        return licenseeClassService.getDetailLicenseeClasses("ACL");
     }
 
     @Override
     public List<AggregateLicenseeClass> getAggregateLicenseeClasses() {
-        //TODO will be implemented later
-        return null;
+        return licenseeClassService.getAggregateLicenseeClasses("ACL");
     }
 }

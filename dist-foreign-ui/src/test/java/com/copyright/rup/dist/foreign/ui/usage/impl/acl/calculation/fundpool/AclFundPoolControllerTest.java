@@ -12,9 +12,13 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
 
 import org.junit.Before;
@@ -23,6 +27,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link AclFundPoolController}.
@@ -38,13 +43,16 @@ public class AclFundPoolControllerTest {
     private final AclFundPoolController controller = new AclFundPoolController();
     private CsvProcessorFactory csvProcessorFactory;
     private IAclFundPoolService fundPoolService;
+    private IAclFundPoolFilterController fundPoolFilterController;
 
     @Before
     public void setUp() {
         fundPoolService = createMock(IAclFundPoolService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
+        fundPoolFilterController = createMock(IAclFundPoolFilterController.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, fundPoolService);
+        Whitebox.setInternalState(controller, fundPoolFilterController);
     }
 
     @Test
@@ -90,6 +98,19 @@ public class AclFundPoolControllerTest {
         int count = controller.createLdmtFundPool(fundPool);
         assertEquals(1, count);
         verify(fundPoolService);
+    }
+
+    @Test
+    public void testGetDtos() {
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        List<AclFundPoolDetailDto> grantDetails = Collections.singletonList(new AclFundPoolDetailDto());
+        IAclFundPoolFilterWidget fundPoolFilterWidget = createMock(IAclFundPoolFilterWidget.class);
+        expect(fundPoolFilterController.getWidget()).andReturn(fundPoolFilterWidget).once();
+        expect(fundPoolFilterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(fundPoolService.getDtosByFilter(filter)).andReturn(grantDetails).once();
+        replay(fundPoolFilterController, fundPoolFilterWidget, fundPoolService);
+        assertSame(grantDetails, controller.getDtos());
+        verify(fundPoolFilterController, fundPoolFilterWidget, fundPoolService);
     }
 
     private AclFundPoolDetail buildFundPoolDetail() {
