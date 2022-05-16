@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
@@ -31,4 +32,12 @@ public interface IAclCalculationReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAclUsageCsvReport(AclUsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes ACL fund pool details found by filter into csv output stream.
+     *
+     * @param filter            instance of {@link AclFundPoolDetailFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream);
 }

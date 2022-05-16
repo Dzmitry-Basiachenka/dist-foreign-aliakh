@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -136,12 +137,15 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         aclFundPoolMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
             aclFundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclFundPoolWindow(controller)));
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportAclFundPoolDetailsStreamSource().getSource());
+        fileDownloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(aclFundPoolMenuBar, exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "acl-fund-pool-menu-bar");

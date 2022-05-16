@@ -90,4 +90,9 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
      * @return instance of {@link IStreamSource}
      */
     IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<AclFundPoolDetail> processingResult);
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportAclFundPoolDetailsStreamSource();
 }
