@@ -30,6 +30,25 @@ public class LdmtDetailsJsonValidatorTest {
     }
 
     @Test
+    public void testValidateFailure() throws IOException {
+        try {
+            validator.validate(loadJson("ldmt_details_failure.json"));
+            fail();
+        } catch (ValidationException e) {
+            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
+                "Licensee Class Id should be a valid integer number: not_a_number, " +
+                "Type Of Use should be either 'DIGITAL' or 'PHOTOCOPY': error, " +
+                "Gross Amount should be a valid decimal number: not_a_number, " +
+                "Net Amount should be a valid decimal number: not_a_number]; " +
+                "LDMT detail #1 is not valid: [" +
+                "Licensee Class Id should be a valid integer number: not_a_number, " +
+                "Type Of Use should be either 'DIGITAL' or 'PHOTOCOPY': error, " +
+                "Gross Amount should be a valid decimal number: not_a_number, " +
+                "Net Amount should be a valid decimal number: not_a_number]", e.getMessage());
+        }
+    }
+
+    @Test
     public void testValidateFailureNullFields() throws IOException {
         try {
             validator.validate(loadJson("ldmt_detail_null_fields.json"));
