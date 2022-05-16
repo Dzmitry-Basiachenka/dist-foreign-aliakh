@@ -1,3 +1,11 @@
+5.1.22
+-
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement JSON validator
+* B-72983 FDA: Fund Pool filters: implement backend logic
+* B-69895 FDA: Usage batch edits: implement service and controller logic to update ACL usages
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement validator to find duplicate Detail Licensee Class Id, Type of Use pairs
+* B-72784 FDA: View Fund Pool details & Export: implement export functionality
+
 5.1.21
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Liquibase script
@@ -9,10 +17,10 @@
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Camel configuration
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement service to create LDMT fund pools
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: update widget to create LDMT fund pools
-* B-72784 FDA&ACL: View Fund Pool details & Export: implement fund pool details UI grid
-* B-72784 FDA&ACL: View Fund Pool details & Export: implement AclFundPoolFilter domain object
-* B-72784 FDA&ACL: View Fund Pool details & Export: implement backend logic to retrieve data based on applied filters
-* B-72784 FDA&ACL: View Fund Pool details & Export: add service logic to apply filters to get data
+* B-72784 FDA: View Fund Pool details & Export: implement fund pool details UI grid
+* B-72784 FDA: View Fund Pool details & Export: implement AclFundPoolFilter domain object
+* B-72784 FDA: View Fund Pool details & Export: implement backend logic to retrieve data based on applied filters
+* B-72784 FDA: View Fund Pool details & Export: add service logic to apply filters to get data
 * B-69895 FDA: Usage batch edits: implement edit usage window
 * B-69895 FDA: Usage batch edits: add editable field to ACL usage dto object
 * B-69895 FDA: Usage batch edits: add Edit button and multi selection mode on Usages tab
