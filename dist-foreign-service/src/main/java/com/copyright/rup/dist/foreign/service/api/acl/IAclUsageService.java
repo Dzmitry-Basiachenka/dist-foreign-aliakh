@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,13 @@ public interface IAclUsageService {
      * @return count of inserted ACL usages
      */
     int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName);
+
+    /**
+     * Updates ACL usages.
+     *
+     * @param aclUsageDtos collection of {@link AclUsageDto}s
+     */
+    void updateUsages(Collection<AclUsageDto> aclUsageDtos);
 
     /**
      * Gets count of ACL usages based on applied filter.

@@ -106,7 +106,7 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
     /**
      * Updates ACL usages.
      *
-     * @param aclUsageDtos set of {@link AclUsageDto} to update
+     * @param aclUsageDtos set of {@link AclUsageDto}s to update
      */
     void updateUsages(Set<AclUsageDto> aclUsageDtos);
 }

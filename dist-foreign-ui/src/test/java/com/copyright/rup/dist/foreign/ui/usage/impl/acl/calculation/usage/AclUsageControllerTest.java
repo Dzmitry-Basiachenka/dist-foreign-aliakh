@@ -21,7 +21,11 @@ import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
@@ -76,6 +80,8 @@ public class AclUsageControllerTest {
     private IAclUsageFilterWidget aclUsageFilterWidget;
     private IAclCalculationReportService aclCalculationReportService;
     private IStreamSourceHandler streamSourceHandler;
+    private IPublicationTypeService publicationTypeService;
+    private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
@@ -86,12 +92,16 @@ public class AclUsageControllerTest {
         aclUsageFilterWidget = createMock(IAclUsageFilterWidget.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        publicationTypeService = createMock(IPublicationTypeService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
         Whitebox.setInternalState(controller, udmUsageService);
         Whitebox.setInternalState(controller, aclUsageBatchService);
         Whitebox.setInternalState(controller, aclUsageService);
         Whitebox.setInternalState(controller, aclUsageFilterController);
         Whitebox.setInternalState(controller, aclCalculationReportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, publicationTypeService);
+        Whitebox.setInternalState(controller, licenseeClassService);
     }
 
     @Test
@@ -187,19 +197,29 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetPublicationTypes() {
-        //TODO {dbasiachenka} implement
-        assertEquals(Collections.emptyList(), controller.getPublicationTypes());
+        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType());
+        expect(publicationTypeService.getPublicationTypes("ACL")).andReturn(pubTypes).once();
+        replay(publicationTypeService);
+        assertSame(pubTypes, controller.getPublicationTypes());
+        verify(publicationTypeService);
     }
 
     @Test
     public void testGetDetailLicenseeClasses() {
-        //TODO {dbasiachenka} implement
-        assertEquals(Collections.emptyList(), controller.getDetailLicenseeClasses());
+        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertSame(licenseeClasses, controller.getDetailLicenseeClasses());
+        verify(licenseeClassService);
     }
 
     @Test
     public void testUpdateUsages() {
-        //TODO {dbasiachenka} implement
+        aclUsageService.updateUsages(Collections.singleton(new AclUsageDto()));
+        expectLastCall().once();
+        replay(aclUsageService);
+        controller.updateUsages(Collections.singleton(new AclUsageDto()));
+        verify(aclUsageService);
     }
 
     private AclUsageBatch buildAclUsageBatch() {
@@ -215,5 +235,12 @@ public class AclUsageControllerTest {
         AclUsageFilter aclUsageFilter = new AclUsageFilter();
         aclUsageFilter.setUsageBatchName(ACL_USAGE_BATCH_NAME);
         return aclUsageFilter;
+    }
+
+    private PublicationType buildPublicationType() {
+        PublicationType pubType = new PublicationType();
+        pubType.setName("BK");
+        pubType.setDescription("Book");
+        return pubType;
     }
 }

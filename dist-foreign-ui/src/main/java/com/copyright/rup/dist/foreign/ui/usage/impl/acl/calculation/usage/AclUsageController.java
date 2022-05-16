@@ -8,8 +8,11 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
@@ -30,7 +33,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -59,6 +61,10 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     private IAclCalculationReportService aclCalculationReportService;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
 
     @Override
     public int getBeansCount() {
@@ -112,19 +118,17 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
 
     @Override
     public List<PublicationType> getPublicationTypes() {
-        //TODO {dbasiachenka} implement
-        return new ArrayList<>();
+        return publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
-        //TODO {dbasiachenka} implement
-        return new ArrayList<>();
+        return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override
     public void updateUsages(Set<AclUsageDto> aclUsageDtos) {
-        //TODO {dbasiachenka} implement
+        aclUsageService.updateUsages(aclUsageDtos);
     }
 
     @Override
