@@ -287,6 +287,20 @@
         returning df_acl_usage_uid
     </select>
 
+    <update id="update" parameterType="AclUsageDto">
+        update ${schema}.df_acl_usage
+        set
+            period = #{period},
+            wr_wrk_inst = #{wrWrkInst},
+            detail_licensee_class_id = #{detailLicenseeClass.id},
+            publication_type_uid = #{publicationType.id},
+            content_unit_price = #{contentUnitPrice},
+            type_of_use = #{typeOfUse},
+            annualized_copies = #{annualizedCopies},
+            <include refid="StoredEntityMapper.update"/>
+        where df_acl_usage_uid = #{id}
+    </update>
+
     <select id="findByIds" resultMap="aclUsageDtoResultMap">
         select
             <include refid="IAclUsageMapper.aclUsageDtoColumns"/>

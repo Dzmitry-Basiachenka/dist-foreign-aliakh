@@ -32,6 +32,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,17 +72,17 @@ public class AclUsageRepositoryIntegrationTest {
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
     private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
-        Collections.singleton(buildDetailLicenseeClass(2));
+        Collections.singleton(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
     private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
         Collections.singleton(buildAggregateLicenseeClass(51));
-    private static final Set<PublicationType> PUB_TYPES = Collections.singleton(buildPubType("BK"));
+    private static final Set<PublicationType> PUB_TYPES = Collections.singleton(buildPubType());
     private static final Set<String> TYPE_OF_USES = Collections.singleton("PRINT");
     private static final String USAGE_DETAIL_ID = "OGN674GHHHB0111";
     private static final String USAGE_DETAIL_ID_DIFFERENT_CASE = "ogn674ghhhb0111";
     private static final String USAGE_DETAIL_ID_FRAGMENT = "OGN674";
     private static final String USAGE_DETAIL_ID_WITH_METASYMBOLS = "OGN554GHHSG005 !@#$%^&*()_+-=?/\\'\"}{][<>";
-    private static final int WR_WRK_INST_1 = 123822477;
-    private static final int WR_WRK_INST_2 = 306985867;
+    private static final Long WR_WRK_INST_1 = 123822477L;
+    private static final Long WR_WRK_INST_2 = 306985867L;
     private static final String SYSTEM_TITLE = "The Wall Street journal";
     private static final String SYSTEM_TITLE_DIFFERENT_CASE = "THe WAll STReet JOURnal";
     private static final String SYSTEM_TITLE_FRAGMENT = "JOURnal";
@@ -117,6 +118,25 @@ public class AclUsageRepositoryIntegrationTest {
         AclUsageDto expectedUsage = loadExpectedDtos("json/acl/acl_usage_dto.json").get(0);
         expectedUsage.setId(usageIds.get(0));
         verifyAclUsageDto(expectedUsage, actualUsages.get(0), false);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "update.groovy")
+    public void testUpdate() {
+        AclUsageFilter filter = new AclUsageFilter();
+        filter.setUsageBatchName("Update ACL Usage 2023");
+        AclUsageDto expectedAclUsageDto = aclUsageRepository.findDtosByFilter(filter, null, null).get(0);
+        expectedAclUsageDto.setPeriod(202412);
+        expectedAclUsageDto.setWrWrkInst(WR_WRK_INST_2);
+        expectedAclUsageDto.setDetailLicenseeClass(buildDetailLicenseeClass(10, "Primary Metals"));
+        expectedAclUsageDto.setPublicationType(buildPubType());
+        expectedAclUsageDto.setContentUnitPrice(new BigDecimal("1.0000000000"));
+        expectedAclUsageDto.setTypeOfUse("DIGITAL");
+        expectedAclUsageDto.setAnnualizedCopies(new BigDecimal("10.00000"));
+        expectedAclUsageDto.setAggregateLicenseeClassId(53);
+        expectedAclUsageDto.setAggregateLicenseeClassName("Metals");
+        aclUsageRepository.update(expectedAclUsageDto);
+        verifyAclUsageDto(expectedAclUsageDto, aclUsageRepository.findDtosByFilter(filter, null, null).get(0), false);
     }
 
     @Test
@@ -346,7 +366,7 @@ public class AclUsageRepositoryIntegrationTest {
         filter.setAnnualizedCopiesExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 1, null));
         List<AclUsageDto> values = aclUsageRepository.findDtosByFilter(filter, null, buildSort());
         assertEquals(1, values.size());
-        verifyAclUsageDto(loadExpectedDtos("json/acl/acl_usage_dto_0eeef531.json").get(0), values.get(0), false);
+        verifyAclUsageDto(loadExpectedDtos("json/acl/acl_usage_dto_0eeef531.json").get(0), values.get(0), true);
     }
 
     @Test
@@ -669,9 +689,10 @@ public class AclUsageRepositoryIntegrationTest {
         return usages;
     }
 
-    private static DetailLicenseeClass buildDetailLicenseeClass(int id) {
+    private static DetailLicenseeClass buildDetailLicenseeClass(int id, String description) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(id);
+        detailLicenseeClass.setDescription(description);
         return detailLicenseeClass;
     }
 
@@ -681,9 +702,11 @@ public class AclUsageRepositoryIntegrationTest {
         return aggregateLicenseeClass;
     }
 
-    private static PublicationType buildPubType(String name) {
+    private static PublicationType buildPubType() {
         PublicationType publicationType = new PublicationType();
-        publicationType.setName(name);
+        publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
+        publicationType.setName("BK");
+        publicationType.setDescription("Book");
         return publicationType;
     }
 
