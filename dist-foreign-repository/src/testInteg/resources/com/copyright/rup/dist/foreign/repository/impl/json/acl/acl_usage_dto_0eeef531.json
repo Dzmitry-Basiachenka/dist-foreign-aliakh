@@ -25,6 +25,8 @@
     "annualizedCopies": 1.00000,
     "editable": true,
     "createUser": "user@copyright.com",
-    "updateUser": "user@copyright.com"
+    "updateUser": "user@copyright.com",
+    "createDate": "2021-02-10T12:00:00+00",
+    "updateDate": "2021-02-14T12:00:00+00"
   }
 ]

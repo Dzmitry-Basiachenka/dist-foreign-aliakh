@@ -40,7 +40,7 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
 
     @Override
     public void update(AclUsageDto aclUsageDto) {
-        //TODO {dbasiachenka} implement
+        insert("IAclUsageMapper.update", Objects.requireNonNull(aclUsageDto));
     }
 
     @Override
