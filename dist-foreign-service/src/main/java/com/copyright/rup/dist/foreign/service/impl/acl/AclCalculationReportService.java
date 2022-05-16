@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
@@ -33,5 +34,10 @@ public class AclCalculationReportService implements IAclCalculationReportService
     @Override
     public void writeAclUsageCsvReport(AclUsageFilter filter, PipedOutputStream pipedOutputStream) {
         aclCalculationReportRepository.writeAclUsageCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    public void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream) {
+        aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, pipedOutputStream);
     }
 }

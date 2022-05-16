@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -46,6 +47,8 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IAclCalculationReportService aclCalculationReportService;
 
     @Override
     public IAclFundPoolFilterWidget initAclFundPoolFilterWidget() {
@@ -91,6 +94,13 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
         return streamSourceHandler.getCsvStreamSource(
             () -> String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), null,
             processingResult::writeToFile);
+    }
+
+    @Override
+    public IStreamSource getExportAclFundPoolDetailsStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_fund_pool_details_",
+            pos -> aclCalculationReportService.writeAclFundPoolDetailsCsvReport(
+                aclFundPoolFilterController.getWidget().getAppliedFilter(), pos));
     }
 
     @Override

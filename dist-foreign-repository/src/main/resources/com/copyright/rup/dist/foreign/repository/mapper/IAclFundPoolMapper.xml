@@ -142,7 +142,7 @@
         select count(*) from fund_pool_detail;
     </select>
 
-    <select id="findDtosByFilter" parameterType="map" resultMap="aclFundPoolDetailDtoResultMap">
+    <sql id="selectDtosByFilterSql">
         select
             df_acl_fund_pool_detail_uid,
             fp.name fund_pool_name,
@@ -162,7 +162,7 @@
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         <include refid="IAclFundPoolMapper.aclFundPoolDetailFilter"/>
         order by fp.name, dlc.detail_licensee_class_id
-    </select>
+    </sql>
 
     <sql id="aclFundPoolDetailFilter">
         <where>
@@ -206,6 +206,10 @@
             </if>
         </where>
     </sql>
+
+    <select id="findDtosByFilter" parameterType="map" resultMap="aclFundPoolDetailDtoResultMap">
+        <include refid="IAclFundPoolMapper.selectDtosByFilterSql"/>
+    </select>
 
     <select id="findAllFundPools" resultMap="aclFundPoolResultMap">
         select

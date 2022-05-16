@@ -3,9 +3,12 @@ package com.copyright.rup.dist.foreign.repository.impl.csv;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
+
+import com.google.common.collect.Sets;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,6 +42,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     private static final String FOLDER_NAME = "acl-calculation-csv-reports-integration-test/";
     private static final String WRITE_GRANT_DETAIL_CSV_REPORT = FOLDER_NAME + "write-grant-detail-csv-report.groovy";
     private static final String WRITE_USAGE_CSV_REPORT = FOLDER_NAME + "write-usage-csv-report.groovy";
+    private static final String WRITE_FUND_POOL_DETAILS_CSV_REPORT =
+        FOLDER_NAME + "write-fund-pool-detail-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -87,5 +92,26 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
         assertFilesWithExecutor(
             outputStream -> aclCalculationReportRepository.writeAclUsageCsvReport(filter, outputStream),
             "acl/usages_report_empty.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_FUND_POOL_DETAILS_CSV_REPORT)
+    public void testWriteAclFundPoolDetailsCsvReport() throws IOException {
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        filter.setFundPoolNames(Sets.newHashSet("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
+        assertFilesWithExecutor(
+            outputStream -> aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream),
+            "acl/fund_pool_details_report.csv");
+    }
+
+    @Test
+    @TestData(fileName = WRITE_FUND_POOL_DETAILS_CSV_REPORT)
+    public void testWriteAclFundPoolDetailsEmptyCsvReport() throws IOException {
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        filter.setFundPoolNames(Sets.newHashSet("ACL Fund Pool 202112", "VGW LDMT Fund Pool 201906"));
+        filter.setLicenseType("MACL");
+        assertFilesWithExecutor(
+            outputStream -> aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream),
+            "acl/fund_pool_details_report_empty.csv");
     }
 }

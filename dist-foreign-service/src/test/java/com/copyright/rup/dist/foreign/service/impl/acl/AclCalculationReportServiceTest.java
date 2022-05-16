@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
@@ -55,6 +56,17 @@ public class AclCalculationReportServiceTest {
         expectLastCall().once();
         replay(aclCalculationReportRepository);
         aclCalculationReportService.writeAclUsageCsvReport(filter, outputStream);
+        verify(aclCalculationReportRepository);
+    }
+
+    @Test
+    public void testWriteAclFundPoolDetailsCsvReport() {
+        AclFundPoolDetailFilter filter = createMock(AclFundPoolDetailFilter.class);
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclFundPoolDetailsCsvReport(filter, outputStream);
         verify(aclCalculationReportRepository);
     }
 }

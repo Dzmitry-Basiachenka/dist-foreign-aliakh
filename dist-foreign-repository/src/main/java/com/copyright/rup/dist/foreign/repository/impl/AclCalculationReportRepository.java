@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclGrantDetailFilter;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 
@@ -42,5 +44,18 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
         writeCsvReportByParts("IAclCalculationReportMapper.findAclUsagesCountByFilter",
             "IAclCalculationReportMapper.findAclUsageDtosByFilter", parameters, !filter.isEmpty(),
             () -> new AclUsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
+    }
+
+    @Override
+    public void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put("filter", Objects.requireNonNull(filter));
+        try (AclFundPoolDetailsCsvReportHandler handler = new AclFundPoolDetailsCsvReportHandler(
+            Objects.requireNonNull(pipedOutputStream))) {
+            if (!filter.isEmpty()) {
+                getTemplate().select("IAclCalculationReportMapper.writeAclFundPoolDetailsCsvReport", parameters,
+                    handler);
+            }
+        }
     }
 }

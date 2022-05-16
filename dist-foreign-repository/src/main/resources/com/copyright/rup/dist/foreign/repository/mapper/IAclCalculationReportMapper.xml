@@ -18,4 +18,8 @@
     <select id="findAclUsageDtosByFilter" resultMap="IAclUsageMapper.aclUsageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IAclUsageMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="writeAclFundPoolDetailsCsvReport" resultMap="IAclFundPoolMapper.aclFundPoolDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclFundPoolMapper.selectDtosByFilterSql"/>
+    </select>
 </mapper>
