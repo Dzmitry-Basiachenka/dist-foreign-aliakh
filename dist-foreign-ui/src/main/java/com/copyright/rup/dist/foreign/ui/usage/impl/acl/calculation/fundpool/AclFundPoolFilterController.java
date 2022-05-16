@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,6 +32,8 @@ public class AclFundPoolFilterController extends CommonController<IAclFundPoolFi
 
     @Autowired
     private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IAclFundPoolService aclFundPoolService;
 
     @Override
     protected IAclFundPoolFilterWidget instantiateWidget() {
@@ -40,14 +42,12 @@ public class AclFundPoolFilterController extends CommonController<IAclFundPoolFi
 
     @Override
     public List<AclFundPool> getFundPoolNames() {
-        //TODO will be implemented later
-        return Collections.emptyList();
+        return aclFundPoolService.getAll();
     }
 
     @Override
     public List<Integer> getPeriods() {
-        //TODO will be implemented later
-        return Collections.emptyList();
+        return aclFundPoolService.getPeriods();
     }
 
     @Override

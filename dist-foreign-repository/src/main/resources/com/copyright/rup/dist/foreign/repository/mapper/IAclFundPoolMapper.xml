@@ -206,4 +206,17 @@
             </if>
         </where>
     </sql>
+
+    <select id="findAllFundPools" resultMap="aclFundPoolResultMap">
+        select
+        <include refid="aclFundPoolColumns"/>
+        from ${schema}.df_acl_fund_pool
+        order by updated_datetime desc
+    </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct period
+        from ${schema}.df_acl_fund_pool
+        order by period desc
+    </select>
 </mapper>

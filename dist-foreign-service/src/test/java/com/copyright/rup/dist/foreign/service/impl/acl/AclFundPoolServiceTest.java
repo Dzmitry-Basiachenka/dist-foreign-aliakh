@@ -116,6 +116,24 @@ public class AclFundPoolServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    public void testGetAll() {
+        List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
+        expect(fundPoolRepository.findAll()).andReturn(fundPools).once();
+        replay(fundPoolRepository);
+        assertSame(fundPools, service.getAll());
+        verify(fundPoolRepository);
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Collections.singletonList(202006);
+        expect(fundPoolRepository.findPeriods()).andReturn(periods).once();
+        replay(fundPoolRepository);
+        assertSame(periods, service.getPeriods());
+        verify(fundPoolRepository);
+    }
+
     private AclFundPoolDetail buildFundPoolDetail() {
         AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
         aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");
