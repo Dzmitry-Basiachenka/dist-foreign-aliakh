@@ -80,7 +80,7 @@ public class AclFundPoolWidgetTest {
             Triple.of("Det LC Name", 200.0, -1),
             Triple.of("Agg LC ID", 150.0, -1),
             Triple.of("Agg LC Name", 200.0, -1),
-            Triple.of("TOU", 100.0, -1),
+            Triple.of("Fund Pool Type", 150.0, -1),
             Triple.of("Gross Amount", 150.0, -1),
             Triple.of("Net Amount", 150.0, -1)));
         assertEquals(1, layout.getExpandRatio(grid), 0);
