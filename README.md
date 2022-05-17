@@ -1,3 +1,9 @@
+5.1.23
+-
+* B-69895 FDA: Usage batch edits: implement sql query to update ACL usages
+* B-72983 FDA: Fund Pool filters: apply ordering for amount fields
+* B-72775 Tech Debt: FDA: refine grid style name for ACL fund pool
+
 5.1.22
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement JSON validator
