@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -96,7 +97,9 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private void addColumns() {
-        addColumn(AclFundPoolDetailDto::getFundPoolName, "table.column.fund_pool_name", "fundPoolName", 250);
+        addColumn(AclFundPoolDetailDto::getFundPoolName, "table.column.fund_pool_name", "fundPoolName", 250)
+            .setComparator((SerializableComparator<AclFundPoolDetailDto>) (detail1, detail2) ->
+                detail1.getFundPoolName().compareToIgnoreCase(detail2.getFundPoolName()));
         addColumn(AclFundPoolDetailDto::getPeriod, "table.column.period", "period", 100);
         addColumn(AclFundPoolDetailDto::getLicenseType, "table.column.license_type", "licenseType", 100);
         addColumn(detail -> detail.isLdmtFlag() ? "LDMT" : "Manual", "table.column.source", "source", 100);
@@ -108,9 +111,9 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
             "aggregateLicenseeClassId", 150);
         addColumn(detail -> detail.getAggregateLicenseeClass().getDescription(),
             "table.column.aggregate_licensee_class_name", "aggregateLicenseeClassName", 200);
-        addColumn(AclFundPoolDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", 100);
-        addAmountColumn(AclFundPoolDetailDto::getGrossAmount, "table.column.gross_amount", "grossAmount", 150);
-        addAmountColumn(AclFundPoolDetailDto::getNetAmount, "table.column.net_amount", "netAmount", 150);
+        addColumn(AclFundPoolDetailDto::getTypeOfUse, "table.column.fund_pool_type", "typeOfUse", 150);
+        addAmountColumn(AclFundPoolDetailDto::getGrossAmount, "table.column.gross_amount", "grossAmount");
+        addAmountColumn(AclFundPoolDetailDto::getNetAmount, "table.column.net_amount", "netAmount");
     }
 
     private Column<AclFundPoolDetailDto, ?> addColumn(ValueProvider<AclFundPoolDetailDto, ?> valueProvider,
@@ -125,15 +128,17 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private Column<AclFundPoolDetailDto, ?> addAmountColumn(Function<AclFundPoolDetailDto, BigDecimal> function,
-                                                            String captionProperty, String columnId, double width) {
+                                                            String captionProperty, String columnId) {
         return aclFundPoolDetailGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)
             .setSortProperty(columnId)
+            .setComparator((SerializableComparator<AclFundPoolDetailDto>) (detail1, detail2) ->
+                function.apply(detail1).compareTo(function.apply(detail2)))
             .setHidable(true)
-            .setWidth(width);
+            .setWidth(150);
     }
 
     private HorizontalLayout initButtonsLayout() {

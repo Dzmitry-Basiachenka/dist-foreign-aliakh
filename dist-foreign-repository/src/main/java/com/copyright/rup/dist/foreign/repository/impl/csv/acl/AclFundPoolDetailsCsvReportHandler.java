@@ -20,7 +20,7 @@ import java.util.List;
 public class AclFundPoolDetailsCsvReportHandler extends BaseCsvReportHandler<AclFundPoolDetailDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Fund Pool Name", "Period", "License Type", "Source",
-        "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "TOU", "Gross Amount", "Net Amount");
+        "Det LC ID", "Det LC Name", "Agg LC ID", "Agg LC Name", "Fund Pool Type", "Gross Amount", "Net Amount");
 
     /**
      * Constructor.
