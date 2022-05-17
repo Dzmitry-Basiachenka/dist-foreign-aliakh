@@ -71,7 +71,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     }
 
     private VerticalLayout initFundPoolLayout() {
-        initUsagesGrid();
+        initFundPoolGrid();
         VerticalLayout layout = new VerticalLayout(initButtonsLayout(), aclFundPoolDetailGrid);
         layout.setSizeFull();
         layout.setMargin(false);
@@ -81,13 +81,13 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
         return layout;
     }
 
-    private void initUsagesGrid() {
+    private void initFundPoolGrid() {
         aclFundPoolDetailGrid = new Grid<>();
         initDataProvider();
         addColumns();
         aclFundPoolDetailGrid.setSelectionMode(Grid.SelectionMode.NONE);
         aclFundPoolDetailGrid.setSizeFull();
-        VaadinUtils.addComponentStyle(aclFundPoolDetailGrid, "acl-usages-grid");
+        VaadinUtils.addComponentStyle(aclFundPoolDetailGrid, "acl-fund-pool-grid");
     }
 
     private void initDataProvider() {
