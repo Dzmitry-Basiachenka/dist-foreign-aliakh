@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Domain object to represent ACL fund pool.
  * <p>
@@ -21,6 +24,8 @@ public class AclFundPool extends StoredEntity<String> {
     private Integer period;
     private String licenseType;
     private boolean manualUploadFlag;
+    private BigDecimal totalAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+    private BigDecimal netAmount = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
 
     public String getName() {
         return name;
@@ -54,6 +59,22 @@ public class AclFundPool extends StoredEntity<String> {
         this.manualUploadFlag = manualUploadFlag;
     }
 
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -69,6 +90,8 @@ public class AclFundPool extends StoredEntity<String> {
             .append(name, fundPool.name)
             .append(period, fundPool.period)
             .append(licenseType, fundPool.licenseType)
+            .append(totalAmount, fundPool.totalAmount)
+            .append(netAmount, fundPool.netAmount)
             .isEquals();
     }
 
@@ -80,6 +103,8 @@ public class AclFundPool extends StoredEntity<String> {
             .append(period)
             .append(licenseType)
             .append(manualUploadFlag)
+            .append(totalAmount)
+            .append(netAmount)
             .toHashCode();
     }
 
@@ -91,6 +116,8 @@ public class AclFundPool extends StoredEntity<String> {
             .append("period", period)
             .append("licenseType", licenseType)
             .append("manualUploadFlag", manualUploadFlag)
+            .append("totalAmount", totalAmount)
+            .append("netAmount", netAmount)
             .toString();
     }
 }

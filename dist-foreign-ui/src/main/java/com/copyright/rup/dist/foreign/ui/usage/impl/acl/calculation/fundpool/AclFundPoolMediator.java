@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 
 /**
  * Mediator for the ACL fund pool widget.
@@ -17,13 +18,20 @@ import com.vaadin.ui.MenuBar;
 public class AclFundPoolMediator implements IMediator {
 
     private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem createMenuItem;
 
     @Override
     public void applyPermissions() {
-        fundPoolMenuBar.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
+        fundPoolMenuBar.setVisible(ForeignSecurityUtils.hasManagerPermission() || hasSpecialistPermission);
+        createMenuItem.setVisible(hasSpecialistPermission);
     }
 
     public void setFundPoolMenuBar(MenuBar fundPoolMenuBar) {
         this.fundPoolMenuBar = fundPoolMenuBar;
+    }
+
+    public void setCreateMenuItem(MenuItem createMenuItem) {
+        this.createMenuItem = createMenuItem;
     }
 }

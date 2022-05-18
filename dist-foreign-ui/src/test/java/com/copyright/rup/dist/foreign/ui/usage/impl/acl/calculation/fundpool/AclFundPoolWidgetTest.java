@@ -69,7 +69,7 @@ public class AclFundPoolWidgetTest {
         verifyWindow(widget, null, 100, 100, Unit.PERCENTAGE);
         VerticalLayout layout = (VerticalLayout) widget.getSecondComponent();
         verifyMenuBar(((HorizontalLayout) layout.getComponent(0)).getComponent(0), "Fund Pool", true,
-            Collections.singletonList("Create"));
+            Arrays.asList("Create", "View"));
         Grid grid = (Grid) layout.getComponent(1);
         verifyGrid(grid, Arrays.asList(
             Triple.of("Fund Pool Name", 250.0, -1),

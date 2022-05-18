@@ -24,6 +24,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -106,6 +107,17 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
         return streamSourceHandler.getCsvStreamSource(() -> "export_fund_pool_details_",
             pos -> aclCalculationReportService.writeAclFundPoolDetailsCsvReport(
                 aclFundPoolFilterController.getWidget().getAppliedFilter(), pos));
+    }
+
+    @Override
+    public List<AclFundPool> getAllAclFundPools() {
+        //TODO will implement later
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void deleteAclFundPool(AclFundPool fundPool) {
+        //TODO will implement later
     }
 
     @Override
