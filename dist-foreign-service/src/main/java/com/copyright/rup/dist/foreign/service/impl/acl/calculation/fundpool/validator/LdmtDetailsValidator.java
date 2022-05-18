@@ -4,19 +4,21 @@ import com.copyright.rup.dist.common.integration.camel.IValidator;
 import com.copyright.rup.dist.common.integration.camel.ValidationException;
 import com.copyright.rup.dist.foreign.domain.LdmtDetail;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+
 import com.google.common.collect.ImmutableSet;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -40,12 +42,12 @@ public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
     @Override
     public void validate(List<LdmtDetail> ldmtDetails) {
         Map<Integer, List<String>> indexToErrors = new LinkedHashMap<>();
-        for (int i = 0; i < ldmtDetails.size(); i++) {
+        IntStream.range(0, ldmtDetails.size()).forEach(i -> {
             List<String> errors = validate(ldmtDetails.get(i));
             if (!errors.isEmpty()) {
                 indexToErrors.put(i, errors);
             }
-        }
+        });
         DuplicatesProcessor processor = new DuplicatesProcessor(ldmtDetails);
         if (!indexToErrors.isEmpty() || processor.hasDuplicates()) {
             throw new ValidationException(Stream.concat(
@@ -69,27 +71,11 @@ public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
         if (!TYPE_OF_USES.contains(ldmtDetail.getTypeOfUse())) {
             errors.add("Type of Use is not valid: " + ldmtDetail.getTypeOfUse());
         }
-        if (isAmountInvalid(ldmtDetail.getGrossAmount())) {
-            errors.add("The integer part of Gross Amount should be less or equal to 10 digits: " +
-                ldmtDetail.getGrossAmount());
-        }
-        if (isAmountInvalid(ldmtDetail.getNetAmount())) {
-            errors.add("The integer part of Net Amount should be less or equal to 10 digits: " +
-                ldmtDetail.getNetAmount());
-        }
         if (ldmtDetail.getGrossAmount().compareTo(ldmtDetail.getNetAmount()) < 0) {
             errors.add("Net Amount should be less than or equal to Gross Amount: " +
                 ldmtDetail.getNetAmount() + ", " + ldmtDetail.getGrossAmount());
         }
         return errors;
-    }
-
-    private boolean isAmountInvalid(BigDecimal amount) {
-        return getDigitsCount(amount) > 10;
-    }
-
-    private int getDigitsCount(BigDecimal value) {
-        return value.signum() == 0 ? 1 : value.precision() - value.scale();
     }
 
     /**
@@ -102,12 +88,12 @@ public class LdmtDetailsValidator implements IValidator<List<LdmtDetail>> {
 
         DuplicatesProcessor(List<LdmtDetail> ldmtDetails) {
             this.ldmtDetails = ldmtDetails;
-            for (LdmtDetail ldmtDetail : ldmtDetails) {
-                Pair<Integer, String> pair =
-                    new ImmutablePair<>(ldmtDetail.getDetailLicenseeClassId(), ldmtDetail.getTypeOfUse());
-                pairToCounts.putIfAbsent(pair, 0);
-                pairToCounts.put(pair, pairToCounts.get(pair) + 1);
-            }
+            ldmtDetails.stream().map(
+                    ldmtDetail -> new ImmutablePair<>(ldmtDetail.getDetailLicenseeClassId(), ldmtDetail.getTypeOfUse()))
+                .forEach(pair -> {
+                    pairToCounts.putIfAbsent(pair, 0);
+                    pairToCounts.put(pair, pairToCounts.get(pair) + 1);
+                });
         }
 
         private boolean hasDuplicates() {

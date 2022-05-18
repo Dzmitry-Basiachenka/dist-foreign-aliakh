@@ -172,8 +172,28 @@ public class CreateAclFundPoolWindowTest {
         setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
         setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
         ((CheckBox) Whitebox.getInternalState(window, LDMT_CHECK_BOX)).setValue(false);
-        window.onConfirmClickedManual();
+        window.onConfirmClicked();
         verify(window, controller, processor, Windows.class);
+    }
+
+    @Test
+    public void testOnConfirmClickedLdmtNoDetails() {
+        window = createPartialMock(CreateAclFundPoolWindow.class, new String[]{"isValid", "close"}, controller);
+        expect(window.isValid()).andReturn(true).once();
+        expect(controller.isFundPoolExist(FUND_POOL_NAME)).andReturn(false).once();
+        expect(controller.isLdmtDetailExist(LICENSE_TYPE)).andReturn(false).once();
+        mockStatic(Windows.class);
+        Windows.showNotificationWindow(
+            "Fund Pool cannot be created. There are no LDMT details for specified license type");
+        expectLastCall().once();
+        replay(window, controller, Windows.class);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
+        setTextFieldValue(window, FUND_POOL_PERIOD_YEAR_FIELD, PERIOD_YEAR);
+        setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
+        setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
+        ((CheckBox) Whitebox.getInternalState(window, LDMT_CHECK_BOX)).setValue(true);
+        window.onConfirmClicked();
+        verify(window, controller, Windows.class);
     }
 
     @Test
@@ -184,6 +204,7 @@ public class CreateAclFundPoolWindowTest {
         expectLastCall().once();
         expect(controller.createLdmtFundPool(buildFundPool(false))).andReturn(1).once();
         expect(controller.isFundPoolExist(FUND_POOL_NAME)).andReturn(false).once();
+        expect(controller.isLdmtDetailExist(LICENSE_TYPE)).andReturn(true).once();
         mockStatic(Windows.class);
         Windows.showNotificationWindow("Creation completed: 1 record(s) were stored successfully");
         expectLastCall().once();
@@ -193,7 +214,7 @@ public class CreateAclFundPoolWindowTest {
         setComboBoxValue(window, FUND_POOL_PERIOD_MONTH_COMBO_BOX, PERIOD_MONTH);
         setComboBoxValue(window, LICENSE_TYPE_COMBO_BOX, LICENSE_TYPE);
         ((CheckBox) Whitebox.getInternalState(window, LDMT_CHECK_BOX)).setValue(true);
-        window.onConfirmClickedLdmt();
+        window.onConfirmClicked();
         verify(window, controller, Windows.class);
     }
 

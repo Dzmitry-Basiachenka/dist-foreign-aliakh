@@ -10,6 +10,7 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.integration.camel.ValidationException;
 import com.copyright.rup.dist.foreign.domain.LdmtDetail;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -69,15 +70,11 @@ public class LdmtDetailsValidatorTest {
             assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
                     "Detail Licensee Class is not valid: 1, " +
                     "License Type is not valid: ACLPRINT, " +
-                    "Type of Use is not valid: EMAIL_COPY, " +
-                    "The integer part of Gross Amount should be less or equal to 10 digits: 12345678901.23, " +
-                    "The integer part of Net Amount should be less or equal to 10 digits: 12345678901.23]; " +
+                    "Type of Use is not valid: EMAIL_COPY]; " +
                     "LDMT detail #1 is not valid: [" +
                     "Detail Licensee Class is not valid: 1, " +
                     "License Type is not valid: ACLPRINT, " +
-                    "Type of Use is not valid: EMAIL_COPY, " +
-                    "The integer part of Gross Amount should be less or equal to 10 digits: 12345678901.23, " +
-                    "The integer part of Net Amount should be less or equal to 10 digits: 12345678901.23]; " +
+                    "Type of Use is not valid: EMAIL_COPY]; " +
                     "LDMT details contain duplicate Detail Licensee Class Id, Type of Use pairs: (1, EMAIL_COPY)",
                 e.getMessage());
         }
@@ -123,40 +120,6 @@ public class LdmtDetailsValidatorTest {
             fail();
         } catch (ValidationException e) {
             assertEquals("LDMT detail #0 is not valid: [Type of Use is not valid: EMAIL_COPY]", e.getMessage());
-        }
-        verify(licenseeClassService);
-    }
-
-    @Test
-    public void testValidateFailureGrossAmount() {
-        expect(licenseeClassService.aclDetailLicenseeClassExists(DETAIL_LICENSEE_CLASS_ID)).andReturn(true).once();
-        replay(licenseeClassService);
-        try {
-            LdmtDetail ldmtDetail = buildLdmtDetail();
-            ldmtDetail.setGrossAmount(INVALID_AMOUNT);
-            validator.validate(Collections.singletonList(ldmtDetail));
-            fail();
-        } catch (ValidationException e) {
-            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
-                    "The integer part of Gross Amount should be less or equal to 10 digits: 12345678901.23]",
-                e.getMessage());
-        }
-        verify(licenseeClassService);
-    }
-
-    @Test
-    public void testValidateFailureNetAmount() {
-        expect(licenseeClassService.aclDetailLicenseeClassExists(DETAIL_LICENSEE_CLASS_ID)).andReturn(true).once();
-        replay(licenseeClassService);
-        try {
-            LdmtDetail ldmtDetail = buildLdmtDetail();
-            ldmtDetail.setNetAmount(INVALID_AMOUNT);
-            validator.validate(Collections.singletonList(ldmtDetail));
-            fail();
-        } catch (ValidationException e) {
-            assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
-                "The integer part of Net Amount should be less or equal to 10 digits: 12345678901.23, " +
-                "Net Amount should be less than or equal to Gross Amount: 12345678901.23, 634420.48]", e.getMessage());
         }
         verify(licenseeClassService);
     }

@@ -42,6 +42,14 @@ public interface IAclFundPoolRepository {
     boolean isFundPoolExists(String name);
 
     /**
+     * Checks whether LDMT {@link AclFundPoolDetail} exists for Fund Pool creation with provided license type.
+     *
+     * @param licenseType license type
+     * @return {@code true} - if detail exists, {@code false} - otherwise
+     */
+    boolean isLdmtDetailExist(String licenseType);
+
+    /**
      * Inserts {@link AclFundPoolDetail}.
      *
      * @param detail instance of {@link AclFundPoolDetail}

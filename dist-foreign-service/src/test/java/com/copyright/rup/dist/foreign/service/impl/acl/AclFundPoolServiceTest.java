@@ -44,6 +44,7 @@ import java.util.List;
 public class AclFundPoolServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
+    private static final String LICENSE_TYPE = "ACL";
     private IAclFundPoolRepository fundPoolRepository;
     private AclFundPoolService service;
 
@@ -99,10 +100,26 @@ public class AclFundPoolServiceTest {
     }
 
     @Test
+    public void testFundPoolExists() {
+        expect(fundPoolRepository.isFundPoolExists("ACL Fund Pool 202012")).andReturn(true).once();
+        replay(fundPoolRepository);
+        assertTrue(service.fundPoolExists("ACL Fund Pool 202012"));
+        verify(fundPoolRepository);
+    }
+
+    @Test
+    public void testIsLdmtDetailExist() {
+        expect(fundPoolRepository.isLdmtDetailExist(LICENSE_TYPE)).andReturn(true).once();
+        replay(fundPoolRepository);
+        assertTrue(service.isLdmtDetailExist(LICENSE_TYPE));
+        verify(fundPoolRepository);
+    }
+
+    @Test
     public void testGetDtos() {
         List<AclFundPoolDetailDto> fundPoolDetails = Collections.singletonList(new AclFundPoolDetailDto());
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        filter.setLicenseType("ACL");
+        filter.setLicenseType(LICENSE_TYPE);
         expect(fundPoolRepository.findDtosByFilter(filter)).andReturn(fundPoolDetails).once();
         replay(fundPoolRepository);
         assertSame(fundPoolDetails, service.getDtosByFilter(filter));
@@ -137,7 +154,7 @@ public class AclFundPoolServiceTest {
     private AclFundPoolDetail buildFundPoolDetail() {
         AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
         aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");
-        aclFundPoolDetail.setLicenseType("ACL");
+        aclFundPoolDetail.setLicenseType(LICENSE_TYPE);
         aclFundPoolDetail.setGrossAmount(new BigDecimal("0.55"));
         return aclFundPoolDetail;
     }
@@ -146,7 +163,7 @@ public class AclFundPoolServiceTest {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setName("Fund Pool Name");
         aclFundPool.setManualUploadFlag(true);
-        aclFundPool.setLicenseType("ACL");
+        aclFundPool.setLicenseType(LICENSE_TYPE);
         return aclFundPool;
     }
 }

@@ -78,6 +78,14 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
     int createLdmtFundPool(AclFundPool fundPool);
 
     /**
+     * Checks whether LDMT {@link AclFundPoolDetail} exists for Fund Pool creation with provided license type.
+     *
+     * @param licenseType license type
+     * @return {@code true} - if detail exists, {@code false} - otherwise
+     */
+    boolean isLdmtDetailExist(String licenseType);
+
+    /**
      * @return list of {@link AclFundPoolDetailDto}s by applied filter.
      */
     List<AclFundPoolDetailDto> getDtos();

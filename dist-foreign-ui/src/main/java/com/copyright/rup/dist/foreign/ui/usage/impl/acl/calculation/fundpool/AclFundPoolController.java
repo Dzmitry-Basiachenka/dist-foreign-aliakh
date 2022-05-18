@@ -84,6 +84,11 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     }
 
     @Override
+    public boolean isLdmtDetailExist(String licenseType) {
+        return fundPoolService.isLdmtDetailExist(licenseType);
+    }
+
+    @Override
     public List<AclFundPoolDetailDto> getDtos() {
         return fundPoolService.getDtosByFilter(aclFundPoolFilterController.getWidget().getAppliedFilter());
     }

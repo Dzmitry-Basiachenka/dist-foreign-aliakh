@@ -83,41 +83,47 @@ public class CreateAclFundPoolWindow extends Window {
     }
 
     /**
-     * Initiates LDMT ACL fund pool creating.
+     * Initiates ACL fund pool creating.
      */
-    void onConfirmClickedLdmt() {
+    void onConfirmClicked() {
         if (isValid()) {
-            int fundPoolDetailsCount = fundPoolController.createLdmtFundPool(buildFundPool());
-            close();
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", fundPoolDetailsCount));
-        }
-    }
-
-    /**
-     * Initiates manual ACL fund pool creating.
-     */
-    void onConfirmClickedManual() {
-        if (isValid()) {
-            try {
-                AclFundPoolCsvProcessor processor = fundPoolController.getCsvProcessor();
-                ProcessingResult<AclFundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
-                if (result.isSuccessful()) {
-                    int fundPoolDetailsCount = fundPoolController.loadManualFundPool(buildFundPool(), result.get());
-                    close();
-                    Windows.showNotificationWindow(
-                        ForeignUi.getMessage("message.upload_completed", fundPoolDetailsCount));
-                } else {
-                    Windows.showModalWindow(new ErrorUploadWindow(
-                        fundPoolController.getErrorResultStreamSource(uploadField.getValue(), result),
-                        ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
-                }
-            } catch (ValidationException e) {
-                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            if (ldmtCheckBox.getValue()) {
+                onConfirmClickedLdmt();
+            } else {
+                onConfirmClickedManual();
             }
         } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(fundPoolNameField, fundPoolPeriodYearField, fundPoolPeriodMonthComboBox,
                     licenseTypeComboBox, uploadField));
+        }
+    }
+
+    private void onConfirmClickedLdmt() {
+        if (fundPoolController.isLdmtDetailExist(licenseTypeComboBox.getValue())) {
+            int fundPoolDetailsCount = fundPoolController.createLdmtFundPool(buildFundPool());
+            close();
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", fundPoolDetailsCount));
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_ldmt_detail"));
+        }
+    }
+
+    private void onConfirmClickedManual() {
+        try {
+            AclFundPoolCsvProcessor processor = fundPoolController.getCsvProcessor();
+            ProcessingResult<AclFundPoolDetail> result = processor.process(uploadField.getStreamToUploadedFile());
+            if (result.isSuccessful()) {
+                int fundPoolDetailsCount = fundPoolController.loadManualFundPool(buildFundPool(), result.get());
+                close();
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", fundPoolDetailsCount));
+            } else {
+                Windows.showModalWindow(new ErrorUploadWindow(
+                    fundPoolController.getErrorResultStreamSource(uploadField.getValue(), result),
+                    ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
+            }
+        } catch (ValidationException e) {
+            Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
         }
     }
 
@@ -213,7 +219,10 @@ public class CreateAclFundPoolWindow extends Window {
     private CheckBox initLdmtCheckBox() {
         ldmtCheckBox = new CheckBox();
         ldmtCheckBox.setValue(false);
-        ldmtCheckBox.addValueChangeListener(event -> uploadField.setEnabled(!event.getValue()));
+        ldmtCheckBox.addValueChangeListener(event -> {
+            uploadField.setEnabled(!event.getValue());
+            binder.validate();
+        });
         ldmtCheckBox.setCaption(ForeignUi.getMessage("label.ldmt"));
         VaadinUtils.addComponentStyle(ldmtCheckBox, "acl-ldmt-checkbox");
         return ldmtCheckBox;
@@ -222,13 +231,7 @@ public class CreateAclFundPoolWindow extends Window {
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
-        confirmButton.addClickListener(event -> {
-            if (ldmtCheckBox.getValue()) {
-                onConfirmClickedLdmt();
-            } else {
-                onConfirmClickedManual();
-            }
-        });
+        confirmButton.addClickListener(event -> onConfirmClicked());
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(confirmButton, closeButton);
         return horizontalLayout;
