@@ -50,6 +50,14 @@ public interface IAclFundPoolService {
     boolean fundPoolExists(String name);
 
     /**
+     * Checks whether LDMT {@link AclFundPoolDetail} exists for Fund Pool creation with provided license type.
+     *
+     * @param licenseType license type
+     * @return {@code true} - if detail exists, {@code false} - otherwise
+     */
+    boolean isLdmtDetailExist(String licenseType);
+
+    /**
      * Gets list of {@link AclFundPoolDetailDto}s by specified filter.
      *
      * @param filter applied {@link AclFundPoolDetailFilter}

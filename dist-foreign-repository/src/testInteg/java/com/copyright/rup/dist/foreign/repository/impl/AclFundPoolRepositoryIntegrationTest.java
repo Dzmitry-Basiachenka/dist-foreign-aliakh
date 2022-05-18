@@ -72,6 +72,13 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "is-ldmt-detail-exist.groovy")
+    public void testIsLdmtDetailExist() {
+        assertTrue(repository.isLdmtDetailExist("ACL"));
+        assertFalse(repository.isLdmtDetailExist("VGW"));
+    }
+
+    @Test
     @TestData(fileName = "rollback-only.groovy")
     public void testInsertDetails() {
         repository.insert(buildAclFundPool());

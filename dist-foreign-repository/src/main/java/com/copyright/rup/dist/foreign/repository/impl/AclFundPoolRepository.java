@@ -42,6 +42,11 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     }
 
     @Override
+    public boolean isLdmtDetailExist(String licenseType) {
+        return selectOne("IAclFundPoolMapper.isLdmtDetailExist", Objects.requireNonNull(licenseType));
+    }
+
+    @Override
     public void insertDetail(AclFundPoolDetail detail) {
         insert("IAclFundPoolMapper.insertDetail", Objects.requireNonNull(detail));
     }

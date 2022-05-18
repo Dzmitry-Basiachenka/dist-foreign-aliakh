@@ -82,6 +82,11 @@ public class AclFundPoolService implements IAclFundPoolService {
     }
 
     @Override
+    public boolean isLdmtDetailExist(String licenseType) {
+        return fundPoolRepository.isLdmtDetailExist(licenseType);
+    }
+
+    @Override
     public List<AclFundPoolDetailDto> getDtosByFilter(AclFundPoolDetailFilter filter) {
         return !filter.isEmpty() ? fundPoolRepository.findDtosByFilter(filter) : Collections.emptyList();
     }

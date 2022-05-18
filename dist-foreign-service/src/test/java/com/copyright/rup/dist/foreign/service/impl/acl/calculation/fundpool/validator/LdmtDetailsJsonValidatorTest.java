@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.integration.camel.ValidationException;
 import com.copyright.rup.dist.common.test.TestUtils;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -38,13 +39,13 @@ public class LdmtDetailsJsonValidatorTest {
             assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
                 "Licensee Class Id should be a valid integer number: not_a_number, " +
                 "Type Of Use should be either 'DIGITAL' or 'PHOTOCOPY': error, " +
-                "Gross Amount should be a valid decimal number: not_a_number, " +
-                "Net Amount should be a valid decimal number: not_a_number]; " +
+                "Gross Amount should be a positive number and not exceed 10 digits: not_a_number, " +
+                "Net Amount should be a positive number and not exceed 10 digits: not_a_number]; " +
                 "LDMT detail #1 is not valid: [" +
                 "Licensee Class Id should be a valid integer number: not_a_number, " +
                 "Type Of Use should be either 'DIGITAL' or 'PHOTOCOPY': error, " +
-                "Gross Amount should be a valid decimal number: not_a_number, " +
-                "Net Amount should be a valid decimal number: not_a_number]", e.getMessage());
+                "Gross Amount should be a positive number and not exceed 10 digits: not_a_number, " +
+                "Net Amount should be a positive number and not exceed 10 digits: not_a_number]", e.getMessage());
         }
     }
 
@@ -107,8 +108,8 @@ public class LdmtDetailsJsonValidatorTest {
             fail();
         } catch (ValidationException e) {
             assertEquals(LDMT_DETAIL_0_IS_NOT_VALID +
-                "Gross Amount should be a valid decimal number: not_a_number, " +
-                "Net Amount should be a valid decimal number: not_a_number]", e.getMessage());
+                "Gross Amount should be a positive number and not exceed 10 digits: -10.02, " +
+                "Net Amount should be a positive number and not exceed 10 digits: 12345678901.00]", e.getMessage());
         }
     }
 

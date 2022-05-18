@@ -80,6 +80,16 @@
         )
     </select>
 
+    <select id="isLdmtDetailExist" parameterType="string" resultType="boolean">
+        select exists (
+            select 1
+            from ${schema}.df_acl_fund_pool_detail
+            where is_ldmt = true
+                and df_acl_fund_pool_uid is null
+                and license_type = #{licenseType}
+        )
+    </select>
+
     <insert id="insertDetail" parameterType="AclFundPoolDetail">
         insert into ${schema}.df_acl_fund_pool_detail (
             <include refid="aclFundPoolDetailColumns"/>

@@ -62,6 +62,7 @@ import java.util.function.Supplier;
 @PrepareForTest({StreamSource.class})
 public class AclFundPoolControllerTest {
 
+    private static final String LICENSE_TYPE = "ACL";
     private final AclFundPoolController controller = new AclFundPoolController();
     private CsvProcessorFactory csvProcessorFactory;
     private IAclFundPoolService fundPoolService;
@@ -104,6 +105,14 @@ public class AclFundPoolControllerTest {
         expect(fundPoolService.fundPoolExists("Fund Pool Name")).andReturn(true).once();
         replay(fundPoolService);
         assertTrue(controller.isFundPoolExist("Fund Pool Name"));
+        verify(fundPoolService);
+    }
+
+    @Test
+    public void testIsLdmtDetailExist() {
+        expect(fundPoolService.isLdmtDetailExist(LICENSE_TYPE)).andReturn(true).once();
+        replay(fundPoolService);
+        assertTrue(controller.isLdmtDetailExist(LICENSE_TYPE));
         verify(fundPoolService);
     }
 
@@ -175,7 +184,7 @@ public class AclFundPoolControllerTest {
     private AclFundPoolDetail buildFundPoolDetail() {
         AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
         aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");
-        aclFundPoolDetail.setLicenseType("ACL");
+        aclFundPoolDetail.setLicenseType(LICENSE_TYPE);
         aclFundPoolDetail.setGrossAmount(new BigDecimal("0.55"));
         return aclFundPoolDetail;
     }
@@ -183,7 +192,7 @@ public class AclFundPoolControllerTest {
     private AclFundPool buildFundPool(boolean manualUploadFlag) {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setName("Fund Pool Name");
-        aclFundPool.setLicenseType("ACL");
+        aclFundPool.setLicenseType(LICENSE_TYPE);
         aclFundPool.setManualUploadFlag(manualUploadFlag);
         return aclFundPool;
     }
