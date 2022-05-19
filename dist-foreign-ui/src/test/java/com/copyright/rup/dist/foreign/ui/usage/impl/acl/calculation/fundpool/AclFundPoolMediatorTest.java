@@ -31,20 +31,26 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class AclFundPoolMediatorTest {
 
     private static final String FDA_SPECIALIST_PERMISSION = "FDA_SPECIALIST_PERMISSION";
+    private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
+
     private final MenuBar fundPoolMenuBar = new MenuBar();
 
+    private MenuBar.MenuItem createMenuItem;
     private AclFundPoolMediator mediator;
 
     @Before
     public void setUp() {
         mediator = new AclFundPoolMediator();
         mediator.setFundPoolMenuBar(fundPoolMenuBar);
+        createMenuItem = fundPoolMenuBar.addItem("Create");
+        mediator.setCreateMenuItem(createMenuItem);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(fundPoolMenuBar.isVisible());
@@ -55,9 +61,11 @@ public class AclFundPoolMediatorTest {
     public void testApplyManagerPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(fundPoolMenuBar.isVisible());
+        assertTrue(fundPoolMenuBar.isVisible());
+        assertFalse(createMenuItem.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -65,6 +73,7 @@ public class AclFundPoolMediatorTest {
     public void testApplyViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(fundPoolMenuBar.isVisible());

@@ -40,6 +40,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
 
     private IAclFundPoolController controller;
     private MenuBar aclFundPoolMenuBar;
+    private MenuBar.MenuItem createMenuItem;
     private Grid<AclFundPoolDetailDto> aclFundPoolDetailGrid;
 
     @Override
@@ -68,11 +69,13 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     public IMediator initMediator() {
         AclFundPoolMediator mediator = new AclFundPoolMediator();
         mediator.setFundPoolMenuBar(aclFundPoolMenuBar);
+        mediator.setCreateMenuItem(createMenuItem);
         return mediator;
     }
 
     private VerticalLayout initFundPoolLayout() {
         initFundPoolGrid();
+        initFundPoolMenuBar();
         VerticalLayout layout = new VerticalLayout(initButtonsLayout(), aclFundPoolDetailGrid);
         layout.setSizeFull();
         layout.setMargin(false);
@@ -141,20 +144,25 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
             .setWidth(150);
     }
 
-    private HorizontalLayout initButtonsLayout() {
+    private void initFundPoolMenuBar() {
         aclFundPoolMenuBar = new MenuBar();
         MenuBar.MenuItem menuItem =
             aclFundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
-        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+        createMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclFundPoolWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewAclFundPoolWindow(controller)));
+        VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "acl-fund-pool-menu-bar");
+        VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "v-menubar-df");
+    }
+
+    private HorizontalLayout initButtonsLayout() {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader =
             new OnDemandFileDownloader(controller.getExportAclFundPoolDetailsStreamSource().getSource());
         fileDownloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(aclFundPoolMenuBar, exportButton);
+        HorizontalLayout layout = new HorizontalLayout(aclFundPoolMenuBar, aclFundPoolMenuBar, exportButton);
         layout.setMargin(true);
-        VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "acl-fund-pool-menu-bar");
-        VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "v-menubar-df");
         VaadinUtils.addComponentStyle(layout, "acl-fund-pool-buttons");
         return layout;
     }

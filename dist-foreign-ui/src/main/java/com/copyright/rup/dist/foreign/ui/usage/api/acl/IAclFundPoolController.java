@@ -103,4 +103,18 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
      * @return instance of {@link IStreamSource} for export.
      */
     IStreamSource getExportAclFundPoolDetailsStreamSource();
+
+    /**
+     * Gets list of all ACL fund pools.
+     *
+     * @return list of all {@link AclFundPool}s
+     */
+    List<AclFundPool> getAllAclFundPools();
+
+    /**
+     * Deletes {@link AclFundPool} with all its ACL grant details.
+     *
+     * @param fundPool {@link AclFundPool} to delete
+     */
+    void deleteAclFundPool(AclFundPool fundPool);
 }
