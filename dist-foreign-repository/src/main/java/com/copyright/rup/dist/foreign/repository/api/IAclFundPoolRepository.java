@@ -95,4 +95,18 @@ public interface IAclFundPoolRepository {
      * @return list of periods
      */
     List<Integer> findPeriods();
+
+    /**
+     * Deletes ACL fund pool details by ACL fund pool id.
+     *
+     * @param fundPoolId id of the {@link com.copyright.rup.dist.foreign.domain.AclFundPool}
+     */
+    void deleteDetailsByFundPoolId(String fundPoolId);
+
+    /**
+     * Deletes ACL fund pool by id.
+     *
+     * @param fundPoolId id of the {@link AclFundPool}
+     */
+    void deleteById(String fundPoolId);
 }

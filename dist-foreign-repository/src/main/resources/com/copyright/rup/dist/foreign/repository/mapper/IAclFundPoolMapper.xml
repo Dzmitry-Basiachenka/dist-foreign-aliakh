@@ -233,4 +233,14 @@
         from ${schema}.df_acl_fund_pool
         order by period desc
     </select>
+
+    <delete id="deleteById">
+        delete from ${schema}.df_acl_fund_pool
+        where df_acl_fund_pool_uid = #{fundPoolId}
+    </delete>
+
+    <delete id="deleteDetailsByFundPoolId" parameterType="string">
+        delete from ${schema}.df_acl_fund_pool_detail
+        where df_acl_fund_pool_uid = #{fundPoolId}
+    </delete>
 </mapper>

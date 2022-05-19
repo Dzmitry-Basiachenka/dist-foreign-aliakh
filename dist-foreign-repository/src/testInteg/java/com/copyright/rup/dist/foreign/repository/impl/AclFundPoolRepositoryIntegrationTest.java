@@ -45,12 +45,13 @@ public class AclFundPoolRepositoryIntegrationTest {
     private static final String ACL_FUND_POOL_NAME = "ACL Fund Pool 2021";
     private static final String USER_NAME = "user@copyright.com";
     private static final String LICENSE_TYPE = "ACL";
+    private static final String ROLLBACK_ONLY = "rollback-only.groovy";
 
     @Autowired
     private AclFundPoolRepository repository;
 
     @Test
-    @TestData(fileName = "rollback-only.groovy")
+    @TestData(fileName = ROLLBACK_ONLY)
     public void testInsert() {
         AclFundPool fundPool = buildAclFundPool();
         repository.insert(fundPool);
@@ -79,7 +80,7 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "rollback-only.groovy")
+    @TestData(fileName = ROLLBACK_ONLY)
     public void testInsertDetails() {
         repository.insert(buildAclFundPool());
         AclFundPoolDetail fundPoolDetail = buildAclFundPoolDetail();
@@ -134,6 +135,27 @@ public class AclFundPoolRepositoryIntegrationTest {
         List<Integer> actualPeriods = repository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
+    }
+
+    @Test
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testDeleteByFundPoolId() {
+        repository.insert(buildAclFundPool());
+        AclFundPoolDetail fundPoolDetail = buildAclFundPoolDetail();
+        repository.insertDetail(fundPoolDetail);
+        assertEquals(1, repository.findDetailsByFundPoolId(ACL_FUND_POOL_ID).size());
+        repository.deleteDetailsByFundPoolId(ACL_FUND_POOL_ID);
+        assertEquals(0, repository.findDetailsByFundPoolId(ACL_FUND_POOL_ID).size());
+    }
+
+    @Test
+    @TestData(fileName = ROLLBACK_ONLY)
+    public void testDeleteById() {
+        AclFundPool fundPool = buildAclFundPool();
+        repository.insert(fundPool);
+        assertEquals(1, repository.findAll().size());
+        repository.deleteById(fundPool.getId());
+        assertEquals(0, repository.findAll().size());
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
