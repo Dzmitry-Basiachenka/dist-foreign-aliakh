@@ -81,4 +81,14 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     public List<Integer> findPeriods() {
         return selectList("IAclFundPoolMapper.findPeriods");
     }
+
+    @Override
+    public void deleteDetailsByFundPoolId(String fundPoolId) {
+        delete("IAclFundPoolMapper.deleteDetailsByFundPoolId", Objects.requireNonNull(fundPoolId));
+    }
+
+    @Override
+    public void deleteById(String fundPoolId) {
+        delete("IAclFundPoolMapper.deleteById", Objects.requireNonNull(fundPoolId));
+    }
 }
