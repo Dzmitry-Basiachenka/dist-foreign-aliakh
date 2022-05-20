@@ -100,4 +100,14 @@ public class AclFundPoolService implements IAclFundPoolService {
     public List<Integer> getPeriods() {
         return fundPoolRepository.findPeriods();
     }
+
+    @Override
+    @Transactional
+    public void deleteAclFundPool(AclFundPool fundPool) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete ACL fund fool. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        fundPoolRepository.deleteDetailsByFundPoolId(fundPool.getId());
+        fundPoolRepository.deleteById(fundPool.getId());
+        LOGGER.info("Delete ACL fund fool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+    }
 }

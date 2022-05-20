@@ -69,6 +69,7 @@ public class AclFundPoolControllerTest {
     private IAclFundPoolFilterController fundPoolFilterController;
     private IAclCalculationReportService aclCalculationReportService;
     private IStreamSourceHandler streamSourceHandler;
+    private IAclFundPoolFilterWidget aclFundPoolFilterWidget;
 
     @Before
     public void setUp() {
@@ -77,6 +78,7 @@ public class AclFundPoolControllerTest {
         fundPoolFilterController = createMock(IAclFundPoolFilterController.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        aclFundPoolFilterWidget = createMock(IAclFundPoolFilterWidget.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, fundPoolService);
         Whitebox.setInternalState(controller, fundPoolFilterController);
@@ -179,6 +181,19 @@ public class AclFundPoolControllerTest {
         assertNotNull(posConsumer);
         verify(OffsetDateTime.class, fundPoolFilterWidget, fundPoolFilterController, streamSourceHandler,
             aclCalculationReportService);
+    }
+
+    @Test
+    public void testDeleteAclFundPool() {
+        AclFundPool fundPool = new AclFundPool();
+        fundPoolService.deleteAclFundPool(fundPool);
+        expectLastCall().once();
+        expect(fundPoolFilterController.getWidget()).andReturn(aclFundPoolFilterWidget).once();
+        aclFundPoolFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(fundPoolService, fundPoolFilterController, aclFundPoolFilterWidget);
+        controller.deleteAclFundPool(fundPool);
+        verify(fundPoolService, fundPoolFilterController, aclFundPoolFilterWidget);
     }
 
     private AclFundPoolDetail buildFundPoolDetail() {

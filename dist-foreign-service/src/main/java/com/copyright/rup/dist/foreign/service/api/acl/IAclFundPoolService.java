@@ -78,4 +78,11 @@ public interface IAclFundPoolService {
      * @return list of periods
      */
     List<Integer> getPeriods();
+
+    /**
+     * Deletes ACL fund pool.
+     *
+     * @param fundPool instance of {@link AclFundPool}
+     */
+    void deleteAclFundPool(AclFundPool fundPool);
 }

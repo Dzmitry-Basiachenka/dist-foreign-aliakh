@@ -48,7 +48,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
      */
     public ViewAclFundPoolWindow(IAclFundPoolController controller) {
         this.controller = controller;
-        setWidth(810, Unit.PIXELS);
+        setWidth(870, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_fund_pool.search"));

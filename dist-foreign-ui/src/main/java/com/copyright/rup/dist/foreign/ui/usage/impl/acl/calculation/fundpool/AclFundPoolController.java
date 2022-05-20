@@ -24,7 +24,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -111,13 +110,13 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
 
     @Override
     public List<AclFundPool> getAllAclFundPools() {
-        //TODO will implement later
-        return new ArrayList<>();
+        return fundPoolService.getAll();
     }
 
     @Override
     public void deleteAclFundPool(AclFundPool fundPool) {
-        //TODO will implement later
+        fundPoolService.deleteAclFundPool(fundPool);
+        aclFundPoolFilterController.getWidget().clearFilter();
     }
 
     @Override

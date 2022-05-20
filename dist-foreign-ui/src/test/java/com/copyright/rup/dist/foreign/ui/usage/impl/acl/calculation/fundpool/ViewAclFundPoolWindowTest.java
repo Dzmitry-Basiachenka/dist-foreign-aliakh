@@ -80,7 +80,7 @@ public class ViewAclFundPoolWindowTest {
 
     @Test
     public void testStructure() {
-        verifyWindow(window, "View Fund Pool", 810, 550, Sizeable.Unit.PIXELS);
+        verifyWindow(window, "View Fund Pool", 870, 550, Sizeable.Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         assertTrue(content.getComponent(0) instanceof SearchWidget);

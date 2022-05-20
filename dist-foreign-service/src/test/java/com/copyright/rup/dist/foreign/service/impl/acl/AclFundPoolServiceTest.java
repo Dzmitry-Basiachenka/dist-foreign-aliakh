@@ -151,6 +151,20 @@ public class AclFundPoolServiceTest {
         verify(fundPoolRepository);
     }
 
+    @Test
+    public void testDeleteAclFundPool() {
+        mockStatic(RupContextUtils.class);
+        AclFundPool fundPool = buildFundPool();
+        fundPool.setId("39c41cc6-7615-4f74-ab86-66bdb33be233");
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        fundPoolRepository.deleteDetailsByFundPoolId(fundPool.getId());
+        fundPoolRepository.deleteById(fundPool.getId());
+        expectLastCall().once();
+        replay(RupContextUtils.class, fundPoolRepository);
+        service.deleteAclFundPool(fundPool);
+        verify(RupContextUtils.class, fundPoolRepository);
+    }
+
     private AclFundPoolDetail buildFundPoolDetail() {
         AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
         aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");

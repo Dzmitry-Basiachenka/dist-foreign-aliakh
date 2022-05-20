@@ -10,6 +10,8 @@
         <result property="period" column="period"/>
         <result property="licenseType" column="license_type"/>
         <result property="manualUploadFlag" column="is_manual"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="totalAmount" column="total_amount"/>
     </resultMap>
 
     <resultMap id="aclFundPoolDetailResultMap" type="AclFundPoolDetail" extends="StoredEntityMapper.storedEntityResult">
@@ -223,9 +225,19 @@
 
     <select id="findAllFundPools" resultMap="aclFundPoolResultMap">
         select
-        <include refid="aclFundPoolColumns"/>
-        from ${schema}.df_acl_fund_pool
-        order by updated_datetime desc
+            fp.df_acl_fund_pool_uid,
+            name,
+            period,
+            fp.license_type,
+            is_manual,
+            sum(fpd.gross_amount) as total_amount,
+            sum(fpd.net_amount) as net_amount,
+            fp.created_datetime,
+            fp.created_by_user
+        from ${schema}.df_acl_fund_pool fp
+        left join ${schema}.df_acl_fund_pool_detail fpd on fp.df_acl_fund_pool_uid = fpd.df_acl_fund_pool_uid
+        group by fp.df_acl_fund_pool_uid,  fp.license_type, fp.updated_datetime
+        order by fp.updated_datetime desc
     </select>
 
     <select id="findPeriods" resultType="int">
