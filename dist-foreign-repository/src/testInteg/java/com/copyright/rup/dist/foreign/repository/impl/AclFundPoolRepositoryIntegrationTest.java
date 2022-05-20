@@ -119,13 +119,13 @@ public class AclFundPoolRepositoryIntegrationTest {
     @TestData(fileName = FOLDER_NAME + "find-all.groovy")
     public void testFindAll() {
         AclFundPool aclFundPool1 = buildAclFundPool("2d46b574-c1f3-4322-8b45-e322574bf057",
-            "ACL Fund Pool 202212", 202212, LICENSE_TYPE, true);
+            "ACL Fund Pool 202212", 202212, LICENSE_TYPE, true, new BigDecimal("2400.52"), new BigDecimal("2711.00"));
         AclFundPool aclFundPool2 = buildAclFundPool("037a9464-fec3-43a2-a71e-711c620100d7",
-            "ACL Fund Pool 202206", 202206, "MACL", true);
+            "ACL Fund Pool 202206", 202206, "MACL", true, new BigDecimal("1000.00"), new BigDecimal("1180.24"));
         List<AclFundPool> fundPools = repository.findAll();
         assertEquals(2, fundPools.size());
-        verifyAclFundPool(aclFundPool1, fundPools.get(0));
-        verifyAclFundPool(aclFundPool2, fundPools.get(1));
+        verifyAclFundPool(aclFundPool1, fundPools.get(1));
+        verifyAclFundPool(aclFundPool2, fundPools.get(0));
     }
 
     @Test
@@ -175,13 +175,15 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     private AclFundPool buildAclFundPool(String id, String name, Integer period, String licenseType,
-                                         boolean manualUploadFlag) {
+                                         boolean manualUploadFlag, BigDecimal netAmount, BigDecimal totalAmount) {
         AclFundPool aclFundPool = new AclFundPool();
         aclFundPool.setId(id);
         aclFundPool.setName(name);
         aclFundPool.setPeriod(period);
         aclFundPool.setLicenseType(licenseType);
         aclFundPool.setManualUploadFlag(manualUploadFlag);
+        aclFundPool.setTotalAmount(totalAmount);
+        aclFundPool.setNetAmount(netAmount);
         return aclFundPool;
     }
 
@@ -202,6 +204,8 @@ public class AclFundPoolRepositoryIntegrationTest {
         assertEquals(expectedFundPool.getPeriod(), actualFundPool.getPeriod());
         assertEquals(expectedFundPool.getLicenseType(), actualFundPool.getLicenseType());
         assertEquals(expectedFundPool.isManualUploadFlag(), actualFundPool.isManualUploadFlag());
+        assertEquals(expectedFundPool.getNetAmount(), actualFundPool.getNetAmount());
+        assertEquals(expectedFundPool.getTotalAmount(), actualFundPool.getTotalAmount());
         assertEquals(expectedFundPool, actualFundPool);
     }
 }
