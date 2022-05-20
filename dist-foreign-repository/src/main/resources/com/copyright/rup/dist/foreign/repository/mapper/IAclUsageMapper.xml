@@ -79,7 +79,7 @@
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-        join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         <include refid="IAclUsageMapper.aclUsageFilter"/>
     </sql>
 
@@ -90,7 +90,7 @@
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_detail_licensee_class dlc on u.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-        join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
+        left join ${schema}.df_publication_type pt on u.publication_type_uid = pt.df_publication_type_uid
         <include refid="IAclUsageMapper.aclUsageFilter"/>
         order by
         <choose>

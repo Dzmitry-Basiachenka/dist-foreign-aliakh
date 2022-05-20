@@ -634,7 +634,7 @@ public class AclUsageRepositoryIntegrationTest {
         assertSortingFindDtosByFilter(ACL_USAGE_UID_1, ACL_USAGE_UID_4, "aggLcId");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "aggLcName");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_4, ACL_USAGE_UID_5, "surveyCountry");
-        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "publicationType");
+        assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_1, "publicationType");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_1, "contentUnitPrice");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_5, ACL_USAGE_UID_2, "typeOfUse");
         assertSortingFindDtosByFilter(ACL_USAGE_UID_2, ACL_USAGE_UID_5, "annualizedCopies");

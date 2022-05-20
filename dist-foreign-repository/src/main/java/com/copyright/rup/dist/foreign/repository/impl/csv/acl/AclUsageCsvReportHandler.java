@@ -3,10 +3,13 @@ package com.copyright.rup.dist.foreign.repository.impl.csv.acl;
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Writes ACL grant details into an {@link OutputStream}.
@@ -47,7 +50,8 @@ public class AclUsageCsvReportHandler extends BaseCsvReportHandler<AclUsageDto> 
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClassId()));
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(bean.getSurveyCountry());
-        beanProperties.add(bean.getPublicationType().getName());
+        beanProperties.add(
+            Objects.nonNull(bean.getPublicationType()) ? bean.getPublicationType().getName() : StringUtils.EMPTY);
         beanProperties.add(getBeanBigDecimal(bean.getContentUnitPrice()));
         beanProperties.add(bean.getTypeOfUse());
         beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
