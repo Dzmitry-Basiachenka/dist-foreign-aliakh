@@ -448,9 +448,9 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
             updateOperatorField(filterBinder, statisticalMultiplierFromField, statisticalMultiplierToField,
                 event.getValue()));
         filterBinder.forField(statisticalMultiplierFromField)
+            .withValidator(new AmountZeroValidator())
             .withValidator(getBetweenOperatorValidator(statisticalMultiplierFromField,
                 statisticalMultiplierOperatorComboBox), BETWEEN_OPERATOR_VALIDATION_MESSAGE)
-            .withValidator(new AmountZeroValidator())
             .bind(filter -> Objects.toString(filter.getStatisticalMultiplierExpression().getFieldFirstValue(),
                     StringUtils.EMPTY),
                 (filter, value) -> filter.getStatisticalMultiplierExpression()

@@ -314,8 +314,9 @@ public class UdmBaselineFiltersWindowTest {
 
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
                                                       ComboBox<FilterOperatorEnum> operatorComboBox) {
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, DECIMAL_VALIDATION_MESSAGE);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, "1.2345677",

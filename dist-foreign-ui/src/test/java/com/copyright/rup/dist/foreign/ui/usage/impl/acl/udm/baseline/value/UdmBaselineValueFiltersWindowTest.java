@@ -386,8 +386,9 @@ public class UdmBaselineValueFiltersWindowTest {
     private void verifyBigDecimalOperationValidations(TextField fromField, TextField toField,
                                                       ComboBox<FilterOperatorEnum> operatorComboBox,
                                                       String fieldSpecificErrorMessage) {
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, null, true);
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, DECIMAL_VALIDATION_MESSAGE);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, DECIMAL_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
