@@ -78,6 +78,8 @@ public class EditAclUsagesWindowTest {
     private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
     private static final String SPACES_STRING = "   ";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String POSITIVE_AND_LENGTH_ERROR_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
     private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
         "Field value should be positive number or zero and should not exceed 10 digits";
     private static final String BINDER_NAME = "binder";
@@ -151,9 +153,19 @@ public class EditAclUsagesWindowTest {
     public void testAnnualizedCopiesValidation() {
         initEditWindow();
         TextField annualizedCopiesField = Whitebox.getInternalState(window, "annualizedCopiesField");
-        String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
         String scaleValidationMessage = "Field value should not exceed 5 digits after the decimal point";
-        verifyCommonNumberValidations(annualizedCopiesField, decimalValidationMessage);
+        verifyCommonNumberValidations(annualizedCopiesField, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
+        validateFieldAndVerifyErrorMessage(
+            annualizedCopiesField, "0", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, " .000011 ", binder, scaleValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 0.000011 ", binder, scaleValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.999999", binder, scaleValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(
+            annualizedCopiesField, "12345678901", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            annualizedCopiesField, "9999999998.999999", binder, scaleValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(
+            annualizedCopiesField, "9999999999.999999", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.00001", binder, null, true);
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 0.00001 ", binder, null, true);
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.9", binder, null, true);
@@ -162,11 +174,10 @@ public class EditAclUsagesWindowTest {
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.9999", binder, null, true);
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.99999", binder, null, true);
         validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 0.99999 ", binder, null, true);
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "-1", binder, decimalValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.000001", binder, decimalValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.999999", binder, scaleValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "1.00001", binder, decimalValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "2", binder, decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 1234567890 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "9999999999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "123456789.12345", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "9999999999.99999", binder, null, true);
     }
 
     @Test
@@ -280,6 +291,7 @@ public class EditAclUsagesWindowTest {
     private void verifyCommonNumberValidations(TextField textField, String numberValidationMessage) {
         validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, "-1", binder, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, null, true);
         validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, binder, null, true);
     }
