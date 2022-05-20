@@ -25,5 +25,26 @@
     "editable": true,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
+  },
+  {
+    "usageBatchId": "1fa04580-af0a-4c57-8470-37ae9c06bea1",
+    "usageOrigin": "SS",
+    "channel": "CCC",
+    "period": 202112,
+    "originalDetailId": "OGN674GHHSB008",
+    "wrWrkInst": 123160519,
+    "systemTitle": "Washington post",
+    "detailLicenseeClass": {
+      "id": 3,
+      "description": "Lumber, Paper, etc."
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "United States",
+    "typeOfUse": "PRINT",
+    "annualizedCopies": 15.00000,
+    "editable": true,
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com"
   }
 ]

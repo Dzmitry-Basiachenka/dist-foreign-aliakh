@@ -112,12 +112,15 @@ public class AclUsageRepositoryIntegrationTest {
         String usageBatchId = "1fa04580-af0a-4c57-8470-37ae9c06bea1";
         Set<Integer> periods = Sets.newHashSet(202106, 202112);
         List<String> usageIds = aclUsageRepository.populateAclUsages(usageBatchId, periods, USER_NAME);
-        assertEquals(1, usageIds.size());
-        List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(Collections.singletonList(usageIds.get(0)));
-        assertEquals(1, actualUsages.size());
-        AclUsageDto expectedUsage = loadExpectedDtos("json/acl/acl_usage_dto.json").get(0);
-        expectedUsage.setId(usageIds.get(0));
-        verifyAclUsageDto(expectedUsage, actualUsages.get(0), false);
+        assertEquals(2, usageIds.size());
+        List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(usageIds);
+        assertEquals(2, actualUsages.size());
+        List<AclUsageDto> expectedUsages = loadExpectedDtos("json/acl/acl_usage_dto.json");
+        IntStream.range(0, 2).forEach(i -> {
+            AclUsageDto expectedUsage = expectedUsages.get(i);
+            expectedUsage.setId(usageIds.get(i));
+            verifyAclUsageDto(expectedUsage, actualUsages.get(i), false);
+        });
     }
 
     @Test
@@ -663,7 +666,7 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getAggregateLicenseeClassId(), actualUsage.getAggregateLicenseeClassId());
         assertEquals(expectedUsage.getAggregateLicenseeClassName(), actualUsage.getAggregateLicenseeClassName());
         assertEquals(expectedUsage.getSurveyCountry(), actualUsage.getSurveyCountry());
-        assertEquals(expectedUsage.getPublicationType().getName(), actualUsage.getPublicationType().getName());
+        assertEquals(expectedUsage.getPublicationType(), actualUsage.getPublicationType());
         assertEquals(expectedUsage.getContentUnitPrice(), actualUsage.getContentUnitPrice());
         assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());

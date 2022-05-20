@@ -414,7 +414,7 @@ databaseChangeLog {
         createTable(tableName: 'df_acl_fund_pool_detail', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
                 remarks: 'Table for storing ACL fund pool details') {
 
-            column(name: 'df_acl_fund_pool_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool detail'){
+            column(name: 'df_acl_fund_pool_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool detail') {
                 constraints(nullable: false)
             }
             column(name: 'df_acl_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
@@ -478,6 +478,23 @@ databaseChangeLog {
 
         rollback {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail', columnName: 'is_ldmt')
+        }
+    }
+
+    changeSet(id: '2022-05-20-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-69208 FDA: UAT Feedback Adjust Usage Batch Creation: drop not null constrains from " +
+                "content_unit_price, publication_type_uid columns in table df_acl_usage")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'content_unit_price', columnDataType: 'NUMERIC (38,10)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                columnName: 'publication_type_uid', columnDataType: 'VARCHAR(255)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'content_unit_price', columnDataType: 'NUMERIC (38,10)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_acl_usage',
+                    columnName: 'publication_type_uid', columnDataType: 'VARCHAR(255)')
         }
     }
 }
