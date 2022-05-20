@@ -49,7 +49,7 @@ public class EditAclUsageWindow extends Window {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
     private static final Range<BigDecimal> ANNUALIZED_COPIES_RANGE =
-        Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
+        Range.closed(new BigDecimal("0.00001"), new BigDecimal("9999999999.99999"));
     private static final Range<Integer> ANNUALIZED_COPIES_SCALE_RANGE = Range.closed(0, 5);
 
     private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
@@ -167,7 +167,7 @@ public class EditAclUsageWindow extends Window {
         binder.forField(annualizedCopiesField)
             .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()) &&
                 ANNUALIZED_COPIES_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
-                ForeignUi.getMessage("field.error.positive_number_between", "0.00001", "1.00000"))
+                ForeignUi.getMessage("field.error.positive_number_and_length", 10))
             .withValidator(value -> StringUtils.isEmpty(value)
                     || ANNUALIZED_COPIES_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
                 ForeignUi.getMessage("field.error.number_scale", 5))
