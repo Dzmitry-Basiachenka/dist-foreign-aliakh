@@ -50,6 +50,6 @@ public class AmountValidator extends AbstractValidator<String> {
      */
     public boolean isValid(String value) {
         String trimmedValue = StringUtils.trimToEmpty(value);
-        return StringUtils.isEmpty(trimmedValue) || trimmedValue.matches(AMOUNT_REGEX);
+        return StringUtils.isEmpty(value) || trimmedValue.matches(AMOUNT_REGEX);
     }
 }

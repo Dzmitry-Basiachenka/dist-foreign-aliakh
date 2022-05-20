@@ -84,7 +84,7 @@ public class AaclExcludePayeeFilterWidgetTest {
         TextField minimumNetThreshold = Whitebox.getInternalState(widget, "minimumNetThreshold");
         String positiveNumberErrorMessage = "Field value should be positive number and should not exceed 10 digits";
         verifyField(minimumNetThreshold, StringUtils.EMPTY, binder, null, true);
-        verifyField(minimumNetThreshold, "   ", binder, null, true);
+        verifyField(minimumNetThreshold, "   ", binder, positiveNumberErrorMessage, false);
         verifyField(minimumNetThreshold, "  99  ", binder, null, true);
         verifyField(minimumNetThreshold, "  0.005  ", binder, null, true);
         verifyField(minimumNetThreshold, "  1.00  ", binder, null, true);

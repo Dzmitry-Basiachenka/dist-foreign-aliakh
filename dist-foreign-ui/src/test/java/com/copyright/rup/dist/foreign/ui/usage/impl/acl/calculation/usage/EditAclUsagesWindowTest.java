@@ -254,8 +254,8 @@ public class EditAclUsagesWindowTest {
         validateFieldAndVerifyErrorMessage(field, INVALID_NUMBER, binder, validationMessage, false);
         validateFieldAndVerifyErrorMessage(field, ".123", binder, validationMessage, false);
         validateFieldAndVerifyErrorMessage(field, "12345678901.12", binder, validationMessage, false);
+        validateFieldAndVerifyErrorMessage(field, SPACES_STRING, binder, validationMessage, false);
         validateFieldAndVerifyErrorMessage(field, StringUtils.EMPTY, binder, null, true);
-        validateFieldAndVerifyErrorMessage(field, SPACES_STRING, binder, null, true);
         validateFieldAndVerifyErrorMessage(field, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(field, VALID_INTEGER, binder, null, true);
         validateFieldAndVerifyErrorMessage(field, "1234567890.1234567890", binder, null, true);

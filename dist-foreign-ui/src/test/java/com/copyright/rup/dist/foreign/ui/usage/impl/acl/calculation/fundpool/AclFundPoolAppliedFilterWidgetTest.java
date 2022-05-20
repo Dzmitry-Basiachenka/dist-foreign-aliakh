@@ -74,7 +74,6 @@ public class AclFundPoolAppliedFilterWidgetTest {
         return filter;
     }
 
-
     private DetailLicenseeClass buildDetailLicenseeClass(int id, String description) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(id);

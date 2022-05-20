@@ -242,7 +242,7 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
         verifyField(priceField, StringUtils.EMPTY, null, true);
-        verifyField(priceField, SPACES_STRING, null, true);
+        verifyField(priceField, SPACES_STRING, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
         verifyField(priceField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
         verifyField(priceField, INTEGER_WITH_SPACES_STRING, null, true);
         verifyField(priceField, "-1", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
@@ -405,7 +405,7 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
         verifyField(contentField, StringUtils.EMPTY, null, true);
-        verifyField(contentField, SPACES_STRING, null, true);
+        verifyField(contentField, SPACES_STRING, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
         verifyField(contentField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
         verifyField(contentField, INTEGER_WITH_SPACES_STRING, null, true);
         verifyField(contentField, "-1", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);

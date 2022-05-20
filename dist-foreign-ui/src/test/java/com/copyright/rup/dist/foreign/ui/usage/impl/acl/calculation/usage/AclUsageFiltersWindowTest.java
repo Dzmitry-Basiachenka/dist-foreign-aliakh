@@ -489,13 +489,14 @@ public class AclUsageFiltersWindowTest {
     private void verifyAmountValidationZeroNotAllowed(TextField fromField, TextField toField,
                                                       ComboBox<FilterOperatorEnum> operatorComboBox,
                                                       String fieldSpecificErrorMessage) {
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
+        String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
         validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
     }
@@ -503,14 +504,15 @@ public class AclUsageFiltersWindowTest {
     private void verifyAmountValidationZeroAllowed(TextField fromField, TextField toField,
                                                       ComboBox<FilterOperatorEnum> operatorComboBox,
                                                       String fieldSpecificErrorMessage) {
-        verifyCommonOperationValidations(fromField, toField, operatorComboBox, BETWEEN_OPERATOR_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, null, true);
+        String numberValidationMessage =
+            "Field value should be positive number or zero and should not exceed 10 digits";
+        verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
         validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        String numberValidationMessage =
-            "Field value should be positive number or zero and should not exceed 10 digits";
         validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
         validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
     }

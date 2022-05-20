@@ -44,7 +44,7 @@ public class AmountZeroValidator extends AbstractValidator<String> {
      */
     public boolean isValid(String value) {
         String trimmedValue = StringUtils.trimToEmpty(value);
-        return StringUtils.isEmpty(trimmedValue) || trimmedValue.matches(AMOUNT_REGEX)
+        return StringUtils.isEmpty(value) || trimmedValue.matches(AMOUNT_REGEX)
             && 0 > BigDecimal.ZERO.compareTo(new BigDecimal(trimmedValue).setScale(2, RoundingMode.HALF_UP));
     }
 }
