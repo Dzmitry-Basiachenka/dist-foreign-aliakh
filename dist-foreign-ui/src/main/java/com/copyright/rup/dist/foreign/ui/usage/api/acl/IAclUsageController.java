@@ -92,7 +92,7 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
     /**
      * Gets list of all {@link PublicationType}s.
      *
-     * @return list of {@link PublicationType}
+     * @return list of {@link PublicationType}s
      */
     List<PublicationType> getPublicationTypes();
 

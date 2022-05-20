@@ -42,7 +42,6 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -135,7 +134,7 @@ public class AclUsageWidgetTest {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
         List<AclUsageDto> aclUsageDtos = ImmutableList.of(new AclUsageDto(), new AclUsageDto());
-        expect(JavaScript.getCurrent()).andReturn(PowerMock.createMock(JavaScript.class)).times(2);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(aclUsageDtos.size()).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
@@ -156,7 +155,7 @@ public class AclUsageWidgetTest {
     public void testSelectAllCheckBoxNotVisibleWhenGridEmpty() {
         mockStatic(JavaScript.class);
         setSpecialistExpectations();
-        expect(JavaScript.getCurrent()).andReturn(PowerMock.createMock(JavaScript.class)).times(2);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(Collections.emptyList()).once();
         expect(controller.getBeansCount()).andReturn(0).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);

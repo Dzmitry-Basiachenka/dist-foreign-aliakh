@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
@@ -13,6 +12,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.google.common.collect.Range;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -30,6 +30,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -47,6 +48,9 @@ import java.util.function.Consumer;
 public class EditAclUsageWindow extends Window {
 
     private static final String NUMBER_VALIDATION_MESSAGE = ForeignUi.getMessage("field.error.not_numeric");
+    private static final Range<BigDecimal> ANNUALIZED_COPIES_RANGE =
+        Range.closed(new BigDecimal("0.00001"), BigDecimal.ONE);
+    private static final Range<Integer> ANNUALIZED_COPIES_SCALE_RANGE = Range.closed(0, 5);
 
     private final TextField periodField = new TextField(ForeignUi.getMessage("label.edit.period"));
     private final TextField wrWrkInstField = new TextField(ForeignUi.getMessage("label.wr_wrk_inst"));
@@ -54,8 +58,8 @@ public class EditAclUsageWindow extends Window {
     private final ComboBox<String> typeOfUseComboBox = new ComboBox<>(ForeignUi.getMessage("label.tou"));
     private final TextField annualizedCopiesField = new TextField(ForeignUi.getMessage("label.annualized_copies"));
     private final TextField contentUnitPriceField = new TextField(ForeignUi.getMessage("label.content_unit_price"));
-    private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox
-        = new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
+    private final ComboBox<DetailLicenseeClass> detailLicenseeClassComboBox =
+        new ComboBox<>(ForeignUi.getMessage("label.det_lc"));
     private final Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
     private final Binder<AclUsageDto> binder = new Binder<>();
     private final IAclUsageController controller;
@@ -112,7 +116,6 @@ public class EditAclUsageWindow extends Window {
                     PeriodValidator.MONTH_6, PeriodValidator.MONTH_12))
             .bind(usage -> Objects.toString(usage.getPeriod(), StringUtils.EMPTY),
                 (usage, value) -> usage.setPeriod(NumberUtils.createInteger(StringUtils.trimToNull(value))));
-        periodField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(periodField, "acl-usage-edit-period-field");
         return buildCommonLayout(periodField, "label.edit.period");
     }
@@ -125,7 +128,6 @@ public class EditAclUsageWindow extends Window {
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 9), 0, 9))
             .bind(usage -> Objects.toString(usage.getWrWrkInst(), StringUtils.EMPTY),
                 (usage, value) -> usage.setWrWrkInst(NumberUtils.createLong(StringUtils.trimToNull(value))));
-        wrWrkInstField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(wrWrkInstField, "acl-usage-edit-wr-wrk-inst-field");
         return buildCommonLayout(wrWrkInstField, "label.wr_wrk_inst");
     }
@@ -145,7 +147,6 @@ public class EditAclUsageWindow extends Window {
     private HorizontalLayout buildTypeOfUseLayout() {
         typeOfUseComboBox.setSizeFull();
         typeOfUseComboBox.setItems("PRINT", "DIGITAL");
-        typeOfUseComboBox.addValueChangeListener(event -> binder.validate());
         binder.forField(typeOfUseComboBox).bind(AclUsageDto::getTypeOfUse, AclUsageDto::setTypeOfUse);
         VaadinUtils.addComponentStyle(typeOfUseComboBox, "acl-usage-edit-type-of-use-combo-box");
         return buildCommonLayout(typeOfUseComboBox, "label.tou");
@@ -164,11 +165,15 @@ public class EditAclUsageWindow extends Window {
     private HorizontalLayout buildAnnualizedCopiesLayout() {
         annualizedCopiesField.setSizeFull();
         binder.forField(annualizedCopiesField)
-            .withValidator(new AmountZeroValidator())
+            .withValidator(value -> StringUtils.isEmpty(value) || NumberUtils.isNumber(value.trim()) &&
+                ANNUALIZED_COPIES_RANGE.contains(NumberUtils.createBigDecimal(value.trim())),
+                ForeignUi.getMessage("field.error.positive_number_between", "0.00001", "1.00000"))
+            .withValidator(value -> StringUtils.isEmpty(value)
+                    || ANNUALIZED_COPIES_SCALE_RANGE.contains(NumberUtils.createBigDecimal(value.trim()).scale()),
+                ForeignUi.getMessage("field.error.number_scale", 5))
             .bind(usage -> Objects.toString(usage.getAnnualizedCopies(), StringUtils.EMPTY),
                 (usage, value) -> usage.setAnnualizedCopies(
                     NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        annualizedCopiesField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(annualizedCopiesField, "acl-usage-edit-annualized-copies-field");
         return buildCommonLayout(annualizedCopiesField, "label.annualized_copies");
     }
@@ -180,7 +185,6 @@ public class EditAclUsageWindow extends Window {
             .bind(usage -> Objects.toString(usage.getContentUnitPrice(), StringUtils.EMPTY),
                 (usage, value) -> usage.setContentUnitPrice(
                     NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
-        contentUnitPriceField.addValueChangeListener(event -> binder.validate());
         VaadinUtils.addComponentStyle(contentUnitPriceField, "acl-usage-edit-content-unit-price-field");
         return buildCommonLayout(contentUnitPriceField, "label.content_unit_price");
     }
@@ -210,7 +214,10 @@ public class EditAclUsageWindow extends Window {
         });
         saveButton.setEnabled(false);
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
-        discardButton.addClickListener(event -> binder.readBean(null));
+        discardButton.addClickListener(event -> {
+            binder.readBean(null);
+            saveButton.setEnabled(false);
+        });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 

@@ -80,8 +80,6 @@ public class EditAclUsagesWindowTest {
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE =
         "Field value should be positive number or zero and should not exceed 10 digits";
-    private static final String POSITIVE_AND_LENGTH_ERROR_MESSAGE =
-        "Field value should be positive number and should not exceed 10 digits";
     private static final String BINDER_NAME = "binder";
     private static final String SELECTED_USAGES = "selectedUsages";
 
@@ -153,9 +151,22 @@ public class EditAclUsagesWindowTest {
     public void testAnnualizedCopiesValidation() {
         initEditWindow();
         TextField annualizedCopiesField = Whitebox.getInternalState(window, "annualizedCopiesField");
-        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE,
-            false);
-        validateAmountFiled(annualizedCopiesField, POSITIVE_AND_LENGTH_ERROR_MESSAGE);
+        String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
+        String scaleValidationMessage = "Field value should not exceed 5 digits after the decimal point";
+        verifyCommonNumberValidations(annualizedCopiesField, decimalValidationMessage);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.00001", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 0.00001 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.9", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.9999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.99999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, " 0.99999 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "-1", binder, decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.000001", binder, decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "0.999999", binder, scaleValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "1.00001", binder, decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualizedCopiesField, "2", binder, decimalValidationMessage, false);
     }
 
     @Test
@@ -163,7 +174,23 @@ public class EditAclUsagesWindowTest {
         initEditWindow();
         TextField contentUnitPriceField = Whitebox.getInternalState(window, "contentUnitPriceField");
         validateFieldAndVerifyErrorMessage(contentUnitPriceField, "0", binder, null, true);
-        validateAmountFiled(contentUnitPriceField, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
+        verifyCommonNumberValidations(contentUnitPriceField, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPriceField, ".123", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPriceField, "0.12345678901", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPriceField, "12345678901", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            contentUnitPriceField, "12345678901.12", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, "0.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, "123", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, " 123.12 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, "1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, "1234567890.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentUnitPriceField, " 1234567890.1234567890 ", binder, null, true);
     }
 
     @Test
@@ -250,16 +277,11 @@ public class EditAclUsagesWindowTest {
         verifyComboBox(layout.getComponent(1), caption, emptySelectionAllowed, expectedItems);
     }
 
-    private void validateAmountFiled(TextField field, String validationMessage) {
-        validateFieldAndVerifyErrorMessage(field, INVALID_NUMBER, binder, validationMessage, false);
-        validateFieldAndVerifyErrorMessage(field, ".123", binder, validationMessage, false);
-        validateFieldAndVerifyErrorMessage(field, "12345678901.12", binder, validationMessage, false);
-        validateFieldAndVerifyErrorMessage(field, SPACES_STRING, binder, validationMessage, false);
-        validateFieldAndVerifyErrorMessage(field, StringUtils.EMPTY, binder, null, true);
-        validateFieldAndVerifyErrorMessage(field, VALID_DECIMAL, binder, null, true);
-        validateFieldAndVerifyErrorMessage(field, VALID_INTEGER, binder, null, true);
-        validateFieldAndVerifyErrorMessage(field, "1234567890.1234567890", binder, null, true);
-        validateFieldAndVerifyErrorMessage(field, INTEGER_WITH_SPACES_STRING, binder, null, true);
+    private void verifyCommonNumberValidations(TextField textField, String numberValidationMessage) {
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, binder, null, true);
     }
 
     private HorizontalLayout getButtonsLayout() {
