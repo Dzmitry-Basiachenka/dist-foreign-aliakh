@@ -29,6 +29,7 @@ import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibi
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -169,8 +170,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             addColumn(AclUsageDto::getAggregateLicenseeClassName, "table.column.aggregate_licensee_class_name",
                 "aggLcName", 100),
             addColumn(AclUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120),
-            addColumn(
-                usage -> usage.getPublicationType().getName(), "table.column.publication_type", "publicationType", 150),
+            addColumn(usage -> Objects.nonNull(usage.getPublicationType()) ? usage.getPublicationType().getName()
+                : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
             addAmountColumn(AclUsageDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
