@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setComboBoxValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 
@@ -60,9 +62,10 @@ import java.util.stream.Collectors;
 @PrepareForTest({Windows.class, UdmBatchUploadWindow.class})
 public class UdmBatchUploadWindowTest {
 
-    private static final String PERIOD_YEAR_FIELD = "2020";
-    private static final String MONTH_FIELD = "12";
-    private static final String METHOD_NAME = "getValue";
+    private static final String PERIOD_YEAR = "2020";
+    private static final String PERIOD_MONTH = "12";
+    private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
+    private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
 
     private IUdmUsageController controller;
     private UdmBatchUploadWindow window;
@@ -75,33 +78,28 @@ public class UdmBatchUploadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
-        UploadField uploadField = createPartialMock(UploadField.class, METHOD_NAME, "getStreamToUploadedFile");
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         UdmCsvProcessor processor = createMock(UdmCsvProcessor.class);
-        ComboBox periodMonth = createPartialMock(ComboBox.class, METHOD_NAME);
-        ComboBox channelField = createPartialMock(ComboBox.class, METHOD_NAME);
-        ComboBox originField = createPartialMock(ComboBox.class, METHOD_NAME);
         ProcessingResult<UdmUsage> processingResult = buildCsvProcessingResult();
-        window = createPartialMock(UdmBatchUploadWindow.class, "isValid");
-        Whitebox.setInternalState(window, "udmUsageController", controller);
+        window = createPartialMock(UdmBatchUploadWindow.class, new String[]{"isValid", "close"}, controller);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, "periodYearField", new TextField("Period Year", PERIOD_YEAR_FIELD));
-        Whitebox.setInternalState(window, "monthField", periodMonth);
-        Whitebox.setInternalState(window, "channelField", channelField);
-        Whitebox.setInternalState(window, "usageOriginField", originField);
         expect(window.isValid()).andReturn(true).once();
+        window.close();
+        expectLastCall().once();
         expect(controller.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(uploadField.getValue()).andReturn("test.csv").once();
-        expect(periodMonth.getValue()).andReturn("12").once();
-        expect(originField.getValue()).andReturn(UdmUsageOriginEnum.RFA).once();
-        expect(channelField.getValue()).andReturn(UdmChannelEnum.CCC).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         expect(controller.loadUdmBatch(buildUdmBatch(), processingResult.get())).andReturn(1).once();
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
-        replay(window, controller, Windows.class, processor, uploadField, periodMonth, originField, channelField);
+        replay(window, controller, Windows.class, processor, uploadField);
+        setTextFieldValue(window, "periodYearField", PERIOD_YEAR);
+        setComboBoxValue(window, "monthField", PERIOD_MONTH);
+        setComboBoxValue(window, "channelField", CHANNEL);
+        setComboBoxValue(window, "usageOriginField", USAGE_ORIGIN);
         window.onUploadClicked();
-        verify(window, controller, Windows.class, processor, uploadField, periodMonth, originField, channelField);
+        verify(window, controller, Windows.class, processor, uploadField);
     }
 
     @Test
@@ -123,14 +121,13 @@ public class UdmBatchUploadWindowTest {
         UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "periodYearField")).setValue(PERIOD_YEAR_FIELD);
+        setTextFieldValue(window, "periodYearField", PERIOD_YEAR);
         assertFalse(window.isValid());
-        ((ComboBox<String>) Whitebox.getInternalState(window, "monthField")).setValue(MONTH_FIELD);
+        setComboBoxValue(window, "monthField", PERIOD_MONTH);
         assertFalse(window.isValid());
-        ((ComboBox<UdmChannelEnum>) Whitebox.getInternalState(window, "channelField")).setValue(UdmChannelEnum.CCC);
+        setComboBoxValue(window, "channelField", CHANNEL);
         assertFalse(window.isValid());
-        ((ComboBox<UdmUsageOriginEnum>) Whitebox.getInternalState(window, "usageOriginField")).setValue(
-            UdmUsageOriginEnum.RFA);
+        setComboBoxValue(window, "usageOriginField", USAGE_ORIGIN);
         assertTrue(window.isValid());
     }
 
@@ -210,10 +207,10 @@ public class UdmBatchUploadWindowTest {
 
     private UdmBatch buildUdmBatch() {
         UdmBatch udmBatch = new UdmBatch();
-        udmBatch.setChannel(UdmChannelEnum.CCC);
         udmBatch.setName("test");
         udmBatch.setPeriod(202012);
-        udmBatch.setUsageOrigin(UdmUsageOriginEnum.RFA);
+        udmBatch.setUsageOrigin(USAGE_ORIGIN);
+        udmBatch.setChannel(CHANNEL);
         return udmBatch;
     }
 
