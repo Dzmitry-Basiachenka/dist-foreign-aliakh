@@ -5,6 +5,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 
 /**
  * Mediator for the ACL grant detail widget.
@@ -18,19 +19,33 @@ import com.vaadin.ui.MenuBar;
 public class AclGrantDetailMediator implements IMediator {
 
     private MenuBar grantSetMenuBar;
+    private MenuBar.MenuItem createMenuItem;
+    private MenuBar.MenuItem viewMenuItem;
     private Button editButton;
     private Button uploadButton;
 
     @Override
     public void applyPermissions() {
-        grantSetMenuBar.setVisible(ForeignSecurityUtils.hasSpecialistPermission()
-            || ForeignSecurityUtils.hasManagerPermission());
-        editButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
-        uploadButton.setVisible(ForeignSecurityUtils.hasSpecialistPermission());
+        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
+        boolean isManager = ForeignSecurityUtils.hasManagerPermission();
+        boolean isViewOnly = ForeignSecurityUtils.hasViewOnlyPermission();
+        grantSetMenuBar.setVisible(isSpecialist || isManager || isViewOnly);
+        createMenuItem.setVisible(isSpecialist || isManager);
+        viewMenuItem.setVisible(isSpecialist || isManager || isViewOnly);
+        editButton.setVisible(isSpecialist);
+        uploadButton.setVisible(isSpecialist);
     }
 
     public void setGrantSetMenuBar(MenuBar grantSetMenuBar) {
         this.grantSetMenuBar = grantSetMenuBar;
+    }
+
+    public void setCreateMenuItem(MenuItem createMenuItem) {
+        this.createMenuItem = createMenuItem;
+    }
+
+    public void setViewMenuItem(MenuItem viewMenuItem) {
+        this.viewMenuItem = viewMenuItem;
     }
 
     public void setEditButton(Button editButton) {
