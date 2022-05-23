@@ -1,3 +1,16 @@
+5.1.24
+-
+* B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: add negative amount validation, and apply validation for details on UI
+* B-57776 FDA: View/Delete ACL Fund Pools: implement View/Delete window
+* B-57776 FDA: View/Delete ACL Fund Pools: Implement logic to remove  fund pool from database base
+* B-57776 FDA: View/Delete ACL Fund Pools: Implement backend logic to remove fund pool
+* B-69895 FDA: Usage batch edits: fix validation for Annualized Copies field
+* B-69895 FDA: Usage batch edits: refine range for Annualized Copies field
+* B-69208 FDA: UAT Feedback Adjust Usage Batch Creation: update backend logic to include all baseline usages
+* B-69208 FDA: UAT Feedback Adjust Usage Batch Creation: update logic to retrieve usages to display on UI
+* B-72775 Tech Debt: FDA: refine grid style name for ACL fund pool filter
+* B-72775 Tech Debt: FDA: refine logic of Amount validators to prohibit spaces string
+
 5.1.23
 -
 * B-69895 FDA: Usage batch edits: implement sql query to update ACL usages
