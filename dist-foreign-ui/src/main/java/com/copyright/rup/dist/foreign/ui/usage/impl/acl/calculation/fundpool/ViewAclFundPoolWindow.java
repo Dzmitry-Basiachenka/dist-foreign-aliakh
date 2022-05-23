@@ -85,7 +85,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
             event -> deleteButton.setEnabled(CollectionUtils.isNotEmpty(event.getAllSelectedItems())));
         grid.setSizeFull();
         addGridColumns();
-        VaadinUtils.addComponentStyle(grid, "view-acl-grant-set-grid");
+        VaadinUtils.addComponentStyle(grid, "view-acl-fund-pool-grid");
     }
 
     private void addGridColumns() {

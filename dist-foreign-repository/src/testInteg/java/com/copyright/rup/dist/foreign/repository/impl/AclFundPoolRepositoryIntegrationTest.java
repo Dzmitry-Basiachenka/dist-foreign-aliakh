@@ -153,6 +153,8 @@ public class AclFundPoolRepositoryIntegrationTest {
     public void testDeleteById() {
         AclFundPool fundPool = buildAclFundPool();
         repository.insert(fundPool);
+        AclFundPoolDetail fundPoolDetail = buildAclFundPoolDetail();
+        repository.insertDetail(fundPoolDetail);
         assertEquals(1, repository.findAll().size());
         repository.deleteById(fundPool.getId());
         assertEquals(0, repository.findAll().size());
