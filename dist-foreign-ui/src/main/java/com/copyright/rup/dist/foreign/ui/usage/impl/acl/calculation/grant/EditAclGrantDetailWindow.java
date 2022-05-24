@@ -187,6 +187,7 @@ public class EditAclGrantDetailWindow extends Window {
         rhAccountNumberField.clear();
         rhNameField.clear();
         eligibleFlagField.clear();
+        saveButton.setEnabled(false);
     }
 
     private void refreshSaveButton(ValueChangeEvent<String> event) {

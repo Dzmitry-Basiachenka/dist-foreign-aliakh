@@ -494,6 +494,7 @@ public class UdmEditUsageWindow extends CommonUdmUsageWindow {
         discardButton.addClickListener(event -> {
             binder.readBean(udmUsage);
             binder.validate();
+            saveButton.setEnabled(false);
         });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }

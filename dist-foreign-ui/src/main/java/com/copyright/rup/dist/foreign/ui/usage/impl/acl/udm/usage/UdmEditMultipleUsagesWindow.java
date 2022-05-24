@@ -364,7 +364,10 @@ public class UdmEditMultipleUsagesWindow extends Window {
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
-        discardButton.addClickListener(event -> binder.readBean(null));
+        discardButton.addClickListener(event -> {
+            binder.readBean(null);
+            saveButton.setEnabled(false);
+        });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
