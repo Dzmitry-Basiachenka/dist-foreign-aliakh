@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
@@ -166,16 +167,13 @@ public class AaclUsageBatchUploadWindowTest {
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         AaclUsageCsvProcessor processor = createMock(AaclUsageCsvProcessor.class);
         ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
-        window = createPartialMock(AaclUsageBatchUploadWindow.class, "isValid");
-        Whitebox.setInternalState(window, "usagesController", usagesController);
+        window = createPartialMock(AaclUsageBatchUploadWindow.class, new String[]{"isValid"}, usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField(" Usage Batch Name", USAGE_BATCH_NAME));
-        Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
-        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", " 0 "));
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn("file.csv");
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get()))
             .andReturn(3).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
@@ -183,6 +181,9 @@ public class AaclUsageBatchUploadWindowTest {
             "Upload completed: 1 record(s) were uploaded, 2 record(s) were pulled from baseline");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
+        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        setTextFieldValue(window, PERIOD_END_DATE_FIELD, "2019");
+        setTextFieldValue(window, NUMBER_OF_BASELINE_YEARS, "0");
         window.onUploadClicked();
         verify(window, usagesController, Windows.class, processor, uploadField);
     }
@@ -192,21 +193,21 @@ public class AaclUsageBatchUploadWindowTest {
         mockStatic(Windows.class);
         UploadField uploadField = createPartialMock(UploadField.class, "getValue");
         AaclUsageCsvProcessor processor = createMock(AaclUsageCsvProcessor.class);
-        window = createPartialMock(AaclUsageBatchUploadWindow.class, "isValid");
-        Whitebox.setInternalState(window, "usagesController", usagesController);
+        window = createPartialMock(AaclUsageBatchUploadWindow.class, new String[]{"isValid"}, usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, USAGE_BATCH_NAME_FIELD, new TextField("Usage Batch Name", USAGE_BATCH_NAME));
-        Whitebox.setInternalState(window, PERIOD_END_DATE_FIELD, new TextField("Period End Date", "2019"));
-        Whitebox.setInternalState(window, NUMBER_OF_BASELINE_YEARS, new TextField("Number of Baseline Years", "0"));
         expect(window.isValid()).andReturn(true).once();
         expect(uploadField.getValue()).andReturn(null);
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(), Collections.emptyList()))
             .andReturn(1).once();
         Windows.showNotificationWindow(
             "Upload completed: 0 record(s) were uploaded, 1 record(s) were pulled from baseline");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
+        setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, USAGE_BATCH_NAME);
+        setTextFieldValue(window, PERIOD_END_DATE_FIELD, "2019");
+        setTextFieldValue(window, NUMBER_OF_BASELINE_YEARS, "0");
         window.onUploadClicked();
         verify(window, usagesController, Windows.class, processor, uploadField);
     }

@@ -17,6 +17,7 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -97,8 +98,11 @@ public class UploadGrantDetailWindowTest {
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         AclGrantDetailCsvProcessor processor = createMock(AclGrantDetailCsvProcessor.class);
         ProcessingResult<AclGrantDetailDto> result = buildProcessingResult();
-        window = createPartialMock(UploadGrantDetailWindow.class, "isValid");
-        Whitebox.setInternalState(window, controller);
+        expect(controller.getAllAclGrantSets()).andReturn(Collections.emptyList()).once();
+        replay(controller);
+        window = createPartialMock(UploadGrantDetailWindow.class, new String[]{"isValid"}, controller);
+        verify(controller);
+        reset(controller);
         Whitebox.setInternalState(window, uploadField);
         ComboBox<AclGrantSet> grantSetComboBox = new ComboBox<>();
         grantSetComboBox.setSelectedItem(grantSet);

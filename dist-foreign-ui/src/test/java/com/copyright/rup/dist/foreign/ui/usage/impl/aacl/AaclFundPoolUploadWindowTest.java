@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
@@ -101,18 +102,18 @@ public class AaclFundPoolUploadWindowTest {
         UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile", "getValue");
         AaclFundPoolCsvProcessor processor = createMock(AaclFundPoolCsvProcessor.class);
         ProcessingResult<FundPoolDetail> result = buildProcessingResult();
-        window = createPartialMock(AaclFundPoolUploadWindow.class, "isValid");
-        Whitebox.setInternalState(window, "aaclUsageController", aaclUsageController);
+        window = createPartialMock(AaclFundPoolUploadWindow.class, new String[]{"isValid"}, aaclUsageController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
-        Whitebox.setInternalState(window, FUND_POOL_NAME_FIELD, new TextField("Fund Pool Name", FUND_POOL_NAME));
         expect(window.isValid()).andReturn(true).once();
         expect(aaclUsageController.getAaclFundPoolCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(result).once();
+        expect(aaclUsageController.fundPoolExists(FUND_POOL_NAME)).andReturn(false).once();
         expect(aaclUsageController.insertFundPool(buildFundPool(), result.get())).andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
         replay(Windows.class, window, aaclUsageController, processor, uploadField);
+        setTextFieldValue(window, FUND_POOL_NAME_FIELD, FUND_POOL_NAME);
         window.onUploadClicked();
         verify(Windows.class, window, aaclUsageController, processor, uploadField);
     }

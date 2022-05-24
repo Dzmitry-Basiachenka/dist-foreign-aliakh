@@ -104,8 +104,8 @@ public final class UiTestHelper {
     /**
      * Verifies label.
      *
-     * @param component   UI component
-     * @param caption     caption
+     * @param component UI component
+     * @param caption   caption
      */
     public static void verifyLabel(Component component, String caption) {
         assertTrue(component instanceof Label);
@@ -303,8 +303,8 @@ public final class UiTestHelper {
      * @param value  value
      */
     @SuppressWarnings("unchecked")
-    public static void setComboBoxValue(Window window, String field, String value) {
-        ((ComboBox<String>) Whitebox.getInternalState(window, field)).setValue(value);
+    public static <T> void setComboBoxValue(Window window, String field, T value) {
+        ((ComboBox<T>) Whitebox.getInternalState(window, field)).setValue(value);
     }
 
     /**
