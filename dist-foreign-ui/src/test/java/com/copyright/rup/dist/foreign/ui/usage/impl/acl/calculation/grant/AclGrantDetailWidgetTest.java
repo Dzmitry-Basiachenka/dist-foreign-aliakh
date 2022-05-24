@@ -90,7 +90,7 @@ public class AclGrantDetailWidgetTest {
     @Test
     public void testWidgetStructureForViewOnly() {
         setViewOnlyExpectations();
-        verifyStructure(false, false, false, true);
+        verifyStructure(true, false, false, true);
     }
 
     @Test
@@ -180,20 +180,21 @@ public class AclGrantDetailWidgetTest {
     }
 
     private void setSpecialistExpectations() {
-        setPermissionsExpectations(true, false);
+        setPermissionsExpectations(true, false, false);
     }
 
     private void setManagerExpectations() {
-        setPermissionsExpectations(false, true);
+        setPermissionsExpectations(false, true, false);
     }
 
     private void setViewOnlyExpectations() {
-        setPermissionsExpectations(false, false);
+        setPermissionsExpectations(false, false, true);
     }
 
-    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager) {
+    private void setPermissionsExpectations(boolean isSpecialist, boolean isManager, boolean isViewOnly) {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andStubReturn(isSpecialist);
         expect(ForeignSecurityUtils.hasManagerPermission()).andStubReturn(isManager);
+        expect(ForeignSecurityUtils.hasViewOnlyPermission()).andStubReturn(isViewOnly);
     }
 
     private HorizontalLayout getButtonsLayout() {

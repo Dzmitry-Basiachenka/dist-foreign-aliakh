@@ -19,12 +19,16 @@ public class AclFundPoolMediator implements IMediator {
 
     private MenuBar fundPoolMenuBar;
     private MenuBar.MenuItem createMenuItem;
+    private MenuBar.MenuItem viewMenuItem;
 
     @Override
     public void applyPermissions() {
-        boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
-        fundPoolMenuBar.setVisible(ForeignSecurityUtils.hasManagerPermission() || hasSpecialistPermission);
-        createMenuItem.setVisible(hasSpecialistPermission);
+        boolean isSpecialist = ForeignSecurityUtils.hasSpecialistPermission();
+        boolean isManager = ForeignSecurityUtils.hasManagerPermission();
+        boolean isViewOnly = ForeignSecurityUtils.hasViewOnlyPermission();
+        fundPoolMenuBar.setVisible(isSpecialist || isManager || isViewOnly);
+        createMenuItem.setVisible(isSpecialist);
+        viewMenuItem.setVisible(isSpecialist || isManager || isViewOnly);
     }
 
     public void setFundPoolMenuBar(MenuBar fundPoolMenuBar) {
@@ -33,5 +37,9 @@ public class AclFundPoolMediator implements IMediator {
 
     public void setCreateMenuItem(MenuItem createMenuItem) {
         this.createMenuItem = createMenuItem;
+    }
+
+    public void setViewMenuItem(MenuItem viewMenuItem) {
+        this.viewMenuItem = viewMenuItem;
     }
 }

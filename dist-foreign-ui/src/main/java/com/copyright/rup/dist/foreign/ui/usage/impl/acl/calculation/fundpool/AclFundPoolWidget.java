@@ -41,6 +41,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
     private IAclFundPoolController controller;
     private MenuBar aclFundPoolMenuBar;
     private MenuBar.MenuItem createMenuItem;
+    private MenuBar.MenuItem viewMenuItem;
     private Grid<AclFundPoolDetailDto> aclFundPoolDetailGrid;
 
     @Override
@@ -70,6 +71,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
         AclFundPoolMediator mediator = new AclFundPoolMediator();
         mediator.setFundPoolMenuBar(aclFundPoolMenuBar);
         mediator.setCreateMenuItem(createMenuItem);
+        mediator.setViewMenuItem(viewMenuItem);
         return mediator;
     }
 
@@ -150,7 +152,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
             aclFundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         createMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(new CreateAclFundPoolWindow(controller)));
-        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+        viewMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewAclFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "acl-fund-pool-menu-bar");
         VaadinUtils.addComponentStyle(aclFundPoolMenuBar, "v-menubar-df");
