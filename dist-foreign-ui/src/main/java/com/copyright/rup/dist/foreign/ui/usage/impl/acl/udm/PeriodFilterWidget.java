@@ -9,13 +9,13 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.ValueProvider;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Widget provides functionality for configuring items filter widget for UDM Periods.
@@ -30,7 +30,7 @@ public class PeriodFilterWidget extends BaseUdmItemsFilterWidget<Integer>
     implements IFilterWindowController<Integer> {
 
     private final Supplier<List<Integer>> supplier;
-    private final Set<Integer> periods = new HashSet<>();
+    private Set<Integer> periods = new LinkedHashSet<>();
 
     /**
      * Constructor.
@@ -77,11 +77,9 @@ public class PeriodFilterWidget extends BaseUdmItemsFilterWidget<Integer>
 
     @Override
     public void onSave(FilterSaveEvent<Integer> event) {
-        Set<Integer> itemsIds = event.getSelectedItemsIds();
-        periods.clear();
-        if (CollectionUtils.isNotEmpty(itemsIds)) {
-            periods.addAll(itemsIds);
-        }
+        periods = event.getSelectedItemsIds().stream()
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

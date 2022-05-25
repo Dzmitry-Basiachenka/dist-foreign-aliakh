@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -17,6 +18,7 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.easymock.Capture;
@@ -44,14 +46,15 @@ import java.util.Set;
 public class PeriodFilterWidgetTest {
 
     private static final Integer PERIOD = 202106;
-    private final PeriodFilterWidget periodFilterWidget =
-        new PeriodFilterWidget(() -> Collections.singletonList(PERIOD));
+    private static final List<Integer> PERIODS = Arrays.asList(202212, PERIOD, 202006, 201512);
+
+    private final PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(() -> PERIODS);
 
     @Test
     public void testLoadBeans() {
         List<Integer> periods = periodFilterWidget.loadBeans();
-        assertEquals(1, periods.size());
-        assertEquals(PERIOD, periods.get(0));
+        assertEquals(4, periods.size());
+        assertSame(PERIODS, periods);
     }
 
     @Test
@@ -67,9 +70,12 @@ public class PeriodFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(PERIOD)).once();
+        expect(
+            filterSaveEvent.getSelectedItemsIds()).andReturn(Sets.newHashSet(202006, 201512, 202212)).once();
         replay(filterSaveEvent);
         periodFilterWidget.onSave(filterSaveEvent);
+        assertEquals(
+            Sets.newLinkedHashSet(Arrays.asList(202212, 202006, 201512)), periodFilterWidget.getSelectedItemsIds());
         verify(filterSaveEvent);
     }
 
@@ -98,8 +104,8 @@ public class PeriodFilterWidgetTest {
 
     @Test
     public void testConstructorWithSelectedItems() {
-        Set<Integer> selectedPeriods = Collections.singleton(202206);
-        PeriodFilterWidget widget = new PeriodFilterWidget(() -> Arrays.asList(202212, 202206), selectedPeriods);
+        Set<Integer> selectedPeriods = Collections.singleton(PERIOD);
+        PeriodFilterWidget widget = new PeriodFilterWidget(() -> PERIODS, selectedPeriods);
         assertEquals(selectedPeriods, widget.getSelectedItemsIds());
         assertEquals("Periods", widget.getComponent(1).getCaption());
     }

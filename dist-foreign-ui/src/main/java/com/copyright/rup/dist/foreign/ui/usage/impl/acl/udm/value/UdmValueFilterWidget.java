@@ -129,8 +129,8 @@ public class UdmValueFilterWidget extends VerticalLayout implements IUdmValueFil
 
     private PeriodFilterWidget buildPeriodFilter() {
         periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
-        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
-            udmValueFilter.setPeriods(saveEvent.getSelectedItemsIds());
+        periodFilterWidget.addFilterSaveListener(saveEvent -> {
+            udmValueFilter.setPeriods(periodFilterWidget.getSelectedItemsIds());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(periodFilterWidget, "udm-value-periods-filter");
