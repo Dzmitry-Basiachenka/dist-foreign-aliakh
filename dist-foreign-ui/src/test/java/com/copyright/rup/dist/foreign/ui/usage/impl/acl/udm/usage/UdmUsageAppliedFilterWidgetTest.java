@@ -51,7 +51,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         widget = new UdmUsageAppliedFilterWidget(controller);
         expect(controller.getUdmBatches()).andReturn(
             Arrays.asList(buildUdmBatch("d7780576-2903-459c-a9ee-75a8d95cd4df", "Udm Batch 2021"),
-                buildUdmBatch("a8711022-8b30-4fa9-be39-c3e25378fd9a", "Udm Batch 2022")));
+                buildUdmBatch("a8711022-8b30-4fa9-be39-c3e25378fd9a", "Udm Batch 2022"),
+                buildUdmBatch("10bacf4f-8b51-48fa-b16e-b1f3968f0381", "Batch 2022")));
         replay(controller);
         UdmUsageFilter filter = buildUdmFilter();
         widget.refreshFilterPanel(filter);
@@ -65,7 +66,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(27, verticalLayout.getComponentCount());
-        verifyLabel(((VerticalLayout) component).getComponent(0), "Batches", "Udm Batch 2021, Udm Batch 2022");
+        verifyLabel(((VerticalLayout) component).getComponent(0), "Batches",
+            "Batch 2022, Udm Batch 2021, Udm Batch 2022");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
@@ -121,8 +123,8 @@ public class UdmUsageAppliedFilterWidgetTest {
 
     private UdmUsageFilter buildUdmFilter() {
         UdmUsageFilter filter = new UdmUsageFilter();
-        filter.setUdmBatchesIds(new HashSet<>(
-            Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df", "a8711022-8b30-4fa9-be39-c3e25378fd9a")));
+        filter.setUdmBatchesIds(new HashSet<>(Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df",
+            "a8711022-8b30-4fa9-be39-c3e25378fd9a", "10bacf4f-8b51-48fa-b16e-b1f3968f0381")));
         filter.setPeriods(Collections.singleton(202106));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
