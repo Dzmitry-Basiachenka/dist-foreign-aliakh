@@ -9,9 +9,11 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPa
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -108,7 +110,8 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             .stream()
             .filter(udmBatch -> batchesIds.contains(udmBatch.getId()))
             .map(UdmBatch::getName)
-            .collect(Collectors.toSet());
+            .sorted()
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private Function<UdmUsageFilter, ?> getFunctionForDate(Function<UdmUsageFilter, LocalDate> function,
