@@ -123,10 +123,11 @@ public class AclFundPoolControllerTest {
         AclFundPool fundPool = buildFundPool(true);
         fundPoolService.insertManualAclFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
         expectLastCall().once();
-        replay(fundPoolService);
+        expect(fundPoolFilterController.getWidget()).andReturn(aclFundPoolFilterWidget).once();
+        replay(fundPoolService, fundPoolFilterController);
         int count = controller.loadManualFundPool(fundPool, Collections.singletonList(buildFundPoolDetail()));
         assertEquals(1, count);
-        verify(fundPoolService);
+        verify(fundPoolService, fundPoolFilterController);
     }
 
     @Test

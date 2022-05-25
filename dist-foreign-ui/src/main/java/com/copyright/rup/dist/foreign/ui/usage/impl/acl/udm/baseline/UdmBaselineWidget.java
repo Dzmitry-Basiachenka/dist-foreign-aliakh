@@ -129,16 +129,16 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
             .setId("detailId")
             .setSortProperty("detailId")
-            .setWidth(200);
+            .setWidth(250);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmBaselineDto::getPeriod, "table.column.period", "period", 100),
             addColumn(UdmBaselineDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100),
             addColumn(UdmBaselineDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", 130),
             addColumn(UdmBaselineDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100),
-            addColumn(UdmBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 200),
+            addColumn(UdmBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 300),
             addColumn(UdmBaselineDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detLcId", 100),
-            addColumn(UdmBaselineDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 100),
+            addColumn(UdmBaselineDto::getDetailLicenseeClassName, "table.column.det_lc_name", "detLcName", 250),
             addColumn(UdmBaselineDto::getAggregateLicenseeClassId, "table.column.aggregate_licensee_class_id",
                 "aggLcId", 100),
             addColumn(UdmBaselineDto::getAggregateLicenseeClassName, "table.column.aggregate_licensee_class_name",
@@ -147,7 +147,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             addColumn(UdmBaselineDto::getChannel, "table.column.channel", "channel", 100),
             addColumn(UdmBaselineDto::getTypeOfUse, "table.column.tou", "reportedTypeOfUse", 100),
             addColumn(UdmBaselineDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
-            addColumn(UdmBaselineDto::getCreateUser, "table.column.created_by", "createUser", 150),
+            addColumn(UdmBaselineDto::getCreateUser, "table.column.created_by", "createUser", 200),
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.created_date", "createDate", 110),
             addColumn(UdmBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
             addColumn(u -> getStringFromDate(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110));

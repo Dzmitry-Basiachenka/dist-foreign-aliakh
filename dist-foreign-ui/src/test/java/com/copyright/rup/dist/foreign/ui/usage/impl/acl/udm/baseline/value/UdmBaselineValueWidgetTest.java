@@ -65,14 +65,14 @@ public class UdmBaselineValueWidgetTest {
             Triple.of("Value ID", 200.0, -1),
             Triple.of("Value Period", 120.0, -1),
             Triple.of("Wr Wrk Inst", 120.0, -1),
-            Triple.of("System Title", 200.0, -1),
+            Triple.of("System Title", 300.0, -1),
             Triple.of("Pub Type", 200.0, -1),
             Triple.of("Price", 120.0, -1),
             Triple.of("Price Flag", 120.0, -1),
             Triple.of("Content", 100.0, -1),
             Triple.of("Content Flag", 100.0, -1),
             Triple.of("Content Unit Price", 200.0, -1),
-            Triple.of("Comment", 200.0, -1),
+            Triple.of("Comment", 300.0, -1),
             Triple.of("Updated By", 150.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(0)), 0);

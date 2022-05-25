@@ -92,7 +92,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
         grid.addColumn(AclFundPool::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_pool_name"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getName().compareToIgnoreCase(fundPool2.getName()))
-            .setExpandRatio(1);
+            .setWidth(200);
         grid.addColumn(AclFundPool::getLicenseType)
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
             .setWidth(100);
