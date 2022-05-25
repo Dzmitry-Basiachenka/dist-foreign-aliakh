@@ -57,15 +57,16 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getUsageStatus, filter, "label.status"), layout);
             addLabel(createLabelWithSingleValue(UdmUsageFilter::getUdmUsageOrigin, filter, "label.usage_origin"),
                 layout);
-            addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getAssignees()),
+                "label.assignees", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
                 DetailLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getReportedPubTypes(), "label.reported_pub_types",
-                String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getReportedTypeOfUses(), "label.types_of_use",
-                String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPubFormats(), "label.publication_formats",
-                String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedPubTypes()),
+                "label.reported_pub_types", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
+                "label.types_of_use", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getPubFormats()),
+                "label.publication_formats", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateFrom, filter), filter,
                 "label.usage_date_from"), layout);
             addLabel(createLabelWithSingleValue(getFunctionForDate(UdmUsageFilter::getUsageDateTo, filter), filter,
@@ -110,7 +111,7 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             .stream()
             .filter(udmBatch -> batchesIds.contains(udmBatch.getId()))
             .map(UdmBatch::getName)
-            .sorted()
+            .sorted(String::compareToIgnoreCase)
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

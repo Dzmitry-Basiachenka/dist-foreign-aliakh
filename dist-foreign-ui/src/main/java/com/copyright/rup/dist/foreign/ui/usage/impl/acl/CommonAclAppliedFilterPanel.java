@@ -15,7 +15,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -141,6 +143,18 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
      */
     protected String convertFilterOperatorToString(FilterOperatorEnum value) {
         return Objects.nonNull(value) ? value.name() : null;
+    }
+
+    /**
+     * Sorts string values by natural order.
+     *
+     * @param values collection of values
+     * @return sorted set of values
+     */
+    protected Set<String> sortStringValuesByNaturalOrder(Collection<String> values) {
+        return values.stream()
+            .sorted(String::compareToIgnoreCase)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private <T> String formatMultipleSelectToString(Collection<T> values, Function<T, String> formatFunction) {

@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -52,7 +53,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         expect(controller.getUdmBatches()).andReturn(
             Arrays.asList(buildUdmBatch("d7780576-2903-459c-a9ee-75a8d95cd4df", "Udm Batch 2021"),
                 buildUdmBatch("a8711022-8b30-4fa9-be39-c3e25378fd9a", "Udm Batch 2022"),
-                buildUdmBatch("10bacf4f-8b51-48fa-b16e-b1f3968f0381", "Batch 2022")));
+                buildUdmBatch("10bacf4f-8b51-48fa-b16e-b1f3968f0381", "batch 2022")));
         replay(controller);
         UdmUsageFilter filter = buildUdmFilter();
         widget.refreshFilterPanel(filter);
@@ -67,15 +68,16 @@ public class UdmUsageAppliedFilterWidgetTest {
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(27, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches",
-            "Batch 2022, Udm Batch 2021, Udm Batch 2022");
+            "batch 2022, Udm Batch 2021, Udm Batch 2022");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
-        verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees", "user@copyright.com");
+        verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees",
+            "Auser@copyright.com, buser@copyright.com, User@copyright.com");
         verifyLabel(((VerticalLayout) component).getComponent(5), "Detail Licensee Classes", "22 - Book series");
-        verifyLabel(((VerticalLayout) component).getComponent(6), "Reported Pub Types", "Not Shared");
-        verifyLabel(((VerticalLayout) component).getComponent(7), "Types of Use", "COPY_FOR_MYSELF");
-        verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital");
+        verifyLabel(((VerticalLayout) component).getComponent(6), "Reported Pub Types", "Book, Journal, Not Shared");
+        verifyLabel(((VerticalLayout) component).getComponent(7), "Types of Use", "COPY_FOR_MYSELF, PRINT_COPIES");
+        verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital, Print");
         verifyLabel(((VerticalLayout) component).getComponent(9), "Usage Date From", "04/12/2020");
         verifyLabel(((VerticalLayout) component).getComponent(10), "Usage Date To", "06/20/2020");
         verifyLabel(((VerticalLayout) component).getComponent(11), "Survey Start Date From", "03/12/2020");
@@ -128,11 +130,11 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setPeriods(Collections.singleton(202106));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        filter.setAssignees(Collections.singleton("user@copyright.com"));
-        filter.setReportedPubTypes(Collections.singleton("Not Shared"));
-        filter.setPubFormats(Collections.singleton("Digital"));
+        filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
+        filter.setReportedPubTypes(Sets.newHashSet("Not Shared", "Book", "Journal"));
+        filter.setPubFormats(Sets.newHashSet("Print", "Digital"));
         filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
-        filter.setReportedTypeOfUses(Collections.singleton("COPY_FOR_MYSELF"));
+        filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "COPY_FOR_MYSELF"));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
         filter.setSurveyStartDateFrom(LocalDate.of(2020, 3, 12));
