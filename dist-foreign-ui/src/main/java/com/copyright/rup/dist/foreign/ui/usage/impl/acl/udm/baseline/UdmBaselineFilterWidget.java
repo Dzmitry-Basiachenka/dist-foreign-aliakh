@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterControl
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -137,8 +136,8 @@ public class UdmBaselineFilterWidget extends VerticalLayout implements IUdmBasel
 
     private PeriodFilterWidget buildPeriodFilter() {
         periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
-        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
-            baselineFilter.setPeriods(saveEvent.getSelectedItemsIds());
+        periodFilterWidget.addFilterSaveListener(saveEvent -> {
+            baselineFilter.setPeriods(periodFilterWidget.getSelectedItemsIds());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(periodFilterWidget, "udm-baseline-periods-filter");
