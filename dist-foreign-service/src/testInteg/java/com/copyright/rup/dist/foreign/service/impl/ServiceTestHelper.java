@@ -457,6 +457,15 @@ public class ServiceTestHelper {
         });
     }
 
+    public List<Usage> loadExpectedUsages(String pathToUsageDtosFile) throws IOException {
+        String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<Usage>>() {
+        });
+    }
+
     public List<UdmUsage> loadExpectedUdmUsages(String pathToUsageDtosFile) throws IOException {
         String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
         ObjectMapper mapper = new ObjectMapper();

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "03f307ac-81d1-4ab5-b037-9bd2ca899aab",
+    "batchId": "bf6bca99-f26d-4612-9eb5-d9ba554eacba",
+    "productFamily": "FAS",
+    "status": "ELIGIBLE",
+    "wrWrkInst": 292891647,
+    "standardNumber": "1906011",
+    "standardNumberType": "VALISSN",
+    "workTitle": "Solar Cells",
+    "systemTitle": "Solar Cells",
+    "rightsholder": {
+      "id": "37338ed1-7083-45e2-a96b-5872a7de3a98",
+      "name": "2HC [T]",
+      "accountNumber": 2000139286
+    },
+    "publicationDate": [
+      3000,
+      12,
+      12
+    ],
+    "market": "Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2015,
+    "reportedValue": 100.00,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "grossAmount": 100.0000000000,
+    "rhParticipating": false,
+    "payeeParticipating": false
+  }
+]

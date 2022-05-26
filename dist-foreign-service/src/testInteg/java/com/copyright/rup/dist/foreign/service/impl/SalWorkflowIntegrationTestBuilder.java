@@ -346,15 +346,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             return out;
         }
 
-        private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<Usage>>() {
-            });
-        }
-
         private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
             String content = String.format(TestUtils.fileToString(this.getClass(), fileName), usageBatch.getId());
             ObjectMapper mapper = new ObjectMapper();
@@ -365,7 +356,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyUsages() throws IOException {
-            List<Usage> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
+            List<Usage> expectedUsages = testHelper.loadExpectedUsages(expectedUsagesJsonFile);
             assertEquals(expectedUsages.size(), usageIds.size());
             Map<String, Usage> actualUsageIdsToUsages = salUsageService.getUsagesByIds(usageIds).stream()
                 .collect(Collectors.toMap(Usage::getId, Function.identity()));
