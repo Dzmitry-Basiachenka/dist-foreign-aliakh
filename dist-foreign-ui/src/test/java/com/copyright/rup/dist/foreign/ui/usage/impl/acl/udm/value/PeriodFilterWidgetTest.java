@@ -18,7 +18,6 @@ import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.FilterSav
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Sets;
 import com.vaadin.data.ValueProvider;
 
 import org.easymock.Capture;
@@ -70,12 +69,9 @@ public class PeriodFilterWidgetTest {
     @Test
     public void testOnSave() {
         FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
-        expect(
-            filterSaveEvent.getSelectedItemsIds()).andReturn(Sets.newHashSet(202006, 201512, 202212)).once();
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(PERIOD)).once();
         replay(filterSaveEvent);
         periodFilterWidget.onSave(filterSaveEvent);
-        assertEquals(
-            Sets.newLinkedHashSet(Arrays.asList(202212, 202006, 201512)), periodFilterWidget.getSelectedItemsIds());
         verify(filterSaveEvent);
     }
 

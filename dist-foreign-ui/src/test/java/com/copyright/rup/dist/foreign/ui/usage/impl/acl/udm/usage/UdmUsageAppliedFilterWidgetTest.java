@@ -69,7 +69,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         assertEquals(27, verticalLayout.getComponentCount());
         verifyLabel(((VerticalLayout) component).getComponent(0), "Batches",
             "batch 2022, Udm Batch 2021, Udm Batch 2022");
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202106");
+        verifyLabel(((VerticalLayout) component).getComponent(1), "Periods", "202312, 202206, 202106");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Status", "ELIGIBLE");
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees",
@@ -127,7 +127,7 @@ public class UdmUsageAppliedFilterWidgetTest {
         UdmUsageFilter filter = new UdmUsageFilter();
         filter.setUdmBatchesIds(new HashSet<>(Arrays.asList("d7780576-2903-459c-a9ee-75a8d95cd4df",
             "a8711022-8b30-4fa9-be39-c3e25378fd9a", "10bacf4f-8b51-48fa-b16e-b1f3968f0381")));
-        filter.setPeriods(Collections.singleton(202106));
+        filter.setPeriods(Sets.newHashSet(202106, 202206, 202312));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
         filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));

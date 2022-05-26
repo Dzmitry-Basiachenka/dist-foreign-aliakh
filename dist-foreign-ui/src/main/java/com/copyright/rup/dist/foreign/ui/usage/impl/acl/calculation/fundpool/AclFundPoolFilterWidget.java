@@ -128,8 +128,8 @@ public class AclFundPoolFilterWidget extends VerticalLayout implements IAclFundP
 
     private PeriodFilterWidget buildPeriodFilter() {
         periodFilterWidget = new PeriodFilterWidget(() -> controller.getPeriods());
-        periodFilterWidget.addFilterSaveListener(saveEvent -> {
-            aclFundPoolDetailFilter.setPeriods(periodFilterWidget.getSelectedItemsIds());
+        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {
+            aclFundPoolDetailFilter.setPeriods(saveEvent.getSelectedItemsIds());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(periodFilterWidget, "udm-periods-filter");

@@ -15,6 +15,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -154,6 +155,18 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
     protected Set<String> sortStringValuesByNaturalOrder(Collection<String> values) {
         return values.stream()
             .sorted(String::compareToIgnoreCase)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * Sorts integer values by descending.
+     *
+     * @param values collection of values
+     * @return sorted set of values
+     */
+    protected Set<Integer> sortIntegerValuesByDesc(Collection<Integer> values) {
+        return values.stream()
+            .sorted(Comparator.reverseOrder())
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
