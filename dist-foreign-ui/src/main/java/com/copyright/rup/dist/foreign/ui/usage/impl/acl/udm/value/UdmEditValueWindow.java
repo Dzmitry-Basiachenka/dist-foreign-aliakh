@@ -318,7 +318,11 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             }
         });
         Button discardButton = Buttons.createButton(ForeignUi.getMessage("button.discard"));
-        discardButton.addClickListener(event -> binder.readBean(udmValue));
+        discardButton.addClickListener(event -> {
+            binder.readBean(udmValue);
+            binder.validate();
+            saveButton.setEnabled(false);
+        });
         return new HorizontalLayout(saveButton, discardButton, closeButton);
     }
 
