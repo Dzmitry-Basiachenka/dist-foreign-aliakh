@@ -109,4 +109,9 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @param aclUsageDtos set of {@link AclUsageDto}s to update
      */
     void updateUsages(Set<AclUsageDto> aclUsageDtos);
+
+    /**
+     * @return threshold value for size of ACL records.
+     */
+    int getRecordThreshold();
 }

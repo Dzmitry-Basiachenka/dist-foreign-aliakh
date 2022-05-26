@@ -132,6 +132,11 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     }
 
     @Override
+    public int getRecordThreshold() {
+        return aclUsageService.getRecordThreshold();
+    }
+
+    @Override
     protected IAclUsageWidget instantiateWidget() {
         return new AclUsageWidget();
     }

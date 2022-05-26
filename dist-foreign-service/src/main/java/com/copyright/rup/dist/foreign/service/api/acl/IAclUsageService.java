@@ -61,4 +61,9 @@ public interface IAclUsageService {
      * @return list of periods
      */
     List<Integer> getPeriods();
+
+    /**
+     * @return threshold value for size of ACL records.
+     */
+    int getRecordThreshold();
 }
