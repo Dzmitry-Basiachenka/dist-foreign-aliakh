@@ -222,6 +222,14 @@ public class AclUsageControllerTest {
         verify(aclUsageService);
     }
 
+    @Test
+    public void testGetRecordThreshold() {
+        expect(aclUsageService.getRecordThreshold()).andReturn(10000).once();
+        replay(aclUsageService);
+        assertEquals(10000, controller.getRecordThreshold());
+        verify(aclUsageService);
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

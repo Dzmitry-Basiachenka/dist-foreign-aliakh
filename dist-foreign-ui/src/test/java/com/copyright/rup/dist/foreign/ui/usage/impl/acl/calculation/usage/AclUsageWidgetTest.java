@@ -68,6 +68,8 @@ import java.util.stream.Collectors;
 public class AclUsageWidgetTest {
 
     private static final String UNCHECKED = "unchecked";
+    private static final int RECORD_THRESHOLD = 10000;
+    private static final int EXCEEDED_RECORD_THRESHOLD = 10001;
     private AclUsageWidget aclUsageWidget;
     private IAclUsageController controller;
     private IStreamSource streamSource;
@@ -137,6 +139,7 @@ public class AclUsageWidgetTest {
         expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
         expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
         expect(controller.getBeansCount()).andReturn(aclUsageDtos.size()).once();
+        expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
         replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
         initWidget();
         Grid<AclUsageDto> grid =
@@ -147,6 +150,29 @@ public class AclUsageWidgetTest {
         assertEquals(aclUsageDtos.size(), dataProvider.size(new Query<>()));
         assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
         assertTrue(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
+        verify(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
+    }
+
+    @Test
+    @SuppressWarnings(UNCHECKED)
+    public void testSelectAllCheckBoxNotVisible() {
+        mockStatic(JavaScript.class);
+        setSpecialistExpectations();
+        List<AclUsageDto> aclUsageDtos = ImmutableList.of(new AclUsageDto(), new AclUsageDto());
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        expect(controller.loadBeans(0, 2, Collections.emptyList())).andReturn(aclUsageDtos).once();
+        expect(controller.getBeansCount()).andReturn(EXCEEDED_RECORD_THRESHOLD).once();
+        expect(controller.getRecordThreshold()).andReturn(RECORD_THRESHOLD).once();
+        replay(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
+        initWidget();
+        Grid<AclUsageDto> grid =
+            (Grid<AclUsageDto>) ((VerticalLayout) aclUsageWidget.getSecondComponent()).getComponent(1);
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(aclUsageDtos, dataProvider.fetch(new Query<>(0, 2, Collections.emptyList(), null,
+            null)).collect(Collectors.toList()));
+        assertEquals(EXCEEDED_RECORD_THRESHOLD, dataProvider.size(new Query<>()));
+        assertTrue(grid.getSelectionModel() instanceof MultiSelectionModelImpl);
+        assertFalse(((MultiSelectionModelImpl<?>) grid.getSelectionModel()).isSelectAllCheckBoxVisible());
         verify(controller, streamSource, ForeignSecurityUtils.class, JavaScript.class);
     }
 

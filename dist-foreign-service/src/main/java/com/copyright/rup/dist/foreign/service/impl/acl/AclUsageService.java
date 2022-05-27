@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,8 @@ public class AclUsageService implements IAclUsageService {
 
     @Autowired
     private IAclUsageRepository aclUsageRepository;
+    @Value("$RUP{dist.foreign.udm.record.threshold}")
+    private int recordsThreshold;
 
     @Override
     public int populateAclUsages(String usageBatchId, Set<Integer> periods, String userName) {
@@ -68,5 +71,10 @@ public class AclUsageService implements IAclUsageService {
     @Override
     public List<Integer> getPeriods() {
         return aclUsageRepository.findPeriods();
+    }
+
+    @Override
+    public int getRecordThreshold() {
+        return recordsThreshold;
     }
 }

@@ -207,7 +207,9 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     private void switchSelectAllCheckBoxVisibility(int beansCount) {
         if (Objects.nonNull(gridSelectionModel) && ForeignSecurityUtils.hasSpecialistPermission()) {
             gridSelectionModel.setSelectAllCheckBoxVisibility(
-                0 == beansCount ? SelectAllCheckBoxVisibility.HIDDEN : SelectAllCheckBoxVisibility.VISIBLE);
+                0 == beansCount || beansCount > controller.getRecordThreshold()
+                    ? SelectAllCheckBoxVisibility.HIDDEN
+                    : SelectAllCheckBoxVisibility.VISIBLE);
             gridSelectionModel.beforeClientResponse(false);
         }
     }
