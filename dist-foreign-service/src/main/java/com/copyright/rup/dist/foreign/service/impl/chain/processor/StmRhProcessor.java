@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -10,6 +11,7 @@ import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -30,12 +32,21 @@ public class StmRhProcessor extends AbstractUsageJobProcessor {
     @Autowired
     @Qualifier("df.service.stmRhProducer")
     private IProducer<List<Usage>> producer;
+    @Autowired
+    @Qualifier("df.service.stmRhConsumer")
+    private IConsumer<List<Usage>> stmRhConsumer;
+    @Value("$RUP{dist.foreign.no_messaging}")
+    private boolean noMessaging;
 
     @Override
     @Profiled(tag = "StmRhProcessor.process")
     public void process(List<Usage> usages) {
         LOGGER.trace("Usages STM RH processor. Started. UsageIds={}", LogUtils.ids(usages));
-        producer.send(usages);
+        if (noMessaging) {
+            stmRhConsumer.consume(usages);
+        } else {
+            producer.send(usages);
+        }
         LOGGER.trace("Usages STM RH processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 

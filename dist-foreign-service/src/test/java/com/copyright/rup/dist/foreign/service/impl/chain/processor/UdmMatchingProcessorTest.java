@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -60,6 +61,7 @@ public class UdmMatchingProcessorTest {
     }
 
     @Test
+    @Ignore
     public void testProcessResultSuccess() {
         List<UdmUsage> usages = buildUsages(UsageStatusEnum.WORK_FOUND);
         successProcessor.process(usages);
@@ -70,6 +72,7 @@ public class UdmMatchingProcessorTest {
     }
 
     @Test
+    @Ignore
     public void testProcessResultFailure() {
         List<UdmUsage> usages = buildUsages(UsageStatusEnum.WORK_NOT_FOUND);
         failureProcessor.process(usages);

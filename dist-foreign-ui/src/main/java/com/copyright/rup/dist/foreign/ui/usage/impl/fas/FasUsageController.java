@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.fas.IFasUsageService;
+import com.copyright.rup.dist.foreign.service.impl.chain.PerformanceMeter;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -84,6 +85,7 @@ public class FasUsageController extends CommonUsageController implements IFasUsa
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
         int result = getUsageBatchService().insertFasBatch(usageBatch, usages);
+        PerformanceMeter.clear();
         getUsageService().sendForMatching(usages);
         getUsageService().sendForGettingRights(usages, usageBatch.getName());
         getUsageFilterController().getWidget().clearFilter();

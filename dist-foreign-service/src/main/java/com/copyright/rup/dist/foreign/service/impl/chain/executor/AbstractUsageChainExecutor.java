@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.processor.IJobProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.JobInfoUtils;
+import com.copyright.rup.dist.foreign.service.impl.chain.PerformanceMeter;
 
 import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,7 +122,10 @@ abstract class AbstractUsageChainExecutor<T> implements IChainExecutor<T> {
     private void execute(List<T> usages, IChainProcessor<T> processor, ChainProcessorTypeEnum type) {
         if (Objects.nonNull(processor)) {
             if (type == processor.getChainProcessorType()) {
-                Iterables.partition(usages, chunkSize).forEach(processor::process);
+                Iterables.partition(usages, chunkSize).forEach(usagesChunk -> {
+                    PerformanceMeter.calculate(processor.getChainProcessorType(), usagesChunk.size());
+                    processor.process(usagesChunk);
+                }) ;
             } else {
                 execute(usages, processor.getSuccessProcessor(), type);
                 execute(usages, processor.getFailureProcessor(), type);

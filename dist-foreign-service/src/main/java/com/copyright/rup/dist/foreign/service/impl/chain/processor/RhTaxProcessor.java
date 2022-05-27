@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -10,6 +11,7 @@ import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -30,12 +32,21 @@ public class RhTaxProcessor extends AbstractUsageJobProcessor {
     @Autowired
     @Qualifier("df.service.rhTaxProducer")
     private IProducer<List<Usage>> rhTaxProducer;
+    @Autowired
+    @Qualifier("df.service.rhTaxConsumer")
+    private IConsumer<List<Usage>> rhTaxConsumer;
+    @Value("$RUP{dist.foreign.no_messaging}")
+    private boolean noMessaging;
 
     @Override
     @Profiled(tag = "RhTaxProcessor.process")
     public void process(List<Usage> usages) {
         LOGGER.trace("Usages RhTax processor. Started. UsageIds={}", LogUtils.ids(usages));
-        rhTaxProducer.send(usages);
+        if (noMessaging) {
+            rhTaxConsumer.consume(usages);
+        } else {
+            rhTaxProducer.send(usages);
+        }
         LOGGER.trace("Usages RhTax processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 

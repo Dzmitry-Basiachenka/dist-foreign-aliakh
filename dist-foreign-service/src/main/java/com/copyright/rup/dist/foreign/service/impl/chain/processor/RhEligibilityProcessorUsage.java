@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -10,6 +11,7 @@ import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -30,12 +32,21 @@ public class RhEligibilityProcessorUsage extends AbstractUsageJobProcessor {
     @Autowired
     @Qualifier("df.service.rhEligibilityProducer")
     private IProducer<List<Usage>> rhEligibilityProducer;
+    @Autowired
+    @Qualifier("df.service.rhEligibilityConsumer")
+    private IConsumer<List<Usage>> rhEligibilityConsumer;
+    @Value("$RUP{dist.foreign.no_messaging}")
+    private boolean noMessaging;
 
     @Override
     @Profiled(tag = "RhEligibilityProcessor.process")
     public void process(List<Usage> usages) {
         LOGGER.trace("Usages RhEligibility processor. Started. UsageIds={}", LogUtils.ids(usages));
-        rhEligibilityProducer.send(usages);
+        if (noMessaging) {
+            rhEligibilityConsumer.consume(usages);
+        } else {
+            rhEligibilityProducer.send(usages);
+        }
         LOGGER.trace("Usages RhEligibility processor. Finished. UsageIds={}", LogUtils.ids(usages));
     }
 

@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
@@ -44,6 +45,7 @@ public class UdmUsageChainExecutorTest {
     }
 
     @Test
+    @Ignore
     public void testExecuteProcessor() {
         List<UdmUsage> udmUsages = Collections.singletonList(buildUdmUsage());
         expect(udmMatchingProcessor.getChainProcessorType())

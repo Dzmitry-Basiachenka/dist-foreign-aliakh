@@ -202,7 +202,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             result.setMarketPeriodFrom(getInteger(row, BasicHeader.MARKET_PERIOD_FROM, headers));
             result.setMarketPeriodTo(getInteger(row, BasicHeader.MARKET_PERIOD_TO, headers));
             result.setAuthor(getString(row, BasicHeader.AUTHOR, headers));
-            result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
+            result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE // TODO: for testing set UsageStatusEnum.NEW
                 : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
             result.setProductFamily(productFamily);
             result.setComment(getString(row, BasicHeader.COMMENT, headers));

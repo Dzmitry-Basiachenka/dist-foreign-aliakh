@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.impl.chain.PerformanceMeter;
 
 import java.util.List;
 import java.util.Map;
@@ -51,10 +52,12 @@ public abstract class AbstractChainProcessor<T> implements IChainProcessor<T> {
             .collect(Collectors.partitioningBy(successPredicate));
         List<T> succeedItems = partitionedItems.get(true);
         if (!succeedItems.isEmpty() && Objects.nonNull(getSuccessProcessor())) {
+            PerformanceMeter.calculate(getSuccessProcessor().getChainProcessorType(), succeedItems.size());
             getSuccessProcessor().process(succeedItems);
         }
         List<T> failedItems = partitionedItems.get(false);
         if (!failedItems.isEmpty() && Objects.nonNull(getFailureProcessor())) {
+            PerformanceMeter.calculate(getFailureProcessor().getChainProcessorType(), failedItems.size());
             getFailureProcessor().process(failedItems);
         }
     }
