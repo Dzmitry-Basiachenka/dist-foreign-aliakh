@@ -99,7 +99,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
         footer.join(
             addColumn(UdmValueBaselineDto::getPeriod, "table.column.value_period", "period", 120),
             addColumn(UdmValueBaselineDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 120),
-            addColumn(UdmValueBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 200),
+            addColumn(UdmValueBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 300),
             addColumn(UdmValueBaselineDto::getPublicationType, "table.column.publication_type", "pubType", 200),
             addAmountColumn(UdmValueBaselineDto::getPrice, "table.column.price", "price", 120),
             addBooleanColumn(UdmValueBaselineDto::getPriceFlag, "table.column.price_flag", "priceFlag", 120),
@@ -107,7 +107,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
             addBooleanColumn(UdmValueBaselineDto::getContentFlag, "table.column.content_flag", "contentFlag", 100),
             addAmountColumn(UdmValueBaselineDto::getContentUnitPrice, "table.column.content_unit_price",
                 "contentUnitPrice", 200),
-            addColumn(UdmValueBaselineDto::getComment, "table.column.comment", "comment", 200),
+            addColumn(UdmValueBaselineDto::getComment, "table.column.comment", "comment", 300),
             addColumn(UdmValueBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
             addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));

@@ -155,16 +155,16 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
     private void addColumns() {
         FooterRow footer = aclUsagesGrid.appendFooterRow();
         aclUsagesGrid.setFooterVisible(true);
-        footer.getCell(addColumn(AclUsageDto::getId, "table.column.detail_id", "detailId", 200))
+        footer.getCell(addColumn(AclUsageDto::getId, "table.column.detail_id", "detailId", 250))
             .setText(String.format(FOOTER_LABEL, 0));
         footer.join(addColumn(AclUsageDto::getPeriod, "table.column.period", "period", 100),
             addColumn(AclUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100),
             addColumn(AclUsageDto::getChannel, "table.column.channel", "channel", 100),
             addColumn(AclUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", 130),
             addColumn(AclUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100),
-            addColumn(AclUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 200),
+            addColumn(AclUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 300),
             addColumn(u -> u.getDetailLicenseeClass().getId(), "table.column.det_lc_id", "detLcId", 100),
-            addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 100),
+            addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 250),
             addColumn(AclUsageDto::getAggregateLicenseeClassId, "table.column.aggregate_licensee_class_id",
                 "aggLcId", 100),
             addColumn(AclUsageDto::getAggregateLicenseeClassName, "table.column.aggregate_licensee_class_name",
@@ -176,7 +176,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
                 200),
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
-            addColumn(AclUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
+            addColumn(AclUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200),
             addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
     }

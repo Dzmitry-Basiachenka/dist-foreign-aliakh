@@ -317,20 +317,20 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
             .setId("detailId")
             .setSortProperty("detailId")
-            .setWidth(200);
+            .setWidth(250);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmUsageDto::getPeriod, "table.column.period", "period", 100, false),
             addColumn(UdmUsageDto::getUsageOrigin, "table.column.usage_origin", "usageOrigin", 100,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", 130, false),
-            addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", 100, false),
+            addColumn(UdmUsageDto::getStatus, "table.column.usage_status", "status", 145, false),
             addColumn(UdmUsageDto::getAssignee, "table.column.assignee", "assignee", 100, false),
             addColumn(UdmUsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 150, false),
-            addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", 150, false),
+            addColumn(UdmUsageDto::getRhName, "table.column.rh_account_name", "rhName", 300, false),
             addColumn(UdmUsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100, false),
-            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", 120, false),
-            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 100, false),
+            addColumn(UdmUsageDto::getReportedTitle, "table.column.reported_title", "reportedTitle", 250, false),
+            addColumn(UdmUsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 300, false),
             addColumn(UdmUsageDto::getReportedStandardNumber, "table.column.reported_standard_number",
                 "reportedStandardNumber", 190, false),
             addColumn(UdmUsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 150, false),
@@ -343,12 +343,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getComment, "table.column.comment", "comment", 200, false),
             addColumn(UdmUsageDto::getResearchUrl, "table.column.research_url", "researchUrl", 200, false),
             addColumn(u -> u.getDetailLicenseeClass().getId(), "table.column.det_lc_id", "detLcId", 100, false),
-            addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 100,
+            addColumn(u -> u.getDetailLicenseeClass().getDescription(), "table.column.det_lc_name", "detLcName", 250,
                 false),
-            addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", 100, hasResearcherPermission),
-            addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", 120,
+            addColumn(UdmUsageDto::getCompanyId, "table.column.company_id", "companyId", 250, hasResearcherPermission),
+            addColumn(UdmUsageDto::getCompanyName, "table.column.company_name", "companyName", 250,
                 hasResearcherPermission),
-            addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 150,
+            addColumn(UdmUsageDto::getSurveyRespondent, "table.column.survey_respondent", "surveyRespondent", 250,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getIpAddress, "table.column.ip_address", "ipAddress", 100,
                 !(hasSpecialistPermission || hasManagerPermission)),
@@ -372,7 +372,7 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(u -> null != u.getIneligibleReason() ? u.getIneligibleReason().getReason() : StringUtils.EMPTY,
                 "table.column.ineligible_reason", "ineligibleReason", 200, false),
             addColumn(u -> DateUtils.format(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
-            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 150, false),
+            addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200, false),
             addColumn(u -> DateUtils.format(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
                 false));
     }

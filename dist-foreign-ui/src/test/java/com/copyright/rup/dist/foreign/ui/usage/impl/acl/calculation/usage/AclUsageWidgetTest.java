@@ -207,15 +207,15 @@ public class AclUsageWidgetTest {
         Grid grid = (Grid) layout.getComponent(1);
         assertEquals(selectionModel, grid.getSelectionModel().getClass());
         verifyGrid(grid, Arrays.asList(
-            Triple.of("Detail ID", 200.0, -1),
+            Triple.of("Detail ID", 250.0, -1),
             Triple.of("Period", 100.0, -1),
             Triple.of("Usage Origin", 100.0, -1),
             Triple.of("Channel", 100.0, -1),
             Triple.of("Usage Detail ID", 130.0, -1),
             Triple.of("Wr Wrk Inst", 100.0, -1),
-            Triple.of("System Title", 200.0, -1),
+            Triple.of("System Title", 300.0, -1),
             Triple.of("Det LC ID", 100.0, -1),
-            Triple.of("Det LC Name", 100.0, -1),
+            Triple.of("Det LC Name", 250.0, -1),
             Triple.of("Agg LC ID", 100.0, -1),
             Triple.of("Agg LC Name", 100.0, -1),
             Triple.of("Survey Country", 120.0, -1),
@@ -223,7 +223,7 @@ public class AclUsageWidgetTest {
             Triple.of("Content Unit Price", 200.0, -1),
             Triple.of("TOU", 120.0, -1),
             Triple.of("Annualized Copies", 130.0, -1),
-            Triple.of("Updated By", 150.0, -1),
+            Triple.of("Updated By", 200.0, -1),
             Triple.of("Updated Date", 110.0, -1)));
         verifyGridFooter(grid);
         assertEquals(1, layout.getExpandRatio(grid), 0);

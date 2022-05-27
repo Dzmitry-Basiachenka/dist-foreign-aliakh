@@ -237,16 +237,16 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             .setCaption(ForeignUi.getMessage("table.column.value_id"))
             .setId("valueId")
             .setSortProperty("valueId")
-            .setWidth(200);
+            .setWidth(250);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(
             addColumn(UdmValueDto::getValuePeriod, "table.column.value_period", "valuePeriod", 150),
             addColumn(UdmValueDto::getStatus, "table.column.status", "status", 100),
             addColumn(UdmValueDto::getAssignee, "table.column.assignee", "assignee", 100),
             addColumn(UdmValueDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 150),
-            addColumn(UdmValueDto::getRhName, "table.column.rh_account_name", "rhName", 150),
+            addColumn(UdmValueDto::getRhName, "table.column.rh_account_name", "rhName", 300),
             addColumn(UdmValueDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100),
-            addColumn(UdmValueDto::getSystemTitle, "table.column.system_title", "systemTitle", 100),
+            addColumn(UdmValueDto::getSystemTitle, "table.column.system_title", "systemTitle", 300),
             addColumn(UdmValueDto::getSystemStandardNumber, "table.column.system_standard_number",
                 "systemStandardNumber", 190),
             addColumn(UdmValueDto::getLastValuePeriod, "table.column.last_value_period", "lastValuePeriod", 150),

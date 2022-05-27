@@ -88,7 +88,7 @@ public class ViewAclFundPoolWindowTest {
         assertTrue(component instanceof Grid);
         Grid grid = (Grid) component;
         verifyGrid(grid, Arrays.asList(
-            Triple.of("Fund Pool Name", -1.0, 1),
+            Triple.of("Fund Pool Name", 200.0, -1),
             Triple.of("License Type", 100.0, -1),
             Triple.of("Gross Amount", 110.0, -1),
             Triple.of("Net Amount", 110.0, -1),
