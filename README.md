@@ -1,3 +1,17 @@
+5.1.25
+-
+* B-57776 FDA: View/Delete ACL Fund Pools: make changes based om comments in codereview
+* B-72775 Tech Debt: FDA: apply new 6_8 rup dependencies version
+* B-72775 Tech Debt: FDA: apply view only permissions to View menu item in Fund Pool and Grant Detail widgets
+* B-72775 Tech Debt: FDA: refactor unit tests of button click handlers
+* B-72775 Tech Debt: FDA: refine order of selected items in Period Filter widget
+* B-72775 Tech Debt: FDA: refine order of UDM batch names on Applied filter panel_
+* B-72775 Tech Debt: FDA: refine order of string values on UDM Usage Applied filter panel
+* B-72775 Tech Debt: FDA: apply correct width for columns in Calculations Tab
+* B-72775 Tech Debt: FDA: make ‘Save’ button disabled when all changes discarded
+* B-72775 Tech Debt: FDA: revert sort of items in Period Filter widget and add sort for periods in UDM Usage Applied panel
+* B-72775 Tech Debt: FDA: add threshold for select all check box on ACL usages grid
+
 5.1.24
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: add negative amount validation, and apply validation for details on UI
