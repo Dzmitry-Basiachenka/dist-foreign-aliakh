@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
@@ -15,10 +14,6 @@ import com.copyright.rup.dist.foreign.repository.api.IAaclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Test;
@@ -123,21 +118,13 @@ public class LoadClassifiedUsagesIntegrationTest {
             .stream()
             .sorted(Comparator.comparing(Usage::getId))
             .collect(Collectors.toList());
-        List<Usage> expectedUsages = loadExpectedUsages("usage/aacl/classified/expected_classified_usages.json")
+        List<Usage> expectedUsages = testHelper
+            .loadExpectedUsages("usage/aacl/classified/expected_classified_usages.json")
             .stream()
             .sorted(Comparator.comparing(Usage::getId))
             .collect(Collectors.toList());
         assertEquals(expectedUsages.size(), actualUsages.size());
         IntStream.range(0, expectedUsages.size()).forEach(i -> assertUsage(expectedUsages.get(i), actualUsages.get(i)));
-    }
-
-    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<Usage>>() {
-        });
     }
 
     private AaclClassifiedUsage buildUsage(String id, Long wrWrkInst, String pubType, String discipline,

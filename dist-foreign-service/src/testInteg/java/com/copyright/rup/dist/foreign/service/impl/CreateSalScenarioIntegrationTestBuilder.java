@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
@@ -15,11 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +147,7 @@ public class CreateSalScenarioIntegrationTestBuilder {
         }
 
         private void assertUsages() throws IOException {
-            List<Usage> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
+            List<Usage> expectedUsages = testHelper.loadExpectedUsages(expectedUsagesJsonFile);
             expectedUsages.forEach(expectedUsage -> {
                 List<Usage> actualUsages =
                     salUsageService.getUsagesByIds(Collections.singletonList(expectedUsage.getId()));
@@ -176,15 +170,6 @@ public class CreateSalScenarioIntegrationTestBuilder {
 
         private void assertSalFields(SalFields expected, SalFields actual) {
             assertEquals(expected.getFundPoolId(), actual.getFundPoolId());
-        }
-
-        private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<Usage>>() {
-            });
         }
 
         // TODO reuse ServiceTestHelper.assertUsage

@@ -1,0 +1,14 @@
+[
+  {
+    "actionType": "ELIGIBLE",
+    "actionReason": "Usage has become eligible"
+  },
+  {
+    "actionType": "RH_FOUND",
+    "actionReason": "Rightsholder account 2000139286 was found in RMS"
+  },
+  {
+    "actionType": "WORK_FOUND",
+    "actionReason": "Wr Wrk Inst 292891647 was found by standard number 1906011"
+  }
+]

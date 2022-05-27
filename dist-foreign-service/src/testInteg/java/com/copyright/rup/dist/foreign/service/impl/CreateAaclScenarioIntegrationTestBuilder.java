@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -21,11 +20,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,7 +156,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         }
 
         private void assertUsages() throws IOException {
-            List<Usage> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
+            List<Usage> expectedUsages = testHelper.loadExpectedUsages(expectedUsagesJsonFile);
             expectedUsages.forEach(expectedUsage -> {
                 List<Usage> actualUsages =
                     aaclUsageService.getUsagesByIds(Collections.singletonList(expectedUsage.getId()));
@@ -221,15 +215,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             assertEquals(expected.getId(), actual.getId());
             assertEquals(expected.getDiscipline(), actual.getDiscipline());
             assertEquals(expected.getEnrollmentProfile(), actual.getEnrollmentProfile());
-        }
-
-        private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<Usage>>() {
-            });
         }
 
         private void assertUsage(Usage expectedUsage, Usage actualUsage) {
