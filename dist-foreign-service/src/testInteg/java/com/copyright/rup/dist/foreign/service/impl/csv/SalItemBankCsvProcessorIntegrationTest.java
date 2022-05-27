@@ -9,15 +9,12 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderVal
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -62,6 +59,8 @@ public class SalItemBankCsvProcessorIntegrationTest {
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -73,7 +72,7 @@ public class SalItemBankCsvProcessorIntegrationTest {
         ProcessingResult<Usage> result = processFile("sal_item_bank_usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages();
+        List<Usage> expectedUsages = testHelper.loadExpectedUsages(BASE_PATH + "sal_item_bank_usages.json");
         assertEquals(expectedUsages.size(), actualUsages.size());
         IntStream.range(0, expectedUsages.size()).forEach(i ->
             assertUsage(expectedUsages.get(i), actualUsages.get(i))
@@ -191,13 +190,5 @@ public class SalItemBankCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
         assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
         assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
-    }
-
-    private List<Usage> loadExpectedUsages() throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "sal_item_bank_usages.json");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<Usage>>() {
-        });
     }
 }

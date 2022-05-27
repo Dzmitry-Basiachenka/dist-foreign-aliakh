@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Verifies {@link WorksMatchingJob}.
+ * Verifies {@link GetRightsJob}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -38,10 +38,10 @@ import java.util.List;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-public class WorksMatchingJobIntegrationTest {
+public class GetRightsJobIntegrationTest {
 
     @Autowired
-    private WorksMatchingJob worksMatchingJob;
+    private GetRightsJob getRightsJob;
 
     @Autowired
     private ServiceTestHelper testHelper;
@@ -55,26 +55,27 @@ public class WorksMatchingJobIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "works-matching-job-integration-test/test-execute-internal.groovy")
+    @TestData(fileName = "get-rights-job-integration-test/test-execute-internal.groovy")
     public void testExecuteInternal() throws IOException {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/rms_grants_292891647_request.json",
-            "rights/rms_grants_292891647_response.json");
+        testHelper.expectGetRmsRights("rights/rms_grants_876543210_request.json",
+            "rights/rms_grants_876543210_response.json");
         JobExecutionContext jobExecutionContext = createMock(JobExecutionContext.class);
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED,
             "ProductFamily=FAS, UsagesCount=1; " +
             "ProductFamily=FAS2, Reason=There are no usages; " +
+            "ProductFamily=NTS, Reason=There are no usages; " +
             "ProductFamily=AACL, Reason=There are no usages; " +
             "ProductFamily=SAL, Reason=There are no usages; " +
             "ProductFamily=ACL_UDM, Reason=There are no usages");
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
         replay(jobExecutionContext);
-        worksMatchingJob.executeInternal(jobExecutionContext);
+        getRightsJob.executeInternal(jobExecutionContext);
         verify(jobExecutionContext);
-        testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_292891647.json"));
-        testHelper.assertAudit("03f307ac-81d1-4ab5-b037-9bd2ca899aab",
-            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_292891647.json"));
+        testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_876543210.json"));
+        testHelper.assertAudit("29ab73e6-2256-429d-bf36-e52315303165",
+            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_876543210.json"));
         testHelper.verifyRestServer();
     }
 }

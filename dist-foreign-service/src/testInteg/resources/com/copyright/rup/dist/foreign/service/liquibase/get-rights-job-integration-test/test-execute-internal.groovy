@@ -11,8 +11,8 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'bf6bca99-f26d-4612-9eb5-d9ba554eacba')
-            column(name: 'name', value: 'Test Usage Batch to verify WorksMatchingJob')
+            column(name: 'df_usage_batch_uid', value: 'e92a3622-0f16-49f8-bdc0-dacd9ade1245')
+            column(name: 'name', value: 'Test Usage Batch to verify GetRightsJob')
             column(name: 'rro_account_number', value: 1000023401)
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-26')
@@ -22,18 +22,22 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '03f307ac-81d1-4ab5-b037-9bd2ca899aab')
-            column(name: 'df_usage_batch_uid', value: 'bf6bca99-f26d-4612-9eb5-d9ba554eacba')
-            column(name: 'status_ind', value: 'NEW')
+            column(name: 'df_usage_uid', value: '29ab73e6-2256-429d-bf36-e52315303165')
+            column(name: 'df_usage_batch_uid', value: 'e92a3622-0f16-49f8-bdc0-dacd9ade1245')
+            column(name: 'status_ind', value: 'WORK_FOUND')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'standard_number', value: '1906011')
+            column(name: 'wr_wrk_inst', value: '876543210')
+            column(name: 'work_title', value: 'Medical Journal')
+            column(name: 'system_title', value: 'Medical Journal')
+            column(name: 'standard_number', value: '978-0-7695-2365-2')
+            column(name: 'standard_number_type', value: 'VALISSN')
             column(name: 'net_amount', value: 0.0000000000)
             column(name: 'service_fee_amount', value: 0.0000000000)
             column(name: 'gross_amount', value: 100.0000000000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {
-            column(name: 'df_usage_fas_uid', value: '03f307ac-81d1-4ab5-b037-9bd2ca899aab')
+            column(name: 'df_usage_fas_uid', value: '29ab73e6-2256-429d-bf36-e52315303165')
             column(name: 'publication_date', value: '3000-12-12')
             column(name: 'market', value: 'Univ')
             column(name: 'market_period_from', value: 2015)

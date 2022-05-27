@@ -1,0 +1,10 @@
+[
+  {
+    "actionType": "ELIGIBLE",
+    "actionReason": "Usage has become eligible"
+  },
+  {
+    "actionType": "RH_FOUND",
+    "actionReason": "Rightsholder account 2000139286 was found in RMS"
+  }
+]

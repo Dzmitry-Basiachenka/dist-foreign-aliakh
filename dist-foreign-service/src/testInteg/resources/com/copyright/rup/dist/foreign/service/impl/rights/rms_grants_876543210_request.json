@@ -1,0 +1,23 @@
+{
+  "works": [
+    {
+      "status": [
+        "GRANT",
+        "DENY",
+        "SPECIAL_REQUEST"
+      ],
+      "wr_wrk_inst": 876543210,
+      "period_end_date": "02/01/2018",
+      "license_type": [
+        "NGT_PHOTOCOPY",
+        "VGW",
+        "AACL",
+        "NGT_ELECTRONIC_COURSE_MATERIALS",
+        "ACL",
+        "JACDCL",
+        "NGT_PRINT_COURSE_MATERIALS",
+        "MACL"
+      ]
+    }
+  ]
+}
