@@ -82,13 +82,15 @@ public class SendScenarioToLmTest {
     @Autowired
     private ISalUsageService salUsageService;
     @Autowired
+    private IUsageService usageService;
+    @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IAaclUsageRepository aaclUsageRepository;
     @Autowired
     private SqsClientMock sqsClientMock;
     @Autowired
-    private IUsageService usageService;
+    private ServiceTestHelper testHelper;
 
     private static final String FAS_SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
     private static final String NTS_SCENARIO_ID = "67027e15-17c6-4b9b-b7f0-12ec414ad344";
@@ -176,7 +178,7 @@ public class SendScenarioToLmTest {
         List<Usage> actualBaselineUsages = aaclUsageRepository.findBaselineUsages().stream()
             .sorted(Comparator.comparing(Usage::getComment))
             .collect(Collectors.toList());
-        List<Usage> expectedBaselineUsages = loadExpectedUsages("usage/aacl/aacl_baseline_usages.json");
+        List<Usage> expectedBaselineUsages = testHelper.loadExpectedUsages("usage/aacl/aacl_baseline_usages.json");
         assertEquals(CollectionUtils.size(actualBaselineUsages), CollectionUtils.size(expectedBaselineUsages));
         IntStream.range(0, actualUsageDtos.size())
             .forEach(index -> assertBaselineUsage(expectedBaselineUsages.get(index), actualBaselineUsages.get(index)));
@@ -299,14 +301,6 @@ public class SendScenarioToLmTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
-        });
-    }
-
-    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<Usage>>() {
         });
     }
 }

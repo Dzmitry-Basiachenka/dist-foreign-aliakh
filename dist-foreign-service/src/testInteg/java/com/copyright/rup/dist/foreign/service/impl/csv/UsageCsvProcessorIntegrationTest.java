@@ -12,13 +12,10 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderVal
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -65,6 +62,8 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private ServiceTestHelper testHelper;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -76,7 +75,7 @@ public class UsageCsvProcessorIntegrationTest {
         ProcessingResult<Usage> result = processFile("usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages();
+        List<Usage> expectedUsages = testHelper.loadExpectedUsages(BASE_PATH + "usages.json");
         int expectedSize = 5;
         assertEquals(expectedSize, actualUsages.size());
         assertEquals(expectedSize, expectedUsages.size());
@@ -90,7 +89,7 @@ public class UsageCsvProcessorIntegrationTest {
         ProcessingResult<Usage> result = processFile("exported_usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
-        List<Usage> expectedUsages = loadExpectedUsages();
+        List<Usage> expectedUsages = testHelper.loadExpectedUsages(BASE_PATH + "usages.json");
         int expectedSize = 5;
         assertEquals(expectedSize, actualUsages.size());
         assertEquals(expectedSize, expectedUsages.size());
@@ -273,13 +272,5 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(BigDecimal.ZERO, usage.getServiceFeeAmount());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
         assertFalse(usage.isRhParticipating());
-    }
-
-    private List<Usage> loadExpectedUsages() throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + "usages.json");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<Usage>>() {
-        });
     }
 }
