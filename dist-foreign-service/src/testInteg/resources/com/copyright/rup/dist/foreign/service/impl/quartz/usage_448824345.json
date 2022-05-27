@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1d798afe-dabb-4dca-9351-7a6ef64f3708",
+    "batchId": "b2341ecb-70e2-472a-9d87-5a3d33c7f22d",
+    "productFamily": "NTS",
+    "status": "ELIGIBLE",
+    "wrWrkInst": 448824345,
+    "workTitle": "Technical Journal",
+    "systemTitle": "Technical Journal",
+    "rightsholder": {
+      "id": "75e057ac-7c24-4ae7-a0f5-aa75ea0895e6",
+      "name": "Zoological Society of Pakistan [T]",
+      "accountNumber": 1000009522
+    },
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": "VALISBN13",
+    "publicationDate": [
+      3000,
+      12,
+      12
+    ],
+    "market": "Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2015,
+    "reportedValue": 100.00,
+    "grossAmount": 100.0000000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "rhParticipating": false,
+    "payeeParticipating": false
+  }
+]

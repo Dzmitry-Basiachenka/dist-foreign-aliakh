@@ -18,7 +18,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: 2018)
             column(name: 'gross_amount', value: 100.00)
-            column(name: 'initial_usages_count', value: 10)
+            column(name: 'initial_usages_count', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -31,9 +31,9 @@ databaseChangeLog {
             column(name: 'system_title', value: 'Medical Journal')
             column(name: 'standard_number', value: '978-0-7695-2365-2')
             column(name: 'standard_number_type', value: 'VALISSN')
+            column(name: 'gross_amount', value: 100.0000000000)
             column(name: 'net_amount', value: 0.0000000000)
             column(name: 'service_fee_amount', value: 0.0000000000)
-            column(name: 'gross_amount', value: 100.0000000000)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_fas') {

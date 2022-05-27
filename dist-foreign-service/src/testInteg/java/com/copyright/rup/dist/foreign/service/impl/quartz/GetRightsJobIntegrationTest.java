@@ -42,10 +42,8 @@ public class GetRightsJobIntegrationTest {
 
     @Autowired
     private GetRightsJob getRightsJob;
-
     @Autowired
     private ServiceTestHelper testHelper;
-
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
 

@@ -23,9 +23,9 @@
     "marketPeriodFrom": 2015,
     "marketPeriodTo": 2015,
     "reportedValue": 100.00,
+    "grossAmount": 100.0000000000,
     "netAmount": 0.0000000000,
     "serviceFeeAmount": 0.0000000000,
-    "grossAmount": 100.0000000000,
     "rhParticipating": false,
     "payeeParticipating": false
   }
