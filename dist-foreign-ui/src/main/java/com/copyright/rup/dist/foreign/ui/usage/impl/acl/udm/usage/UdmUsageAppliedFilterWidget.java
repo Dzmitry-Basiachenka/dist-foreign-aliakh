@@ -60,8 +60,8 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
                 layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getAssignees()),
                 "label.assignees", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
-                DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
+                "label.detail_licensee_classes", DetailLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedPubTypes()),
                 "label.reported_pub_types", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),

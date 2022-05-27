@@ -30,7 +30,6 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -74,7 +73,8 @@ public class UdmUsageAppliedFilterWidgetTest {
         verifyLabel(((VerticalLayout) component).getComponent(3), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(4), "Assignees",
             "Auser@copyright.com, buser@copyright.com, User@copyright.com");
-        verifyLabel(((VerticalLayout) component).getComponent(5), "Detail Licensee Classes", "22 - Book series");
+        verifyLabel(((VerticalLayout) component).getComponent(5), "Detail Licensee Classes",
+            "1 - Food and Tobacco, 22 - Book series, 26 - Law Firms");
         verifyLabel(((VerticalLayout) component).getComponent(6), "Reported Pub Types", "Book, Journal, Not Shared");
         verifyLabel(((VerticalLayout) component).getComponent(7), "Types of Use", "COPY_FOR_MYSELF, PRINT_COPIES");
         verifyLabel(((VerticalLayout) component).getComponent(8), "Publication Formats", "Digital, Print");
@@ -133,7 +133,9 @@ public class UdmUsageAppliedFilterWidgetTest {
         filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
         filter.setReportedPubTypes(Sets.newHashSet("Not Shared", "Book", "Journal"));
         filter.setPubFormats(Sets.newHashSet("Print", "Digital"));
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
+        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+            buildDetailLicenseeClass(1, "Food and Tobacco"),
+            buildDetailLicenseeClass(26, "Law Firms")));
         filter.setReportedTypeOfUses(Sets.newHashSet("PRINT_COPIES", "COPY_FOR_MYSELF"));
         filter.setUsageDateFrom(LocalDate.of(2020, 4, 12));
         filter.setUsageDateTo(LocalDate.of(2020, 6, 20));
@@ -168,10 +170,10 @@ public class UdmUsageAppliedFilterWidgetTest {
         return udmBatch;
     }
 
-    private DetailLicenseeClass buildDetailLicenseeClass() {
+    private DetailLicenseeClass buildDetailLicenseeClass(Integer id, String description) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        detailLicenseeClass.setId(22);
-        detailLicenseeClass.setDescription("Book series");
+        detailLicenseeClass.setId(id);
+        detailLicenseeClass.setDescription(description);
         return detailLicenseeClass;
     }
 }
