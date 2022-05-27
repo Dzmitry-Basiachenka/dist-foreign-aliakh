@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -167,6 +168,18 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
     protected Set<Integer> sortIntegerValuesByDesc(Collection<Integer> values) {
         return values.stream()
             .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * Sorts detail licensee classes by id ascending.
+     *
+     * @param classes collection of {@link DetailLicenseeClass}es
+     * @return set of sorted {@link DetailLicenseeClass}es
+     */
+    protected Set<DetailLicenseeClass> sortDetailLicenseeClasses(Collection<DetailLicenseeClass> classes) {
+        return classes.stream()
+            .sorted(Comparator.comparing(DetailLicenseeClass::getId))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
