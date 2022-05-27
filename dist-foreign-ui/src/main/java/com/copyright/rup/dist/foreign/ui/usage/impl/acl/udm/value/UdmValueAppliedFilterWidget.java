@@ -9,8 +9,13 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Widget for applied UDM value filters.
@@ -41,13 +46,15 @@ public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
     public void refreshFilterPanel(UdmValueFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
-            addLabel(createLabelWithSingleValue(UdmValueFilter::getStatus, filter, "label.status"), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPubTypes(), "label.pub_types",
-                getPubTypeToStringFunction()), layout);
-            addLabel(createLabelWithMultipleValues(filter.getAssignees(), "label.assignees", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getLastValuePeriods(), "label.last_value_periods",
+            addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
                 String::valueOf), layout);
+            addLabel(createLabelWithSingleValue(UdmValueFilter::getStatus, filter, "label.status"), layout);
+            addLabel(createLabelWithMultipleValues(sortAndConvertPublicationType(filter.getPubTypes()),
+                "label.pub_types", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getAssignees()),
+                "label.assignees", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortLastValuePeriodsByDesc(filter.getLastValuePeriods()),
+                "label.last_value_periods", String::valueOf), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",
@@ -106,9 +113,18 @@ public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
         return function;
     }
 
-    private Function<PublicationType, String> getPubTypeToStringFunction() {
-        return publicationType -> Objects.nonNull(publicationType.getId())
-            ? publicationType.getNameAndDescription()
-            : NULL;
+    private Set<String> sortAndConvertPublicationType(Collection<PublicationType> publicationTypes) {
+        return publicationTypes.stream()
+            .map(publicationType -> Objects.nonNull(publicationType.getId())
+                ? publicationType.getNameAndDescription()
+                : NULL)
+            .sorted(String::compareToIgnoreCase)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private Set<String> sortLastValuePeriodsByDesc(Collection<String> lastValuePeriods) {
+        return lastValuePeriods.stream()
+            .sorted(Comparator.reverseOrder())
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

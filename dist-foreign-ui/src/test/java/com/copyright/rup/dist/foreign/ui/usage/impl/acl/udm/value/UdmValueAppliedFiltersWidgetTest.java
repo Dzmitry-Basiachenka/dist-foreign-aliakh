@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -21,7 +22,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 /**
  * Verifies {@link UdmValueAppliedFilterWidget}.
@@ -50,11 +50,14 @@ public class UdmValueAppliedFiltersWidgetTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(25, verticalLayout.getComponentCount());
-        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
+        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202212, 202106, 201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Status", "NEW");
-        verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Types", "BK - Book");
-        verifyLabel(((VerticalLayout) component).getComponent(3), "Assignees", "user@copyright.com");
-        verifyLabel(((VerticalLayout) component).getComponent(4), "Last Value Periods", "IS_NULL");
+        verifyLabel(((VerticalLayout) component).getComponent(2), "Pub Types",
+            "BK - Book, NULL, SJ - Scholarly Journal");
+        verifyLabel(((VerticalLayout) component).getComponent(3), "Assignees",
+            "Auser@copyright.com, buser@copyright.com, User@copyright.com");
+        verifyLabel(((VerticalLayout) component).getComponent(4), "Last Value Periods",
+            "IS_NULL, 202312, 202206, 201506");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(5),
             "<li><b><i>Wr Wrk Inst From: </i></b>306985899</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
@@ -105,10 +108,10 @@ public class UdmValueAppliedFiltersWidgetTest {
 
     private UdmValueFilter buildUdmValueFilter() {
         UdmValueFilter filter = new UdmValueFilter();
-        filter.setPeriods(Collections.singleton(201506));
+        filter.setPeriods(Sets.newHashSet(202106, 201506, 202212));
         filter.setStatus(UdmValueStatusEnum.NEW);
-        filter.setAssignees(Collections.singleton("user@copyright.com"));
-        filter.setLastValuePeriods(Collections.singleton(FilterOperatorEnum.IS_NULL.name()));
+        filter.setAssignees(Sets.newHashSet("buser@copyright.com", "User@copyright.com", "Auser@copyright.com"));
+        filter.setLastValuePeriods(Sets.newHashSet("202206", FilterOperatorEnum.IS_NULL.name(), "201506", "202312"));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
@@ -133,18 +136,20 @@ public class UdmValueAppliedFiltersWidgetTest {
         filter.setLastContentFlagExpression(new FilterExpression<>(FilterOperatorEnum.N));
         filter.setLastContentCommentExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "last content comment", null));
-        filter.setPubTypes(Collections.singleton(buildPubType()));
-        filter.setLastPubType(buildPubType());
+        filter.setPubTypes(Sets.newHashSet(new PublicationType(),
+            buildPubType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ", "Scholarly Journal"),
+            buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book")));
+        filter.setLastPubType(buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book"));
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "comment", null));
         filter.setLastCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "last comment", null));
         return filter;
     }
 
-    private PublicationType buildPubType() {
+    private PublicationType buildPubType(String id, String name, String description) {
         PublicationType publicationType = new PublicationType();
-        publicationType.setId("ce650157-3dbf-4385-938c-f3f1e10f4577");
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
+        publicationType.setId(id);
+        publicationType.setName(name);
+        publicationType.setDescription(description);
         return publicationType;
     }
 }
