@@ -1,0 +1,39 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationRelationshipPreference",
+          "id": "917bfe2f-5125-4c3c-b7b1-01876524bc8c",
+          "pmOrganizationUid": "18062f0c-beba-47a4-ae38-faa612688760",
+          "name": "Zoological Society of Pakistan [T]",
+          "externalOrganizationKey": "1000009522",
+          "pmLicenseProductUid": "NTS",
+          "pmPreferenceTypeUid": "baseline-is-rh-stm-ipro",
+          "preferenceCode": "IS-RH-STM-IPRO",
+          "validBeginDate": "2019-10-10T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "false"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationRelationshipPreference",
+          "id": "917bfe2f-5125-4c3c-b7b1-01876524bc8c",
+          "pmOrganizationUid": "18062f0c-beba-47a4-ae38-faa612688760",
+          "name": "Zoological Society of Pakistan [T]",
+          "externalOrganizationKey": "1000009522",
+          "pmLicenseProductUid": "NTS",
+          "pmPreferenceTypeUid": "baseline-is-rh-dist-ineligible",
+          "preferenceCode": "ISRHDISTINELIGIBLE",
+          "validBeginDate": "2019-01-09T00:00:00-0500",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "TRUE"
+        }
+      ]
+    ]
+  }
+}

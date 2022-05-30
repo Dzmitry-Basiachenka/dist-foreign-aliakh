@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Verifies {@link WorksMatchingJob}.
+ * Verifies {@link RhTaxJob}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -38,10 +38,10 @@ import java.util.List;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-public class WorksMatchingJobIntegrationTest {
+public class RxTaxJobIntegrationTest {
 
     @Autowired
-    private WorksMatchingJob worksMatchingJob;
+    private RhTaxJob rhTaxJob;
     @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
@@ -53,26 +53,22 @@ public class WorksMatchingJobIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "works-matching-job-integration-test/test-execute-internal.groovy")
+    @TestData(fileName = "rx-tax-job-integration-test/test-execute-internal.groovy")
     public void testExecuteInternal() throws IOException {
         testHelper.createRestServer();
-        testHelper.expectGetRmsRights("rights/rms_grants_292891647_request.json",
-            "rights/rms_grants_292891647_response.json");
+        testHelper.expectOracleCall("tax/rh_1000009522_tax_country_us_response.json", 1000009522L);
+        testHelper.expectGetPreferences("75e057ac-7c24-4ae7-a0f5-aa75ea0895e6",
+            "preferences/rh_1000009522_preferences_response.json");
         JobExecutionContext jobExecutionContext = createMock(JobExecutionContext.class);
-        JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED,
-            "ProductFamily=FAS, UsagesCount=1; " +
-            "ProductFamily=FAS2, Reason=There are no usages; " +
-            "ProductFamily=AACL, Reason=There are no usages; " +
-            "ProductFamily=SAL, Reason=There are no usages; " +
-            "ProductFamily=ACL_UDM, Reason=There are no usages");
+        JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=NTS, UsagesCount=1");
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
         replay(jobExecutionContext);
-        worksMatchingJob.executeInternal(jobExecutionContext);
+        rhTaxJob.executeInternal(jobExecutionContext);
         verify(jobExecutionContext);
-        testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_292891647.json"));
-        testHelper.assertAudit("03f307ac-81d1-4ab5-b037-9bd2ca899aab",
-            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_292891647.json"));
+        testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_448824345.json"));
+        testHelper.assertAudit("1d798afe-dabb-4dca-9351-7a6ef64f3708",
+            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_448824345.json"));
         testHelper.verifyRestServer();
     }
 }

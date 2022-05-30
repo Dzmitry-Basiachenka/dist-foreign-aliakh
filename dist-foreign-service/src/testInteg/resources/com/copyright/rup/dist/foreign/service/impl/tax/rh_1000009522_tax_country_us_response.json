@@ -1,0 +1,21 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RightsholderDataInfo",
+          "rightsholderAccountNumber": "1000009522",
+          "rightsholderName": "Zoological Society of Pakistan [T]",
+          "withholdingIndicator": "U",
+          "domesticInternationalIndicator": "D",
+          "taxCountry": "US"
+        }
+      ]
+    ]
+  }
+}
