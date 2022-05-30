@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -14,9 +15,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -63,15 +66,14 @@ public class EditScenarioNameWindowTest {
         replay(controller);
         window = new EditScenarioNameWindow(controller, scenario);
         verify(controller);
-        assertEquals("Edit Scenario Name", window.getCaption());
-        assertEquals(320, window.getWidth(), 0);
+        verifyWindow(window, "Edit Scenario Name", 320, -1, Unit.PIXELS);
         assertEquals("edit-scenario-name-window", window.getId());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);
         assertTrue(content.isSpacing());
         assertEquals(2, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        verifyButtonsLayout(content.getComponent(1));
+        UiTestHelper.verifyButtonsLayout(content.getComponent(1), "Save", "Cancel");
     }
 
     @Test
@@ -90,7 +92,7 @@ public class EditScenarioNameWindowTest {
         ((TextField) content.getComponent(0)).setValue(newScenarioName);
         Component component = content.getComponent(1);
         HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        Button saveButton = verifyButton(buttonsLayout.getComponent(0), "Save");
+        Button saveButton = (Button) buttonsLayout.getComponent(0);
         ClickListener listener = (ClickListener) saveButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(window));
         verify(widget, controller);
@@ -142,21 +144,5 @@ public class EditScenarioNameWindowTest {
         assertEquals("Scenario name", scenarioNameField.getCaption());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertNotNull(component);
-        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
-        assertTrue(buttonsLayout.isSpacing());
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Save");
-        verifyButton(buttonsLayout.getComponent(1), "Cancel");
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertNotNull(component);
-        Button button = (Button) component;
-        assertEquals(caption, button.getCaption());
-        return button;
     }
 }
