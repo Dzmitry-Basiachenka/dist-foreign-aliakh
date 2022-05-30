@@ -35,13 +35,14 @@ public class AclFundPoolAppliedFilterWidget extends CommonAclAppliedFilterPanel 
     public void refreshFilterPanel(AclFundPoolDetailFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(filter.getFundPoolNames(), "label.fund_pool.names", String::valueOf),
-                layout);
-            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getAggregateLicenseeClasses(),
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getFundPoolNames()),
+                "label.fund_pool.names", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
+                String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortAggregateLicenseeClasses(filter.getAggregateLicenseeClasses()),
                 "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
-                DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
+                "label.detail_licensee_classes", DetailLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithSingleValue(AclFundPoolDetailFilter::getLicenseType, filter, "label.license_type"),
                 layout);
             addLabel(createLabelWithSingleValue(AclFundPoolDetailFilter::getFundPoolType, filter,

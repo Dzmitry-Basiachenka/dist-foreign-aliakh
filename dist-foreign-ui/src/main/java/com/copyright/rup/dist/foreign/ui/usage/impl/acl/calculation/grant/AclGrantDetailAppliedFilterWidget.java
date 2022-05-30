@@ -35,14 +35,14 @@ public class AclGrantDetailAppliedFilterWidget extends CommonAclAppliedFilterPan
     public void refreshFilterPanel(AclGrantDetailFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(filter.getGrantSetNames(), "label.grant_sets", String::valueOf),
-                layout);
-            addLabel(createLabelWithMultipleValues(filter.getLicenseTypes(), "label.license_types", String::valueOf),
-                layout);
-            addLabel(createLabelWithMultipleValues(filter.getGrantStatuses(), "label.grant_statuses", String::valueOf),
-                layout);
-            addLabel(createLabelWithMultipleValues(filter.getTypeOfUses(), "label.types_of_use", String::valueOf),
-                layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getGrantSetNames()),
+                "label.grant_sets", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getLicenseTypes()),
+                "label.license_types", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getGrantStatuses()),
+                "label.grant_statuses", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getTypeOfUses()),
+                "label.types_of_use", String::valueOf), layout);
             addLabel(createLabelWithSingleValue(AclGrantDetailFilter::getGrantSetPeriod, filter,
                 "label.grant_set_period"), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
