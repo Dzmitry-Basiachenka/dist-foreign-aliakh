@@ -41,15 +41,16 @@ public class AclUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             addLabel(createLabelWithSingleValue(AclUsageFilter::getUsageOrigin, filter, "label.usage_origin"),
                 layout);
             addLabel(createLabelWithSingleValue(AclUsageFilter::getChannel, filter, "label.channel"), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
-                DetailLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getAggregateLicenseeClasses(),
-                "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPubTypes(), "label.pub_types",
-                PublicationType::getNameAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getTypeOfUses(), "label.types_of_use",
+            addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
                 String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
+                "label.detail_licensee_classes", DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortAggregateLicenseeClasses(filter.getAggregateLicenseeClasses()),
+                "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortPublicationTypes(filter.getPubTypes()), "label.pub_types",
+                PublicationType::getNameAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getTypeOfUses()),
+                "label.types_of_use", String::valueOf), layout);
             addLabel(createLabelWithOperator(filter.getUsageDetailIdExpression(), "label.usage_detail_id",
                 StringUtils.EMPTY), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",

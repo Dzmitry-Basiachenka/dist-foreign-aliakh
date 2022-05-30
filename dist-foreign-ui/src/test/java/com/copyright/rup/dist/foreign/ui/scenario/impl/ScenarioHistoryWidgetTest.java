@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;

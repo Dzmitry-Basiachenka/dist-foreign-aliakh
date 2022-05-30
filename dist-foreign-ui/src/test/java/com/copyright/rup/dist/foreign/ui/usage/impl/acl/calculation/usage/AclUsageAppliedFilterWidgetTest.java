@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -13,13 +14,14 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
-import org.junit.Test;
 
-import java.util.Collections;
+import org.junit.Test;
 
 /**
  * Verifies {@link AclUsageAppliedFilterWidget}.
@@ -48,11 +50,14 @@ public class AclUsageAppliedFilterWidgetTest {
         verifyLabel(verticalLayout.getComponent(0), "Usage Batch Name", "ACL Usage Batch 2021");
         verifyLabel(verticalLayout.getComponent(1), "Usage Origin", "RFA");
         verifyLabel(verticalLayout.getComponent(2), "Channel", "CCC");
-        verifyLabel(verticalLayout.getComponent(3), "Periods", "202112");
-        verifyLabel(verticalLayout.getComponent(4), "Detail Licensee Classes", "4 - Publishing");
-        verifyLabel(verticalLayout.getComponent(5), "Aggregate Licensee Classes", "57 - Communications");
-        verifyLabel(verticalLayout.getComponent(6), "Pub Types", "BK - Book");
-        verifyLabel(verticalLayout.getComponent(7), "Types of Use", "PRINT");
+        verifyLabel(verticalLayout.getComponent(3), "Periods", "202212, 202112, 201506");
+        verifyLabel(verticalLayout.getComponent(4), "Detail Licensee Classes",
+            "1 - Food and Tobacco, 4 - Publishing, 22 - Book series");
+        verifyLabel(verticalLayout.getComponent(5), "Aggregate Licensee Classes",
+            "1 - Food and Tobacco, 12 - Machinery, 57 - Communications");
+        verifyLabel(verticalLayout.getComponent(6), "Pub Types",
+            "BK - Book, BK2 - Book series, SJ - Scholarly Journal");
+        verifyLabel(verticalLayout.getComponent(7), "Types of Use", "DIGITAL, PRINT");
         verifyLabel(verticalLayout.getComponent(8), "Usage Detail ID", "EQUALS", "OGN674GHHHB0153");
         verifyLabel(verticalLayout.getComponent(9), "Wr Wrk Inst From", "Wr Wrk Inst To", "BETWEEN", "1", "100000000");
         verifyLabel(verticalLayout.getComponent(10), "System Title", "CONTAINS", "journal");
@@ -84,11 +89,17 @@ public class AclUsageAppliedFilterWidgetTest {
         filter.setUsageBatchName("ACL Usage Batch 2021");
         filter.setUsageOrigin(UdmUsageOriginEnum.RFA);
         filter.setChannel(UdmChannelEnum.CCC);
-        filter.setPeriods(Collections.singleton(202112));
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(4, "Publishing")));
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(57, "Communications")));
-        filter.setPubTypes(Collections.singleton(buildPubType("BK", "Book")));
-        filter.setTypeOfUses(Collections.singleton("PRINT"));
+        filter.setPeriods(Sets.newHashSet(202112, 201506, 202212));
+        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+            buildDetailLicenseeClass(1, "Food and Tobacco"),
+            buildDetailLicenseeClass(4, "Publishing")));
+        filter.setAggregateLicenseeClasses(Sets.newHashSet(
+            buildAggregateLicenseeClass(12, "Machinery"),
+            buildAggregateLicenseeClass(1, "Food and Tobacco"),
+            buildAggregateLicenseeClass(57, "Communications")));
+        filter.setPubTypes(Sets.newHashSet(buildPubType("BK2", "Book series"), buildPubType("SJ", "Scholarly Journal"),
+            buildPubType("BK", "Book")));
+        filter.setTypeOfUses(Sets.newHashSet("PRINT", "DIGITAL"));
         filter.setUsageDetailIdExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "OGN674GHHHB0153", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.BETWEEN, 1, 100000000));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.CONTAINS, "journal", null));

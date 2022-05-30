@@ -10,14 +10,13 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
-
-import java.util.Collections;
 
 /**
  * Verifies {@link AclFundPoolAppliedFilterWidget}.
@@ -30,7 +29,6 @@ import java.util.Collections;
  */
 public class AclFundPoolAppliedFilterWidgetTest {
 
-    private static final String FUND_POOL_NAME = "Fund Pool name";
     private static final String LICENSE_TYPE = "ACL";
     private static final String FUND_POOL_TYPE = "Print";
 
@@ -50,10 +48,13 @@ public class AclFundPoolAppliedFilterWidgetTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(6, verticalLayout.getComponentCount());
-        verifyLabel(verticalLayout.getComponent(0), "Fund Pool Names", FUND_POOL_NAME);
-        verifyLabel(verticalLayout.getComponent(1), "Periods", "202212");
-        verifyLabel(verticalLayout.getComponent(2), "Aggregate Licensee Classes", "57 - Communications");
-        verifyLabel(verticalLayout.getComponent(3), "Detail Licensee Classes", "4 - Publishing");
+        verifyLabel(verticalLayout.getComponent(0), "Fund Pool Names",
+            "Fund Pool name, LDMT fund pool, Manual Fund pool 2022");
+        verifyLabel(verticalLayout.getComponent(1), "Periods", "202212, 202112, 201506");
+        verifyLabel(verticalLayout.getComponent(2), "Aggregate Licensee Classes",
+            "1 - Food and Tobacco, 12 - Machinery, 57 - Communications");
+        verifyLabel(verticalLayout.getComponent(3), "Detail Licensee Classes",
+            "1 - Food and Tobacco, 4 - Publishing, 22 - Book series");
         verifyLabel(verticalLayout.getComponent(4), "License Type", LICENSE_TYPE);
         verifyLabel(verticalLayout.getComponent(5), "Fund Pool Type", FUND_POOL_TYPE);
     }
@@ -65,10 +66,15 @@ public class AclFundPoolAppliedFilterWidgetTest {
 
     private AclFundPoolDetailFilter buildAclFundPoolDetailFilter() {
         AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
-        filter.setFundPoolNames(Collections.singleton(FUND_POOL_NAME));
-        filter.setPeriods(Collections.singleton(202212));
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(57, "Communications")));
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass(4, "Publishing")));
+        filter.setFundPoolNames(Sets.newHashSet("Manual Fund pool 2022", "LDMT fund pool", "Fund Pool name"));
+        filter.setPeriods(Sets.newHashSet(202112, 201506, 202212));
+        filter.setAggregateLicenseeClasses(Sets.newHashSet(
+            buildAggregateLicenseeClass(12, "Machinery"),
+            buildAggregateLicenseeClass(1, "Food and Tobacco"),
+            buildAggregateLicenseeClass(57, "Communications")));
+        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+            buildDetailLicenseeClass(1, "Food and Tobacco"),
+            buildDetailLicenseeClass(4, "Publishing")));
         filter.setLicenseType(LICENSE_TYPE);
         filter.setFundPoolType(FUND_POOL_TYPE);
         return filter;
