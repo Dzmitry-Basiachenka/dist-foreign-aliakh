@@ -36,8 +36,9 @@ public class UdmBaselineValueAppliedFilterWidget extends CommonAclAppliedFilterP
     public void refreshFilterPanel(UdmBaselineValueFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
-            addLabel(createLabelWithMultipleValues(filter.getPubTypes(), "label.pub_types",
+            addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
+                String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortPublicationTypes(filter.getPubTypes()), "label.pub_types",
                 PublicationType::getNameAndDescription), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);

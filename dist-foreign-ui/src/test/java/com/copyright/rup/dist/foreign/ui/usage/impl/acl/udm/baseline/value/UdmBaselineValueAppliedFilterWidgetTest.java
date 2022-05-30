@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
@@ -19,7 +20,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 /**
  * Test for {@link UdmBaselineValueAppliedFilterWidget}.
@@ -51,8 +51,9 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(10, verticalLayout.getComponentCount());
-        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "201506");
-        verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Types", "BK - Book");
+        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202212, 202106, 201506");
+        verifyLabel(((VerticalLayout) component).getComponent(1), "Pub Types",
+            "BK - Book, BK2 - Book series, SJ - Scholarly Journal");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(2),
             "<li><b><i>Wr Wrk Inst From: </i></b>306985899</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(3),
@@ -81,8 +82,10 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
 
     private UdmBaselineValueFilter buildUdmFilter() {
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
-        filter.setPeriods(Collections.singleton(201506));
-        filter.setPubTypes(Collections.singleton(buildPubType()));
+        filter.setPeriods(Sets.newHashSet(202106, 201506, 202212));
+        filter.setPubTypes(Sets.newHashSet(buildPubType("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series"),
+            buildPubType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ", "Scholarly Journal"),
+            buildPubType("ce650157-3dbf-4385-938c-f3f1e10f4577", "BK", "Book")));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 306985899L, null));
         filter.setSystemTitleExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, "Tenside, surfactants, detergents", null));
@@ -96,11 +99,11 @@ public class UdmBaselineValueAppliedFilterWidgetTest {
         return filter;
     }
 
-    private PublicationType buildPubType() {
+    private PublicationType buildPubType(String id, String name, String description) {
         PublicationType publicationType = new PublicationType();
-        publicationType.setId("ce650157-3dbf-4385-938c-f3f1e10f4577");
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
+        publicationType.setId(id);
+        publicationType.setName(name);
+        publicationType.setDescription(description);
         return publicationType;
     }
 }

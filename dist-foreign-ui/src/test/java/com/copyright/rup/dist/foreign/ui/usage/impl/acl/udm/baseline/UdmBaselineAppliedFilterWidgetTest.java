@@ -14,14 +14,13 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineFilter;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
-
-import java.util.Collections;
 
 /**
  * Test for {@link UdmBaselineAppliedFilterWidget}.
@@ -51,12 +50,15 @@ public class UdmBaselineAppliedFilterWidgetTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(11, verticalLayout.getComponentCount());
-        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202012");
+        verifyLabel(((VerticalLayout) component).getComponent(0), "Periods", "202106, 202012, 201506");
         verifyLabel(((VerticalLayout) component).getComponent(1), "Usage Origin", "SS");
         verifyLabel(((VerticalLayout) component).getComponent(2), "Channel", "CCC");
-        verifyLabel(((VerticalLayout) component).getComponent(3), "Detail Licensee Classes", "22 - Book series");
-        verifyLabel(((VerticalLayout) component).getComponent(4), "Types of Use", "EMAIL_COPY");
-        verifyLabel(((VerticalLayout) component).getComponent(5), "Aggregate Licensee Classes", "56 - Financial");
+        verifyLabel(((VerticalLayout) component).getComponent(3), "Detail Licensee Classes",
+            "1 - Food and Tobacco, 22 - Book series, 26 - Law Firms");
+        verifyLabel(((VerticalLayout) component).getComponent(4), "Types of Use",
+            "EMAIL_COPY, FAX_PHOTOCOPIES, STORE_COPY");
+        verifyLabel(((VerticalLayout) component).getComponent(5), "Aggregate Licensee Classes",
+            "1 - Food and Tobacco, 12 - Machinery, 56 - Financial");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(6),
             "<li><b><i>Wr Wrk Inst From: </i></b>20008506</li><li><b><i>Operator: </i></b>EQUALS</li>");
         verifyLabelWithOperator(((VerticalLayout) component).getComponent(7),
@@ -80,12 +82,17 @@ public class UdmBaselineAppliedFilterWidgetTest {
 
     private UdmBaselineFilter buildUdmFilter() {
         UdmBaselineFilter filter = new UdmBaselineFilter();
-        filter.setPeriods(Collections.singleton(202012));
+        filter.setPeriods(Sets.newHashSet(202012, 202106, 201506));
         filter.setChannel(UdmChannelEnum.CCC);
         filter.setUdmUsageOrigin(UdmUsageOriginEnum.SS);
-        filter.setDetailLicenseeClasses(Collections.singleton(buildDetailLicenseeClass()));
-        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass()));
-        filter.setReportedTypeOfUses(Collections.singleton("EMAIL_COPY"));
+        filter.setDetailLicenseeClasses(Sets.newHashSet(buildDetailLicenseeClass(22, "Book series"),
+            buildDetailLicenseeClass(1, "Food and Tobacco"),
+            buildDetailLicenseeClass(26, "Law Firms")));
+        filter.setAggregateLicenseeClasses(Sets.newHashSet(
+            buildAggregateLicenseeClass(1, "Food and Tobacco"),
+            buildAggregateLicenseeClass(12, "Machinery"),
+            buildAggregateLicenseeClass(56, "Financial")));
+        filter.setReportedTypeOfUses(Sets.newHashSet("STORE_COPY", "EMAIL_COPY", "FAX_PHOTOCOPIES"));
         filter.setSurveyCountryExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "United States", null));
         filter.setWrWrkInstExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, 20008506L, null));
         filter.setSystemTitleExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Medical journal", null));
@@ -95,17 +102,17 @@ public class UdmBaselineAppliedFilterWidgetTest {
         return filter;
     }
 
-    private DetailLicenseeClass buildDetailLicenseeClass() {
+    private DetailLicenseeClass buildDetailLicenseeClass(Integer id, String description) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        detailLicenseeClass.setId(22);
-        detailLicenseeClass.setDescription("Book series");
+        detailLicenseeClass.setId(id);
+        detailLicenseeClass.setDescription(description);
         return detailLicenseeClass;
     }
 
-    private AggregateLicenseeClass buildAggregateLicenseeClass() {
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id, String description) {
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
-        aggregateLicenseeClass.setId(56);
-        aggregateLicenseeClass.setDescription("Financial");
+        aggregateLicenseeClass.setId(id);
+        aggregateLicenseeClass.setDescription(description);
         return aggregateLicenseeClass;
     }
 }

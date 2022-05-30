@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -180,6 +182,30 @@ public abstract class CommonAclAppliedFilterPanel extends Panel {
     protected Set<DetailLicenseeClass> sortDetailLicenseeClasses(Collection<DetailLicenseeClass> classes) {
         return classes.stream()
             .sorted(Comparator.comparing(DetailLicenseeClass::getId))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * Sorts aggregate licensee classes by id ascending.
+     *
+     * @param classes collection of {@link AggregateLicenseeClass}es
+     * @return set of sorted {@link AggregateLicenseeClass}es
+     */
+    protected Set<AggregateLicenseeClass> sortAggregateLicenseeClasses(Collection<AggregateLicenseeClass> classes) {
+        return classes.stream()
+            .sorted(Comparator.comparing(AggregateLicenseeClass::getId))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    /**
+     * Sorts publication types by name and description ascending.
+     *
+     * @param publicationTypes collection of {@link PublicationType}s
+     * @return set of sorted {@link PublicationType}s
+     */
+    protected Set<PublicationType> sortPublicationTypes(Collection<PublicationType> publicationTypes) {
+        return publicationTypes.stream()
+            .sorted((p1, p2) -> p1.getNameAndDescription().compareToIgnoreCase(p2.getNameAndDescription()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
