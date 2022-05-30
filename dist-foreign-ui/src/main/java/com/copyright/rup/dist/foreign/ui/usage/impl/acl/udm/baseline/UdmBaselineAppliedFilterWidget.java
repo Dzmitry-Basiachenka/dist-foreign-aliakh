@@ -37,17 +37,18 @@ public class UdmBaselineAppliedFilterWidget extends CommonAclAppliedFilterPanel 
     public void refreshFilterPanel(UdmBaselineFilter filter) {
         VerticalLayout layout = initLayout();
         if (!filter.isEmpty()) {
-            addLabel(createLabelWithMultipleValues(filter.getPeriods(), "label.periods", String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
+                String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getUdmUsageOrigin, filter, "label.usage_origin"),
                 layout);
             addLabel(createLabelWithSingleValue(UdmBaselineFilter::getChannel, filter, "label.channel"), layout);
-            addLabel(createLabelWithMultipleValues(filter.getDetailLicenseeClasses(), "label.detail_licensee_classes",
-                DetailLicenseeClass::getIdAndDescription), layout);
-            addLabel(createLabelWithMultipleValues(filter.getReportedTypeOfUses(), "label.types_of_use",
-                String::valueOf), layout);
+            addLabel(createLabelWithMultipleValues(sortDetailLicenseeClasses(filter.getDetailLicenseeClasses()),
+                "label.detail_licensee_classes", DetailLicenseeClass::getIdAndDescription), layout);
+            addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getReportedTypeOfUses()),
+                "label.types_of_use", String::valueOf), layout);
             addLabel(
-                createLabelWithMultipleValues(filter.getAggregateLicenseeClasses(), "label.aggregate_licensee_classes",
-                    AggregateLicenseeClass::getIdAndDescription), layout);
+                createLabelWithMultipleValues(sortAggregateLicenseeClasses(filter.getAggregateLicenseeClasses()),
+                    "label.aggregate_licensee_classes", AggregateLicenseeClass::getIdAndDescription), layout);
             addLabel(createLabelWithOperator(filter.getWrWrkInstExpression(), "label.wr_wrk_inst_from",
                 "label.wr_wrk_inst_to"), layout);
             addLabel(createLabelWithOperator(filter.getSystemTitleExpression(), "label.system_title",

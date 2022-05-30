@@ -49,7 +49,7 @@ public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
             addLabel(createLabelWithMultipleValues(sortIntegerValuesByDesc(filter.getPeriods()), "label.periods",
                 String::valueOf), layout);
             addLabel(createLabelWithSingleValue(UdmValueFilter::getStatus, filter, "label.status"), layout);
-            addLabel(createLabelWithMultipleValues(sortAndConvertPublicationType(filter.getPubTypes()),
+            addLabel(createLabelWithMultipleValues(sortAndConvertPublicationTypes(filter.getPubTypes()),
                 "label.pub_types", String::valueOf), layout);
             addLabel(createLabelWithMultipleValues(sortStringValuesByNaturalOrder(filter.getAssignees()),
                 "label.assignees", String::valueOf), layout);
@@ -113,7 +113,7 @@ public class UdmValueAppliedFilterWidget extends CommonAclAppliedFilterPanel {
         return function;
     }
 
-    private Set<String> sortAndConvertPublicationType(Collection<PublicationType> publicationTypes) {
+    private Set<String> sortAndConvertPublicationTypes(Collection<PublicationType> publicationTypes) {
         return publicationTypes.stream()
             .map(publicationType -> Objects.nonNull(publicationType.getId())
                 ? publicationType.getNameAndDescription()
