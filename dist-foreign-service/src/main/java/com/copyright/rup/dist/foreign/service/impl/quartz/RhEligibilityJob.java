@@ -26,7 +26,7 @@ public class RhEligibilityJob extends QuartzJobBean {
 
     @Autowired
     @Qualifier("usageChainExecutor")
-    private IChainExecutor<Usage> chainExecutor;;
+    private IChainExecutor<Usage> chainExecutor;
 
     /**
      * Finds NTS usages in NON_STM_RH status and send to RH Eligibility queue.
