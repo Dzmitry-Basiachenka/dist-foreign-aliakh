@@ -1,0 +1,53 @@
+[
+  {
+    "id": "e6343e5a-2075-45e0-96da-5f9f4ba15f5c",
+    "batchId": "2beb2f08-3ed5-4cfb-96e8-a67e77bf7bfe",
+    "originalDetailId": "OGN555GHASG001",
+    "status": "RH_FOUND",
+    "period": 202112,
+    "periodEndDate": [
+      2022,
+      5,
+      27
+    ],
+    "rightsholder": {
+      "accountNumber": 1000000322
+    },
+    "wrWrkInst": 854030732,
+    "standardNumber": "2998622115929154XX",
+    "reportedStandardNumber": "2998622115929154XX",
+    "reportedTitle": "Technical Journal",
+    "systemTitle": "Technical Journal",
+    "article": "Technical Journal",
+    "reportedPubType": "Book",
+    "language": "German",
+    "pubFormat": "Digital",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "surveyRespondent": "a671342a-ff05-4d6a-94ce-5876e950a656",
+    "surveyCountry": "United States",
+    "ipAddress": "24.12.119.203",
+    "usageDate": [
+      2020,
+      9,
+      10
+    ],
+    "surveyStartDate": [
+      2020,
+      9,
+      10
+    ],
+    "surveyEndDate": [
+      2021,
+      6,
+      30
+    ],
+    "companyId": 454984566,
+    "companyName": "Skadden, Arps, Slate, Meagher & Flom LLP",
+    "detailLicenseeClassId": 1,
+    "quantity": 1,
+    "annualMultiplier": 1,
+    "statisticalMultiplier": 0.10000,
+    "annualizedCopies": 1.00000,
+    "baselineFlag": false
+  }
+]

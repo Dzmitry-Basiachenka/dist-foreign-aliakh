@@ -1,0 +1,53 @@
+[
+  {
+    "id": "748223ba-cabd-481f-8c05-4fcdea550cb7",
+    "batchId": "e41926ac-519a-4d8c-9788-8287d4080406",
+    "originalDetailId": "OGN555GHASG002",
+    "status": "RH_FOUND",
+    "period": 202112,
+    "periodEndDate": [
+      2022,
+      5,
+      27
+    ],
+    "rightsholder": {
+      "accountNumber": 1000023401
+    },
+    "wrWrkInst": 658824345,
+    "standardNumber": "1008902112377654XX",
+    "reportedStandardNumber": "1008902112377654XX",
+    "reportedTitle": "Medical Journal",
+    "systemTitle": "Medical Journal",
+    "article": "Medical Journal",
+    "reportedPubType": "Book",
+    "language": "German",
+    "pubFormat": "Digital",
+    "reportedTypeOfUse": "EMAIL_COPY",
+    "surveyRespondent": "a671342a-ff05-4d6a-94ce-5876e950a656",
+    "surveyCountry": "United States",
+    "ipAddress": "24.12.119.203",
+    "usageDate": [
+      2020,
+      9,
+      10
+    ],
+    "surveyStartDate": [
+      2020,
+      9,
+      10
+    ],
+    "surveyEndDate": [
+      2021,
+      6,
+      30
+    ],
+    "companyId": 454984566,
+    "companyName": "Skadden, Arps, Slate, Meagher & Flom LLP",
+    "detailLicenseeClassId": 1,
+    "quantity": 1,
+    "annualMultiplier": 1,
+    "statisticalMultiplier": 0.10000,
+    "annualizedCopies": 1.00000,
+    "baselineFlag": false
+  }
+]
