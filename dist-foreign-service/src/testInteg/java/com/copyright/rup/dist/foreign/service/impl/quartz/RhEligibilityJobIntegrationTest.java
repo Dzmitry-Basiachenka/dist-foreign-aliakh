@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Verifies {@link StmRhJob}.
+ * Verifies {@link RhEligibilityJob}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -38,10 +38,10 @@ import java.util.List;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS,
     listeners = {LiquibaseTestExecutionListener.class}
 )
-public class StmRhJobIntegrationTest {
+public class RhEligibilityJobIntegrationTest {
 
     @Autowired
-    private StmRhJob stmRhJob;
+    private RhEligibilityJob rhEligibilityJob;
     @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
@@ -53,7 +53,7 @@ public class StmRhJobIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = "stm-rh-job-integration-test/test-execute-internal.groovy")
+    @TestData(fileName = "rh-eligibility-job-integration-test/test-execute-internal.groovy")
     public void testExecuteInternal() throws IOException {
         testHelper.createRestServer();
         testHelper.expectGetPreferences("75e057ac-7c24-4ae7-a0f5-aa75ea0895e6",
@@ -63,7 +63,7 @@ public class StmRhJobIntegrationTest {
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
         replay(jobExecutionContext);
-        stmRhJob.executeInternal(jobExecutionContext);
+        rhEligibilityJob.executeInternal(jobExecutionContext);
         verify(jobExecutionContext);
         testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_448824345.json"));
         testHelper.assertAudit("1d798afe-dabb-4dca-9351-7a6ef64f3708",
