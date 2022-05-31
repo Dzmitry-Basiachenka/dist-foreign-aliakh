@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,6 +45,8 @@ public class WorksMatchingJobIntegrationTest {
     @Autowired
     private WorksMatchingJob worksMatchingJob;
     @Autowired
+    private IUdmUsageService udmUsageService;
+    @Autowired
     private ServiceTestHelper testHelper;
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
@@ -58,13 +62,15 @@ public class WorksMatchingJobIntegrationTest {
         testHelper.createRestServer();
         testHelper.expectGetRmsRights("rights/rms_grants_292891647_request.json",
             "rights/rms_grants_292891647_response.json");
+        testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_854030732_request.json",
+            "rights/udm/usage/rms_grants_854030732_response.json");
         JobExecutionContext jobExecutionContext = createMock(JobExecutionContext.class);
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED,
             "ProductFamily=FAS, UsagesCount=1; " +
             "ProductFamily=FAS2, Reason=There are no usages; " +
             "ProductFamily=AACL, Reason=There are no usages; " +
             "ProductFamily=SAL, Reason=There are no usages; " +
-            "ProductFamily=ACL_UDM, Reason=There are no usages");
+            "ProductFamily=ACL_UDM, UsagesCount=1");
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
         replay(jobExecutionContext);
@@ -73,6 +79,10 @@ public class WorksMatchingJobIntegrationTest {
         testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_292891647.json"));
         testHelper.assertAudit("03f307ac-81d1-4ab5-b037-9bd2ca899aab",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_292891647.json"));
+        testHelper.assertUdmUsages(testHelper.loadExpectedUdmUsages("quartz/usage_854030732.json"),
+            udmUsageService.getUdmUsagesByIds(Collections.singletonList("e6343e5a-2075-45e0-96da-5f9f4ba15f5c")));
+        testHelper.assertUdmUsageAudit("e6343e5a-2075-45e0-96da-5f9f4ba15f5c",
+            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_854030732.json"));
         testHelper.verifyRestServer();
     }
 }

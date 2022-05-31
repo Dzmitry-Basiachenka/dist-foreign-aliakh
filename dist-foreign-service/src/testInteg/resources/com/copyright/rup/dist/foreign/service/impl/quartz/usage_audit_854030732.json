@@ -1,0 +1,10 @@
+[
+  {
+    "actionType": "RH_FOUND",
+    "actionReason": "Rightsholder account 1000000322 was found in RMS"
+  },
+  {
+    "actionType": "WORK_FOUND",
+    "actionReason": "Wr Wrk Inst 854030732 was found in PI"
+  }
+]
