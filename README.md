@@ -1,3 +1,16 @@
+5.1.26
+-
+* B-72775 Tech Debt: FDA: add sort of detail licensee classes in UDM Usage Applied panel
+* B-72775 Tech Debt: FDA: add sort for multi-select filters in UDM Baseline Applied panels
+* B-72775 Tech Debt: FDA: add sort for multi-select filters in UDM Value Applied panel
+* B-72775 Tech Debt: FDA: add sort for multi-select filters in Applied panels for Calculations tab
+* B-72775 Tech Debt: FDA: implement integration tests for WorksMatchingJob
+* B-72775 Tech Debt: FDA: implement integration tests for GetRightsJob
+* B-72775 Tech Debt: FDA: implement integration tests for RhTaxJob
+* B-72775 Tech Debt: FDA: improve UI unit tests
+* B-72775 Tech Debt: FDA: implement integration tests for StmRhJob
+* B-72775 Tech Debt: FDA: implement integration tests for RhEligibilityJob
+
 5.1.25
 -
 * B-57776 FDA: View/Delete ACL Fund Pools: make changes based om comments in codereview
