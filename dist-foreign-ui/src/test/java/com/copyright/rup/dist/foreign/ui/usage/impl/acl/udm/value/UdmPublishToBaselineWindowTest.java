@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -65,11 +67,7 @@ public class UdmPublishToBaselineWindowTest {
         expect(controller.getPeriods()).andReturn(Collections.emptyList()).once();
         replay(controller);
         window = new UdmPublishToBaselineWindow(controller, publishButtonClickListener);
-        assertEquals("Publish to Baseline", window.getCaption());
-        assertEquals(280, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(120, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Publish to Baseline", 280, 120, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verify(controller);
     }
@@ -115,15 +113,7 @@ public class UdmPublishToBaselineWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyPeriodComponent(verticalLayout.getComponent(0));
+        verifyComboBox(verticalLayout.getComponent(0), "Period", false);
         verifyButtonsLayout(verticalLayout.getComponent(1), "Continue", "Cancel");
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyPeriodComponent(Component component) {
-        ComboBox<Integer> comboBox = (ComboBox<Integer>) component;
-        assertEquals("Period", comboBox.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
     }
 }

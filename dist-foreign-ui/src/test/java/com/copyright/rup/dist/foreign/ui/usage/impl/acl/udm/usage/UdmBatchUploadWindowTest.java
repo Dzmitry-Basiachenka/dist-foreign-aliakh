@@ -2,8 +2,12 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setComboBoxValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -29,7 +33,6 @@ import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
@@ -46,8 +49,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmBatchUploadWindow}.
@@ -105,11 +106,7 @@ public class UdmBatchUploadWindowTest {
     @Test
     public void testConstructor() {
         window = new UdmBatchUploadWindow(controller);
-        assertEquals("Upload UDM Usage Batch", window.getCaption());
-        assertEquals(400, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(211, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Upload UDM Usage Batch", 400, 211, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
@@ -137,18 +134,24 @@ public class UdmBatchUploadWindowTest {
         window = new UdmBatchUploadWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodYearField = Whitebox.getInternalState(window, "periodYearField");
-        verifyField(periodYearField, StringUtils.EMPTY, binder, "Field value should be specified", false);
-        verifyField(periodYearField, "null", binder, "Field value should be specified", false);
-        verifyField(periodYearField, "a", binder, "Field value should contain numeric values only", false);
-        verifyField(periodYearField, "a955", binder, "Field value should contain numeric values only", false);
-        verifyField(periodYearField, "1949", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodYearField, "2100", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodYearField, "1950", binder, StringUtils.EMPTY, true);
-        verifyField(periodYearField, " 1950 ", binder, StringUtils.EMPTY, true);
-        verifyField(periodYearField, "1999", binder, StringUtils.EMPTY, true);
-        verifyField(periodYearField, " 1999 ", binder, StringUtils.EMPTY, true);
-        verifyField(periodYearField, "2099", binder, StringUtils.EMPTY, true);
-        verifyField(periodYearField, " 2099 ", binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, StringUtils.EMPTY, binder, "Field value should be specified", false);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, "null", binder, "Field value should contain numeric values only", false);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, "a", binder, "Field value should contain numeric values only", false);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, "a955", binder, "Field value should contain numeric values only", false);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, "1949", binder, "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVerifyErrorMessage(
+            periodYearField, "2100", binder, "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1950", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1950 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "1999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, null, true);
         verify(controller);
     }
 
@@ -167,16 +170,9 @@ public class UdmBatchUploadWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        assertTrue(horizontalLayout.getComponent(0) instanceof TextField);
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
-        TextField textField = (TextField) horizontalLayout.getComponent(0);
-        assertEquals("Period Year", textField.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
-        ComboBox<String> comboBox = (ComboBox<String>) horizontalLayout.getComponent(1);
-        assertEquals("Period Month", comboBox.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
+        verifyTextField(horizontalLayout.getComponent(0), "Period Year");
+        verifyComboBox(horizontalLayout.getComponent(1), "Period Month", true, "06", "12");
     }
 
     private void verifyChannelAndUsageOriginComponents(Component component) {
@@ -185,14 +181,8 @@ public class UdmBatchUploadWindowTest {
         assertEquals(2, horizontalLayout.getComponentCount());
         assertTrue(horizontalLayout.getComponent(0) instanceof ComboBox);
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
-        ComboBox<UdmUsageOriginEnum> originComboBox = (ComboBox<UdmUsageOriginEnum>) horizontalLayout.getComponent(0);
-        assertEquals("Usage Origin", originComboBox.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, originComboBox.getWidthUnits());
-        ComboBox<UdmChannelEnum> channelComboBox = (ComboBox<UdmChannelEnum>) horizontalLayout.getComponent(1);
-        assertEquals("Channel", channelComboBox.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, channelComboBox.getWidthUnits());
+        verifyComboBox(horizontalLayout.getComponent(0), "Usage Origin", true, UdmUsageOriginEnum.values());
+        verifyComboBox(horizontalLayout.getComponent(1), "Channel", true, UdmChannelEnum.values());
     }
 
     private ProcessingResult<UdmUsage> buildCsvProcessingResult() {
@@ -212,13 +202,5 @@ public class UdmBatchUploadWindowTest {
         udmBatch.setUsageOrigin(USAGE_ORIGIN);
         udmBatch.setChannel(CHANNEL);
         return udmBatch;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

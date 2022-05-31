@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -156,11 +157,7 @@ public class UdmEditValueWindowTest {
     public void testConstructor() {
         setSpecialistExpectations();
         initEditWindow();
-        assertEquals("Edit UDM Value", window.getCaption());
-        assertEquals(960, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Edit UDM Value",960, 700, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanel(verticalLayout.getComponent(0));
     }

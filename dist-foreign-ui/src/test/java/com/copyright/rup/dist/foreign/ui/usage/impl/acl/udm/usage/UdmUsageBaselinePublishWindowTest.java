@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
@@ -13,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -63,11 +65,7 @@ public class UdmUsageBaselinePublishWindowTest {
         replay(controller);
         window = new UdmUsageBaselinePublishWindow(controller, publishButtonClickListener);
         verify(controller);
-        assertEquals("Publish to Baseline", window.getCaption());
-        assertEquals(280, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(120, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Publish to Baseline", 280, 120, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
@@ -93,14 +91,7 @@ public class UdmUsageBaselinePublishWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        verifyPeriodComponent(verticalLayout.getComponent(0));
+        UiTestHelper.verifyComboBox(verticalLayout.getComponent(0), "Period", false);
         verifyButtonsLayout(verticalLayout.getComponent(1), "Publish", "Close");
-    }
-
-    private void verifyPeriodComponent(Component component) {
-        ComboBox<Integer> comboBox = (ComboBox<Integer>) component;
-        assertEquals("Period", comboBox.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
     }
 }
