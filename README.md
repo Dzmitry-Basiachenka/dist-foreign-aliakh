@@ -1,4 +1,4 @@
-5.1.26
+15.1.26
 -
 * B-72775 Tech Debt: FDA: add sort of detail licensee classes in UDM Usage Applied panel
 * B-72775 Tech Debt: FDA: add sort for multi-select filters in UDM Baseline Applied panels
@@ -11,7 +11,7 @@
 * B-72775 Tech Debt: FDA: implement integration tests for StmRhJob
 * B-72775 Tech Debt: FDA: implement integration tests for RhEligibilityJob
 
-5.1.25
+15.1.25
 -
 * B-57776 FDA: View/Delete ACL Fund Pools: make changes based om comments in codereview
 * B-72775 Tech Debt: FDA: apply new 6_8 rup dependencies version
@@ -25,7 +25,7 @@
 * B-72775 Tech Debt: FDA: revert sort of items in Period Filter widget and add sort for periods in UDM Usage Applied panel
 * B-72775 Tech Debt: FDA: add threshold for select all check box on ACL usages grid
 
-5.1.24
+15.1.24
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: add negative amount validation, and apply validation for details on UI
 * B-57776 FDA: View/Delete ACL Fund Pools: implement View/Delete window
@@ -38,13 +38,13 @@
 * B-72775 Tech Debt: FDA: refine grid style name for ACL fund pool filter
 * B-72775 Tech Debt: FDA: refine logic of Amount validators to prohibit spaces string
 
-5.1.23
+15.1.23
 -
 * B-69895 FDA: Usage batch edits: implement sql query to update ACL usages
 * B-72983 FDA: Fund Pool filters: apply ordering for amount fields
 * B-72775 Tech Debt: FDA: refine grid style name for ACL fund pool
 
-5.1.22
+15.1.22
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement JSON validator
 * B-72983 FDA: Fund Pool filters: implement backend logic
@@ -52,7 +52,7 @@
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement validator to find duplicate Detail Licensee Class Id, Type of Use pairs
 * B-72784 FDA: View Fund Pool details & Export: implement export functionality
 
-5.1.21
+15.1.21
 -
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: implement Liquibase script
 * B-57768 FDA: Integrate with LDMT for ACL fund pools in Oracle: update domain objects
@@ -73,7 +73,7 @@
 * B-72983 FDA: Fund Pool filters: implement UI Part of filters
 * B-72983 FDA: Fund Pool filters: implement applied filter widget and rename filters
 
-5.1.20
+15.1.20
 -
 * B-72774 FDA: Tech Debt: update amount validator to allow up to 10 digits after the decimal point
 * B-72774 Tech Debt: FDA: replace sorting by Det LC ID in Verified Details by Source report
@@ -81,7 +81,7 @@
 * B-72774 Tech Debt: FDA: Move common logic to common class in unit test
 * B-64276 FDA: Fund Pool creation: fix issue with wrong detail licensee class id validation
 
-5.1.19
+15.1.19
 -
 * B-64276 FDA: Fund Pool creation: apply permissions for fund pool tab
 
