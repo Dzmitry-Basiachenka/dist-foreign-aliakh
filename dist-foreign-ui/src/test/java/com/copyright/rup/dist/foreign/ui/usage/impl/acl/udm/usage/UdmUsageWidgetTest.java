@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
@@ -121,7 +122,7 @@ public class UdmUsageWidgetTest {
     private static final String NON_BASELINE_ERROR_MESSAGE = "Only non baseline usages can be edited";
     private static final String RESEARCHER_STATUSES_ERROR_MESSAGE = "You can edit only UDM usages in statuses " +
         "WORK_NOT_FOUND, RH_NOT_FOUND, OPS_REVIEW";
-    private static final String USAGE_NOT_EDITED_ERROR_MESSAGE  = "Selected UDM usage cannot be edited. Please " +
+    private static final String USAGE_NOT_EDITED_ERROR_MESSAGE = "Selected UDM usage cannot be edited. Please " +
         "assign it to yourself first";
     private UdmUsageWidget usagesWidget;
     private IUdmUsageController controller;
@@ -148,12 +149,12 @@ public class UdmUsageWidgetTest {
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, true, true, true, true, true);
         Grid grid = (Grid) layout.getComponent(1);
@@ -170,12 +171,12 @@ public class UdmUsageWidgetTest {
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
@@ -192,12 +193,12 @@ public class UdmUsageWidgetTest {
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER, false, false, false, false, true);
         Grid grid = (Grid) layout.getComponent(1);
@@ -214,12 +215,12 @@ public class UdmUsageWidgetTest {
         verify(controller, ForeignSecurityUtils.class, RupContextUtils.class, streamSource);
         assertTrue(usagesWidget.isLocked());
         assertEquals(270, usagesWidget.getSplitPosition(), 0);
-        verifySize(usagesWidget, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(usagesWidget.getFirstComponent() instanceof UdmUsageFilterWidget);
         Component secondComponent = usagesWidget.getSecondComponent();
         assertTrue(secondComponent instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) secondComponent;
-        verifySize(layout, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(layout, null, 100, 100, Unit.PERCENTAGE);
         assertEquals(2, layout.getComponentCount());
         verifyToolbarLayout(layout.getComponent(0), SEARCH_PLACEHOLDER_RESEARCHER, false, true, true, false, true);
         Grid grid = (Grid) layout.getComponent(1);
@@ -820,7 +821,7 @@ public class UdmUsageWidgetTest {
             .filter(column -> !column.isHidden())
             .map(Column::getCaption)
             .collect(Collectors.toList()));
-        verifySize(grid, 100, 100, Unit.PERCENTAGE);
+        verifyWindow(usagesWidget, null, 100, 100, Unit.PERCENTAGE);
         assertTrue(grid.isFooterVisible());
         FooterRow footerRow = grid.getFooterRow(0);
         assertEquals("Usages Count: 0", footerRow.getCell("detailId").getText());

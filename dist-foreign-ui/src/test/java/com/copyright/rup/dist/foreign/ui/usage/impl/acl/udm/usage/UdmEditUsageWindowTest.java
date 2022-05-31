@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyLong;
@@ -158,7 +159,7 @@ public class UdmEditUsageWindowTest {
     public void testConstructorSpecialist() {
         setSpecialistExpectations();
         initEditWindow();
-        verifyWindowSize("Edit UDM Usage");
+        verifyWindow(window, "Edit UDM Usage", 650, 700, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }

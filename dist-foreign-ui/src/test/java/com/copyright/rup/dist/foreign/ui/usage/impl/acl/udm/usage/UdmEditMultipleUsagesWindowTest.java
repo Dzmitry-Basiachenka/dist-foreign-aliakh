@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyInt;
 import static org.easymock.EasyMock.anyLong;
@@ -172,11 +175,7 @@ public class UdmEditMultipleUsagesWindowTest {
     @Test
     public void testConstructor() {
         initEditWindow();
-        assertEquals("Edit multiple UDM Usages", window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(530, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
+        verifyWindow(window, "Edit multiple UDM Usages", 650, 530, Unit.PIXELS);
         verifyRootLayout(window.getContent());
     }
 
@@ -213,14 +212,14 @@ public class UdmEditMultipleUsagesWindowTest {
         ComboBox<UsageStatusEnum> detailsStatus = Whitebox.getInternalState(window, STATUS_COMBOBOX);
         detailsStatus.setValue(UsageStatusEnum.NEW);
         TextField wrWrkInstField = Whitebox.getInternalState(window, "wrWrkInstField");
-        verifyTextFieldValidationMessage(wrWrkInstField, StringUtils.EMPTY, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(wrWrkInstField, "1234567890",
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, INTEGER_WITH_SPACES_STRING, binder, null, true);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, "1234567890", binder,
             "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(wrWrkInstField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(wrWrkInstField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, SPACES_STRING, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(wrWrkInstField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
     }
 
     @Test
@@ -239,15 +238,15 @@ public class UdmEditMultipleUsagesWindowTest {
         String yearValidationMessage = "Year value should be in range from 1950 to 2099";
         String monthValidationMessage = "Month value should be 06 or 12";
         String lengthValidationMessage = "Period value should contain 6 digits";
-        verifyTextFieldValidationMessage(periodField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        verifyTextFieldValidationMessage(periodField, "125012", yearValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "300006", yearValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "202122", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "202100", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "202111", monthValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "202106", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(periodField, "2021013", lengthValidationMessage, false);
-        verifyTextFieldValidationMessage(periodField, "123", lengthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodField, "125012", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "300006", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202122", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202100", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202111", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202106", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodField, "2021013", binder, lengthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "123", binder, lengthValidationMessage, false);
     }
 
     @Test
@@ -281,9 +280,9 @@ public class UdmEditMultipleUsagesWindowTest {
         TextField annualMultiplierField = Whitebox.getInternalState(window, "annualMultiplierField");
         String numberValidationMessage = "Field value should be positive number between 1 and 25";
         verifyIntegerValidations(annualMultiplierField, numberValidationMessage);
-        verifyTextFieldValidationMessage(annualMultiplierField, "1000", numberValidationMessage, false);
-        verifyTextFieldValidationMessage(annualMultiplierField, "26", numberValidationMessage, false);
-        verifyTextFieldValidationMessage(annualMultiplierField, "0", numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualMultiplierField, "1000", binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualMultiplierField, "26", binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(annualMultiplierField, "0", binder, numberValidationMessage, false);
     }
 
     @Test
@@ -293,15 +292,18 @@ public class UdmEditMultipleUsagesWindowTest {
         String decimalValidationMessage = "Field value should be positive number between 0.00001 and 1.00000";
         String scaleValidationMessage = "Field value should not exceed 5 digits after the decimal point";
         verifyCommonNumberValidations(statisticalMultiplierField, decimalValidationMessage);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.000001", decimalValidationMessage, false);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.00001", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.9", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.99", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.999", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.9999", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.99999", StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "0.999999", scaleValidationMessage, false);
-        verifyTextFieldValidationMessage(statisticalMultiplierField, "1.00001", decimalValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.000001", binder, decimalValidationMessage,
+            false);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.00001", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.9", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.9999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.99999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "0.999999", binder, scaleValidationMessage,
+            false);
+        validateFieldAndVerifyErrorMessage(statisticalMultiplierField, "1.00001", binder, decimalValidationMessage,
+            false);
     }
 
     @Test
@@ -309,13 +311,16 @@ public class UdmEditMultipleUsagesWindowTest {
         initEditWindow();
         TextField quantityField = Whitebox.getInternalState(window, "quantityField");
         String positiveNumberValidationMessage = "Field value should be positive number";
-        verifyTextFieldValidationMessage(quantityField, INVALID_NUMBER, positiveNumberValidationMessage, false);
-        verifyTextFieldValidationMessage(quantityField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(quantityField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(quantityField, VALID_DECIMAL, positiveNumberValidationMessage, false);
-        verifyTextFieldValidationMessage(quantityField, "1234567890", "Field value should not exceed 9 digits", false);
-        verifyTextFieldValidationMessage(quantityField, "-1", positiveNumberValidationMessage, false);
-        verifyTextFieldValidationMessage(quantityField, "0", positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(quantityField, INVALID_NUMBER, binder, positiveNumberValidationMessage,
+            false);
+        validateFieldAndVerifyErrorMessage(quantityField, INTEGER_WITH_SPACES_STRING, binder, null, true);
+        validateFieldAndVerifyErrorMessage(quantityField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(quantityField, VALID_DECIMAL, binder, positiveNumberValidationMessage,
+            false);
+        validateFieldAndVerifyErrorMessage(quantityField, "1234567890", binder,
+            "Field value should not exceed 9 digits", false);
+        validateFieldAndVerifyErrorMessage(quantityField, "-1", binder, positiveNumberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(quantityField, "0", binder, positiveNumberValidationMessage, false);
     }
 
     @Test
@@ -702,11 +707,6 @@ public class UdmEditMultipleUsagesWindowTest {
         return (HorizontalLayout) verticalLayout.getComponent(number);
     }
 
-    private void verifyTextFieldValidationMessage(TextField field, String value, String message, boolean isValid) {
-        field.setValue(value);
-        verifyBinderStatusAndValidationMessage(message, isValid);
-    }
-
     private void verifyBinderStatusAndValidationMessage(String message, boolean isValid) {
         BinderValidationStatus<UdmUsageDto> binderStatus = binder.validate();
         assertEquals(isValid, binderStatus.isOk());
@@ -719,11 +719,10 @@ public class UdmEditMultipleUsagesWindowTest {
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
-        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize),
-            StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, buildStringWithExpectedLength(maxSize + 1),
+        validateFieldAndVerifyErrorMessage(textField, buildStringWithExpectedLength(maxSize), binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, buildStringWithExpectedLength(maxSize + 1), binder,
             String.format("Field value should not exceed %s characters", maxSize), false);
-        verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, null, true);
     }
 
     private void verifyCompanyTextFieldValidationMessage(TextField field, Button verifyButton, String value,
@@ -775,13 +774,6 @@ public class UdmEditMultipleUsagesWindowTest {
         verifyTextField(layout.getComponent(1), caption);
     }
 
-    private void verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
-    }
-
     private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
@@ -798,13 +790,13 @@ public class UdmEditMultipleUsagesWindowTest {
 
     private void verifyIntegerValidations(TextField textField, String numberValidationMessage) {
         verifyCommonNumberValidations(textField, numberValidationMessage);
-        verifyTextFieldValidationMessage(textField, VALID_INTEGER, StringUtils.EMPTY, true);
-        verifyTextFieldValidationMessage(textField, VALID_DECIMAL, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, VALID_DECIMAL, binder, numberValidationMessage, false);
     }
 
     private void verifyCommonNumberValidations(TextField textField, String numberValidationMessage) {
-        verifyTextFieldValidationMessage(textField, INVALID_NUMBER, numberValidationMessage, false);
-        verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(textField, INVALID_NUMBER, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(textField, INTEGER_WITH_SPACES_STRING, binder, null, true);
     }
 
     private HorizontalLayout getButtonsLayout() {

@@ -10,7 +10,6 @@ import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -23,12 +22,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
-import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -40,7 +39,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +46,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
@@ -89,7 +86,7 @@ public class UdmUsageFilterWidgetTest {
         assertEquals(4, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
-        verifyButtonsLayout(widget.getComponent(1));
+        UiTestHelper.verifyButtonsLayout(widget.getComponent(1),  "Apply", "Clear");
         verifyLabel(widget.getComponent(2), "Applied Filters:", ContentMode.TEXT, -1.0f);
         assertTrue(widget.getComponent(3) instanceof UdmUsageAppliedFilterWidget);
     }
@@ -232,31 +229,6 @@ public class UdmUsageFilterWidgetTest {
         Label label = (Label) component;
         assertEquals("Filters", label.getValue());
         assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
-    }
-
-    private void verifyButtonsLayout(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout layout = (HorizontalLayout) component;
-        assertEquals(2, layout.getComponentCount());
-        assertTrue(layout.isSpacing());
-        verifyButton(layout.getComponent(0), "Apply");
-        verifyButton(layout.getComponent(1), "Clear");
-    }
-
-    private void verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals(caption, button.getCaption());
-        assertEquals(100, button.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, button.getWidthUnits());
-        verifyButtonClickListener(button);
-    }
-
-    private void verifyButtonClickListener(Button button) {
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        assertTrue(CollectionUtils.isNotEmpty(listeners));
-        assertEquals(1, listeners.size());
-        assertNotNull(listeners.iterator().next());
     }
 
     private Button getApplyButton() {
