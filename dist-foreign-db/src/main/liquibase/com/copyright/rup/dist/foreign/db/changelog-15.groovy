@@ -497,4 +497,16 @@ databaseChangeLog {
                     columnName: 'publication_type_uid', columnDataType: 'VARCHAR(255)')
         }
     }
+
+    changeSet(id: '2022-06-13-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-72776 FDA: Tech Debt: add database index by Period for AACL usage table")
+
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_usage_aacl', indexName: 'ix_df_usage_aacl_period') {
+            column(name: 'usage_period')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_aacl_period")
+        }
+    }
 }
