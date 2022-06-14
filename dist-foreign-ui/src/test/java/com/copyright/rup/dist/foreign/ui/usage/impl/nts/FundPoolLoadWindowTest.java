@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
@@ -363,9 +364,7 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Usage Batch Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -514,12 +513,6 @@ public class FundPoolLoadWindowTest {
         assertEquals(value, actualField.getValue());
         assertEquals(errorMessage, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
-    }
-
-    private TextField verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(caption, component.getCaption());
-        return (TextField) component;
     }
 
     private void setTextField(String field, String value) {

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
@@ -18,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
@@ -30,6 +33,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -255,8 +259,6 @@ public class SalUpdateRighstholderWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
         assertEquals(2, horizontalLayout.getComponentCount());
         TextField numberField = verifyTextField(horizontalLayout.getComponent(0), "RH Account #");
-        assertEquals(100, numberField.getWidth(), 0);
-        assertEquals(Sizeable.Unit.PERCENTAGE, numberField.getWidthUnits());
         Collection<?> listeners = numberField.getListeners(HasValue.ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(2, listeners.size());
@@ -267,12 +269,6 @@ public class SalUpdateRighstholderWindowTest {
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(Button.ClickEvent.class).size());
-    }
-
-    private TextField verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(caption, component.getCaption());
-        return (TextField) component;
     }
 
     private void assertVerifyButton(Button verifyButton, TextField numberField, TextField nameField) {

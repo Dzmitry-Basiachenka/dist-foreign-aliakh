@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -20,6 +22,7 @@ import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -28,7 +31,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -122,15 +124,6 @@ public class SalAuditFilterWidgetTest {
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {
         assertEquals(caption, Whitebox.getInternalState(filterWidget, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(filterWidget, IFilterSaveListener.class));
-    }
-
-    private void verifyTextField(Component component, String caption) {
-        assertNotNull(component);
-        assertEquals(TextField.class, component.getClass());
-        TextField textField = (TextField) component;
-        assertEquals(caption, textField.getCaption());
-        assertEquals(100, textField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

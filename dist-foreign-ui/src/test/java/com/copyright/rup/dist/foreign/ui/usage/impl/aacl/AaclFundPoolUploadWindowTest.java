@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldV
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -151,9 +152,7 @@ public class AaclFundPoolUploadWindowTest {
     }
 
     private void verifyFundPoolNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Fund Pool Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 

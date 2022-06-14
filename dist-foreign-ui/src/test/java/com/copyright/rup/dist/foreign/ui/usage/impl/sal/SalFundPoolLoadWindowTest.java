@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -372,11 +374,8 @@ public class SalFundPoolLoadWindowTest {
     }
 
     private void verifyTextFieldComponent(Component component, String caption, boolean isReadonly) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
+        TextField textField = verifyTextField(component, caption);
         assertEquals(isReadonly, textField.isReadOnly());
-        assertEquals(caption, textField.getCaption());
-        assertEquals(100, component.getWidth(), 0);
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 

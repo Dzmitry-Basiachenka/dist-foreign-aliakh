@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmUsageAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
@@ -792,11 +793,8 @@ public class UdmEditUsageWindowTest {
     }
 
     private void verifyTextField(Component component, String caption, boolean isReadOnly) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
-        assertEquals(isReadOnly, ((TextField) component).isReadOnly());
+        TextField textField = UiTestHelper.verifyTextField(component, caption);
+        assertEquals(isReadOnly, textField.isReadOnly());
     }
 
     private void verifyButtonsLayout(Component component, boolean isVisible) {

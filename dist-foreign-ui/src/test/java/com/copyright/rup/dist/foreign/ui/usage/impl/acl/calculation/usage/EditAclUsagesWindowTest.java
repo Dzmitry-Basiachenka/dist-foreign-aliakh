@@ -4,6 +4,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateField
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -270,13 +271,6 @@ public class EditAclUsagesWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 130);
         verifyTextField(layout.getComponent(1), caption);
-    }
-
-    private void verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
     }
 
     private <T> void verifyComboBoxLayout(Component component, String caption, boolean emptySelectionAllowed,

@@ -294,19 +294,13 @@ public class UdmViewValueWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
-        validateTextField(layout.getComponent(1));
+        TextField textField = verifyTextField(layout.getComponent(1), null);
+        assertTrue(textField.isReadOnly());
     }
 
     private void assertTextFieldValue(Component component, String expectedValue) {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(expectedValue, ((TextField) layout.getComponent(1)).getValue());
-    }
-
-    private void validateTextField(Component component) {
-        TextField textField = verifyTextField(component, null);
-        assertEquals(100, textField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
-        assertTrue(((TextField) component).isReadOnly());
     }
 
     private void buildUdmValueDto() {

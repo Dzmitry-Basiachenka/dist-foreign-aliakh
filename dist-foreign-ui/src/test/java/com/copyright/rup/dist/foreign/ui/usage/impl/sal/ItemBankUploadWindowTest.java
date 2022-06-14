@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 
 import static org.easymock.EasyMock.anyObject;
@@ -236,14 +237,12 @@ public class ItemBankUploadWindowTest {
         verifyItemBankNameComponent(verticalLayout.getComponent(0));
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyLicenseeComponents(verticalLayout.getComponent(2));
-        verifyPeriodEndDate(verticalLayout.getComponent(3));
+        verifyTextField(verticalLayout.getComponent(3), "Period End Date (YYYY)", 40);
         verifyButtonsLayout(verticalLayout.getComponent(4));
     }
 
     private void verifyItemBankNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Item Bank Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -261,12 +260,6 @@ public class ItemBankUploadWindowTest {
         assertEquals("Verify", verifyComponent.getCaption());
         TextField nameField = verifyTextField(verticalLayout.getComponent(1), "Licensee Name");
         assertTrue(nameField.isReadOnly());
-    }
-
-    private void verifyPeriodEndDate(Component component) {
-        TextField periodEndDateField = verifyTextField(component, "Period End Date (YYYY)");
-        assertEquals(40, periodEndDateField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, periodEndDateField.getWidthUnits());
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -308,12 +301,6 @@ public class ItemBankUploadWindowTest {
         List<String> errorMessages =
             errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
         assertEquals(!isValid, errorMessages.contains(message));
-    }
-
-    private TextField verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(caption, component.getCaption());
-        return (TextField) component;
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {

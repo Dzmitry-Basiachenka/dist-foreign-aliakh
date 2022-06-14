@@ -229,9 +229,7 @@ public class AaclUsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Usage Batch Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -239,20 +237,8 @@ public class AaclUsageBatchUploadWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyPeriodEndDate(layout.getComponent(0));
-        verifyNumberOfBaselineYears(layout.getComponent(1));
-    }
-
-    private void verifyPeriodEndDate(Component component) {
-        TextField periodEndDateField = verifyTextField(component, "Period End Date (YYYY)");
-        assertEquals(100, periodEndDateField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, periodEndDateField.getWidthUnits());
-    }
-
-    private void verifyNumberOfBaselineYears(Component component) {
-        TextField baselineYearsField = verifyTextField(component, "Number of Baseline Years");
-        assertEquals(100, baselineYearsField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, baselineYearsField.getWidthUnits());
+        verifyTextField(layout.getComponent(0), "Period End Date (YYYY)");
+        verifyTextField(layout.getComponent(1), "Number of Baseline Years");
     }
 
     private UsageBatch buildUsageBatch() {
