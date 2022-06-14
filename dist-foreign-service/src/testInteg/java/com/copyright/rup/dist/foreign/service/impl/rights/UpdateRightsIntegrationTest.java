@@ -7,8 +7,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
-import com.copyright.rup.dist.common.test.JsonMatcher;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
@@ -24,26 +22,18 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmUsageService;
-import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.AsyncRestTemplate;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -76,7 +66,8 @@ public class UpdateRightsIntegrationTest {
     private static final String FAS = "FAS";
     private static final String AACL = "AACL";
     private static final String RH_FOUND_REASON = "Rightsholder account 1000000322 was found in RMS";
-    private static final String RMS_GRANTS_EMPTY_RESPONSE_JSON = "rms_grants_empty_response.json";
+    private static final String RMS_GRANTS_EMPTY_RESPONSE_JSON = "rights/rms_grants_empty_response.json";
+    private static final String PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON = "prm/rightsholder_1000000322_response.json";
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -91,16 +82,9 @@ public class UpdateRightsIntegrationTest {
     @Autowired
     private IUdmUsageService udmUsageService;
     @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
-    private boolean prmRightsholderAsync;
+    private ServiceTestHelper testHelper;
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
-
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
 
     @Before
     public void setUp() {
@@ -109,10 +93,10 @@ public class UpdateRightsIntegrationTest {
 
     @Test
     public void testUpdateRightsSentForRaUsages() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCallIgnoreDate("rms_grants_sent_for_ra_request.json", "rms_grants_sent_for_ra_response.json");
-        expectPrmCall();
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/rms_grants_sent_for_ra_request.json",
+            "rights/rms_grants_sent_for_ra_response.json");
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         JobInfo jobInfo = rightsService.updateRightsSentForRaUsages();
         assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
         assertEquals("ProductFamily=FAS, UsagesCount=2; ProductFamily=FAS2, Reason=There are no usages;",
@@ -124,17 +108,18 @@ public class UpdateRightsIntegrationTest {
         assertUsage("ff321d96-04bd-11e8-ba89-0ed5f89f718b", UsageStatusEnum.LOCKED, 1000009522L);
         assertUsage("19ca7776-48c8-472e-acfe-d49b6e8780ce", UsageStatusEnum.RH_NOT_FOUND, null);
         assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Usage has become eligible", RH_FOUND_REASON);
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     @Test
     public void testUpdateRights() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCallIgnoreDate("fas/rms_grants_request_1.json", "fas/rms_grants_response_1.json");
-        expectRmsCallIgnoreDate("fas/rms_grants_488824345_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
-        expectRmsCallIgnoreDate("nts/rms_grants_786768461_request.json", "nts/rms_grants_786768461_response.json");
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_request_1.json",
+            "rights/fas/rms_grants_response_1.json");
+        testHelper.expectGetRmsRights("rights/fas/rms_grants_488824345_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectGetRmsRights("rights/nts/rms_grants_786768461_request.json",
+            "rights/nts/rms_grants_786768461_response.json");
         rightsService.updateRights(Arrays.asList(
             buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L),
             buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L),
@@ -153,17 +138,17 @@ public class UpdateRightsIntegrationTest {
         assertAudit("74ded52a-4454-1225-ab4c-fA2e029298af", "Rightsholder account 1000023401 was found in RMS");
         assertAudit("3a6b6f25-9f68-4da7-be4f-dd65574f5168", "Rightsholder account for 488824345 was not found in RMS");
         assertAudit("ede81bc0-a756-43a2-b236-05a0184384f4");
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     @Test
     public void testUpdateAaclRights() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("aacl/rms_grants_request_1.json", "aacl/rms_grants_response_1.json");
-        expectRmsCall("aacl/rms_grants_200208329_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
-        expectPrmCall();
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_request_1.json",
+            "rights/aacl/rms_grants_response_1.json");
+        testHelper.expectGetRmsRights("rights/aacl/rms_grants_200208329_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateAaclRights(Arrays.asList(
             buildAaclUsage("b23cb103-9242-4d58-a65d-2634b3e5a8cf", 122803735),
             buildAaclUsage("7e7b97d1-ad60-4d47-915b-2834c5cc056a", 130297955)));
@@ -175,17 +160,17 @@ public class UpdateRightsIntegrationTest {
         assertAudit("b23cb103-9242-4d58-a65d-2634b3e5a8cf", RH_FOUND_REASON);
         assertAudit("7e7b97d1-ad60-4d47-915b-2834c5cc056a", "Rightsholder account 1000023401 was found in RMS");
         assertAudit("10c9a60f-28b6-466c-975c-3ea930089a9e");
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     @Test
     public void testUpdateUdmRights() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("udm/usage/rms_grants_request_1.json", "udm/usage/rms_grants_response_1.json");
-        expectRmsCall("udm/usage/rms_grants_210001899_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
-        expectPrmCall();
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_request_1.json",
+            "rights/udm/usage/rms_grants_response_1.json");
+        testHelper.expectGetRmsRights("rights/udm/usage/rms_grants_210001899_request.json",
+            RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateUdmRights(Arrays.asList(
             buildUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769421, "DIGITAL"),
             buildUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", 210001133, "PRINT")));
@@ -194,17 +179,17 @@ public class UpdateRightsIntegrationTest {
         assertUdmUsage("acb53a42-7e8d-4a4a-8d72-6f794be2731c", UsageStatusEnum.RH_FOUND, 1000023401L);
         assertUdmUsage("1b348196-2193-46d7-b9df-2ba835189131", UsageStatusEnum.RH_FOUND, 1000000322L);
         assertUdmUsage("074749c5-08fa-4f57-8c3b-ecbc334a5c2a", UsageStatusEnum.RH_NOT_FOUND, null);
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     @Test
     public void testUpdateUdmValuesRights() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("udm/value/rms_grants_202112_1_request.json", "udm/value/rms_grants_202112_1_response.json");
-        expectRmsCall("udm/value/rms_grants_202112_2_request.json", "udm/value/rms_grants_202112_2_response.json");
-        expectPrmCall();
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/udm/value/rms_grants_202112_1_request.json",
+            "rights/udm/value/rms_grants_202112_1_response.json");
+        testHelper.expectGetRmsRights("rights/udm/value/rms_grants_202112_2_request.json",
+            "rights/udm/value/rms_grants_202112_2_response.json");
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         List<UdmValue> values = Arrays.asList(buildUdmValue(122769421), buildUdmValue(243618757),
             buildUdmValue(140160102), buildUdmValue(210001133));
         rightsService.updateUdmValuesRights(values, 202112);
@@ -212,17 +197,15 @@ public class UpdateRightsIntegrationTest {
         assertEquals(RH_ACCOUNT_NUMBER_2, values.get(1).getRhAccountNumber());
         assertNull(values.get(2).getRhAccountNumber());
         assertEquals(RH_ACCOUNT_NUMBER_1, values.get(3).getRhAccountNumber());
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     @Test
     public void testUpdateSalRights() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("sal/rms_grants_request_1.json", "sal/rms_grants_response_1.json");
-        expectRmsCall("sal/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
-        expectPrmCall();
+        testHelper.createRestServer();
+        testHelper.expectGetRmsRights("rights/sal/rms_grants_request_1.json", "rights/sal/rms_grants_response_1.json");
+        testHelper.expectGetRmsRights("rights/sal/rms_grants_140160102_request.json", RMS_GRANTS_EMPTY_RESPONSE_JSON);
+        testHelper.expectPrmCall(PRM_RIGHTSHOLDER_1000000322_RESPONSE_JSON, 1000000322L);
         rightsService.updateSalRights(Arrays.asList(
             buildSalUsage("dcb53a42-7e8d-4a4a-8d72-6f794be2731c", 122769471),
             buildSalUsage("094749c5-08fa-4f57-8c3b-ecbc334a5c2a", 243618757)));
@@ -235,8 +218,7 @@ public class UpdateRightsIntegrationTest {
         assertAudit("094749c5-08fa-4f57-8c3b-ecbc334a5c2a",
             "Right for 243618757 is denied for rightsholder account 1000000322");
         assertAudit("ecf46bea-2baa-40c1-a5e1-769c78865b2c", "Rightsholder account for 140160102 was not found in RMS");
-        mockServer.verify();
-        asyncMockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     private Usage buildUsage(String usageId, String productFamily, Long wrWrkInst) {
@@ -308,31 +290,5 @@ public class UpdateRightsIntegrationTest {
         assertEquals(CollectionUtils.size(auditItems), ArrayUtils.getLength(reasons));
         Arrays.stream(reasons).forEach(expectedReason ->
             assertTrue(auditItems.stream().anyMatch(item -> expectedReason.equals(item.getActionReason()))));
-    }
-
-    private void expectRmsCallIgnoreDate(String rmsRequestFileName, String rmsResponseFileName) {
-        expectRmsCall(rmsRequestFileName, rmsResponseFileName, "period_end_date");
-    }
-
-    private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName, String... excludeFields) {
-        mockServer
-            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
-                    Arrays.asList(excludeFields))))
-            .andRespond(
-                MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponseFileName),
-                    MediaType.APPLICATION_JSON));
-    }
-
-    private void expectPrmCall() {
-        (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo(
-                "http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=1000000322"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(RightsholderService.class, "prm/rightsholder_1000000322_response.json"),
-                MediaType.APPLICATION_JSON));
     }
 }

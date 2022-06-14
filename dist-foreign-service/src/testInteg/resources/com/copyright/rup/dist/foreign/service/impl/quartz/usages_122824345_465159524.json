@@ -1,0 +1,61 @@
+[
+  {
+    "id": "14c3d141-5475-4789-8fe4-ecae63a2d262",
+    "batchId": "c17981e6-5dfd-4ccf-8d64-182745f991f5",
+    "status": "ELIGIBLE",
+    "productFamily": "FAS",
+    "wrWrkInst": 122824345,
+    "workTitle": "ACP journal club",
+    "rightsholder": {
+      "id": "85f864f2-30a5-4215-ac4f-f1f541901218",
+      "name": "American College of Physicians - Journals",
+      "accountNumber": 1000000322
+    },
+    "payee": {
+    },
+    "standardNumber": "10568751",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      3000,
+      12,
+      12
+    ],
+    "market": "Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2015,
+    "reportedValue": 101.17,
+    "grossAmount": 77.7300000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "rhParticipating": false,
+    "payeeParticipating": false
+  },
+  {
+    "id": "e878dfa2-31d8-4506-a7fd-1f4778d406e6",
+    "batchId": "c17981e6-5dfd-4ccf-8d64-182745f991f5",
+    "status": "SENT_FOR_RA",
+    "productFamily": "FAS",
+    "wrWrkInst": 465159524,
+    "workTitle": "Digital Transformation Playbook",
+    "rightsholder": {
+    },
+    "payee": {
+    },
+    "standardNumber": "9780231175449",
+    "standardNumberType": "VALISSN",
+    "publicationDate": [
+      3000,
+      12,
+      12
+    ],
+    "market": "Univ",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2015,
+    "reportedValue": 179.34,
+    "grossAmount": 122.2700000000,
+    "netAmount": 0.0000000000,
+    "serviceFeeAmount": 0.0000000000,
+    "rhParticipating": false,
+    "payeeParticipating": false
+  }
+]
