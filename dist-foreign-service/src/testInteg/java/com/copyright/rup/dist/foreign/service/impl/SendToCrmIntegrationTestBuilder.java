@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -9,8 +10,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.SendToCrmIntegrationTestBuilder.Runner;
 
@@ -19,14 +20,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Builder for send to CRM test.
@@ -41,7 +38,7 @@ import java.util.stream.Collectors;
 public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
 
     @Autowired
-    private IScenarioService scenarioService;
+    private IScenarioRepository scenarioRepository;
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -56,12 +53,6 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmRequest;
     private String crmResponse;
     private JobInfo expectedJobInfo;
-    private Set<String> productFamiliesSet;
-
-    SendToCrmIntegrationTestBuilder withProductFamilies(Set<String> productFamilies) {
-        this.productFamiliesSet = productFamilies;
-        return this;
-    }
 
     SendToCrmIntegrationTestBuilder expectUsageStatus(Map<String, UsageStatusEnum> usageIdToStatusMap) {
         usageIdToExpectedStatus = usageIdToStatusMap;
@@ -140,16 +131,9 @@ public class SendToCrmIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyScenarios() {
-            Set<Scenario> actualScenarios = productFamiliesSet.stream()
-                .map(productFamily -> scenarioService.getScenarios(productFamily))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
             scenarioIdToExpectedStatus.forEach((scenarioId, expectedStatus) -> {
-                Scenario actualScenario = actualScenarios.stream()
-                    .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
-                    .findFirst()
-                    .orElseThrow(
-                        () -> new AssertionError(String.format("Scenario must exists. ScenarioId=%s", scenarioId)));
+                Scenario actualScenario = scenarioRepository.findById(scenarioId);
+                assertNotNull(actualScenario);
                 assertEquals(expectedStatus, actualScenario.getStatus());
             });
         }

@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +60,6 @@ public class SendToCrmIntegrationTest {
     @Test
     public void testSendToCrm() {
         testBuilder
-            .withProductFamilies(Sets.newHashSet("AACL", "FAS", "NTS", "SAL"))
             .expectCrmCall("crm/sendToCrm/rights_distribution_request.json",
                 "crm/sendToCrm/rights_distribution_response.json")
             .expectJobInfo(buildJobInfo())

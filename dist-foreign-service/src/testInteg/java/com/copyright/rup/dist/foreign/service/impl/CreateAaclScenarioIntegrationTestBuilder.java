@@ -16,7 +16,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
 public class CreateAaclScenarioIntegrationTestBuilder {
 
     @Autowired
-    private IScenarioService scenarioService;
+    private IScenarioRepository scenarioRepository;
     @Autowired
     private IAaclScenarioService aaclScenarioService;
     @Autowired
@@ -127,7 +127,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
      */
     class Runner {
 
-        private final String productFamily = scenarioUsageFilter.getProductFamily();
         private String scenarioId;
 
         void run() throws IOException {
@@ -145,7 +144,8 @@ public class CreateAaclScenarioIntegrationTestBuilder {
         }
 
         private void assertScenario() {
-            Scenario actualScenario = getScenarioById(scenarioId);
+            Scenario actualScenario = scenarioRepository.findById(scenarioId);
+            assertNotNull(actualScenario);
             assertEquals(expectedScenario.getName(), actualScenario.getName());
             assertEquals(expectedScenario.getNetTotal(), actualScenario.getNetTotal());
             assertEquals(expectedScenario.getGrossTotal(), actualScenario.getGrossTotal());
@@ -267,15 +267,6 @@ public class CreateAaclScenarioIntegrationTestBuilder {
                                            PublicationType actualPublicationType) {
             assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
             assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
-        }
-
-        private Scenario getScenarioById(String id) {
-            List<Scenario> scenarios = scenarioService.getScenarios(productFamily);
-            return scenarios.stream()
-                .filter(scenario -> Objects.equals(scenarioId, scenario.getId()))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError(
-                    String.format("Scenario doesn't exist. ScenarioId=%s, Scenarios=%s", id, scenarios)));
         }
     }
 }

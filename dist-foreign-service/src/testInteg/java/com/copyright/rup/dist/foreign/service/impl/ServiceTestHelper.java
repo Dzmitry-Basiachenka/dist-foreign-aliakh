@@ -457,8 +457,8 @@ public class ServiceTestHelper {
         });
     }
 
-    public List<Usage> loadExpectedUsages(String pathToUsageDtosFile) throws IOException {
-        String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
+    public List<Usage> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(ServiceTestHelper.class, fileName);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
@@ -466,8 +466,8 @@ public class ServiceTestHelper {
         });
     }
 
-    public List<UdmUsage> loadExpectedUdmUsages(String pathToUsageDtosFile) throws IOException {
-        String content = TestUtils.fileToString(ServiceTestHelper.class, pathToUsageDtosFile);
+    public List<UdmUsage> loadExpectedUdmUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(ServiceTestHelper.class, fileName);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);

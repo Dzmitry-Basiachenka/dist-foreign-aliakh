@@ -175,4 +175,12 @@ public interface IScenarioRepository {
      * @return list of found scenarios ids
      */
     List<String> findIdsForArchiving();
+
+    /**
+     * Finds {@link Scenario} by its id.
+     *
+     * @param scenarioId scenario id
+     * @return instance of {@link Scenario} or {@code null} if none exists
+     */
+    Scenario findById(String scenarioId);
 }

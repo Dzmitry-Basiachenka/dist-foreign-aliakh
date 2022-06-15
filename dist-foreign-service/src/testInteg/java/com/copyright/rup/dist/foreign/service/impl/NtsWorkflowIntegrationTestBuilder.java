@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -50,6 +51,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     @Autowired
     private INtsScenarioService ntsScenarioService;
+    @Autowired
+    private IScenarioRepository scenarioRepository;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
@@ -228,11 +231,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertScenario() {
-            actualScenario = scenarioService.getScenarios("NTS")
-                .stream()
-                .filter(scenario -> actualScenario.getId().equals(scenario.getId()))
-                .findAny()
-                .orElse(null);
+            actualScenario = scenarioRepository.findById(actualScenario.getId());
             assertNotNull(actualScenario);
             assertEquals(expectedScenario.getNtsFields().getRhMinimumAmount(),
                 actualScenario.getNtsFields().getRhMinimumAmount());

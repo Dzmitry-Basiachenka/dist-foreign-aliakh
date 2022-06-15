@@ -1,0 +1,57 @@
+{
+  "list": {
+    "rightsDistribution": [
+      {
+        "cccEventId": "53256",
+        "product": "FAS",
+        "rorAccountNumber": "1000002859",
+        "payeeAccountNumber": "1000002859",
+        "royaltyAmount": 84.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "06-15-2022T12:00:00 AM",
+        "serviceFeeAmount": 16.0000000000,
+        "wrWrkInst": "122465241",
+        "publicationName": "Water for energy",
+        "omOrderDetailNumber": "06eae1b7-6132-4e19-b8ee-864a5ad65924",
+        "totalAmount": 100.0000000000,
+        "periodEndDate": "06/16/2022",
+        "publicationDate": "12/31/2021",
+        "numberOfCopies": 1,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "market": "Doc Del",
+        "marketPeriodFrom": 2021,
+        "marketPeriodTo": 2022,
+        "arAccountNumber": "1000005413",
+        "serviceNameReporting": "FAS",
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      },
+      {
+        "cccEventId": "53256",
+        "product": "FAS",
+        "rorAccountNumber": "1000003821",
+        "payeeAccountNumber": "1000003821",
+        "royaltyAmount": 84.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "06-15-2022T12:00:00 AM",
+        "serviceFeeAmount": 16.0000000000,
+        "wrWrkInst": "102875272",
+        "publicationName": "Travels in West Africa",
+        "omOrderDetailNumber": "ac4ccfee-5fb6-4f9f-870d-35b2997f288f",
+        "totalAmount": 100.0000000000,
+        "periodEndDate": "06/16/2022",
+        "publicationDate": "12/31/2021",
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "market": "Bus",
+        "marketPeriodFrom": 2021,
+        "marketPeriodTo": 2022,
+        "arAccountNumber": "1000005413",
+        "serviceNameReporting": "FAS",
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      }
+    ]
+  }
+}

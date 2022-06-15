@@ -487,6 +487,16 @@ public class ScenarioRepositoryIntegrationTest {
             usageRepository.findByStatuses(UsageStatusEnum.SCENARIO_EXCLUDED));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-by-id.groovy")
+    public void testFindById() {
+        Scenario scenario = scenarioRepository.findById("dc60e68e-8167-4cf5-90d7-2f7c5d9e0389 ");
+        assertNotNull(scenario);
+        assertEquals("Test scenario name", scenario.getName());
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertEquals("Test scenario description", scenario.getDescription());
+    }
+
     private void assertUsages(List<Usage> expected, List<Usage> actual) {
         actual.sort(Comparator.comparing(Usage::getId));
         assertEquals(CollectionUtils.size(expected), CollectionUtils.size(actual));
