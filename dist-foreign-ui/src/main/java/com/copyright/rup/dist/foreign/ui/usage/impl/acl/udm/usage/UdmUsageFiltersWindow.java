@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -17,7 +16,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationFormatFil
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.ReportedPubTypeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -55,7 +53,7 @@ import java.util.function.Function;
  * @author Ihar Suvorau
  */
 public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
-    
+
     private static final String LENGTH_VALIDATION_MESSAGE = "field.error.length";
     private static final String BETWEEN_OPERATOR_VALIDATION_MESSAGE =
         ForeignUi.getMessage("field.error.populated_for_between_operator");
@@ -169,32 +167,26 @@ public class UdmUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private void initAssigneeFilterWidget() {
         assigneeFilterWidget = new AssigneeFilterWidget(controller::getAssignees, usageFilter.getAssignees());
-        assigneeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initReportedPublicationTypeFilterWidget() {
         reportedPubTypeFilterWidget =
             new ReportedPubTypeFilterWidget(controller::getPublicationTypes, usageFilter.getReportedPubTypes());
-        reportedPubTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initPublicationFormatFilterWidget() {
         publicationFormatFilterWidget =
             new PublicationFormatFilterWidget(controller::getPublicationFormats, usageFilter.getPubFormats());
-        publicationFormatFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private void initDetailLicenseeClassFilterWidget() {
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
-        detailLicenseeClassFilterWidget.addFilterSaveListener((IFilterSaveListener<DetailLicenseeClass>) saveEvent ->
-        {});
     }
 
     private void initTypeOfUseFilterWidget() {
         typeOfUseFilterWidget =
             new TypeOfUseFilterWidget(controller::getTypeOfUses, usageFilter.getReportedTypeOfUses());
-        typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
     }
 
     private HorizontalLayout initAssigneeLicenseeClassLayout() {
