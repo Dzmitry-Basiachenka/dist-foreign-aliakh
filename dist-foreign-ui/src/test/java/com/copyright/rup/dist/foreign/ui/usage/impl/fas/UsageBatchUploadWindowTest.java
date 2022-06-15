@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 
 import static org.easymock.EasyMock.anyObject;
@@ -256,9 +257,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyUsageBatchNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Usage Batch Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -396,12 +395,6 @@ public class UsageBatchUploadWindowTest {
         assertEquals(value, actualField.getValue());
         assertEquals(errorMessage, actualErrorMessage);
         assertEquals(isValid, Objects.isNull(actualErrorMessage));
-    }
-
-    private TextField verifyTextField(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(caption, component.getCaption());
-        return (TextField) component;
     }
 
     private UsageBatch buildUsageBatch(Rightsholder rro) {

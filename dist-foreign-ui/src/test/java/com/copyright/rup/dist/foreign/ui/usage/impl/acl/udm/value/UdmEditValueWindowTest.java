@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -672,7 +673,8 @@ public class UdmEditValueWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
-        verifyTextField(layout.getComponent(1), isValidated ? caption : null, isReadOnly);
+        TextField textField = verifyTextField(layout.getComponent(1), isValidated ? caption : null);
+        assertEquals(isReadOnly, textField.isReadOnly());
     }
 
     private void assertTextFieldValue(Component component, String expectedValue) {
@@ -692,14 +694,6 @@ public class UdmEditValueWindowTest {
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 175);
         verifyComboBox(layout.getComponent(1), isValidated ? caption : null, emptySelectionAllowed, expectedItems);
-    }
-
-    private void verifyTextField(Component component, String caption, boolean isReadOnly) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(caption, component.getCaption());
-        assertEquals(isReadOnly, ((TextField) component).isReadOnly());
     }
 
     private void verifyButtonsLayout(Component component, boolean isVisible) {

@@ -290,8 +290,22 @@ public final class UiTestHelper {
      * @return instance of {@link TextField}
      */
     public static TextField verifyTextField(Component component, String caption) {
+        return verifyTextField(component, caption, 100);
+    }
+
+    /**
+     * Verifies text field.
+     *
+     * @param component UI component
+     * @param caption   caption of field
+     * @param width     width
+     * @return of {@link TextField}
+     */
+    public static TextField verifyTextField(Component component, String caption, float width) {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
+        assertEquals(width, component.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         return (TextField) component;
     }
 

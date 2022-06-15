@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.expect;
@@ -354,10 +355,7 @@ public class UdmViewUsageWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         verifyLabel(layout.getComponent(0), caption, ContentMode.TEXT, 165);
-        Component textField = layout.getComponent(1);
-        assertTrue(textField instanceof TextField);
-        assertEquals(100, textField.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
-        assertTrue(((TextField) textField).isReadOnly());
+        TextField textField = verifyTextField(layout.getComponent(1), null);
+        assertTrue(textField.isReadOnly());
     }
 }

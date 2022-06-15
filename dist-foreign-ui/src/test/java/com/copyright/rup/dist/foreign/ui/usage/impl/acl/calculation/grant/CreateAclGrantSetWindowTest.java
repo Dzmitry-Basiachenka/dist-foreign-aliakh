@@ -7,6 +7,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtons
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyCheckBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -211,9 +212,7 @@ public class CreateAclGrantSetWindowTest {
     }
 
     private void verifyGrantSetNameComponent(Component component) {
-        assertTrue(component instanceof TextField);
-        TextField textField = (TextField) component;
-        assertEquals(100, component.getWidth(), 0);
+        TextField textField = verifyTextField(component, "Grant Set Name");
         assertEquals(StringUtils.EMPTY, textField.getValue());
     }
 
@@ -224,10 +223,7 @@ public class CreateAclGrantSetWindowTest {
         assertEquals(2, horizontalLayout.getComponentCount());
         assertTrue(horizontalLayout.getComponent(0) instanceof TextField);
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
-        TextField textField = (TextField) horizontalLayout.getComponent(0);
-        assertEquals("Grant Period Year", textField.getCaption());
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, textField.getWidthUnits());
+        verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year");
         verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, MONTHS);
     }
 }

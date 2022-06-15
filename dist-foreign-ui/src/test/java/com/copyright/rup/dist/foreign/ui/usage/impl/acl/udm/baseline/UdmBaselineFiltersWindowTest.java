@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
@@ -231,7 +232,8 @@ public class UdmBaselineFiltersWindowTest {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
-        verifyTextFieldComponent(layout.getComponent(0), caption);
+        TextField textField = verifyTextField(layout.getComponent(0), caption);
+        assertTrue(textField.isEnabled());
         assertTrue(layout.getComponent(1) instanceof ComboBox);
         assertEquals(CAPTION_OPERATOR, layout.getComponent(1).getCaption());
     }
@@ -246,14 +248,6 @@ public class UdmBaselineFiltersWindowTest {
         assertEquals(captionTo, layout.getComponent(1).getCaption());
         assertTrue(layout.getComponent(2) instanceof ComboBox);
         assertEquals(CAPTION_OPERATOR, layout.getComponent(2).getCaption());
-    }
-
-    private void verifyTextFieldComponent(Component component, String caption) {
-        assertTrue(component instanceof TextField);
-        assertEquals(100, component.getWidth(), 0);
-        assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        assertEquals(component.getCaption(), caption);
-        assertTrue(component.isEnabled());
     }
 
     @SuppressWarnings(UNCHECKED)
