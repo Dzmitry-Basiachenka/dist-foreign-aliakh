@@ -1,8 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
-import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -20,7 +17,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PublicationTypeFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.TypeOfUseFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -148,13 +144,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
 
     private HorizontalLayout initPeriodDetailLicenseeClassLayout() {
         periodFilterWidget = new PeriodFilterWidget(controller::getPeriods, usageFilter.getPeriods());
-        //TODO avoid using empty listeners
-        periodFilterWidget.addFilterSaveListener((IFilterSaveListener<Integer>) saveEvent -> {});
         detailLicenseeClassFilterWidget = new DetailLicenseeClassFilterWidget(controller::getDetailLicenseeClasses,
             usageFilter.getDetailLicenseeClasses());
-        //TODO avoid using empty listeners
-        detailLicenseeClassFilterWidget.addFilterSaveListener((
-            IFilterSaveListener<DetailLicenseeClass>) saveEvent -> {});
         HorizontalLayout periodDetailLicenseeClassLayout =
             new HorizontalLayout(periodFilterWidget, detailLicenseeClassFilterWidget);
         periodDetailLicenseeClassLayout.setSizeFull();
@@ -165,13 +156,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     private HorizontalLayout initAggregateLicenseeClassPubTypeLayout() {
         aggregateLicenseeClassFilterWidget = new AggregateLicenseeClassFilterWidget(
             controller::getAggregateLicenseeClasses, usageFilter.getAggregateLicenseeClasses());
-        //TODO avoid using empty listeners
-        aggregateLicenseeClassFilterWidget.addFilterSaveListener((
-            IFilterSaveListener<AggregateLicenseeClass>) saveEvent -> {});
         pubTypeFilterWidget = new PublicationTypeFilterWidget(controller::getPublicationTypes,
             usageFilter.getPubTypes());
-        //TODO avoid using empty listeners
-        pubTypeFilterWidget.addFilterSaveListener((IFilterSaveListener<PublicationType>) saveEvent -> {});
         HorizontalLayout assigneeLicenseeClassLayout =
             new HorizontalLayout(aggregateLicenseeClassFilterWidget, pubTypeFilterWidget);
         assigneeLicenseeClassLayout.setSizeFull();
@@ -180,10 +166,8 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
     }
 
     private void initTypeOfUseFilterWidget() {
-        typeOfUseFilterWidget = new TypeOfUseFilterWidget(() -> Arrays.asList("PRINT", "DIGITAL"),
-            usageFilter.getTypeOfUses());
-        //TODO avoid using empty listeners
-        typeOfUseFilterWidget.addFilterSaveListener((IFilterSaveListener<String>) saveEvent -> {});
+        typeOfUseFilterWidget = new TypeOfUseFilterWidget(
+            () -> Arrays.asList("PRINT", "DIGITAL"), usageFilter.getTypeOfUses());
     }
 
     private HorizontalLayout initUsageOriginChannelLayout() {
@@ -329,7 +313,7 @@ public class AclUsageFiltersWindow extends CommonAclFiltersWindow {
                     .setFieldSecondValue(NumberUtils.createBigDecimal(StringUtils.trimToNull(value))));
         filterBinder.forField(contentUnitPriceOperatorComboBox)
             .bind(filter -> ObjectUtils.defaultIfNull(
-                filter.getContentUnitPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
+                    filter.getContentUnitPriceExpression().getOperator(), FilterOperatorEnum.valueOf(EQUALS)),
                 (filter, value) -> filter.getContentUnitPriceExpression().setOperator(value));
         contentUnitPriceOperatorComboBox.addValueChangeListener(
             event -> updateOperatorField(filterBinder, contentUnitPriceFromField, contentUnitPriceToField,
