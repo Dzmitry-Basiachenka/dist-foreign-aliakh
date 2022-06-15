@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.expect;
@@ -21,7 +22,6 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IFasNtsUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.ImmutableSet;
@@ -34,7 +34,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -225,13 +224,6 @@ public class FasNtsUsageFilterWidgetTest {
         verifyDateWidget(verticalLayout.getComponent(3));
         verifyComboBox(verticalLayout.getComponent(4), "Status", true, FAS_FAS2_STATUSES);
         verifyComboBox(verticalLayout.getComponent(5), "Fiscal Year To", true, FISCAL_YEAR);
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private void verifyDateWidget(Component component) {

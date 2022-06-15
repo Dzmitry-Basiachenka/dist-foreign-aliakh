@@ -114,6 +114,18 @@ public final class UiTestHelper {
     }
 
     /**
+     * Verifies filters label.
+     *
+     * @param component UI component
+     */
+    public static void verifyFiltersLabel(Component component) {
+        assertTrue(component instanceof Label);
+        Label label = (Label) component;
+        assertEquals("Filters", label.getValue());
+        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
+    }
+
+    /**
      * Verifies listeners by fields.
      *
      * @param loadButton load button

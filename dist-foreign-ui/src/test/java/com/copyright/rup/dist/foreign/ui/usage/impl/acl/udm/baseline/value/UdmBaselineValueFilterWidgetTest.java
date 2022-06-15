@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
@@ -19,7 +20,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.Sets;
 import com.vaadin.shared.ui.ContentMode;
@@ -29,7 +29,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -177,13 +176,6 @@ public class UdmBaselineValueFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Pub Types");
         verifyMoreFiltersButton(verticalLayout.getComponent(3), 2);
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private Button getApplyButton() {

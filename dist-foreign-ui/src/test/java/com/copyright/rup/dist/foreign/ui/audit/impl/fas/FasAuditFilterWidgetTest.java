@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -15,7 +17,6 @@ import com.copyright.rup.dist.foreign.ui.audit.impl.CommonStatusFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.CommonFilterWindow.IFilterSaveListener;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.vaadin.server.Sizeable;
@@ -26,7 +27,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 import org.junit.Before;
@@ -64,8 +64,7 @@ public class FasAuditFilterWidgetTest {
         assertEquals("audit-filter-widget", widget.getStyleName());
         assertEquals(7, widget.getComponentCount());
         Component component = widget.getComponent(0);
-        assertTrue(component instanceof Label);
-        verifyLabel((Label) component);
+        verifyFiltersLabel(component);
         component = widget.getComponent(1);
         assertTrue(component instanceof LazyRightsholderFilterWidget);
         assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
@@ -93,11 +92,6 @@ public class FasAuditFilterWidgetTest {
         Whitebox.setInternalState(widget, "filter", auditFilter);
         widget.applyFilter();
         assertEquals(auditFilter, widget.getAppliedFilter());
-    }
-
-    private void verifyLabel(Label label) {
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {

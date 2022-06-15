@@ -39,7 +39,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
@@ -277,10 +276,10 @@ public class AaclScenariosWidgetTest {
         assertTrue(layout.getComponent(10) instanceof VerticalLayout);
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
-        verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
-        verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
-        verifyMetadataLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
-        verifyMetadataLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
+        verifyLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
+        verifyLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
+        verifyLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
+        verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
         assertTrue(lastActionLayout.getComponent(4) instanceof Button);
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
     }
@@ -332,11 +331,6 @@ public class AaclScenariosWidgetTest {
         aaclFields.setFundPoolId(FUND_POOL_ID);
         aaclFields.setUsageAges(buildUsageAges());
         return aaclFields;
-    }
-
-    private void verifyMetadataLabel(Component component, String expectedValue) {
-        assertTrue(component instanceof Label);
-        assertEquals(expectedValue, ((Label) component).getValue());
     }
 
     private List<PublicationType> buildPublicationTypes() {

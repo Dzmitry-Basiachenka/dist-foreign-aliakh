@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.proxy;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.junit.Assert.assertEquals;
@@ -13,13 +14,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmProxyValueFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -119,13 +118,6 @@ public class UdmProxyValueFilterWidgetTest {
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Periods");
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Pub Type Codes");
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private Button getApplyButton() {
