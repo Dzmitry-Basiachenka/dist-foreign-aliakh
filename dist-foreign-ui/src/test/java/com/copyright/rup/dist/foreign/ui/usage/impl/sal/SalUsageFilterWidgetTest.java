@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.expect;
@@ -21,7 +22,6 @@ import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -33,7 +33,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -193,13 +192,6 @@ public class SalUsageFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Batches");
         verifyComboBox(verticalLayout.getComponent(2), "Status", true, SAL_STATUSES);
         verifyComboBox(verticalLayout.getComponent(3), "Detail Type", true, SalDetailTypeEnum.values());
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private void verifyButtonsLayout(Component component) {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
@@ -25,7 +26,6 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.shared.ui.ContentMode;
@@ -36,7 +36,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -222,13 +221,6 @@ public class UdmUsageFilterWidgetTest {
         verifyComboBox(verticalLayout.getComponent(3), "Status", true, ACL_STATUSES);
         verifyComboBox(verticalLayout.getComponent(4), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(5), 1);
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private Button getApplyButton() {

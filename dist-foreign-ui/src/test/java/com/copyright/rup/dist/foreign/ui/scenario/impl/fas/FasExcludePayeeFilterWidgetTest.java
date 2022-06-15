@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.createMock;
@@ -14,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.filter.ExcludePayeeFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.fas.IFasExcludePayeeFilterController;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.server.Sizeable;
@@ -22,7 +22,6 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -108,13 +107,6 @@ public class FasExcludePayeeFilterWidgetTest {
         }
         assertEquals(applyEnabled, applyButton.isEnabled());
         assertEquals(filterValue, filter.getNetAmountMinThreshold());
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private void verifyMinimumNetThresholdComponent(Component component) {

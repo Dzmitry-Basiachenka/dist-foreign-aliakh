@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 
 import static org.easymock.EasyMock.expect;
@@ -20,7 +21,6 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -31,7 +31,6 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -198,13 +197,6 @@ public class AaclUsageFilterWidgetTest {
         verifyItemsFilterWidget(verticalLayout.getComponent(1), "Batches");
         verifyComboBox(verticalLayout.getComponent(2), "Status", true, AACL_STATUSES);
         verifyComboBox(verticalLayout.getComponent(3), "Usage Period", true, USAGE_PERIOD);
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private Button getApplyButton() {

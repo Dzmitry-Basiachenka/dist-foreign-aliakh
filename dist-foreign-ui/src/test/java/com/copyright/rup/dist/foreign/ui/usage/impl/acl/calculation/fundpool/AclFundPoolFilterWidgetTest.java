@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 
@@ -17,13 +18,11 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -133,13 +132,6 @@ public class AclFundPoolFilterWidgetTest {
             Arrays.asList("ACL", "VGW", "JACDCL", "MACL"));
         verifyComboBox(verticalLayout.getComponent(6), "Fund Pool Type", true,
             Arrays.asList("PRINT", "DIGITAL"));
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private Button getApplyButton() {

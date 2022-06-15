@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyFiltersLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMoreFiltersButton;
@@ -23,7 +24,6 @@ import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.ContentMode;
@@ -32,7 +32,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -148,13 +147,6 @@ public class UdmBaselineFilterWidgetTest {
         verifyComboBox(verticalLayout.getComponent(2), "Usage Origin", true, UdmUsageOriginEnum.values());
         verifyComboBox(verticalLayout.getComponent(3), "Channel", true, UdmChannelEnum.values());
         verifyMoreFiltersButton(verticalLayout.getComponent(4), 1);
-    }
-
-    private void verifyFiltersLabel(Component component) {
-        assertTrue(component instanceof Label);
-        Label label = (Label) component;
-        assertEquals("Filters", label.getValue());
-        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
     }
 
     private void verifyButtonsLayout(Component component) {
