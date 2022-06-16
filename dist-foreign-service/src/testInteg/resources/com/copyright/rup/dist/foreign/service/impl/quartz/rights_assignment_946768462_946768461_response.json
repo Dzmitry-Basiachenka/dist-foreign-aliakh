@@ -1,0 +1,15 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.JobInfo",
+      "jobId": "194fce65-78c1-4100-8d3d-4522f73eec94",
+      "name": "Test FAS Usage Batch to verify SendToRightsAssignmentJob",
+      "totalWorks": 2,
+      "status": "PREPARING"
+    }
+  }
+}

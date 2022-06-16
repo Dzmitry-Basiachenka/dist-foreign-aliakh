@@ -67,7 +67,7 @@ public class StmRhJobIntegrationTest {
         verify(jobExecutionContext);
         testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usage_448824345.json"));
         testHelper.assertAudit("1d798afe-dabb-4dca-9351-7a6ef64f3708",
-            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_448824345.json"));
+            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_eligible.json"));
         testHelper.verifyRestServer();
     }
 }
