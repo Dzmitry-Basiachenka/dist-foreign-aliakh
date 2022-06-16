@@ -169,7 +169,7 @@ public class UdmEditUsageWindowTest {
     public void testConstructorManager() {
         setManagerExpectations();
         initEditWindow();
-        verifyWindowSize("Edit UDM Usage");
+        verifyWindow(window, "Edit UDM Usage", 650, 700, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelSpecialistAndManager(verticalLayout.getComponent(0));
     }
@@ -179,7 +179,7 @@ public class UdmEditUsageWindowTest {
         mockStatic(ForeignSecurityUtils.class);
         setResearcherExpectations();
         initEditWindow();
-        verifyWindowSize("Edit UDM Usage");
+        verifyWindow(window, "Edit UDM Usage", 650, 700, Unit.PIXELS);
         VerticalLayout verticalLayout = verifyRootLayout(window.getContent(), true);
         verifyPanelResearcher(verticalLayout.getComponent(0));
     }
@@ -646,14 +646,6 @@ public class UdmEditUsageWindowTest {
         verifyTextFieldValidationMessage(textField, StringUtils.EMPTY, EMPTY_FIELD_VALIDATION_MESSAGE, false);
         verifyTextFieldValidationMessage(textField, INTEGER_WITH_SPACES_STRING, StringUtils.EMPTY, true);
         verifyTextFieldValidationMessage(textField, SPACES_STRING, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-    }
-
-    private void verifyWindowSize(String caption) {
-        assertEquals(caption, window.getCaption());
-        assertEquals(650, window.getWidth(), 0);
-        assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(700, window.getHeight(), 0);
-        assertEquals(Unit.PIXELS, window.getHeightUnits());
     }
 
     private VerticalLayout verifyRootLayout(Component component, boolean isVisible) {

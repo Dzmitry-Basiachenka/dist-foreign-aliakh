@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
 
@@ -14,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -269,23 +269,12 @@ public class ItemBankUploadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Arrays.asList(
+        verifyLoadClickListener(loadButton, Arrays.asList(
             Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "licenseeNameField"),
-            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
+            Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD)));
     }
 
     private Button verifyButton(Component component, String caption) {

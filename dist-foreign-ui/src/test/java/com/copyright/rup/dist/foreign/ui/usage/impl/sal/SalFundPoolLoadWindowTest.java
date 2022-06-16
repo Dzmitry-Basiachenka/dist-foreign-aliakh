@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 
 import static org.easymock.EasyMock.anyObject;
@@ -14,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -43,7 +42,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
 
 /**
  * Verifies {@link SalFundPoolLoadWindow}.
@@ -386,18 +384,7 @@ public class SalFundPoolLoadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(1, loadButton.getListeners(Button.ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private Button verifyButton(Component component, String caption) {
-        assertTrue(component instanceof Button);
-        assertEquals(caption, component.getCaption());
-        return (Button) component;
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+        verifyLoadClickListener(loadButton, Lists.newArrayList(
             Whitebox.getInternalState(window, FUND_POOL_NAME_FIELD),
             Whitebox.getInternalState(window, ASSESSMENT_NAME_FIELD),
             Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD),
@@ -407,13 +394,13 @@ public class SalFundPoolLoadWindowTest {
             Whitebox.getInternalState(window, DATE_RECEIVED_FIELD),
             Whitebox.getInternalState(window, GRADE_K_TO_5_NUM_OF_STUDENTS_FIELD),
             Whitebox.getInternalState(window, GRADE_6_TO_8_NUM_OF_STUDENTS_FIELD),
-            Whitebox.getInternalState(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
+            Whitebox.getInternalState(window, GRADE_9_TO_12_NUM_OF_STUDENTS_FIELD)));
+    }
+
+    private Button verifyButton(Component component, String caption) {
+        assertTrue(component instanceof Button);
+        assertEquals(caption, component.getCaption());
+        return (Button) component;
     }
 
     private void setLocalDateWidgetValue(String field, LocalDate value) {
