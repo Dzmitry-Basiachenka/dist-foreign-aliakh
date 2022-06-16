@@ -147,7 +147,7 @@ public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParam
             } else {
                 detailLicenseeClass.setAggregateLicenseeClass(listener.getOldValue());
             }
-            grid.getDataProvider().refreshAll();
+            grid.setItems(currentValues);
         });
         return comboBox;
     }
