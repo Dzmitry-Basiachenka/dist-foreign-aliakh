@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -59,7 +60,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link FasUsageWidget}.
@@ -335,7 +335,7 @@ public class FasUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(5, layout.getComponentCount());
-        verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Arrays.asList("Load", "View"));
         assertEquals("Send for Research", layout.getComponent(1).getCaption());
         assertEquals("Load Researched Details", layout.getComponent(2).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
@@ -350,19 +350,6 @@ public class FasUsageWidgetTest {
     private void prepareCreateScenarioExpectation() {
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.scenarioExists(FAS_SCENARIO_NAME_PREFIX + DATE)).andReturn(true).once();
-    }
-
-    private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        List<MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
     private List<MenuItem> getUsageBatchMenuBarItems() {

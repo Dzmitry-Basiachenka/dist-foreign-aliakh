@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyMenuBar;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.anyObject;
@@ -49,7 +50,6 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -64,9 +64,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link AaclUsageWidget}.
@@ -437,8 +435,8 @@ public class AaclUsageWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(6, layout.getComponentCount());
-        verifyUsageBatchMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
-        verifyFundPoolMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", true, Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", true, Arrays.asList("Load", "View"));
         Button sendForClassificationButton = (Button) layout.getComponent(2);
         assertEquals("Send for Classification", sendForClassificationButton.getCaption());
         Button loadClassifiedButton = (Button) layout.getComponent(3);
@@ -448,31 +446,5 @@ public class AaclUsageWidgetTest {
         assertEquals("Add To Scenario", addToScenarioButton.getCaption());
         assertTrue(addToScenarioButton.isDisableOnClick());
         assertEquals("Export", layout.getComponent(5).getCaption());
-    }
-
-    private void verifyUsageBatchMenuBar(Component component, String menuBarName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        List<MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
-    }
-
-    private void verifyFundPoolMenuBar(Component component, String menuBarName, List<String> menuItems) {
-        assertTrue(component instanceof MenuBar);
-        MenuBar menuBar = (MenuBar) component;
-        List<MenuItem> parentItems = menuBar.getItems();
-        assertEquals(1, parentItems.size());
-        MenuItem item = parentItems.get(0);
-        assertEquals(menuBarName, item.getText());
-        List<MenuItem> childItems = item.getChildren();
-        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
-        IntStream.range(0, menuItems.size())
-            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 }

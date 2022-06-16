@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 
 import static org.easymock.EasyMock.capture;
@@ -15,7 +16,6 @@ import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -31,7 +31,6 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue.ValueChangeEvent;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
@@ -375,12 +374,7 @@ public class FundPoolLoadWindowTest {
         Button loadButton = verifyButton(layout.getComponent(0), "Upload");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(1, loadButton.getListeners(ClickEvent.class).size());
-        verifyLoadClickListener(loadButton);
-    }
-
-    private void verifyLoadClickListener(Button loadButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
+        verifyLoadClickListener(loadButton, Lists.newArrayList(
             Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD),
             Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD),
             Whitebox.getInternalState(window, "accountNameField"),
@@ -391,13 +385,7 @@ public class FundPoolLoadWindowTest {
             Whitebox.getInternalState(window, STM_FIELD),
             Whitebox.getInternalState(window, NON_STM_FIELD),
             Whitebox.getInternalState(window, STM_MIN_FIELD),
-            Whitebox.getInternalState(window, NON_STM_MIN_FIELD));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        loadButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
+            Whitebox.getInternalState(window, NON_STM_MIN_FIELD)));
     }
 
     private Button verifyButton(Component component, String caption) {

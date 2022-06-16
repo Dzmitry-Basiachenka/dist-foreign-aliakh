@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 
 import static org.easymock.EasyMock.anyObject;
@@ -12,7 +13,6 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -296,26 +296,15 @@ public class SalUpdateRighstholderWindowTest {
         Button saveButton = verifyButton(layout.getComponent(0), "Save");
         verifyButton(layout.getComponent(1), "Close");
         assertEquals(1, saveButton.getListeners(Button.ClickEvent.class).size());
-        verifySaveClickListener(saveButton);
+        verifyLoadClickListener(saveButton, Lists.newArrayList(
+            Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
+            Whitebox.getInternalState(window, "rhNameField")));
     }
 
     private Button verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
         return (Button) component;
-    }
-
-    private void verifySaveClickListener(Button saveButton) {
-        mockStatic(Windows.class);
-        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
-            Whitebox.getInternalState(window, RH_ACCOUNT_NUMBER_FIELD_NAME),
-            Whitebox.getInternalState(window, "rhNameField"));
-        Windows.showValidationErrorWindow(fields);
-        expectLastCall().once();
-        replay(Windows.class);
-        saveButton.click();
-        verify(Windows.class);
-        reset(Windows.class);
     }
 
     private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
