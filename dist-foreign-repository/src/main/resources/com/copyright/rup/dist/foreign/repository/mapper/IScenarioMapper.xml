@@ -388,4 +388,11 @@
                       from ${schema}.df_usage_archive u
                       where u.df_scenario_uid = ua.df_scenario_uid))
     </select>
+
+    <select id="findById" resultMap="scenarioResultMap" parameterType="string">
+        select
+            <include refid="scenarioColumns"/>
+        from ${schema}.df_scenario s
+        where s.df_scenario_uid = #{scenarioId}
+    </select>
 </mapper>
