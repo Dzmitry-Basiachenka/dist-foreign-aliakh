@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 
@@ -24,7 +25,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.Validator;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractField;
@@ -45,8 +45,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link SalUpdateRighstholderWindow}.
@@ -244,11 +242,14 @@ public class SalUpdateRighstholderWindowTest {
         window = new SalUpdateRighstholderWindow(usageController, detailsWindow, new UsageDto());
         Binder binder = Whitebox.getInternalState(window, "usageBinder");
         TextField rhAccountNumberField = Whitebox.getInternalState(window, "rhAccountNumberField");
-        verifyField(rhAccountNumberField, StringUtils.EMPTY, binder, "Field value should be specified", false);
-        verifyField(rhAccountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
-        verifyField(rhAccountNumberField, "value", binder, "Field value should contain numeric values only", false);
-        verifyField(rhAccountNumberField, "1", binder, StringUtils.EMPTY, true);
-        verifyField(rhAccountNumberField, "1000000000", binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(
+            rhAccountNumberField, StringUtils.EMPTY, binder, "Field value should be specified", false);
+        validateFieldAndVerifyErrorMessage(
+            rhAccountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
+        validateFieldAndVerifyErrorMessage(
+            rhAccountNumberField, "value", binder, "Field value should contain numeric values only", false);
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(rhAccountNumberField, "1000000000", binder, null, true);
         verify(usageController);
     }
 
@@ -305,13 +306,5 @@ public class SalUpdateRighstholderWindowTest {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
         return (Button) component;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

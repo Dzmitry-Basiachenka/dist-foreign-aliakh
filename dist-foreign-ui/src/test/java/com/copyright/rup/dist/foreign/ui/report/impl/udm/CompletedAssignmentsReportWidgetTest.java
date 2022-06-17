@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -14,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -27,9 +27,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link CompletedAssignmentsReportWidget}.
@@ -101,21 +99,12 @@ public class CompletedAssignmentsReportWidgetTest {
         LocalDateWidget dateToWidget = Whitebox.getInternalState(widget, "dateToWidget");
         LocalDate localDateFrom = LocalDate.of(2021, 12, 13);
         LocalDate localDateTo = LocalDate.of(2021, 12, 20);
-        verifyDateWidgetValidationMessage(dateFromWidget, localDateFrom, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(dateToWidget, localDateTo, StringUtils.EMPTY, true);
+        verifyGridEditableFieldErrorMessage(dateFromWidget, localDateFrom, dateBinder, null, true);
+        verifyGridEditableFieldErrorMessage(dateToWidget, localDateTo, dateBinder, null, true);
         dateFromWidget.setValue(LocalDate.of(2021, 12, 27));
-        verifyDateWidgetValidationMessage(dateToWidget, localDateTo,
+        verifyGridEditableFieldErrorMessage(dateToWidget, localDateTo, dateBinder,
             "Field value should be greater or equal to From Date", false);
-        verifyDateWidgetValidationMessage(dateFromWidget, null, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(dateToWidget, null, StringUtils.EMPTY, true);
-    }
-
-    private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
-                                                   boolean isValid) {
-        localDateWidget.setValue(value);
-        List<ValidationResult> errors = dateBinder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
+        verifyGridEditableFieldErrorMessage(dateFromWidget, null, dateBinder, null, true);
+        verifyGridEditableFieldErrorMessage(dateToWidget, null, dateBinder, null, true);
     }
 }

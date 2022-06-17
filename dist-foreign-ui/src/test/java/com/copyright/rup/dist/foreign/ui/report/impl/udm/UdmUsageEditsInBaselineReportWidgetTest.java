@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.report.impl.udm;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -12,11 +14,12 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.domain.filter.UdmReportFilter;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
+
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +27,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmUsageEditsInBaselineReportWidget}.
@@ -95,21 +96,12 @@ public class UdmUsageEditsInBaselineReportWidgetTest {
         LocalDateWidget dateToWidget = Whitebox.getInternalState(widget, "dateToWidget");
         LocalDate dateFrom = LocalDate.of(2021, 12, 13);
         LocalDate dateTo = LocalDate.of(2021, 12, 20);
-        verifyDateWidgetValidationMessage(dateFromWidget, dateFrom, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(dateToWidget, dateTo, StringUtils.EMPTY, true);
+        verifyGridEditableFieldErrorMessage(dateFromWidget, dateFrom, dateBinder, null, true);
+        verifyGridEditableFieldErrorMessage(dateToWidget, dateTo, dateBinder, null, true);
         dateFromWidget.setValue(LocalDate.of(2021, 12, 27));
-        verifyDateWidgetValidationMessage(dateToWidget, dateTo,
-            "Field value should be greater or equal to Updated Date From", false);
-        verifyDateWidgetValidationMessage(dateFromWidget, null, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(dateToWidget, null, StringUtils.EMPTY, true);
-    }
-
-    private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
-                                                   boolean isValid) {
-        localDateWidget.setValue(value);
-        List<ValidationResult> errors = dateBinder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
+        verifyGridEditableFieldErrorMessage(
+            dateToWidget, dateTo, dateBinder, "Field value should be greater or equal to Updated Date From", false);
+        verifyGridEditableFieldErrorMessage(dateFromWidget, null, dateBinder, null, true);
+        verifyGridEditableFieldErrorMessage(dateToWidget, null, dateBinder, null, true);
     }
 }

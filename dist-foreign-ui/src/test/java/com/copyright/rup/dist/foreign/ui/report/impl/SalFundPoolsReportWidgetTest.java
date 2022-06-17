@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -8,7 +9,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.vaadin.data.Binder;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -19,9 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link SalFundPoolsReportWidget}.
@@ -61,20 +58,20 @@ public class SalFundPoolsReportWidgetTest {
         Binder binder = Whitebox.getInternalState(widget, "binder");
         TextField distributionYear = Whitebox.getInternalState(widget, "distributionYear");
         Button exportButton = Whitebox.getInternalState(widget, "exportButton");
-        verifyField(distributionYear, "", binder, "Field value should be specified", false);
+        validateFieldAndVerifyErrorMessage(distributionYear, "", binder, "Field value should be specified", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(distributionYear, "two", binder, "Field value should contain numeric values only",
-            false);
+        validateFieldAndVerifyErrorMessage(
+            distributionYear, "two", binder, "Field value should contain numeric values only", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(distributionYear, "2100", binder, "Field value should be in range from 1950 to 2099",
-            false);
+        validateFieldAndVerifyErrorMessage(
+            distributionYear, "2100", binder, "Field value should be in range from 1950 to 2099", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(distributionYear, " 1949 ", binder, "Field value should be in range from 1950 to 2099",
-            false);
+        validateFieldAndVerifyErrorMessage(
+            distributionYear, " 1949 ", binder, "Field value should be in range from 1950 to 2099", false);
         assertFalse(exportButton.isEnabled());
-        verifyField(distributionYear, " 2020 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(distributionYear, " 2020 ", binder, null, true);
         assertTrue(exportButton.isEnabled());
-        verifyField(distributionYear, "2045", binder, null, true);
+        validateFieldAndVerifyErrorMessage(distributionYear, "2045", binder, null, true);
         assertTrue(exportButton.isEnabled());
     }
 
@@ -84,15 +81,8 @@ public class SalFundPoolsReportWidgetTest {
         TextField distributionYear = Whitebox.getInternalState(widget, "distributionYear");
         Button exportButton = Whitebox.getInternalState(widget, "exportButton");
         binder.setValidatorsDisabled(true);
-        verifyField(distributionYear, "invalidValue", binder, "Field value can not be converted", false);
+        validateFieldAndVerifyErrorMessage(
+            distributionYear, "invalidValue", binder, "Field value can not be converted", false);
         assertFalse(exportButton.isEnabled());
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 }

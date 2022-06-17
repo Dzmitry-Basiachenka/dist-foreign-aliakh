@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -43,7 +44,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -161,11 +161,12 @@ public class CreateNtsScenarioWindowTest {
         window = new CreateNtsScenarioWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
-        verifyField(scenarioName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(scenarioName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(scenarioName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(
+            scenarioName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(scenarioName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyField(scenarioName, SCENARIO_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(scenarioName, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
 
@@ -251,39 +252,22 @@ public class CreateNtsScenarioWindowTest {
     }
 
     private void verifyAmountField(Binder binder, TextField field) {
-        verifyField(field, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(field, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(field, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, ".01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, "01.01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, "01.01.", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, " -1 ", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, "10000000000", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(field, "  0  ", binder, null, true);
-        verifyField(field, "  0.004  ", binder, null, true);
-        verifyField(field, "  0.005  ", binder, null, true);
-        verifyField(field, "  1.00  ", binder, null, true);
-        verifyField(field, "  99  ", binder, null, true);
-        verifyField(field, "  9999999999.99  ", binder, null, true);
-        verifyField(field, "1000000000",binder, null, true);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyField(TextField field, String value, Binder binder, String errorMessage, boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List<TextField> fields = (List<TextField>) binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
-        TextField actualField = fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
+        validateFieldAndVerifyErrorMessage(field, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, "   ", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, ".01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, "01.01", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, "01.01.", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, " -1 ", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            field, "10000000000", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(field, "  0  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "  0.004  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "  0.005  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "  1.00  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "  99  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "  9999999999.99  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(field, "1000000000",binder, null, true);
     }
 
     private static class TestCreateNtsScenarioWindow extends CreateNtsScenarioWindow {

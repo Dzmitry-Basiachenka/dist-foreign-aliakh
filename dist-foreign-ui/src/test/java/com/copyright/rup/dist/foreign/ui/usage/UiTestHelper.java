@@ -162,8 +162,8 @@ public final class UiTestHelper {
      * @param isValid <code>true</code> if valid otherwise <code>false</code>
      */
     @SuppressWarnings(UNCHECKED)
-    public static void validateFieldAndVerifyErrorMessage(AbstractField field, String value, Binder binder,
-                                                          String message, boolean isValid) {
+    public static <T> void validateFieldAndVerifyErrorMessage(AbstractField field, T value, Binder binder,
+                                                              String message, boolean isValid) {
         field.setValue(value);
         binder.validate();
         List<HasValue<?>> fields = (List<HasValue<?>>) binder.getFields()
@@ -190,8 +190,8 @@ public final class UiTestHelper {
      * @param isValid <code>true</code> if valid otherwise <code>false</code>
      */
     @SuppressWarnings(UNCHECKED)
-    public static void verifyGridEditableFieldErrorMessage(AbstractField field, String value, Binder binder,
-                                                           String message, boolean isValid) {
+    public static <T> void verifyGridEditableFieldErrorMessage(AbstractField field, T value, Binder binder,
+                                                               String message, boolean isValid) {
         field.setValue(value);
         List<ValidationResult> errors = binder.validate().getValidationErrors();
         List<String> errorMessages = errors

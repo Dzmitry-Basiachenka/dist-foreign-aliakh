@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
@@ -8,7 +9,6 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -54,9 +54,6 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
@@ -150,16 +147,19 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        verifyField(grossAmountField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "0", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "0.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "0.004", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "value", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "10000000000.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
-        verifyField(grossAmountField, "0.005", binder, null, true);
-        verifyField(grossAmountField, "123.5684", binder, null, true);
-        verifyField(grossAmountField, "9999999999.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "0", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "0.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, "0.004", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, "value", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, "10000000000.00", binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "0.005", binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "123.5684", binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "9999999999.99", binder, null, true);
         verify(usagesController);
     }
 
@@ -169,14 +169,16 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        verifyField(accountNumberField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(accountNumberField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(accountNumberField, "10000018631", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        verifyField(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        verifyField(accountNumberField, "0.00", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyField(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyField(accountNumberField, "0", binder, null, true);
-        verifyField(accountNumberField, "1000001863", binder, null, true);
+        validateFieldAndVerifyErrorMessage(accountNumberField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, "10000018631", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "0.00", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "1000001863", binder, null, true);
         verify(usagesController);
     }
 
@@ -189,12 +191,13 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        verifyField(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(usageBatchNameField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
-        verifyField(usageBatchNameField, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(usageBatchNameField, StringUtils.EMPTY, binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(usageBatchNameField, "   ", binder, EMPTY_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(usageBatchNameField, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyField(usageBatchNameField, existingBatchName, binder, "Usage Batch with such name already exists", false);
-        verifyField(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            usageBatchNameField, existingBatchName, binder, "Usage Batch with such name already exists", false);
+        validateFieldAndVerifyErrorMessage(usageBatchNameField, USAGE_BATCH_NAME, binder, null, true);
         verify(usagesController);
     }
 
@@ -365,24 +368,6 @@ public class UsageBatchUploadWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyGrossAmountComponent(horizontalLayout.getComponent(0));
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyField(TextField field, String value, Binder binder, String errorMessage, boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List<TextField> fields = (List<TextField>) binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1 , fields.size());
-        TextField actualField = fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private UsageBatch buildUsageBatch(Rightsholder rro) {

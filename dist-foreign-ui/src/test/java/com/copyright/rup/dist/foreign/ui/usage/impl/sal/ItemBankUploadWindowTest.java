@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyUploadComponent;
@@ -29,9 +30,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue.ValueChangeEvent;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -52,8 +51,6 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ItemBankUploadWindow}.
@@ -77,6 +74,7 @@ public class ItemBankUploadWindowTest {
     private static final String ACCOUNT_NUMBER_FIELD = "accountNumberField";
     private static final String ITEM_BANK_NAME_FIELD = "itemBankNameField";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private ItemBankUploadWindow window;
     private ISalUsageController usagesController;
 
@@ -174,13 +172,16 @@ public class ItemBankUploadWindowTest {
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodEndDate = Whitebox.getInternalState(window, PERIOD_END_DATE_FIELD);
-        verifyField(periodEndDate, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(periodEndDate, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(periodEndDate, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(periodEndDate, "a", binder, "Field value should contain numeric values only", false);
-        verifyField(periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
-        verifyField(periodEndDate, "2020", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            periodEndDate, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "null", binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "a", binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            periodEndDate, "1000", binder, "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVerifyErrorMessage(
+            periodEndDate, "2100", binder, "Field value should be in range from 1950 to 2099", false);
+        validateFieldAndVerifyErrorMessage(periodEndDate, "2020", binder, null, true);
         verify(usagesController);
     }
 
@@ -190,13 +191,16 @@ public class ItemBankUploadWindowTest {
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
-        verifyField(accountNumberField, "null", binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(accountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
-        verifyField(accountNumberField, "a", binder, "Field value should contain numeric values only", false);
-        verifyField(accountNumberField, "1", binder, StringUtils.EMPTY, true);
-        verifyField(accountNumberField, "1000000000", binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "null", binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "a", binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, "10000000000", binder, "Field value should not exceed 10 digits", false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "1000000000", binder, null, true);
         verify(usagesController);
     }
 
@@ -208,12 +212,14 @@ public class ItemBankUploadWindowTest {
         window = new ItemBankUploadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField itemBankName = Whitebox.getInternalState(window, ITEM_BANK_NAME_FIELD);
-        verifyField(itemBankName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(itemBankName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(itemBankName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters",
-            false);
-        verifyField(itemBankName, ITEM_BANK_NAME, binder, "Item Bank with such name already exists", false);
-        verifyField(itemBankName, "Item Bank", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            itemBankName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(itemBankName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            itemBankName, StringUtils.repeat('a', 51), binder, "Field value should not exceed 50 characters", false);
+        validateFieldAndVerifyErrorMessage(
+            itemBankName, ITEM_BANK_NAME, binder, "Item Bank with such name already exists", false);
+        validateFieldAndVerifyErrorMessage(itemBankName, "Item Bank", binder, null, true);
         verify(usagesController);
     }
 
@@ -223,11 +229,12 @@ public class ItemBankUploadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "uploadBinder");
         UploadField uploadField = Whitebox.getInternalState(window, "uploadField");
         String fileExtensionValidationMessage = "File extension is incorrect";
-        verifyField(uploadField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(uploadField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyField(uploadField, "item_bank.dox", binder, fileExtensionValidationMessage, false);
-        verifyField(uploadField, "item_bank", binder, fileExtensionValidationMessage, false);
-        verifyField(uploadField, "item_bank.csv", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            uploadField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(uploadField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(uploadField, "item_bank.dox", binder, fileExtensionValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(uploadField, "item_bank", binder, fileExtensionValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(uploadField, "item_bank.csv", binder, null, true);
     }
 
     private void verifyRootLayout(Component component) {
@@ -281,15 +288,6 @@ public class ItemBankUploadWindowTest {
         assertTrue(component instanceof Button);
         assertEquals(caption, component.getCaption());
         return (Button) component;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyField(AbstractField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
