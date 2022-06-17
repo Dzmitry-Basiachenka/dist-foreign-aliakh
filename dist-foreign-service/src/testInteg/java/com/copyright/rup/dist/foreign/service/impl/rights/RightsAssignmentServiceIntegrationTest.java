@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
-import com.copyright.rup.dist.common.test.JsonMatcher;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -15,21 +13,15 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +60,7 @@ public class RightsAssignmentServiceIntegrationTest {
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
-    private RestTemplate restTemplate;
+    private ServiceTestHelper testHelper;
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
 
@@ -80,21 +72,15 @@ public class RightsAssignmentServiceIntegrationTest {
     // Test Case ID: af51f1a4-66a6-4d70-b475-50007454f864
     @Test
     public void testSendForRightsAssignment() {
-        MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
-        mockServer.expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/jobs/wrwrkinst/"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(
-                    StringUtils.trim(TestUtils.fileToString(this.getClass(), "rights_assignment_request.json")))))
-            .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(this.getClass(), "rights_assignment_response.json"),
-                MediaType.APPLICATION_JSON));
+        testHelper.createRestServer();
+        testHelper.expectRmsRightsAssignmentCall("rights/rights_assignment_request.json",
+            "rights/rights_assignment_response.json");
         JobInfo jobInfo = rightsAssignmentService.sendForRightsAssignment();
         assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
         assertEquals("UsagesCount=3", jobInfo.getResult());
         assertNtsWithdrawnUsage();
         assertSentForRaUsages();
-        mockServer.verify();
+        testHelper.verifyRestServer();
     }
 
     private void assertNtsWithdrawnUsage() {

@@ -143,6 +143,28 @@ public class ServiceTestHelper {
                 expectedRmsResponse), MediaType.APPLICATION_JSON));
     }
 
+    public void expectGetRmsRights(Map<String, String> expectedRmsRequestsToResponses) {
+        expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
+            -> mockServer.expect(MockRestRequestMatchers
+            .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andExpect(MockRestRequestMatchers.content()
+                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
+                    Lists.newArrayList("period_end_date"))))
+            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
+                expectedRmsResponse),
+                MediaType.APPLICATION_JSON)));
+    }
+
+    public void expectRmsRightsAssignmentCall(String requestFileName, String responseFileName) {
+        mockServer.expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/jobs/wrwrkinst/"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andExpect(MockRestRequestMatchers.content()
+                .string(new JsonMatcher(StringUtils.trim(TestUtils.fileToString(this.getClass(), requestFileName)))))
+            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), responseFileName),
+                MediaType.APPLICATION_JSON));
+    }
+
     public void expectPrmCall(String expectedPrmResponse, Long expectedPrmAccountNumber) {
         (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
             .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" +
@@ -197,19 +219,6 @@ public class ServiceTestHelper {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPreferencesResponse), MediaType.APPLICATION_JSON));
-    }
-
-    public void expectGetRmsRights(Map<String, String> expectedRmsRequestsToResponses) {
-        expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
-            -> mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
-                    Lists.newArrayList("period_end_date"))))
-            .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                expectedRmsResponse),
-                MediaType.APPLICATION_JSON)));
     }
 
     public void expectGetPreferences(String fileName, List<String> rightsholdersIds) {

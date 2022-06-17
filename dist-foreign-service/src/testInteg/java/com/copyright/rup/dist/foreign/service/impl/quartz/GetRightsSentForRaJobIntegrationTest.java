@@ -21,6 +21,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,8 +72,7 @@ public class GetRightsSentForRaJobIntegrationTest {
         testHelper.assertUsages(testHelper.loadExpectedUsages("quartz/usages_122824345_465159524.json"));
         testHelper.assertAudit("14c3d141-5475-4789-8fe4-ecae63a2d262",
             testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_122824345.json"));
-        testHelper.assertAudit("e878dfa2-31d8-4506-a7fd-1f4778d406e6",
-            testHelper.loadExpectedUsageAuditItems("quartz/usage_audit_empty.json"));
+        testHelper.assertAudit("e878dfa2-31d8-4506-a7fd-1f4778d406e6", Collections.emptyList());
         testHelper.verifyRestServer();
     }
 }

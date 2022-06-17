@@ -1,0 +1,6 @@
+[
+  {
+    "actionType": "ELIGIBLE_FOR_NTS",
+    "actionReason": "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100"
+  }
+]
