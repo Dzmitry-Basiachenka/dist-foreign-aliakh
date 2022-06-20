@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
@@ -8,7 +9,6 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -27,8 +27,6 @@ import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
-import com.vaadin.data.HasValue;
-import com.vaadin.data.ValidationResult;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -52,9 +50,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UdmUsageFiltersWindow}.
@@ -259,13 +254,13 @@ public class UdmUsageFiltersWindowTest {
         LocalDateWidget usageDateToWidget = Whitebox.getInternalState(window, "usageDateToWidget");
         LocalDate localDateFrom = LocalDate.of(2021, 1, 1);
         LocalDate localDateTo = LocalDate.of(2022, 1, 1);
-        verifyDateWidgetValidationMessage(usageDateFromWidget, localDateFrom, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(usageDateFromWidget, localDateFrom, binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageDateToWidget, localDateTo, binder, null, true);
         usageDateFromWidget.setValue(LocalDate.of(2023, 1, 1));
-        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo,
+        validateFieldAndVerifyErrorMessage(usageDateToWidget, localDateTo, binder,
             "Field value should be greater or equal to Usage Date From", false);
         usageDateFromWidget.setValue(null);
-        verifyDateWidgetValidationMessage(usageDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(usageDateToWidget, localDateTo, binder, null, true);
     }
 
     @Test
@@ -274,15 +269,15 @@ public class UdmUsageFiltersWindowTest {
         LocalDateWidget surveyStartDateToWidget = Whitebox.getInternalState(window, "surveyStartDateToWidget");
         LocalDate localDateFrom = LocalDate.of(2021, 1, 1);
         LocalDate localDateTo = LocalDate.of(2022, 1, 1);
-        verifyDateWidgetValidationMessage(surveyStartDateFromWidget, null, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(surveyStartDateToWidget, null, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(surveyStartDateFromWidget, localDateFrom, StringUtils.EMPTY, true);
-        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(surveyStartDateFromWidget, null, binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyStartDateToWidget, null, binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyStartDateFromWidget, localDateFrom, binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyStartDateToWidget, localDateTo, binder, null, true);
         surveyStartDateFromWidget.setValue(LocalDate.of(2023, 1, 1));
-        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo,
+        validateFieldAndVerifyErrorMessage(surveyStartDateToWidget, localDateTo, binder,
             "Field value should be greater or equal to Survey Start Date From", false);
         surveyStartDateFromWidget.setValue(null);
-        verifyDateWidgetValidationMessage(surveyStartDateToWidget, localDateTo, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(surveyStartDateToWidget, localDateTo, binder, null, true);
     }
 
     @Test
@@ -345,9 +340,9 @@ public class UdmUsageFiltersWindowTest {
     public void testReportedTitleValidation() {
         TextField reportedTitleField = Whitebox.getInternalState(window, "reportedTitleField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "reportedTitleOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(reportedTitleField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(reportedTitleField, buildStringWithExpectedLength(2000), null, true);
-        validateFieldAndVerifyErrorMessage(reportedTitleField, buildStringWithExpectedLength(2001),
+        validateFieldAndVerifyErrorMessage(reportedTitleField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(reportedTitleField, buildStringWithExpectedLength(2000), binder, null, true);
+        validateFieldAndVerifyErrorMessage(reportedTitleField, buildStringWithExpectedLength(2001), binder,
             "Field value should not exceed 2000 characters", false);
     }
 
@@ -355,9 +350,9 @@ public class UdmUsageFiltersWindowTest {
     public void testSystemTitleValidation() {
         TextField systemTitleField = Whitebox.getInternalState(window, "systemTitleField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "systemTitleOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
-        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), binder, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001), binder,
             "Field value should not exceed 2000 characters", false);
     }
 
@@ -365,9 +360,9 @@ public class UdmUsageFiltersWindowTest {
     public void testUsageDetailIdValidation() {
         TextField usageDetailIdField = Whitebox.getInternalState(window, "usageDetailIdField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "usageDetailIdOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), null, true);
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51),
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51), binder,
             "Field value should not exceed 50 characters", false);
     }
 
@@ -386,9 +381,9 @@ public class UdmUsageFiltersWindowTest {
     public void testCompanyNameValidation() {
         TextField companyNameField = Whitebox.getInternalState(window, "companyNameField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "companyNameOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(companyNameField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(companyNameField, buildStringWithExpectedLength(200), null, true);
-        validateFieldAndVerifyErrorMessage(companyNameField, buildStringWithExpectedLength(201),
+        validateFieldAndVerifyErrorMessage(companyNameField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(companyNameField, buildStringWithExpectedLength(200), binder, null, true);
+        validateFieldAndVerifyErrorMessage(companyNameField, buildStringWithExpectedLength(201), binder,
             "Field value should not exceed 200 characters", false);
     }
 
@@ -396,9 +391,10 @@ public class UdmUsageFiltersWindowTest {
     public void testSurveyRespondentValidation() {
         TextField surveyRespondentField = Whitebox.getInternalState(window, "surveyRespondentField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "surveyRespondentOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(surveyRespondentField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(surveyRespondentField, buildStringWithExpectedLength(200), null, true);
-        validateFieldAndVerifyErrorMessage(surveyRespondentField, buildStringWithExpectedLength(201),
+        validateFieldAndVerifyErrorMessage(surveyRespondentField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            surveyRespondentField, buildStringWithExpectedLength(200), binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyRespondentField, buildStringWithExpectedLength(201), binder,
             "Field value should not exceed 200 characters", false);
     }
 
@@ -406,9 +402,9 @@ public class UdmUsageFiltersWindowTest {
     public void testSurveyCountryValidation() {
         TextField surveyCountryField = Whitebox.getInternalState(window, "surveyCountryField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "surveyCountryOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), null, true);
-        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101),
+        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101), binder,
             "Field value should not exceed 100 characters", false);
     }
 
@@ -416,9 +412,9 @@ public class UdmUsageFiltersWindowTest {
     public void testLanguageValidation() {
         TextField languageField = Whitebox.getInternalState(window, "languageField");
         assertTextOperatorComboBoxItems(Whitebox.getInternalState(window, "languageOperatorComboBox"));
-        validateFieldAndVerifyErrorMessage(languageField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(255), null, true);
-        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(256),
+        validateFieldAndVerifyErrorMessage(languageField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(255), binder, null, true);
+        validateFieldAndVerifyErrorMessage(languageField, buildStringWithExpectedLength(256), binder,
             "Field value should not exceed 255 characters", false);
     }
 
@@ -559,16 +555,16 @@ public class UdmUsageFiltersWindowTest {
                                                    ComboBox<FilterOperatorEnum> operatorComboBox,
                                                    String fieldSpecificErrorMessage, int length) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, "12345679", null, true);
-        validateFieldAndVerifyErrorMessage(toField, "12345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, buildStringWithExpectedLength(length + 1),
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, "12345679", binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "12345678", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, buildStringWithExpectedLength(length + 1), binder,
             String.format("Field value should not exceed %d digits", length), false);
-        validateFieldAndVerifyErrorMessage(toField, buildStringWithExpectedLength(length + 1),
+        validateFieldAndVerifyErrorMessage(toField, buildStringWithExpectedLength(length + 1), binder,
             String.format("Field value should not exceed %d digits", length), false);
     }
 
@@ -576,29 +572,31 @@ public class UdmUsageFiltersWindowTest {
                                                       ComboBox<FilterOperatorEnum> operatorComboBox,
                                                       String fieldSpecificErrorMessage) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, DECIMAL_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, DECIMAL_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, DECIMAL_VALIDATION_MESSAGE, false);
     }
 
     private void verifyCommonOperationValidations(TextField fromField, TextField toField,
                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
                                                   String numberValidationMessage) {
-        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, binder, null, true);
         operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(
+            fromField, StringUtils.EMPTY, binder, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            toField, StringUtils.EMPTY, binder, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, numberValidationMessage, false);
         operatorComboBox.setValue(FilterOperatorEnum.EQUALS);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, binder, null, true);
     }
 
     private UdmUsageFilter buildExpectedFilter() {
@@ -767,33 +765,6 @@ public class UdmUsageFiltersWindowTest {
     @SuppressWarnings(UNCHECKED)
     private <T> void populateComboBox(String fieldName, T value) {
         ((ComboBox<T>) Whitebox.getInternalState(window, fieldName)).setValue(value);
-    }
-
-    private void verifyDateWidgetValidationMessage(LocalDateWidget localDateWidget, LocalDate value, String message,
-                                                   boolean isValid) {
-        localDateWidget.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
-    }
-
-    private void validateFieldAndVerifyErrorMessage(TextField field, String value, String errorMessage,
-                                                    boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List<HasValue<?>> fields = binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1, fields.size());
-        TextField actualField = (TextField) fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private String buildStringWithExpectedLength(int length) {

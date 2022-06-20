@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.fas;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
@@ -149,12 +150,14 @@ public class CreateScenarioWindowTest {
         createScenarioWindow = new CreateScenarioWindow(controller);
         Binder binder = Whitebox.getInternalState(createScenarioWindow, "binder");
         TextField scenarioNameField = Whitebox.getInternalState(createScenarioWindow, "scenarioNameField");
-        verifyField(scenarioNameField, StringUtils.EMPTY, binder, "Field value should be specified", false);
-        verifyField(scenarioNameField, "    ", binder, "Field value should be specified", false);
-        verifyField(scenarioNameField, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(
+            scenarioNameField, StringUtils.EMPTY, binder, "Field value should be specified", false);
+        validateFieldAndVerifyErrorMessage(scenarioNameField, "    ", binder, "Field value should be specified", false);
+        validateFieldAndVerifyErrorMessage(scenarioNameField, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyField(scenarioNameField, existingScenarioName, binder, "Scenario with such name already exists", false);
-        verifyField(scenarioNameField, SCENARIO_NAME, binder, StringUtils.EMPTY, true);
+        validateFieldAndVerifyErrorMessage(
+            scenarioNameField, existingScenarioName, binder, "Scenario with such name already exists", false);
+        validateFieldAndVerifyErrorMessage(scenarioNameField, SCENARIO_NAME, binder, null, true);
         verify(controller);
     }
 
@@ -186,14 +189,6 @@ public class CreateScenarioWindowTest {
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         return button;
-    }
-
-    private void verifyField(TextField field, String value, Binder binder, String message, boolean isValid) {
-        field.setValue(value);
-        List<ValidationResult> errors = binder.validate().getValidationErrors();
-        List<String> errorMessages =
-            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
-        assertEquals(!isValid, errorMessages.contains(message));
     }
 
     private static class TestCreateScenarioWindow extends CreateScenarioWindow {

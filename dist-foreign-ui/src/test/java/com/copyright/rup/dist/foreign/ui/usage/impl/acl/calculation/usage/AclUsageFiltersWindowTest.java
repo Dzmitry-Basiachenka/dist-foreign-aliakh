@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
@@ -7,7 +8,6 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.BaseUdmItemsFilterWi
 
 import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
-import com.vaadin.data.HasValue;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -45,8 +44,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AclUsageFiltersWindow}.
@@ -166,9 +163,9 @@ public class AclUsageFiltersWindowTest {
         ComboBox<FilterOperatorEnum> usageDetailIdOperatorComboBox =
             Whitebox.getInternalState(window, "usageDetailIdOperatorComboBox");
         assertTextOperatorComboBoxItems(usageDetailIdOperatorComboBox);
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), null, true);
-        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51),
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(50), binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageDetailIdField, buildStringWithExpectedLength(51), binder,
             "Field value should not exceed 50 characters", false);
     }
 
@@ -189,9 +186,9 @@ public class AclUsageFiltersWindowTest {
         ComboBox<FilterOperatorEnum> systemTitleOperatorComboBox =
             Whitebox.getInternalState(window, "systemTitleOperatorComboBox");
         assertTextOperatorComboBoxItems(systemTitleOperatorComboBox);
-        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), null, true);
-        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001),
+        validateFieldAndVerifyErrorMessage(systemTitleField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2000), binder, null, true);
+        validateFieldAndVerifyErrorMessage(systemTitleField, buildStringWithExpectedLength(2001), binder,
             "Field value should not exceed 2000 characters", false);
     }
 
@@ -201,9 +198,9 @@ public class AclUsageFiltersWindowTest {
         ComboBox<FilterOperatorEnum> surveyCountryOperatorComboBox =
             Whitebox.getInternalState(window, "surveyCountryOperatorComboBox");
         assertTextOperatorComboBoxItems(surveyCountryOperatorComboBox);
-        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), null, true);
-        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101),
+        validateFieldAndVerifyErrorMessage(surveyCountryField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(100), binder, null, true);
+        validateFieldAndVerifyErrorMessage(surveyCountryField, buildStringWithExpectedLength(101), binder,
             "Field value should not exceed 100 characters", false);
     }
 
@@ -458,32 +455,34 @@ public class AclUsageFiltersWindowTest {
                                                    ComboBox<FilterOperatorEnum> operatorComboBox,
                                                    String fieldSpecificErrorMessage, int length) {
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, NUMBER_VALIDATION_MESSAGE);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, "12345679", null, true);
-        validateFieldAndVerifyErrorMessage(toField, "12345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, buildStringWithExpectedLength(length + 1),
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, "12345679", binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "12345678", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, buildStringWithExpectedLength(length + 1), binder,
             String.format("Field value should not exceed %d digits", length), false);
-        validateFieldAndVerifyErrorMessage(toField, buildStringWithExpectedLength(length + 1),
+        validateFieldAndVerifyErrorMessage(toField, buildStringWithExpectedLength(length + 1), binder,
             String.format("Field value should not exceed %d digits", length), false);
     }
 
     private void verifyCommonOperationValidations(TextField fromField, TextField toField,
                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
                                                   String numberValidationMessage) {
-        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, INTEGER_WITH_SPACES_STRING, binder, null, true);
         operatorComboBox.setValue(FilterOperatorEnum.BETWEEN);
-        validateFieldAndVerifyErrorMessage(fromField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(toField, StringUtils.EMPTY, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(
+            fromField, StringUtils.EMPTY, binder, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            toField, StringUtils.EMPTY, binder, BETWEEN_OPERATOR_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, numberValidationMessage, false);
         operatorComboBox.setValue(FilterOperatorEnum.EQUALS);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_INTEGER, binder, null, true);
     }
 
     private void verifyAmountValidationZeroNotAllowed(TextField fromField, TextField toField,
@@ -491,48 +490,30 @@ public class AclUsageFiltersWindowTest {
                                                       String fieldSpecificErrorMessage) {
         String numberValidationMessage = "Field value should be positive number and should not exceed 10 digits";
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, numberValidationMessage, false);
     }
 
     private void verifyAmountValidationZeroAllowed(TextField fromField, TextField toField,
-                                                      ComboBox<FilterOperatorEnum> operatorComboBox,
-                                                      String fieldSpecificErrorMessage) {
+                                                   ComboBox<FilterOperatorEnum> operatorComboBox,
+                                                   String fieldSpecificErrorMessage) {
         String numberValidationMessage =
             "Field value should be positive number or zero and should not exceed 10 digits";
         verifyCommonOperationValidations(fromField, toField, operatorComboBox, numberValidationMessage);
-        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, null, true);
-        validateFieldAndVerifyErrorMessage(toField, "1.1345678", fieldSpecificErrorMessage, false);
-        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, numberValidationMessage, false);
-        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, numberValidationMessage, false);
-    }
-
-    private void validateFieldAndVerifyErrorMessage(TextField field, String value, String errorMessage,
-                                                    boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List<HasValue<?>> fields = binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1, fields.size());
-        TextField actualField = (TextField) fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
+        validateFieldAndVerifyErrorMessage(fromField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, SPACES_STRING, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(fromField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(toField, "1.1345678", binder, fieldSpecificErrorMessage, false);
+        validateFieldAndVerifyErrorMessage(fromField, INVALID_NUMBER, binder, numberValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(toField, INVALID_NUMBER, binder, numberValidationMessage, false);
     }
 
     private String buildStringWithExpectedLength(int length) {

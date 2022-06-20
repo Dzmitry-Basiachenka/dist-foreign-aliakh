@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.nts;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.setTextFieldValue;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLoadClickListener;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
@@ -52,9 +53,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Verifies {@link FundPoolLoadWindow}.
@@ -185,27 +183,28 @@ public class FundPoolLoadWindowTest {
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
         TextField periodFrom = Whitebox.getInternalState(window, PERIOD_FROM_FIELD);
         TextField periodTo = Whitebox.getInternalState(window, PERIOD_TO_FIELD);
-        verifyFieldValidationMessage(periodFrom, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(periodFrom, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(periodFrom, "invalidDateFrom", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyFieldValidationMessage(periodFrom, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, "invalidDateTo", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyFieldValidationMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
-        verifyFieldValidationMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
-        verifyFieldValidationMessage(periodTo, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            periodFrom, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodFrom, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodFrom, "invalidDateFrom", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodFrom, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, "invalidDateTo", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, "-2000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodTo, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         periodFrom.setValue("2018");
-        verifyFieldValidationMessage(periodTo, "2001", binder,
+        validateFieldAndVerifyErrorMessage(periodTo, "2001", binder,
             "Field value should be greater or equal to Fund Pool Period From", false);
         periodFrom.setValue("2001");
-        verifyFieldValidationMessage(periodTo, "2018", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodTo, "2018", binder, null, true);
         periodFrom.setValue("2005");
-        verifyFieldValidationMessage(periodTo, "2004", binder,
+        validateFieldAndVerifyErrorMessage(periodTo, "2004", binder,
             "Field value should be greater or equal to Fund Pool Period From", false);
-        verifyFieldValidationMessage(periodTo, "2005", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodTo, "2005", binder, null, true);
         verify(usagesController);
     }
 
@@ -215,12 +214,13 @@ public class FundPoolLoadWindowTest {
         window = new FundPoolLoadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
         TextField marketValidationField = Whitebox.getInternalState(window, MARKET_VALIDATION_FIELD);
-        verifyFieldValidationMessage(marketValidationField, "1000", binder, null, true);
-        verifyFieldValidationMessage(marketValidationField, "99999999", binder, null, true);
-        verifyFieldValidationMessage(marketValidationField, StringUtils.EMPTY, binder, INVALID_MARKET_MESSAGE, false);
-        verifyFieldValidationMessage(marketValidationField, "A", binder, INVALID_MARKET_MESSAGE, false);
-        verifyFieldValidationMessage(marketValidationField, "0", binder, INVALID_MARKET_MESSAGE, false);
-        verifyFieldValidationMessage(marketValidationField, "-1000", binder, INVALID_MARKET_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(marketValidationField, "1000", binder, null, true);
+        validateFieldAndVerifyErrorMessage(marketValidationField, "99999999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            marketValidationField, StringUtils.EMPTY, binder, INVALID_MARKET_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(marketValidationField, "A", binder, INVALID_MARKET_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(marketValidationField, "0", binder, INVALID_MARKET_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(marketValidationField, "-1000", binder, INVALID_MARKET_MESSAGE, false);
         verify(usagesController);
     }
 
@@ -230,15 +230,18 @@ public class FundPoolLoadWindowTest {
         window = new FundPoolLoadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField accountNumberField = Whitebox.getInternalState(window, ACCOUNT_NUMBER_FIELD);
-        verifyFieldValidationMessage(accountNumberField, "0", binder, null, true);
-        verifyFieldValidationMessage(accountNumberField, "1000024950", binder, null, true);
-        verifyFieldValidationMessage(accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
-            false);
-        verifyFieldValidationMessage(accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(accountNumberField, "10000249500", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        verifyFieldValidationMessage(accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
-        verifyFieldValidationMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
-        verifyFieldValidationMessage(accountNumberField, "-1000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "1000024950", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, "10000249500", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            accountNumberField, "9999999999.99", binder, INVALID_NUMBER_LENGTH_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "value", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(accountNumberField, "-1000", binder, INVALID_NUMERIC_VALUE_MESSAGE, false);
         verify(usagesController);
     }
 
@@ -300,13 +303,15 @@ public class FundPoolLoadWindowTest {
         window = new FundPoolLoadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField usageBatchName = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
-        verifyFieldValidationMessage(usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(usageBatchName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
+        validateFieldAndVerifyErrorMessage(
+            usageBatchName, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            usageBatchName, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(usageBatchName, StringUtils.repeat('a', 51), binder,
             "Field value should not exceed 50 characters", false);
-        verifyFieldValidationMessage(usageBatchName, USAGE_BATCH_NAME, binder,
+        validateFieldAndVerifyErrorMessage(usageBatchName, USAGE_BATCH_NAME, binder,
             "Usage Batch with such name already exists", false);
-        verifyFieldValidationMessage(usageBatchName, "Batch", binder, null, true);
+        validateFieldAndVerifyErrorMessage(usageBatchName, "Batch", binder, null, true);
         verify(usagesController);
     }
 
@@ -334,18 +339,20 @@ public class FundPoolLoadWindowTest {
     private void verifyAmountFieldValidation(String fieldName) {
         TextField grossAmountField = Whitebox.getInternalState(window, fieldName);
         Binder binder = Whitebox.getInternalState(window, "binder");
-        verifyFieldValidationMessage(grossAmountField, ZERO_AMOUNT, binder, null, true);
-        verifyFieldValidationMessage(grossAmountField, "123.5684", binder, null, true);
-        verifyFieldValidationMessage(grossAmountField, "9999999999", binder, null, true);
-        verifyFieldValidationMessage(grossAmountField, "9999999999.99", binder, null, true);
-        verifyFieldValidationMessage(grossAmountField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE,
-            false);
-        verifyFieldValidationMessage(grossAmountField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
-        verifyFieldValidationMessage(grossAmountField, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
-        verifyFieldValidationMessage(grossAmountField, ".04", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
-        verifyFieldValidationMessage(grossAmountField, "00.33", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
-        verifyFieldValidationMessage(grossAmountField, "123.568 4", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
-        verifyFieldValidationMessage(grossAmountField, "10000000000.00", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, ZERO_AMOUNT, binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "123.5684", binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "9999999999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "9999999999.99", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, StringUtils.EMPTY, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, SPACES_STRING, binder, EMPTY_FIELD_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "value", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, ".04", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "00.33", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
+        validateFieldAndVerifyErrorMessage(grossAmountField, "123.568 4", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
+        validateFieldAndVerifyErrorMessage(
+            grossAmountField, "10000000000.00", binder, POSITIVE_OR_ZERO_AND_LENGTH, false);
     }
 
     private void verifyRootLayout(Component component) {
@@ -482,25 +489,6 @@ public class FundPoolLoadWindowTest {
         assertEquals("Exclude STM RHs", checkBox.getCaption());
         assertEquals("exclude-stm-rhs-checkbox", checkBox.getStyleName());
         assertFalse(checkBox.getValue());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void verifyFieldValidationMessage(TextField field, String value, Binder binder, String errorMessage,
-                                              boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List<TextField> fields = (List<TextField>) binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1, fields.size());
-        TextField actualField = fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private void setTextField(String field, String value) {

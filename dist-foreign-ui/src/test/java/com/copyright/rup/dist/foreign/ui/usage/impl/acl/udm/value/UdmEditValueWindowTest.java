@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
@@ -12,7 +13,6 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -63,7 +63,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -239,35 +238,38 @@ public class UdmEditValueWindowTest {
         setSpecialistExpectations();
         initEditWindow();
         TextField priceField = Whitebox.getInternalState(window, PRICE_FIELD);
-        verifyField(priceField, StringUtils.EMPTY, null, true);
-        verifyField(priceField, SPACES_STRING, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(priceField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        verifyField(priceField, INTEGER_WITH_SPACES_STRING, null, true);
-        verifyField(priceField, "-1", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(priceField, "0", null, true);
-        verifyField(priceField, "0.1", null, true);
-        verifyField(priceField, "0.12", null, true);
-        verifyField(priceField, "  0.12  ", null, true);
-        verifyField(priceField, "0.123", null, true);
-        verifyField(priceField, "0.1234", null, true);
-        verifyField(priceField, "0.12345", null, true);
-        verifyField(priceField, "0.123456", null, true);
-        verifyField(priceField, "0.1234567", null, true);
-        verifyField(priceField, "0.12345678", null, true);
-        verifyField(priceField, "0.123456789", null, true);
-        verifyField(priceField, "0.1234567890", null, true);
-        verifyField(priceField, "0.12345678901", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(priceField, "1.1234567890", null, true);
-        verifyField(priceField, "12.1234567890", null, true);
-        verifyField(priceField, "123.1234567890", null, true);
-        verifyField(priceField, "1234.1234567890", null, true);
-        verifyField(priceField, "12345.1234567890", null, true);
-        verifyField(priceField, "123456.1234567890", null, true);
-        verifyField(priceField, "1234567.1234567890", null, true);
-        verifyField(priceField, "12345678.1234567890", null, true);
-        verifyField(priceField, "123456789.1234567890", null, true);
-        verifyField(priceField, "1234567890.1234567890", null, true);
-        verifyField(priceField, "12345678901.1234567890", POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            priceField, SPACES_STRING, binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceField, INTEGER_WITH_SPACES_STRING, binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "-1", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceField, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.12", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "  0.12  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.123", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.1234", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.12345", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.123456", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.1234567", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.12345678", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.123456789", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "0.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            priceField, "0.12345678901", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceField, "1.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "12.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "123.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "1234.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "12345.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "123456.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "1234567.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "12345678.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "123456789.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceField, "1234567890.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            priceField, "12345678901.1234567890", binder, POSITIVE_OR_ZERO_AND_LENGTH_ERROR_MESSAGE, false);
     }
 
     @Test
@@ -342,19 +344,19 @@ public class UdmEditValueWindowTest {
         initEditWindow();
         TextField priceYearField = Whitebox.getInternalState(window, "priceYearField");
         String yearValidationMessage = "Field value should be in range from 1950 to 2099";
-        verifyField(priceYearField, StringUtils.EMPTY, null, true);
-        verifyField(priceYearField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        verifyField(priceYearField, "1949", yearValidationMessage, false);
-        verifyField(priceYearField, " 1949 ", yearValidationMessage, false);
-        verifyField(priceYearField, "1950", null, true);
-        verifyField(priceYearField, " 1950 ", null, true);
-        verifyField(priceYearField, "1999", null, true);
-        verifyField(priceYearField, " 1999 ", null, true);
-        verifyField(priceYearField, "2099", null, true);
-        verifyField(priceYearField, " 2099 ", null, true);
-        verifyField(priceYearField, "2100", yearValidationMessage, false);
-        verifyField(priceYearField, "20211", yearValidationMessage, false);
-        verifyField(priceYearField, "202", yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, "1949", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, " 1949 ", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, "1950", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, " 1950 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, "1999", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, " 1999 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, "2099", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, " 2099 ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceYearField, "2100", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, "20211", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(priceYearField, "202", binder, yearValidationMessage, false);
     }
 
     @Test
@@ -367,9 +369,11 @@ public class UdmEditValueWindowTest {
         priceField.setValue(StringUtils.EMPTY);
         verifyLengthValidation(priceSourceField, maxSize);
         priceField.setValue(VALID_DECIMAL);
-        verifyField(priceSourceField, StringUtils.EMPTY, "Field value cannot be empty if Price is specified", false);
-        verifyField(priceSourceField, buildStringWithExpectedLength(maxSize), null, true);
-        verifyField(priceSourceField, buildStringWithExpectedLength(maxSize + 1),
+        validateFieldAndVerifyErrorMessage(
+            priceSourceField, StringUtils.EMPTY, binder, "Field value cannot be empty if Price is specified", false);
+        validateFieldAndVerifyErrorMessage(
+            priceSourceField, buildStringWithExpectedLength(maxSize), binder, null, true);
+        validateFieldAndVerifyErrorMessage(priceSourceField, buildStringWithExpectedLength(maxSize + 1), binder,
             String.format("Field value should not exceed %s characters", maxSize), false);
     }
 
@@ -402,35 +406,38 @@ public class UdmEditValueWindowTest {
         setSpecialistExpectations();
         initEditWindow();
         TextField contentField = Whitebox.getInternalState(window, CONTENT_FIELD);
-        verifyField(contentField, StringUtils.EMPTY, null, true);
-        verifyField(contentField, SPACES_STRING, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(contentField, INVALID_NUMBER, NUMBER_VALIDATION_MESSAGE, false);
-        verifyField(contentField, INTEGER_WITH_SPACES_STRING, null, true);
-        verifyField(contentField, "-1", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(contentField, "0", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(contentField, "0.1", null, true);
-        verifyField(contentField, "0.12", null, true);
-        verifyField(contentField, "  0.12  ", null, true);
-        verifyField(contentField, "0.123", null, true);
-        verifyField(contentField, "0.1234", null, true);
-        verifyField(contentField, "0.12345", null, true);
-        verifyField(contentField, "0.123456", null, true);
-        verifyField(contentField, "0.1234567", null, true);
-        verifyField(contentField, "0.12345678", null, true);
-        verifyField(contentField, "0.123456789", null, true);
-        verifyField(contentField, "0.1234567890", null, true);
-        verifyField(contentField, "0.12345678901", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
-        verifyField(contentField, "1.1234567890", null, true);
-        verifyField(contentField, "12.1234567890", null, true);
-        verifyField(contentField, "123.1234567890", null, true);
-        verifyField(contentField, "1234.1234567890", null, true);
-        verifyField(contentField, "12345.1234567890", null, true);
-        verifyField(contentField, "123456.1234567890", null, true);
-        verifyField(contentField, "1234567.1234567890", null, true);
-        verifyField(contentField, "12345678.1234567890", null, true);
-        verifyField(contentField, "123456789.1234567890", null, true);
-        verifyField(contentField, "1234567890.1234567890", null, true);
-        verifyField(contentField, "12345678901.1234567890", POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentField, SPACES_STRING, binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, INTEGER_WITH_SPACES_STRING, binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "-1", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, "0", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, "0.1", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.12", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "  0.12  ", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.123", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.1234", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.12345", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.123456", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.1234567", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.12345678", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.123456789", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "0.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentField, "0.12345678901", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(contentField, "1.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "12.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "123.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "1234.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "12345.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "123456.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "1234567.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "12345678.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "123456789.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentField, "1234567890.1234567890", binder, null, true);
+        validateFieldAndVerifyErrorMessage(
+            contentField, "12345678901.1234567890", binder, POSITIVE_AND_LENGTH_ERROR_MESSAGE, false);
     }
 
     @Test
@@ -443,10 +450,11 @@ public class UdmEditValueWindowTest {
         contentField.setValue(StringUtils.EMPTY);
         verifyLengthValidation(contentSourceField, maxSize);
         contentField.setValue(VALID_DECIMAL);
-        verifyField(contentSourceField, StringUtils.EMPTY, "Field value cannot be empty if Content is specified",
-            false);
-        verifyField(contentSourceField, buildStringWithExpectedLength(maxSize), null, true);
-        verifyField(contentSourceField, buildStringWithExpectedLength(maxSize + 1),
+        validateFieldAndVerifyErrorMessage(contentSourceField, StringUtils.EMPTY, binder,
+            "Field value cannot be empty if Content is specified", false);
+        validateFieldAndVerifyErrorMessage(
+            contentSourceField, buildStringWithExpectedLength(maxSize), binder, null, true);
+        validateFieldAndVerifyErrorMessage(contentSourceField, buildStringWithExpectedLength(maxSize + 1), binder,
             String.format("Field value should not exceed %s characters", maxSize), false);
     }
 
@@ -562,9 +570,9 @@ public class UdmEditValueWindowTest {
     }
 
     private void verifyLengthValidation(TextField textField, int maxSize) {
-        verifyField(textField, StringUtils.EMPTY, null, true);
-        verifyField(textField, buildStringWithExpectedLength(maxSize), null, true);
-        verifyField(textField, buildStringWithExpectedLength(maxSize + 1),
+        validateFieldAndVerifyErrorMessage(textField, StringUtils.EMPTY, binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, buildStringWithExpectedLength(maxSize), binder, null, true);
+        validateFieldAndVerifyErrorMessage(textField, buildStringWithExpectedLength(maxSize + 1), binder,
             String.format("Field value should not exceed %s characters", maxSize), false);
     }
 
@@ -765,23 +773,6 @@ public class UdmEditValueWindowTest {
                 errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
             assertTrue(errorMessages.contains(message));
         }
-    }
-
-    private void verifyField(TextField field, String value, String errorMessage, boolean isValid) {
-        field.setValue(value);
-        binder.validate();
-        List fields = binder.getFields()
-            .filter(actualField -> actualField.equals(field))
-            .collect(Collectors.toList());
-        assertEquals(1, fields.size());
-        TextField actualField = (TextField) fields.get(0);
-        assertNotNull(actualField);
-        String actualErrorMessage = Objects.nonNull(actualField.getErrorMessage())
-            ? actualField.getErrorMessage().toString()
-            : null;
-        assertEquals(value, actualField.getValue());
-        assertEquals(errorMessage, actualErrorMessage);
-        assertEquals(isValid, Objects.isNull(actualErrorMessage));
     }
 
     private VerticalLayout getPanelContent() {
