@@ -24,6 +24,7 @@
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="typeOfUse" column="type_of_use"/>
         <result property="annualizedCopies" column="annualized_copies"/>
+        <result property="quantity" column="quantity"/>
         <result property="editable" column="is_editable"/>
     </resultMap>
 
@@ -42,6 +43,7 @@
         content_unit_price,
         type_of_use,
         annualized_copies,
+        quantity,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -65,6 +67,7 @@
         content_unit_price,
         type_of_use,
         annualized_copies,
+        u.quantity,
         is_editable,
         u.created_datetime,
         u.updated_datetime,
@@ -275,6 +278,7 @@
             vb.content_unit_price,
             u.type_of_use,
             u.annualized_copies,
+            u.quantity,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_udm_usage u
         join ${schema}.df_udm_usage_batch ub on u.df_udm_usage_batch_uid = ub.df_udm_usage_batch_uid

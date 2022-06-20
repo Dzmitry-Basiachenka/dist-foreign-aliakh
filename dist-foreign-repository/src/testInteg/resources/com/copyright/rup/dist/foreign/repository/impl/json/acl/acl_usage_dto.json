@@ -22,6 +22,7 @@
     "contentUnitPrice": 5.0000000000,
     "typeOfUse": "PRINT",
     "annualizedCopies": 1.00000,
+    "quantity": 11,
     "editable": true,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
@@ -43,6 +44,7 @@
     "surveyCountry": "United States",
     "typeOfUse": "PRINT",
     "annualizedCopies": 15.00000,
+    "quantity": 10,
     "editable": true,
     "createUser": "user@copyright.com",
     "updateUser": "user@copyright.com"
