@@ -523,4 +523,287 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'quantity')
         }
     }
+
+    changeSet(id: '2022-06-22-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_scenario table")
+
+        createTable(tableName: 'df_acl_scenario', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scanarios') {
+
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_usage_batch_uid', type: 'VARCHAR(255)', remarks: 'The identifier of ACL usage batch') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_grant_set_uid', type: 'VARCHAR(255)', remarks: 'The identifier of grant set') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'period_end_date', type: 'NUMERIC(6)', remarks: 'The period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'status_ind', type: 'VARCHAR(16)', remarks: 'The status index') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(2000)', remarks: 'The description of scenario')
+            column(name: 'license_type', type: 'VARCHAR(10)', remarks: 'The license type') {
+                constraints(nullable: false)
+            }
+            column(name: 'is_editable', type: 'BOOLEAN', remarks: 'The editable flag') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario',
+                columnNames: 'df_acl_scenario_uid',
+                constraintName: 'pk_df_acl_scenario_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario',
+                baseColumnNames: 'df_acl_fund_pool_uid',
+                referencedTableName: 'df_acl_fund_pool',
+                referencedColumnNames: 'df_acl_fund_pool_uid',
+                constraintName: 'fk_df_acl_scenario_2_df_acl_fund_pool')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario',
+                baseColumnNames: 'df_acl_grant_set_uid',
+                referencedTableName: 'df_acl_grant_set',
+                referencedColumnNames: 'df_acl_grant_set_uid',
+                constraintName: 'fk_df_acl_scenario_2_df_acl_grant_set')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario',
+                baseColumnNames: 'df_acl_usage_batch_uid',
+                referencedTableName: 'df_acl_usage_batch',
+                referencedColumnNames: 'df_acl_usage_batch_uid',
+                constraintName: 'fk_df_df_acl_scenario_2_df_acl_usage_batch')
+
+        rollback {
+            //automatic rollback
+        }
+    }
+
+    changeSet(id: '2022-06-22-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_scenario_detail table")
+
+        createTable(tableName: 'df_acl_scenario_detail', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scanario details') {
+
+            column(name: 'df_acl_scenario_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario deetail') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'period_end_date', type: 'NUMERIC(6)', remarks: 'The period in YYYYMM format') {
+                constraints(nullable: false)
+            }
+            column(name: 'original_detail_id', type: 'VARCHAR(50)', remarks: 'The original detail id') {
+                constraints(nullable: false)
+            }
+            column(name: 'wr_wrk_inst', type: 'NUMERIC(15)', remarks: 'The Wr Wrk Inst') {
+                constraints(nullable: false)
+            }
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The system title') {
+                constraints(nullable: false)
+            }
+            column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Detail Licensee Class') {
+                constraints(nullable: false)
+            }
+            column(name: 'publication_type_uid', type: 'VARCHAR(255)', remarks: 'The identifier of Publication Type') {
+                constraints(nullable: false)
+            }
+            column(name: 'content_unit_price', type: 'NUMERIC (38,10)', remarks: 'The content unit price') {
+                constraints(nullable: false)
+            }
+            column(name: 'usage_quantity', type: 'NUMERIC(38)', remarks: 'The usage quantity') {
+                constraints(nullable: false)
+            }
+            column(name: 'usage_age_weight', type: 'numeric(10,5)', remarks: 'The usage age weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'weighted_copies', type: 'NUMERIC (38,10)', remarks: 'The weighted copies') {
+                constraints(nullable: false)
+            }
+            column(name: 'survey_country', type: 'VARCHAR(100)', remarks: 'The survey country') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_detail',
+                columnNames: 'df_acl_scenario_detail_uid',
+                constraintName: 'pk_df_acl_scenario_detail_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_detail',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_scenario_detail_2_df_acl_scenario')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_detail',
+                baseColumnNames: 'detail_licensee_class_id',
+                referencedTableName: 'df_detail_licensee_class',
+                referencedColumnNames: 'detail_licensee_class_id',
+                constraintName: 'fk_df_acl_scenario_detail_2_df_detail_licensee_class')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_detail',
+                baseColumnNames: 'publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_acl_scenario_detail_2_df_publication_type')
+
+        rollback {
+            //automatic rollback
+        }
+    }
+
+    changeSet(id: '2022-06-22-03', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_share_detail table")
+
+        createTable(tableName: 'df_acl_share_detail', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scanario share details') {
+
+            column(name: 'df_acl_share_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario deetail') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_detail_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario deetail') {
+                constraints(nullable: false)
+            }
+            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use') {
+                constraints(nullable: false)
+            }
+            column(name: 'rh_account_number', type: 'NUMERIC(22)', remarks: 'The rightsholder account number') {
+                constraints(nullable: false)
+            }
+            column(name: 'aggregate_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Aggregate Licensee Class') {
+                constraints(nullable: false)
+            }
+            column(name: 'volume_weight', type: 'NUMERIC (38,10)', remarks: 'The volume weight')
+            column(name: 'value_weight', type: 'NUMERIC (38,10)', remarks: 'The value weight')
+            column(name: 'value_weight_denominator', type: 'NUMERIC (38,10)', remarks: 'The value weight denominator')
+            column(name: 'volume_weight_denominator', type: 'NUMERIC (38,10)', remarks: 'The volume weight denominator')
+            column(name: 'value_share', type: 'NUMERIC (38,10)', remarks: 'The value share')
+            column(name: 'volume_share', type: 'NUMERIC (38,10)', remarks: 'The volume share')
+            column(name: 'net_amount', type: 'NUMERIC (38,10)', remarks: 'The net amount')
+            column(name: 'gross_amount', type: 'NUMERIC (38,10)', remarks: 'TThe gross amount')
+            column(name: 'service_fee_amount', type: 'NUMERIC (38,10)', remarks: 'The service fee amount')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_share_detail',
+                columnNames: 'df_acl_share_detail_uid',
+                constraintName: 'pk_acl_share_detail_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_share_detail',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_share_detail_2_df_acl_scenario')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_share_detail',
+                baseColumnNames: 'aggregate_licensee_class_id',
+                referencedTableName: 'df_aggregate_licensee_class',
+                referencedColumnNames: 'aggregate_licensee_class_id',
+                constraintName: 'fk_df_acl_share_detail_2_df_aggregate_licensee_class')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_share_detail',
+                baseColumnNames: 'df_acl_scenario_detail_uid',
+                referencedTableName: 'df_acl_scenario_detail',
+                referencedColumnNames: 'df_acl_scenario_detail_uid',
+                constraintName: 'fk_df_acl_share_detail_2_df_acl_scenario_detail')
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }
