@@ -806,4 +806,67 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2022-06-22-04', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment('B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: create df_acl_scenario_audit table')
+
+        createTable(tableName: 'df_acl_scenario_audit', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scenario audit actions') {
+            column(name: 'df_acl_scenario_audit_uid', type: 'VARCHAR(255)', remarks: 'The identifier of ACL scenario audit action') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of ACL scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'action_type_ind', type: 'VARCHAR(32)', remarks: 'Scenario action type index') {
+                constraints(nullable: false)
+            }
+            column(name: 'action_reason', type: 'VARCHAR(1024)', remarks: 'Scenario action reason')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_audit',
+                columnNames: 'df_acl_scenario_audit_uid',
+                constraintName: 'pk_df_acl_scenario_audit')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_audit',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_scenario_2_df_acl_scenario_audit')
+
+        createIndex(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_audit',
+                indexName: 'ix_df_acl_scenario_audit_df_acl_scenario_uid') {
+            column(name: 'df_acl_scenario_uid')
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }
