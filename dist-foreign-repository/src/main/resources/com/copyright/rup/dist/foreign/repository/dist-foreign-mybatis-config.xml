@@ -157,5 +157,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageBatchMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclFundPoolMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioAuditMapper.xml"/>
     </mappers>
 </configuration>
