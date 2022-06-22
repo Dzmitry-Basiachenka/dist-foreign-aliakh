@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api.acl;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -27,4 +28,9 @@ public interface IAclCalculationController extends IController<IAclCalculationWi
      * @return instance of {@link IAclFundPoolController}.
      */
     IAclFundPoolController getAclFundPoolController();
+
+    /**
+     * @return instance of {@link IAclScenariosController}.
+     */
+    IAclScenariosController getAclScenariosController();
 }

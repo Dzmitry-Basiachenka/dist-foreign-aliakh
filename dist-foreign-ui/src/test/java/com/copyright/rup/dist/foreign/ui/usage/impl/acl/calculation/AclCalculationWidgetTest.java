@@ -9,6 +9,8 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
@@ -40,6 +42,8 @@ public class AclCalculationWidgetTest {
     private IAclGrantDetailWidget aclGrantDetailWidget;
     private IAclFundPoolWidget aclFundPoolWidget;
     private IAclFundPoolController aclFundPoolController;
+    private IAclScenariosController aclScenariosController;
+    private IAclScenariosWidget aclScenariosWidget;
 
     @Before
     public void setUp() {
@@ -63,18 +67,24 @@ public class AclCalculationWidgetTest {
         expect(aclFundPoolController.initWidget()).andReturn(aclFundPoolWidget).once();
         aclFundPoolWidget.setController(aclFundPoolController);
         expectLastCall().once();
+        aclScenariosController = createNiceMock(IAclScenariosController.class);
+        aclScenariosWidget = createNiceMock(IAclScenariosWidget.class);
         expect(controller.getAclFundPoolController()).andReturn(aclFundPoolController).once();
+        expect(aclScenariosController.initWidget()).andReturn(aclScenariosWidget).once();
+        aclScenariosWidget.setController(aclScenariosController);
+        expectLastCall().once();
+        expect(controller.getAclScenariosController()).andReturn(aclScenariosController).once();
     }
 
     @Test
     public void testWidgetStructure() {
         replay(controller, aclUsageController, aclUsageWidget, aclGrantDetailController, aclGrantDetailWidget,
-            aclFundPoolWidget, aclFundPoolController);
+            aclFundPoolWidget, aclFundPoolController, aclScenariosController, aclScenariosWidget);
         AclCalculationWidget widget = new AclCalculationWidget();
         widget.setController(controller);
         widget.init();
         verify(controller, aclUsageController, aclUsageWidget, aclGrantDetailController, aclGrantDetailWidget,
-            aclFundPoolWidget, aclFundPoolController);
+            aclFundPoolWidget, aclFundPoolController, aclScenariosController, aclScenariosWidget);
         verifyTabs(widget);
     }
 
@@ -83,25 +93,25 @@ public class AclCalculationWidgetTest {
         aclUsageWidget.refresh();
         expectLastCall().once();
         replay(controller, aclUsageController, aclUsageWidget, aclGrantDetailController, aclGrantDetailWidget,
-            aclFundPoolWidget, aclFundPoolController);
+            aclFundPoolWidget, aclFundPoolController, aclScenariosController, aclScenariosWidget);
         AclCalculationWidget widget = new AclCalculationWidget();
         widget.setController(controller);
         widget.init();
         widget.refresh();
         verify(controller, aclUsageController, aclUsageWidget, aclGrantDetailController, aclGrantDetailWidget,
-            aclFundPoolWidget, aclFundPoolController);
+            aclFundPoolWidget, aclFundPoolController, aclScenariosController, aclScenariosWidget);
     }
 
     private void verifyTabs(AclCalculationWidget widget) {
-        assertEquals(3, widget.getComponentCount());
-        TabSheet.Tab usagesTab = widget.getTab(0);
-        assertEquals("Usages", usagesTab.getCaption());
-        assertTrue(usagesTab.getComponent() instanceof IAclUsageWidget);
-        TabSheet.Tab fundPoolTab = widget.getTab(1);
-        assertEquals("Fund Pool", fundPoolTab.getCaption());
-        assertTrue(fundPoolTab.getComponent() instanceof IAclFundPoolWidget);
-        TabSheet.Tab grantSetTab = widget.getTab(2);
-        assertEquals("Grant Set", grantSetTab.getCaption());
-        assertTrue(grantSetTab.getComponent() instanceof IAclGrantDetailWidget);
+        assertEquals(4, widget.getComponentCount());
+        verifyTab(widget.getTab(0), "Usages", IAclUsageWidget.class);
+        verifyTab(widget.getTab(1), "Fund Pool", IAclFundPoolWidget.class);
+        verifyTab(widget.getTab(2), "Grant Set", IAclGrantDetailWidget.class);
+        verifyTab(widget.getTab(3), "Scenarios", IAclScenariosWidget.class);
+    }
+
+    private void verifyTab(TabSheet.Tab tab, String caption, Class<?> clazz) {
+        assertEquals(caption, tab.getCaption());
+        assertTrue(clazz.isInstance(tab.getComponent()));
     }
 }

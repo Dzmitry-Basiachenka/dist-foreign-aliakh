@@ -5,7 +5,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclCalculationWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
 
@@ -28,13 +30,19 @@ public class AclCalculationControllerTest {
 
     private IAclUsageController aclUsageController;
     private IAclGrantDetailController aclGrantDetailController;
+    private IAclFundPoolController aclFundPoolController;
+    private IAclScenariosController aclScenariosController;
 
     @Before
     public void setUp() {
         aclUsageController = createMock(IAclUsageController.class);
         aclGrantDetailController = createMock(IAclGrantDetailController.class);
+        aclFundPoolController = createMock(IAclFundPoolController.class);
+        aclScenariosController = createMock(IAclScenariosController.class);
         Whitebox.setInternalState(controller, aclUsageController);
         Whitebox.setInternalState(controller, aclGrantDetailController);
+        Whitebox.setInternalState(controller, aclFundPoolController);
+        Whitebox.setInternalState(controller, aclScenariosController);
     }
 
     @Test
@@ -52,5 +60,15 @@ public class AclCalculationControllerTest {
     @Test
     public void testGetAclGrantDetailController() {
         assertSame(aclGrantDetailController, controller.getAclGrantDetailController());
+    }
+
+    @Test
+    public void testGetAclFundPoolController() {
+        assertSame(aclFundPoolController, controller.getAclFundPoolController());
+    }
+
+    @Test
+    public void testGetAclScenariosController() {
+        assertSame(aclScenariosController, controller.getAclScenariosController());
     }
 }
