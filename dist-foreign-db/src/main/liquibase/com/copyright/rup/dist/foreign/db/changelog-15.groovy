@@ -509,4 +509,18 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_aacl_period")
         }
     }
+
+    changeSet(id: '2022-06-22-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: add quantity column to df_acl_usage table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'quantity', type: 'NUMERIC(38)', remarks: 'The quantity', defaultValue: '1') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'quantity')
+        }
+    }
 }

@@ -670,6 +670,7 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getContentUnitPrice(), actualUsage.getContentUnitPrice());
         assertEquals(expectedUsage.getTypeOfUse(), actualUsage.getTypeOfUse());
         assertEquals(expectedUsage.getAnnualizedCopies(), actualUsage.getAnnualizedCopies());
+        assertEquals(expectedUsage.getQuantity(), actualUsage.getQuantity());
         assertEquals(expectedUsage.isEditable(), actualUsage.isEditable());
         assertEquals(expectedUsage.getCreateUser(), actualUsage.getCreateUser());
         assertEquals(expectedUsage.getUpdateUser(), actualUsage.getUpdateUser());

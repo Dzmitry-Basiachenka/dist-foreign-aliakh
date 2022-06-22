@@ -34,6 +34,7 @@ public class AclUsageDto extends StoredEntity<String> {
     private BigDecimal contentUnitPrice;
     private String typeOfUse;
     private BigDecimal annualizedCopies;
+    private Long quantity;
     private boolean editable;
 
     public String getUsageBatchId() {
@@ -156,6 +157,14 @@ public class AclUsageDto extends StoredEntity<String> {
         this.annualizedCopies = annualizedCopies;
     }
 
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
+    }
+
     public boolean isEditable() {
         return editable;
     }
@@ -190,6 +199,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(contentUnitPrice, that.contentUnitPrice)
             .append(typeOfUse, that.typeOfUse)
             .append(annualizedCopies, that.annualizedCopies)
+            .append(quantity, that.quantity)
             .append(editable, that.editable)
             .isEquals();
     }
@@ -213,6 +223,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append(contentUnitPrice)
             .append(typeOfUse)
             .append(annualizedCopies)
+            .append(quantity)
             .append(editable)
             .toHashCode();
     }
@@ -236,6 +247,7 @@ public class AclUsageDto extends StoredEntity<String> {
             .append("contentUnitPrice", contentUnitPrice)
             .append("typeOfUse", typeOfUse)
             .append("annualizedCopies", annualizedCopies)
+            .append("quantity", quantity)
             .append("editable", editable)
             .toString();
     }
