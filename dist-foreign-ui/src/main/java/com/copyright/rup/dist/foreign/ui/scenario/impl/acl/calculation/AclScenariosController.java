@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -24,5 +25,15 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget();
+    }
+
+    @Override
+    public AclScenario getScenarioWithAmountsAndLastAction(AclScenario scenario) {
+        return new AclScenario(); // TODO {aliakh} implement
+    }
+
+    @Override
+    public String getCriteriaHtmlRepresentation() {
+        return ""; // TODO {aliakh} implement
     }
 }

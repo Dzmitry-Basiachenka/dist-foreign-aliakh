@@ -49,6 +49,31 @@ public class AclScenariosWidgetTest {
         verifyPanel((Panel) component);
     }
 
+    @Test
+    public void testRefresh() {
+        // TODO {aliakh} implement
+    }
+
+    @Test
+    public void testSelectScenario() {
+        // TODO {aliakh} implement
+    }
+
+    @Test
+    public void testRefreshSelectedScenario() {
+        // TODO {aliakh} implement
+    }
+
+    @Test
+    public void testGetSelectedScenario() {
+        // TODO {aliakh} implement
+    }
+
+    @Test
+    public void testGetNotSelectedScenario() {
+        // TODO {aliakh} implement
+    }
+
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
         assertNull(panel.getContent());

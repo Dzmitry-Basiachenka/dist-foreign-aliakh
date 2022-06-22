@@ -1,14 +1,38 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclUsageAgeWeightWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAclScenariosWidget}.
@@ -21,8 +45,35 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget {
 
-    private Grid<Scenario> scenarioGrid;
+    // TODO {aliakh} rename style name
+    private static final String STYLE_SCENARIO_LAST_ACTION = "scenario-last-action";
+
+    private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label grossTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberRhPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberRhDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberWorksPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberWorksDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final VerticalLayout grossTotalLayout = initGrossTotalLayout();
+    private final Label serviceFeeTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label serviceFeeTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final VerticalLayout serviceFeeTotalLayout = initServiceFeeTotalLayout();
+    private final Label netTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label netTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final VerticalLayout netTotalLayout = initNetTotalLayout();
+    private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label copiedFromLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
+
+    private IAclScenariosController controller;
+    private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
+    private VerticalLayout metadataLayout;
 
     @Override
     public void refresh() {
@@ -48,6 +99,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     @Override
     public void setController(IAclScenariosController controller) {
+        this.controller = controller;
     }
 
     private void initGrid() {
@@ -55,6 +107,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid = new Grid<>();
         addColumns();
         scenarioGrid.setSizeFull();
+        scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
+        scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
     }
 
@@ -62,10 +116,142 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         //TODO {dbasiachenka} implement
     }
 
+    private VerticalLayout initGrossTotalLayout() {
+        VerticalLayout layout = new VerticalLayout(grossTotalPrintLabel, grossTotalDigitalLabel, numberRhPrintLabel,
+            numberRhDigitalLabel, numberWorksPrintLabel, numberWorksDigitalLabel);
+        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        layout.setCaptionAsHtml(true);
+        layout.setSpacing(false);
+        layout.setMargin(false);
+        VaadinUtils.setMaxComponentsWidth(layout, grossTotalPrintLabel, grossTotalDigitalLabel, numberRhPrintLabel,
+            numberRhDigitalLabel, numberWorksPrintLabel, numberWorksDigitalLabel);
+        return layout;
+    }
+
+    private VerticalLayout initServiceFeeTotalLayout() {
+        VerticalLayout layout = new VerticalLayout(serviceFeeTotalPrintLabel, serviceFeeTotalDigitalLabel);
+        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        layout.setCaptionAsHtml(true);
+        layout.setSpacing(false);
+        layout.setMargin(false);
+        VaadinUtils.setMaxComponentsWidth(layout, serviceFeeTotalPrintLabel, serviceFeeTotalDigitalLabel);
+        return layout;
+    }
+
+    private VerticalLayout initNetTotalLayout() {
+        VerticalLayout layout = new VerticalLayout(netTotalPrintLabel, netTotalDigitalLabel);
+        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        layout.setCaptionAsHtml(true);
+        layout.setSpacing(false);
+        layout.setMargin(false);
+        VaadinUtils.setMaxComponentsWidth(layout, netTotalPrintLabel, netTotalDigitalLabel);
+        return layout;
+    }
+
     private void initMetadataPanel() {
-        //TODO {aliakh} implement
         metadataPanel = new Panel();
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "acl-scenarios-metadata");
+        metadataLayout = initMetadataLayout();
+        metadataLayout.addComponent(initScenarioActionLayout());
+        metadataLayout.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.setMaxComponentsWidth(metadataLayout);
+    }
+
+    // TODO {aliakh} rename AaclScenarioParameterWidget to ScenarioParameterWidget
+    private VerticalLayout initMetadataLayout() {
+        AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
+            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
+                Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
+        AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget =
+            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
+                Collections.emptyList(), () -> new PublicationTypeWeightsWindow(false));
+        AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget =
+            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
+                Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
+        descriptionLabel.setStyleName("v-label-white-space-normal");
+        VerticalLayout layout =
+            new VerticalLayout(ownerLabel, grossTotalLayout, serviceFeeTotalLayout, netTotalLayout, descriptionLabel,
+                selectionCriteriaLabel, licenseeClassMappingWidget, publicationTypeWeightWidget, usageAgeWeightWidget,
+                copiedFromLabel);
+        layout.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.setMaxComponentsWidth(layout);
+        return layout;
+    }
+
+    private VerticalLayout initScenarioActionLayout() {
+        VerticalLayout layout = new VerticalLayout(actionType, actionCreatedUser, actionCreatedDate, actionReason);
+        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        layout.setCaption(ForeignUi.getMessage("label.scenario.action"));
+        Button viewAllActions = new Button(ForeignUi.getMessage("button.caption.view_all_actions"));
+        viewAllActions.addStyleName(ValoTheme.BUTTON_LINK);
+        // TODO {aliakh} implement viewAllActions.addClickListener(event -> {});
+        layout.setSpacing(false);
+        layout.setMargin(false);
+        layout.addComponent(viewAllActions);
+        layout.setComponentAlignment(viewAllActions, Alignment.BOTTOM_RIGHT);
+        VaadinUtils.setMaxComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);
+        VaadinUtils.setButtonsAutoDisabled(viewAllActions);
+        return layout;
+    }
+
+    private void onItemChanged(AclScenario scenario) {
+        if (Objects.nonNull(scenario)) {
+            AclScenario scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
+            updateScenarioMetadata(scenarioWithAmounts);
+            ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
+            if (Objects.nonNull(lastAction)) {
+                actionType.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_type"),
+                    lastAction.getActionType()));
+                actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
+                    lastAction.getCreateUser()));
+                actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
+                    DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)));
+                actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
+                    lastAction.getActionReason()));
+            }
+            metadataPanel.setContent(metadataLayout);
+        } else {
+            metadataPanel.setContent(new Label());
+        }
+        //TODO {aliakh} implement mediator.selectedScenarioChanged(scenario);
+    }
+
+    // TODO {aliakh} implement displaying values from the scenario instead of hardcoded values
+    private void updateScenarioMetadata(AclScenario scenarioWithAmounts) {
+        ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenarioWithAmounts.getCreateUser()));
+        grossTotalLayout.setCaption(ForeignUi.getMessage("label.gross_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getGrossTotal())));
+        grossTotalPrintLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd_by_print",
+            formatAmount(BigDecimal.ZERO)));
+        grossTotalDigitalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd_by_digital",
+            formatAmount(BigDecimal.ZERO)));
+        numberRhPrintLabel.setValue(ForeignUi.getMessage("label.number_of_rh_print", 0));
+        numberRhDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_rh_digital", 0));
+        numberWorksPrintLabel.setValue(ForeignUi.getMessage("label.number_of_works_print", 0));
+        numberWorksDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_works_digital", 0));
+        serviceFeeTotalLayout.setCaption(ForeignUi.getMessage("label.service_fee_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
+        serviceFeeTotalPrintLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd_by_print",
+            formatAmount(BigDecimal.ZERO)));
+        serviceFeeTotalDigitalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd_by_digital",
+            formatAmount(BigDecimal.ZERO)));
+        netTotalLayout.setCaption(ForeignUi.getMessage("label.net_amount_in_usd",
+            formatAmount(scenarioWithAmounts.getNetTotal())));
+        netTotalPrintLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd_by_print",
+            formatAmount(BigDecimal.ZERO)));
+        netTotalDigitalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd_by_digital",
+            formatAmount(BigDecimal.ZERO)));
+        descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
+        selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
+        copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", ""));
+    }
+
+    private String formatScenarioLabel(String caption, Object value) {
+        return ForeignUi.getMessage("label.format.label_with_caption", caption, value);
+    }
+
+    private String formatAmount(BigDecimal amount) {
+        return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 }
