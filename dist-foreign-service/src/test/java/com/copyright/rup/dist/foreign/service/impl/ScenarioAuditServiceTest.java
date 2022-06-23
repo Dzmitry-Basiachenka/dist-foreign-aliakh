@@ -1,26 +1,29 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioAuditRepository;
-import com.copyright.rup.dist.foreign.repository.impl.ScenarioAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.List;
@@ -34,9 +37,15 @@ import java.util.List;
  *
  * @author Uladzislau_Shalamitski
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class ScenarioAuditServiceTest {
 
+    private static final String USER_NAME = "user@copyright.com";
     private static final String SCENARIO_UID = "2f9259de-b274-11e7-abc4-cec278b6b50a";
+    private static final String AUDIT_ITEM_UID = "fb8184a1-cacc-456c-96bf-0cd1ef36cb18";
+    private static final ScenarioActionTypeEnum SCENARIO_ACTION_TYPE = ScenarioActionTypeEnum.SUBMITTED;
+    private static final String SCENARIO_ACTION_REASON = "Submitted";
 
     private IScenarioAuditService scenarioAuditService;
     private IScenarioAuditRepository scenarioAuditRepository;
@@ -44,22 +53,22 @@ public class ScenarioAuditServiceTest {
     @Before
     public void setUp() {
         scenarioAuditService = new ScenarioAuditService();
-        scenarioAuditRepository = createMock(ScenarioAuditRepository.class);
-        Whitebox.setInternalState(scenarioAuditService, "scenarioAuditRepository", scenarioAuditRepository);
+        scenarioAuditRepository = createMock(IScenarioAuditRepository.class);
+        Whitebox.setInternalState(scenarioAuditService, scenarioAuditRepository);
     }
 
     @Test
     public void testLogAction() {
-        Capture<ScenarioAuditItem> scenarioAuditItemCapture = new Capture<>();
-        scenarioAuditRepository.insert(capture(scenarioAuditItemCapture));
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        mockStatic(RupPersistUtils.class);
+        expect(RupPersistUtils.generateUuid()).andReturn(AUDIT_ITEM_UID).once();
+        ScenarioAuditItem auditItem = buildScenarioAuditItem();
+        scenarioAuditRepository.insert(auditItem);
         expectLastCall().once();
-        replay(scenarioAuditRepository);
-        scenarioAuditService.logAction(SCENARIO_UID, ScenarioActionTypeEnum.SUBMITTED, "Submitted");
-        ScenarioAuditItem scenarioAuditItem = scenarioAuditItemCapture.getValue();
-        assertEquals("Submitted", scenarioAuditItem.getActionReason());
-        assertEquals(SCENARIO_UID, scenarioAuditItem.getScenarioId());
-        assertEquals(ScenarioActionTypeEnum.SUBMITTED, scenarioAuditItem.getActionType());
-        verify(scenarioAuditRepository);
+        replay(RupContextUtils.class, RupPersistUtils.class, scenarioAuditRepository);
+        scenarioAuditService.logAction(SCENARIO_UID, SCENARIO_ACTION_TYPE, SCENARIO_ACTION_REASON);
+        verify(RupContextUtils.class, RupPersistUtils.class, scenarioAuditRepository);
     }
 
     @Test
@@ -81,5 +90,16 @@ public class ScenarioAuditServiceTest {
         assertTrue(CollectionUtils.isNotEmpty(auditItems));
         assertEquals(2, CollectionUtils.size(auditItems));
         verify(scenarioAuditRepository);
+    }
+
+    private ScenarioAuditItem buildScenarioAuditItem() {
+        ScenarioAuditItem auditItem = new ScenarioAuditItem();
+        auditItem.setId(AUDIT_ITEM_UID);
+        auditItem.setScenarioId(SCENARIO_UID);
+        auditItem.setActionType(SCENARIO_ACTION_TYPE);
+        auditItem.setActionReason(SCENARIO_ACTION_REASON);
+        auditItem.setCreateUser(USER_NAME);
+        auditItem.setUpdateUser(USER_NAME);
+        return auditItem;
     }
 }
