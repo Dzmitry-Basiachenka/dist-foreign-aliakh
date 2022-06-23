@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
@@ -16,6 +17,8 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsW
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -26,6 +29,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -74,10 +79,25 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
+    private ListDataProvider<AclScenario> dataProvider;
+
+    /**
+     * Constructor.
+     *
+     * @param controller instance of {@link IAclScenariosController}
+     */
+    public AclScenariosWidget(IAclScenariosController controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void refresh() {
-        //TODO implement
+        List<AclScenario> scenarios = controller.getScenarios();
+        dataProvider = DataProvider.ofCollection(scenarios);
+        scenarioGrid.setDataProvider(dataProvider);
+        if (CollectionUtils.isNotEmpty(scenarios)) {
+            scenarioGrid.select(scenarios.get(0));
+        }
     }
 
     @Override
@@ -103,8 +123,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private void initGrid() {
-        //TODO {dbasiachenka} implement
-        scenarioGrid = new Grid<>();
+        dataProvider = DataProvider.ofCollection(controller.getScenarios());
+        scenarioGrid = new Grid<>(dataProvider);
         addColumns();
         scenarioGrid.setSizeFull();
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
@@ -113,7 +133,26 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private void addColumns() {
-        //TODO {dbasiachenka} implement
+        scenarioGrid.addColumn(AclScenario::getName)
+            .setCaption(ForeignUi.getMessage("table.column.name"))
+            .setComparator((scenario1, scenario2) -> scenario1.getName().compareToIgnoreCase(scenario2.getName()))
+            .setExpandRatio(1);
+        scenarioGrid.addColumn(AclScenario::getLicenseType)
+            .setCaption(ForeignUi.getMessage("table.column.license_type"))
+            .setWidth(110);
+        scenarioGrid.addColumn(AclScenario::getPeriodEndDate)
+            .setCaption(ForeignUi.getMessage("table.column.period"))
+            .setWidth(100);
+        scenarioGrid.addColumn(scenario -> scenario.isEditableFlag() ? "Y" : "N")
+            .setCaption(ForeignUi.getMessage("table.column.editable"))
+            .setWidth(100);
+        scenarioGrid.addColumn(scenario -> DateUtils.format(scenario.getCreateDate()))
+            .setCaption(ForeignUi.getMessage("table.column.created_date"))
+            .setComparator((scenario1, scenario2) -> scenario1.getCreateDate().compareTo(scenario2.getCreateDate()))
+            .setWidth(120);
+        scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
+            .setCaption(ForeignUi.getMessage("table.column.status"))
+            .setWidth(130);
     }
 
     private VerticalLayout initGrossTotalLayout() {

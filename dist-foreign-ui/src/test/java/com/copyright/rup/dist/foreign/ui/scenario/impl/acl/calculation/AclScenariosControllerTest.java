@@ -8,6 +8,8 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+
 /**
  * Verifies {@link AclScenariosController}.
  * <p>
@@ -24,6 +26,12 @@ public class AclScenariosControllerTest {
     @Before
     public void setUp() {
         aclScenariosController = new AclScenariosController();
+    }
+
+    @Test
+    public void testGetScenarios() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(), aclScenariosController.getScenarios());
     }
 
     @Test

@@ -9,6 +9,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Implementation of {@link IAclScenariosController}.
  * <p>
@@ -23,8 +26,14 @@ import org.springframework.stereotype.Component;
 public class AclScenariosController extends CommonController<IAclScenariosWidget> implements IAclScenariosController {
 
     @Override
+    public List<AclScenario> getScenarios() {
+        //TODO {dbasiachenka} implement
+        return Collections.emptyList();
+    }
+
+    @Override
     protected IAclScenariosWidget instantiateWidget() {
-        return new AclScenariosWidget();
+        return new AclScenariosWidget(this);
     }
 
     @Override
