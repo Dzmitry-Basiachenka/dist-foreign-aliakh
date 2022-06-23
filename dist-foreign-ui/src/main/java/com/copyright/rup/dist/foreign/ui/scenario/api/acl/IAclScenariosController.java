@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import java.util.List;
+
 /**
  * Interface for ACL scenarios controller.
  * <p>
@@ -26,4 +28,9 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return HTML filter representation for selected scenario.
      */
     String getCriteriaHtmlRepresentation();
+
+    /**
+     * @return list of all {@link AclScenario}s.
+     */
+    List<AclScenario> getScenarios();
 }
