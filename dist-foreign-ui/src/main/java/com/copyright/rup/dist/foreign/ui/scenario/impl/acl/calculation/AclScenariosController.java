@@ -1,15 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,10 +26,12 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AclScenariosController extends CommonController<IAclScenariosWidget> implements IAclScenariosController {
 
+    @Autowired
+    private IAclScenarioService aclScenarioService;
+
     @Override
     public List<AclScenario> getScenarios() {
-        //TODO {dbasiachenka} implement
-        return Collections.emptyList();
+        return aclScenarioService.getScenarios();
     }
 
     @Override
