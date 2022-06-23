@@ -1,0 +1,41 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclScenarioAuditMapper">
+
+    <resultMap id="scenarioAuditItemResultMap" type="ScenarioAuditItem" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_scenario_audit_uid"/>
+        <result property="scenarioId" column="df_acl_scenario_uid"/>
+        <result property="actionType" column="action_type_ind"/>
+        <result property="actionReason" column="action_reason"/>
+    </resultMap>
+
+    <sql id="scenarioAuditItemColumns">
+        df_acl_scenario_audit_uid,
+        df_acl_scenario_uid,
+        action_type_ind,
+        action_reason,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="ScenarioAuditItem">
+        insert into ${schema}.df_acl_scenario_audit(
+            <include refid="scenarioAuditItemColumns"/>
+        ) values (
+            #{id},
+            #{scenarioId},
+            #{actionType},
+            #{actionReason},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findByAclScenarioId" parameterType="string" resultMap="scenarioAuditItemResultMap">
+        select
+            <include refid="scenarioAuditItemColumns"/>
+        from ${schema}.df_acl_scenario_audit
+        where df_acl_scenario_uid = #{scenarioId}
+        order by created_datetime desc
+    </select>
+</mapper>
