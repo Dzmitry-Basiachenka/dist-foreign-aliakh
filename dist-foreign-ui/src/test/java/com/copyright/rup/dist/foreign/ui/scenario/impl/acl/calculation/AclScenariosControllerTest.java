@@ -32,4 +32,14 @@ public class AclScenariosControllerTest {
         assertNotNull(widget);
         assertEquals(AclScenariosWidget.class, widget.getClass());
     }
+
+    @Test
+    public void testGetScenarioWithAmountsAndLastAction() {
+        // TODO {aliakh} implement
+    }
+
+    @Test
+    public void testGetCriteriaHtmlRepresentation() {
+        // TODO {aliakh} implement
+    }
 }
