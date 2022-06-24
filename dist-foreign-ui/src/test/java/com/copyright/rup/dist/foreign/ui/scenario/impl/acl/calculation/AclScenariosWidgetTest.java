@@ -9,7 +9,6 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -58,6 +57,8 @@ public class AclScenariosWidgetTest {
         scenario = buildAclScenario();
         aclScenariosWidget = new AclScenariosWidget(controller);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         aclScenariosWidget.init();
         verify(controller);
@@ -125,7 +126,7 @@ public class AclScenariosWidgetTest {
 
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
-        assertNull(panel.getContent());
+        assertNotNull(panel.getContent());
     }
 
     private void verifyGrid(Grid grid) {

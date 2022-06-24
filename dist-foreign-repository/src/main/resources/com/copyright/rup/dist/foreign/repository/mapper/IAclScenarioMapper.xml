@@ -1,0 +1,36 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IAclScenarioMapper">
+
+    <resultMap id="aclScenarioResultMap" type="AclScenario" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_scenario_uid"/>
+        <result property="usageBatchId" column="df_acl_usage_batch_uid"/>
+        <result property="fundPoolId" column="df_acl_fund_pool_uid"/>
+        <result property="grantSetId" column="df_acl_grant_set_uid"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status_ind"/>
+        <result property="editableFlag" column="is_editable"/>
+        <result property="periodEndDate" column="period_end_date"/>
+        <result property="licenseType" column="license_type"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="aclScenarioResultMap">
+        select
+            df_acl_scenario_uid,
+            df_acl_usage_batch_uid,
+            df_acl_fund_pool_uid,
+            df_acl_grant_set_uid,
+            name,
+            description,
+            status_ind,
+            is_editable,
+            period_end_date,
+            license_type,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from ${schema}.df_acl_scenario
+        order by updated_datetime desc
+    </select>
+</mapper>

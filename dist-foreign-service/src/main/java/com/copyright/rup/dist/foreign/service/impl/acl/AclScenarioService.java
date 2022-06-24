@@ -1,11 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,9 +21,11 @@ import java.util.List;
 @Service
 public class AclScenarioService implements IAclScenarioService {
 
+    @Autowired
+    private IAclScenarioRepository aclScenarioRepository;
+
     @Override
     public List<AclScenario> getScenarios() {
-        //TODO {dbasiachenka} implement
-        return Collections.emptyList();
+        return aclScenarioRepository.findAll();
     }
 }
