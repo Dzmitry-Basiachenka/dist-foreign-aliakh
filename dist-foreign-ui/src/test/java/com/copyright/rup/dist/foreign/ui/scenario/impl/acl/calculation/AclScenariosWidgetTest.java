@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -67,8 +68,10 @@ public class AclScenariosWidgetTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals(1, aclScenariosWidget.getComponentCount());
-        Component component = aclScenariosWidget.getComponent(0);
+        assertEquals(2, aclScenariosWidget.getComponentCount());
+        Component buttonsLayout = aclScenariosWidget.getComponent(0);
+        verifyButtonsLayout(buttonsLayout, "Create");
+        Component component = aclScenariosWidget.getComponent(1);
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());

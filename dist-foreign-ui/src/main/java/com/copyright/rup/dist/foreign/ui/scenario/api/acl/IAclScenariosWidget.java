@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -12,5 +13,5 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Dzmitry Basiachenka
  */
-public interface IAclScenariosWidget extends IWidget<IAclScenariosController>, IRefreshable {
+public interface IAclScenariosWidget extends IWidget<IAclScenariosController>, IRefreshable, IMediatorProvider {
 }
