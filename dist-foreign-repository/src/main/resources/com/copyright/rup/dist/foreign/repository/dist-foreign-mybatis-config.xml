@@ -99,6 +99,7 @@
         <typeAlias alias="AclFundPool" type="com.copyright.rup.dist.foreign.domain.AclFundPool"/>
         <typeAlias alias="AclFundPoolDetail" type="com.copyright.rup.dist.foreign.domain.AclFundPoolDetail"/>
         <typeAlias alias="AclFundPoolDetailDto" type="com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto"/>
+        <typeAlias alias="AclScenario" type="com.copyright.rup.dist.foreign.domain.AclScenario"/>
     </typeAliases>
 
     <typeHandlers>
@@ -158,5 +159,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclFundPoolMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioAuditMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IAclScenarioMapper.xml"/>
     </mappers>
 </configuration>

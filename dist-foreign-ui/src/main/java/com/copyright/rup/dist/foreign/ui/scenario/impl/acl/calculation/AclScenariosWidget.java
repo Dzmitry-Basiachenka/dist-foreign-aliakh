@@ -95,17 +95,15 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         List<AclScenario> scenarios = controller.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid.setDataProvider(dataProvider);
-        if (CollectionUtils.isNotEmpty(scenarios)) {
-            scenarioGrid.select(scenarios.get(0));
-        }
+        selectFirstScenario(scenarios);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public IAclScenariosWidget init() {
         setSizeFull();
-        initGrid();
         initMetadataPanel();
+        initGrid();
         HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, metadataPanel);
         horizontalLayout.setSizeFull();
         horizontalLayout.setExpandRatio(scenarioGrid, 0.7f);
@@ -123,12 +121,14 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private void initGrid() {
-        dataProvider = DataProvider.ofCollection(controller.getScenarios());
+        List<AclScenario> scenarios = controller.getScenarios();
+        dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid = new Grid<>(dataProvider);
         addColumns();
         scenarioGrid.setSizeFull();
         scenarioGrid.getColumns().forEach(column -> column.setSortable(true));
         scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
+        selectFirstScenario(scenarios);
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
     }
 
@@ -292,5 +292,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private String formatAmount(BigDecimal amount) {
         return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
+    }
+
+    private void selectFirstScenario(List<AclScenario> scenarios) {
+        if (CollectionUtils.isNotEmpty(scenarios)) {
+            scenarioGrid.select(scenarios.get(0));
+        }
     }
 }
