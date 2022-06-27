@@ -1,3 +1,16 @@
+15.1.28
+-
+* B-72775 Tech Debt: FDA: update integration tests for WorksMatchingJob, GetRightsJob
+* B-72775 Tech Debt: FDA: improve UI unit tests
+* B-72776 FDA: Tech Debt: add database index by Period for AACL usage table 
+* B-72776 Tech Debt: FDA: reuse verify text field method from UI test class in UI unit tests 
+* B-72776 Tech Debt: FDA: update integration tests for GetRightsSentForRaJob 
+* B-72776 Tech Debt: FDA: check additional filters windows and remove empty Event Listeners 
+* B-72776 Tech Debt: FDA: reuse verify label method from UI test class in UI unit tests 
+* B-72776 Tech Debt: FDA: reuse verify load click listener, verify window, verify menu bar methods from UI test class in UI unit tests 
+* B-72776 Tech Debt: FDA: fix issue with not refreshable combo boxes during create AACL scenario 
+* B-72776 Tech Debt: FDA: update integration tests for SendToCrmJob 
+
 15.1.27
 -
 * CDP-1080 FDA: AACL: Add to scenario: Licensee Class Mapping window: Dropdown element in AGG LC ID column disappears in case selecting some value from it, but default
