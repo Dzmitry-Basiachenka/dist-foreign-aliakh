@@ -148,7 +148,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
         createButton.addClickListener(
             event -> Windows.showModalWindow(new CreateAclScenarioWindow(controller)));
-        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton);
+        Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+        //TODO {dbasiachenka} implement
+        viewButton.addClickListener(event -> {});
+        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
