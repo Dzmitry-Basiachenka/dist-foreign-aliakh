@@ -69,8 +69,7 @@ public class AclScenariosWidgetTest {
     @Test
     public void testComponentStructure() {
         assertEquals(2, aclScenariosWidget.getComponentCount());
-        Component buttonsLayout = aclScenariosWidget.getComponent(0);
-        verifyButtonsLayout(buttonsLayout, "Create");
+        verifyButtonsComponent(aclScenariosWidget.getComponent(0));
         Component component = aclScenariosWidget.getComponent(1);
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
@@ -144,5 +143,10 @@ public class AclScenariosWidgetTest {
             Triple.of("Status", 130.0, -1)
         ));
         assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
+    }
+
+    private void verifyButtonsComponent(Component buttonsLayout) {
+        verifyButtonsLayout(buttonsLayout, "Create", "View");
+        assertEquals("acl-scenario-buttons-layout", buttonsLayout.getId());
     }
 }
