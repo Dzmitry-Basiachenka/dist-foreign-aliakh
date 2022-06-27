@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
@@ -32,6 +33,8 @@ import java.util.List;
  * @author Dzmitry Basiachenka
  */
 public class AclScenarioServiceTest {
+
+    private static final String SCENARIO_UID = "732f1f1f-1d63-45a4-9f07-357cba3429fc";
 
     private IAclScenarioService aclScenarioService;
     private IAclScenarioRepository aclScenarioRepository;
@@ -60,9 +63,19 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository);
     }
 
+    @Test
+    public void testGetScenarioWithAmountsAndLastAction() {
+        AclScenarioDto scenario = new AclScenarioDto();
+        scenario.setId(SCENARIO_UID);
+        expect(aclScenarioRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        replay(aclScenarioRepository);
+        assertSame(scenario, aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
+        verify(aclScenarioRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
-        aclScenario.setId("732f1f1f-1d63-45a4-9f07-357cba3429fc");
+        aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("Description");
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
