@@ -6,8 +6,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.math.BigDecimal;
-
 /**
  * Represents ACL scenario.
  * <p>
@@ -28,10 +26,6 @@ public class AclScenario extends StoredEntity<String> {
     private boolean editableFlag;
     private Integer periodEndDate;
     private String licenseType;
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private ScenarioAuditItem auditItem;
 
     public String getUsageBatchId() {
         return usageBatchId;
@@ -105,38 +99,6 @@ public class AclScenario extends StoredEntity<String> {
         this.licenseType = licenseType;
     }
 
-    public BigDecimal getNetTotal() {
-        return netTotal;
-    }
-
-    public void setNetTotal(BigDecimal netTotal) {
-        this.netTotal = netTotal;
-    }
-
-    public BigDecimal getServiceFeeTotal() {
-        return serviceFeeTotal;
-    }
-
-    public void setServiceFeeTotal(BigDecimal serviceFeeTotal) {
-        this.serviceFeeTotal = serviceFeeTotal;
-    }
-
-    public BigDecimal getGrossTotal() {
-        return grossTotal;
-    }
-
-    public void setGrossTotal(BigDecimal grossTotal) {
-        this.grossTotal = grossTotal;
-    }
-
-    public ScenarioAuditItem getAuditItem() {
-        return auditItem;
-    }
-
-    public void setAuditItem(ScenarioAuditItem auditItem) {
-        this.auditItem = auditItem;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -157,10 +119,6 @@ public class AclScenario extends StoredEntity<String> {
             .append(status, that.status)
             .append(periodEndDate, that.periodEndDate)
             .append(licenseType, that.licenseType)
-            .append(netTotal, that.netTotal)
-            .append(serviceFeeTotal, that.serviceFeeTotal)
-            .append(grossTotal, that.grossTotal)
-            .append(auditItem, that.auditItem)
             .isEquals();
     }
 
@@ -177,10 +135,6 @@ public class AclScenario extends StoredEntity<String> {
             .append(editableFlag)
             .append(periodEndDate)
             .append(licenseType)
-            .append(netTotal)
-            .append(serviceFeeTotal)
-            .append(grossTotal)
-            .append(auditItem)
             .toHashCode();
     }
 
@@ -196,11 +150,7 @@ public class AclScenario extends StoredEntity<String> {
             .append("status", status)
             .append("editableFlag", editableFlag)
             .append("periodEndDate", periodEndDate)
-            .append("netTotal", netTotal)
             .append("licenseType", licenseType)
-            .append("serviceFeeTotal", serviceFeeTotal)
-            .append("grossTotal", grossTotal)
-            .append("auditItem", auditItem)
             .toString();
     }
 }

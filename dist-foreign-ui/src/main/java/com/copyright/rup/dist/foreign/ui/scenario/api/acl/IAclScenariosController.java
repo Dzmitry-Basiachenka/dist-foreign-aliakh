@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -25,7 +26,7 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @param scenario selected {@link AclScenario}
      * @return scenario {@link AclScenario}
      */
-    AclScenario getScenarioWithAmountsAndLastAction(AclScenario scenario);
+    AclScenarioDto getScenarioWithAmountsAndLastAction(AclScenario scenario);
 
     /**
      * @return HTML filter representation for selected scenario.

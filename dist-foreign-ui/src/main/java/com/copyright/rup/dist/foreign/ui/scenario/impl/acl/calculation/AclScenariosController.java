@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
@@ -52,8 +53,8 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
-    public AclScenario getScenarioWithAmountsAndLastAction(AclScenario scenario) {
-        return new AclScenario(); // TODO {aliakh} implement
+    public AclScenarioDto getScenarioWithAmountsAndLastAction(AclScenario scenario) {
+        return new AclScenarioDto(); // TODO {aliakh} implement
     }
 
     @Override

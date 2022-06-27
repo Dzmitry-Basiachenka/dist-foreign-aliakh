@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 
 import java.util.List;
 
@@ -29,4 +30,12 @@ public interface IAclScenarioRepository {
      * @return count of found {@link AclScenario}s
      */
     int findCountByName(String name);
+
+    /**
+     * Finds {@link AclScenarioDto} by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return instance of {@link AclScenarioDto}
+     */
+    AclScenarioDto findWithAmountsAndLastAction(String scenarioId);
 }

@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of {@link IRightsholderRepository} for MyBatis.
+ * Implementation of {@link IRightsholderRepository}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>

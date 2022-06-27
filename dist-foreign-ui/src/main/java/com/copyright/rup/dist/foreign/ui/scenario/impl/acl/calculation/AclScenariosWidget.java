@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -261,7 +262,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private void onItemChanged(AclScenario scenario) {
         if (Objects.nonNull(scenario)) {
-            AclScenario scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
+            AclScenarioDto scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
             updateScenarioMetadata(scenarioWithAmounts);
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {
@@ -282,7 +283,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     // TODO {aliakh} implement displaying values from the scenario instead of hardcoded values
-    private void updateScenarioMetadata(AclScenario scenarioWithAmounts) {
+    private void updateScenarioMetadata(AclScenarioDto scenarioWithAmounts) {
         ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenarioWithAmounts.getCreateUser()));
         grossTotalLayout.setCaption(ForeignUi.getMessage("label.gross_amount_in_usd",
             formatAmount(scenarioWithAmounts.getGrossTotal())));
