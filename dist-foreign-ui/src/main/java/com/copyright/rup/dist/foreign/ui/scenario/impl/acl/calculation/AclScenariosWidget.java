@@ -14,8 +14,11 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWi
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
+import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -80,6 +83,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ListDataProvider<AclScenario> dataProvider;
+    private Button createButton;
 
     /**
      * Constructor.
@@ -104,15 +108,23 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         setSizeFull();
         initMetadataPanel();
         initGrid();
+        HorizontalLayout buttonsLayout = initButtons();
         HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, metadataPanel);
         horizontalLayout.setSizeFull();
         horizontalLayout.setExpandRatio(scenarioGrid, 0.7f);
         horizontalLayout.setExpandRatio(metadataPanel, 0.3f);
-        addComponents(horizontalLayout);
+        addComponents(buttonsLayout, horizontalLayout);
         setExpandRatio(horizontalLayout, 1);
         setSpacing(false);
         setMargin(false);
         return this;
+    }
+
+    @Override
+    public IMediator initMediator() {
+        AclScenariosMediator mediator = new AclScenariosMediator();
+        mediator.setCreateButton(createButton);
+        return mediator;
     }
 
     @Override
@@ -130,6 +142,16 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid.addSelectionListener(event -> onItemChanged(event.getFirstSelectedItem().orElse(null)));
         selectFirstScenario(scenarios);
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
+    }
+
+    private HorizontalLayout initButtons() {
+        createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
+        createButton.addClickListener(
+            event -> Windows.showModalWindow(new CreateAclScenarioWindow(controller)));
+        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton);
+        buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
+        VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
+        return buttonsLayout;
     }
 
     private void addColumns() {
