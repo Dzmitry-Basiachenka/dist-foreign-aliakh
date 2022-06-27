@@ -91,4 +91,12 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     public void deleteById(String fundPoolId) {
         delete("IAclFundPoolMapper.deleteById", Objects.requireNonNull(fundPoolId));
     }
+
+    @Override
+    public List<AclFundPool> findFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("licenseType", Objects.requireNonNull(licenseType));
+        parameters.put("period", Objects.requireNonNull(period));
+        return selectList("IAclFundPoolMapper.findFundPoolsByLicenseTypeAndPeriod", parameters);
+    }
 }

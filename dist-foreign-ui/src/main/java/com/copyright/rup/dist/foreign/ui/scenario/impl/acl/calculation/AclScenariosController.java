@@ -4,7 +4,10 @@ import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +34,12 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Autowired
     private IAclScenarioService aclScenarioService;
-
+    @Autowired
+    private IAclUsageBatchService usageBatchService;
+    @Autowired
+    private IAclGrantSetService grantSetService;
+    @Autowired
+    private IAclFundPoolService fundPoolService;
 
     @Override
     public List<AclScenario> getScenarios() {
@@ -56,33 +63,28 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public boolean aclScenarioExists(String scenarioName) {
-        //TODO will implement later
-        return false;
+        return aclScenarioService.aclScenarioExists(scenarioName);
     }
 
     @Override
     public List<AclUsageBatch> getUsageBatchesByPeriod(Integer period, boolean editableFlag) {
-        //todo will be implemented later
-        return new ArrayList<>();
+        return usageBatchService.getUsageBatchesByPeriod(period, editableFlag);
     }
 
     @Override
     public List<AclFundPool> getFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period) {
-        //todo will be implemented later
-        return new ArrayList<>();
+        return fundPoolService.getFundPoolsByLicenseTypeAndPeriod(licenseType, period);
     }
 
     @Override
     public List<AclGrantSet> getGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period,
                                                                 boolean editableFlag) {
-        //todo will be implemented later
-        return new ArrayList<>();
+        return grantSetService.getGrantSetsByLicenseTypeAndPeriod(licenseType, period, editableFlag);
     }
 
     @Override
-    public List<Integer> getAclUsagePeriods() {
-        //todo will be implemented later
-        return new ArrayList<>();
+    public List<Integer> getAllPeriods() {
+        return usageBatchService.getPeriods();
     }
 
     @Override

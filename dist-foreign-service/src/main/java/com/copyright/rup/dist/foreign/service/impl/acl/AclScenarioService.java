@@ -28,4 +28,9 @@ public class AclScenarioService implements IAclScenarioService {
     public List<AclScenario> getScenarios() {
         return aclScenarioRepository.findAll();
     }
+
+    @Override
+    public boolean aclScenarioExists(String scenarioName) {
+        return 0 < aclScenarioRepository.findCountByName(scenarioName);
+    }
 }

@@ -44,4 +44,20 @@ public interface IAclUsageBatchRepository {
      * @return list of {@link AclUsageBatch}es
      */
     List<AclUsageBatch> findAll();
+
+    /**
+     * Finds list of all ACl usage batches by period.
+     *
+     * @param period       period end date
+     * @param editableFlag editable flag
+     * @return list of {@link AclUsageBatch}s
+     */
+    List<AclUsageBatch> findUsageBatchesByPeriod(Integer period, boolean editableFlag);
+
+    /**
+     * Finds list of periods from ACL usages.
+     *
+     * @return list of periods
+     */
+    List<Integer> findPeriods();
 }

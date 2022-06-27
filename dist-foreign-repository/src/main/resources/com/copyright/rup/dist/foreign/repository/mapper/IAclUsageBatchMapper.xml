@@ -55,4 +55,19 @@
         from ${schema}.df_acl_usage_batch
         order by updated_datetime desc
     </select>
+
+    <select id="findUsageBatchesByPeriod" resultMap="aclUsageBatchResultMap">
+        select
+        <include refid="aclUsageBatchColumns"/>
+        from ${schema}.df_acl_usage_batch
+        where distribution_period = #{period}
+            and is_editable = #{editableFlag}
+        order by updated_datetime desc
+    </select>
+
+    <select id="findPeriods" resultType="int">
+        select distinct distribution_period
+        from ${schema}.df_acl_usage_batch
+        order by distribution_period desc
+    </select>
 </mapper>

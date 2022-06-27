@@ -60,6 +60,13 @@ public class AclScenarioRepositoryIntegrationTest {
         verifyAclScenario(scenario2, scenarios.get(1));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    public void testFindCountByName() {
+        assertEquals(1, aclScenarioRepository.findCountByName("ACL Scenario 202212"));
+        assertEquals(0, aclScenarioRepository.findCountByName("ACL Scenario"));
+    }
+
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
                                          String name, String description, ScenarioStatusEnum status, boolean editable,
                                          Integer periodEndDate, String licenseType, String user, String date) {

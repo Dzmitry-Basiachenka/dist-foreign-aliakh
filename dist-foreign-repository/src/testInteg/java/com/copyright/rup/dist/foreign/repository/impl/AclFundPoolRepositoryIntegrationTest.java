@@ -129,6 +129,16 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-fund-pools-by-period-and-license-type.groovy")
+    public void testFindFundPoolsByLicenseTypeAndPeriod() {
+        AclFundPool expectedFundPool = buildAclFundPool("7c3b7ccf-593a-43a5-86d6-83471a073bdc",
+            "ACL Fund Pool 202212", 202212, LICENSE_TYPE, true, new BigDecimal("0.00"), new BigDecimal("0.00"));
+        List<AclFundPool> fundPools = repository.findFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212);
+        assertEquals(1, fundPools.size());
+        verifyAclFundPool(expectedFundPool, fundPools.get(0));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
     public void testFindPeriods() {
         List<Integer> expectedPeriods = Arrays.asList(202212, 202206);

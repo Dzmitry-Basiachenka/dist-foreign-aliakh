@@ -37,4 +37,20 @@ public interface IAclUsageBatchService {
      * @return list of all {@link AclUsageBatch}es
      */
     List<AclUsageBatch> getAll();
+
+    /**
+     * Gets list of all ACl usage batches by period.
+     *
+     * @param period       period end date
+     * @param editableFlag editable flag
+     * @return list of {@link AclUsageBatch}s
+     */
+    List<AclUsageBatch> getUsageBatchesByPeriod(Integer period, boolean editableFlag);
+
+    /**
+     * Gets all available periods.
+     *
+     * @return list of periods
+     */
+    List<Integer> getPeriods();
 }

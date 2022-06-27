@@ -110,4 +110,9 @@ public class AclFundPoolService implements IAclFundPoolService {
         fundPoolRepository.deleteById(fundPool.getId());
         LOGGER.info("Delete ACL fund fool. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
     }
+
+    @Override
+    public List<AclFundPool> getFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period) {
+        return fundPoolRepository.findFundPoolsByLicenseTypeAndPeriod(licenseType, period);
+    }
 }

@@ -3,9 +3,13 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
+
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,5 +42,18 @@ public class AclUsageBatchRepository extends BaseRepository implements IAclUsage
     @Override
     public List<AclUsageBatch> findAll() {
         return selectList("IAclUsageBatchMapper.findAll");
+    }
+
+    @Override
+    public List<AclUsageBatch> findUsageBatchesByPeriod(Integer period, boolean editableFlag) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("editableFlag", editableFlag);
+        return selectList("IAclUsageBatchMapper.findUsageBatchesByPeriod", parameters);
+    }
+
+    @Override
+    public List<Integer> findPeriods() {
+        return selectList("IAclUsageBatchMapper.findPeriods");
     }
 }

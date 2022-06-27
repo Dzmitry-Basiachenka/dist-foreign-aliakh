@@ -76,7 +76,7 @@ public class CreateAclScenarioWindow extends Window {
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IAclScenarioController}
+     * @param controller instance of {@link IAclScenariosController}
      */
     public CreateAclScenarioWindow(IAclScenariosController controller) {
         this.controller = controller;
@@ -134,7 +134,7 @@ public class CreateAclScenarioWindow extends Window {
     private void initPeriodComboBox() {
         periodComboBox = new ComboBox<>(ForeignUi.getMessage("label.period"));
         VaadinUtils.setMaxComponentsWidth(periodComboBox);
-        periodComboBox.setItems(controller.getAclUsagePeriods());
+        periodComboBox.setItems(controller.getAllPeriods());
         periodComboBox.addValueChangeListener(event -> populateComboBoxes());
         periodComboBox.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(periodComboBox)

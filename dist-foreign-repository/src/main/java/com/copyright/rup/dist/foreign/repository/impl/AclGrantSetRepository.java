@@ -3,9 +3,13 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.repository.api.IAclGrantSetRepository;
+
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -48,5 +52,15 @@ public class AclGrantSetRepository extends BaseRepository implements IAclGrantSe
     @Override
     public void deleteById(String grantSetId) {
         delete("IAclGrantSetMapper.deleteById", Objects.requireNonNull(grantSetId));
+    }
+
+    @Override
+    public List<AclGrantSet> findGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period,
+                                                                 boolean editableFlag) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("licenseType", Objects.requireNonNull(licenseType));
+        parameters.put("period", Objects.requireNonNull(period));
+        parameters.put("editableFlag", editableFlag);
+        return selectList("IAclGrantSetMapper.findGrantSetsByLicenseTypeAndPeriod", parameters);
     }
 }

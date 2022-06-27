@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -48,6 +49,14 @@ public class AclScenarioServiceTest {
         expect(aclScenarioRepository.findAll()).andReturn(scenarios).once();
         replay(aclScenarioRepository);
         assertSame(scenarios, aclScenarioService.getScenarios());
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testAclScenarioExists() {
+        expect(aclScenarioRepository.findCountByName("ACL Scenario 2022")).andReturn(1).once();
+        replay(aclScenarioRepository);
+        assertTrue(aclScenarioService.aclScenarioExists("ACL Scenario 2022"));
         verify(aclScenarioRepository);
     }
 

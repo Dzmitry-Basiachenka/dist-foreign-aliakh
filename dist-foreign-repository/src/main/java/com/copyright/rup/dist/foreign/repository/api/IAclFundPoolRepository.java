@@ -109,4 +109,13 @@ public interface IAclFundPoolRepository {
      * @param fundPoolId id of the {@link AclFundPool}
      */
     void deleteById(String fundPoolId);
+
+    /**
+     * Finds list of all ACl fund pools by license type and period.
+     *
+     * @param licenseType license type
+     * @param period      period end date
+     * @return list of {@link AclFundPool}s
+     */
+    List<AclFundPool> findFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period);
 }

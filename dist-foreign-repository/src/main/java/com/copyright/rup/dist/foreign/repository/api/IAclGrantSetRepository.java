@@ -58,4 +58,14 @@ public interface IAclGrantSetRepository {
      * @param grantSetId id of the {@link AclGrantSet}
      */
     void deleteById(String grantSetId);
+
+    /**
+     * Finds list of all ACl grant sets by license type and period.
+     *
+     * @param licenseType  license type
+     * @param period       period end date
+     * @param editableFlag editable flag
+     * @return list of {@link AclGrantSet}s
+     */
+    List<AclGrantSet> findGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period, boolean editableFlag);
 }

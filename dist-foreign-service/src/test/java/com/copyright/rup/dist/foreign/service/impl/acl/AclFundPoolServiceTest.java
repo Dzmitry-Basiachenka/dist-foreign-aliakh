@@ -165,6 +165,15 @@ public class AclFundPoolServiceTest {
         verify(RupContextUtils.class, fundPoolRepository);
     }
 
+    @Test
+    public void testGetFundPoolsByLicenseTypeAndPeriod() {
+        List<AclFundPool> fundPools = Collections.singletonList(buildFundPool());
+        expect(fundPoolRepository.findFundPoolsByLicenseTypeAndPeriod("ACl", 202212)).andReturn(fundPools).once();
+        replay(fundPoolRepository);
+        assertSame(fundPools, service.getFundPoolsByLicenseTypeAndPeriod("ACl", 202212));
+        verify(fundPoolRepository);
+    }
+
     private AclFundPoolDetail buildFundPoolDetail() {
         AclFundPoolDetail aclFundPoolDetail = new AclFundPoolDetail();
         aclFundPoolDetail.setFundPoolId("4f01a2fc-c5d4-4738-9715-c7dafc0c1fad");

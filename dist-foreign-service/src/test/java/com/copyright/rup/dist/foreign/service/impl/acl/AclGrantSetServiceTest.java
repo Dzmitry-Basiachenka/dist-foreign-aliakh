@@ -145,6 +145,16 @@ public class AclGrantSetServiceTest {
         verify(RupContextUtils.class, aclGrantDetailService, aclGrantSetRepository);
     }
 
+    @Test
+    public void testGetGrantSetsByLicenseTypeAndPeriod() {
+        List<AclGrantSet> grantSets = Collections.singletonList(buildAclGrantSet());
+        expect(aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod("ACL", 202212, true)).andReturn(grantSets)
+            .once();
+        replay(aclGrantSetRepository);
+        assertSame(grantSets, aclGrantSetService.getGrantSetsByLicenseTypeAndPeriod("ACL", 202212, true));
+        verify(aclGrantSetRepository);
+    }
+
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
         grantSet.setName(ACL_GRANT_SET_NAME);
