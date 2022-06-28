@@ -60,10 +60,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private final Label numberRhPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private final Label numberRhDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private final Label numberWorksPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private final Label numberWorksDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberOfRhsPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberOfRhsDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberOfWorksPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label numberOfWorksDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final VerticalLayout grossTotalLayout = initGrossTotalLayout();
     private final Label serviceFeeTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label serviceFeeTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -182,14 +182,14 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private VerticalLayout initGrossTotalLayout() {
-        VerticalLayout layout = new VerticalLayout(grossTotalPrintLabel, grossTotalDigitalLabel, numberRhPrintLabel,
-            numberRhDigitalLabel, numberWorksPrintLabel, numberWorksDigitalLabel);
+        VerticalLayout layout = new VerticalLayout(grossTotalPrintLabel, grossTotalDigitalLabel, numberOfRhsPrintLabel,
+            numberOfRhsDigitalLabel, numberOfWorksPrintLabel, numberOfWorksDigitalLabel);
         VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
-        VaadinUtils.setMaxComponentsWidth(layout, grossTotalPrintLabel, grossTotalDigitalLabel, numberRhPrintLabel,
-            numberRhDigitalLabel, numberWorksPrintLabel, numberWorksDigitalLabel);
+        VaadinUtils.setMaxComponentsWidth(layout, grossTotalPrintLabel, grossTotalDigitalLabel, numberOfRhsPrintLabel,
+            numberOfRhsDigitalLabel, numberOfWorksPrintLabel, numberOfWorksDigitalLabel);
         return layout;
     }
 
@@ -292,10 +292,14 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             formatAmount(scenario.getGrossTotalPrint())));
         grossTotalDigitalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd_by_digital",
             formatAmount(scenario.getGrossTotalDigital())));
-        numberRhPrintLabel.setValue(ForeignUi.getMessage("label.number_of_rh_print", 0));
-        numberRhDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_rh_digital", 0));
-        numberWorksPrintLabel.setValue(ForeignUi.getMessage("label.number_of_works_print", 0));
-        numberWorksDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_works_digital", 0));
+        numberOfRhsPrintLabel.setValue(ForeignUi.getMessage("label.number_of_rhs_print",
+            scenario.getNumberOfRhsPrint()));
+        numberOfRhsDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_rhs_digital",
+            scenario.getNumberOfRhsDigital()));
+        numberOfWorksPrintLabel.setValue(ForeignUi.getMessage("label.number_of_works_print",
+            scenario.getNumberOfWorksPrint()));
+        numberOfWorksDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_works_digital",
+            scenario.getNumberOfWorksDigital()));
         serviceFeeTotalLayout.setCaption(ForeignUi.getMessage("label.service_fee_amount_in_usd",
             formatAmount(scenario.getServiceFeeTotal())));
         serviceFeeTotalPrintLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd_by_print",
