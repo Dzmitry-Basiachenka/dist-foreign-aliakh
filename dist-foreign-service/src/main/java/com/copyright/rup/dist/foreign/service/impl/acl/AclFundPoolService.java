@@ -115,4 +115,9 @@ public class AclFundPoolService implements IAclFundPoolService {
     public List<AclFundPool> getFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period) {
         return fundPoolRepository.findFundPoolsByLicenseTypeAndPeriod(licenseType, period);
     }
+
+    @Override
+    public AclFundPool getById(String fundPoolId) {
+        return fundPoolRepository.findById(fundPoolId);
+    }
 }

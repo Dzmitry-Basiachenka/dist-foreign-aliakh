@@ -53,4 +53,12 @@ public interface IAclUsageBatchService {
      * @return list of periods
      */
     List<Integer> getPeriods();
+
+    /**
+     * Gets {@link AclUsageBatch} by its id.
+     *
+     * @param usageBatchId ACl usage batch id
+     * @return instance of {@link AclUsageBatch} or {@code null} if none exists
+     */
+    AclUsageBatch getById(String usageBatchId);
 }

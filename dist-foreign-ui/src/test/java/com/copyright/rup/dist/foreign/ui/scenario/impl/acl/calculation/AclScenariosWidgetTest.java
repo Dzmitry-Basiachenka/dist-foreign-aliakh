@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -29,6 +30,7 @@ import com.vaadin.ui.Panel;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -50,7 +52,7 @@ public class AclScenariosWidgetTest {
     private static final String SCENARIO_UID = "29ca6de6-0496-49e8-8ff4-334ef1bab597";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
-    private AclScenariosWidget aclScenariosWidget;
+    private AclScenariosWidget scenariosWidget;
     private IAclScenariosController controller;
     private AclScenario scenario;
 
@@ -58,21 +60,21 @@ public class AclScenariosWidgetTest {
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         scenario = buildAclScenario();
-        aclScenariosWidget = new AclScenariosWidget(controller);
+        scenariosWidget = new AclScenariosWidget(controller);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
-        aclScenariosWidget.init();
+        scenariosWidget.init();
         verify(controller);
         reset(controller);
     }
 
     @Test
     public void testComponentStructure() {
-        assertEquals(2, aclScenariosWidget.getComponentCount());
-        verifyButtonsComponent(aclScenariosWidget.getComponent(0));
-        Component component = aclScenariosWidget.getComponent(1);
+        assertEquals(2, scenariosWidget.getComponentCount());
+        verifyButtonsComponent(scenariosWidget.getComponent(0));
+        Component component = scenariosWidget.getComponent(1);
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
@@ -90,7 +92,7 @@ public class AclScenariosWidgetTest {
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
-        aclScenariosWidget.refresh();
+        scenariosWidget.refresh();
         verify(controller);
     }
 
@@ -106,12 +108,22 @@ public class AclScenariosWidgetTest {
 
     @Test
     public void testGetSelectedScenario() {
-        // TODO {aliakh} implement
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, "scenarioGrid", grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        replay(grid);
+        assertEquals(scenario, scenariosWidget.getSelectedScenario());
+        verify(grid);
     }
 
     @Test
     public void testGetNotSelectedScenario() {
-        // TODO {aliakh} implement
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, "scenarioGrid", grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.emptySet()).once();
+        replay(grid);
+        assertNull(scenariosWidget.getSelectedScenario());
+        verify(grid);
     }
 
     private AclScenario buildAclScenario() {

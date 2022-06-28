@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -185,11 +184,11 @@ public class SalScenariosControllerTest {
         scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
         expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID_1)).andReturn(scenarioUsageFilter).once();
         replay(scenariosWidget, scenarioUsageFilterService);
-        String result = scenariosController.getCriteriaHtmlRepresentation();
-        assertTrue(result.contains("<b>Selection Criteria:</b>"));
-        assertTrue(result.contains("<li><b><i>Product Family </i></b>(SAL)</li>"));
-        assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
-        assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
+        assertEquals("<b>Selection Criteria:</b><ul>" +
+            "<li><b><i>Product Family </i></b>(SAL)</li>" +
+            "<li><b><i>Batch in </i></b>(BatchName)</li>" +
+            "<li><b><i>Status </i></b>(ELIGIBLE)</li>" +
+            "</ul>", scenariosController.getCriteriaHtmlRepresentation());
         verify(scenariosWidget, scenarioUsageFilterService);
     }
 

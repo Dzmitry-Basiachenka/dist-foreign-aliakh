@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -277,15 +276,14 @@ public class FasScenariosControllerTest {
             ImmutableMap.of(1000000001L, buildRightsholder(1000000001L, "Rothchild Consultants"), 1000000002L,
                 buildRightsholder(1000000002L, "Royal Society of Victoria"))).once();
         replay(scenariosWidget, scenarioUsageFilterService, rightsholderService);
-        String result = scenariosController.getCriteriaHtmlRepresentation();
-        assertTrue(result.contains("<b>Selection Criteria:</b>"));
-        assertTrue(result.contains("<li><b><i>Product Family </i></b>(FAS)</li>"));
-        assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
-        assertTrue(result.contains("<li><b><i>RRO in </i></b>(1000000001: Rothchild Consultants, " +
-            "1000000002: Royal Society of Victoria)</li>"));
-        assertTrue(result.contains("<li><b><i>Payment Date To </i></b>(01/01/2010)</li>"));
-        assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
-        assertTrue(result.contains("<li><b><i>Fiscal Year To </i></b>(2018)</li>"));
+        assertEquals("<b>Selection Criteria:</b>" +
+            "<ul><li><b><i>Product Family </i></b>(FAS)</li>" +
+            "<li><b><i>Batch in </i></b>(BatchName)</li>" +
+            "<li><b><i>RRO in </i></b>(1000000001: Rothchild Consultants, 1000000002: Royal Society of Victoria)</li>" +
+            "<li><b><i>Payment Date To </i></b>(01/01/2010)</li>" +
+            "<li><b><i>Status </i></b>(ELIGIBLE)</li>" +
+            "<li><b><i>Fiscal Year To </i></b>(2018)</li>" +
+            "</ul>", scenariosController.getCriteriaHtmlRepresentation());
         verify(scenariosWidget, scenarioUsageFilterService, rightsholderService);
     }
 

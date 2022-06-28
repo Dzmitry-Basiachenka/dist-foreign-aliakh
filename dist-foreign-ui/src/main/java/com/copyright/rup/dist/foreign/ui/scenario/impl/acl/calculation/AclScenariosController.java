@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IAclScenariosController}.
@@ -59,7 +61,19 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public String getCriteriaHtmlRepresentation() {
-        return ""; // TODO {aliakh} implement
+        AclScenario scenario = getWidget().getSelectedScenario();
+        StringBuilder sb = new StringBuilder(ForeignUi.getMessage("label.criteria"));
+        if (Objects.nonNull(scenario)) {
+            sb.append("<ul>");
+            appendCriterionMessage(sb, "label.usage_batch",
+                usageBatchService.getById(scenario.getUsageBatchId()).getName());
+            appendCriterionMessage(sb, "label.grant_set",
+                grantSetService.getById(scenario.getGrantSetId()).getName());
+            appendCriterionMessage(sb, "label.fund_pool",
+                fundPoolService.getById(scenario.getFundPoolId()).getName());
+            sb.append("</ul>");
+        }
+        return sb.toString();
     }
 
     @Override
@@ -91,5 +105,9 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public void createAclScenario(AclScenario aclScenario) {
         //todo will be implemented later
+    }
+
+    private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {
+        builder.append(String.format("<li><b><i>%s </i></b>(%s)</li>", ForeignUi.getMessage(criterionName), values));
     }
 }

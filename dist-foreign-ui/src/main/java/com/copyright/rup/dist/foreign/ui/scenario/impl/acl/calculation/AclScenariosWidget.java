@@ -133,6 +133,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         this.controller = controller;
     }
 
+    @Override
+    public AclScenario getSelectedScenario() {
+        return scenarioGrid.getSelectedItems().stream().findFirst().orElse(null);
+    }
+
     private void initGrid() {
         List<AclScenario> scenarios = controller.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
@@ -216,7 +221,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private void initMetadataPanel() {
         metadataPanel = new Panel();
         metadataPanel.setSizeFull();
-        VaadinUtils.addComponentStyle(metadataPanel, "acl-scenarios-metadata");
+        VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = initMetadataLayout();
         metadataLayout.addComponent(initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
@@ -235,6 +240,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
                 Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
+        selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout layout =
             new VerticalLayout(ownerLabel, grossTotalLayout, serviceFeeTotalLayout, netTotalLayout, descriptionLabel,
                 selectionCriteriaLabel, licenseeClassMappingWidget, publicationTypeWeightWidget, usageAgeWeightWidget,
@@ -250,7 +256,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         layout.setCaption(ForeignUi.getMessage("label.scenario.action"));
         Button viewAllActions = new Button(ForeignUi.getMessage("button.caption.view_all_actions"));
         viewAllActions.addStyleName(ValoTheme.BUTTON_LINK);
-        // TODO {aliakh} implement viewAllActions.addClickListener(event -> {});
+        // TODO add viewAllActions.addClickListener(event -> {...}) when ACL scenario history is implemented
         layout.setSpacing(false);
         layout.setMargin(false);
         layout.addComponent(viewAllActions);
@@ -283,7 +289,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         //TODO {aliakh} implement mediator.selectedScenarioChanged(scenario);
     }
 
-    // TODO {aliakh} implement displaying values from the scenario instead of hardcoded values
     private void updateScenarioMetadata(AclScenarioDto scenario) {
         ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
         grossTotalLayout.setCaption(ForeignUi.getMessage("label.gross_amount_in_usd",
@@ -314,7 +319,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             formatAmount(scenario.getNetTotalDigital())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
         selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
-        copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", ""));
+        // TODO use the real value when field "Copy from" is implemented in the ACL scenario creation dialog
+        copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", StringUtils.EMPTY));
     }
 
     private String formatScenarioLabel(String caption, Object value) {

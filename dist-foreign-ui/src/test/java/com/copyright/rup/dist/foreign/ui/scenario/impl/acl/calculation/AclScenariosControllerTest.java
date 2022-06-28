@@ -47,6 +47,7 @@ public class AclScenariosControllerTest {
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
     private static final String LICENSE_TYPE = "ACL";
 
+    private IAclScenariosWidget scenariosWidget;
     private AclScenariosController aclScenariosController;
     private IAclScenarioService aclScenarioService;
     private IAclUsageBatchService usageBatchService;
@@ -56,10 +57,12 @@ public class AclScenariosControllerTest {
     @Before
     public void setUp() {
         aclScenariosController = new AclScenariosController();
+        scenariosWidget = createMock(IAclScenariosWidget.class);
         aclScenarioService = createMock(IAclScenarioService.class);
         usageBatchService = createMock(IAclUsageBatchService.class);
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
+        Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
         Whitebox.setInternalState(aclScenariosController, grantSetService);
@@ -94,7 +97,27 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetCriteriaHtmlRepresentation() {
-        // TODO {aliakh} implement
+        AclScenario scenario = new AclScenario();
+        scenario.setUsageBatchId("c5df0a33-c734-4b56-acbe-468142c0fde1");
+        scenario.setGrantSetId("34503049-9022-4c81-a70f-f8d5ff68602f");
+        scenario.setFundPoolId("416ed2e4-b2e6-4a70-96fe-2182c4dc0929");
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        AclUsageBatch usageBatch = new AclUsageBatch();
+        usageBatch.setName("ACL Usage Batch");
+        expect(usageBatchService.getById(scenario.getUsageBatchId())).andReturn(usageBatch).once();
+        AclGrantSet grantSet = new AclGrantSet();
+        grantSet.setName("ACL Grant Set");
+        expect(grantSetService.getById(scenario.getGrantSetId())).andReturn(grantSet).once();
+        AclFundPool fundPool = new AclFundPool();
+        fundPool.setName("ACL Fund Pool");
+        expect(fundPoolService.getById(scenario.getFundPoolId())).andReturn(fundPool).once();
+        replay(scenariosWidget, usageBatchService, grantSetService, fundPoolService);
+        assertEquals("<b>Selection Criteria:</b><ul>" +
+            "<li><b><i>Usage Batch </i></b>(ACL Usage Batch)</li>" +
+            "<li><b><i>Grant Set </i></b>(ACL Grant Set)</li>" +
+            "<li><b><i>Fund Pool </i></b>(ACL Fund Pool)</li>" +
+            "</ul>", aclScenariosController.getCriteriaHtmlRepresentation());
+        verify(scenariosWidget, usageBatchService, grantSetService, fundPoolService);
     }
 
     @Test
