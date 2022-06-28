@@ -26,6 +26,10 @@ public class AclScenarioDto extends AclScenario {
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private int numberOfRhsPrint;
+    private int numberOfRhsDigital;
+    private int numberOfWorksPrint;
+    private int numberOfWorksDigital;
     private ScenarioAuditItem auditItem;
 
     public BigDecimal getGrossTotal() {
@@ -100,6 +104,38 @@ public class AclScenarioDto extends AclScenario {
         this.netTotalDigital = netTotalDigital;
     }
 
+    public int getNumberOfRhsPrint() {
+        return numberOfRhsPrint;
+    }
+
+    public void setNumberOfRhsPrint(int numberOfRhsPrint) {
+        this.numberOfRhsPrint = numberOfRhsPrint;
+    }
+
+    public int getNumberOfRhsDigital() {
+        return numberOfRhsDigital;
+    }
+
+    public void setNumberOfRhsDigital(int numberOfRhsDigital) {
+        this.numberOfRhsDigital = numberOfRhsDigital;
+    }
+
+    public int getNumberOfWorksPrint() {
+        return numberOfWorksPrint;
+    }
+
+    public void setNumberOfWorksPrint(int numberOfWorksPrint) {
+        this.numberOfWorksPrint = numberOfWorksPrint;
+    }
+
+    public int getNumberOfWorksDigital() {
+        return numberOfWorksDigital;
+    }
+
+    public void setNumberOfWorksDigital(int numberOfWorksDigital) {
+        this.numberOfWorksDigital = numberOfWorksDigital;
+    }
+
     public ScenarioAuditItem getAuditItem() {
         return auditItem;
     }
@@ -128,6 +164,10 @@ public class AclScenarioDto extends AclScenario {
             .append(netTotal, that.netTotal)
             .append(netTotalPrint, that.netTotalPrint)
             .append(netTotalDigital, that.netTotalDigital)
+            .append(numberOfRhsPrint, that.numberOfRhsPrint)
+            .append(numberOfRhsDigital, that.numberOfRhsDigital)
+            .append(numberOfWorksPrint, that.numberOfWorksPrint)
+            .append(numberOfWorksDigital, that.numberOfWorksDigital)
             .append(auditItem, that.auditItem)
             .isEquals();
     }
@@ -145,6 +185,10 @@ public class AclScenarioDto extends AclScenario {
             .append(netTotal)
             .append(netTotalPrint)
             .append(netTotalDigital)
+            .append(numberOfRhsPrint)
+            .append(numberOfRhsDigital)
+            .append(numberOfWorksPrint)
+            .append(numberOfWorksDigital)
             .append(auditItem)
             .toHashCode();
     }
@@ -162,6 +206,10 @@ public class AclScenarioDto extends AclScenario {
             .append("netTotal", netTotal)
             .append("netTotalPrint", netTotalPrint)
             .append("netTotalDigital", netTotalDigital)
+            .append("numberOfRhsPrint", numberOfRhsPrint)
+            .append("numberOfRhsDigital", numberOfRhsDigital)
+            .append("numberOfWorksPrint", numberOfWorksPrint)
+            .append("numberOfWorksDigital", numberOfWorksDigital)
             .append("auditItem", auditItem)
             .toString();
     }

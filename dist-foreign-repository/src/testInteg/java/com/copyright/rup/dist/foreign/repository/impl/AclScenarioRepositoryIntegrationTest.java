@@ -107,6 +107,10 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("252.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("84.0000000000"), scenario.getNetTotalPrint());
         assertEquals(new BigDecimal("168.0000000000"), scenario.getNetTotalDigital());
+        assertEquals(1, scenario.getNumberOfRhsPrint());
+        assertEquals(1, scenario.getNumberOfRhsDigital());
+        assertEquals(1, scenario.getNumberOfWorksPrint());
+        assertEquals(1, scenario.getNumberOfWorksDigital());
     }
 
     @Test
@@ -137,6 +141,10 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
         assertEquals(BigDecimal.ZERO, scenario.getNetTotalPrint());
         assertEquals(BigDecimal.ZERO, scenario.getNetTotalDigital());
+        assertEquals(0, scenario.getNumberOfRhsPrint());
+        assertEquals(0, scenario.getNumberOfRhsDigital());
+        assertEquals(0, scenario.getNumberOfWorksPrint());
+        assertEquals(0, scenario.getNumberOfWorksDigital());
     }
 
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
