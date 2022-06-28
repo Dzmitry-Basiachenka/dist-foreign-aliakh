@@ -21,4 +21,13 @@ public interface IAclScenarioService {
      * @return list of {@link AclScenario}s
      */
     List<AclScenario> getScenarios();
+
+    /**
+     * Checks whether {@link AclScenario} with specified name already exists in database.
+     *
+     * @param scenarioName name of {@link AclScenario} to check
+     * @return {@code true} if {@link AclScenario} with specified name already exists in database,
+     * {@code false} - if doesn't
+     */
+    boolean aclScenarioExists(String scenarioName);
 }

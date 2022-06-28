@@ -88,4 +88,10 @@ public class AclGrantSetService implements IAclGrantSetService {
         aclGrantSetRepository.deleteById(grantSet.getId());
         LOGGER.info("Delete ACL grant set. Finished. GrantSetName={}, UserName={}", grantSet.getName(), userName);
     }
+
+    @Override
+    public List<AclGrantSet> getGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period,
+                                                                boolean editableFlag) {
+        return aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod(licenseType, period, editableFlag);
+    }
 }

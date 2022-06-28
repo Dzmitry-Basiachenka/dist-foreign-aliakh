@@ -21,4 +21,12 @@ public interface IAclScenarioRepository {
      * @return list of {@link AclScenario}s
      */
     List<AclScenario> findAll();
+
+    /**
+     * Finds {@link AclScenario}s count with specified name.
+     *
+     * @param name {@link AclScenario} name
+     * @return count of found {@link AclScenario}s
+     */
+    int findCountByName(String name);
 }

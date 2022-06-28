@@ -78,7 +78,7 @@ public class CreateAclScenarioWindowTest {
         controller = createMock(IAclScenariosController.class);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
-        expect(controller.getAclUsagePeriods()).andReturn(Collections.singletonList(202206));
+        expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
     }
 
     @Test

@@ -96,6 +96,24 @@ public class AclUsageBatchServiceTest {
         verify(aclUsageBatchRepository);
     }
 
+    @Test
+    public void testGetUsageBatchesByPeriod() {
+        List<AclUsageBatch> usageBatches = Collections.singletonList(buildAclUsageBatch());
+        expect(aclUsageBatchRepository.findUsageBatchesByPeriod(202212, true)).andReturn(usageBatches).once();
+        replay(aclUsageBatchRepository);
+        assertSame(usageBatches, aclUsageBatchService.getUsageBatchesByPeriod(202212, true));
+        verify(aclUsageBatchRepository);
+    }
+
+    @Test
+    public void testGetPeriods() {
+        List<Integer> periods = Collections.singletonList(202006);
+        expect(aclUsageBatchRepository.findPeriods()).andReturn(periods).once();
+        replay(aclUsageBatchRepository);
+        assertSame(periods, aclUsageBatchService.getPeriods());
+        verify(aclUsageBatchRepository);
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

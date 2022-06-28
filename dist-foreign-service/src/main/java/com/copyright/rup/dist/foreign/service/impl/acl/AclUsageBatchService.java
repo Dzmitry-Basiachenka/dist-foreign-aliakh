@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +57,15 @@ public class AclUsageBatchService implements IAclUsageBatchService {
     @Override
     public List<AclUsageBatch> getAll() {
         return aclUsageBatchRepository.findAll();
+    }
+
+    @Override
+    public List<AclUsageBatch> getUsageBatchesByPeriod(Integer period, boolean editableFlag) {
+        return aclUsageBatchRepository.findUsageBatchesByPeriod(period, editableFlag);
+    }
+
+    @Override
+    public List<Integer> getPeriods() {
+        return aclUsageBatchRepository.findPeriods();
     }
 }

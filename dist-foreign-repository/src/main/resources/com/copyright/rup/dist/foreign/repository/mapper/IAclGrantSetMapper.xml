@@ -69,4 +69,14 @@
         delete from ${schema}.df_acl_grant_set
         where df_acl_grant_set_uid = #{grantSetId}
     </delete>
+
+    <select id="findGrantSetsByLicenseTypeAndPeriod" resultMap="aclGrantSetResultMap">
+        select
+        <include refid="aclGrantSetColumns"/>
+        from ${schema}.df_acl_grant_set
+        where grant_period = #{period}
+            and license_type = #{licenseType}
+            and is_editable = #{editableFlag}
+        order by grant_period desc
+    </select>
 </mapper>

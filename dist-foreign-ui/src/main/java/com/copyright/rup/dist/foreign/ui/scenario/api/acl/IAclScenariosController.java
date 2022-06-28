@@ -75,11 +75,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
     List<AclGrantSet> getGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period, boolean editableFlag);
 
     /**
-     * Gets list of all ACl usage periods.
+     * Gets list of all ACl usage batch periods.
      *
      * @return list of periods
      */
-    List<Integer> getAclUsagePeriods();
+    List<Integer> getAllPeriods();
 
     /**
      * Creates ACL scenario.

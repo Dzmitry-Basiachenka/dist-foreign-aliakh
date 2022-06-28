@@ -33,4 +33,10 @@
         from ${schema}.df_acl_scenario
         order by updated_datetime desc
     </select>
+
+    <select id="findCountByName" parameterType="string" resultType="int">
+        select count(name)
+        from ${schema}.df_acl_scenario
+        where upper(name) = upper(#{name})
+    </select>
 </mapper>

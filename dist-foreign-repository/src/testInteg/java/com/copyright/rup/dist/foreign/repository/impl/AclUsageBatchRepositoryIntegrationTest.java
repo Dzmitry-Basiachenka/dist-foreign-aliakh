@@ -76,6 +76,30 @@ public class AclUsageBatchRepositoryIntegrationTest {
         verifyAclUsageBatch(aclUsageBatch2, usageBatches.get(1));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-usage-batch-by-period.groovy")
+    public void testFindUsageBatchesByPeriod() {
+        AclUsageBatch expectedUsageBatch1 = buildAclUsageBatch("fb5fb8ce-26e8-4417-97db-9a5116ba4061",
+            "ACL Usage Batch 2022", 202212, Sets.newHashSet(202206, 202212), true);
+        AclUsageBatch expectedUsageBatch2 = buildAclUsageBatch("0825074e-f5fc-4eb6-a4b8-a452e63f1aeb",
+            "ACL Usage Batch 2021", 202212, Sets.newHashSet(202106, 202112), false);
+        List<AclUsageBatch> usageBatches = aclUsageBatchRepository.findUsageBatchesByPeriod(202212, true);
+        assertEquals(1, usageBatches.size());
+        verifyAclUsageBatch(expectedUsageBatch1, usageBatches.get(0));
+        usageBatches = aclUsageBatchRepository.findUsageBatchesByPeriod(202212, false);
+        assertEquals(1, usageBatches.size());
+        verifyAclUsageBatch(expectedUsageBatch2, usageBatches.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-periods.groovy")
+    public void testFindAllPeriods() {
+        List<Integer> periods = aclUsageBatchRepository.findPeriods();
+        assertEquals(2, periods.size());
+        assertEquals(Integer.valueOf(202212), periods.get(0));
+        assertEquals(Integer.valueOf(202112), periods.get(1));
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         return buildAclUsageBatch(ACL_USAGE_BATCH_ID, ACL_USAGE_BATCH_NAME, 202112, Sets.newHashSet(202106, 202112),
             true);
