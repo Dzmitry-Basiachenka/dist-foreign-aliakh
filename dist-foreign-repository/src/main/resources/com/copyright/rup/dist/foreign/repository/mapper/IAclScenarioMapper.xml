@@ -17,6 +17,56 @@
         <result property="licenseType" column="license_type"/>
     </resultMap>
 
+    <resultMap id="aclScenarioDtoResultMap" type="AclScenarioDto" extends="aclScenarioResultMap">
+        <result property="grossTotal" column="gross_total"/>
+        <result property="grossTotalPrint" column="gross_total_print"/>
+        <result property="grossTotalDigital" column="gross_total_digital"/>
+        <result property="serviceFeeTotal" column="service_fee_total"/>
+        <result property="serviceFeeTotalPrint" column="service_fee_total_print"/>
+        <result property="serviceFeeTotalDigital" column="service_fee_total_digital"/>
+        <result property="netTotal" column="net_total"/>
+        <result property="netTotalPrint" column="net_total_print"/>
+        <result property="netTotalDigital" column="net_total_digital"/>
+        <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
+    </resultMap>
+
+    <sql id="fullScenarioInformation">
+        s.df_acl_scenario_uid,
+        s.df_acl_usage_batch_uid,
+        s.df_acl_fund_pool_uid,
+        s.df_acl_grant_set_uid,
+        s.name,
+        s.description,
+        s.status_ind,
+        s.is_editable,
+        s.period_end_date,
+        s.license_type,
+        <!-- TODO {aliakh} use nested query to simplify amount calculation -->
+        coalesce(sum(share_detail_digital.gross_amount), 0) + coalesce(sum(share_detail_print.gross_amount), 0) gross_total,
+        coalesce(sum(share_detail_print.gross_amount), 0) gross_total_print,
+        coalesce(sum(share_detail_digital.gross_amount), 0) gross_total_digital,
+        coalesce(sum(share_detail_digital.service_fee_amount), 0) + coalesce(sum(share_detail_print.service_fee_amount), 0) service_fee_total,
+        coalesce(sum(share_detail_print.service_fee_amount), 0) service_fee_total_print,
+        coalesce(sum(share_detail_digital.service_fee_amount), 0) service_fee_total_digital,
+        coalesce(sum(share_detail_digital.net_amount), 0) + coalesce(sum(share_detail_print.net_amount), 0) net_total,
+        coalesce(sum(share_detail_print.net_amount), 0) net_total_print,
+        coalesce(sum(share_detail_digital.net_amount), 0) net_total_digital,
+        a1.df_acl_scenario_audit_uid action_df_scenario_audit_uid,
+        a1.df_acl_scenario_uid action_df_scenario_uid,
+        a1.action_type_ind action_action_type_ind,
+        a1.action_reason action_action_reason,
+        a1.created_datetime action_created_datetime,
+        a1.updated_datetime action_updated_datetime,
+        a1.created_by_user action_created_by_user,
+        a1.updated_by_user action_updated_by_user,
+        s.record_version action_record_version,
+        s.created_datetime created_datetime,
+        s.updated_datetime updated_datetime,
+        s.created_by_user created_by_user,
+        s.updated_by_user updated_by_user,
+        s.record_version record_version
+    </sql>
+
     <select id="findAll" resultMap="aclScenarioResultMap">
         select
             df_acl_scenario_uid,
@@ -38,5 +88,24 @@
         select count(name)
         from ${schema}.df_acl_scenario
         where upper(name) = upper(#{name})
+    </select>
+
+    <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
+        select
+            <include refid="fullScenarioInformation"/>
+        from ${schema}.df_acl_scenario s
+        left join apps.df_acl_share_detail share_detail_print on share_detail_print.df_acl_scenario_uid = s.df_acl_scenario_uid
+            and share_detail_print.type_of_use = 'PRINT'
+        left join apps.df_acl_share_detail share_detail_digital on share_detail_digital.df_acl_scenario_uid = s.df_acl_scenario_uid
+            and share_detail_digital.type_of_use = 'DIGITAL'
+        left join ${schema}.df_acl_scenario_audit a1 on s.df_acl_scenario_uid = a1.df_acl_scenario_uid
+        left join ${schema}.df_acl_scenario_audit a2 on s.df_acl_scenario_uid = a2.df_acl_scenario_uid
+            and a1.created_datetime &lt; a2.created_datetime
+        where s.df_acl_scenario_uid = #{scenarioId}
+            and a2.df_acl_scenario_uid is null
+        group by
+            s.df_acl_scenario_uid,
+            s.name,
+            a1.df_acl_scenario_audit_uid
     </select>
 </mapper>

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -58,7 +59,7 @@ public class AclScenariosWidgetTest {
         scenario = buildAclScenario();
         aclScenariosWidget = new AclScenariosWidget(controller);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         aclScenariosWidget.init();
@@ -85,7 +86,7 @@ public class AclScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         aclScenariosWidget.refresh();

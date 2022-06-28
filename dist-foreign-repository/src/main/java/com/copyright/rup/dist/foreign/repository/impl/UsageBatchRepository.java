@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of {@link IUsageBatchRepository} for MyBatis.
+ * Implementation of {@link IUsageBatchRepository}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>

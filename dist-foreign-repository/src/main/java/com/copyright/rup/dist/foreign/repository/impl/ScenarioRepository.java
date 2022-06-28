@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Implementation of {@link IScenarioRepository} for MyBatis.
+ * Implementation of {@link IScenarioRepository}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
