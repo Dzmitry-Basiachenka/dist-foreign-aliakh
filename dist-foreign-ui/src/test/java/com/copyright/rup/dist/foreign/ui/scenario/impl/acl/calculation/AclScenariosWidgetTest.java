@@ -47,6 +47,7 @@ import java.util.Date;
  */
 public class AclScenariosWidgetTest {
 
+    private static final String SCENARIO_UID = "29ca6de6-0496-49e8-8ff4-334ef1bab597";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
     private AclScenariosWidget aclScenariosWidget;
@@ -59,7 +60,7 @@ public class AclScenariosWidgetTest {
         scenario = buildAclScenario();
         aclScenariosWidget = new AclScenariosWidget(controller);
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(new AclScenarioDto()).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         aclScenariosWidget.init();
@@ -86,7 +87,7 @@ public class AclScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(new AclScenarioDto()).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         aclScenariosWidget.refresh();
@@ -115,7 +116,7 @@ public class AclScenariosWidgetTest {
 
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
-        aclScenario.setId("29ca6de6-0496-49e8-8ff4-334ef1bab597");
+        aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("Description");
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

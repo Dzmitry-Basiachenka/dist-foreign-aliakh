@@ -21,12 +21,12 @@ import java.util.List;
 public interface IAclScenariosController extends IController<IAclScenariosWidget> {
 
     /**
-     * Gets {@link AclScenario} with calculated amounts and last audit action.
+     * Gets {@link AclScenarioDto} by scenario id.
      *
-     * @param scenario selected {@link AclScenario}
-     * @return scenario {@link AclScenario}
+     * @param scenarioId scenario id
+     * @return instance of {@link AclScenarioDto}
      */
-    AclScenarioDto getScenarioWithAmountsAndLastAction(AclScenario scenario);
+    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
 
     /**
      * @return HTML filter representation for selected scenario.

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 
@@ -32,5 +33,10 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public boolean aclScenarioExists(String scenarioName) {
         return 0 < aclScenarioRepository.findCountByName(scenarioName);
+    }
+
+    @Override
+    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
+        return aclScenarioRepository.findWithAmountsAndLastAction(scenarioId);
     }
 }

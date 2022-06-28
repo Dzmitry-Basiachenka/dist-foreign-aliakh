@@ -262,7 +262,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private void onItemChanged(AclScenario scenario) {
         if (Objects.nonNull(scenario)) {
-            AclScenarioDto scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
+            AclScenarioDto scenarioWithAmounts = controller.getAclScenarioWithAmountsAndLastAction(scenario.getId());
             updateScenarioMetadata(scenarioWithAmounts);
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {
@@ -271,7 +271,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
-                    DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)));
+                    Objects.nonNull(lastAction.getCreateDate()) ? DateFormatUtils.format(lastAction.getCreateDate(),
+                        RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG) : null)); // TODO {aliakh} refactor
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }
@@ -283,37 +284,39 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     // TODO {aliakh} implement displaying values from the scenario instead of hardcoded values
-    private void updateScenarioMetadata(AclScenarioDto scenarioWithAmounts) {
-        ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenarioWithAmounts.getCreateUser()));
+    private void updateScenarioMetadata(AclScenarioDto scenario) {
+        ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
         grossTotalLayout.setCaption(ForeignUi.getMessage("label.gross_amount_in_usd",
-            formatAmount(scenarioWithAmounts.getGrossTotal())));
+            formatAmount(scenario.getGrossTotal())));
         grossTotalPrintLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd_by_print",
-            formatAmount(BigDecimal.ZERO)));
+            formatAmount(scenario.getGrossTotalPrint())));
         grossTotalDigitalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd_by_digital",
-            formatAmount(BigDecimal.ZERO)));
+            formatAmount(scenario.getGrossTotalDigital())));
         numberRhPrintLabel.setValue(ForeignUi.getMessage("label.number_of_rh_print", 0));
         numberRhDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_rh_digital", 0));
         numberWorksPrintLabel.setValue(ForeignUi.getMessage("label.number_of_works_print", 0));
         numberWorksDigitalLabel.setValue(ForeignUi.getMessage("label.number_of_works_digital", 0));
         serviceFeeTotalLayout.setCaption(ForeignUi.getMessage("label.service_fee_amount_in_usd",
-            formatAmount(scenarioWithAmounts.getServiceFeeTotal())));
+            formatAmount(scenario.getServiceFeeTotal())));
         serviceFeeTotalPrintLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd_by_print",
-            formatAmount(BigDecimal.ZERO)));
+            formatAmount(scenario.getServiceFeeTotalPrint())));
         serviceFeeTotalDigitalLabel.setValue(ForeignUi.getMessage("label.service_fee_amount_in_usd_by_digital",
-            formatAmount(BigDecimal.ZERO)));
+            formatAmount(scenario.getServiceFeeTotalDigital())));
         netTotalLayout.setCaption(ForeignUi.getMessage("label.net_amount_in_usd",
-            formatAmount(scenarioWithAmounts.getNetTotal())));
+            formatAmount(scenario.getNetTotal())));
         netTotalPrintLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd_by_print",
-            formatAmount(BigDecimal.ZERO)));
+            formatAmount(scenario.getNetTotalPrint())));
         netTotalDigitalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd_by_digital",
-            formatAmount(BigDecimal.ZERO)));
-        descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenarioWithAmounts.getDescription()));
+            formatAmount(scenario.getNetTotalDigital())));
+        descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
         selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", ""));
     }
 
     private String formatScenarioLabel(String caption, Object value) {
-        return ForeignUi.getMessage("label.format.label_with_caption", caption, value);
+        return Objects.nonNull(value)
+            ? ForeignUi.getMessage("label.format.label_with_caption", caption, value)
+            : StringUtils.EMPTY;
     }
 
     private String formatAmount(BigDecimal amount) {

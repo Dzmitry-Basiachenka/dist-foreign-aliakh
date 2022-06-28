@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
@@ -43,6 +44,7 @@ import java.util.List;
  */
 public class AclScenariosControllerTest {
 
+    private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
     private static final String LICENSE_TYPE = "ACL";
 
     private AclScenariosController aclScenariosController;
@@ -82,7 +84,12 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testGetScenarioWithAmountsAndLastAction() {
-        // TODO {aliakh} implement
+        AclScenarioDto scenario = new AclScenarioDto();
+        scenario.setId(SCENARIO_UID);
+        expect(aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        replay(aclScenarioService);
+        assertSame(scenario, aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
+        verify(aclScenarioService);
     }
 
     @Test
@@ -137,7 +144,7 @@ public class AclScenariosControllerTest {
 
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
-        aclScenario.setId("7ed0e17d-6baf-454c-803f-1d9be3cb3192");
+        aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("ACL Scenario name");
         aclScenario.setDescription("Description");
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

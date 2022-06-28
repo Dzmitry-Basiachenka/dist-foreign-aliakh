@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 
 import java.util.List;
 
@@ -30,4 +31,12 @@ public interface IAclScenarioService {
      * {@code false} - if doesn't
      */
     boolean aclScenarioExists(String scenarioName);
+
+    /**
+     * Gets {@link AclScenarioDto} by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return instance of {@link AclScenarioDto}
+     */
+    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
 }
