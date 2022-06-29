@@ -232,7 +232,8 @@ public class CreateAclScenarioWindow extends Window {
         descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
         scenarioBinder.forField(descriptionArea)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
-            .bind(AclScenario::getDescription, AclScenario::setDescription)
+            .bind(AclScenario::getDescription,
+                (scenario, description) -> scenario.setDescription(StringUtils.trimToEmpty(description)))
             .validate();
         VaadinUtils.setMaxComponentsWidth(descriptionArea);
         VaadinUtils.addComponentStyle(descriptionArea, "scenario-description");
