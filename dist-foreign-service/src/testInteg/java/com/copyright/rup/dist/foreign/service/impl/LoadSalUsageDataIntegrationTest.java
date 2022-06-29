@@ -113,8 +113,11 @@ public class LoadSalUsageDataIntegrationTest {
             getActualUsages().stream().collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
         List<UsageDto> expectedUsages = loadExpectedUsages("usage/sal/sal_expected_usage_data_for_upload.json");
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
-        expectedUsages.forEach(
-            expectedUsage -> assertUsage(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment())));
+        expectedUsages.forEach(expectedUsage -> {
+            testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
+            assertSalUsage(expectedUsage.getSalUsage(),
+                actualUsageCommentsToUsages.get(expectedUsage.getComment()).getSalUsage());
+        });
     }
 
     private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
@@ -124,21 +127,6 @@ public class LoadSalUsageDataIntegrationTest {
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
         return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
         });
-    }
-
-    // TODO {srudak} move to ServiceTestHelper
-    private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
-        assertNotNull(actualUsage);
-        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
-        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
     }
 
     private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {

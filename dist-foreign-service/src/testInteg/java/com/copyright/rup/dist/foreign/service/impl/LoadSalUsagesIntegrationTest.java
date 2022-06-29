@@ -153,8 +153,11 @@ public class LoadSalUsagesIntegrationTest {
             getActualUsages().stream().collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
         List<UsageDto> expectedUsages = loadExpectedUsages("usage/sal/sal_expected_item_bank_usages_for_upload.json");
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
-        expectedUsages.forEach(
-            expectedUsage -> assertUsage(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment())));
+        expectedUsages.forEach(expectedUsage -> {
+            testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
+            assertSalUsage(expectedUsage.getSalUsage(),
+                actualUsageCommentsToUsages.get(expectedUsage.getComment()).getSalUsage());
+        });
     }
 
     private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
@@ -164,16 +167,6 @@ public class LoadSalUsagesIntegrationTest {
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
         return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
         });
-    }
-
-    private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
-        assertNotNull(actualUsage);
-        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
     }
 
     private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {

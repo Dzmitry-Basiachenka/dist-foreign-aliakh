@@ -600,7 +600,7 @@ public class ServiceTestHelper {
         sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
     }
 
-    private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+    public void assertUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
@@ -616,6 +616,19 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
         assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
         assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+    }
+
+    public void assertUsageDto(UsageDto expectedUsage, UsageDto actualUsage) {
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
+        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 
     private PaidUsage getPaidUsageByLmDetailId(String lmDetailId,

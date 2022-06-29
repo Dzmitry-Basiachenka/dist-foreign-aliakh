@@ -156,8 +156,11 @@ public class LoadAaclUsagesIntegrationTest {
         Map<String, UsageDto> actualUsageCommentsToUsages = getUsageCommentsToUsageDtosMap();
         List<UsageDto> expectedUsages = loadExpectedUsages("usage/aacl/aacl_expected_usages_for_upload.json");
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
-        expectedUsages.forEach(
-            expectedUsage -> assertUsage(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment())));
+        expectedUsages.forEach(expectedUsage -> {
+            testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
+            assertAaclUsage(expectedUsage.getAaclUsage(),
+                actualUsageCommentsToUsages.get(expectedUsage.getComment()).getAaclUsage());
+        });
     }
 
     private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
@@ -167,21 +170,6 @@ public class LoadAaclUsagesIntegrationTest {
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
         return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
         });
-    }
-
-    private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
-        assertNotNull(actualUsage);
-        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-        assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
-        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
-        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 
     private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
