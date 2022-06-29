@@ -869,4 +869,206 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2022-06-29-00', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_scenario_usage_age_weight table")
+
+        createTable(tableName: 'df_acl_scenario_usage_age_weight', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scenario usage age weights') {
+
+            column(name: 'df_acl_scenario_usage_age_weight_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario usage age weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'period_prior', type: 'INTEGER', remarks: 'Prior period') {
+                constraints(nullable: false)
+            }
+            column(name: 'weight', type: 'NUMERIC (10, 5)', remarks: 'Value of age weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_usage_age_weight',
+                columnNames: 'df_acl_scenario_usage_age_weight_uid',
+                constraintName: 'pk_df_acl_scenario_usage_age_weight_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_usage_age_weight',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_scenario_usage_age_weights_2_df_acl_scenario')
+
+        rollback {
+            //automatic rollback
+        }
+    }
+
+    changeSet(id: '2022-06-29-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_scenario_licensee_class table")
+
+        createTable(tableName: 'df_acl_scenario_licensee_class', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scenario licensee classes') {
+
+            column(name: 'df_acl_scenario_licensee_class_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario licensee classes') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'detail_licensee_class_id', type: 'INTEGER', remarks: 'The identifier of Detail Licensee Class') {
+                constraints(nullable: false)
+            }
+            column(name: 'aggregate_licensee_class_id', type: 'INTEGER', remarks: 'Aggregate Licensee Class Id') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_licensee_class',
+                columnNames: 'df_acl_scenario_licensee_class_uid',
+                constraintName: 'pk_df_acl_scenario_licensee_class_uid')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_licensee_class',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_scenario_licensee_classes_2_df_acl_scenario')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_licensee_class',
+                baseColumnNames: 'detail_licensee_class_id',
+                referencedTableName: 'df_detail_licensee_class',
+                referencedColumnNames: 'detail_licensee_class_id',
+                constraintName: 'fk_df_acl_scenario_licensee_class_2_df_detail_licensee_class_id')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_licensee_class',
+                baseColumnNames: 'aggregate_licensee_class_id',
+                referencedTableName: 'df_aggregate_licensee_class',
+                referencedColumnNames: 'aggregate_licensee_class_id',
+                constraintName: 'fk_df_acl_scenario_licensee_class_2_df_aggregate_licensee_class')
+
+        rollback {
+            //automatic rollback
+        }
+    }
+
+    changeSet(id: '2022-06-29-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-57783 FDA: Create an ACL Scenario: create df_acl_scenario_pub_type_weight table")
+
+        createTable(tableName: 'df_acl_scenario_pub_type_weight', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL scenario publication type weight') {
+
+            column(name: 'df_acl_scenario_pub_type_weight_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario publication type') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_acl_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication Type Id') {
+                constraints(nullable: false)
+            }
+            column(name: 'weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type Weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The period in YYYYMM format')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_scenario_pub_type_weight',
+                columnNames: 'df_acl_scenario_pub_type_weight_uid',
+                constraintName: 'pk_df_acl_scenario_pub_type_weight')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_pub_type_weight',
+                baseColumnNames: 'df_acl_scenario_uid',
+                referencedTableName: 'df_acl_scenario',
+                referencedColumnNames: 'df_acl_scenario_uid',
+                constraintName: 'fk_df_acl_scenario_pub_type_weights_2_df_acl_scenario')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_scenario_pub_type_weight',
+                baseColumnNames: 'df_publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_acl_scenario_pub_type_weights_2_df_publication_type')
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }
