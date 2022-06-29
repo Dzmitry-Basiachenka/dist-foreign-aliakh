@@ -163,8 +163,7 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
             button.addClickListener(event -> controller.onRightsholderAccountNumberClicked(
                 holder.getRightsholder().getAccountNumber(), Objects.toString(holder.getRightsholder().getName())));
             return button;
-        })
-            .setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
+        }).setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
             .setId("rightsholder.accountNumber")
             .setSortProperty("rightsholder.accountNumber")
             .setExpandRatio(1);
@@ -212,8 +211,7 @@ public abstract class CommonScenarioWidget extends Window implements ICommonScen
             return Objects.nonNull(value)
                 ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, BigDecimal.ROUND_HALF_UP))
                 : StringUtils.EMPTY;
-        })
-            .setCaption(ForeignUi.getMessage("table.column.service_fee"))
+        }).setCaption(ForeignUi.getMessage("table.column.service_fee"))
             .setId("serviceFee")
             .setSortProperty("serviceFee")
             .setHidable(true)

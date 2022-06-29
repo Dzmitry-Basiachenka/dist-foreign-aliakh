@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
@@ -21,6 +20,8 @@ import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -73,7 +74,7 @@ public class AclScenariosWidgetTest {
     @Test
     public void testComponentStructure() {
         assertEquals(2, scenariosWidget.getComponentCount());
-        verifyButtonsComponent(scenariosWidget.getComponent(0));
+        verifyButtonsLayout((HorizontalLayout) scenariosWidget.getComponent(0));
         Component component = scenariosWidget.getComponent(1);
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout layout = (HorizontalLayout) component;
@@ -159,8 +160,20 @@ public class AclScenariosWidgetTest {
         assertNotNull(((Column) grid.getColumns().get(2)).getComparator(SortDirection.ASCENDING));
     }
 
-    private void verifyButtonsComponent(Component buttonsLayout) {
-        verifyButtonsLayout(buttonsLayout, "Create", "View");
-        assertEquals("acl-scenario-buttons-layout", buttonsLayout.getId());
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertEquals("acl-scenario-buttons-layout", layout.getId());
+        assertEquals(2, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "Create", false, 1);
+        verifyButton(layout.getComponent(1), "View", true, 2);
+    }
+
+    private void verifyButton(Component component, String caption, boolean isDisabled, int listenersCount) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals(caption, button.getCaption());
+        assertEquals(caption, button.getId());
+        assertTrue(button.isEnabled());
+        assertEquals(isDisabled, button.isDisableOnClick());
+        assertEquals(listenersCount, button.getListeners(ClickEvent.class).size());
     }
 }

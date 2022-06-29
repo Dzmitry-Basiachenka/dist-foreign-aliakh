@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -43,15 +44,12 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     private IAclGrantSetService grantSetService;
     @Autowired
     private IAclFundPoolService fundPoolService;
+    @Autowired
+    private IAclScenarioController aclScenarioController;
 
     @Override
     public List<AclScenario> getScenarios() {
         return aclScenarioService.getScenarios();
-    }
-
-    @Override
-    protected IAclScenariosWidget instantiateWidget() {
-        return new AclScenariosWidget(this);
     }
 
     @Override
@@ -105,6 +103,16 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public void createAclScenario(AclScenario aclScenario) {
         //todo will be implemented later
+    }
+
+    @Override
+    public IAclScenarioController getAclScenarioController() {
+        return aclScenarioController;
+    }
+
+    @Override
+    protected IAclScenariosWidget instantiateWidget() {
+        return new AclScenariosWidget(this);
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {

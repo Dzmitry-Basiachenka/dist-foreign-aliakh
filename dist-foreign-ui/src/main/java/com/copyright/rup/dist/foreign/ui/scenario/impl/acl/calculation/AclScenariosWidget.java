@@ -9,6 +9,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
@@ -32,6 +34,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -155,12 +158,21 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         createButton.addClickListener(
             event -> Windows.showModalWindow(new CreateAclScenarioWindow(controller)));
         Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
-        //TODO {dbasiachenka} implement
-        viewButton.addClickListener(event -> {});
+        viewButton.addClickListener(event -> onClickViewButton());
+        VaadinUtils.setButtonsAutoDisabled(viewButton);
         HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
+    }
+
+    private void onClickViewButton() {
+        IAclScenarioController aclScenariosController = controller.getAclScenarioController();
+        aclScenariosController.setScenario(getSelectedScenario());
+        IAclScenarioWidget aclScenarioWidget = aclScenariosController.initWidget();
+        Window aclScenarioWindow = (Window) aclScenarioWidget;
+        Windows.showModalWindow(aclScenarioWindow);
+        aclScenarioWindow.setPositionY(30);
     }
 
     private void addColumns() {

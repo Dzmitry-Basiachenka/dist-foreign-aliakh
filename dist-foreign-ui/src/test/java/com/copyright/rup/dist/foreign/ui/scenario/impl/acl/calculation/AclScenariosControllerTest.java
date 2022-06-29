@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 
 import com.google.common.collect.Sets;
@@ -53,6 +54,7 @@ public class AclScenariosControllerTest {
     private IAclUsageBatchService usageBatchService;
     private IAclGrantSetService grantSetService;
     private IAclFundPoolService fundPoolService;
+    private IAclScenarioController aclScenarioController;
 
     @Before
     public void setUp() {
@@ -63,10 +65,12 @@ public class AclScenariosControllerTest {
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
+        aclScenarioController = createMock(IAclScenarioController.class);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
         Whitebox.setInternalState(aclScenariosController, grantSetService);
         Whitebox.setInternalState(aclScenariosController, fundPoolService);
+        Whitebox.setInternalState(aclScenariosController, aclScenarioController);
     }
 
     @Test
@@ -163,6 +167,11 @@ public class AclScenariosControllerTest {
         replay(usageBatchService);
         assertEquals(periods, aclScenariosController.getAllPeriods());
         verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetAclScenarioController() {
+        assertSame(aclScenarioController, aclScenariosController.getAclScenarioController());
     }
 
     private AclScenario buildAclScenario() {

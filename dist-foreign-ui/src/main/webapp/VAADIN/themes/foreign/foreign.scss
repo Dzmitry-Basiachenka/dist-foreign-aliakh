@@ -130,7 +130,8 @@
     $window-search-padding : 7px 0 0 0;
 
     /**==== View Scenario widget ====*/
-    .view-scenario-widget {
+    .view-scenario-widget,
+    .acl-view-scenario-widget {
 
         .v-window-contents {
             background-color: $window-background-color !important;
