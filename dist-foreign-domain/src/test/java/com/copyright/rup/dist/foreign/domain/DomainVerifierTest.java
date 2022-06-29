@@ -151,7 +151,8 @@ public class DomainVerifierTest {
             {LdmtDetail.class},
             {AclFundPoolDetailFilter.class},
             {AclScenario.class},
-            {AclScenarioDto.class}
+            {AclScenarioDto.class},
+            {RightsholderAclTotalsHolder.class}
         };
         return Arrays.asList(testData);
     }

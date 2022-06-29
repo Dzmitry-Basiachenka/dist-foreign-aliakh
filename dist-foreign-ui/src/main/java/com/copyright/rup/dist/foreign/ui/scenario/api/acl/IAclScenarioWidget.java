@@ -12,4 +12,14 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Anton Azarenka
  */
 public interface IAclScenarioWidget extends IWidget<IAclScenarioController> {
+
+    /**
+     * @return value from search field.
+     */
+    String getSearchValue();
+
+    /**
+     * Applies search value for table container.
+     */
+    void applySearch();
 }

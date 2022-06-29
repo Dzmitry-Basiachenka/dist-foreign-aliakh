@@ -88,4 +88,9 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @param aclScenario instance of {@link AclScenario}
      */
     void createAclScenario(AclScenario aclScenario);
+
+    /**
+     * @return an {@link IAclScenarioController} instance.
+     */
+    IAclScenarioController getAclScenarioController();
 }
