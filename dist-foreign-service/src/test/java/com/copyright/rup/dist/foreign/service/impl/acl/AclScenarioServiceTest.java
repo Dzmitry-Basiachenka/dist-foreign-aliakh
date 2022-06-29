@@ -73,6 +73,16 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository);
     }
 
+    @Test
+    public void testGetRightsholderAclTotalsHoldersByScenarioId() {
+        //TODO {dbasiachenka} implement
+    }
+
+    @Test
+    public void testGetRightsholderAclTotalsHolderCountByScenarioId() {
+        //TODO {dbasiachenka} implement
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
