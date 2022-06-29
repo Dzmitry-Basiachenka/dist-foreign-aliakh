@@ -94,4 +94,9 @@ public class AclGrantSetService implements IAclGrantSetService {
                                                                 boolean editableFlag) {
         return aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod(licenseType, period, editableFlag);
     }
+
+    @Override
+    public AclGrantSet getById(String grantSetId) {
+        return aclGrantSetRepository.findById(grantSetId);
+    }
 }

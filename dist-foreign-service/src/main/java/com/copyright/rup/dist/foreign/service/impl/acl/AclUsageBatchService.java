@@ -68,4 +68,9 @@ public class AclUsageBatchService implements IAclUsageBatchService {
     public List<Integer> getPeriods() {
         return aclUsageBatchRepository.findPeriods();
     }
+
+    @Override
+    public AclUsageBatch getById(String usageBatchId) {
+        return aclUsageBatchRepository.findById(usageBatchId);
+    }
 }

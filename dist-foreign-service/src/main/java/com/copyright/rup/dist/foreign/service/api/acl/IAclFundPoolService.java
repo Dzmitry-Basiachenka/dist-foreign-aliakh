@@ -94,4 +94,12 @@ public interface IAclFundPoolService {
      * @return list of {@link AclFundPool}s
      */
     List<AclFundPool> getFundPoolsByLicenseTypeAndPeriod(String licenseType, Integer period);
+
+    /**
+     * Gets {@link AclFundPool} by its id.
+     *
+     * @param fundPoolId ACL fund pool id
+     * @return instance of {@link AclFundPool} or {@code null} if none exists
+     */
+    AclFundPool getById(String fundPoolId);
 }

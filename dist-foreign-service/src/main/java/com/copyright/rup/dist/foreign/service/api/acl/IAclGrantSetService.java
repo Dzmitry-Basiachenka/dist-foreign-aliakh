@@ -61,4 +61,12 @@ public interface IAclGrantSetService {
      * @return list of {@link AclGrantSet}s
      */
     List<AclGrantSet> getGrantSetsByLicenseTypeAndPeriod(String licenseType, Integer period, boolean editableFlag);
+
+    /**
+     * Gets {@link AclGrantSet} by its id.
+     *
+     * @param grantSetId ACL grant set id
+     * @return instance of {@link AclGrantSet} or {@code null} if none exists
+     */
+    AclGrantSet getById(String grantSetId);
 }
