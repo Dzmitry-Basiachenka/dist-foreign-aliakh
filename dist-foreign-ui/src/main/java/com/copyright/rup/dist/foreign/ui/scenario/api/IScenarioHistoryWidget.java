@@ -12,7 +12,6 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Uladziuslau Shalamitski
  */
-
 public interface IScenarioHistoryWidget extends IWidget<IScenarioHistoryController> {
 
     /**
