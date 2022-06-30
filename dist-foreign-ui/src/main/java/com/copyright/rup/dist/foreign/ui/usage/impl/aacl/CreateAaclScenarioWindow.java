@@ -13,6 +13,10 @@ import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.PublicationTypeWeightsWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -53,9 +57,9 @@ class CreateAaclScenarioWindow extends Window {
     private final Binder<AtomicReference<FundPool>> fundPoolBinder = new Binder<>();
     private TextField scenarioNameField;
     private ComboBox<FundPool> fundPoolComboBox;
-    private AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
-    private AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
-    private AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
+    private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
+    private ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
+    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
     private TextArea descriptionArea;
 
     /**
@@ -122,19 +126,19 @@ class CreateAaclScenarioWindow extends Window {
 
     private void initUsageAgeWeightsWidget() {
         usageAgeWeightWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
-                controller.getUsageAges(), () -> new AaclUsageAgeWeightWindow(true));
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
+                controller.getUsageAges(), () -> new UsageAgeWeightWindow(true));
     }
 
     private void initPubTypeWeightsWidget() {
         publicationTypeWeightWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
                 controller.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(true));
     }
 
     private void initLicenseeClassesMappingWidget() {
         licenseeClassMappingWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
                 controller.getDetailLicenseeClasses(), () -> new AggregateLicenseeClassMappingWindow(true));
     }
 

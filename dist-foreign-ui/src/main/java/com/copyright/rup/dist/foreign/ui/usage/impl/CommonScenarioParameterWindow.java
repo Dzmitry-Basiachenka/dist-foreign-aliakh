@@ -1,11 +1,11 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
 import com.vaadin.ui.Window;
 
 /**
- * Common AACL scenario parameter window.
+ * Common scenario parameter window.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -14,7 +14,7 @@ import com.vaadin.ui.Window;
  * @param <T> type of scenario parameter
  * @author Ihar Suvorau
  */
-public abstract class AaclCommonScenarioParameterWindow<T> extends Window {
+public abstract class CommonScenarioParameterWindow<T> extends Window {
 
     /**
      * Sets default parameters for the window.

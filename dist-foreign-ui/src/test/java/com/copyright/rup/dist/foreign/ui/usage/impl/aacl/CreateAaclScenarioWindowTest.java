@@ -26,6 +26,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario.AaclFields;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
@@ -252,7 +253,7 @@ public class CreateAaclScenarioWindowTest {
 
     private void verifyScenarioParameterWidget(Component component, String expectedCaption) {
         assertNotNull(component);
-        AaclScenarioParameterWidget widget = (AaclScenarioParameterWidget) component;
+        ScenarioParameterWidget widget = (ScenarioParameterWidget) component;
         assertEquals(expectedCaption, widget.getComponent(0).getCaption());
     }
 

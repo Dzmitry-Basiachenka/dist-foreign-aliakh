@@ -15,10 +15,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosControl
 import com.copyright.rup.dist.foreign.ui.scenario.api.aacl.IAaclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.CommonScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclUsageAgeWeightWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.PublicationTypeWeightsWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.ViewAaclFundPoolDetailsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -68,9 +68,9 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private AaclScenariosMediator mediator;
     private FundPool fundPool;
     private List<FundPoolDetail> fundPoolDetails;
-    private AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
-    private AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
-    private AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
+    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
+    private ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
+    private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
 
     /**
      * Controller.
@@ -126,15 +126,15 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         VaadinUtils.setButtonsAutoDisabled(fundPoolButton);
         fundPoolButton.addClickListener(event ->
             Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails)));
-        licenseeClassMappingWidget = new AaclScenarioParameterWidget<>(
+        licenseeClassMappingWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
             Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
-        publicationTypeWeightWidget = new AaclScenarioParameterWidget<>(
+        publicationTypeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.publication_type_weights"),
             usageController.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(false));
-        usageAgeWeightWidget = new AaclScenarioParameterWidget<>(
+        usageAgeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
-            Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
+            Collections.emptyList(), () -> new UsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel, descriptionLabel,

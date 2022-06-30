@@ -13,10 +13,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclUsageAgeWeightWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AggregateLicenseeClassMappingWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.PublicationTypeWeightsWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.PublicationTypeWeightsWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -237,18 +237,17 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }
 
-    // TODO {aliakh} rename AaclScenarioParameterWidget to ScenarioParameterWidget
     private VerticalLayout initMetadataLayout() {
         // TODO use the real Licensee Class Mappings, Publication Type Weights, Usage Age Weights when implemented
-        AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
+        ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
                 Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
-        AaclScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
+        ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget =
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
                 Collections.emptyList(), () -> new PublicationTypeWeightsWindow(false));
-        AaclScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget =
-            new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
-                Collections.emptyList(), () -> new AaclUsageAgeWeightWindow(false));
+        ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget =
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
+                Collections.emptyList(), () -> new UsageAgeWeightWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout layout =

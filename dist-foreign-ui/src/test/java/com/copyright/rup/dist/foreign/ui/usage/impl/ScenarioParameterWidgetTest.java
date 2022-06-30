@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -8,7 +8,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.ui.Button;
@@ -21,7 +21,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
- * Verifies {@link AaclScenarioParameterWidget}.
+ * Verifies {@link ScenarioParameterWidget}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -31,17 +31,17 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class})
-public class AaclScenarioParameterWidgetTest {
+public class ScenarioParameterWidgetTest {
 
     private static final String CAPTION = "caption";
     private static final String DEFAULT_VALUE = "default";
-    private AaclScenarioParameterWidget<String> widget;
-    private AaclCommonScenarioParameterWindowMock window;
+    private ScenarioParameterWidget<String> widget;
+    private CommonScenarioParameterWindowMock window;
 
     @Before
     public void setUp() {
-        window = new AaclCommonScenarioParameterWindowMock();
-        widget = new AaclScenarioParameterWidget<>(CAPTION, DEFAULT_VALUE, () -> window);
+        window = new CommonScenarioParameterWindowMock();
+        widget = new ScenarioParameterWidget<>(CAPTION, DEFAULT_VALUE, () -> window);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class AaclScenarioParameterWidgetTest {
         assertTrue(button.isDisableOnClick());
     }
 
-    private static class AaclCommonScenarioParameterWindowMock extends AaclCommonScenarioParameterWindow<String> {
+    private static class CommonScenarioParameterWindowMock extends CommonScenarioParameterWindow<String> {
         @Override
         void setDefault(String params) {
         }

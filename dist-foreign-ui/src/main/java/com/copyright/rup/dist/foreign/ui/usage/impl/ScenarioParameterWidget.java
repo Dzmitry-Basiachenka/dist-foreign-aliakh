@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.util.function.Supplier;
 
 /**
- * Represents widget for populating AACL scenario parameters.
+ * Represents widget for populating scenario parameters.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -24,9 +24,9 @@ import java.util.function.Supplier;
  * @param <T> type of scenario parameter
  * @author Ihar Suvorau
  */
-public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
+public class ScenarioParameterWidget<T> extends HorizontalLayout {
 
-    private final Supplier<AaclCommonScenarioParameterWindow<T>> windowSupplier;
+    private final Supplier<CommonScenarioParameterWindow<T>> windowSupplier;
     private T defaultParameters;
     private T appliedParameters;
     private Button button;
@@ -38,8 +38,8 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
      * @param defaultParameters default parameters
      * @param windowInitializer supplier for window initialization
      */
-    public AaclScenarioParameterWidget(String caption, T defaultParameters,
-                                       Supplier<AaclCommonScenarioParameterWindow<T>> windowInitializer) {
+    public ScenarioParameterWidget(String caption, T defaultParameters,
+                                   Supplier<CommonScenarioParameterWindow<T>> windowInitializer) {
         this.windowSupplier = windowInitializer;
         this.defaultParameters = defaultParameters;
         this.appliedParameters = defaultParameters;
@@ -69,7 +69,7 @@ public class AaclScenarioParameterWidget<T> extends HorizontalLayout {
         button.addStyleName(ValoTheme.BUTTON_LINK);
         VaadinUtils.setButtonsAutoDisabled(button);
         button.addClickListener(event -> {
-            AaclCommonScenarioParameterWindow<T> parameterWindow = windowSupplier.get();
+            CommonScenarioParameterWindow<T> parameterWindow = windowSupplier.get();
             parameterWindow.setDefault(defaultParameters);
             parameterWindow.setAppliedParameters(appliedParameters);
             Windows.showModalWindow(parameterWindow);

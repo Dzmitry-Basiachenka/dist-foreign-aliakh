@@ -1,9 +1,9 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
-public class AggregateLicenseeClassMappingWindow extends AaclCommonScenarioParameterWindow<List<DetailLicenseeClass>> {
+public class AggregateLicenseeClassMappingWindow extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
 
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
