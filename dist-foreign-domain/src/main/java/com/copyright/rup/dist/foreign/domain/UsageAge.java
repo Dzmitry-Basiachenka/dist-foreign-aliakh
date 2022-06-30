@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -7,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.math.BigDecimal;
 
 /**
- * Represents usage age for AACL product family.
+ * Represents usage age.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
@@ -15,7 +17,7 @@ import java.math.BigDecimal;
  *
  * @author Uladzislau Shalamitski
  */
-public class UsageAge {
+public class UsageAge extends StoredEntity<String> {
 
     private Integer period;
     private BigDecimal weight;
@@ -62,6 +64,7 @@ public class UsageAge {
         }
         UsageAge that = (UsageAge) obj;
         return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
             .append(period, that.period)
             .append(weight, that.weight)
             .isEquals();
@@ -70,6 +73,7 @@ public class UsageAge {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
             .append(period)
             .append(weight)
             .toHashCode();
@@ -78,6 +82,7 @@ public class UsageAge {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+            .appendSuper(super.toString())
             .append("period", period)
             .append("weight", weight)
             .toString();

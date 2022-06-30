@@ -10,9 +10,13 @@ import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListen
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,9 +28,12 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Integration test for {@link AclScenarioRepository}.
@@ -50,6 +57,9 @@ public class AclScenarioRepositoryIntegrationTest {
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final String SCENARIO_UID_1 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
     private static final String SCENARIO_UID_2 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
+    private static final String DESCRIPTION = "Description";
+    private static final String USER_NAME = "user@copyright.com";
+    private static final String DATE = "2022-02-14T12:00:00+00:00";
 
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
@@ -59,9 +69,8 @@ public class AclScenarioRepositoryIntegrationTest {
     public void testFindAll() {
         AclScenario scenario1 = buildAclScenario("c65e9c0a-006f-4b79-b828-87d2106330b7",
             "274ad62f-365e-41a6-a169-0e85e04d52d4", "2474c9ae-dfaf-404f-b4eb-17b7c88794d2",
-            "7e89e5c4-7db6-44b6-9a82-43166ec8da63", "ACL Scenario 202212", "Description",
-            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, "user@copyright.com",
-            "2022-02-14T12:00:00+00:00");
+            "7e89e5c4-7db6-44b6-9a82-43166ec8da63", "ACL Scenario 202212", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, DATE);
         AclScenario scenario2 = buildAclScenario("1995d50d-41c6-4e81-8c82-51a983bbecf8",
             "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
             "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
@@ -147,6 +156,83 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(0, scenario.getNumberOfWorksDigital());
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "insert-scenario.groovy")
+    public void testInsertScenario() {
+        AclScenario expectedScenario = buildAclScenario("d582352f-11c3-47f2-b0e1-1e3a57aaa1af",
+            "4426b58d-9df9-4c5e-842f-b179ba87989f", "61be2512-cbf7-4d39-94d7-acf419238dbd",
+            "924aab3c-b2e0-4115-b46a-cb6cfe70fb61", "ACL Scenario 202206", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, DATE);
+        aclScenarioRepository.insertAclScenario(expectedScenario);
+        List<AclScenario> aclScenarios = aclScenarioRepository.findAll();
+        assertEquals(1, aclScenarios.size());
+        verifyAclScenario(expectedScenario, aclScenarios.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "insert-scenario-usage-age.groovy")
+    public void testInsertAclScenarioUsageAgeWeight() {
+        AclScenario expectedScenario = buildAclScenario("7318b083-278b-44f3-8d3c-7fd22083443a",
+            "9695d1a0-407b-485d-ad0e-7471f4cb5607", "fb1d0635-b52d-4d4a-9412-d370481657d8",
+            "4448e5d8-a008-4481-abb8-e75af1329637", "ACL Scenario 201806", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
+        UsageAge usageAge = buildUsageAge(0, new BigDecimal(BigInteger.ZERO));
+        expectedScenario.setUsageAges(Collections.singletonList(usageAge));
+        aclScenarioRepository.insertAclScenarioUsageAgeWeight(usageAge, expectedScenario.getId(), USER_NAME);
+        verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "insert-scenario-publication-type.groovy")
+    public void testInsertAclScenarioPublicationTypeWeight() {
+        AclScenario expectedScenario = buildAclScenario("798964c8-e267-46e2-8685-29e84a5ab8c0",
+            "3ef4e970-7a40-4909-b0a3-7a59c8a28e82", "4a716c5e-ef92-4507-9283-c2be0f622494",
+            "d6209e69-527b-469e-8ba8-2f83ef4f99aa", "ACL Scenario 201712", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
+        PublicationType publicationType =
+            buildPublicationType("f1f523ca-1b46-4d3a-842d-99252785187c", new BigDecimal(BigInteger.ZERO));
+        expectedScenario.setPublicationTypes(Collections.singletonList(publicationType));
+        aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, expectedScenario.getId(), USER_NAME);
+        verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "insert-scenario-licensee-class.groovy")
+    public void testInsertAclScenarioLicenseeClass() {
+        AclScenario expectedScenario = buildAclScenario("d18b4933-98c7-45b0-9775-1a86f3525636",
+            "881e39b4-b8dc-4df5-97c1-e6dad801a3b0", "3b960493-95f6-44b6-bc85-30021a18c65c",
+            "92362a0f-75a0-4746-8ccf-082041023016", "ACL Scenario 201512", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
+        DetailLicenseeClass licenseeClass = buildDetailLicenseeClass(43, 108);
+        expectedScenario.setDetailLicenseeClasses(Collections.singletonList(licenseeClass));
+        aclScenarioRepository.insertAclScenarioLicenseeClass(licenseeClass, expectedScenario.getId(), USER_NAME);
+        verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
+    }
+
+    private DetailLicenseeClass buildDetailLicenseeClass(Integer detailLicenseeClassId,
+                                                         Integer aggregateLicenseeClassId) {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(detailLicenseeClassId);
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(aggregateLicenseeClassId);
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
+        return detailLicenseeClass;
+    }
+
+    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(weight);
+        return usageAge;
+    }
+
+    private PublicationType buildPublicationType(String publicationTypeId, BigDecimal weight) {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setId(publicationTypeId);
+        publicationType.setWeight(weight);
+        return publicationType;
+    }
+
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
                                          String name, String description, ScenarioStatusEnum status, boolean editable,
                                          Integer periodEndDate, String licenseType, String user, String date) {
@@ -181,7 +267,50 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(expectedAclScenario.getLicenseType(), actualAclScenario.getLicenseType());
         assertEquals(expectedAclScenario.getCreateUser(), actualAclScenario.getCreateUser());
         assertEquals(expectedAclScenario.getUpdateUser(), actualAclScenario.getUpdateUser());
-        assertEquals(expectedAclScenario.getCreateDate(), actualAclScenario.getCreateDate());
-        assertEquals(expectedAclScenario.getUpdateDate(), actualAclScenario.getUpdateDate());
+        if (actualAclScenario.getUsageAges().size() > 0) {
+            IntStream.of(0, actualAclScenario.getUsageAges().size())
+                .forEach(i -> verifyAclScenarioUsageAge(expectedAclScenario.getUsageAges().get(i),
+                    actualAclScenario.getUsageAges().get(i)));
+        }
+        if (actualAclScenario.getDetailLicenseeClasses().size() > 0) {
+            IntStream.of(0, actualAclScenario.getDetailLicenseeClasses().size())
+                .forEach(i -> verifyAclScenarioLicenseeClasses(expectedAclScenario.getDetailLicenseeClasses().get(i),
+                    actualAclScenario.getDetailLicenseeClasses().get(i)));
+        }
+        if (actualAclScenario.getPublicationTypes().size() > 0) {
+            IntStream.of(0, actualAclScenario.getPublicationTypes().size())
+                .forEach(i -> verifyAclScenarioPublicationType(expectedAclScenario.getPublicationTypes().get(i),
+                    actualAclScenario.getPublicationTypes().get(i)));
+        }
+    }
+
+    private void verifyAclScenarioLicenseeClasses(DetailLicenseeClass expectedDetailLicenseeClass,
+                                                  DetailLicenseeClass actualDetailLicenseeClass) {
+        assertEquals(expectedDetailLicenseeClass.getId(), actualDetailLicenseeClass.getId());
+        assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getId(),
+            actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
+        assertEquals(expectedDetailLicenseeClass.getCreateUser(), actualDetailLicenseeClass.getCreateUser());
+        assertEquals(expectedDetailLicenseeClass.getUpdateUser(), actualDetailLicenseeClass.getUpdateUser());
+        assertEquals(expectedDetailLicenseeClass.getCreateDate(), actualDetailLicenseeClass.getCreateDate());
+        assertEquals(expectedDetailLicenseeClass.getUpdateDate(), actualDetailLicenseeClass.getUpdateDate());
+    }
+
+    private void verifyAclScenarioPublicationType(PublicationType expectedPublicationType,
+                                                  PublicationType actualPublicationType) {
+        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
+        assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
+        assertEquals(expectedPublicationType.getCreateUser(), actualPublicationType.getCreateUser());
+        assertEquals(expectedPublicationType.getUpdateUser(), actualPublicationType.getUpdateUser());
+        assertEquals(expectedPublicationType.getCreateDate(), actualPublicationType.getCreateDate());
+        assertEquals(expectedPublicationType.getUpdateDate(), actualPublicationType.getUpdateDate());
+    }
+
+    private void verifyAclScenarioUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
+        assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
+        assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
+        assertEquals(expectedUsageAge.getCreateUser(), actualUsageAge.getCreateUser());
+        assertEquals(expectedUsageAge.getUpdateUser(), actualUsageAge.getUpdateUser());
+        assertEquals(expectedUsageAge.getCreateDate(), actualUsageAge.getCreateDate());
+        assertEquals(expectedUsageAge.getUpdateDate(), actualUsageAge.getUpdateDate());
     }
 }
