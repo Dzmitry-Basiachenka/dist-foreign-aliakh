@@ -76,7 +76,9 @@
         from ${schema}.df_acl_grant_set
         where grant_period = #{period}
             and license_type = #{licenseType}
-            and is_editable = #{editableFlag}
+            <if test="!editableFlag">
+                and is_editable = #{editableFlag}
+            </if>
         order by grant_period desc
     </select>
 </mapper>

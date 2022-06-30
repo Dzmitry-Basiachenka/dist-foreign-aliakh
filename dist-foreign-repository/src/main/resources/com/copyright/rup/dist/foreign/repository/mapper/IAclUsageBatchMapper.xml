@@ -61,7 +61,9 @@
         <include refid="aclUsageBatchColumns"/>
         from ${schema}.df_acl_usage_batch
         where distribution_period = #{period}
-            and is_editable = #{editableFlag}
+            <if test="!editableFlag">
+                and is_editable = #{editableFlag}
+            </if>
         order by updated_datetime desc
     </select>
 

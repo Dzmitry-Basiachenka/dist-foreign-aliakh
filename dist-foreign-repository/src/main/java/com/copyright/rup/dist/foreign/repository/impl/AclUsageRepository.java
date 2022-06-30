@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 
@@ -66,6 +67,11 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public List<Integer> findPeriods() {
         return selectList("IAclUsageMapper.findPeriods");
+    }
+
+    @Override
+    public List<UsageAge> findDefaultUsageAgesWeights() {
+        return selectList("IAclUsageMapper.findDefaultUsageAgesWeights");
     }
 
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {

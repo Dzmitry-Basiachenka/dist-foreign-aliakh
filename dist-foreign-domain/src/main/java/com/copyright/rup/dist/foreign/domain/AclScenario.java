@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents ACL scenario.
  * <p>
@@ -26,6 +29,9 @@ public class AclScenario extends StoredEntity<String> {
     private boolean editableFlag;
     private Integer periodEndDate;
     private String licenseType;
+    private List<PublicationType> publicationTypes = new ArrayList<>();
+    private List<UsageAge> usageAges = new ArrayList<>();
+    private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
 
     public String getUsageBatchId() {
         return usageBatchId;
@@ -99,6 +105,30 @@ public class AclScenario extends StoredEntity<String> {
         this.licenseType = licenseType;
     }
 
+    public List<PublicationType> getPublicationTypes() {
+        return publicationTypes;
+    }
+
+    public void setPublicationTypes(List<PublicationType> publicationTypes) {
+        this.publicationTypes = publicationTypes;
+    }
+
+    public List<UsageAge> getUsageAges() {
+        return usageAges;
+    }
+
+    public void setUsageAges(List<UsageAge> usageAges) {
+        this.usageAges = usageAges;
+    }
+
+    public List<DetailLicenseeClass> getDetailLicenseeClasses() {
+        return detailLicenseeClasses;
+    }
+
+    public void setDetailLicenseeClasses(List<DetailLicenseeClass> detailLicenseeClasses) {
+        this.detailLicenseeClasses = detailLicenseeClasses;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -107,18 +137,21 @@ public class AclScenario extends StoredEntity<String> {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        AclScenario that = (AclScenario) obj;
+        AclScenario scenario = (AclScenario) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(editableFlag, that.editableFlag)
-            .append(usageBatchId, that.usageBatchId)
-            .append(fundPoolId, that.fundPoolId)
-            .append(grantSetId, that.grantSetId)
-            .append(name, that.name)
-            .append(description, that.description)
-            .append(status, that.status)
-            .append(periodEndDate, that.periodEndDate)
-            .append(licenseType, that.licenseType)
+            .append(editableFlag, scenario.editableFlag)
+            .append(usageBatchId, scenario.usageBatchId)
+            .append(fundPoolId, scenario.fundPoolId)
+            .append(grantSetId, scenario.grantSetId)
+            .append(name, scenario.name)
+            .append(description, scenario.description)
+            .append(status, scenario.status)
+            .append(periodEndDate, scenario.periodEndDate)
+            .append(licenseType, scenario.licenseType)
+            .append(publicationTypes, scenario.publicationTypes)
+            .append(usageAges, scenario.usageAges)
+            .append(detailLicenseeClasses, scenario.detailLicenseeClasses)
             .isEquals();
     }
 
@@ -135,6 +168,9 @@ public class AclScenario extends StoredEntity<String> {
             .append(editableFlag)
             .append(periodEndDate)
             .append(licenseType)
+            .append(publicationTypes)
+            .append(usageAges)
+            .append(detailLicenseeClasses)
             .toHashCode();
     }
 
@@ -151,6 +187,9 @@ public class AclScenario extends StoredEntity<String> {
             .append("editableFlag", editableFlag)
             .append("periodEndDate", periodEndDate)
             .append("licenseType", licenseType)
+            .append("publicationTypes", publicationTypes)
+            .append("usageAges", usageAges)
+            .append("detailLicenseeClasses", detailLicenseeClasses)
             .toString();
     }
 }

@@ -84,8 +84,9 @@ public class AclUsageBatchRepositoryIntegrationTest {
         AclUsageBatch expectedUsageBatch2 = buildAclUsageBatch("0825074e-f5fc-4eb6-a4b8-a452e63f1aeb",
             "ACL Usage Batch 2021", 202212, Sets.newHashSet(202106, 202112), false);
         List<AclUsageBatch> usageBatches = aclUsageBatchRepository.findUsageBatchesByPeriod(202212, true);
-        assertEquals(1, usageBatches.size());
+        assertEquals(2, usageBatches.size());
         verifyAclUsageBatch(expectedUsageBatch1, usageBatches.get(0));
+        verifyAclUsageBatch(expectedUsageBatch2, usageBatches.get(1));
         usageBatches = aclUsageBatchRepository.findUsageBatchesByPeriod(202212, false);
         assertEquals(1, usageBatches.size());
         verifyAclUsageBatch(expectedUsageBatch2, usageBatches.get(0));

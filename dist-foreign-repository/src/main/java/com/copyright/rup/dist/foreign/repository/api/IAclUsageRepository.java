@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
 import java.util.List;
@@ -68,4 +69,11 @@ public interface IAclUsageRepository {
      * @return list of periods
      */
     List<Integer> findPeriods();
+
+    /**
+     * Finds list of {@link UsageAge}.
+     *
+     * @return list of usage age wights
+     */
+    List<UsageAge> findDefaultUsageAgesWeights();
 }
