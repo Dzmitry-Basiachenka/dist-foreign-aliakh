@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.FilterExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterOperatorEnum;
@@ -649,6 +650,12 @@ public class AclUsageRepositoryIntegrationTest {
         List<Integer> actualPeriods = aclUsageRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
+    }
+
+    @Test
+    public void testFindDefaultUsageAgesWeights() {
+        List<UsageAge> usageAgeWeights = aclUsageRepository.findDefaultUsageAgesWeights();
+        assertEquals(16, usageAgeWeights.size());
     }
 
     private void verifyAclUsageDto(AclUsageDto expectedUsage, AclUsageDto actualUsage, boolean isValidateDates) {

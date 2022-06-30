@@ -28,6 +28,11 @@
         <result property="editable" column="is_editable"/>
     </resultMap>
 
+    <resultMap id="aclDefaultUsageAgeWeightResultMap" type="UsageAge" extends="StoredEntityMapper.storedEntityResult">
+        <result property="period" column="period_prior"/>
+        <result property="weight" column="weight"/>
+    </resultMap>
+
     <sql id="aclUsageColumns">
         df_acl_usage_uid,
         df_acl_usage_batch_uid,
@@ -258,6 +263,13 @@
             </when>
         </choose>
     </sql>
+
+    <select id="findDefaultUsageAgesWeights" resultMap="aclDefaultUsageAgeWeightResultMap">
+        select
+            period_prior,
+            weight
+        from ${schema}.df_udm_age_weight
+    </select>
 
     <select id="populateAclUsages" parameterType="map" resultType="string">
         insert into ${schema}.df_acl_usage (

@@ -95,13 +95,22 @@ public class AclGrantSetRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "find-grant-set-by-period-and-license-type.groovy")
     public void testFindGrantSetsByLicenseTypeAndPeriod() {
-        AclGrantSet expectedGrantSet =
+        AclGrantSet expectedGrantSet1 =
             buildAclGrantSet("9950ea35-41a4-48f5-9d14-b2182f771f66", "ACL Grant Set_1", 202212, LICENSE_TYPE);
-        expectedGrantSet.setPeriods(Sets.newHashSet(202212, 202206));
+        AclGrantSet expectedGrantSet2 =
+            buildAclGrantSet("1e06dd5e-6ab1-442a-95fc-65dec5a61658", "ACL Grant Set_2", 202212, LICENSE_TYPE);
+        AclGrantSet expectedGrantSet3 =
+            buildAclGrantSet("f7a5bc79-2be2-4384-a113-34155828a4aa", "ACL Grant Set_3", 202212, LICENSE_TYPE);
+        expectedGrantSet3.setEditable(false);
         List<AclGrantSet> grantSets =
             aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212, true);
+        assertEquals(3, grantSets.size());
+        verifyGrantSet(expectedGrantSet1, grantSets.get(0));
+        verifyGrantSet(expectedGrantSet2, grantSets.get(1));
+        verifyGrantSet(expectedGrantSet3, grantSets.get(2));
+        grantSets = aclGrantSetRepository.findGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212, false);
         assertEquals(1, grantSets.size());
-        verifyGrantSet(expectedGrantSet, grantSets.get(0));
+        verifyGrantSet(expectedGrantSet3, grantSets.get(0));
     }
 
     private void verifyGrantSet(AclGrantSet expectedGrantSet, AclGrantSet actualGrantSet) {
