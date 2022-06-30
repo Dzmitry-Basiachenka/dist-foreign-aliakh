@@ -57,9 +57,6 @@ import java.util.Objects;
  */
 public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget {
 
-    // TODO {aliakh} rename style name
-    private static final String STYLE_SCENARIO_LAST_ACTION = "scenario-last-action";
-
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalDigitalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -201,7 +198,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private VerticalLayout initGrossTotalLayout() {
         VerticalLayout layout = new VerticalLayout(grossTotalPrintLabel, grossTotalDigitalLabel, numberOfRhsPrintLabel,
             numberOfRhsDigitalLabel, numberOfWorksPrintLabel, numberOfWorksDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
@@ -212,7 +209,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private VerticalLayout initServiceFeeTotalLayout() {
         VerticalLayout layout = new VerticalLayout(serviceFeeTotalPrintLabel, serviceFeeTotalDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
@@ -222,7 +219,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private VerticalLayout initNetTotalLayout() {
         VerticalLayout layout = new VerticalLayout(netTotalPrintLabel, netTotalDigitalLabel);
-        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        VaadinUtils.addComponentStyle(layout, "scenario-detailed-amount");
         layout.setCaptionAsHtml(true);
         layout.setSpacing(false);
         layout.setMargin(false);
@@ -242,6 +239,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     // TODO {aliakh} rename AaclScenarioParameterWidget to ScenarioParameterWidget
     private VerticalLayout initMetadataLayout() {
+        // TODO use the real Licensee Class Mappings, Publication Type Weights, Usage Age Weights when implemented
         AaclScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
             new AaclScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
                 Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
@@ -264,11 +262,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private VerticalLayout initScenarioActionLayout() {
         VerticalLayout layout = new VerticalLayout(actionType, actionCreatedUser, actionCreatedDate, actionReason);
-        VaadinUtils.addComponentStyle(layout, STYLE_SCENARIO_LAST_ACTION);
+        VaadinUtils.addComponentStyle(layout, "scenario-last-action");
         layout.setCaption(ForeignUi.getMessage("label.scenario.action"));
         Button viewAllActions = new Button(ForeignUi.getMessage("button.caption.view_all_actions"));
         viewAllActions.addStyleName(ValoTheme.BUTTON_LINK);
-        // TODO add viewAllActions.addClickListener(event -> {...}) when ACL scenario history is implemented
+        // TODO {aliakh} add viewAllActions.addClickListener(event -> {...})
         layout.setSpacing(false);
         layout.setMargin(false);
         layout.addComponent(viewAllActions);
