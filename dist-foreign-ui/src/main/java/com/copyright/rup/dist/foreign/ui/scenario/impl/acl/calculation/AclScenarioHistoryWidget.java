@@ -1,21 +1,19 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -23,22 +21,22 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Implementation of {@link IScenarioHistoryWidget}.
+ * Implementation of {@link IAclScenarioHistoryWidget}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 12/18/2017
+ * Date: 06/30/2022
  *
- * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
-public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWidget {
+public class AclScenarioHistoryWidget extends Window implements IAclScenarioHistoryWidget {
 
-    private IScenarioHistoryController controller;
+    private IAclScenarioHistoryController controller;
     private Grid<ScenarioAuditItem> grid;
 
     @Override
     @SuppressWarnings("unchecked")
-    public ScenarioHistoryWidget init() {
+    public AclScenarioHistoryWidget init() {
         setWidth(700, Unit.PIXELS);
         setHeight(350, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "scenario-history-widget");
@@ -47,12 +45,12 @@ public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWid
     }
 
     @Override
-    public void setController(IScenarioHistoryController controller) {
+    public void setController(IAclScenarioHistoryController controller) {
         this.controller = controller;
     }
 
     @Override
-    public void populateHistory(Scenario scenario) {
+    public void populateHistory(AclScenario scenario) {
         if (null != scenario) {
             setCaption(ForeignUi.getMessage("window.caption.scenario_history", scenario.getName()));
             grid.setItems(controller.getActions(scenario.getId()));

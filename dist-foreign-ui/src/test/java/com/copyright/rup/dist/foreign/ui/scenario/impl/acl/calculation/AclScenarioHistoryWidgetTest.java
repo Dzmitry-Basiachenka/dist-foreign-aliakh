@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.scenario.impl;
+package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
@@ -10,7 +10,6 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
@@ -19,22 +18,22 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
- * Verifies {@link ScenarioHistoryWidget}.
+ * Verifies {@link AclScenarioHistoryWidget}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 12/18/2017
+ * Date: 06/30/2022
  *
- * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
-public class ScenarioHistoryWidgetTest {
+public class AclScenarioHistoryWidgetTest {
 
-    private ScenarioHistoryWidget widget;
+    private AclScenarioHistoryWidget widget;
 
     @Before
     public void setUp() {
-        widget = new ScenarioHistoryWidget();
-        widget.setController(createMock(ScenarioHistoryController.class));
+        widget = new AclScenarioHistoryWidget();
+        widget.setController(createMock(AclScenarioHistoryController.class));
         widget.init();
     }
 

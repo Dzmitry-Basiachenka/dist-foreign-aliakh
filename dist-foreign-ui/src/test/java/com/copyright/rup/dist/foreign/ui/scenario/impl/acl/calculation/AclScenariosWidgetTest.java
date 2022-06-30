@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 
@@ -61,7 +62,7 @@ public class AclScenariosWidgetTest {
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         scenario = buildAclScenario();
-        scenariosWidget = new AclScenariosWidget(controller);
+        scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
@@ -141,6 +142,7 @@ public class AclScenariosWidgetTest {
         return aclScenario;
     }
 
+    // TODO {aliakh} verify metadataPanel
     private void verifyPanel(Panel panel) {
         verifyWindow(panel, null, 100, 100, Unit.PERCENTAGE);
         assertNotNull(panel.getContent());

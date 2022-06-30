@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
@@ -39,11 +41,13 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -79,7 +83,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
 
-    private IAclScenariosController controller;
+    private final IAclScenarioHistoryController aclScenarioHistoryController;
+    private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
@@ -89,15 +94,18 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IAclScenariosController}
+     * @param aclScenariosController       instance of {@link IAclScenariosController}
+     * @param aclScenarioHistoryController instance of {@link IAclScenarioHistoryController}
      */
-    public AclScenariosWidget(IAclScenariosController controller) {
-        this.controller = controller;
+    public AclScenariosWidget(IAclScenariosController aclScenariosController,
+                              IAclScenarioHistoryController aclScenarioHistoryController) {
+        this.aclScenariosController = aclScenariosController;
+        this.aclScenarioHistoryController = aclScenarioHistoryController;
     }
 
     @Override
     public void refresh() {
-        List<AclScenario> scenarios = controller.getScenarios();
+        List<AclScenario> scenarios = aclScenariosController.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid.setDataProvider(dataProvider);
         selectFirstScenario(scenarios);
@@ -130,7 +138,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     @Override
     public void setController(IAclScenariosController controller) {
-        this.controller = controller;
+        this.aclScenariosController = controller;
     }
 
     @Override
@@ -139,7 +147,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private void initGrid() {
-        List<AclScenario> scenarios = controller.getScenarios();
+        List<AclScenario> scenarios = aclScenariosController.getScenarios();
         dataProvider = DataProvider.ofCollection(scenarios);
         scenarioGrid = new Grid<>(dataProvider);
         addColumns();
@@ -153,7 +161,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private HorizontalLayout initButtons() {
         createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
         createButton.addClickListener(
-            event -> Windows.showModalWindow(new CreateAclScenarioWindow(controller)));
+            event -> Windows.showModalWindow(new CreateAclScenarioWindow(aclScenariosController)));
         Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> onClickViewButton());
         VaadinUtils.setButtonsAutoDisabled(viewButton);
@@ -164,9 +172,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private void onClickViewButton() {
-        IAclScenarioController aclScenariosController = controller.getAclScenarioController();
-        aclScenariosController.setScenario(getSelectedScenario());
-        IAclScenarioWidget aclScenarioWidget = aclScenariosController.initWidget();
+        IAclScenarioController aclScenarioController = aclScenariosController.getAclScenarioController();
+        aclScenarioController.setScenario(getSelectedScenario());
+        IAclScenarioWidget aclScenarioWidget = aclScenarioController.initWidget();
         Window aclScenarioWindow = (Window) aclScenarioWidget;
         Windows.showModalWindow(aclScenarioWindow);
         aclScenarioWindow.setPositionY(30);
@@ -265,7 +273,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         layout.setCaption(ForeignUi.getMessage("label.scenario.action"));
         Button viewAllActions = new Button(ForeignUi.getMessage("button.caption.view_all_actions"));
         viewAllActions.addStyleName(ValoTheme.BUTTON_LINK);
-        // TODO {aliakh} add viewAllActions.addClickListener(event -> {...})
+        viewAllActions.addClickListener(event -> {
+            IAclScenarioHistoryWidget scenarioHistoryWidget = aclScenarioHistoryController.initWidget();
+            scenarioHistoryWidget.populateHistory(getSelectedScenario());
+            Windows.showModalWindow((Window) scenarioHistoryWidget);
+        });
         layout.setSpacing(false);
         layout.setMargin(false);
         layout.addComponent(viewAllActions);
@@ -277,7 +289,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private void onItemChanged(AclScenario scenario) {
         if (Objects.nonNull(scenario)) {
-            AclScenarioDto scenarioWithAmounts = controller.getAclScenarioWithAmountsAndLastAction(scenario.getId());
+            AclScenarioDto scenarioWithAmounts =
+                aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId());
             updateScenarioMetadata(scenarioWithAmounts);
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {
@@ -286,8 +299,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
-                    Objects.nonNull(lastAction.getCreateDate()) ? DateFormatUtils.format(lastAction.getCreateDate(),
-                        RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG) : null)); // TODO {aliakh} refactor
+                    getStringFromDate(lastAction.getCreateDate())));
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }
@@ -327,7 +339,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         netTotalDigitalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd_by_digital",
             formatAmount(scenario.getNetTotalDigital())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
-        selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
+        selectionCriteriaLabel.setValue(aclScenariosController.getCriteriaHtmlRepresentation());
         // TODO use the real value when field "Copy from" is implemented in the ACL scenario creation dialog
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", StringUtils.EMPTY));
     }
@@ -346,5 +358,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
         }
+    }
+
+    private String getStringFromDate(Date date) {
+        return Objects.nonNull(date)
+            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
+            : StringUtils.EMPTY;
     }
 }

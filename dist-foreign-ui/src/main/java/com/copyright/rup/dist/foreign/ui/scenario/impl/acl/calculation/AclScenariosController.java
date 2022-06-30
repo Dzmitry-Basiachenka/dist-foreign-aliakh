@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -46,6 +47,8 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     private IAclFundPoolService fundPoolService;
     @Autowired
     private IAclScenarioController aclScenarioController;
+    @Autowired
+    private IAclScenarioHistoryController aclScenarioHistoryController;
 
     @Override
     public List<AclScenario> getScenarios() {
@@ -112,7 +115,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     protected IAclScenariosWidget instantiateWidget() {
-        return new AclScenariosWidget(this);
+        return new AclScenariosWidget(this, aclScenarioHistoryController);
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {
