@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -360,8 +359,11 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsages.size(), usageIds.size());
             Map<String, Usage> actualUsageIdsToUsages = salUsageService.getUsagesByIds(usageIds).stream()
                 .collect(Collectors.toMap(Usage::getId, Function.identity()));
-            expectedUsages.forEach(
-                expectedUsage -> assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId())));
+            expectedUsages.forEach(expectedUsage -> {
+                testHelper.assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId()));
+                assertSalUsage(expectedUsage.getSalUsage(),
+                    actualUsageIdsToUsages.get(expectedUsage.getId()).getSalUsage());
+            });
         }
 
         private void assertPaidUsagesCountByLmDetailIds() {
@@ -383,27 +385,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 usageArchiveRepository.findByIdAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED);
             assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
             assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
-        }
-
-        // TODO {srudak} move to ServiceTestHelper
-        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
-            assertNotNull(actualUsage);
-            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-            assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-            assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
-                actualUsage.getRightsholder().getAccountNumber());
-            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
-            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
-            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
-            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
-            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
-            assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
         }
 
         private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {

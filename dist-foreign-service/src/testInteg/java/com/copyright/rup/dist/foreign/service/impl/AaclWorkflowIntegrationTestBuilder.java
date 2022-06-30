@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -400,8 +399,11 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
             List<UsageDto> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
             assertEquals(expectedUsages.size(), actualCommentsToUsages.size());
-            expectedUsages.forEach(
-                expectedUsage -> assertUsage(expectedUsage, actualCommentsToUsages.get(expectedUsage.getComment())));
+            expectedUsages.forEach(expectedUsage -> {
+                testHelper.assertUsageDto(expectedUsage, actualCommentsToUsages.get(expectedUsage.getComment()));
+                assertAaclUsage(expectedUsage.getAaclUsage(),
+                    actualCommentsToUsages.get(expectedUsage.getComment()).getAaclUsage());
+            });
         }
 
         private void assertAaclFields(AaclFields expected, AaclFields actual) {
@@ -426,21 +428,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
             return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
             });
-        }
-
-        private void assertUsage(UsageDto expectedUsage, UsageDto actualUsage) {
-            assertNotNull(actualUsage);
-            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
-            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
-            assertEquals(expectedUsage.getRhAccountNumber(), actualUsage.getRhAccountNumber());
-            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
-            assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
-            assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
-            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
-            assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
-            assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
         }
 
         private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
