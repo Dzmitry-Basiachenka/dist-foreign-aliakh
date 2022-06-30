@@ -1,9 +1,10 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.BigDecimalConverter;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -23,20 +24,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Window for Publication Type Weights.
+ * Modal window to show and modify usage age weights.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 03/12/2020
+ * Date: 03/12/20
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
-public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWindow<List<PublicationType>> {
+public class UsageAgeWeightWindow extends CommonScenarioParameterWindow<List<UsageAge>> {
 
-    private List<PublicationType> defaultValues;
-    private Map<String, BigDecimal> idsToDefaultWeights;
-    private List<PublicationType> currentValues;
-    private Grid<PublicationType> grid;
+    private List<UsageAge> defaultValues;
+    private Map<Integer, BigDecimal> periodsToDefaultWeights;
+    private List<UsageAge> currentValues;
+    private Grid<UsageAge> grid;
     private final boolean isEditable;
 
     /**
@@ -44,10 +45,10 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
      *
      * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
-    public PublicationTypeWeightsWindow(boolean isEditable) {
+    public UsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
-        setHeight(250, Unit.PIXELS);
+        setHeight(300, Unit.PIXELS);
         setResizable(false);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
@@ -56,26 +57,26 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         mainLayout.setExpandRatio(grid, 1);
         mainLayout.setSizeFull();
         setContent(mainLayout);
-        setCaption(ForeignUi.getMessage("window.publication_type_weights"));
-        VaadinUtils.addComponentStyle(this, "aacl-publication-type-weight-window");
+        setCaption(ForeignUi.getMessage("window.usage_age_weights"));
+        VaadinUtils.addComponentStyle(this, "aacl-usage-age-weight-window");
     }
 
     @Override
-    void setDefault(List<PublicationType> params) {
+    void setDefault(List<UsageAge> params) {
         defaultValues = params;
-        idsToDefaultWeights = defaultValues
+        periodsToDefaultWeights = defaultValues
             .stream()
-            .collect(Collectors.toMap(PublicationType::getId, PublicationType::getWeight));
+            .collect(Collectors.toMap(UsageAge::getPeriod, UsageAge::getWeight));
     }
 
     @Override
-    void setAppliedParameters(List<PublicationType> params) {
-        currentValues = params.stream().map(PublicationType::new).collect(Collectors.toList());
+    void setAppliedParameters(List<UsageAge> params) {
+        currentValues = params.stream().map(UsageAge::new).collect(Collectors.toList());
         grid.setItems(currentValues);
     }
 
     @Override
-    void fireParametersSaveEvent(AaclScenarioParameterWidget.ParametersSaveEvent parametersSaveEvent) {
+    void fireParametersSaveEvent(ScenarioParameterWidget.ParametersSaveEvent parametersSaveEvent) {
         fireEvent(parametersSaveEvent);
     }
 
@@ -83,13 +84,13 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         grid = new Grid<>();
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.addColumn(PublicationType::getName)
-            .setCaption(ForeignUi.getMessage("table.column.publication_type"))
+        grid.addColumn(UsageAge::getPeriod)
+            .setCaption(ForeignUi.getMessage("label.usage_period"))
             .setSortable(false);
-        grid.addColumn(item -> CurrencyUtils.format(idsToDefaultWeights.get(item.getId()), null))
+        grid.addColumn(item -> CurrencyUtils.format(periodsToDefaultWeights.get(item.getPeriod()), null))
             .setCaption(ForeignUi.getMessage("table.column.default_weight"))
             .setSortable(false);
-        Grid.Column<PublicationType, String> weightColumn =
+        Grid.Column<UsageAge, String> weightColumn =
             grid.addColumn(item -> CurrencyUtils.format(item.getWeight(), null))
                 .setCaption(ForeignUi.getMessage("table.column.scenario_weight"))
                 .setSortable(false);
@@ -107,24 +108,24 @@ public class PublicationTypeWeightsWindow extends AaclCommonScenarioParameterWin
         } else {
             grid.getEditor().setEnabled(false);
         }
-        VaadinUtils.addComponentStyle(grid, "aacl-publication-type-weight-grid");
+        VaadinUtils.addComponentStyle(grid, "aacl-usage-age-weight-grid");
     }
 
-    private Binder.Binding<PublicationType, BigDecimal> initEditorBinding() {
+    private Binder.Binding<UsageAge, BigDecimal> initEditorBinding() {
         TextField textField = new TextField();
         textField.addStyleName("editable-field");
-        Binder<PublicationType> binder = grid.getEditor().getBinder();
+        Binder<UsageAge> binder = grid.getEditor().getBinder();
         return binder.forField(textField)
             .withValidator(new RequiredValidator())
             .withValidator(new AmountValidator(ForeignUi.getMessage("field.error.positive_number_or_zero")))
             .withConverter(new BigDecimalConverter())
-            .bind(PublicationType::getWeight, PublicationType::setWeight);
+            .bind(UsageAge::getWeight, UsageAge::setWeight);
     }
 
     private HorizontalLayout initButtonsLayout() {
         Button saveButton = new Button(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
-            fireParametersSaveEvent(new AaclScenarioParameterWidget.ParametersSaveEvent<>(this, currentValues));
+            fireParametersSaveEvent(new ScenarioParameterWidget.ParametersSaveEvent<>(this, currentValues));
             close();
         });
         saveButton.setVisible(isEditable);

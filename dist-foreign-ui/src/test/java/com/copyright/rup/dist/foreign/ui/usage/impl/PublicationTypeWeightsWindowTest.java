@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
+package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
@@ -13,14 +13,16 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.IParametersSaveListener;
-import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.AaclScenarioParameterWidget.ParametersSaveEvent;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
@@ -30,6 +32,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -46,31 +49,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link AaclUsageAgeWeightWindow}.
+ * Verifies {@link PublicationTypeWeightsWindow}.
  * <p>
  * Copyright (C) 2020 copyright.com
  * <p>
- * Date: 03/13/2020
+ * Date: 03/12/2020
  *
- * @author Uladzislau Shalamitski
+ * @author Aliaksandr Liakh
  */
-public class AaclUsageAgeWeightWindowTest {
+public class PublicationTypeWeightsWindowTest {
 
-    private AaclUsageAgeWeightWindow window;
-    private final List<UsageAge> defaultParams =
-        Arrays.asList(buildUsageAge(2020, new BigDecimal("1.00")), buildUsageAge(2019, new BigDecimal("0.75")));
-    private final List<UsageAge> appliedParams =
-        Arrays.asList(buildUsageAge(2020, new BigDecimal("0.75")), buildUsageAge(2019, new BigDecimal("1.00")));
+    private final List<PublicationType> defaultParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
+        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00"),
+        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
+        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "1.10"));
+    private final List<PublicationType> appliedParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "2.00"),
+        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "3.00"),
+        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
+        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "5.00"));
+
+    private PublicationTypeWeightsWindow window;
 
     @Before
     public void setUp() {
-        window = new AaclUsageAgeWeightWindow(true);
+        window = new PublicationTypeWeightsWindow(true);
         window.setDefault(defaultParams);
     }
 
     @Test
     public void testConstructorInEditMode() {
-        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
+        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -78,19 +90,27 @@ public class AaclUsageAgeWeightWindowTest {
         assertEquals(Grid.class, component.getClass());
         verifyGrid((Grid) component, true);
         assertEquals(1, content.getExpandRatio(component), 0);
-        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        verifyButtonsVisibility(ImmutableMap.of(
-            buttonsLayout.getComponent(0), true,
-            buttonsLayout.getComponent(1), true,
-            buttonsLayout.getComponent(2), true,
-            buttonsLayout.getComponent(3), true));
+        assertEquals(4, buttonsLayout.getComponentCount());
+        Component saveButton = buttonsLayout.getComponent(0);
+        Component closeButton = buttonsLayout.getComponent(1);
+        Component placeholderLabel = buttonsLayout.getComponent(2);
+        Component defaultButton = buttonsLayout.getComponent(3);
+        assertEquals("Save", saveButton.getCaption());
+        assertEquals("Close", closeButton.getCaption());
+        assertTrue(placeholderLabel instanceof Label);
+        assertNull(placeholderLabel.getCaption());
+        assertEquals("Default", defaultButton.getCaption());
+        assertTrue(saveButton.isVisible());
+        assertTrue(defaultButton.isVisible());
+        assertTrue(placeholderLabel.isVisible());
+        assertTrue(closeButton.isVisible());
     }
 
     @Test
     public void testConstructorInViewMode() {
-        window = new AaclUsageAgeWeightWindow(false);
-        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
+        window = new PublicationTypeWeightsWindow(false);
+        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
@@ -112,9 +132,9 @@ public class AaclUsageAgeWeightWindowTest {
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
         Button saveButton = (Button) buttonsLayout.getComponent(0);
-        IParametersSaveListener<List<UsageAge>> listener = createMock(IParametersSaveListener.class);
+        IParametersSaveListener<List<PublicationType>> listener = createMock(IParametersSaveListener.class);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
-        Capture<ParametersSaveEvent<List<UsageAge>>> event = new Capture<>();
+        Capture<ParametersSaveEvent<List<PublicationType>>> event = new Capture<>();
         listener.onSave(capture(event));
         expectLastCall().once();
         replay(listener);
@@ -141,7 +161,7 @@ public class AaclUsageAgeWeightWindowTest {
     @Test
     public void testSetAppliedParameters() {
         window.setAppliedParameters(appliedParams);
-        List<UsageAge> currentValues = Whitebox.getInternalState(window, "currentValues");
+        List<PublicationType> currentValues = Whitebox.getInternalState(window, "currentValues");
         assertNotSame(appliedParams, currentValues);
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
@@ -151,8 +171,8 @@ public class AaclUsageAgeWeightWindowTest {
 
     @Test
     public void testFireParametersSaveEvent() {
-        IParametersSaveListener<List<UsageAge>> listener = createMock(IParametersSaveListener.class);
-        ParametersSaveEvent<List<UsageAge>> event = new ParametersSaveEvent<>(window, defaultParams);
+        IParametersSaveListener<List<PublicationType>> listener = createMock(IParametersSaveListener.class);
+        ParametersSaveEvent<List<PublicationType>> event = new ParametersSaveEvent<>(window, defaultParams);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
         listener.onSave(event);
         expectLastCall().once();
@@ -162,33 +182,35 @@ public class AaclUsageAgeWeightWindowTest {
     }
 
     @Test
-    public void testWeightFieldValidation() {
+    public void testPublicationTypeWeightFieldValidation() {
         Grid grid = Whitebox.getInternalState(window, "grid");
         Binder binder = grid.getEditor().getBinder();
         List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
-        TextField weightField = fields.get(0);
+        TextField publicationTypeWeight = fields.get(0);
         String emptyFieldValidationMessage = "Field value should be specified";
         String positiveNumberValidationMessage = "Field value should be positive number or zero";
-        verifyGridEditableFieldErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, StringUtils.EMPTY, binder,
+            emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "   ", binder, emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, " -1 ", binder, positiveNumberValidationMessage,
             false);
-        verifyGridEditableFieldErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
-        verifyGridEditableFieldErrorMessage(weightField, " -1 ", binder, positiveNumberValidationMessage, false);
-        verifyGridEditableFieldErrorMessage(weightField, ".05", binder, positiveNumberValidationMessage, false);
-        verifyGridEditableFieldErrorMessage(weightField, "99999999999", binder, positiveNumberValidationMessage,
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, ".05", binder, positiveNumberValidationMessage,
             false);
-        verifyGridEditableFieldErrorMessage(weightField, "value", binder, positiveNumberValidationMessage, false);
-        verifyGridEditableFieldErrorMessage(weightField, "0", binder, null, true);
-        verifyGridEditableFieldErrorMessage(weightField, " 0.00 ", binder, null, true);
-        verifyGridEditableFieldErrorMessage(weightField, "125", binder, null, true);
-        verifyGridEditableFieldErrorMessage(weightField, "125.123456789", binder, null, true);
-        verifyGridEditableFieldErrorMessage(weightField, "9999999999.99", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "99999999999", binder,
+            positiveNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "value", binder, positiveNumberValidationMessage,
+            false);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "0", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, " 0.00 ", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "125", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "125.123456789", binder, null, true);
+        verifyGridEditableFieldErrorMessage(publicationTypeWeight, "999999999.99", binder, null, true);
     }
-
 
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
-        UiTestHelper.verifyGrid((Grid) grid, Arrays.asList(
-            Triple.of("Usage Period", -1.0, -1),
+        UiTestHelper.verifyGrid(grid, Arrays.asList(
+            Triple.of("Pub Type", -1.0, -1),
             Triple.of("Default Weight", -1.0, -1),
             Triple.of("Scenario Weight", -1.0, -1)));
         List<Column> columns = grid.getColumns();
@@ -198,17 +220,18 @@ public class AaclUsageAgeWeightWindowTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void assertGridItems(List<UsageAge> params) {
+    private void assertGridItems(List<PublicationType> params) {
         VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<UsageAge> grid = (Grid<UsageAge>) content.getComponent(0);
-        assertTrue(grid.getDataProvider().isInMemory());
-        assertEquals(params, ((ListDataProvider<UsageAge>) grid.getDataProvider()).getItems());
+        Grid<PublicationType> grid = (Grid<PublicationType>) content.getComponent(0);
+        assertTrue(grid.getDataProvider() instanceof ListDataProvider);
+        assertEquals(params, ((ListDataProvider<PublicationType>) grid.getDataProvider()).getItems());
     }
 
-    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
-        UsageAge usageAge = new UsageAge();
-        usageAge.setPeriod(period);
-        usageAge.setWeight(weight);
-        return usageAge;
+    private PublicationType buildPublicationType(String id, String name, String weight) {
+        PublicationType pubType = new PublicationType();
+        pubType.setId(id);
+        pubType.setName(name);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
     }
 }
