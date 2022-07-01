@@ -15,10 +15,11 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
-import com.copyright.rup.dist.foreign.domain.RightsholderAclTotalsHolder;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -46,6 +47,7 @@ public class AclScenarioControllerTest {
 
     private AclScenarioController controller;
     private IAclScenarioService aclScenarioService;
+    private IAclUsageService aclUsageService;
     private AclScenario scenario;
 
     @Before
@@ -54,7 +56,9 @@ public class AclScenarioControllerTest {
         controller = new AclScenarioController();
         controller.setScenario(scenario);
         aclScenarioService = createMock(IAclScenarioService.class);
+        aclUsageService = createMock(IAclUsageService.class);
         Whitebox.setInternalState(controller, aclScenarioService);
+        Whitebox.setInternalState(controller, aclUsageService);
     }
 
     @Test
@@ -95,32 +99,32 @@ public class AclScenarioControllerTest {
         AclScenarioDto scenarioDto = new AclScenarioDto();
         scenarioDto.setId(SCENARIO_UID);
         Capture<Pageable> pageableCapture = newCapture();
-        expect(aclScenarioService.getRightsholderAclTotalsHoldersByScenarioId(eq(scenario.getId()), anyString(),
+        expect(aclUsageService.getAclRightsholderTotalsHoldersByScenarioId(eq(scenario.getId()), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(
             aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenarioDto).once();
-        replay(aclScenarioService);
+        replay(aclScenarioService, aclUsageService);
         controller.initWidget();
-        List<RightsholderAclTotalsHolder> result = controller.loadBeans(10, 150, null);
+        List<AclRightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
         assertEquals(10, pageable.getOffset());
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(aclScenarioService);
+        verify(aclScenarioService, aclUsageService);
     }
 
     @Test
     public void testGetSize() {
         AclScenarioDto scenarioDto = new AclScenarioDto();
         scenarioDto.setId(SCENARIO_UID);
-        expect(aclScenarioService.getRightsholderAclTotalsHolderCountByScenarioId(scenario.getId(),
+        expect(aclUsageService.getAclRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
             StringUtils.EMPTY)).andReturn(1).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenarioDto).once();
-        replay(aclScenarioService);
+        replay(aclScenarioService, aclUsageService);
         controller.initWidget();
         assertEquals(1, controller.getSize());
-        verify(aclScenarioService);
+        verify(aclScenarioService, aclUsageService);
     }
 
     @Test

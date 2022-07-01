@@ -3,10 +3,11 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
-import com.copyright.rup.dist.foreign.domain.RightsholderAclTotalsHolder;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -37,6 +38,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Autowired
     private IAclScenarioService scenarioService;
+    @Autowired
+    private IAclUsageService usageService;
     private AclScenario aclScenario;
 
     @Override
@@ -60,19 +63,19 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     }
 
     @Override
-    public List<RightsholderAclTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+    public List<AclRightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
         Sort sort = null;
         if (CollectionUtils.isNotEmpty(sortOrders)) {
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return scenarioService.getRightsholderAclTotalsHoldersByScenarioId(aclScenario.getId(),
+        return usageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId(),
             getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
     }
 
     @Override
     public int getSize() {
-        return scenarioService.getRightsholderAclTotalsHolderCountByScenarioId(aclScenario.getId(),
+        return usageService.getAclRightsholderTotalsHolderCountByScenarioId(aclScenario.getId(),
             getWidget().getSearchValue());
     }
 

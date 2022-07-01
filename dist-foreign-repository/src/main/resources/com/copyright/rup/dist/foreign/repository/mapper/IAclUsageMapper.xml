@@ -33,6 +33,20 @@
         <result property="weight" column="weight"/>
     </resultMap>
 
+    <resultMap id="aclRightsholderTotalsHolderResultMap" type="AclRightsholderTotalsHolder">
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="grossTotalPrint" column="gross_total_print"/>
+        <result property="grossTotalDigital" column="gross_total_digital"/>
+        <result property="serviceFeeTotalPrint" column="service_fee_total_print"/>
+        <result property="serviceFeeTotalDigital" column="service_fee_total_digital"/>
+        <result property="netTotalPrint" column="net_total_print"/>
+        <result property="netTotalDigital" column="net_total_digital"/>
+        <result property="numberOfTitles" column="number_of_titles"/>
+        <result property="numberOfAggLcClasses" column="number_of_agg_lc_classes"/>
+        <result property="licenseType" column="license_type"/>
+    </resultMap>
+
     <sql id="aclUsageColumns">
         df_acl_usage_uid,
         df_acl_usage_batch_uid,
@@ -271,6 +285,58 @@
         from ${schema}.df_udm_age_weight
     </select>
 
+    <sql id="rightsholderAclTotalHoldersOrderBy">
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'rightsholder.name'">
+                        r.name <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'rightsholder.accountNumber'">
+                        shd.rh_account_number <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'grossTotalPrint'">
+                        gross_total_print <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'serviceFeeTotalPrint'">
+                        service_fee_total_print <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'netTotalPrint'">
+                        net_total_print <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'grossTotalDigital'">
+                        gross_total_digital <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'serviceFeeTotalDigital'">
+                        service_fee_total_digital <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'netTotalDigital'">
+                        net_total_digital <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'numberOfTitles'">
+                        number_of_titles <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'numberOfAggLcClasses'">
+                        number_of_agg_lc_classes <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'licenseType'">
+                        s.license_type <include refid="IUsageMapper.direction"/>
+                    </when>
+                </choose>,
+                r.name
+            </when>
+            <otherwise>
+                r.name
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="searchWhereClause">
+        (r.name ilike '%' || #{searchValue} || '%' or
+        cast(shd.rh_account_number as text) like '%' || #{searchValue} || '%')
+    </sql>
+
     <select id="populateAclUsages" parameterType="map" resultType="string">
         insert into ${schema}.df_acl_usage (
             <include refid="aclUsageColumns"/>
@@ -344,5 +410,47 @@
         select distinct period
         from ${schema}.df_acl_usage
         order by period desc
+    </select>
+
+    <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
+        select
+            shd.rh_account_number,
+            r.name rh_name,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_print,
+            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_digital,
+            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.net_amount, 0) else 0 end) as net_total_digital,
+            count(distinct system_title) number_of_titles,
+            count(distinct aggregate_licensee_class_id) number_of_agg_lc_classes,
+            s.license_type
+        from ${schema}.df_acl_scenario s
+        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
+        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        where s.df_acl_scenario_uid = #{scenarioId}
+            <if test="null != searchValue">
+                and <include refid="IAclUsageMapper.searchWhereClause"/>
+            </if>
+        group by
+            shd.rh_account_number,
+            rh_name,
+            s.license_type
+        <include refid="IAclUsageMapper.rightsholderAclTotalHoldersOrderBy"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findAclRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
+        select
+            count(distinct shd.rh_account_number)
+        from ${schema}.df_acl_scenario s
+        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
+        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        where s.df_acl_scenario_uid = #{scenarioId}
+            <if test="null != searchValue">
+                and <include refid="IAclUsageMapper.searchWhereClause"/>
+            </if>
     </select>
 </mapper>

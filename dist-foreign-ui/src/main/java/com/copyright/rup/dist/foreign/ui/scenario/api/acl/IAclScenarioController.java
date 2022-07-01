@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
-import com.copyright.rup.dist.foreign.domain.RightsholderAclTotalsHolder;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -46,7 +46,7 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @param sortOrders sort orders
      * @return list of items to be displayed on UI
      */
-    List<RightsholderAclTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+    List<AclRightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 
     /**
      * @return number of items.
