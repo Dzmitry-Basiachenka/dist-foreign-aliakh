@@ -48,27 +48,27 @@
         s.is_editable,
         s.period_end_date,
         s.license_type,
-        coalesce(sum(shdp.gross_amount), 0) + coalesce(sum(shdd.gross_amount), 0) gross_total,
-        coalesce(sum(shdp.gross_amount), 0) gross_total_print,
-        coalesce(sum(shdd.gross_amount), 0) gross_total_digital,
-        coalesce(sum(shdp.service_fee_amount), 0) + coalesce(sum(shdd.service_fee_amount), 0) service_fee_total,
-        coalesce(sum(shdp.service_fee_amount), 0) service_fee_total_print,
-        coalesce(sum(shdd.service_fee_amount), 0) service_fee_total_digital,
-        coalesce(sum(shdp.net_amount), 0) + coalesce(sum(shdd.net_amount), 0) net_total,
-        coalesce(sum(shdp.net_amount), 0) net_total_print,
-        coalesce(sum(shdd.net_amount), 0) net_total_digital,
-        count(distinct shdp.rh_account_number) number_of_rhs_print,
-        count(distinct shdd.rh_account_number) number_of_rhs_digital,
-        count(distinct scdp.wr_wrk_inst) number_of_works_print,
-        count(distinct scdd.wr_wrk_inst) number_of_works_digital,
-        a1.df_acl_scenario_audit_uid action_df_scenario_audit_uid,
-        a1.df_acl_scenario_uid action_df_scenario_uid,
-        a1.action_type_ind action_action_type_ind,
-        a1.action_reason action_action_reason,
-        a1.created_datetime action_created_datetime,
-        a1.updated_datetime action_updated_datetime,
-        a1.created_by_user action_created_by_user,
-        a1.updated_by_user action_updated_by_user,
+        coalesce(sum(gross_total), 0) gross_total,
+        coalesce(sum(service_fee_total), 0) service_fee_total,
+        coalesce(sum(net_total), 0) net_total,
+        sum(case when type_of_use = 'PRINT' then gross_total else 0 end) gross_total_print,
+        sum(case when type_of_use = 'PRINT' then service_fee_total else 0 end) service_fee_total_print,
+        sum(case when type_of_use = 'PRINT' then net_total else 0 end) net_total_print,
+        sum(case when type_of_use = 'PRINT' then number_of_rhs else 0 end) number_of_rhs_print,
+        sum(case when type_of_use = 'PRINT' then number_of_works else 0 end) number_of_works_print,
+        sum(case when type_of_use = 'DIGITAL' then gross_total else 0 end) gross_total_digital,
+        sum(case when type_of_use = 'DIGITAL' then service_fee_total else 0 end) service_fee_total_digital,
+        sum(case when type_of_use = 'DIGITAL' then net_total else 0 end) net_total_digital,
+        sum(case when type_of_use = 'DIGITAL' then number_of_rhs else 0 end) number_of_rhs_digital,
+        sum(case when type_of_use = 'DIGITAL' then number_of_works else 0 end) number_of_works_digital,
+        sa.df_acl_scenario_audit_uid action_df_scenario_audit_uid,
+        sa.df_acl_scenario_uid action_df_scenario_uid,
+        sa.action_type_ind action_action_type_ind,
+        sa.action_reason action_action_reason,
+        sa.created_datetime action_created_datetime,
+        sa.updated_datetime action_updated_datetime,
+        sa.created_by_user action_created_by_user,
+        sa.updated_by_user action_updated_by_user,
         s.record_version action_record_version,
         s.created_datetime created_datetime,
         s.updated_datetime updated_datetime,
@@ -214,18 +214,38 @@
     <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
         select
             <include refid="fullScenarioInformation"/>
-        from ${schema}.df_acl_scenario s
-        left join apps.df_acl_share_detail shdp on shdp.df_acl_scenario_uid = s.df_acl_scenario_uid and shdp.type_of_use = 'PRINT'
-        left join apps.df_acl_share_detail shdd on shdd.df_acl_scenario_uid = s.df_acl_scenario_uid and shdd.type_of_use = 'DIGITAL'
-        left join apps.df_acl_scenario_detail scdp on scdp.df_acl_scenario_detail_uid = shdp.df_acl_scenario_detail_uid
-        left join apps.df_acl_scenario_detail scdd on scdd.df_acl_scenario_detail_uid = shdd.df_acl_scenario_detail_uid
-        left join ${schema}.df_acl_scenario_audit a1 on s.df_acl_scenario_uid = a1.df_acl_scenario_uid
-        left join ${schema}.df_acl_scenario_audit a2 on s.df_acl_scenario_uid = a2.df_acl_scenario_uid
-            and a1.created_datetime &lt; a2.created_datetime
-        where s.df_acl_scenario_uid = #{scenarioId}
-            and a2.df_acl_scenario_uid is null
-        group by
-            s.df_acl_scenario_uid,
-            a1.df_acl_scenario_audit_uid
+        from (
+            select 
+                df_acl_scenario_uid,
+                sum(gross_amount) as gross_total,
+                sum(service_fee_amount) as service_fee_total,
+                sum(net_amount) as net_total,
+                count(distinct rh_account_number) number_of_rhs,
+                count(distinct wr_wrk_inst) number_of_works,
+                type_of_use
+                from (
+                    select        
+                        s1.df_acl_scenario_uid,
+                        shd.gross_amount,
+                        shd.service_fee_amount,
+                        shd.net_amount,
+                        shd.type_of_use,
+                        shd.rh_account_number,
+                        scd.wr_wrk_inst           
+                    from ${schema}.df_acl_scenario s1
+                    left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s1.df_acl_scenario_uid
+                    left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+                    where s1.df_acl_scenario_uid = #{scenarioId}
+                ) as values
+                group by df_acl_scenario_uid, type_of_use
+            ) as groups    
+        join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
+        left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
+            and sa.created_datetime = (
+                select
+                    max(created_datetime)
+                from ${schema}.df_acl_scenario_audit
+                where df_acl_scenario_uid = s.df_acl_scenario_uid)
+        group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
     </select>
 </mapper>
