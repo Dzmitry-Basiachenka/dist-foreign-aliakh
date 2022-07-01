@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -19,7 +19,7 @@ import java.util.function.Function;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmValueAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<UdmValueDto> {
+public class UdmValueAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<UdmValueDto> implements IDateFormatter {
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ public class UdmValueAuditFieldToValuesMap extends CommonAuditFieldToValuesMap<U
         getFieldToValueChangesMap().put("Currency Exchange Rate", buildPair(valueDto,
             UdmValueDto::getCurrencyExchangeRate));
         getFieldToValueChangesMap().put("Currency Exchange Rate Date", buildPair(valueDto,
-            value -> DateUtils.format(value.getCurrencyExchangeRateDate())));
+            value -> toShortFormat(value.getCurrencyExchangeRateDate())));
         getFieldToValueChangesMap().put("Price in USD", buildPair(valueDto,
             value -> BigDecimalUtils.formatCurrencyForDialog(value.getPriceInUsd())));
         getFieldToValueChangesMap().put("Price Type", buildPair(valueDto, UdmValueDto::getPriceType));

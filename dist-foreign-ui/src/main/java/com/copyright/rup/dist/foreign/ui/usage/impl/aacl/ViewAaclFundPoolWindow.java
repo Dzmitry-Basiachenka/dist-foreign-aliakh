@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.aacl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.aacl.IAaclUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -21,9 +21,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -35,7 +32,7 @@ import java.util.Objects;
  *
  * @author Stanislau Rudak
  */
-public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISearchController {
+public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
     private final IAaclUsageController controller;
@@ -147,15 +144,9 @@ public class ViewAaclFundPoolWindow extends Window implements SearchWidget.ISear
             .setComparator(
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))
             .setWidth(170);
-        grid.addColumn(fundPool -> getStringFromDate(fundPool.getCreateDate()))
+        grid.addColumn(fundPool -> toLongFormat(fundPool.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((fundPool1, fundPool2) -> fundPool1.getCreateDate().compareTo(fundPool2.getCreateDate()))
             .setExpandRatio(0);
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 }

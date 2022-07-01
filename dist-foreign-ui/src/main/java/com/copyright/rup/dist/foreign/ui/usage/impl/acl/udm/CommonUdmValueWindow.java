@@ -4,7 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -35,7 +35,7 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public abstract class CommonUdmValueWindow extends Window {
+public abstract class CommonUdmValueWindow extends Window implements IDateFormatter {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
@@ -81,7 +81,7 @@ public abstract class CommonUdmValueWindow extends Window {
      * @return value provider with converted value
      */
     protected ValueProvider<UdmValueDto, String> fromLocalDateToString(ValueProvider<UdmValueDto, LocalDate> getter) {
-        return bean -> DateUtils.format(getter.apply(bean));
+        return bean -> toShortFormat(getter.apply(bean));
     }
 
     /**

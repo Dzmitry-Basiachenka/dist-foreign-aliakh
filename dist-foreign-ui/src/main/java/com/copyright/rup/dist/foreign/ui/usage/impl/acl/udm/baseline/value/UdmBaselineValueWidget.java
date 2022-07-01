@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline.value;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmBaselineValueWidget;
@@ -31,7 +31,7 @@ import java.util.function.Function;
  *
  * @author Anton Azarenka
  */
-public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdmBaselineValueWidget {
+public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdmBaselineValueWidget, IDateFormatter {
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
@@ -108,7 +108,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
                 "contentUnitPrice", 200),
             addColumn(UdmValueBaselineDto::getComment, "table.column.comment", "comment", 300),
             addColumn(UdmValueBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
-            addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
+            addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
     }
 

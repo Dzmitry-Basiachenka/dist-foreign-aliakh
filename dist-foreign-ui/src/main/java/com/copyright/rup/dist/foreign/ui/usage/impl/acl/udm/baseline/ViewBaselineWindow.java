@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * @author Anton Azarenka
  */
-public class ViewBaselineWindow extends Window {
+public class ViewBaselineWindow extends Window implements IDateFormatter {
 
     private final UdmBaselineDto udmBaselineDto;
     private final Binder<UdmBaselineDto> binder = new Binder<>();
@@ -70,9 +70,9 @@ public class ViewBaselineWindow extends Window {
             buildReadOnlyLayout(
                 "label.annualized_copies", baseline -> Objects.toString(baseline.getAnnualizedCopies())),
             buildReadOnlyLayout("label.created_by", UdmBaselineDto::getCreateUser),
-            buildReadOnlyLayout("label.created_date", baseline -> DateUtils.format(baseline.getCreateDate())),
+            buildReadOnlyLayout("label.created_date", baseline -> toShortFormat(baseline.getCreateDate())),
             buildReadOnlyLayout("label.updated_by", UdmBaselineDto::getUpdateUser),
-            buildReadOnlyLayout("label.updated_date", baseline -> DateUtils.format(baseline.getUpdateDate())),
+            buildReadOnlyLayout("label.updated_date", baseline -> toShortFormat(baseline.getUpdateDate())),
             buttonsLayout
         );
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);

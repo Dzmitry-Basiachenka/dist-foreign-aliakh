@@ -1,13 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
@@ -41,7 +40,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -57,7 +55,7 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget {
+public class AclScenariosWidget extends VerticalLayout implements IAclScenariosWidget, IDateFormatter {
 
     private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalPrintLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -203,7 +201,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         scenarioGrid.addColumn(scenario -> scenario.isEditableFlag() ? "Y" : "N")
             .setCaption(ForeignUi.getMessage("table.column.editable"))
             .setWidth(100);
-        scenarioGrid.addColumn(scenario -> DateUtils.format(scenario.getCreateDate()))
+        scenarioGrid.addColumn(scenario -> toShortFormat(scenario.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((scenario1, scenario2) -> scenario1.getCreateDate().compareTo(scenario2.getCreateDate()))
             .setWidth(120);
@@ -308,10 +306,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
-                    Objects.nonNull(lastAction.getCreateDate())
-                        ? DateFormatUtils.format(lastAction.getCreateDate(),
-                        RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)
-                        : null));
+                    Objects.nonNull(lastAction.getCreateDate()) ? toLongFormat(lastAction.getCreateDate()) : null));
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }

@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWidget {
+public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWidget, IDateFormatter {
 
     private static final String EMPTY_STYLE_NAME = "empty-values-grid";
     private static final String FOOTER_LABEL = "Values Count: %s";
@@ -269,7 +269,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addBooleanColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
             addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 200),
-            addColumn(value -> DateUtils.format(value.getCurrencyExchangeRateDate()),
+            addColumn(value -> toShortFormat(value.getCurrencyExchangeRateDate()),
                 "table.column.currency_exchange_rate_date", "currencyExchangeRateDate", 200),
             addAmountColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
             addBooleanColumn(UdmValueDto::isLastContentFlag, "table.column.last_content_flag", "lastContentFlag", 130),
@@ -285,7 +285,7 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(UdmValueDto::getLastComment, "table.column.last_comment", "lastComment", 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
             addColumn(UdmValueDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
-            addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
+            addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
     }
 

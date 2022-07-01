@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.CommonAclAppliedFilterPanel;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author Anton Azarenka
  */
-public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
+public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel implements IDateFormatter {
 
     private final IUdmUsageFilterController controller;
 
@@ -119,7 +119,7 @@ public class UdmUsageAppliedFilterWidget extends CommonAclAppliedFilterPanel {
     private Function<UdmUsageFilter, ?> getFunctionForDate(Function<UdmUsageFilter, LocalDate> function,
                                                            UdmUsageFilter filter) {
         return Objects.nonNull(function.apply(filter))
-            ? value -> DateUtils.format(function.apply(filter))
+            ? value -> toShortFormat(function.apply(filter))
             : function;
     }
 }

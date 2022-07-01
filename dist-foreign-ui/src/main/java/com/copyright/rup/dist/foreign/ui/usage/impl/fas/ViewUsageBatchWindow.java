@@ -84,7 +84,7 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
         addColumn(UsageBatch::getCreateUser, "table.column.created_by", 170,
             (batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()));
-        grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
+        grid.addColumn(batch -> toLongFormat(batch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
                 batch1.getCreateDate().compareTo(batch2.getCreateDate()));

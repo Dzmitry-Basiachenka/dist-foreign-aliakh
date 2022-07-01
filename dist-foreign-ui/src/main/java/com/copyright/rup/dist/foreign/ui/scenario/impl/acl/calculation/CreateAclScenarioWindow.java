@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author Anton Azarenka
  */
-public class CreateAclScenarioWindow extends Window {
+public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
     //TODO move it in FdaConstants
     private static final String[] LICENSE_TYPES = new String[]{"ACL", "MACL", "VGW", "JACDCL"};
@@ -122,7 +122,7 @@ public class CreateAclScenarioWindow extends Window {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setValue(
             ForeignUi.getMessage("field.scenario_name.default", FdaConstants.ACL_PRODUCT_FAMILY,
-                DateUtils.format(LocalDate.now())));
+                toShortFormat(LocalDate.now())));
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         scenarioNameField.setRequiredIndicatorVisible(true);
         scenarioBinder.forField(scenarioNameField)
