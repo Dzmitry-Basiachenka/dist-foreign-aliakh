@@ -137,7 +137,7 @@
 
     <sql id="chooseSortProperty">
         <choose>
-            <when test="sort.property == 'detailId'">
+            <when test="sort.property == 'valueId'">
                 v.df_udm_value_baseline_uid
                 <include refid="IUsageMapper.direction"/>
             </when>

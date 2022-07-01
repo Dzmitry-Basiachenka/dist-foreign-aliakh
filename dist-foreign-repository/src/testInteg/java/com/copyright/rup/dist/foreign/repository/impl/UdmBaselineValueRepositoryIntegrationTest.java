@@ -584,7 +584,7 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testSortingFindDtosByFilter() {
-        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "detailId");
+        assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_2, UDM_BASELINE_VALUE_UID_1, "valueId");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_3, "period");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_1, UDM_BASELINE_VALUE_UID_3, "wrWrkInst");
         assertSortingFindDtosByFilter(UDM_BASELINE_VALUE_UID_3, UDM_BASELINE_VALUE_UID_1, "systemTitle");
@@ -661,6 +661,6 @@ public class UdmBaselineValueRepositoryIntegrationTest {
     }
 
     private Sort buildSort() {
-        return new Sort("detailId", Sort.Direction.ASC);
+        return new Sort("valueId", Sort.Direction.ASC);
     }
 }

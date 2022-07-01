@@ -76,7 +76,7 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
                 } else {
                     udmBaselineValueGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
-                udmBaselineValueGrid.getFooterRow(0).getCell("detailId").setText(String.format(FOOTER_LABEL, size));
+                udmBaselineValueGrid.getFooterRow(0).getCell("valueId").setText(String.format(FOOTER_LABEL, size));
                 return size;
             });
         udmBaselineValueGrid = new Grid<>(dataProvider);
@@ -89,11 +89,10 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
     private void addColumns() {
         FooterRow footer = udmBaselineValueGrid.appendFooterRow();
         udmBaselineValueGrid.setFooterVisible(true);
-        //TODO  should be value_id as sort property
         Column<UdmValueBaselineDto, ?> column = udmBaselineValueGrid.addColumn(UdmValueBaselineDto::getId)
             .setCaption(ForeignUi.getMessage("table.column.value_id"))
-            .setId("detailId")
-            .setSortProperty("detailId")
+            .setId("valueId")
+            .setSortProperty("valueId")
             .setWidth(200);
         footer.getCell(column).setText(String.format(FOOTER_LABEL, 0));
         footer.join(

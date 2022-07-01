@@ -59,7 +59,7 @@ public class UdmBaselineValueServiceTest {
     public void testGetValueDtos() {
         List<UdmValueBaselineDto> baselineValues = Collections.singletonList(new UdmValueBaselineDto());
         Pageable pageable = new Pageable(0, 1);
-        Sort sort = new Sort("detailId", Sort.Direction.ASC);
+        Sort sort = new Sort("valueId", Sort.Direction.ASC);
         UdmBaselineValueFilter filter = new UdmBaselineValueFilter();
         filter.setCommentExpression(new FilterExpression<>(FilterOperatorEnum.EQUALS, "Comment", null));
         expect(baselineValueRepository.findDtosByFilter(filter, pageable, sort)).andReturn(baselineValues).once();
