@@ -140,8 +140,18 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     @Override
+    public void selectScenario(AclScenario scenario) {
+        scenarioGrid.select(scenario);
+    }
+
+    @Override
     public AclScenario getSelectedScenario() {
         return scenarioGrid.getSelectedItems().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void refreshSelectedScenario() {
+        onItemChanged(getSelectedScenario());
     }
 
     private void initGrid() {
@@ -297,8 +307,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
-                    Objects.nonNull(lastAction.getCreateDate()) ? DateFormatUtils.format(lastAction.getCreateDate(),
-                        RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG) : null)); // TODO {aliakh} refactor
+                    Objects.nonNull(lastAction.getCreateDate())
+                    ? DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)
+                    : null));
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }
@@ -306,7 +317,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         } else {
             metadataPanel.setContent(new Label());
         }
-        //TODO {aliakh} implement mediator.selectedScenarioChanged(scenario);
     }
 
     private void updateScenarioMetadata(AclScenarioDto scenario) {
