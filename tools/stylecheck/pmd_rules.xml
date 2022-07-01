@@ -116,9 +116,6 @@
         </properties>
     </rule>
 
-    <!--TODO enable this rule-->
-    <!--<rule ref="category/java/documentation.xml"/>-->
-
     <rule ref="category/java/errorprone.xml">
         <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="ConstructorCallsOverridableMethod"/>

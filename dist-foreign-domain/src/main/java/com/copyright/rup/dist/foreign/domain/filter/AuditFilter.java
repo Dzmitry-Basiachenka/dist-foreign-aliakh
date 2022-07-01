@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.domain.filter;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -12,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,12 +25,11 @@ import java.util.Set;
  */
 public class AuditFilter {
 
-    private Set<Long> rhAccountNumbers = Sets.newHashSet();
-    private Set<Long> licenseeAccountNumbers = Sets.newHashSet();
-    private Set<String> batchesIds = Sets.newHashSet();
-    // TODO {dbaraukova} investigate options to remove product family field from filter as it is not a part of it
+    private Set<Long> rhAccountNumbers = new HashSet<>();
+    private Set<Long> licenseeAccountNumbers = new HashSet<>();
+    private Set<String> batchesIds = new HashSet<>();
+    private Set<UsageStatusEnum> statuses = new HashSet<>();
     private String productFamily;
-    private Set<UsageStatusEnum> statuses = Sets.newHashSet();
     private String cccEventId;
     private String distributionName;
     private String searchValue;
