@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -99,4 +101,20 @@ public interface IAclUsageRepository {
      * @return count of {@link AclRightsholderTotalsHolder}s
      */
     int findAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+
+    /**
+     * Attaches usages to scenario.
+     *
+     * @param aclScenario ACL scenario to add ACL usages to
+     * @param userName    user name
+     */
+    void addToAclScenario(AclScenario aclScenario, String userName);
+
+    /**
+     * Finds list of {@link AclScenarioDetail}s by ACL scenario uid.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link AclScenarioDetail}s
+     */
+    List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId);
 }

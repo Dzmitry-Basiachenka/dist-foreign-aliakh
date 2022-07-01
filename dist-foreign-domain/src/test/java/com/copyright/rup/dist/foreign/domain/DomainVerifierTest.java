@@ -152,7 +152,9 @@ public class DomainVerifierTest {
             {AclFundPoolDetailFilter.class},
             {AclScenario.class},
             {AclScenarioDto.class},
-            {AclRightsholderTotalsHolder.class}
+            {AclRightsholderTotalsHolder.class},
+            {AclScenarioDetail.class},
+            {AclScenarioShareDetail.class}
         };
         return Arrays.asList(testData);
     }

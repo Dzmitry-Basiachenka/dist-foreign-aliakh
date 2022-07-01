@@ -8,10 +8,14 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UdmChannelEnum;
 import com.copyright.rup.dist.foreign.domain.UdmUsageOriginEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -36,9 +40,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -719,6 +725,116 @@ public class AclUsageRepositoryIntegrationTest {
         assertSortingAclRightsholderTotalsHolder(holder1, holder1, "licenseType");
     }
 
+    @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
+    public void testAddToAclScenario() {
+        AclScenario scenario = buildAclScenario("dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
+            "11c6590a-cea4-4cb6-a3ce-0f23a6f2e81c", "0f65b9b0-308f-4f73-b232-773a98baba2e",
+            "17970e6b-c020-4c84-9282-045ca465a8af", "ACL Scenario 201512", "Description",
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, "ACL", USER_NAME, "2022-02-14T12:00:00+00:00");
+        aclUsageRepository.addToAclScenario(scenario, "SYSTEM");
+        List<AclScenarioDetail> scenarioDetails =
+            aclUsageRepository.findScenarioDetailsByScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
+        assertEquals(1, scenarioDetails.size());
+        AclScenarioDetail expectedScenarioDetail = buildAclScenarioDetail();
+        verifyAclScenarioDetail(expectedScenarioDetail, scenarioDetails.get(0));
+    }
+
+    private AclScenarioDetail buildAclScenarioDetail() {
+        AclScenarioDetail scenarioDetail = new AclScenarioDetail();
+        scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
+        scenarioDetail.setPeriod(202112);
+        scenarioDetail.setOriginalDetailId("OGN674GHHHB0110");
+        scenarioDetail.setWrWrkInst(122820638L);
+        scenarioDetail.setSystemTitle("Technology review");
+        scenarioDetail.setDetailLicenseeClass(buildDetailLicenseeClass(43, "Other - Govt"));
+        scenarioDetail.setAggregateLicenseeClassId(1);
+        scenarioDetail.setAggregateLicenseeClassName("Food and Tobacco");
+        scenarioDetail.setPublicationType(buildPubType(new BigDecimal("1.00")));
+        scenarioDetail.setContentUnitPrice(new BigDecimal("11.0000000000"));
+        scenarioDetail.setQuantity(10L);
+        scenarioDetail.setUsageAgeWeight(new BigDecimal("0.50000"));
+        scenarioDetail.setWeightedCopies(new BigDecimal("5.0000000000"));
+        scenarioDetail.setSurveyCountry("Germany");
+        scenarioDetail.setScenarioShareDetails(buildAclScenarioShareDetails());
+        return scenarioDetail;
+    }
+
+    private List<AclScenarioShareDetail> buildAclScenarioShareDetails() {
+        return Arrays.asList(
+            buildAclScenarioShareDetail(1000028511L, "DIGITAL"),
+            buildAclScenarioShareDetail(1000028511L, "PRINT"));
+    }
+
+    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, String typeOfUse) {
+        AclScenarioShareDetail aclScenarioShareDetail = new AclScenarioShareDetail();
+        aclScenarioShareDetail.setRhAccountNumber(rhAccountNumber);
+        aclScenarioShareDetail.setValueWeight(new BigDecimal("55.0000000000"));
+        aclScenarioShareDetail.setVolumeWeight(new BigDecimal("5.0000000000"));
+        aclScenarioShareDetail.setTypeOfUse(typeOfUse);
+        return aclScenarioShareDetail;
+    }
+
+    private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
+                                         AclScenarioDetail actualScenarioDetail) {
+        assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
+        assertEquals(expectedScenarioDetail.getPeriod(), actualScenarioDetail.getPeriod());
+        assertEquals(expectedScenarioDetail.getOriginalDetailId(), actualScenarioDetail.getOriginalDetailId());
+        assertEquals(expectedScenarioDetail.getWrWrkInst(), actualScenarioDetail.getWrWrkInst());
+        assertEquals(expectedScenarioDetail.getSystemTitle(), actualScenarioDetail.getSystemTitle());
+        assertEquals(expectedScenarioDetail.getDetailLicenseeClass().getId(),
+            actualScenarioDetail.getDetailLicenseeClass().getId());
+        assertEquals(expectedScenarioDetail.getDetailLicenseeClass().getDescription(),
+            actualScenarioDetail.getDetailLicenseeClass().getDescription());
+        assertEquals(expectedScenarioDetail.getAggregateLicenseeClassId(),
+            actualScenarioDetail.getAggregateLicenseeClassId());
+        assertEquals(expectedScenarioDetail.getAggregateLicenseeClassName(),
+            actualScenarioDetail.getAggregateLicenseeClassName());
+        assertEquals(expectedScenarioDetail.getPublicationType().getId(),
+            actualScenarioDetail.getPublicationType().getId());
+        assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
+            actualScenarioDetail.getPublicationType().getWeight());
+        assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
+        assertEquals(expectedScenarioDetail.getQuantity(), actualScenarioDetail.getQuantity());
+        assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
+        assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
+        assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
+        List<AclScenarioShareDetail> expectedShareDetails = expectedScenarioDetail.getScenarioShareDetails();
+        List<AclScenarioShareDetail> actualShareDetails = actualScenarioDetail.getScenarioShareDetails();
+        assertEquals(expectedShareDetails.size(), actualShareDetails.size());
+        IntStream.range(0, actualScenarioDetail.getScenarioShareDetails().size()).forEach(i -> {
+            verifyAclScenarioShareDetails(expectedShareDetails.get(i), actualShareDetails.get(i));
+        });
+    }
+
+    private void verifyAclScenarioShareDetails(AclScenarioShareDetail expectedDetail,
+                                               AclScenarioShareDetail actualDetail) {
+        assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
+        assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
+        assertEquals(expectedDetail.getValueShare(), actualDetail.getValueShare());
+        assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
+    }
+
+    private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
+                                         String name, String description, ScenarioStatusEnum status, boolean editable,
+                                         Integer periodEndDate, String licenseType, String user, String date) {
+        AclScenario scenario = new AclScenario();
+        scenario.setId(id);
+        scenario.setFundPoolId(fundPoolId);
+        scenario.setUsageBatchId(usageBatchId);
+        scenario.setGrantSetId(grantSetId);
+        scenario.setName(name);
+        scenario.setDescription(description);
+        scenario.setStatus(status);
+        scenario.setEditableFlag(editable);
+        scenario.setPeriodEndDate(periodEndDate);
+        scenario.setLicenseType(licenseType);
+        scenario.setCreateUser(user);
+        scenario.setUpdateUser(user);
+        scenario.setCreateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
+        scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
+        return scenario;
+    }
+
     private void verifyAclUsageDto(AclUsageDto expectedUsage, AclUsageDto actualUsage, boolean isValidateDates) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getUsageBatchId(), actualUsage.getUsageBatchId());
@@ -779,6 +895,15 @@ public class AclUsageRepositoryIntegrationTest {
         publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
         publicationType.setName("BK");
         publicationType.setDescription("Book");
+        return publicationType;
+    }
+
+    private static PublicationType buildPubType(BigDecimal weight) {
+        PublicationType publicationType = new PublicationType();
+        publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
+        publicationType.setName("BK");
+        publicationType.setDescription("Book");
+        publicationType.setWeight(weight);
         return publicationType;
     }
 
