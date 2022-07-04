@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
@@ -76,5 +77,17 @@ public class AclUsageService implements IAclUsageService {
     @Override
     public int getRecordThreshold() {
         return recordsThreshold;
+    }
+
+    @Override
+    public List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
+                                                                                         String searchValue,
+                                                                                         Pageable pageable, Sort sort) {
+        return aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(scenarioId, searchValue, pageable, sort);
+    }
+
+    @Override
+    public int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
+        return aclUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
     }
 }

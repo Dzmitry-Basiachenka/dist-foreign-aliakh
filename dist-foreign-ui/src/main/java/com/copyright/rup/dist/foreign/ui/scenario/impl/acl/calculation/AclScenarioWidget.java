@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
-import com.copyright.rup.dist.foreign.domain.RightsholderAclTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
@@ -48,8 +48,8 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
 
     private IAclScenarioController controller;
     private SearchWidget searchWidget;
-    private Grid<RightsholderAclTotalsHolder> rightsholdersGrid;
-    private DataProvider<RightsholderAclTotalsHolder, Void> dataProvider;
+    private Grid<AclRightsholderTotalsHolder> rightsholdersGrid;
+    private DataProvider<AclRightsholderTotalsHolder, Void> dataProvider;
 
     /**
      * Constructor.
@@ -164,8 +164,8 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setHidable(true)
             .setExpandRatio(1);
-        rightsholdersGrid.addColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfAggLicClasses()));
+        rightsholdersGrid.addComponentColumn(holder -> {
+            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfTitles()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_titles"))
@@ -173,16 +173,16 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
             .setSortProperty("numberOfTitles")
             .setHidable(true)
             .setExpandRatio(2);
-        rightsholdersGrid.addColumn(holder -> {
-            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfAggLicClasses()));
+        rightsholdersGrid.addComponentColumn(holder -> {
+            Button button = Buttons.createButton(Objects.toString(holder.getNumberOfAggLcClasses()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_aggregate_licensee_classes"))
-            .setId("numberOfAggLicClasses")
-            .setSortProperty("numberOfAggLicClasses")
+            .setId("numberOfAggLcClasses")
+            .setSortProperty("numberOfAggLcClasses")
             .setHidable(true)
             .setExpandRatio(2);
-        rightsholdersGrid.addColumn(RightsholderAclTotalsHolder::getLicenseType)
+        rightsholdersGrid.addColumn(AclRightsholderTotalsHolder::getLicenseType)
             .setCaption(ForeignUi.getMessage("table.column.license_type"))
             .setId("licenseType")
             .setSortProperty("licenseType")
@@ -254,7 +254,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
         return toolbar;
     }
 
-    private VerticalLayout initLayout(VerticalLayout searchLayout, Grid<RightsholderAclTotalsHolder> grid,
+    private VerticalLayout initLayout(VerticalLayout searchLayout, Grid<AclRightsholderTotalsHolder> grid,
                                       HorizontalLayout buttons) {
         VerticalLayout layout = new VerticalLayout(searchLayout, grid, buttons);
         layout.setExpandRatio(grid, 1);

@@ -102,6 +102,7 @@
         <typeAlias alias="AclScenario" type="com.copyright.rup.dist.foreign.domain.AclScenario"/>
         <typeAlias alias="AclScenarioDto" type="com.copyright.rup.dist.foreign.domain.AclScenarioDto"/>
         <typeAlias alias="UsageAge" type="com.copyright.rup.dist.foreign.domain.UsageAge"/>
+        <typeAlias alias="AclRightsholderTotalsHolder" type="com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder"/>
     </typeAliases>
 
     <typeHandlers>

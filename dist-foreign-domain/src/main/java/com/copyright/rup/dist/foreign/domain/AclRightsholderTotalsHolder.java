@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  *
  * @author Dzmitry Basiachenka
  */
-public class RightsholderAclTotalsHolder {
+public class AclRightsholderTotalsHolder {
 
     private Rightsholder rightsholder = new Rightsholder();
     private BigDecimal grossTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
@@ -27,7 +27,7 @@ public class RightsholderAclTotalsHolder {
     private BigDecimal netTotalPrint = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netTotalDigital = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private int numberOfTitles;
-    private int numberOfAggLicClasses;
+    private int numberOfAggLcClasses;
     private String licenseType;
 
     public Rightsholder getRightsholder() {
@@ -94,12 +94,12 @@ public class RightsholderAclTotalsHolder {
         this.numberOfTitles = numberOfTitles;
     }
 
-    public int getNumberOfAggLicClasses() {
-        return numberOfAggLicClasses;
+    public int getNumberOfAggLcClasses() {
+        return numberOfAggLcClasses;
     }
 
-    public void setNumberOfAggLicClasses(int numberOfAggLicClasses) {
-        this.numberOfAggLicClasses = numberOfAggLicClasses;
+    public void setNumberOfAggLcClasses(int numberOfAggLcClasses) {
+        this.numberOfAggLcClasses = numberOfAggLcClasses;
     }
 
     public String getLicenseType() {
@@ -118,10 +118,10 @@ public class RightsholderAclTotalsHolder {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        RightsholderAclTotalsHolder that = (RightsholderAclTotalsHolder) obj;
+        AclRightsholderTotalsHolder that = (AclRightsholderTotalsHolder) obj;
         return new EqualsBuilder()
             .append(numberOfTitles, that.numberOfTitles)
-            .append(numberOfAggLicClasses, that.numberOfAggLicClasses)
+            .append(numberOfAggLcClasses, that.numberOfAggLcClasses)
             .append(rightsholder, that.rightsholder)
             .append(grossTotalPrint, that.grossTotalPrint)
             .append(grossTotalDigital, that.grossTotalDigital)
@@ -144,7 +144,7 @@ public class RightsholderAclTotalsHolder {
             .append(netTotalPrint)
             .append(netTotalDigital)
             .append(numberOfTitles)
-            .append(numberOfAggLicClasses)
+            .append(numberOfAggLcClasses)
             .append(licenseType)
             .toHashCode();
     }
@@ -160,7 +160,7 @@ public class RightsholderAclTotalsHolder {
             .append("netTotalPrint", netTotalPrint)
             .append("netTotalDigital", netTotalDigital)
             .append("numberOfTitles", numberOfTitles)
-            .append("numberOfAggLicClasses", numberOfAggLicClasses)
+            .append("numberOfAggLcClasses", numberOfAggLcClasses)
             .append("licenseType", licenseType)
             .toString();
     }
