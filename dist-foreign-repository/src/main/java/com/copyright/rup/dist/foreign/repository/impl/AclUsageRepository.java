@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -99,6 +101,20 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IAclUsageMapper.findAclRightsholderTotalsHolderCountByScenarioId", parameters);
+    }
+
+    @Override
+    public void addToAclScenario(AclScenario scenario, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("scenario", Objects.requireNonNull(scenario));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("IAclUsageMapper.addToScenario", params);
+    }
+
+    @Override
+    public List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId) {
+        return selectList("IAclUsageMapper.findScenarioDetailsByScenarioId", scenarioId);
     }
 
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {

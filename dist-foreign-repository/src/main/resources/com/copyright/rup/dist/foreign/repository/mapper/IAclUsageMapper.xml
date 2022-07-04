@@ -47,6 +47,39 @@
         <result property="licenseType" column="license_type"/>
     </resultMap>
 
+    <resultMap id="aclScenarioDetailResultMap" type="AclScenarioDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_scenario_detail_uid"/>
+        <result property="scenarioId" column="df_acl_scenario_uid"/>
+        <result property="period" column="period_end_date"/>
+        <result property="originalDetailId" column="original_detail_id"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="detailLicenseeClass.id" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClass.description" column="description"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
+        <result property="publicationType.id" column="publication_type_uid"/>
+        <result property="publicationType.weight" column="weight"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="quantity" column="usage_quantity"/>
+        <result property="usageAgeWeight" column="usage_age_weight"/>
+        <result property="weightedCopies" column="weighted_copies"/>
+        <result property="surveyCountry" column="survey_country"/>
+        <collection property="scenarioShareDetails" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail">
+            <result property="rhAccountNumber" column="rh_account_number"/>
+            <result property="typeOfUse" column="type_of_use"/>
+            <result property="volumeWeight" column="volume_weight"/>
+            <result property="valueWeight" column="value_weight"/>
+            <result property="valueShare" column="value_share"/>
+            <result property="volumeShare" column="volume_share"/>
+            <result property="volumeWeightDenominator" column="volume_weight_denominator"/>
+            <result property="valueWeightDenominator" column="value_weight_denominator"/>
+            <result property="netAmount" column="net_amount"/>
+            <result property="totalAmount" column="gross_amount"/>
+            <result property="serviceFeeAmount" column="service_fee_amount"/>
+        </collection>
+    </resultMap>
+
     <sql id="aclUsageColumns">
         df_acl_usage_uid,
         df_acl_usage_batch_uid,
@@ -452,5 +485,132 @@
             <if test="null != searchValue">
                 and <include refid="IAclUsageMapper.searchWhereClause"/>
             </if>
+    </select>
+
+    <insert id="addToScenario" parameterType="map">
+        with details as (
+            select
+                uuid_generate_v4() df_acl_scenario_detail_uid,
+                #{scenario.id} df_acl_scenario_uid,
+                u.period period_end_date,
+                original_detail_id,
+                wr_wrk_inst,
+                system_title,
+                detail_licensee_class_id,
+                publication_type_uid,
+                content_unit_price,
+                quantity,
+                uaw.weight usage_age_weight,
+                survey_country,
+                uaw.weight * quantity weighted_copies
+            from ${schema}.df_acl_usage u
+            left join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.period_prior = (
+                    <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
+                    select (extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
+                            extract(month from age(to_date(#{scenario.periodEndDate}::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp))
+                        ) / 6
+                   )
+            where df_acl_usage_batch_uid = #{scenario.usageBatchId}
+                and uaw.weight > 0
+        ),
+        scenario_details as (
+            insert into ${schema}.df_acl_scenario_detail (
+                df_acl_scenario_detail_uid,
+                df_acl_scenario_uid,
+                period_end_date,
+                original_detail_id,
+                wr_wrk_inst,
+                system_title,
+                detail_licensee_class_id,
+                publication_type_uid,
+                content_unit_price,
+                usage_quantity,
+                usage_age_weight,
+                survey_country,
+                weighted_copies,
+               <include refid="StoredEntityMapper.additionalColumns"/>
+            )
+            select
+                df_acl_scenario_detail_uid,
+                df_acl_scenario_uid,
+                period_end_date,
+                original_detail_id,
+                wr_wrk_inst,
+                system_title,
+                detail_licensee_class_id,
+                publication_type_uid,
+                content_unit_price,
+                quantity,
+                usage_age_weight,
+                survey_country,
+                weighted_copies,
+                <include refid="StoredEntityMapper.insert"/>
+            from details
+        )
+        insert into ${schema}.df_acl_share_detail (
+            df_acl_share_detail_uid,
+            df_acl_scenario_uid,
+            df_acl_scenario_detail_uid,
+            type_of_use,
+            rh_account_number,
+            aggregate_licensee_class_id,
+            volume_weight,
+            value_weight,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        )
+        select
+            uuid_generate_v4(),
+            #{scenario.id} df_acl_scenario_uid,
+            sd.df_acl_scenario_detail_uid,
+            gd.type_of_use,
+            gd.rh_account_number,
+            slc.aggregate_licensee_class_id,
+            quantity * usage_age_weight volume_weight,
+            quantity * usage_age_weight * content_unit_price * spt.weight value_weight,
+            <include refid="StoredEntityMapper.insert"/>
+        from details sd
+        join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
+        join ${schema}.df_acl_scenario_licensee_class slc on sd.detail_licensee_class_id = slc.detail_licensee_class_id
+        join ${schema}.df_acl_scenario_pub_type_weight spt on sd.publication_type_uid = spt.df_publication_type_uid
+        join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
+            and  gd.wr_wrk_inst = sd.wr_wrk_inst
+    </insert>
+
+    <select id="findScenarioDetailsByScenarioId" resultMap="aclScenarioDetailResultMap">
+        select
+            sd.df_acl_scenario_detail_uid,
+            sd.df_acl_scenario_uid,
+            period_end_date,
+            original_detail_id,
+            wr_wrk_inst,
+            system_title,
+            dlc.detail_licensee_class_id,
+            dlc.description,
+            shd.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name,
+            sd.publication_type_uid,
+            spt.weight,
+            content_unit_price,
+            usage_quantity,
+            usage_age_weight,
+            weighted_copies,
+            survey_country,
+            shd.rh_account_number,
+            shd.type_of_use,
+            shd.volume_weight,
+            shd.value_weight,
+            shd.value_share,
+            shd.volume_share,
+            shd.volume_weight_denominator,
+            shd.value_weight_denominator,
+            shd. net_amount,
+            shd.gross_amount,
+            shd.service_fee_amount
+        from ${schema}.df_acl_scenario_detail sd
+        join ${schema}.df_acl_share_detail shd on sd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        join ${schema}.df_acl_scenario_pub_type_weight spt on sd.publication_type_uid = spt.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on sd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+            where sd.df_acl_scenario_uid = #{scenarioId}
     </select>
 </mapper>
