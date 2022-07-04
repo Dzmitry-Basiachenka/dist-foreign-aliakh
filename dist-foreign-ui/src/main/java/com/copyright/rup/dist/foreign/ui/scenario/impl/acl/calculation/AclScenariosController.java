@@ -5,10 +5,14 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
@@ -49,6 +53,12 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     private IAclScenarioController aclScenarioController;
     @Autowired
     private IAclScenarioHistoryController aclScenarioHistoryController;
+    @Autowired
+    private IPublicationTypeService publicationTypeService;
+    @Autowired
+    private ILicenseeClassService licenseeClassService;
+    @Autowired
+    private IAclUsageService aclUsageService;
 
     @Override
     public List<AclScenario> getScenarios() {
@@ -105,7 +115,14 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public void createAclScenario(AclScenario aclScenario) {
-        //todo will be implemented later
+        //TODO sets default values. this logic will be changed after implementing additional windows for creating
+        // scenario window.
+        aclScenario.setDetailLicenseeClasses(
+            licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY));
+        aclScenario.setPublicationTypes(
+            publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY));
+        aclScenario.setUsageAges(aclUsageService.getDefaultUsageAgesWeights());
+        aclScenarioService.insertScenario(aclScenario);
     }
 
     @Override

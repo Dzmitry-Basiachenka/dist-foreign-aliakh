@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -15,10 +16,13 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
+import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 
@@ -64,12 +68,18 @@ public class AclScenariosControllerTest {
         usageBatchService = createMock(IAclUsageBatchService.class);
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
+        IPublicationTypeService publicationTypeService = createMock(IPublicationTypeService.class);
+        ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
+        IAclUsageService aclUsageService = createMock(IAclUsageService.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         aclScenarioController = createMock(IAclScenarioController.class);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
         Whitebox.setInternalState(aclScenariosController, grantSetService);
         Whitebox.setInternalState(aclScenariosController, fundPoolService);
+        Whitebox.setInternalState(aclScenariosController, publicationTypeService);
+        Whitebox.setInternalState(aclScenariosController, licenseeClassService);
+        Whitebox.setInternalState(aclScenariosController, aclUsageService);
         Whitebox.setInternalState(aclScenariosController, aclScenarioController);
     }
 
@@ -167,6 +177,16 @@ public class AclScenariosControllerTest {
         replay(usageBatchService);
         assertEquals(periods, aclScenariosController.getAllPeriods());
         verify(usageBatchService);
+    }
+
+    @Test
+    public void testCreateAclScenario() {
+        AclScenario scenario = new AclScenario();
+        aclScenarioService.insertScenario(scenario);
+        expectLastCall().once();
+        replay(aclScenarioService);
+        aclScenariosController.createAclScenario(scenario);
+        verify(aclScenarioService);
     }
 
     @Test

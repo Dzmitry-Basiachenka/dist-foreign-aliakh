@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.domain.common.util;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -41,8 +42,43 @@ public class ForeignLogUtilsTest {
     }
 
     @Test
+    public void testAclScenario() {
+        AclScenario scenario = new AclScenario();
+        scenario.setName("Scenario name");
+        scenario.setFundPoolId("65b2c7d7-adfa-460b-87b5-a978701a49d7");
+        scenario.setUsageBatchId("05ed8d36-3e98-4aa8-b3ca-862837e04d92");
+        scenario.setGrantSetId("94578e03-5581-45d9-b6b6-47cff3806550");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setUsageAges(Arrays.asList(
+            buildUsageAge(2019, new BigDecimal("1.00")),
+            buildUsageAge(2018, new BigDecimal("0.75"))
+        ));
+        scenario.setPublicationTypes(Arrays.asList(
+            buildPublicationType("Book", new BigDecimal("3.12")),
+            buildPublicationType("STMA Journal", new BigDecimal("0.99"))
+        ));
+        scenario.setDetailLicenseeClasses(Arrays.asList(
+            buildDetailLicenseeClass(108, 141),
+            buildDetailLicenseeClass(110, 143)
+        ));
+        assertEquals("AclScenarioName='Scenario name', Status='IN_PROGRESS', " +
+                "AclScenarioFields[FundPoolId='65b2c7d7-adfa-460b-87b5-a978701a49d7', " +
+                "UsageBatchId='05ed8d36-3e98-4aa8-b3ca-862837e04d92', " +
+                "GrantSetId='94578e03-5581-45d9-b6b6-47cff3806550', " +
+                "UsageAges=[Period=2019, Weight=1.00], [Period=2018, Weight=0.75], " +
+                "PublicationTypes=[Name=Book, Weight=3.12], [Name=STMA Journal, Weight=0.99], " +
+                "DetailLicenseeClasses=[DLC=108, ALC=141], [DLC=110, ALC=143]]",
+            ForeignLogUtils.aclScenario(scenario).toString());
+    }
+
+    @Test
     public void testScenarioNullValue() {
         assertEquals("Scenario={NULL}", ForeignLogUtils.scenario(null).toString());
+    }
+
+    @Test
+    public void testAclScenarioNullValue() {
+        assertEquals("AclScenario={NULL}", ForeignLogUtils.aclScenario(null).toString());
     }
 
     @Test

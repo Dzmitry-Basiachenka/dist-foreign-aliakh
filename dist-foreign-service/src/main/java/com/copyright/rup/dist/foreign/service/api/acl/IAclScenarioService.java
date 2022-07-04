@@ -2,6 +2,9 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import java.util.List;
 
@@ -17,6 +20,41 @@ import java.util.List;
 public interface IAclScenarioService {
 
     /**
+     * Inserts {@link AclScenario}.
+     *
+     * @param aclScenario instance of {@link AclScenario}
+     */
+    void insertScenario(AclScenario aclScenario);
+
+    /**
+     * Inserts usage age weights of ACL scenario.
+     *
+     * @param usageAges  list of {@link UsageAge}s
+     * @param scenarioId scenario uid
+     * @param userName   username
+     */
+    void insertAclScenarioUsageAgeWeights(List<UsageAge> usageAges, String scenarioId, String userName);
+
+    /**
+     * Inserts licensee classes of ACL scenario.
+     *
+     * @param licenseeClasses list of {@link DetailLicenseeClass}s
+     * @param scenarioId      scenario uid
+     * @param userName        username
+     */
+    void insertAclScenarioLicenseeClasses(List<DetailLicenseeClass> licenseeClasses, String scenarioId,
+                                          String userName);
+
+    /**
+     * Inserts publication type weight of ACL scenario.
+     *
+     * @param publicationTypes list of {@link PublicationType}s
+     * @param scenarioId       scenario uid
+     * @param userName         username
+     */
+    void insertAclScenarioPubTypeWeights(List<PublicationType> publicationTypes, String scenarioId, String userName);
+
+    /**
      * Gets list of {@link AclScenario}s.
      *
      * @return list of {@link AclScenario}s
@@ -28,7 +66,7 @@ public interface IAclScenarioService {
      *
      * @param scenarioName name of {@link AclScenario} to check
      * @return {@code true} if {@link AclScenario} with specified name already exists in database,
-     * {@code false} - if doesn't
+     * otherwise {@code false}
      */
     boolean aclScenarioExists(String scenarioName);
 

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.common.util;
 
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -41,6 +42,33 @@ public final class ForeignLogUtils {
                 return null == scenario
                     ? "Scenario={NULL}"
                     : String.format("ScenarioName='%s', Status='%s'", scenario.getName(), scenario.getStatus());
+            }
+        };
+    }
+
+    /**
+     * Wraps the {@link AclScenario} object and provides name and status for log message.
+     *
+     * @param aclScenario instance of {@link AclScenario}
+     * @return instance of {@link ILogWrapper}
+     */
+    public static ILogWrapper aclScenario(AclScenario aclScenario) {
+        return new ILogWrapper() {
+            @Override
+            public String toString() {
+                return null == aclScenario
+                    ? "AclScenario={NULL}"
+                    : String.format("AclScenarioName='%s', Status='%s', AclScenarioFields[FundPoolId='%s', " +
+                        "UsageBatchId='%s', GrantSetId='%s', UsageAges=%s, PublicationTypes=%s, " +
+                        "DetailLicenseeClasses=%s]",
+                    aclScenario.getName(),
+                    aclScenario.getStatus(),
+                    aclScenario.getFundPoolId(),
+                    aclScenario.getUsageBatchId(),
+                    aclScenario.getGrantSetId(),
+                    formatUsageAges(aclScenario.getUsageAges()),
+                    formatPublicationTypes(aclScenario.getPublicationTypes()),
+                    formatDetailLicenseeClasses(aclScenario.getDetailLicenseeClasses()));
             }
         };
     }

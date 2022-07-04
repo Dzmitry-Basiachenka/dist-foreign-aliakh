@@ -19,6 +19,7 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
@@ -54,6 +55,7 @@ public class CreateAclScenarioWindow extends Window {
     private final Binder<AtomicReference<AclFundPool>> fundPoolBinder = new Binder<>();
     private final Binder<AtomicReference<AclGrantSet>> grantSetBinder = new Binder<>();
     private final Binder<AtomicReference<AclUsageBatch>> usageBatchBinder = new Binder<>();
+    private final ClickListener createButtonClickListener;
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
 
     private final IAclScenariosController controller;
@@ -76,10 +78,12 @@ public class CreateAclScenarioWindow extends Window {
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IAclScenariosController}
+     * @param controller    instance of {@link IAclScenariosController}
+     * @param clickListener action that should be performed after Create button was clicked
      */
-    public CreateAclScenarioWindow(IAclScenariosController controller) {
+    public CreateAclScenarioWindow(IAclScenariosController controller, ClickListener clickListener) {
         this.controller = controller;
+        this.createButtonClickListener = clickListener;
         setResizable(false);
         setWidth(400, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.create_scenario"));
@@ -241,7 +245,10 @@ public class CreateAclScenarioWindow extends Window {
 
     private HorizontalLayout initButtonsLayout() {
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
-        confirmButton.addClickListener(listener -> onConfirmButtonClicked());
+        confirmButton.addClickListener(event -> {
+            onConfirmButtonClicked();
+            createButtonClickListener.buttonClick(event);
+        });
         HorizontalLayout layout = new HorizontalLayout(confirmButton, Buttons.createCancelButton(this));
         layout.setSpacing(true);
         return layout;
@@ -252,6 +259,9 @@ public class CreateAclScenarioWindow extends Window {
         usageBatchComboBox.setEnabled(periodAndLicenseTypeFilled);
         fundPoolComboBox.setEnabled(periodAndLicenseTypeFilled);
         grantSetComboBox.setEnabled(periodAndLicenseTypeFilled);
+        usageBatchComboBox.setSelectedItem(null);
+        fundPoolComboBox.setSelectedItem(null);
+        grantSetComboBox.setSelectedItem(null);
         if (periodAndLicenseTypeFilled) {
             String licenseType = licenseTypeComboBox.getValue();
             Integer period = periodComboBox.getValue();

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
@@ -89,5 +90,10 @@ public class AclUsageService implements IAclUsageService {
     @Override
     public int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         return aclUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
+    }
+
+    @Override
+    public List<UsageAge> getDefaultUsageAgesWeights() {
+        return aclUsageRepository.findDefaultUsageAgesWeights();
     }
 }
