@@ -1,12 +1,26 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,8 +36,57 @@ import java.util.List;
 @Service
 public class AclScenarioService implements IAclScenarioService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IAclScenarioRepository aclScenarioRepository;
+    @Autowired
+    private IAclScenarioAuditService aclScenarioAuditService;
+    @Autowired
+    private IAclUsageRepository aclUsageRepository;
+
+    @Override
+    @Transactional
+    public void insertScenario(AclScenario aclScenario) {
+        String scenarioId = RupPersistUtils.generateUuid();
+        String userName = RupContextUtils.getUserName();
+        aclScenario.setId(scenarioId);
+        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        LOGGER.info("Insert ACL scenario. Started. {}, Description={}, User={}",
+            ForeignLogUtils.aclScenario(aclScenario), aclScenario.getDescription(), userName);
+        aclScenarioRepository.insertAclScenario(aclScenario);
+        insertAclScenarioLicenseeClasses(aclScenario.getDetailLicenseeClasses(), scenarioId, userName);
+        insertAclScenarioPubTypeWeights(aclScenario.getPublicationTypes(), scenarioId, userName);
+        insertAclScenarioUsageAgeWeights(aclScenario.getUsageAges(), scenarioId, userName);
+        aclScenarioAuditService.logAction(scenarioId, ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        aclUsageRepository.addToAclScenario(aclScenario, userName);
+        LOGGER.info("Insert ACL scenario. Finished. ScenarioName={}, Description={}, UserName={}",
+            aclScenario.getName(), aclScenario.getDescription(), userName);
+    }
+
+    @Override
+    @Transactional
+    public void insertAclScenarioUsageAgeWeights(List<UsageAge> usageAges, String scenarioId, String userName) {
+        usageAges.forEach(
+            usageAge -> aclScenarioRepository.insertAclScenarioUsageAgeWeight(usageAge, scenarioId, userName));
+    }
+
+    @Override
+    @Transactional
+    public void insertAclScenarioLicenseeClasses(List<DetailLicenseeClass> licenseeClasses, String scenarioId,
+                                                 String userName) {
+        licenseeClasses.forEach(
+            licenseeClass -> aclScenarioRepository.insertAclScenarioLicenseeClass(licenseeClass, scenarioId, userName));
+    }
+
+    @Override
+    @Transactional
+    public void insertAclScenarioPubTypeWeights(List<PublicationType> publicationTypes, String scenarioId,
+                                                String userName) {
+        publicationTypes.forEach(
+            publicationType -> aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, scenarioId,
+                userName));
+    }
 
     @Override
     public List<AclScenario> getScenarios() {

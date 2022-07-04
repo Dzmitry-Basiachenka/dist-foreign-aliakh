@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 
 import java.util.Collection;
@@ -88,4 +89,11 @@ public interface IAclUsageService {
      * @return count of {@link AclRightsholderTotalsHolder}s
      */
     int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+
+    /**
+     * Gets list of {@link UsageAge}s.
+     *
+     * @return list of usage age wights
+     */
+    List<UsageAge> getDefaultUsageAgesWeights();
 }

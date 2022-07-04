@@ -16,6 +16,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
@@ -28,6 +29,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -146,9 +148,25 @@ public class AclUsageServiceTest {
         verify(aclUsageRepository);
     }
 
+    @Test
+    public void testGetDefaultUsageAgesWeights() {
+        UsageAge usageAge = buildUsageAge(2019, new BigDecimal("1.00"));
+        expect(aclUsageRepository.findDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
+        replay(aclUsageRepository);
+        assertSame(usageAge, aclUsageService.getDefaultUsageAgesWeights().get(0));
+        verify(aclUsageRepository);
+    }
+
     private AclUsageFilter buildAclUsageFilter() {
         AclUsageFilter aclUsageFilter = new AclUsageFilter();
         aclUsageFilter.setUsageBatchName("ACL Usage Batch 2021");
         return aclUsageFilter;
+    }
+
+    private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(period);
+        usageAge.setWeight(weight);
+        return usageAge;
     }
 }

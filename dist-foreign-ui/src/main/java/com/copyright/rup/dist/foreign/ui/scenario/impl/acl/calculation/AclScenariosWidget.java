@@ -169,7 +169,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private HorizontalLayout initButtons() {
         createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
         createButton.addClickListener(
-            event -> Windows.showModalWindow(new CreateAclScenarioWindow(aclScenariosController)));
+            event -> Windows.showModalWindow(
+                new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> onClickViewButton());
         VaadinUtils.setButtonsAutoDisabled(viewButton);
@@ -308,8 +309,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
                     Objects.nonNull(lastAction.getCreateDate())
-                    ? DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)
-                    : null));
+                        ? DateFormatUtils.format(lastAction.getCreateDate(),
+                        RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)
+                        : null));
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }

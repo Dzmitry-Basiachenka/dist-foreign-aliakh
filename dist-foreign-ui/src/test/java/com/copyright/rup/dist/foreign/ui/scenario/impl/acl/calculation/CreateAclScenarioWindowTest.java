@@ -40,6 +40,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,10 +73,12 @@ public class CreateAclScenarioWindowTest {
 
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
+    private ClickListener createButtonClickListener;
 
     @Before
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
+        createButtonClickListener = EasyMock.createMock(ClickListener.class);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
@@ -85,7 +88,7 @@ public class CreateAclScenarioWindowTest {
     public void testComponentStructure() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
         replay(controller, ForeignSecurityUtils.class);
-        window = new CreateAclScenarioWindow(controller);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         assertEquals("Create Scenario", window.getCaption());
         assertEquals(400, window.getWidth(), 0);
         assertEquals("create-acl-scenario-window", window.getId());
@@ -112,7 +115,7 @@ public class CreateAclScenarioWindowTest {
     public void testScenarioNameFieldValidation() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(3);
         replay(controller);
-        window = new CreateAclScenarioWindow(controller);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         TextField scenarioName = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         String emptyFieldValidationMessage = "Field value should be specified";
@@ -128,7 +131,7 @@ public class CreateAclScenarioWindowTest {
     public void testScenarioNameExists() {
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
         replay(controller);
-        window = new CreateAclScenarioWindow(controller);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
         Binder binder = Whitebox.getInternalState(window, "scenarioBinder");
         validateScenarioNameExistence(scenarioNameField, binder, SCENARIO_NAME);
@@ -167,7 +170,7 @@ public class CreateAclScenarioWindowTest {
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
         replay(controller);
-        window = new CreateAclScenarioWindow(controller);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
         VerticalLayout content = (VerticalLayout) window.getContent();
         ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(1);
         periodComboBox.setSelectedItem(202206);
