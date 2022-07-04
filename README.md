@@ -1,3 +1,27 @@
+15.1.29
+-
+* B-57796 FDA: View single scenario for ACL: add View button in Scenarios sub-tab
+* B-57783 FDA: Create an ACL Scenario: implement logic to get data from database to create scenario window
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement repository to read scenario metadata
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement service and controller to read scenario metadata
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement # of RH, # of works widgets to scenario metadata panel
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement Selection Criteria widgets to scenario metadata panel
+* B-57796 FDA: View single scenario for ACL: implement window for view single scenario
+* B-57783 FDA: Create an ACL Scenario: create tables for mapping weights and license classes
+* B-57796 FDA: View single scenario for ACL: implement service logic to retrieve records by scenario for single scenario window
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement Description widget to scenario metadata panel
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: rename some classes to show that they can be used for different product families
+* B-57783 FDA: Create an ACL Scenario: adjust domain ACL Scenario and implement logic to getting default values usage age weights
+* B-74268 FDA: Tech Debt: move methods assertUsage and similar to ServiceTestHelper
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement View All Actions widget to scenario metadata panel
+* B-57783 FDA: Create an ACL Scenario: implement queries to insert scenario data
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: fix the query to read total amounts
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: implement unit tests
+* B-57796 FDA: View single scenario for ACL: implement repository logic to retrieve records by scenario for single scenario window
+* B-57783 FDA: Create an ACL Scenario: implement logic to populate scenario tables in database
+* B-74268 FDA: Tech Debt: rename detailId to valueId as sort property
+* B-57783 FDA: Create an ACL Scenario: implement service logic to insert scenario and scenario data
+
 15.1.28
 -
 * B-72775 Tech Debt: FDA: update integration tests for WorksMatchingJob, GetRightsJob
