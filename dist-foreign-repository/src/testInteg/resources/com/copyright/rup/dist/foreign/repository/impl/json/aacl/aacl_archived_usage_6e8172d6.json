@@ -1,21 +1,5 @@
 [
   {
-    "id": "6e8172d6-c16f-4522-8606-e55db1b8e5a4",
-    "wrWrkInst": 243904752,
-    "systemTitle": "Biological Journal",
-    "standardNumber": "4680262122277",
-    "standardNumberType": "VALISBN10",
-    "status": "LOCKED",
-    "productFamily": "AACL",
-    "numberOfCopies": 300,
-    "grossAmount": 500.0000000000,
-    "netAmount": 80.0000000000,
-    "serviceFeeAmount": 420.0000000000,
-    "serviceFee": 0.25000,
-    "periodEndDate": "2019-06-30T00:00-04:00",
-    "comment": "AACL archived usage"
-  },
-  {
     "id": "1537f313-975e-420e-b745-95f2808a388a",
     "wrWrkInst": 243904752,
     "systemTitle": "Snap to grid",
@@ -27,6 +11,22 @@
     "grossAmount": 1000.0000000000,
     "netAmount": 160.0000000000,
     "serviceFeeAmount": 840.0000000000,
+    "serviceFee": 0.25000,
+    "periodEndDate": "2019-06-30T00:00-04:00",
+    "comment": "AACL archived usage"
+  },
+  {
+    "id": "6e8172d6-c16f-4522-8606-e55db1b8e5a4",
+    "wrWrkInst": 243904752,
+    "systemTitle": "Biological Journal",
+    "standardNumber": "4680262122277",
+    "standardNumberType": "VALISBN10",
+    "status": "LOCKED",
+    "productFamily": "AACL",
+    "numberOfCopies": 300,
+    "grossAmount": 500.0000000000,
+    "netAmount": 80.0000000000,
+    "serviceFeeAmount": 420.0000000000,
     "serviceFee": 0.25000,
     "periodEndDate": "2019-06-30T00:00-04:00",
     "comment": "AACL archived usage"

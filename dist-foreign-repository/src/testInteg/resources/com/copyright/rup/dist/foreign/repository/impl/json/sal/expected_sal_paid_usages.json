@@ -1,40 +1,5 @@
 [
   {
-    "id": "b8a76b66-1a9f-4208-94fa-2191237b73ef",
-    "wrWrkInst": 269040891,
-    "systemTitle": "Castanea",
-    "standardNumber": "09639292",
-    "standardNumberType": "VALISSN",
-    "status": "PAID",
-    "productFamily": "SAL",
-    "numberOfCopies": 10,
-    "grossAmount": 100.0000000000,
-    "netAmount": 75.0000000000,
-    "serviceFeeAmount": 25.0000000000,
-    "serviceFee": 0.25000,
-    "checkNumber": "578000",
-    "checkDate": "2016-11-03T00:00-04:00",
-    "cccEventId": "3356214",
-    "distributionName": "FDA March 20",
-    "distributionDate": "2020-04-03T00:00-04:00",
-    "lmDetailId": "4375bee0-24f0-4e6c-a808-c62814dd93ae",
-    "rightsholder": {
-      "accountNumber": 2000017010
-    },
-    "payee": {
-      "accountNumber": 2000017010
-    },
-    "salUsage": {
-      "detailType": "IB",
-      "reportedArticle": "Learning in Your Sleep",
-      "reportedVolNumberSeries": "Vol 17, Issue 2",
-      "grade": "5",
-      "coverageYear": "2019-2020",
-      "reportedAuthor": "Stephen Ornes",
-      "reportedPublicationDate": "2015-01-02"
-    }
-  },
-  {
     "id": "6d7cc92d-4662-4665-af57-0c8fdc417b01",
     "wrWrkInst": 269040891,
     "systemTitle": "Castanea",
@@ -68,6 +33,41 @@
       "coverageYear": "2019-2020",
       "reportedAuthor": "Stephen Ornes",
       "states": "CA;WV",
+      "reportedPublicationDate": "2015-01-02"
+    }
+  },
+  {
+    "id": "b8a76b66-1a9f-4208-94fa-2191237b73ef",
+    "wrWrkInst": 269040891,
+    "systemTitle": "Castanea",
+    "standardNumber": "09639292",
+    "standardNumberType": "VALISSN",
+    "status": "PAID",
+    "productFamily": "SAL",
+    "numberOfCopies": 10,
+    "grossAmount": 100.0000000000,
+    "netAmount": 75.0000000000,
+    "serviceFeeAmount": 25.0000000000,
+    "serviceFee": 0.25000,
+    "checkNumber": "578000",
+    "checkDate": "2016-11-03T00:00-04:00",
+    "cccEventId": "3356214",
+    "distributionName": "FDA March 20",
+    "distributionDate": "2020-04-03T00:00-04:00",
+    "lmDetailId": "4375bee0-24f0-4e6c-a808-c62814dd93ae",
+    "rightsholder": {
+      "accountNumber": 2000017010
+    },
+    "payee": {
+      "accountNumber": 2000017010
+    },
+    "salUsage": {
+      "detailType": "IB",
+      "reportedArticle": "Learning in Your Sleep",
+      "reportedVolNumberSeries": "Vol 17, Issue 2",
+      "grade": "5",
+      "coverageYear": "2019-2020",
+      "reportedAuthor": "Stephen Ornes",
       "reportedPublicationDate": "2015-01-02"
     }
   }
