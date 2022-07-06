@@ -6,11 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.foreign.domain.AaclUsage;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -24,7 +21,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -109,7 +103,8 @@ public class LoadAaclUsagesIntegrationTest {
     private void loadUsageBatch() throws IOException {
         UsageBatch batch = buildUsageBatch();
         AaclUsageCsvProcessor csvProcessor = csvProcessorFactory.getAaclUsageCsvProcessor();
-        ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
+        ProcessingResult<Usage> result =
+            csvProcessor.process(testHelper.getCsvOutputStream("usage/aacl/aacl_usages_for_upload.csv"));
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         List<String> insertedUsageIds = usageBatchService.insertAaclBatch(batch, usages);
@@ -130,13 +125,6 @@ public class LoadAaclUsagesIntegrationTest {
         return batch;
     }
 
-    private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/aacl/aacl_usages_for_upload.csv");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-        return out;
-    }
-
     private void assertUsageBatch() {
         UsageBatch batch = usageBatchService.getUsageBatches("AACL")
             .stream()
@@ -155,29 +143,9 @@ public class LoadAaclUsagesIntegrationTest {
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
         expectedUsages.forEach(expectedUsage -> {
             testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
-            assertAaclUsage(expectedUsage.getAaclUsage(),
+            testHelper.assertAaclUsage(expectedUsage.getAaclUsage(),
                 actualUsageCommentsToUsages.get(expectedUsage.getComment()).getAaclUsage());
         });
-    }
-
-    private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
-        assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
-        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-            actualAaclUsage.getPublicationType().getWeight());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-            actualAaclUsage.getDetailLicenseeClass().getId());
-        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-    }
-
-    private void assertPublicationType(PublicationType expectedPublicationType, PublicationType actualPublicationType) {
-        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
-        assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
     }
 
     private void assertAudit() {

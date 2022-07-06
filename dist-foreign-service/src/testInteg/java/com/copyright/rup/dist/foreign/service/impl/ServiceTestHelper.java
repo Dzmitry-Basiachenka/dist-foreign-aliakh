@@ -50,6 +50,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,9 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -561,6 +564,21 @@ public class ServiceTestHelper {
         });
     }
 
+    public ByteArrayOutputStream getCsvOutputStream(String fileName) throws IOException {
+        String csvText = TestUtils.fileToString(this.getClass(), fileName);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
+        return out;
+    }
+
+    private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
+        paidUsageConsumer.setLatch(new CountDownLatch(1));
+        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message),
+            Collections.emptyMap());
+        assertTrue(paidUsageConsumer.getLatch().await(10, TimeUnit.SECONDS));
+        sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
+    }
+
     private void assertPaidUsages(List<PaidUsage> expectedUsages,
                                   Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         expectedUsages.forEach(expectedUsage -> {
@@ -588,50 +606,41 @@ public class ServiceTestHelper {
             assertEquals(expectedUsage.getPeriodEndDate(), actualUsage.getPeriodEndDate());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             if (Objects.nonNull(actualUsage.getAaclUsage())) {
-                verifyAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
+                assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
             }
         });
     }
 
-    private void verifyAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getPublicationType().getId(), actualAaclUsage.getPublicationType().getId());
-        assertEquals(expectedAaclUsage.getPublicationType().getName(), actualAaclUsage.getPublicationType().getName());
-        assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-            actualAaclUsage.getPublicationType().getWeight());
-        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
-        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getBatchPeriodEndDate(), actualAaclUsage.getBatchPeriodEndDate());
-        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-        assertEquals(expectedAaclUsage.getUsageAge().getWeight(), actualAaclUsage.getUsageAge().getWeight());
-        assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
-        assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
-        assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
-        assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
-        assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-            actualAaclUsage.getDetailLicenseeClass().getId());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getDiscipline(),
-            actualAaclUsage.getDetailLicenseeClass().getDiscipline());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getEnrollmentProfile(),
-            actualAaclUsage.getDetailLicenseeClass().getEnrollmentProfile());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getId(),
-            actualAaclUsage.getAggregateLicenseeClass().getId());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getDiscipline(),
-            actualAaclUsage.getAggregateLicenseeClass().getDiscipline());
-        assertEquals(expectedAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile(),
-            actualAaclUsage.getAggregateLicenseeClass().getEnrollmentProfile());
-    }
-
-    private void doReceivePaidUsagesFromLm(String message) throws InterruptedException {
-        paidUsageConsumer.setLatch(new CountDownLatch(1));
-        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid", SnsMock.wrapBody(message),
-            Collections.emptyMap());
-        assertTrue(paidUsageConsumer.getLatch().await(10, TimeUnit.SECONDS));
-        sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
+    public void assertAaclUsage(AaclUsage expectedUsage, AaclUsage actualUsage) {
+        assertEquals(expectedUsage.getDetailLicenseeClass().getId(),
+            actualUsage.getDetailLicenseeClass().getId());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getDiscipline(),
+            actualUsage.getDetailLicenseeClass().getDiscipline());
+        assertEquals(expectedUsage.getDetailLicenseeClass().getEnrollmentProfile(),
+            actualUsage.getDetailLicenseeClass().getEnrollmentProfile());
+        assertEquals(expectedUsage.getAggregateLicenseeClass().getId(),
+            actualUsage.getAggregateLicenseeClass().getId());
+        assertEquals(expectedUsage.getAggregateLicenseeClass().getDiscipline(),
+            actualUsage.getAggregateLicenseeClass().getDiscipline());
+        assertEquals(expectedUsage.getAggregateLicenseeClass().getEnrollmentProfile(),
+            actualUsage.getAggregateLicenseeClass().getEnrollmentProfile());
+        assertEquals(expectedUsage.getPublicationType().getId(), actualUsage.getPublicationType().getId());
+        assertEquals(expectedUsage.getPublicationType().getName(), actualUsage.getPublicationType().getName());
+        assertEquals(expectedUsage.getPublicationType().getWeight(), actualUsage.getPublicationType().getWeight());
+        assertEquals(expectedUsage.getUsageAge().getPeriod(), actualUsage.getUsageAge().getPeriod());
+        assertEquals(expectedUsage.getUsageAge().getWeight(), actualUsage.getUsageAge().getWeight());
+        assertEquals(expectedUsage.getOriginalPublicationType(), actualUsage.getOriginalPublicationType());
+        assertEquals(expectedUsage.getInstitution(), actualUsage.getInstitution());
+        assertEquals(expectedUsage.getUsageSource(), actualUsage.getUsageSource());
+        assertEquals(expectedUsage.getRightLimitation(), actualUsage.getRightLimitation());
+        assertEquals(expectedUsage.getNumberOfPages(), actualUsage.getNumberOfPages());
+        assertEquals(expectedUsage.getBatchPeriodEndDate(), actualUsage.getBatchPeriodEndDate());
+        assertEquals(expectedUsage.getBaselineId(), actualUsage.getBaselineId());
+        assertEquals(expectedUsage.getVolumeWeight(), actualUsage.getVolumeWeight());
+        assertEquals(expectedUsage.getValueWeight(), actualUsage.getValueWeight());
+        assertEquals(expectedUsage.getValueShare(), actualUsage.getValueShare());
+        assertEquals(expectedUsage.getVolumeShare(), actualUsage.getVolumeShare());
+        assertEquals(expectedUsage.getTotalShare(), actualUsage.getTotalShare());
     }
 
     public void assertUsage(Usage expectedUsage, Usage actualUsage) {

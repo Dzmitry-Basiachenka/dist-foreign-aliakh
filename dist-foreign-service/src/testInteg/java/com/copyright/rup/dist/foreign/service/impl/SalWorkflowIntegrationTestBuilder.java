@@ -35,14 +35,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -270,7 +267,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadItemBank() throws IOException {
             SalItemBankCsvProcessor csvProcessor = csvProcessorFactory.getSalItemBankCsvProcessor();
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(itemBankCsvFile));
+            ProcessingResult<Usage> result = csvProcessor.process(testHelper.getCsvOutputStream(itemBankCsvFile));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages, predefinedItemBankDetailIds);
@@ -286,7 +283,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadUsageData() throws IOException {
             SalUsageDataCsvProcessor csvProcessor = csvProcessorFactory.getSalUsageDataCsvProcessor(usageBatch.getId());
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usageDataCsvFile));
+            ProcessingResult<Usage> result = csvProcessor.process(testHelper.getCsvOutputStream(usageDataCsvFile));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages, predefinedUsageDataDetailIds);
@@ -335,13 +332,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(usages.size(), predefinedDetailIds.size());
             AtomicInteger usageId = new AtomicInteger(0);
             usages.forEach(usage -> usage.setId(predefinedDetailIds.get(usageId.getAndIncrement())));
-        }
-
-        private ByteArrayOutputStream getCsvOutputStream(String fileName) throws IOException {
-            String csvText = TestUtils.fileToString(this.getClass(), fileName);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-            return out;
         }
 
         private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {

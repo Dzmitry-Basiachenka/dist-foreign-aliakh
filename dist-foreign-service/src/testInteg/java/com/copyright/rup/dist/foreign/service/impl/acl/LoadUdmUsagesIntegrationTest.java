@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
@@ -26,7 +25,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,9 +33,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +102,8 @@ public class LoadUdmUsagesIntegrationTest {
 
     private List<String> loadUdmBatch() throws IOException {
         UdmCsvProcessor csvProcessor = csvProcessorFactory.getUdmCsvProcessor();
-        ProcessingResult<UdmUsage> result = csvProcessor.process(getCsvOutputStream());
+        ProcessingResult<UdmUsage> result =
+            csvProcessor.process(testHelper.getCsvOutputStream("acl/usage/udm_usages_for_upload.csv"));
         assertTrue(result.isSuccessful());
         List<UdmUsage> usages = result.get();
         udmBatchService.insertUdmBatch(batch, usages);
@@ -175,13 +172,6 @@ public class LoadUdmUsagesIntegrationTest {
                 expectedItem.getActionReason().equals(actualItem.getActionReason()) &&
                     expectedItem.getActionType() == actualItem.getActionType()));
         });
-    }
-
-    private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/udm_usages_for_upload.csv");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-        return out;
     }
 
     private UdmBatch buildUdmBatch() {

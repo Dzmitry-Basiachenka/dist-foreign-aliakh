@@ -25,7 +25,12 @@
       "detailLicenseeClass": {
         "id": 108,
         "enrollmentProfile": "EXGP",
-        "discipline": "Life Sciences"
+        "discipline": "Life Sciences",
+        "aggregateLicenseeClass": {
+          "id": 141,
+          "discipline": "Education",
+          "enrollmentProfile": "MU"
+        }
       },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
@@ -35,12 +40,7 @@
       "usageAge": {
         "period": 2021,
         "weight": 1.00
-      },
-      "valueShare": 60.0000000,
-      "valueWeight": 24.0000000,
-      "volumeShare": 50.0000000,
-      "volumeWeight": 5.0000000,
-      "totalShare": 2.0000000
+      }
     },
     "comment": "Newly uploaded LOCKED usage"
   },
@@ -71,7 +71,12 @@
       "detailLicenseeClass": {
         "id": 108,
         "enrollmentProfile": "EXGP",
-        "discipline": "Life Sciences"
+        "discipline": "Life Sciences",
+        "aggregateLicenseeClass": {
+          "id": 141,
+          "discipline": "Education",
+          "enrollmentProfile": "MU"
+        }
       },
       "publicationType": {
         "id": "2fe9c0a0-7672-4b56-bc64-9d4125fecf6e",
@@ -82,12 +87,7 @@
       "usageAge": {
         "period": 2021,
         "weight": 1.00
-      },
-      "valueShare": 60.0000000,
-      "valueWeight": 24.0000000,
-      "volumeShare": 50.0000000,
-      "volumeWeight": 5.0000000,
-      "totalShare": 2.0000000
+      }
     },
     "comment": "LOCKED usage from baseline"
   }

@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -22,7 +21,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,10 +29,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,7 +124,8 @@ public class LoadFasUsagesIntegrationTest {
     private void loadUsageBatch() throws IOException {
         UsageBatch batch = buildUsageBatch();
         UsageCsvProcessor csvProcessor = csvProcessorFactory.getUsageCsvProcessor("FAS2");
-        ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
+        ProcessingResult<Usage> result =
+            csvProcessor.process(testHelper.getCsvOutputStream("usage/usages_for_upload.csv"));
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         setPredefinedUsageIds(usages);
@@ -166,13 +163,6 @@ public class LoadFasUsagesIntegrationTest {
     private void setPredefinedUsageIds(List<Usage> usages) {
         AtomicInteger usageId = new AtomicInteger(0);
         usages.forEach(usage -> usage.setId(IDS.get(usageId.getAndIncrement())));
-    }
-
-    private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/usages_for_upload.csv");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-        return out;
     }
 
     private Usage buildUsage(String usageId, UsageStatusEnum status, Long wrWrkInst, Long rhAccounNumber,
