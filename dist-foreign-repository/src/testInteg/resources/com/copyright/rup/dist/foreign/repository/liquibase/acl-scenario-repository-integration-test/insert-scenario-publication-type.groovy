@@ -49,7 +49,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
             column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'fbcc3113-3f5a-41a0-993e-fcdec1032eaa')
             column(name: 'df_acl_scenario_uid', value: '798964c8-e267-46e2-8685-29e84a5ab8c0')
-            column(name: 'period_prior', value: 1)
+            column(name: 'period_prior', value: 0)
             column(name: 'weight', value: 1)
         }
 
@@ -57,7 +57,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_licensee_class_uid', value: '556537fb-0809-45ea-b653-9768d5823111')
             column(name: 'df_acl_scenario_uid', value: '798964c8-e267-46e2-8685-29e84a5ab8c0')
             column(name: 'detail_licensee_class_id', value: 43)
-            column(name: 'aggregate_licensee_class_id', value: 108)
+            column(name: 'aggregate_licensee_class_id', value: 1)
         }
 
         rollback {

@@ -494,8 +494,8 @@
                 #{scenario.id} df_acl_scenario_uid,
                 u.period period_end_date,
                 original_detail_id,
-                wr_wrk_inst,
-                system_title,
+                u.wr_wrk_inst,
+                u.system_title,
                 detail_licensee_class_id,
                 publication_type_uid,
                 content_unit_price,
@@ -504,6 +504,10 @@
                 survey_country,
                 uaw.weight * quantity weighted_copies
             from ${schema}.df_acl_usage u
+            join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
+            join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
+                and  gd.wr_wrk_inst = u.wr_wrk_inst
+                and  gd.grant_status = 'GRANT'
             left join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.period_prior = (
                     <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
                     select (extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
@@ -512,6 +516,8 @@
                    )
             where df_acl_usage_batch_uid = #{scenario.usageBatchId}
                 and uaw.weight > 0
+                and quantity &lt; 2000
+            group by u.df_acl_usage_uid, uaw.weight
         ),
         scenario_details as (
             insert into ${schema}.df_acl_scenario_detail (

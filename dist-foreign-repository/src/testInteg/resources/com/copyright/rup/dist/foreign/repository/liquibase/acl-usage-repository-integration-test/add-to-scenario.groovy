@@ -49,6 +49,34 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '96d266e4-9633-4a6e-8e26-748596bd71f3')
+            column(name: 'df_acl_grant_set_uid', value: '17970e6b-c020-4c84-9282-045ca465a8af')
+            column(name: 'grant_status', value: 'DENY')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 122825555)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '6e6ccdad-62e0-4d55-8dc7-e1fd6a227140')
+            column(name: 'df_acl_grant_set_uid', value: '17970e6b-c020-4c84-9282-045ca465a8af')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 300820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
             column(name: 'df_acl_usage_batch_uid', value: '0f65b9b0-308f-4f73-b232-773a98baba2e')
             column(name: 'name', value: 'ACL Usage Batch 202112')
@@ -65,6 +93,98 @@ databaseChangeLog {
             column(name: 'period', value: 202112)
             column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
             column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'survey_country', value: 'Germany')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 11.0000000000)
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'annualized_copies', value: 2)
+            column(name: 'quantity', value: 10)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user1@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        //will be excluded by wrWrkInst
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'df_acl_usage_uid', value: '6497c851-7d5e-4832-9166-124982d08228')
+            column(name: 'df_acl_usage_batch_uid', value: '0f65b9b0-308f-4f73-b232-773a98baba2e')
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'Rightsdirect')
+            column(name: 'period', value: 202112)
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'wr_wrk_inst', value: 823333789)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'survey_country', value: 'Germany')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 11.0000000000)
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'annualized_copies', value: 2)
+            column(name: 'quantity', value: 10)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user1@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        //will be excluded from scenario by quantity
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'df_acl_usage_uid', value: '639a476b-4a5f-4712-a5c0-a92e75c60622')
+            column(name: 'df_acl_usage_batch_uid', value: '0f65b9b0-308f-4f73-b232-773a98baba2e')
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'Rightsdirect')
+            column(name: 'period', value: 202112)
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'survey_country', value: 'Germany')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 11.0000000000)
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'annualized_copies', value: 2)
+            column(name: 'quantity', value: 2000)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user1@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        //will be excluded from scenario by usage age weight
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'df_acl_usage_uid', value: '49166318-3c28-4ec0-b368-9383e99edce1')
+            column(name: 'df_acl_usage_batch_uid', value: '0f65b9b0-308f-4f73-b232-773a98baba2e')
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'Rightsdirect')
+            column(name: 'period', value: 200806)
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'survey_country', value: 'Germany')
+            column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'content_unit_price', value: 11.0000000000)
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'annualized_copies', value: 2)
+            column(name: 'quantity', value: 10)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user1@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        //will be excluded from scenario by grant status
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'df_acl_usage_uid', value: 'c386408a-3f71-4958-b82f-c137922a0c43')
+            column(name: 'df_acl_usage_batch_uid', value: '0f65b9b0-308f-4f73-b232-773a98baba2e')
+            column(name: 'usage_origin', value: 'SS')
+            column(name: 'channel', value: 'Rightsdirect')
+            column(name: 'period', value: 201812)
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'wr_wrk_inst', value: 122825555)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'detail_licensee_class_id', value: 43)
             column(name: 'survey_country', value: 'Germany')

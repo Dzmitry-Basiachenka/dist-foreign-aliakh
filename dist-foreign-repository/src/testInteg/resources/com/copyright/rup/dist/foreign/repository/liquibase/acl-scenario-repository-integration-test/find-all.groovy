@@ -87,6 +87,48 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'eb80bec3-6b46-414a-83a8-40a8b94642c0')
+            column(name: 'df_acl_scenario_uid', value: '1995d50d-41c6-4e81-8c82-51a983bbecf8')
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '86625299-47a7-4adc-bc65-43c527e3c7af')
+            column(name: 'df_acl_scenario_uid', value: '1995d50d-41c6-4e81-8c82-51a983bbecf8')
+            column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: 'fffabfef-3411-4f26-a3de-2e203f38716d')
+            column(name: 'df_acl_scenario_uid', value: '1995d50d-41c6-4e81-8c82-51a983bbecf8')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'e6eff13e-6566-4585-9859-306b54553fe5')
+            column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '8ad5583b-7999-4a7b-b7aa-526cf32572d3')
+            column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
+            column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: 'ada3da9b-e49f-449b-8942-f9844f5b8aca')
+            column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'aggregate_licensee_class_id', value: 1)
+        }
+
         rollback {
             dbRollback
         }

@@ -145,7 +145,7 @@ public class CreateAclScenarioWindow extends Window {
             .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .bind(AclScenario::getPeriodEndDate, AclScenario::setPeriodEndDate);
         periodComboBox.setSizeFull();
-        VaadinUtils.addComponentStyle(licenseTypeComboBox, "acl-scenario-license-type-combo-box");
+        VaadinUtils.addComponentStyle(periodComboBox, "acl-scenario-period-combo-box");
     }
 
     private void initLicenseTypeComboBox() {
@@ -288,7 +288,7 @@ public class CreateAclScenarioWindow extends Window {
             }
         } else {
             Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, periodComboBox, licenseTypeComboBox,
-                usageBatchComboBox, grantSetComboBox, fundPoolComboBox));
+                usageBatchComboBox, grantSetComboBox, fundPoolComboBox, descriptionArea));
         }
     }
 

@@ -28,12 +28,10 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Integration test for {@link AclScenarioRepository}.
@@ -164,6 +162,12 @@ public class AclScenarioRepositoryIntegrationTest {
             "924aab3c-b2e0-4115-b46a-cb6cfe70fb61", "ACL Scenario 202206", DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, DATE);
         aclScenarioRepository.insertAclScenario(expectedScenario);
+        aclScenarioRepository.insertAclScenarioUsageAgeWeight(expectedScenario.getUsageAges().get(0),
+            expectedScenario.getId(), USER_NAME);
+        aclScenarioRepository.insertAclScenarioPubTypeWeight(expectedScenario.getPublicationTypes().get(0),
+            expectedScenario.getId(), USER_NAME);
+        aclScenarioRepository.insertAclScenarioLicenseeClass(expectedScenario.getDetailLicenseeClasses().get(0),
+            expectedScenario.getId(), USER_NAME);
         List<AclScenario> aclScenarios = aclScenarioRepository.findAll();
         assertEquals(1, aclScenarios.size());
         verifyAclScenario(expectedScenario, aclScenarios.get(0));
@@ -176,9 +180,8 @@ public class AclScenarioRepositoryIntegrationTest {
             "9695d1a0-407b-485d-ad0e-7471f4cb5607", "fb1d0635-b52d-4d4a-9412-d370481657d8",
             "4448e5d8-a008-4481-abb8-e75af1329637", "ACL Scenario 201806", DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
-        UsageAge usageAge = buildUsageAge(0, new BigDecimal(BigInteger.ZERO));
-        expectedScenario.setUsageAges(Collections.singletonList(usageAge));
-        aclScenarioRepository.insertAclScenarioUsageAgeWeight(usageAge, expectedScenario.getId(), USER_NAME);
+        aclScenarioRepository.insertAclScenarioUsageAgeWeight(expectedScenario.getUsageAges().get(0),
+            expectedScenario.getId(), USER_NAME);
         verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
     }
 
@@ -189,10 +192,8 @@ public class AclScenarioRepositoryIntegrationTest {
             "3ef4e970-7a40-4909-b0a3-7a59c8a28e82", "4a716c5e-ef92-4507-9283-c2be0f622494",
             "d6209e69-527b-469e-8ba8-2f83ef4f99aa", "ACL Scenario 201712", DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
-        PublicationType publicationType =
-            buildPublicationType("f1f523ca-1b46-4d3a-842d-99252785187c", new BigDecimal(BigInteger.ZERO));
-        expectedScenario.setPublicationTypes(Collections.singletonList(publicationType));
-        aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, expectedScenario.getId(), USER_NAME);
+        aclScenarioRepository.insertAclScenarioPubTypeWeight(expectedScenario.getPublicationTypes().get(0),
+            expectedScenario.getId(), USER_NAME);
         verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
     }
 
@@ -203,9 +204,8 @@ public class AclScenarioRepositoryIntegrationTest {
             "881e39b4-b8dc-4df5-97c1-e6dad801a3b0", "3b960493-95f6-44b6-bc85-30021a18c65c",
             "92362a0f-75a0-4746-8ccf-082041023016", "ACL Scenario 201512", DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202012, LICENSE_TYPE_ACL, USER_NAME, DATE);
-        DetailLicenseeClass licenseeClass = buildDetailLicenseeClass(43, 108);
-        expectedScenario.setDetailLicenseeClasses(Collections.singletonList(licenseeClass));
-        aclScenarioRepository.insertAclScenarioLicenseeClass(licenseeClass, expectedScenario.getId(), USER_NAME);
+        aclScenarioRepository.insertAclScenarioLicenseeClass(expectedScenario.getDetailLicenseeClasses().get(0),
+            expectedScenario.getId(), USER_NAME);
         verifyAclScenario(expectedScenario, aclScenarioRepository.findById(expectedScenario.getId()));
     }
 
@@ -251,6 +251,10 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setUpdateUser(user);
         scenario.setCreateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
         scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
+        scenario.setDetailLicenseeClasses(Collections.singletonList(buildDetailLicenseeClass(43, 1)));
+        scenario.setPublicationTypes(Collections.singletonList(
+            buildPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00000"))));
+        scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, new BigDecimal("1.00000"))));
         return scenario;
     }
 
@@ -267,21 +271,12 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(expectedAclScenario.getLicenseType(), actualAclScenario.getLicenseType());
         assertEquals(expectedAclScenario.getCreateUser(), actualAclScenario.getCreateUser());
         assertEquals(expectedAclScenario.getUpdateUser(), actualAclScenario.getUpdateUser());
-        if (actualAclScenario.getUsageAges().size() > 0) {
-            IntStream.of(0, actualAclScenario.getUsageAges().size())
-                .forEach(i -> verifyAclScenarioUsageAge(expectedAclScenario.getUsageAges().get(i),
-                    actualAclScenario.getUsageAges().get(i)));
-        }
-        if (actualAclScenario.getDetailLicenseeClasses().size() > 0) {
-            IntStream.of(0, actualAclScenario.getDetailLicenseeClasses().size())
-                .forEach(i -> verifyAclScenarioLicenseeClasses(expectedAclScenario.getDetailLicenseeClasses().get(i),
-                    actualAclScenario.getDetailLicenseeClasses().get(i)));
-        }
-        if (actualAclScenario.getPublicationTypes().size() > 0) {
-            IntStream.of(0, actualAclScenario.getPublicationTypes().size())
-                .forEach(i -> verifyAclScenarioPublicationType(expectedAclScenario.getPublicationTypes().get(i),
-                    actualAclScenario.getPublicationTypes().get(i)));
-        }
+        verifyAclScenarioUsageAge(expectedAclScenario.getUsageAges().get(0),
+            actualAclScenario.getUsageAges().get(0));
+        verifyAclScenarioLicenseeClasses(expectedAclScenario.getDetailLicenseeClasses().get(0),
+            actualAclScenario.getDetailLicenseeClasses().get(0));
+        verifyAclScenarioPublicationType(expectedAclScenario.getPublicationTypes().get(0),
+            actualAclScenario.getPublicationTypes().get(0));
     }
 
     private void verifyAclScenarioLicenseeClasses(DetailLicenseeClass expectedDetailLicenseeClass,
@@ -289,28 +284,16 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(expectedDetailLicenseeClass.getId(), actualDetailLicenseeClass.getId());
         assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getId(),
             actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
-        assertEquals(expectedDetailLicenseeClass.getCreateUser(), actualDetailLicenseeClass.getCreateUser());
-        assertEquals(expectedDetailLicenseeClass.getUpdateUser(), actualDetailLicenseeClass.getUpdateUser());
-        assertEquals(expectedDetailLicenseeClass.getCreateDate(), actualDetailLicenseeClass.getCreateDate());
-        assertEquals(expectedDetailLicenseeClass.getUpdateDate(), actualDetailLicenseeClass.getUpdateDate());
     }
 
     private void verifyAclScenarioPublicationType(PublicationType expectedPublicationType,
                                                   PublicationType actualPublicationType) {
         assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
         assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
-        assertEquals(expectedPublicationType.getCreateUser(), actualPublicationType.getCreateUser());
-        assertEquals(expectedPublicationType.getUpdateUser(), actualPublicationType.getUpdateUser());
-        assertEquals(expectedPublicationType.getCreateDate(), actualPublicationType.getCreateDate());
-        assertEquals(expectedPublicationType.getUpdateDate(), actualPublicationType.getUpdateDate());
     }
 
     private void verifyAclScenarioUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
         assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
         assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
-        assertEquals(expectedUsageAge.getCreateUser(), actualUsageAge.getCreateUser());
-        assertEquals(expectedUsageAge.getUpdateUser(), actualUsageAge.getUpdateUser());
-        assertEquals(expectedUsageAge.getCreateDate(), actualUsageAge.getCreateDate());
-        assertEquals(expectedUsageAge.getUpdateDate(), actualUsageAge.getUpdateDate());
     }
 }

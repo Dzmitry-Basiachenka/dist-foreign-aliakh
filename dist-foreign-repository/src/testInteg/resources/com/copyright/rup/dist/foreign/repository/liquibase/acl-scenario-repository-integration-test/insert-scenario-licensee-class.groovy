@@ -49,14 +49,14 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
             column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'fbcc3113-3f5a-41a0-993e-fcdec1032eaa')
             column(name: 'df_acl_scenario_uid', value: 'd18b4933-98c7-45b0-9775-1a86f3525636')
-            column(name: 'period_prior', value: 1)
+            column(name: 'period_prior', value: 0)
             column(name: 'weight', value: 1)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
             column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'fbcc3113-3f5a-41a0-993e-fcdec1032eaa')
             column(name: 'df_acl_scenario_uid', value: 'd18b4933-98c7-45b0-9775-1a86f3525636')
-            column(name: 'df_publication_type_uid', value: "f1f523ca-1b46-4d3a-842d-99252785187c")
+            column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
         }
 
