@@ -1,3 +1,9 @@
+15.1.30
+-
+* B-74268 FDA: Tech Debt: add explicit order to results of method usageArchiveRepository.findByIdAndStatus for tests only
+* B-57796 FDA: View single scenario for ACL: refine logic to enable/disable View button
+* B-57783 FDA: Create an ACL Scenario: fix issue with duplicate data during creation scenario
+
 15.1.29
 -
 * B-57796 FDA: View single scenario for ACL: add View button in Scenarios sub-tab
