@@ -80,14 +80,15 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
-
     private final IAclScenarioHistoryController aclScenarioHistoryController;
+    private final Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));;
+    private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));;
+
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ListDataProvider<AclScenario> dataProvider;
-    private Button createButton;
 
     /**
      * Constructor.
@@ -115,7 +116,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         setSizeFull();
         initMetadataPanel();
         initGrid();
-        HorizontalLayout buttonsLayout = initButtons();
+        HorizontalLayout buttonsLayout = initButtonsLayout();
         HorizontalLayout horizontalLayout = new HorizontalLayout(scenarioGrid, metadataPanel);
         horizontalLayout.setSizeFull();
         horizontalLayout.setExpandRatio(scenarioGrid, 0.7f);
@@ -166,16 +167,15 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         VaadinUtils.addComponentStyle(scenarioGrid, "acl-scenarios-table");
     }
 
-    private HorizontalLayout initButtons() {
-        createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
+    private HorizontalLayout initButtonsLayout() {
         createButton.addClickListener(
             event -> Windows.showModalWindow(
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
-        Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> onClickViewButton());
-        VaadinUtils.setButtonsAutoDisabled(viewButton);
+        viewButton.setEnabled(Objects.nonNull(getSelectedScenario()));
         HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
+        VaadinUtils.setButtonsAutoDisabled(viewButton);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
     }
@@ -319,6 +319,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         } else {
             metadataPanel.setContent(new Label());
         }
+        changeButtonsAvailability(scenario);
     }
 
     private void updateScenarioMetadata(AclScenarioDto scenario) {
@@ -369,5 +370,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
         }
+    }
+
+    private void changeButtonsAvailability(AclScenario scenario) {
+        viewButton.setEnabled(Objects.nonNull(scenario));
     }
 }
