@@ -15,20 +15,33 @@
     "productFamily": "SAL",
     "comment": "usage1",
     "salUsage": {
-      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "licenseeAccountNumber": 4444,
+      "licenseeName": "Truman State University",
+      "detailType": "IB",
       "grade": "K",
       "gradeGroup": "ITEM_BANK",
-      "detailType": "IB",
-      "reportedMediaType": "Image",
-      "mediaTypeWeight": 0.3,
-      "reportedStandardNumber": "978-0-87664-361-7",
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "assessmentType": null,
       "reportedWorkPortionId": "1",
+      "reportedArticle": null,
+      "reportedStandardNumber": "978-0-87664-361-7",
       "reportedAuthor": "Linda J. S. Allen",
       "reportedPublisher": "Rosen",
       "reportedPublicationDate": "7/7/2010",
       "reportedPageRange": "25-30",
       "reportedVolNumberSeries": "55(2)",
-      "coverageYear": "2014-2015"
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": 0.3,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -43,18 +56,33 @@
     "productFamily": "SAL",
     "comment": "usage2",
     "salUsage": {
-      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "licenseeAccountNumber": 4444,
+      "licenseeName": "Truman State University",
       "detailType": "IB",
-      "reportedMediaType": "Image",
-      "mediaTypeWeight": 0.3,
-      "reportedStandardNumber": "978-2-84096-163-5",
+      "grade": null,
+      "gradeGroup": "ITEM_BANK",
+      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "assessmentType": null,
       "reportedWorkPortionId": "2",
+      "reportedArticle": null,
+      "reportedStandardNumber": "978-2-84096-163-5",
       "reportedAuthor": "Linda J. S. Allen",
       "reportedPublisher": "Rosen",
       "reportedPublicationDate": "7/8/2010",
       "reportedPageRange": "25-30",
       "reportedVolNumberSeries": "55(2)",
-      "coverageYear": "2015-2016"
+      "reportedMediaType": "Image",
+      "mediaTypeWeight": 0.3,
+      "coverageYear": "2015-2016",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -72,20 +100,33 @@
     "productFamily": "SAL",
     "comment": "usage3",
     "salUsage": {
-      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "licenseeAccountNumber": 4444,
+      "licenseeName": "Truman State University",
+      "detailType": "IB",
       "grade": "2",
       "gradeGroup": "ITEM_BANK",
-      "detailType": "IB",
-      "reportedMediaType": "Text",
-      "mediaTypeWeight": 1.0,
-      "reportedStandardNumber": "1040-1776",
+      "assessmentName": "Spring2014 Eng Lang/Mathy",
+      "assessmentType": null,
       "reportedWorkPortionId": "3",
+      "reportedArticle": null,
+      "reportedStandardNumber": "1040-1776",
       "reportedAuthor": "Linda J. S. Allen",
       "reportedPublisher": "Rosen",
       "reportedPublicationDate": "7/9/2010",
       "reportedPageRange": "25-30",
       "reportedVolNumberSeries": "55(2)",
-      "coverageYear": "2014-2015"
+      "reportedMediaType": "Text",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -103,18 +144,33 @@
     "productFamily": "SAL",
     "comment": "usage4",
     "salUsage": {
-      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "licenseeAccountNumber": 4444,
+      "licenseeName": "Truman State University",
       "detailType": "IB",
-      "reportedMediaType": "Text",
-      "mediaTypeWeight": 1.0,
-      "reportedStandardNumber": "9780",
+      "grade": null,
+      "gradeGroup": "ITEM_BANK",
+      "assessmentName": "Spring2015 Eng Lang/Mathy",
+      "assessmentType": null,
       "reportedWorkPortionId": "4",
+      "reportedArticle": null,
+      "reportedStandardNumber": "9780",
       "reportedAuthor": "Linda J. S. Allen",
       "reportedPublisher": "Rosen",
       "reportedPublicationDate": "7/10/2010",
       "reportedPageRange": "25-30",
       "reportedVolNumberSeries": "55(2)",
-      "coverageYear": "2015-2016"
+      "reportedMediaType": "Text",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2015-2016",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   }
 ]

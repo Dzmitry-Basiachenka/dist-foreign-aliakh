@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.SalFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -191,31 +190,7 @@ public class CreateSalScenarioIntegrationTestBuilder {
             assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
             assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
-        }
-
-        private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {
-            assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
-            assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
-            assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
-            assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
-            assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
-            assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
-            assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
-            assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-            assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
-            assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
-            assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
-            assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
-            assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
-            assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-            assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-            assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
-            assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
-            assertEquals(expectedUsage.getStates(), actualUsage.getStates());
-            assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
-            assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
-            assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
+            testHelper.assertSalUsage(expectedUsage.getSalUsage(), actualUsage.getSalUsage());
         }
     }
 }

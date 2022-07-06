@@ -31,20 +31,37 @@
     "status": "SENT_TO_LM",
     "productFamily": "SAL",
     "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "UD",
+      "grade": "1",
+      "gradeGroup": "GRADEK_5",
       "assessmentName": "FY16 AIR",
       "assessmentType": "ELA",
-      "coverageYear": "2012-2013",
-      "gradeGroup": "GRADEK_5",
-      "grade": "1",
-      "detailType": "UD",
-      "states": "SD,VT",
       "reportedWorkPortionId": "1201001IB2161",
       "reportedArticle": "Learning in Your Sleep",
       "reportedStandardNumber": "450220996",
       "reportedAuthor": "Stephen Ornes",
       "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
-      "reportedPageRange": "14-17"
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2012-2013",
+      "scoredAssessmentDate": [
+        2015,
+        10,
+        3
+      ],
+      "questionIdentifier": "SB7663",
+      "states": "SD,VT",
+      "numberOfViews": 42,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -76,19 +93,33 @@
     "status": "SENT_TO_LM",
     "productFamily": "SAL",
     "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "IB",
+      "grade": "1",
+      "gradeGroup": "ITEM_BANK",
       "assessmentName": "FY16 AIR",
       "assessmentType": "ELA",
-      "coverageYear": "2014-2015",
-      "gradeGroup": "ITEM_BANK",
-      "grade": "1",
-      "detailType": "IB",
       "reportedWorkPortionId": "1201001IB2162",
       "reportedArticle": "Medical Journal",
       "reportedStandardNumber": "09639291",
       "reportedAuthor": "Stephen Ornes",
       "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
-      "reportedPageRange": "14-17"
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -120,20 +151,37 @@
     "status": "SENT_TO_LM",
     "productFamily": "SAL",
     "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "UD",
+      "grade": "1",
+      "gradeGroup": "GRADEK_5",
       "assessmentName": "FY16 AIR",
       "assessmentType": "ELA",
-      "coverageYear": "2019-2020",
-      "gradeGroup": "GRADEK_5",
-      "grade": "1",
-      "detailType": "UD",
-      "states": "SD,VT",
       "reportedWorkPortionId": "1201001IB2162",
       "reportedArticle": "Medical Journal",
       "reportedStandardNumber": "09639291",
       "reportedAuthor": "Stephen Ornes",
       "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
-      "reportedPageRange": "14-17"
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2019-2020",
+      "scoredAssessmentDate": [
+        2020,
+        10,
+        3
+      ],
+      "questionIdentifier": "SB7663",
+      "states": "SD,VT",
+      "numberOfViews": 24,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   },
   {
@@ -165,19 +213,33 @@
     "status": "SENT_TO_LM",
     "productFamily": "SAL",
     "salUsage": {
+      "licenseeAccountNumber": 7001293454,
+      "licenseeName": "Synergy Publishers",
+      "detailType": "IB",
+      "grade": "1",
+      "gradeGroup": "ITEM_BANK",
       "assessmentName": "FY16 AIR",
       "assessmentType": "ELA",
-      "coverageYear": "2014-2015",
-      "gradeGroup": "ITEM_BANK",
-      "grade": "1",
-      "detailType": "IB",
       "reportedWorkPortionId": "1201001IB2161",
       "reportedArticle": "Learning in Your Sleep",
       "reportedStandardNumber": "450220996",
       "reportedAuthor": "Stephen Ornes",
       "reportedPublisher": "Associated Press",
+      "reportedPublicationDate": "2015-01-02",
+      "reportedPageRange": "14-17",
       "reportedVolNumberSeries": "Vol 17, Issue 2",
-      "reportedPageRange": "14-17"
+      "reportedMediaType": "TEXT",
+      "mediaTypeWeight": 1.0,
+      "coverageYear": "2014-2015",
+      "scoredAssessmentDate": null,
+      "questionIdentifier": null,
+      "states": null,
+      "numberOfViews": null,
+      "batchPeriodEndDate": [
+        2019,
+        6,
+        30
+      ]
     }
   }
 ]

@@ -9,7 +9,6 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
-import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -20,11 +19,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -111,45 +105,14 @@ public class LoadSalUsageDataIntegrationTest {
     private void assertUsages() throws IOException {
         Map<String, UsageDto> actualUsageCommentsToUsages =
             getActualUsages().stream().collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
-        List<UsageDto> expectedUsages = loadExpectedUsages("usage/sal/sal_expected_usage_data_for_upload.json");
+        List<UsageDto> expectedUsages =
+            testHelper.loadExpectedUsageDtos("usage/sal/sal_expected_usage_data_for_upload.json");
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
         expectedUsages.forEach(expectedUsage -> {
             testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
-            assertSalUsage(expectedUsage.getSalUsage(),
+            testHelper.assertSalUsage(expectedUsage.getSalUsage(),
                 actualUsageCommentsToUsages.get(expectedUsage.getComment()).getSalUsage());
         });
-    }
-
-    private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
-        });
-    }
-
-    private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {
-        assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
-        assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
-        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
-        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
-        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
-        assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
-        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
-        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
-        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
-        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
-        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
-        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
-        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
-        assertEquals(expectedUsage.getStates(), actualUsage.getStates());
-        assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
-        assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
-        assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
     }
 
     private void assertAudit() {

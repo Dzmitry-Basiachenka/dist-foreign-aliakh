@@ -397,7 +397,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             filter.setStatuses(Collections.singleton(UsageStatusEnum.SENT_TO_LM));
             actualCommentsToUsages = aaclUsageService.getForAudit(filter, null, null).stream()
                 .collect(Collectors.toMap(UsageDto::getComment, usageDto -> usageDto));
-            List<UsageDto> expectedUsages = loadExpectedUsages(expectedUsagesJsonFile);
+            List<UsageDto> expectedUsages = testHelper.loadExpectedUsageDtos(expectedUsagesJsonFile);
             assertEquals(expectedUsages.size(), actualCommentsToUsages.size());
             expectedUsages.forEach(expectedUsage -> {
                 testHelper.assertUsageDto(expectedUsage, actualCommentsToUsages.get(expectedUsage.getComment()));
@@ -410,15 +410,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertUsageAges(expected.getUsageAges(), actual.getUsageAges());
             assertPublicationTypes(expected.getPublicationTypes(), actual.getPublicationTypes());
             assertDetailLicenseeClasses(expected.getDetailLicenseeClasses(), actual.getDetailLicenseeClasses());
-        }
-
-        private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
-            String content = TestUtils.fileToString(this.getClass(), fileName);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-            return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
-            });
         }
 
         private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
