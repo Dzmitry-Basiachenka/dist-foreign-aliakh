@@ -49,7 +49,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
             column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'fbcc3113-3f5a-41a0-993e-fcdec1032eaa')
             column(name: 'df_acl_scenario_uid', value: '7318b083-278b-44f3-8d3c-7fd22083443a')
-            column(name: 'df_publication_type_uid', value: "f1f523ca-1b46-4d3a-842d-99252785187c")
+            column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
         }
 
@@ -57,7 +57,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_licensee_class_uid', value: '556537fb-0809-45ea-b653-9768d5823111')
             column(name: 'df_acl_scenario_uid', value: '7318b083-278b-44f3-8d3c-7fd22083443a')
             column(name: 'detail_licensee_class_id', value: 43)
-            column(name: 'aggregate_licensee_class_id', value: 108)
+            column(name: 'aggregate_licensee_class_id', value: 1)
         }
 
         rollback {

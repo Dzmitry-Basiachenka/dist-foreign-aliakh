@@ -15,9 +15,18 @@
         <result property="editableFlag" column="is_editable"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="licenseType" column="license_type"/>
-        <collection property="usageAges" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.UsageAge"/>
-        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.PublicationType"/>
-        <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass"/>
+        <collection property="usageAges" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.UsageAge">
+            <result property="period" column="period_prior"/>
+            <result property="weight" column="weight"/>
+        </collection>
+        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.PublicationType">
+            <result property="id" column="df_publication_type_uid"/>
+            <result property="weight" column="weight"/>
+        </collection>
+        <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass">
+            <result property="id" column="detail_licensee_class_id"/>
+            <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
+        </collection>
     </resultMap>
 
     <resultMap id="aclScenarioDtoResultMap" type="AclScenarioDto" extends="aclScenarioResultMap">
@@ -159,7 +168,7 @@
 
     <select id="findAll" resultMap="aclScenarioResultMap">
         select
-            df_acl_scenario_uid,
+            s.df_acl_scenario_uid,
             df_acl_usage_batch_uid,
             df_acl_fund_pool_uid,
             df_acl_grant_set_uid,
@@ -169,8 +178,20 @@
             is_editable,
             period_end_date,
             license_type,
-            <include refid="StoredEntityMapper.additionalColumns"/>
-        from ${schema}.df_acl_scenario
+            uaw.period_prior,
+            uaw.weight,
+            ptw.df_publication_type_uid,
+            ptw.weight,
+            slc.detail_licensee_class_id,
+            slc.aggregate_licensee_class_id,
+            s.created_datetime,
+            s.updated_datetime,
+            s.updated_by_user,
+            s.created_by_user
+        from ${schema}.df_acl_scenario s
+        join ${schema}.df_acl_scenario_usage_age_weight uaw on s.df_acl_scenario_uid = uaw.df_acl_scenario_uid
+        join ${schema}.df_acl_scenario_pub_type_weight ptw on s.df_acl_scenario_uid = ptw.df_acl_scenario_uid
+        join ${schema}.df_acl_scenario_licensee_class slc on s.df_acl_scenario_uid = slc.df_acl_scenario_uid
         order by updated_datetime desc
     </select>
 

@@ -725,6 +725,7 @@ public class AclUsageRepositoryIntegrationTest {
         assertSortingAclRightsholderTotalsHolder(holder1, holder1, "licenseType");
     }
 
+    @Test
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToAclScenario() {
         AclScenario scenario = buildAclScenario("dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
