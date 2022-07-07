@@ -1,0 +1,54 @@
+[
+  {
+    "period": 201806,
+    "originalDetailId": "OGN674GHHHB0111",
+    "wrWrkInst": 109110189,
+    "systemTitle": "Technology review",
+    "detailLicenseeClass": {
+      "id": 1
+    },
+    "aggregateLicenseeClassId" : 1,
+    "aggregateLicenseeClassName" : "Food and Tobacco",
+    "publicationType": {
+      "id": "076f2c40-f524-405d-967a-3840df2b57df",
+      "weight": 1.90
+    },
+    "contentUnitPrice": 5.0000000000,
+    "quantity": 10,
+    "usageAgeWeight": 0.20000,
+    "weightedCopies": 2.0000000000,
+    "surveyCountry": "Germany",
+    "scenarioShareDetails": [{
+      "rhAccountNumber": 1000028511,
+      "typeOfUse" : "PRINT",
+      "valueWeight" : 19.0000000000,
+      "volumeWeight" : 2.0000000000
+    }]
+  },
+  {
+    "period": 202112,
+    "originalDetailId": "OGN674GHHHB0110",
+    "wrWrkInst": 823333789,
+    "systemTitle": "Technology review",
+    "detailLicenseeClass": {
+      "id": 5
+    },
+    "aggregateLicenseeClassId" : 51,
+    "aggregateLicenseeClassName" : "Materials",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "weight": 1.00
+    },
+    "contentUnitPrice": 11.0000000000,
+    "quantity": 10,
+    "usageAgeWeight": 0.80000,
+    "weightedCopies": 8.0000000000,
+    "surveyCountry": "Germany",
+    "scenarioShareDetails": [{
+      "rhAccountNumber": 2000017000,
+      "typeOfUse" : "DIGITAL",
+      "valueWeight" : 88.0000000000,
+      "volumeWeight" : 8.0000000000
+    }]
+  }
+]

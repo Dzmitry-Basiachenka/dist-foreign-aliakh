@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "aggregateLicenseeClass": {
+      "id": 1
+    }
+  },
+  {
+    "id": 2,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 3,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 4,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 5,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 6,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 7,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 8,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  },
+  {
+    "id": 9,
+    "aggregateLicenseeClass": {
+      "id": 51
+    }
+  }
+]

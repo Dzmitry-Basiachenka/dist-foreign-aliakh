@@ -820,7 +820,7 @@ public class AclUsageRepositoryIntegrationTest {
                                                AclScenarioShareDetail actualDetail) {
         assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
-        assertEquals(expectedDetail.getValueShare(), actualDetail.getValueShare());
+        assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
         assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
     }
 

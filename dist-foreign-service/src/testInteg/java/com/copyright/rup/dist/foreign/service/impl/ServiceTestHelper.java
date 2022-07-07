@@ -4,13 +4,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -19,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.UdmValueAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmValueBaselineDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -61,9 +67,11 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -135,7 +143,7 @@ public class ServiceTestHelper {
 
     public void expectGetRmsRights(String expectedRmsRequest, String expectedRmsResponse) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
+                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
@@ -147,13 +155,13 @@ public class ServiceTestHelper {
     public void expectGetRmsRights(Map<String, String> expectedRmsRequestsToResponses) {
         expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
             -> mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
+                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
                     Lists.newArrayList("period_end_date"))))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                expectedRmsResponse),
+                    expectedRmsResponse),
                 MediaType.APPLICATION_JSON)));
     }
 
@@ -168,8 +176,8 @@ public class ServiceTestHelper {
 
     public void expectPrmCall(String expectedPrmResponse, Long expectedPrmAccountNumber) {
         (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" +
-                expectedPrmAccountNumber))
+                .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" +
+                    expectedPrmAccountNumber))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPrmResponse), MediaType.APPLICATION_JSON));
@@ -185,8 +193,8 @@ public class ServiceTestHelper {
 
     public void expectPrmIneligibleCall(String rightsholderId, String licenceProduct, String expectedPrmResponse) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/orgRelationship/drilldownv2?orgIds=" +
-                rightsholderId + "&relationshipCode=PARENT&productId=" + licenceProduct))
+                .requestTo("http://localhost:8080/party-rest/orgRelationship/drilldownv2?orgIds=" +
+                    rightsholderId + "&relationshipCode=PARENT&productId=" + licenceProduct))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPrmResponse), MediaType.APPLICATION_JSON));
@@ -194,9 +202,9 @@ public class ServiceTestHelper {
 
     public void expectOracleCall(String expectedOracleResponse, List<Long> expectedOracleAccountNumbers) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo(
-                "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
-                    Joiner.on(",").join(expectedOracleAccountNumbers)))
+                .requestTo(
+                    "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
+                        Joiner.on(",").join(expectedOracleAccountNumbers)))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedOracleResponse), MediaType.APPLICATION_JSON));
@@ -204,9 +212,9 @@ public class ServiceTestHelper {
 
     public void expectOracleCall(String expectedOracleResponse, Long expectedOracleAccountNumber) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo(
-                "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
-                    expectedOracleAccountNumber))
+                .requestTo(
+                    "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
+                        expectedOracleAccountNumber))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedOracleResponse), MediaType.APPLICATION_JSON));
@@ -214,9 +222,9 @@ public class ServiceTestHelper {
 
     public void expectGetPreferences(String expectedPreferencesRightsholderId, String expectedPreferencesResponse) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                + expectedPreferencesRightsholderId
-                + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO,TAXBENEFICIALOWNER"))
+                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
+                    + expectedPreferencesRightsholderId
+                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO,TAXBENEFICIALOWNER"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                 expectedPreferencesResponse), MediaType.APPLICATION_JSON));
@@ -224,9 +232,9 @@ public class ServiceTestHelper {
 
     public void expectGetPreferences(String fileName, List<String> rightsholdersIds) {
         mockServer.expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                + String.join(",", rightsholdersIds)
-                + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO,TAXBENEFICIALOWNER"))
+                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
+                    + String.join(",", rightsholdersIds)
+                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE,IS-RH-STM-IPRO,TAXBENEFICIALOWNER"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                 MediaType.APPLICATION_JSON));
@@ -234,8 +242,8 @@ public class ServiceTestHelper {
 
     public void expectGetRollups(String fileName, List<String> rightsholdersIds) {
         (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
-                String.join(",", rightsholdersIds) + "&relationshipCode=PARENT&prefCodes=payee"))
+                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
+                    String.join(",", rightsholdersIds) + "&relationshipCode=PARENT&prefCodes=payee"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                 MediaType.APPLICATION_JSON));
@@ -245,7 +253,7 @@ public class ServiceTestHelper {
         String expectedRequestBody = TestUtils.fileToString(this.getClass(), expectedRequestFileName);
         String responseBody = TestUtils.fileToString(this.getClass(), responseFileName);
         mockServer.expect(MockRestRequestMatchers.requestTo(
-            "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
+                "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(expectedRequestBody, fieldsToIgnore)))
             .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
@@ -546,6 +554,13 @@ public class ServiceTestHelper {
         });
     }
 
+    public List<AclScenarioDetail> loadExpectedAclScenarioDetails(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(content, new TypeReference<List<AclScenarioDetail>>() {
+        });
+    }
+
     private void assertPaidUsages(List<PaidUsage> expectedUsages,
                                   Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         expectedUsages.forEach(expectedUsage -> {
@@ -674,6 +689,46 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
     }
 
+    public void verifyAclScenario(AclScenario expectedAclScenario, AclScenario actualAclScenario) {
+        assertEquals(expectedAclScenario.getFundPoolId(), actualAclScenario.getFundPoolId());
+        assertEquals(expectedAclScenario.getUsageBatchId(), actualAclScenario.getUsageBatchId());
+        assertEquals(expectedAclScenario.getGrantSetId(), actualAclScenario.getGrantSetId());
+        assertEquals(expectedAclScenario.getName(), actualAclScenario.getName());
+        assertEquals(expectedAclScenario.getDescription(), actualAclScenario.getDescription());
+        assertEquals(expectedAclScenario.getStatus(), actualAclScenario.getStatus());
+        assertEquals(expectedAclScenario.isEditableFlag(), actualAclScenario.isEditableFlag());
+        assertEquals(expectedAclScenario.getPeriodEndDate(), actualAclScenario.getPeriodEndDate());
+        assertEquals(expectedAclScenario.getLicenseType(), actualAclScenario.getLicenseType());
+        assertEquals(expectedAclScenario.getCreateUser(), actualAclScenario.getCreateUser());
+        assertEquals(expectedAclScenario.getUpdateUser(), actualAclScenario.getUpdateUser());
+        assertEquals(expectedAclScenario.getUsageAges().size(), actualAclScenario.getUsageAges().size());
+        actualAclScenario.getUsageAges().sort(Comparator.comparingInt(UsageAge::getPeriod));
+        IntStream.range(0, expectedAclScenario.getUsageAges().size())
+            .forEach(i -> verifyAclScenarioUsageAge(expectedAclScenario.getUsageAges().get(i),
+                actualAclScenario.getUsageAges().get(i)));
+        assertEquals(expectedAclScenario.getDetailLicenseeClasses().size(),
+            actualAclScenario.getDetailLicenseeClasses().size());
+        actualAclScenario.getDetailLicenseeClasses().sort(Comparator.comparingInt(BaseEntity::getId));
+        IntStream.range(0, actualAclScenario.getDetailLicenseeClasses().size())
+            .forEach(i -> verifyAclScenarioLicenseeClasses(expectedAclScenario.getDetailLicenseeClasses().get(i),
+                actualAclScenario.getDetailLicenseeClasses().get(i)));
+        Set<PublicationType> publicationTypeSet = new HashSet<>(actualAclScenario.getPublicationTypes());
+        assertEquals(
+            expectedAclScenario.getPublicationTypes().size(), publicationTypeSet.size());
+        IntStream.range(0, actualAclScenario.getPublicationTypes().size())
+            .forEach(i -> verifyAclScenarioPublicationType(expectedAclScenario.getPublicationTypes().get(i),
+                actualAclScenario.getPublicationTypes().get(i)));
+    }
+
+    public void verifyAclScenarioDetails(String pathToExpectedScenarioDetail,
+                                         List<AclScenarioDetail> actualScenarioDetails) throws IOException {
+        assertNotNull(pathToExpectedScenarioDetail);
+        List<AclScenarioDetail> expectedScenarioDetails = loadExpectedAclScenarioDetails(pathToExpectedScenarioDetail);
+        assertEquals(expectedScenarioDetails.size(), actualScenarioDetails.size());
+        IntStream.range(0, expectedScenarioDetails.size())
+            .forEach(i -> verifyAclScenarioDetail(expectedScenarioDetails.get(i), actualScenarioDetails.get(i)));
+    }
+
     private PaidUsage getPaidUsageByLmDetailId(String lmDetailId,
                                                Map<UsageStatusEnum, List<String>> usageIdsGroupedByStatus) {
         assertNotNull(lmDetailId);
@@ -683,5 +738,61 @@ public class ServiceTestHelper {
             .collect(Collectors.toList());
         assertEquals(1, usages.size());
         return usages.get(0);
+    }
+
+    private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
+                                         AclScenarioDetail actualScenarioDetail) {
+        assertEquals(expectedScenarioDetail.getPeriod(), actualScenarioDetail.getPeriod());
+        assertEquals(expectedScenarioDetail.getOriginalDetailId(), actualScenarioDetail.getOriginalDetailId());
+        assertEquals(expectedScenarioDetail.getWrWrkInst(), actualScenarioDetail.getWrWrkInst());
+        assertEquals(expectedScenarioDetail.getSystemTitle(), actualScenarioDetail.getSystemTitle());
+        assertEquals(expectedScenarioDetail.getDetailLicenseeClass().getId(),
+            actualScenarioDetail.getDetailLicenseeClass().getId());
+        assertEquals(expectedScenarioDetail.getAggregateLicenseeClassId(),
+            actualScenarioDetail.getAggregateLicenseeClassId());
+        assertEquals(expectedScenarioDetail.getAggregateLicenseeClassName(),
+            actualScenarioDetail.getAggregateLicenseeClassName());
+        assertEquals(expectedScenarioDetail.getPublicationType().getId(),
+            actualScenarioDetail.getPublicationType().getId());
+        assertEquals(expectedScenarioDetail.getPublicationType().getWeight(),
+            actualScenarioDetail.getPublicationType().getWeight());
+        assertEquals(expectedScenarioDetail.getContentUnitPrice(), actualScenarioDetail.getContentUnitPrice());
+        assertEquals(expectedScenarioDetail.getQuantity(), actualScenarioDetail.getQuantity());
+        assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
+        assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
+        assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
+        List<AclScenarioShareDetail> expectedScenarioShareDetail = expectedScenarioDetail.getScenarioShareDetails();
+        List<AclScenarioShareDetail> scenarioShareDetails = actualScenarioDetail.getScenarioShareDetails();
+        assertEquals(expectedScenarioShareDetail.size(), scenarioShareDetails.size());
+        IntStream.range(0, scenarioShareDetails.size()).forEach(i ->
+            verifyAclScenarioShareDetails(expectedScenarioShareDetail.get(i), scenarioShareDetails.get(i)));
+    }
+
+    private void verifyAclScenarioLicenseeClasses(DetailLicenseeClass expectedDetailLicenseeClass,
+                                                  DetailLicenseeClass actualDetailLicenseeClass) {
+        assertEquals(expectedDetailLicenseeClass.getId(), actualDetailLicenseeClass.getId());
+        assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getId(),
+            actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
+    }
+
+    private void verifyAclScenarioPublicationType(PublicationType expectedPublicationType,
+                                                  PublicationType actualPublicationType) {
+        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
+        assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
+        assertEquals(expectedPublicationType.getCreateUser(), actualPublicationType.getCreateUser());
+        assertEquals(expectedPublicationType.getUpdateUser(), actualPublicationType.getUpdateUser());
+    }
+
+    private void verifyAclScenarioUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
+        assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
+        assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
+    }
+
+    private void verifyAclScenarioShareDetails(AclScenarioShareDetail expectedDetail,
+                                               AclScenarioShareDetail actualDetail) {
+        assertEquals(expectedDetail.getRhAccountNumber(), actualDetail.getRhAccountNumber());
+        assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
+        assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
+        assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
     }
 }
