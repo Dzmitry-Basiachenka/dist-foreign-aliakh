@@ -251,6 +251,139 @@ databaseChangeLog {
             column(name: 'aggregate_licensee_class_id', value: 1)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
+            column(name: 'df_acl_fund_pool_uid', value: '109d35c4-9072-428e-8b8c-54b1defd58b1')
+            column(name: 'name', value: 'ACL Fund Pool 202112-2')
+            column(name: 'period', value: 202112)
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_manual', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'name', value: 'ACL Grant Set 202112-2')
+            column(name: 'grant_period', value: 202112)
+            column(name: 'periods', value: '[202106, 202112]')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '1c300c88-8ad4-4391-9dbc-d0a683754e6c')
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'type_of_use_status', value: 'Print&Digital')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: 'ea499399-ebbd-4dc5-ade3-0f0fd34aa71e')
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print&Digital')
+            column(name: 'wr_wrk_inst', value: 122820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '8fd1a35b-7288-4701-a4ce-6bf67b0507ea')
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'grant_status', value: 'DENY')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 122825555)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: 'a591a138-4ddc-4a1c-8328-58c5636116c2')
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 300820638)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
+            column(name: 'df_acl_usage_batch_uid', value: '1326041c-258e-4c7d-907b-6340246420fc')
+            column(name: 'name', value: 'ACL Usage Batch 202111')
+            column(name: 'distribution_period', value: 202112)
+            column(name: 'periods', value: '[202106, 202112]')
+            column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario') {
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'df_acl_fund_pool_uid', value: '109d35c4-9072-428e-8b8c-54b1defd58b1')
+            column(name: 'df_acl_usage_batch_uid', value: '1326041c-258e-4c7d-907b-6340246420fc')
+            column(name: 'df_acl_grant_set_uid', value: '69f63054-42d4-4292-9a92-e055eefc00aa')
+            column(name: 'name', value: 'ACL Scenario 201512')
+            column(name: 'description', value: 'Description')
+            column(name: 'period_end_date', value: 202212)
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: true)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: '2bdcf31a-90cd-4186-8137-091a38f173db')
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'period_prior', value: 1)
+            column(name: 'weight', value: 3)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: '7140cd37-e85f-4c2c-8b55-6e46c78540f2')
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 5)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: '9408f5c8-46df-44fc-a2bc-beed282467d3')
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'period_prior', value: 2)
+            column(name: 'weight', value: 2)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '408c5f25-7511-40b9-ae8e-6d915dc345e8')
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
+            column(name: 'weight', value: 2)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: '2c224a53-350b-49fb-b04a-ce5c90f99acf')
+            column(name: 'df_acl_scenario_uid', value: '859aaf80-a84c-439d-98df-8ef63b0cb5d5')
+            column(name: 'detail_licensee_class_id', value: 43)
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
         rollback {
             dbRollback
         }
