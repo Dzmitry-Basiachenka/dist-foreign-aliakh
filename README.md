@@ -1,3 +1,10 @@
+15.1.31
+-
+* B-74268 FDA: Tech Debt: implement integration tests for UpdateRightsholdersJob
+* B-74268 FDA: Tech Debt: unify methods to assert SAL usages in tests
+* B-57783 FDA: Create an ACL Scenario: implement validation for ACL usages by content unit price and publication type in Create Scenario window
+* B-57783 FDA: Create an ACL Scenario: add integration test and fix queries to add scenario details and get them
+
 15.1.30
 -
 * B-74268 FDA: Tech Debt: add explicit order to results of method usageArchiveRepository.findByIdAndStatus for tests only
