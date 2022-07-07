@@ -12,7 +12,6 @@ import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
-import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -28,9 +27,6 @@ import com.copyright.rup.dist.foreign.service.api.nts.INtsScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalScenarioService;
 import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -121,7 +117,7 @@ public class SendScenarioToLmTest {
                 salUsageService.getByScenarioAndRhAccountNumber(scenario, accountNumber, null, null, null).stream())
             .sorted(Comparator.comparing(UsageDto::getRhAccountNumber).thenComparing(UsageDto::getId))
             .collect(Collectors.toList());
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/sal/archived_usage_dtos_sal.json");
+        List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/sal/archived_usage_dtos_sal.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
             .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index)));
@@ -137,7 +133,7 @@ public class SendScenarioToLmTest {
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_fas.json")),
             Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
+        List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_fas.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
             .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index)));
@@ -154,7 +150,7 @@ public class SendScenarioToLmTest {
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_nts.json")),
             Collections.singletonList("detail_id"), SOURCE_MAP);
         List<UsageDto> usageDtos = findUsageDtos(scenario);
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
+        List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/archived_usage_dtos_nts.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
         IntStream.range(0, usageDtos.size())
             .forEach(index -> assertUsageDtoIgnoringId(expectedUsageDtos.get(index), usageDtos.get(index)));
@@ -171,7 +167,7 @@ public class SendScenarioToLmTest {
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm_aacl.json")),
             Collections.emptyList(), SOURCE_MAP);
         List<UsageDto> actualUsageDtos = usageArchiveRepository.findAaclDtosByScenarioId(AACL_SCENARIO_ID);
-        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");
+        List<UsageDto> expectedUsageDtos = testHelper.loadExpectedUsageDtos("usage/aacl/aacl_archived_usage_dtos.json");
         assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(actualUsageDtos));
         IntStream.range(0, actualUsageDtos.size())
             .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), actualUsageDtos.get(index)));
@@ -239,7 +235,7 @@ public class SendScenarioToLmTest {
             assertNull(actual.getAaclUsage());
         }
         if (Objects.nonNull(expected.getSalUsage())) {
-            assertSalUsage(expected.getSalUsage(), actual.getSalUsage());
+            testHelper.assertSalUsage(expected.getSalUsage(), actual.getSalUsage());
         } else {
             assertNull(actual.getSalUsage());
         }
@@ -250,24 +246,6 @@ public class SendScenarioToLmTest {
         assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
         assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
-    }
-
-    private void assertSalUsage(SalUsage expectedSalUsage, SalUsage actualSalUsage) {
-        assertNotNull(actualSalUsage);
-        assertEquals(expectedSalUsage.getAssessmentName(), actualSalUsage.getAssessmentName());
-        assertEquals(expectedSalUsage.getAssessmentType(), actualSalUsage.getAssessmentType());
-        assertEquals(expectedSalUsage.getCoverageYear(), actualSalUsage.getCoverageYear());
-        assertEquals(expectedSalUsage.getDetailType(), actualSalUsage.getDetailType());
-        assertEquals(expectedSalUsage.getGradeGroup(), actualSalUsage.getGradeGroup());
-        assertEquals(expectedSalUsage.getGrade(), actualSalUsage.getGrade());
-        assertEquals(expectedSalUsage.getStates(), actualSalUsage.getStates());
-        assertEquals(expectedSalUsage.getReportedWorkPortionId(), actualSalUsage.getReportedWorkPortionId());
-        assertEquals(expectedSalUsage.getReportedArticle(), actualSalUsage.getReportedArticle());
-        assertEquals(expectedSalUsage.getReportedStandardNumber(), actualSalUsage.getReportedStandardNumber());
-        assertEquals(expectedSalUsage.getReportedAuthor(), actualSalUsage.getReportedAuthor());
-        assertEquals(expectedSalUsage.getReportedPublisher(), actualSalUsage.getReportedPublisher());
-        assertEquals(expectedSalUsage.getReportedVolNumberSeries(), actualSalUsage.getReportedVolNumberSeries());
-        assertEquals(expectedSalUsage.getReportedPageRange(), actualSalUsage.getReportedPageRange());
     }
 
     private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
@@ -294,13 +272,5 @@ public class SendScenarioToLmTest {
     private void assertUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
         assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
         assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
-    }
-
-    private List<UsageDto> loadExpectedUsageDtos(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
-        });
     }
 }

@@ -7,7 +7,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -361,7 +360,7 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .collect(Collectors.toMap(Usage::getId, Function.identity()));
             expectedUsages.forEach(expectedUsage -> {
                 testHelper.assertUsage(expectedUsage, actualUsageIdsToUsages.get(expectedUsage.getId()));
-                assertSalUsage(expectedUsage.getSalUsage(),
+                testHelper.assertSalUsage(expectedUsage.getSalUsage(),
                     actualUsageIdsToUsages.get(expectedUsage.getId()).getSalUsage());
             });
         }
@@ -385,29 +384,6 @@ public class SalWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 usageArchiveRepository.findByIdAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED);
             assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
             assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
-        }
-
-        private void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {
-            assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
-            assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
-            assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
-            assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
-            assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
-            assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
-            assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
-            assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
-            assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
-            assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
-            assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
-            assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
-            assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
-            assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
-            assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
-            assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
-            assertEquals(expectedUsage.getStates(), actualUsage.getStates());
-            assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
-            assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
-            assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
         }
     }
 }

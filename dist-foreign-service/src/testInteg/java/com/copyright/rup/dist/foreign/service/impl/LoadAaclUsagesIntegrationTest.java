@@ -22,10 +22,6 @@ import com.copyright.rup.dist.foreign.service.api.aacl.IAaclUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AaclUsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.io.IOUtils;
@@ -154,21 +150,13 @@ public class LoadAaclUsagesIntegrationTest {
     private void assertUsages() throws IOException {
         // using comments to distinguish usages as ids are generated
         Map<String, UsageDto> actualUsageCommentsToUsages = getUsageCommentsToUsageDtosMap();
-        List<UsageDto> expectedUsages = loadExpectedUsages("usage/aacl/aacl_expected_usages_for_upload.json");
+        List<UsageDto> expectedUsages =
+            testHelper.loadExpectedUsageDtos("usage/aacl/aacl_expected_usages_for_upload.json");
         assertEquals(expectedUsages.size(), actualUsageCommentsToUsages.size());
         expectedUsages.forEach(expectedUsage -> {
             testHelper.assertUsageDto(expectedUsage, actualUsageCommentsToUsages.get(expectedUsage.getComment()));
             assertAaclUsage(expectedUsage.getAaclUsage(),
                 actualUsageCommentsToUsages.get(expectedUsage.getComment()).getAaclUsage());
-        });
-    }
-
-    private List<UsageDto> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
         });
     }
 

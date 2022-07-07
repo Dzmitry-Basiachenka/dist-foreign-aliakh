@@ -3,17 +3,10 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.caching.api.ICacheService;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,7 +61,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidFasUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_fas.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/paid_usages_fas.json"));
+        testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/paid_usages_fas.json"));
     }
 
     @Test
@@ -77,7 +70,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidNtsUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_nts_receive_paid_from_lm_test.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/paid_usages_nts.json"));
+        testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/paid_usages_nts.json"));
     }
 
     @Test
@@ -86,7 +79,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages_aacl.json");
-        testHelper.assertPaidAaclUsages(loadExpectedPaidUsages("usage/aacl/aacl_paid_usages.json"));
+        testHelper.assertPaidAaclUsages(testHelper.loadExpectedPaidUsages("usage/aacl/aacl_paid_usages.json"));
     }
 
     @Test
@@ -95,7 +88,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidSplitAaclUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_aacl.json");
-        testHelper.assertPaidAaclUsages(loadExpectedPaidUsages("usage/aacl/aacl_paid_split_usages.json"));
+        testHelper.assertPaidAaclUsages(testHelper.loadExpectedPaidUsages("usage/aacl/aacl_paid_split_usages.json"));
         testHelper.assertScenarioAudit("de1d65f6-10c6-462c-bd97-44fcfc976934", Collections.singletonList(
             Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
@@ -106,7 +99,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidSplitUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_split_usages_fas.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/paid_split_usages_fas.json"));
+        testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/paid_split_usages_fas.json"));
         testHelper.assertScenarioAudit("4924da00-ee87-41b3-9aed-caa5c5ba94f1", Collections.singletonList(
             Pair.of(ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process")));
     }
@@ -117,7 +110,7 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePostDistributionUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_fas.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/post_distribution_paid_usages_fas.json"));
+        testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/post_distribution_paid_usages_fas.json"));
     }
 
     @Test
@@ -126,7 +119,8 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePostDistributionAaclUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_paid_usages_aacl.json");
-        testHelper.assertPaidAaclUsages(loadExpectedPaidUsages("usage/aacl/aacl_post_distribution_paid_usages.json"));
+        testHelper.assertPaidAaclUsages(
+            testHelper.loadExpectedPaidUsages("usage/aacl/aacl_post_distribution_paid_usages.json"));
     }
 
     @Test
@@ -135,7 +129,8 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePostDistributionSplitUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/post_distribution_split_paid_usages_fas.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/post_distribution_split_paid_usages_fas.json"));
+        testHelper.assertPaidUsages(
+            testHelper.loadExpectedPaidUsages("usage/post_distribution_split_paid_usages_fas.json"));
     }
 
     /**
@@ -148,15 +143,6 @@ public class ReceivePaidUsagesFromLmTest {
     public void testReceivePaidInformationFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         testHelper.receivePaidUsagesFromLm("lm/paid_usages.json");
-        testHelper.assertPaidUsages(loadExpectedPaidUsages("usage/paid_usages.json"));
-    }
-
-    private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
-        });
+        testHelper.assertPaidUsages(testHelper.loadExpectedPaidUsages("usage/paid_usages.json"));
     }
 }

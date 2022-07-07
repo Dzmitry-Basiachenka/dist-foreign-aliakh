@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.SalUsage;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UdmUsage;
@@ -475,6 +476,24 @@ public class ServiceTestHelper {
         });
     }
 
+    public List<UsageDto> loadExpectedUsageDtos(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+        });
+    }
+
+    public List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
+        });
+    }
+
     public List<UdmUsage> loadExpectedUdmUsages(String fileName) throws IOException {
         String content = TestUtils.fileToString(ServiceTestHelper.class, fileName);
         ObjectMapper mapper = new ObjectMapper();
@@ -629,6 +648,30 @@ public class ServiceTestHelper {
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
+    }
+
+    public void assertSalUsage(SalUsage expectedUsage, SalUsage actualUsage) {
+        assertEquals(expectedUsage.getAssessmentName(), actualUsage.getAssessmentName());
+        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+        assertEquals(expectedUsage.getCoverageYear(), actualUsage.getCoverageYear());
+        assertEquals(expectedUsage.getGrade(), actualUsage.getGrade());
+        assertEquals(expectedUsage.getGradeGroup(), actualUsage.getGradeGroup());
+        assertEquals(expectedUsage.getDetailType(), actualUsage.getDetailType());
+        assertEquals(expectedUsage.getReportedWorkPortionId(), actualUsage.getReportedWorkPortionId());
+        assertEquals(expectedUsage.getReportedStandardNumber(), actualUsage.getReportedStandardNumber());
+        assertEquals(expectedUsage.getReportedMediaType(), actualUsage.getReportedMediaType());
+        assertEquals(expectedUsage.getMediaTypeWeight(), actualUsage.getMediaTypeWeight());
+        assertEquals(expectedUsage.getReportedArticle(), actualUsage.getReportedArticle());
+        assertEquals(expectedUsage.getReportedAuthor(), actualUsage.getReportedAuthor());
+        assertEquals(expectedUsage.getReportedPublisher(), actualUsage.getReportedPublisher());
+        assertEquals(expectedUsage.getReportedPublicationDate(), actualUsage.getReportedPublicationDate());
+        assertEquals(expectedUsage.getReportedPageRange(), actualUsage.getReportedPageRange());
+        assertEquals(expectedUsage.getReportedVolNumberSeries(), actualUsage.getReportedVolNumberSeries());
+        assertEquals(expectedUsage.getAssessmentType(), actualUsage.getAssessmentType());
+        assertEquals(expectedUsage.getStates(), actualUsage.getStates());
+        assertEquals(expectedUsage.getNumberOfViews(), actualUsage.getNumberOfViews());
+        assertEquals(expectedUsage.getScoredAssessmentDate(), actualUsage.getScoredAssessmentDate());
+        assertEquals(expectedUsage.getQuestionIdentifier(), actualUsage.getQuestionIdentifier());
     }
 
     private PaidUsage getPaidUsageByLmDetailId(String lmDetailId,
