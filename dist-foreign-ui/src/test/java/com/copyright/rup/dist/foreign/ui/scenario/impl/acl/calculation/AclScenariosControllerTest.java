@@ -50,6 +50,7 @@ import java.util.List;
 public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
+    private static final String BATCH_UID = "47b4d40a-a6bd-4fe1-b463-4aa52bf0e56f";
     private static final String LICENSE_TYPE = "ACL";
 
     private IAclScenariosWidget scenariosWidget;
@@ -59,6 +60,7 @@ public class AclScenariosControllerTest {
     private IAclGrantSetService grantSetService;
     private IAclFundPoolService fundPoolService;
     private IAclScenarioController aclScenarioController;
+    private IAclUsageService aclUsageService;
 
     @Before
     public void setUp() {
@@ -70,9 +72,9 @@ public class AclScenariosControllerTest {
         fundPoolService = createMock(IAclFundPoolService.class);
         IPublicationTypeService publicationTypeService = createMock(IPublicationTypeService.class);
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
-        IAclUsageService aclUsageService = createMock(IAclUsageService.class);
-        Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
+        aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
+        Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
         Whitebox.setInternalState(aclScenariosController, grantSetService);
@@ -192,6 +194,14 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetAclScenarioController() {
         assertSame(aclScenarioController, aclScenariosController.getAclScenarioController());
+    }
+
+    @Test
+    public void testIsValidUsageBatch() {
+        expect(aclUsageService.getCountWithNullPubTypeOrContentUnitPriceByBatchId(BATCH_UID)).andReturn(0).once();
+        replay(aclUsageService);
+        assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID));
+        verify(aclUsageService);
     }
 
     private AclScenario buildAclScenario() {

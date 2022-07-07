@@ -49,6 +49,7 @@ public class AclUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
     private static final String ACL_SCENARIO_UID = "8dbe8fa6-9700-4822-9be3-7075ce4ea378";
+    private static final String ACL_BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
 
     private IAclUsageService aclUsageService;
     private IAclUsageRepository aclUsageRepository;
@@ -154,6 +155,15 @@ public class AclUsageServiceTest {
         expect(aclUsageRepository.findDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
         replay(aclUsageRepository);
         assertSame(usageAge, aclUsageService.getDefaultUsageAgesWeights().get(0));
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testGetCountWithNullPubTypeOrContentUnitPriceByBatchId() {
+        expect(
+            aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_BATCH_UID)).andReturn(0).once();
+        replay(aclUsageRepository);
+        assertEquals(0, aclUsageService.getCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_BATCH_UID));
         verify(aclUsageRepository);
     }
 

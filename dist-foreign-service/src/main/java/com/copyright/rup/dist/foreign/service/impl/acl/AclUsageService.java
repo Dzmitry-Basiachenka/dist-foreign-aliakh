@@ -96,4 +96,9 @@ public class AclUsageService implements IAclUsageService {
     public List<UsageAge> getDefaultUsageAgesWeights() {
         return aclUsageRepository.findDefaultUsageAgesWeights();
     }
+
+    @Override
+    public int getCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId) {
+        return aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(batchId);
+    }
 }

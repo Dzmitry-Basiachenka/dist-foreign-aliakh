@@ -93,4 +93,12 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return an {@link IAclScenarioController} instance.
      */
     IAclScenarioController getAclScenarioController();
+
+    /**
+     * Verifies ACL batch is valid for creation of ACL scenario.
+     *
+     * @param batchId ACL batch id
+     * @return {@code true} - if ACL batch is valid, {@code false} - otherwise
+     */
+    boolean isValidUsageBatch(String batchId);
 }

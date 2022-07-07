@@ -131,6 +131,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public boolean isValidUsageBatch(String batchId) {
+        return 0 == aclUsageService.getCountWithNullPubTypeOrContentUnitPriceByBatchId(batchId);
+    }
+
+    @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget(this, aclScenarioHistoryController);
     }

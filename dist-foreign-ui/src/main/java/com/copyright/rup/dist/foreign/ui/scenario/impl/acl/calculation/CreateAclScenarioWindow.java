@@ -274,17 +274,23 @@ public class CreateAclScenarioWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (isValid()) {
-            AclScenario aclScenario = new AclScenario();
-            try {
-                scenarioBinder.writeBean(aclScenario);
-                fundPoolComboBox.getSelectedItem().ifPresent(fundPool -> aclScenario.setFundPoolId(fundPool.getId()));
-                usageBatchComboBox.getSelectedItem()
-                    .ifPresent(usageBatch -> aclScenario.setUsageBatchId(usageBatch.getId()));
-                grantSetComboBox.getSelectedItem().ifPresent(grantSet -> aclScenario.setGrantSetId(grantSet.getId()));
-                controller.createAclScenario(aclScenario);
-                close();
-            } catch (ValidationException e) {
-                ExceptionUtils.printRootCauseStackTrace(e);
+            if (controller.isValidUsageBatch(usageBatchComboBox.getValue().getId())) {
+                AclScenario aclScenario = new AclScenario();
+                try {
+                    scenarioBinder.writeBean(aclScenario);
+                    fundPoolComboBox.getSelectedItem()
+                        .ifPresent(fundPool -> aclScenario.setFundPoolId(fundPool.getId()));
+                    usageBatchComboBox.getSelectedItem()
+                        .ifPresent(usageBatch -> aclScenario.setUsageBatchId(usageBatch.getId()));
+                    grantSetComboBox.getSelectedItem()
+                        .ifPresent(grantSet -> aclScenario.setGrantSetId(grantSet.getId()));
+                    controller.createAclScenario(aclScenario);
+                    close();
+                } catch (ValidationException e) {
+                    ExceptionUtils.printRootCauseStackTrace(e);
+                }
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_acl_scenario"));
             }
         } else {
             Windows.showValidationErrorWindow(Arrays.asList(scenarioNameField, periodComboBox, licenseTypeComboBox,

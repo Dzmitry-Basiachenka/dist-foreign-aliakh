@@ -74,6 +74,8 @@ public class AclUsageRepositoryIntegrationTest {
     private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
+    private static final String ACL_USAGE_BATCH_UID_1 = "36d8901e-1f3b-4e68-8c95-1f8b02740ed2";
+    private static final String ACL_USAGE_BATCH_UID_2 = "c653d257-4180-4fb4-9119-f001063e4a56";
     private static final String ACL_USAGE_UID_1 = "8ff48add-0eea-4fe3-81d0-3264c6779936";
     private static final String ACL_USAGE_UID_2 = "0eeef531-b779-4b3b-827d-b44b2261c6db";
     private static final String ACL_USAGE_UID_3 = "2ba0fab7-746d-41e0-87b5-c2b3997ce0ae";
@@ -738,6 +740,13 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(1, scenarioDetails.size());
         AclScenarioDetail expectedScenarioDetail = buildAclScenarioDetail();
         verifyAclScenarioDetail(expectedScenarioDetail, scenarioDetails.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-count-with-null-pub-type-or-content-unit-price-by-batch-id.groovy")
+    public void testFindCountWithNullPubTypeOrContentUnitPriceByBatchId() {
+        assertEquals(0, aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_USAGE_BATCH_UID_1));
+        assertEquals(3, aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_USAGE_BATCH_UID_2));
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {
