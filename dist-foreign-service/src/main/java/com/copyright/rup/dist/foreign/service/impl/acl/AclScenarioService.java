@@ -50,8 +50,7 @@ public class AclScenarioService implements IAclScenarioService {
     public void insertScenario(AclScenario aclScenario) {
         String scenarioId = RupPersistUtils.generateUuid();
         String userName = RupContextUtils.getUserName();
-        aclScenario.setId(scenarioId);
-        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        populateScenario(aclScenario, userName, scenarioId);
         LOGGER.info("Insert ACL scenario. Started. {}, Description={}, User={}",
             ForeignLogUtils.aclScenario(aclScenario), aclScenario.getDescription(), userName);
         aclScenarioRepository.insertAclScenario(aclScenario);
@@ -101,5 +100,12 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
         return aclScenarioRepository.findWithAmountsAndLastAction(scenarioId);
+    }
+
+    private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
+        aclScenario.setId(scenarioId);
+        aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        aclScenario.setCreateUser(userName);
+        aclScenario.setUpdateUser(userName);
     }
 }

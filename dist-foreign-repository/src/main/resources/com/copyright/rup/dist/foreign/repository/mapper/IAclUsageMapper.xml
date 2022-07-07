@@ -506,14 +506,15 @@
             from ${schema}.df_acl_usage u
             join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
             join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
-                and  gd.wr_wrk_inst = u.wr_wrk_inst
-                and  gd.grant_status = 'GRANT'
+                and gd.wr_wrk_inst = u.wr_wrk_inst
+                and gd.grant_status = 'GRANT'
+                and gd.is_eligible = true
             left join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.period_prior = (
                     <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
                     select (extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
                             extract(month from age(to_date(#{scenario.periodEndDate}::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp))
                         ) / 6
-                   )
+                    )
             where df_acl_usage_batch_uid = #{scenario.usageBatchId}
                 and uaw.weight > 0
                 and quantity &lt; 2000
@@ -565,7 +566,7 @@
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
-            uuid_generate_v4(),
+            uuid_generate_v4() df_acl_share_detail_uid,
             #{scenario.id} df_acl_scenario_uid,
             sd.df_acl_scenario_detail_uid,
             gd.type_of_use,
@@ -580,6 +581,9 @@
         join ${schema}.df_acl_scenario_pub_type_weight spt on sd.publication_type_uid = spt.df_publication_type_uid
         join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
             and  gd.wr_wrk_inst = sd.wr_wrk_inst
+        where sd.df_acl_scenario_uid = #{scenario.id}
+        group by df_acl_scenario_detail_uid, gd.type_of_use, gd.rh_account_number, slc.aggregate_licensee_class_id,
+            spt.weight, sd.quantity, sd.usage_age_weight, sd.content_unit_price
     </insert>
 
     <select id="findScenarioDetailsByScenarioId" resultMap="aclScenarioDetailResultMap">

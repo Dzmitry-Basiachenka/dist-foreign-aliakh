@@ -208,6 +208,7 @@ public class CreateAclScenarioWindow extends Window {
         editableCheckBox = new CheckBox();
         editableCheckBox.setCaption(ForeignUi.getMessage("label.editable"));
         editableCheckBox.setEnabled(hasSpecialistPermission);
+        editableCheckBox.addValueChangeListener(event -> populateComboBoxes());
         editableCheckBox.setValue(true);
         scenarioBinder.forField(editableCheckBox)
             .bind(AclScenario::isEditableFlag, AclScenario::setEditableFlag);

@@ -1,0 +1,66 @@
+[
+  {
+    "period": 0,
+    "weight": 1.00000
+  },
+  {
+    "period": 1,
+    "weight": 1.00000
+  },
+  {
+    "period": 2,
+    "weight": 0.80000
+  },
+  {
+    "period": 3,
+    "weight": 0.80000
+  },
+  {
+    "period": 4,
+    "weight": 0.60000
+  },
+  {
+    "period": 5,
+    "weight": 0.60000
+  },
+  {
+    "period": 6,
+    "weight": 0.40000
+  },
+  {
+    "period": 7,
+    "weight": 0.50000
+  },
+  {
+    "period": 8,
+    "weight": 0.20000
+  },
+  {
+    "period": 9,
+    "weight": 0.20000
+  },
+  {
+    "period": 10,
+    "weight": 0.10000
+  },
+  {
+    "period": 11,
+    "weight": 0.05000
+  },
+  {
+    "period": 12,
+    "weight": 0.00000
+  },
+  {
+    "period": 13,
+    "weight": 0.00000
+  },
+  {
+    "period": 14,
+    "weight": 0.00000
+  },
+  {
+    "period": 15,
+    "weight": 0.00000
+  }
+]

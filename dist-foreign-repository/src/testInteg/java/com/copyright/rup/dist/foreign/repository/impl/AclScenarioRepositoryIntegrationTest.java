@@ -253,7 +253,7 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
         scenario.setDetailLicenseeClasses(Collections.singletonList(buildDetailLicenseeClass(43, 1)));
         scenario.setPublicationTypes(Collections.singletonList(
-            buildPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00000"))));
+            buildPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"))));
         scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, new BigDecimal("1.00000"))));
         return scenario;
     }
