@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -135,8 +136,10 @@ public class UdmUsageService implements IUdmUsageService {
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.UNASSIGN,
                 String.format("Usage was unassigned from '%s'", udmUsageDto.getAssignee()));
             udmUsageDto.setAssignee(null);
+            udmUsageDto.setUpdateUser(StoredEntity.DEFAULT_USER);
+        } else {
+            udmUsageDto.setUpdateUser(userName);
         }
-        udmUsageDto.setUpdateUser(userName);
         udmUsageRepository.update(udmUsageDto);
         actionReasons.forEach(actionReason ->
             udmUsageAuditService.logAction(udmUsageDto.getId(), UsageActionTypeEnum.USAGE_EDIT, actionReason));

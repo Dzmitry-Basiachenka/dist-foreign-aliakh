@@ -266,7 +266,7 @@ public class UdmUsageServiceTest {
         replay(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
         udmUsageDto.setAssignee(ASSIGNEE);
         udmUsageService.updateUsage(udmUsageDto, actionReasons, true, StringUtils.EMPTY);
-        assertEquals(USER_NAME, udmUsageDto.getUpdateUser());
+        assertEquals("SYSTEM", udmUsageDto.getUpdateUser());
         assertNull(udmUsageDto.getAssignee());
         assertEquals(UsageStatusEnum.NEW, udmUsageDto.getStatus());
         verify(udmUsageRepository, udmUsageAuditService, RupContextUtils.class);
