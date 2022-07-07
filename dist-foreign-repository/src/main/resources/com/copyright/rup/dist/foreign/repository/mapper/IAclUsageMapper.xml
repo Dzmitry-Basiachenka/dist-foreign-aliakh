@@ -619,4 +619,12 @@
         join ${schema}.df_aggregate_licensee_class alc on shd.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
             where sd.df_acl_scenario_uid = #{scenarioId}
     </select>
+
+    <select id="findCountWithNullPubTypeOrContentUnitPriceByBatchId" parameterType="string" resultType="int">
+        select count(1)
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid  = ub.df_acl_usage_batch_uid
+        where u.df_acl_usage_batch_uid = #{batchId}
+            and (u.publication_type_uid is null or u.content_unit_price is null);
+    </select>
 </mapper>

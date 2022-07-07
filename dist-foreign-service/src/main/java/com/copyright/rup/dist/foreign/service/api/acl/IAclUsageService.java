@@ -96,4 +96,12 @@ public interface IAclUsageService {
      * @return list of usage age wights
      */
     List<UsageAge> getDefaultUsageAgesWeights();
+
+    /**
+     * Gets count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
+     *
+     * @param batchId ACL batch id
+     * @return count of {@link AclUsageDto}s
+     */
+    int getCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId);
 }

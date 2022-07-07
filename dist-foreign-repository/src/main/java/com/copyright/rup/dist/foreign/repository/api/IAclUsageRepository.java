@@ -117,4 +117,12 @@ public interface IAclUsageRepository {
      * @return list of {@link AclScenarioDetail}s
      */
     List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId);
+
+    /**
+     * Finds count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
+     *
+     * @param batchId ACL batch id
+     * @return count of {@link AclUsageDto}s
+     */
+    int findCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId);
 }

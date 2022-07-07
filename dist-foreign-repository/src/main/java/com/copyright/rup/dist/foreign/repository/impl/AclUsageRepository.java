@@ -117,6 +117,12 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         return selectList("IAclUsageMapper.findScenarioDetailsByScenarioId", scenarioId);
     }
 
+    @Override
+    public int findCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId) {
+        return selectOne("IAclUsageMapper.findCountWithNullPubTypeOrContentUnitPriceByBatchId",
+            Objects.requireNonNull(batchId));
+    }
+
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {
         AclUsageFilter filterCopy = new AclUsageFilter(filter);
         filterCopy.setUsageDetailIdExpression(

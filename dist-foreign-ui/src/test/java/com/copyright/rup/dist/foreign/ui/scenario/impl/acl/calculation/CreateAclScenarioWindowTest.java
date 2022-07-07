@@ -70,6 +70,7 @@ public class CreateAclScenarioWindowTest {
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private static final String SCENARIO_NAME = "ACL Distribution " + DATE;
     private static final String LICENSE_TYPE = "ACL";
+    private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
 
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
@@ -140,55 +141,54 @@ public class CreateAclScenarioWindowTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testConfirmButtonClickListener() {
-        AclUsageBatch usageBatch = new AclUsageBatch();
-        usageBatch.setId("df36a701-8630-45aa-994d-35e3f019192a");
-        usageBatch.setName("Usage Batch");
-        AclFundPool aclFundPool = new AclFundPool();
-        aclFundPool.setId("304795bf-9bd1-4377-9b5f-ce247d88f8b2");
-        aclFundPool.setName("Fund Pool");
-        AclGrantSet aclGrantSet = new AclGrantSet();
-        aclGrantSet.setId("f5e558ce-2261-4998-8434-fc04d432c1a5");
-        aclGrantSet.setName("Grant Set");
+        AclUsageBatch aclUsageBatch = buildAclUsageBatch();
+        AclFundPool aclFundPool = buildAclFundPool();
+        AclGrantSet aclGrantSet = buildAclGrantSet();
         AclScenario expectedScenario = new AclScenario();
-        expectedScenario.setGrantSetId(aclGrantSet.getId());
+        expectedScenario.setUsageBatchId(aclUsageBatch.getId());
         expectedScenario.setFundPoolId(aclFundPool.getId());
-        expectedScenario.setUsageBatchId(usageBatch.getId());
+        expectedScenario.setGrantSetId(aclGrantSet.getId());
         expectedScenario.setName(SCENARIO_NAME);
         expectedScenario.setPeriodEndDate(202206);
         expectedScenario.setEditableFlag(true);
         expectedScenario.setDescription("Description");
         expectedScenario.setLicenseType(LICENSE_TYPE);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
-        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(usageBatch))
+        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
         expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
             .andReturn(Collections.singletonList(aclFundPool));
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
             .andReturn(Collections.singletonList(aclGrantSet));
+        expect(controller.isValidUsageBatch(ACL_BATCH_UID)).andReturn(true);
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
         replay(controller);
-        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(1);
-        periodComboBox.setSelectedItem(202206);
-        ComboBox<String> licenseTypeComboBox = (ComboBox<String>) content.getComponent(2);
-        licenseTypeComboBox.setSelectedItem(LICENSE_TYPE);
-        ComboBox<AclUsageBatch> usageBatchComboBox = (ComboBox<AclUsageBatch>) content.getComponent(3);
-        usageBatchComboBox.setSelectedItem(usageBatch);
-        ComboBox<AclFundPool> fundPoolComboBox = (ComboBox<AclFundPool>) content.getComponent(4);
-        fundPoolComboBox.setSelectedItem(aclFundPool);
-        ComboBox<AclGrantSet> grantSetComboBox = (ComboBox<AclGrantSet>) content.getComponent(5);
-        grantSetComboBox.setSelectedItem(aclGrantSet);
-        TextArea textField = (TextArea) content.getComponent(11);
-        textField.setValue("Description");
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(12);
-        Button confirmButton = (Button) buttonsLayout.getComponent(0);
-        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
-        listener.buttonClick(new ClickEvent(window));
+        populateCreateScenarioWindowAndClickConfirmButton(aclUsageBatch, aclFundPool, aclGrantSet);
         verify(controller);
+    }
+
+    @Test
+    public void testNotificationMessageOnConfirmButtonClick() {
+        mockStatic(Windows.class);
+        AclUsageBatch aclUsageBatch = buildAclUsageBatch();
+        AclFundPool aclFundPool = buildAclFundPool();
+        AclGrantSet aclGrantSet = buildAclGrantSet();
+        expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
+            .once();
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
+            .andReturn(Collections.singletonList(aclFundPool));
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
+            .andReturn(Collections.singletonList(aclGrantSet));
+        expect(controller.isValidUsageBatch(ACL_BATCH_UID)).andReturn(false);
+        Windows.showNotificationWindow(
+            "System found usages missing Pub Type and/or CUP. Please update the missing data");
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        populateCreateScenarioWindowAndClickConfirmButton(aclUsageBatch, aclFundPool, aclGrantSet);
+        verify(controller, Windows.class);
     }
 
     private void verifyScenarioNameField(Component component) {
@@ -222,5 +222,50 @@ public class CreateAclScenarioWindowTest {
             .stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
         assertEquals(3, errorMessages.size());
         assertEquals("ACL Scenario with such name already exists", errorMessages.get(0));
+    }
+
+    private AclUsageBatch buildAclUsageBatch() {
+        AclUsageBatch usageBatch = new AclUsageBatch();
+        usageBatch.setId(ACL_BATCH_UID);
+        usageBatch.setName("Usage Batch");
+        return usageBatch;
+    }
+
+    private AclFundPool buildAclFundPool() {
+        AclFundPool aclFundPool = new AclFundPool();
+        aclFundPool.setId("304795bf-9bd1-4377-9b5f-ce247d88f8b2");
+        aclFundPool.setName("Fund Pool");
+        return aclFundPool;
+    }
+
+    private AclGrantSet buildAclGrantSet() {
+        AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId("f5e558ce-2261-4998-8434-fc04d432c1a5");
+        aclGrantSet.setName("Grant Set");
+        return aclGrantSet;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void populateCreateScenarioWindowAndClickConfirmButton(AclUsageBatch aclUsageBatch,
+                                                                   AclFundPool aclFundPool,
+                                                                   AclGrantSet aclGrantSet) {
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        ComboBox<Integer> periodComboBox = (ComboBox<Integer>) content.getComponent(1);
+        periodComboBox.setSelectedItem(202206);
+        ComboBox<String> licenseTypeComboBox = (ComboBox<String>) content.getComponent(2);
+        licenseTypeComboBox.setSelectedItem(LICENSE_TYPE);
+        ComboBox<AclUsageBatch> usageBatchComboBox = (ComboBox<AclUsageBatch>) content.getComponent(3);
+        usageBatchComboBox.setSelectedItem(aclUsageBatch);
+        ComboBox<AclFundPool> fundPoolComboBox = (ComboBox<AclFundPool>) content.getComponent(4);
+        fundPoolComboBox.setSelectedItem(aclFundPool);
+        ComboBox<AclGrantSet> grantSetComboBox = (ComboBox<AclGrantSet>) content.getComponent(5);
+        grantSetComboBox.setSelectedItem(aclGrantSet);
+        TextArea textField = (TextArea) content.getComponent(11);
+        textField.setValue("Description");
+        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(12);
+        Button confirmButton = (Button) buttonsLayout.getComponent(0);
+        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(window));
     }
 }
