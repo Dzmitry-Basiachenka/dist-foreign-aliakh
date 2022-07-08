@@ -231,10 +231,38 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '57e53b30-1d8b-4973-a753-2ccbef17f4b1')
+            column(name: 'df_acl_grant_set_uid', value: 'df3096cb-eb6f-440f-9450-98293b45e81c')
+            column(name: 'grant_status', value: 'GRANT')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Digital Only')
+            column(name: 'wr_wrk_inst', value: 823333789)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 2000017000)
+            column(name: 'is_eligible', value: false)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
             column(name: 'df_acl_grant_detail_uid', value: '287b4580-a519-4c4c-97fa-5e028f17161e')
             column(name: 'df_acl_grant_set_uid', value: 'df3096cb-eb6f-440f-9450-98293b45e81c')
             column(name: 'grant_status', value: 'GRANT')
             column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
+            column(name: 'wr_wrk_inst', value: 109110189)
+            column(name: 'system_title', value: 'Technology review')
+            column(name: 'rh_account_number', value: 1000028511)
+            column(name: 'is_eligible', value: true)
+            column(name: 'created_datetime', value: '2021-01-30T00:00:00-04:00')
+            column(name: 'updated_datetime', value: '2021-01-31T00:00:00-04:00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_detail') {
+            column(name: 'df_acl_grant_detail_uid', value: '5b66b659-a966-496e-be80-014fbf6f6e89')
+            column(name: 'df_acl_grant_set_uid', value: 'df3096cb-eb6f-440f-9450-98293b45e81c')
+            column(name: 'grant_status', value: 'DENY')
+            column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'type_of_use_status', value: 'Print Only')
             column(name: 'wr_wrk_inst', value: 109110189)
             column(name: 'system_title', value: 'Technology review')
@@ -401,7 +429,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: 'edc2b656-30d5-4214-a6bc-884c753f65cd')
             column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
             column(name: 'period_end_date', value: 201006)
-            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0116')
             column(name: 'wr_wrk_inst', value: 122820777)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'detail_licensee_class_id', value: 2)
@@ -421,7 +449,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_detail_uid', value: '7fe7cd5a-5094-4ea3-a457-c516edab9637')
             column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
             column(name: 'period_end_date', value: 201006)
-            column(name: 'original_detail_id', value: 'OGN674GHHHB0110')
+            column(name: 'original_detail_id', value: 'OGN674GHHHB0117')
             column(name: 'wr_wrk_inst', value: 122820777)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'detail_licensee_class_id', value: 2)
