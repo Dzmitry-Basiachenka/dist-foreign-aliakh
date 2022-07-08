@@ -1,3 +1,7 @@
+15.1.32
+-
+* FDA: ACL: Calculations tab: Scenarios subtab: There are duplicate records in df_acl_share_detail table after scenario creation
+
 15.1.31
 -
 * B-74268 FDA: Tech Debt: implement integration tests for UpdateRightsholdersJob
