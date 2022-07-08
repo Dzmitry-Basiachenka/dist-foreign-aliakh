@@ -194,7 +194,7 @@ public class CreateAclScenarioWindowTest {
     private void verifyScenarioNameField(Component component) {
         assertNotNull(component);
         TextField scenarioNameField = (TextField) component;
-        assertEquals("Scenario name", scenarioNameField.getCaption());
+        assertEquals("Scenario Name", scenarioNameField.getCaption());
         assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("acl-scenario-name", scenarioNameField.getId());
     }

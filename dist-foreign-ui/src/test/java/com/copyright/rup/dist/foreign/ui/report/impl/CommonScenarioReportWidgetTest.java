@@ -87,7 +87,7 @@ public class CommonScenarioReportWidgetTest {
     private void verifyScenarioCombobox(Component component, Scenario scenario) {
         assertEquals(ComboBox.class, component.getClass());
         ComboBox<Scenario> scenarioComboBox = (ComboBox<Scenario>) component;
-        assertEquals("Scenario name", scenarioComboBox.getCaption());
+        assertEquals("Scenario Name", scenarioComboBox.getCaption());
         assertEquals(100, scenarioComboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, scenarioComboBox.getWidthUnits());
         assertFalse(scenarioComboBox.isEmptySelectionAllowed());
