@@ -271,7 +271,7 @@
         <!-- Selects oldest period with age weight greater than zero -->
         <include refid="IUdmBaselineMapper.selectOldestPeriodWithPositiveAgeWeight"/>,
         updated_usages_uids as (
-            update apps.df_udm_usage u
+            update ${schema}.df_udm_usage u
             set
                 df_udm_value_uid = wv.df_udm_value_uid,
                 updated_by_user = #{updateUser},

@@ -87,8 +87,8 @@
             f.total_amount,
             f.total_amount * #{serviceFee} as service_fee_amount,
             f.total_amount - (f.total_amount * #{serviceFee}) as net_amount
-        from apps.df_fund_pool f
-        left join apps.df_scenario s on s.aacl_fields ->> 'fund_pool_uid' = f.df_fund_pool_uid
+        from ${schema}.df_fund_pool f
+        left join ${schema}.df_scenario s on s.aacl_fields ->> 'fund_pool_uid' = f.df_fund_pool_uid
         where f.product_family = #{productFamily}
             and (s.status_ind is null or s.status_ind in
                 <foreach collection="statuses" item="status" open="(" separator="," close=")">
