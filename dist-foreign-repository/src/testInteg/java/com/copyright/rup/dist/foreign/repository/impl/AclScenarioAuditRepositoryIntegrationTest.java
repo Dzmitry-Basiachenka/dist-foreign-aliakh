@@ -46,22 +46,22 @@ public class AclScenarioAuditRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FOLDER_NAME + "insert.groovy")
     public void testInsert() {
-        assertEquals(0, CollectionUtils.size(aclScenarioAuditRepository.findByAclScenarioId(SCENARIO_UID_1)));
+        assertEquals(0, CollectionUtils.size(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1)));
         ScenarioAuditItem auditItem = buildScenarioAuditItem(SCENARIO_UID_1);
         aclScenarioAuditRepository.insert(auditItem);
-        List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByAclScenarioId(SCENARIO_UID_1);
+        List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1);
         assertEquals(1, CollectionUtils.size(auditItems));
         assertEquals(auditItem, auditItems.get(0));
     }
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-by-acl-scenario-id.groovy")
-    public void testFindByAclScenarioId() {
-        assertEquals(0, CollectionUtils.size(aclScenarioAuditRepository.findByAclScenarioId(SCENARIO_UID_1)));
+    public void testFindByScenarioId() {
+        assertEquals(0, CollectionUtils.size(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1)));
         ScenarioAuditItem auditItem = buildScenarioAuditItem(SCENARIO_UID_1);
         aclScenarioAuditRepository.insert(auditItem);
         aclScenarioAuditRepository.insert(buildScenarioAuditItem(SCENARIO_UID_2));
-        List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByAclScenarioId(SCENARIO_UID_1);
+        List<ScenarioAuditItem> auditItems = aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID_1);
         assertEquals(1, CollectionUtils.size(auditItems));
         assertEquals(auditItem, auditItems.get(0));
     }

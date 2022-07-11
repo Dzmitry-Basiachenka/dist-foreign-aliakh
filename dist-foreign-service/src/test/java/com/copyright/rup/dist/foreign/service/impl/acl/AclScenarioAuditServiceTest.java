@@ -70,7 +70,7 @@ public class AclScenarioAuditServiceTest {
     @Test
     public void testGetActions() {
         List<ScenarioAuditItem> auditItems = Collections.singletonList(new ScenarioAuditItem());
-        expect(aclScenarioAuditRepository.findByAclScenarioId(SCENARIO_UID)).andReturn(auditItems).once();
+        expect(aclScenarioAuditRepository.findByScenarioId(SCENARIO_UID)).andReturn(auditItems).once();
         replay(aclScenarioAuditRepository);
         assertSame(auditItems, aclScenarioAuditService.getActions(SCENARIO_UID));
         verify(aclScenarioAuditRepository);

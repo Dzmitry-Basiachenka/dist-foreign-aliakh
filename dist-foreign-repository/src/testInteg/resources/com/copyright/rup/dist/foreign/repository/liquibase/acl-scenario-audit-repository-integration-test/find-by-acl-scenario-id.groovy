@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2022-06-22-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment('Insert test data for testFindByAclScenarioId')
+        comment('Insert test data for testfindByScenarioId')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '6e574487-3d58-4e7a-b89d-df96204b43d8')
