@@ -663,7 +663,7 @@
                 content_unit_price,
                 comment,
                 <include refid="StoredEntityMapper.insert"/>
-            from apps.df_udm_value
+            from ${schema}.df_udm_value
             where period = #{period}
                 and df_udm_value_uid not in (select * from existent_baseline_values_uids)
         )
