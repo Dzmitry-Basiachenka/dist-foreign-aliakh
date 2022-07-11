@@ -5,7 +5,6 @@ databaseChangeLog {
         comment('Insert test data for testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue, testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue, ' +
                 'testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue, testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue, ' +
                 'testSortingFindAclRightsholderTotalsHoldersByScenarioId')
-        // TODO correct fields in tables df_acl_scenario_detail, df_acl_share_detail when ACL scenario calculation is implemented
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')

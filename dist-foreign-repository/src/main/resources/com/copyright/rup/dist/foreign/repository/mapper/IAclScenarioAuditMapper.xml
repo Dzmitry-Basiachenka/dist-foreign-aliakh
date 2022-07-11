@@ -31,7 +31,7 @@
         )
     </insert>
 
-    <select id="findByAclScenarioId" parameterType="string" resultMap="scenarioAuditItemResultMap">
+    <select id="findByScenarioId" parameterType="string" resultMap="scenarioAuditItemResultMap">
         select
             <include refid="scenarioAuditItemColumns"/>
         from ${schema}.df_acl_scenario_audit

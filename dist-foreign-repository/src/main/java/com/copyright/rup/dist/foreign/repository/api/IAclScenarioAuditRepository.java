@@ -28,5 +28,5 @@ public interface IAclScenarioAuditRepository {
      * @param scenarioId scenario id
      * @return list of {@link ScenarioAuditItem}s
      */
-    List<ScenarioAuditItem> findByAclScenarioId(String scenarioId);
+    List<ScenarioAuditItem> findByScenarioId(String scenarioId);
 }

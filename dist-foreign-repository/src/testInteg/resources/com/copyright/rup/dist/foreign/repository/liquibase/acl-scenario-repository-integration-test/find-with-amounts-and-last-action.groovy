@@ -3,7 +3,6 @@ databaseChangeLog {
 
     changeSet(id: '2022-06-27-01', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment('Insert test data for testFindWithAmountsAndLastAction')
-        // TODO correct fields in tables df_acl_scenario_detail, df_acl_share_detail when ACL scenario calculation is implemented
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: '1b48301c-e953-4af1-8ccb-8b3f9ed31544')

@@ -26,7 +26,7 @@ public class AclScenarioAuditRepository extends BaseRepository implements IAclSc
     }
 
     @Override
-    public List<ScenarioAuditItem> findByAclScenarioId(String scenarioId) {
-        return selectList("IAclScenarioAuditMapper.findByAclScenarioId", Objects.requireNonNull(scenarioId));
+    public List<ScenarioAuditItem> findByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioAuditMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
     }
 }

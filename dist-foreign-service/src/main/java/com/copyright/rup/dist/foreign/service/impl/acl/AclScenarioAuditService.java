@@ -33,7 +33,7 @@ public class AclScenarioAuditService implements IAclScenarioAuditService {
 
     @Override
     public List<ScenarioAuditItem> getActions(String scenarioId) {
-        return aclScenarioAuditRepository.findByAclScenarioId(scenarioId);
+        return aclScenarioAuditRepository.findByScenarioId(scenarioId);
     }
 
     private ScenarioAuditItem buildScenarioAuditItem(String scenarioId, ScenarioActionTypeEnum actionType,
