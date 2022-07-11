@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
@@ -20,7 +19,6 @@ import com.copyright.rup.dist.foreign.service.api.sal.ISalUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.SalUsageDataCsvProcessor;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -81,19 +77,13 @@ public class LoadSalUsageDataIntegrationTest {
     private void loadUsageData() throws IOException {
         UsageBatch batch = usageBatchService.getUsageBatchById(BATCH_ID);
         SalUsageDataCsvProcessor csvProcessor = csvProcessorFactory.getSalUsageDataCsvProcessor(BATCH_ID);
-        ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
+        ProcessingResult<Usage> result =
+            csvProcessor.process(testHelper.getCsvOutputStream("usage/sal/sal_usage_data_for_upload.csv"));
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         usageBatchService.addUsageDataToSalBatch(batch, usages);
         commentToUsageIdMap = usages.stream()
             .collect(Collectors.toMap(Usage::getComment, Usage::getId));
-    }
-
-    private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/sal/sal_usage_data_for_upload.csv");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-        return out;
     }
 
     private void assertUsageBatch() {

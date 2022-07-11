@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -240,27 +239,7 @@ public class CreateAaclScenarioIntegrationTestBuilder {
             assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
             assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
             assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-            assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
-        }
-
-        private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-            assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-            assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-            assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-            assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
-            assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
-            assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-            assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-                actualAaclUsage.getPublicationType().getWeight());
-            assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-                actualAaclUsage.getDetailLicenseeClass().getId());
-            assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-            assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-            assertEquals(expectedAaclUsage.getVolumeWeight(), actualAaclUsage.getVolumeWeight());
-            assertEquals(expectedAaclUsage.getValueWeight(), actualAaclUsage.getValueWeight());
-            assertEquals(expectedAaclUsage.getVolumeShare(), actualAaclUsage.getVolumeShare());
-            assertEquals(expectedAaclUsage.getValueShare(), actualAaclUsage.getValueShare());
-            assertEquals(expectedAaclUsage.getTotalShare(), actualAaclUsage.getTotalShare());
+            testHelper.assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
         }
 
         private void assertPublicationType(PublicationType expectedPublicationType,

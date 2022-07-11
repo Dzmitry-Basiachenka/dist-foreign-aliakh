@@ -5,8 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
-import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
@@ -33,15 +32,12 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UdmCsvProcessor;
 
 import com.google.common.collect.ImmutableSet;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -204,7 +200,8 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadUdmBatch() throws IOException {
             UdmCsvProcessor csvProcessor = csvProcessorFactory.getUdmCsvProcessor();
-            DistCsvProcessor.ProcessingResult<UdmUsage> result = csvProcessor.process(getCsvOutputStream());
+            ProcessingResult<UdmUsage> result =
+                csvProcessor.process(testHelper.getCsvOutputStream(pathToUsagesToUpload));
             assertTrue(result.isSuccessful());
             List<UdmUsage> udmUsages = result.get();
             udmBatchService.insertUdmBatch(expectedUdmBatch, udmUsages);
@@ -311,13 +308,6 @@ public class AclWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     testHelper.loadExpectedUdmValueAuditItems(pathsToExpectedUdmValueAuditItems.get(index));
                 testHelper.assertUdmValueAudit(uploadedUdmValuesIds.get(index), udmValueAuditItems);
             }
-        }
-
-        private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-            String csvText = TestUtils.fileToString(ServiceTestHelper.class, pathToUsagesToUpload);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-            return out;
         }
     }
 }

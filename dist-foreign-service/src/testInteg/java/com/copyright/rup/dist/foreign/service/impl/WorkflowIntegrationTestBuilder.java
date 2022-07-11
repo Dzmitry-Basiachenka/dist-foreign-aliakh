@@ -33,15 +33,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -220,7 +217,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadUsageBatch() throws IOException {
             UsageCsvProcessor csvProcessor = csvProcessorFactory.getUsageCsvProcessor(productFamily);
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
+            ProcessingResult<Usage> result = csvProcessor.process(testHelper.getCsvOutputStream(usagesCsvFile));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages);
@@ -234,13 +231,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void setPredefinedUsageIds(List<Usage> usages) {
             AtomicInteger usageId = new AtomicInteger(0);
             usages.forEach(usage -> usage.setId(predefinedUsageIds.get(usageId.getAndIncrement())));
-        }
-
-        private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-            String csvText = TestUtils.fileToString(this.getClass(), usagesCsvFile);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-            return out;
         }
 
         private void addToScenario() {

@@ -7,7 +7,6 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.AaclClassifiedUsage;
-import com.copyright.rup.dist.foreign.domain.AaclUsage;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FundPool;
@@ -49,7 +48,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +55,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -290,7 +287,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void loadUsageBatch() throws IOException {
             AaclUsageCsvProcessor csvProcessor = csvProcessorFactory.getAaclUsageCsvProcessor();
-            ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream(usagesCsvFile));
+            ProcessingResult<Usage> result = csvProcessor.process(testHelper.getCsvOutputStream(usagesCsvFile));
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages);
@@ -313,7 +310,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void loadClassification() throws IOException {
             ClassifiedUsageCsvProcessor processor = csvProcessorFactory.getClassifiedUsageCsvProcessor();
             ProcessingResult<AaclClassifiedUsage> result =
-                processor.process(getCsvOutputStream(classifiedUsagesCsvFile));
+                processor.process(testHelper.getCsvOutputStream(classifiedUsagesCsvFile));
             assertTrue(result.isSuccessful());
             List<AaclClassifiedUsage> classifiedUsages = result.get();
             aaclUsageService.updateClassifiedUsages(classifiedUsages);
@@ -377,13 +374,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             archiveUsages = actualUsages;
         }
 
-        private ByteArrayOutputStream getCsvOutputStream(String fileName) throws IOException {
-            String csvText = TestUtils.fileToString(this.getClass(), fileName);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-            return out;
-        }
-
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
         private void setPredefinedUsageIds(List<Usage> usages) {
             AtomicInteger usageId = new AtomicInteger(0);
@@ -401,7 +391,7 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsages.size(), actualCommentsToUsages.size());
             expectedUsages.forEach(expectedUsage -> {
                 testHelper.assertUsageDto(expectedUsage, actualCommentsToUsages.get(expectedUsage.getComment()));
-                assertAaclUsage(expectedUsage.getAaclUsage(),
+                testHelper.assertAaclUsage(expectedUsage.getAaclUsage(),
                     actualCommentsToUsages.get(expectedUsage.getComment()).getAaclUsage());
             });
         }
@@ -419,21 +409,6 @@ public class AaclWorkflowIntegrationTestBuilder implements Builder<Runner> {
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
             return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
             });
-        }
-
-        private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-            assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-            assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-            assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-            assertEquals(expectedAaclUsage.getUsageAge().getPeriod(), actualAaclUsage.getUsageAge().getPeriod());
-            assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
-            assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-            assertEquals(expectedAaclUsage.getPublicationType().getWeight(),
-                actualAaclUsage.getPublicationType().getWeight());
-            assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-                actualAaclUsage.getDetailLicenseeClass().getId());
-            assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-            assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
         }
 
         private void assertPublicationType(PublicationType expectedPublicationType,

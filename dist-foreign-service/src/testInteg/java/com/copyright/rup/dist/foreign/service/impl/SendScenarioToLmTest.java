@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -9,12 +8,9 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
-import com.copyright.rup.dist.foreign.domain.AaclUsage;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -230,7 +226,7 @@ public class SendScenarioToLmTest {
         assertEquals(expected.getServiceFee(), actual.getServiceFee());
         assertEquals(expected.getComment(), actual.getComment());
         if (Objects.nonNull(expected.getAaclUsage())) {
-            assertAaclUsage(expected.getAaclUsage(), actual.getAaclUsage());
+            testHelper.assertAaclUsage(expected.getAaclUsage(), actual.getAaclUsage());
         } else {
             assertNull(actual.getAaclUsage());
         }
@@ -245,32 +241,6 @@ public class SendScenarioToLmTest {
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
         assertEquals(expectedUsage.getComment(), actualUsage.getComment());
-        assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
-    }
-
-    private void assertAaclUsage(AaclUsage expectedAaclUsage, AaclUsage actualAaclUsage) {
-        assertNotNull(actualAaclUsage);
-        assertEquals(expectedAaclUsage.getInstitution(), actualAaclUsage.getInstitution());
-        assertEquals(expectedAaclUsage.getUsageSource(), actualAaclUsage.getUsageSource());
-        assertEquals(expectedAaclUsage.getNumberOfPages(), actualAaclUsage.getNumberOfPages());
-        assertUsageAge(expectedAaclUsage.getUsageAge(), actualAaclUsage.getUsageAge());
-        assertPublicationType(expectedAaclUsage.getPublicationType(), actualAaclUsage.getPublicationType());
-        assertEquals(expectedAaclUsage.getOriginalPublicationType(), actualAaclUsage.getOriginalPublicationType());
-        assertEquals(expectedAaclUsage.getDetailLicenseeClass().getId(),
-            actualAaclUsage.getDetailLicenseeClass().getId());
-        assertEquals(expectedAaclUsage.getRightLimitation(), actualAaclUsage.getRightLimitation());
-        assertEquals(expectedAaclUsage.getBaselineId(), actualAaclUsage.getBaselineId());
-    }
-
-    private void assertPublicationType(PublicationType expectedPublicationType,
-                                       PublicationType actualPublicationType) {
-        assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
-        assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
-        assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
-    }
-
-    private void assertUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {
-        assertEquals(expectedUsageAge.getPeriod(), actualUsageAge.getPeriod());
-        assertEquals(expectedUsageAge.getWeight(), actualUsageAge.getWeight());
+        testHelper.assertAaclUsage(expectedUsage.getAaclUsage(), actualUsage.getAaclUsage());
     }
 }

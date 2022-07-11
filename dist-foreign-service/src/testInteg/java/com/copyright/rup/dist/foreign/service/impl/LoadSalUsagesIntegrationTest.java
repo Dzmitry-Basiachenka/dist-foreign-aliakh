@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.SalDetailTypeEnum;
@@ -24,7 +23,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.SalItemBankCsvProcessor;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,9 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -100,7 +96,8 @@ public class LoadSalUsagesIntegrationTest {
     private void loadUsageBatch() throws IOException {
         UsageBatch batch = buildUsageBatch();
         SalItemBankCsvProcessor csvProcessor = csvProcessorFactory.getSalItemBankCsvProcessor();
-        ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
+        ProcessingResult<Usage> result =
+            csvProcessor.process(testHelper.getCsvOutputStream("usage/sal/sal_item_bank_usages_for_upload.csv"));
         assertTrue(result.isSuccessful());
         List<Usage> usages = result.get();
         List<String> insertedUsageIds = usageBatchService.insertSalBatch(batch, usages);
@@ -124,13 +121,6 @@ public class LoadSalUsagesIntegrationTest {
         salFields.setLicenseeName("Truman State University");
         batch.setSalFields(salFields);
         return batch;
-    }
-
-    private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-        String csvText = TestUtils.fileToString(this.getClass(), "usage/sal/sal_item_bank_usages_for_upload.csv");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        IOUtils.write(csvText, out, StandardCharsets.UTF_8);
-        return out;
     }
 
     private void assertUsageBatch() {
