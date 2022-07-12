@@ -72,7 +72,7 @@
 
     <select id="findGrantSetsByLicenseTypeAndPeriod" resultMap="aclGrantSetResultMap">
         select
-        <include refid="aclGrantSetColumns"/>
+            <include refid="aclGrantSetColumns"/>
         from ${schema}.df_acl_grant_set
         where grant_period = #{period}
             and license_type = #{licenseType}

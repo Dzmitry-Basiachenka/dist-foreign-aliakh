@@ -60,7 +60,7 @@ public interface IAclGrantSetRepository {
     void deleteById(String grantSetId);
 
     /**
-     * Finds list of all ACl grant sets by license type and period.
+     * Finds list of all ACL grant sets by license type and period.
      *
      * @param licenseType  license type
      * @param period       period end date

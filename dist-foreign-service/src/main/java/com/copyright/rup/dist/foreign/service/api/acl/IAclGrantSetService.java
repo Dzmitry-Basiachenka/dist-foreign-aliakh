@@ -53,7 +53,7 @@ public interface IAclGrantSetService {
     void deleteAclGrantSet(AclGrantSet grantSet);
 
     /**
-     * Gets list of all ACl grant sets by license type and period.
+     * Gets list of all ACL grant sets by license type and period.
      *
      * @param licenseType  license type
      * @param period       period end date
