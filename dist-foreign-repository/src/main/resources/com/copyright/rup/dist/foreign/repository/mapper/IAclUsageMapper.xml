@@ -445,6 +445,7 @@
         order by period desc
     </select>
 
+   <!-- todo  move all scenario related queries to separate AclScenarioUsageMapper-->
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
         select
             shd.rh_account_number,

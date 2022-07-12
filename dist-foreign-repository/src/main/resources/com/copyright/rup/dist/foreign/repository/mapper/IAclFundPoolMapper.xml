@@ -248,7 +248,7 @@
 
     <select id="findFundPoolsByLicenseTypeAndPeriod" resultMap="aclFundPoolResultMap">
         select
-        <include refid="aclFundPoolColumns"/>
+            <include refid="aclFundPoolColumns"/>
         from ${schema}.df_acl_fund_pool
         where  period = #{period}
             and license_type = #{licenseType}

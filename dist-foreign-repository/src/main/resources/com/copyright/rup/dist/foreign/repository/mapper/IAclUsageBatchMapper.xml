@@ -58,7 +58,7 @@
 
     <select id="findUsageBatchesByPeriod" resultMap="aclUsageBatchResultMap">
         select
-        <include refid="aclUsageBatchColumns"/>
+            <include refid="aclUsageBatchColumns"/>
         from ${schema}.df_acl_usage_batch
         where distribution_period = #{period}
             <if test="!editableFlag">
