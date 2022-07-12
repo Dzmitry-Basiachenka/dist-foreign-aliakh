@@ -632,11 +632,25 @@
             where sd.df_acl_scenario_uid = #{scenarioId}
     </select>
 
-    <select id="findCountWithNullPubTypeOrContentUnitPriceByBatchId" parameterType="string" resultType="int">
+    <select id="findCountInvalidUsages" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_acl_usage u
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid  = ub.df_acl_usage_batch_uid
+        join ${schema}.df_acl_grant_detail gd on  gd.df_acl_grant_set_uid = #{grantSetId}
+            and gd.wr_wrk_inst = u.wr_wrk_inst
+            and grant_status = 'GRANT'
+            and is_eligible = true
         where u.df_acl_usage_batch_uid = #{batchId}
-            and (u.publication_type_uid is null or u.content_unit_price is null);
+            and (u.publication_type_uid is null or u.content_unit_price is null)
+            and
+                <foreach collection="periodPriors" item="periodPrior" open="(" separator=" or " close=")">
+                   #{periodPrior} = (
+                        select (
+                            extract(year from age(to_date(#{distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
+                            extract(month from age(to_date(#{distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp))
+                        ) / 6
+                   )
+                </foreach>
+            and u.quantity &lt; 2000
     </select>
 </mapper>

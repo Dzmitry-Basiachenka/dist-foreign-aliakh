@@ -50,6 +50,7 @@ public class AclUsageServiceTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final String ACL_SCENARIO_UID = "8dbe8fa6-9700-4822-9be3-7075ce4ea378";
     private static final String ACL_BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
+    private static final String ACL_GRANT_SET_UID = "6fbd9c98-c119-448a-b0a7-3795319dce00";
 
     private IAclUsageService aclUsageService;
     private IAclUsageRepository aclUsageRepository;
@@ -160,10 +161,11 @@ public class AclUsageServiceTest {
 
     @Test
     public void testGetCountWithNullPubTypeOrContentUnitPriceByBatchId() {
-        expect(
-            aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_BATCH_UID)).andReturn(0).once();
+        expect(aclUsageRepository.findCountInvalidUsages(ACL_BATCH_UID, ACL_GRANT_SET_UID, 202212,
+            Collections.singletonList(0))).andReturn(0).once();
         replay(aclUsageRepository);
-        assertEquals(0, aclUsageService.getCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_BATCH_UID));
+        assertEquals(0, aclUsageService.getCountInvalidUsages(
+            ACL_BATCH_UID, ACL_GRANT_SET_UID, 202212, Collections.singletonList(0)));
         verify(aclUsageRepository);
     }
 

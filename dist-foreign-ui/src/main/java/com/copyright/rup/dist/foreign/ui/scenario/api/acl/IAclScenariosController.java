@@ -97,8 +97,12 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
     /**
      * Verifies ACL batch is valid for creation of ACL scenario.
      *
-     * @param batchId ACL batch id
+     * @param batchId            ACL batch id
+     * @param grantSetId         ACL grant set  id
+     * @param periodPriors       list of period
+     * @param distributionPeriod distribution period
      * @return {@code true} - if ACL batch is valid, {@code false} - otherwise
      */
-    boolean isValidUsageBatch(String batchId);
+    boolean isValidUsageBatch(String batchId, String grantSetId, Integer distributionPeriod,
+                              List<Integer> periodPriors);
 }

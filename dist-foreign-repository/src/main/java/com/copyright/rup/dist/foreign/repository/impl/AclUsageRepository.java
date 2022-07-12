@@ -118,9 +118,14 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     }
 
     @Override
-    public int findCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId) {
-        return selectOne("IAclUsageMapper.findCountWithNullPubTypeOrContentUnitPriceByBatchId",
-            Objects.requireNonNull(batchId));
+    public int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
+                                      List<Integer> periodPriors) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("batchId", Objects.requireNonNull(batchId));
+        params.put("grantSetId", Objects.requireNonNull(grantSetId));
+        params.put("periodPriors", Objects.requireNonNull(periodPriors));
+        params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
+        return selectOne("IAclUsageMapper.findCountInvalidUsages", params);
     }
 
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {

@@ -34,6 +34,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -275,7 +276,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
     private void onConfirmButtonClicked() {
         if (isValid()) {
-            if (controller.isValidUsageBatch(usageBatchComboBox.getValue().getId())) {
+            if (isValidUsageBatch()) {
                 AclScenario aclScenario = new AclScenario();
                 try {
                     scenarioBinder.writeBean(aclScenario);
@@ -311,5 +312,16 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         usageBatchBinder.validate();
         grantSetBinder.validate();
         fundPoolBinder.validate();
+    }
+
+    private boolean isValidUsageBatch() {
+        return controller.isValidUsageBatch(usageBatchComboBox.getValue().getId(), grantSetComboBox.getValue().getId(),
+            periodComboBox.getValue(), getPeriodPriorsWithWeightAboveZero());
+    }
+
+    //TODO will return period based on data from ACL Usage Age Weights in Scenario
+    private List<Integer> getPeriodPriorsWithWeightAboveZero() {
+        //todo {aazarenka will be rewrite as part of B-57781 story}
+        return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
     }
 }
