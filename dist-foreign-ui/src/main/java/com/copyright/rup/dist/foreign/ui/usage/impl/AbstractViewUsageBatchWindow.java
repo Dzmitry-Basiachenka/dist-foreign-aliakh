@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -23,11 +23,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Modal window that provides functionality for viewing and deleting {@link UsageBatch}es.
@@ -38,7 +34,8 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public abstract class AbstractViewUsageBatchWindow extends Window implements SearchWidget.ISearchController {
+public abstract class AbstractViewUsageBatchWindow extends Window
+    implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
     private final ICommonUsageController controller;
@@ -79,18 +76,6 @@ public abstract class AbstractViewUsageBatchWindow extends Window implements Sea
         }
         // Gets round an issue when Vaadin do not recalculates columns widths once vertical scroll is disappeared
         grid.recalculateColumnWidths();
-    }
-
-    /**
-     * Converts date to string value.
-     *
-     * @param date value to convert
-     * @return converted date as string
-     */
-    protected String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 
     /**

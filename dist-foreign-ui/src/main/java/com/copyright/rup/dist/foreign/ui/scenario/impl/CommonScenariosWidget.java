@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.ICommonScenariosWidget;
@@ -30,7 +30,6 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.math.BigDecimal;
@@ -47,7 +46,7 @@ import java.util.Objects;
  *
  * @author Stanislau Rudak
  */
-public abstract class CommonScenariosWidget extends VerticalLayout implements ICommonScenariosWidget {
+public abstract class CommonScenariosWidget extends VerticalLayout implements ICommonScenariosWidget, IDateFormatter {
 
     private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -242,7 +241,7 @@ public abstract class CommonScenariosWidget extends VerticalLayout implements IC
                 actionCreatedUser.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
                 actionCreatedDate.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_date"),
-                    DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)));
+                    toLongFormat(lastAction.getCreateDate())));
                 actionReason.setValue(formatScenarioLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }

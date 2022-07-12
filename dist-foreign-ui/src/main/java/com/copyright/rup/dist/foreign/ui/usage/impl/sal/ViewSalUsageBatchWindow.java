@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.sal;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.sal.ISalUsageController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -22,12 +23,8 @@ import com.vaadin.ui.renderers.LocalDateRenderer;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -39,7 +36,7 @@ import java.util.function.Consumer;
  *
  * @author Anton Azarenka
  */
-public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISearchController {
+public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
     private final ISalUsageController controller;
@@ -195,16 +192,10 @@ public class ViewSalUsageBatchWindow extends Window implements SearchWidget.ISea
             .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
-        grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
+        grid.addColumn(batch -> toLongFormat(batch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()))
             .setWidth(170);
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 
     private String buildNotificationMessage(String key, String param, String associatedField,

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmUsageWindow;
@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @author Dzmitry Basiachenka
  */
-public class UdmViewUsageWindow extends CommonUdmUsageWindow {
+public class UdmViewUsageWindow extends CommonUdmUsageWindow implements IDateFormatter {
 
     private final Binder<UdmUsageDto> binder = new Binder<>();
     private final UdmUsageDto udmUsage;
@@ -96,15 +96,15 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow {
             buildReadOnlyLayout("label.research_url", UdmUsageDto::getResearchUrl, binder),
             buildReadOnlyLayout("label.det_lc", buildDetailLicenseeClassValueProvider(), binder),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name(), binder),
-            buildReadOnlyLayout("label.usage_date", usage -> DateUtils.format(usage.getUsageDate()), binder),
+            buildReadOnlyLayout("label.usage_date", usage -> toShortFormat(usage.getUsageDate()), binder),
             buildReadOnlyLayout("label.survey_start_date",
-                usage -> DateUtils.format(usage.getSurveyStartDate()), binder),
-            buildReadOnlyLayout("label.survey_end_date", usage -> DateUtils.format(usage.getSurveyEndDate()), binder),
+                usage -> toShortFormat(usage.getSurveyStartDate()), binder),
+            buildReadOnlyLayout("label.survey_end_date", usage -> toShortFormat(usage.getSurveyEndDate()), binder),
             buildReadOnlyLayout("label.reported_tou", UdmUsageDto::getReportedTypeOfUse, binder),
             buildReadOnlyLayout("label.ineligible_reason", buildIneligibleReasonValueProvider(), binder),
-            buildReadOnlyLayout("label.load_date", usage -> DateUtils.format(usage.getCreateDate()), binder),
+            buildReadOnlyLayout("label.load_date", usage -> toShortFormat(usage.getCreateDate()), binder),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", usage -> DateUtils.format(usage.getUpdateDate()), binder)
+            buildReadOnlyLayout("label.updated_date", usage -> toShortFormat(usage.getUpdateDate()), binder)
         };
     }
 
@@ -140,10 +140,10 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow {
             buildReadOnlyLayout("label.ip_address", UdmUsageDto::getIpAddress, binder),
             buildReadOnlyLayout("label.survey_country", UdmUsageDto::getSurveyCountry, binder),
             buildReadOnlyLayout("label.channel", usage -> usage.getChannel().name(), binder),
-            buildReadOnlyLayout("label.usage_date", usage -> DateUtils.format(usage.getUsageDate()), binder),
-            buildReadOnlyLayout("label.survey_start_date", usage -> DateUtils.format(usage.getSurveyStartDate()),
+            buildReadOnlyLayout("label.usage_date", usage -> toShortFormat(usage.getUsageDate()), binder),
+            buildReadOnlyLayout("label.survey_start_date", usage -> toShortFormat(usage.getSurveyStartDate()),
                 binder),
-            buildReadOnlyLayout("label.survey_end_date", usage -> DateUtils.format(usage.getSurveyEndDate()), binder),
+            buildReadOnlyLayout("label.survey_end_date", usage -> toShortFormat(usage.getSurveyEndDate()), binder),
             buildReadOnlyLayout("label.annual_multiplier",
                 usage -> Objects.toString(usage.getAnnualMultiplier(), StringUtils.EMPTY), binder),
             buildReadOnlyLayout("label.statistical_multiplier",
@@ -154,9 +154,9 @@ public class UdmViewUsageWindow extends CommonUdmUsageWindow {
             buildReadOnlyLayout("label.annualized_copies",
                 usage -> Objects.toString(usage.getAnnualizedCopies(), StringUtils.EMPTY), binder),
             buildReadOnlyLayout("label.ineligible_reason", buildIneligibleReasonValueProvider(), binder),
-            buildReadOnlyLayout("label.load_date", usage -> DateUtils.format(usage.getCreateDate()), binder),
+            buildReadOnlyLayout("label.load_date", usage -> toShortFormat(usage.getCreateDate()), binder),
             buildReadOnlyLayout("label.updated_by", UdmUsageDto::getUpdateUser, binder),
-            buildReadOnlyLayout("label.updated_date", usage -> DateUtils.format(usage.getUpdateDate()), binder)
+            buildReadOnlyLayout("label.updated_date", usage -> toShortFormat(usage.getUpdateDate()), binder)
         };
     }
 }

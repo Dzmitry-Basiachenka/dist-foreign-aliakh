@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.domain.UdmValueStatusEnum;
 import com.copyright.rup.dist.foreign.ui.audit.impl.UdmValueAuditFieldToValuesMap;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.YearValidator;
@@ -122,7 +121,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
                 exchangeRate.getInverseExchangeRateValue().setScale(10, RoundingMode.HALF_UP);
             BigDecimal priceInUsd = price.multiply(currencyExchangeRate).setScale(10, RoundingMode.HALF_UP);
             currencyExchangeRateField.setValue(currencyExchangeRate.toString());
-            currencyExchangeRateDateField.setValue(DateUtils.format(exchangeRate.getExchangeRateUpdateDate()));
+            currencyExchangeRateDateField.setValue(toShortFormat(exchangeRate.getExchangeRateUpdateDate()));
             priceInUsdField.setValue(convertFromBigDecimalToMoneyString(priceInUsd));
         } else {
             currencyExchangeRateField.clear();
@@ -264,7 +263,7 @@ public class UdmEditValueWindow extends CommonUdmValueWindow {
             new Panel(new VerticalLayout(
                 buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
                 buildReadOnlyLayout("label.updated_date",
-                    bean -> DateUtils.format(bean.getUpdateDate()), binder)
+                    bean -> toShortFormat(bean.getUpdateDate()), binder)
             ))
         );
     }

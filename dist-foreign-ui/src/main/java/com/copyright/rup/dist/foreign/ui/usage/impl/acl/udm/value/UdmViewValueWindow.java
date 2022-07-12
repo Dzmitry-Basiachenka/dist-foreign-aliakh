@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.value;
 import com.copyright.rup.dist.foreign.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UdmValueDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmValueController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.CommonUdmValueWindow;
@@ -147,7 +146,7 @@ public class UdmViewValueWindow extends CommonUdmValueWindow {
             )),
             new Panel(new VerticalLayout(
                 buildReadOnlyLayout("label.updated_by", UdmValueDto::getUpdateUser, binder),
-                buildReadOnlyLayout("label.updated_date", bean -> DateUtils.format(bean.getUpdateDate()), binder)
+                buildReadOnlyLayout("label.updated_date", bean -> toShortFormat(bean.getUpdateDate()), binder)
             ))
         );
     }

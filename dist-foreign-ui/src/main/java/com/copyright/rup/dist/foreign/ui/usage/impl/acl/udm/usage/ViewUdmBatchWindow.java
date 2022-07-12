@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.usage;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UdmBatch;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -21,11 +21,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
-
 /**
  * Modal window that provides functionality for viewing and deleting {@link UdmBatch}es.
  * <p>
@@ -35,7 +30,7 @@ import java.util.Objects;
  *
  * @author Anton Azarenka
  */
-public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchController {
+public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
     private final IUdmUsageController controller;
@@ -109,7 +104,7 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
             .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
-        grid.addColumn(udmBatch -> getStringFromDate(udmBatch.getCreateDate()))
+        grid.addColumn(udmBatch -> toLongFormat(udmBatch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()))
             .setWidth(170);
@@ -145,11 +140,5 @@ public class ViewUdmBatchWindow extends Window implements SearchWidget.ISearchCo
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.error.delete_in_progress_batch", udmBatch.getName()));
         }
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 }

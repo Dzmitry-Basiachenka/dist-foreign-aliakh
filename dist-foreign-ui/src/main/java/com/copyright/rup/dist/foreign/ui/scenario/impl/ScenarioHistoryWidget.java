@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryWidget;
@@ -16,12 +16,6 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Implementation of {@link IScenarioHistoryWidget}.
  * <p>
@@ -31,7 +25,7 @@ import java.util.Locale;
  *
  * @author Uladzislau Shalamitski
  */
-public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWidget {
+public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWidget, IDateFormatter {
 
     private IScenarioHistoryController controller;
     private Grid<ScenarioAuditItem> grid;
@@ -79,16 +73,11 @@ public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWid
             .setCaption(ForeignUi.getMessage("table.column.type"));
         grid.addColumn(ScenarioAuditItem::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.action.user"));
-        grid.addColumn(auditItem -> getStringFromDate(auditItem.getCreateDate()))
+        grid.addColumn(auditItem -> toLongFormat(auditItem.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.date"));
         grid.addColumn(ScenarioAuditItem::getActionReason)
             .setCaption(ForeignUi.getMessage("table.column.action.reason"));
         grid.setSizeFull();
         VaadinUtils.addComponentStyle(grid, "scenario-history-grid");
-    }
-
-    private String getStringFromDate(Date date) {
-        return null != date ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault())
-            .format(date) : StringUtils.EMPTY;
     }
 }

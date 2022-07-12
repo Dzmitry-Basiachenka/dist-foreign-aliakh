@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IUdmUsageController;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
-public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWidget {
+public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWidget, IDateFormatter {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
@@ -355,11 +355,11 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
             addColumn(UdmUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120,
                 hasResearcherPermission),
             addColumn(UdmUsageDto::getChannel, "table.column.channel", "channel", 100, false),
-            addColumn(u -> DateUtils.format(u.getUsageDate()), "table.column.usage_date", "usageDate", 100,
+            addColumn(u -> toShortFormat(u.getUsageDate()), "table.column.usage_date", "usageDate", 100,
                 false),
-            addColumn(u -> DateUtils.format(u.getSurveyStartDate()), "table.column.survey_start_date",
+            addColumn(u -> toShortFormat(u.getSurveyStartDate()), "table.column.survey_start_date",
                 "surveyStartDate", 130, false),
-            addColumn(u -> DateUtils.format(u.getSurveyEndDate()), "table.column.survey_end_date",
+            addColumn(u -> toShortFormat(u.getSurveyEndDate()), "table.column.survey_end_date",
                 "surveyEndDate", 130, false),
             addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", 130,
                 hasResearcherPermission),
@@ -371,9 +371,9 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 hasResearcherPermission),
             addColumn(u -> null != u.getIneligibleReason() ? u.getIneligibleReason().getReason() : StringUtils.EMPTY,
                 "table.column.ineligible_reason", "ineligibleReason", 200, false),
-            addColumn(u -> DateUtils.format(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
+            addColumn(u -> toShortFormat(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
             addColumn(UdmUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200, false),
-            addColumn(u -> DateUtils.format(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
+            addColumn(u -> toShortFormat(u.getUpdateDate()), "table.column.updated_date", "updateDate", 110,
                 false));
     }
 

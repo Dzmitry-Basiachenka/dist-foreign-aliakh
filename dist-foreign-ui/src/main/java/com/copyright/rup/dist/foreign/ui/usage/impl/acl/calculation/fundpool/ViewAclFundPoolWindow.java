@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -20,11 +20,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
-
 /**
  * Modal window that provides functionality for viewing and deleting {@link AclFundPool}s.
  * <p>
@@ -34,7 +29,7 @@ import java.util.Objects;
  *
  * @author Anton Azarenka
  */
-public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearchController {
+public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearchController, IDateFormatter {
 
     private final SearchWidget searchWidget;
     private final IAclFundPoolController controller;
@@ -112,7 +107,7 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
             .setComparator(
                 (fundPool1, fundPool2) -> fundPool1.getCreateUser().compareToIgnoreCase(fundPool2.getCreateUser()))
             .setWidth(170);
-        grid.addColumn(fundPool -> getStringFromDate(fundPool.getCreateDate()))
+        grid.addColumn(fundPool -> toLongFormat(fundPool.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"));
     }
 
@@ -142,11 +137,5 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
                 controller.deleteAclFundPool(fundPool);
                 grid.setItems(controller.getAllAclFundPools());
             });
-    }
-
-    private String getStringFromDate(Date date) {
-        return Objects.nonNull(date)
-            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
-            : StringUtils.EMPTY;
     }
 }

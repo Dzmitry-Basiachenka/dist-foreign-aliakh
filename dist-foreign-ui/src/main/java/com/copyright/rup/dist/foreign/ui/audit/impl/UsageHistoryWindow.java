@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -13,12 +13,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Modal window for displaying usage history.
@@ -29,7 +24,7 @@ import java.util.Locale;
  *
  * @author Aliaksandr Radkevich
  */
-public class UsageHistoryWindow extends Window {
+public class UsageHistoryWindow extends Window implements IDateFormatter {
 
     /**
      * Constructor.
@@ -57,7 +52,7 @@ public class UsageHistoryWindow extends Window {
         grid.addColumn(UsageAuditItem::getCreateUser)
             .setCaption(ForeignUi.getMessage("label.action_user"))
             .setComparator((item1, item2) -> item1.getCreateUser().compareToIgnoreCase(item2.getCreateUser()));
-        grid.addColumn(item -> getStringFromDate(item.getCreateDate()))
+        grid.addColumn(item -> toLongFormat(item.getCreateDate()))
             .setCaption(ForeignUi.getMessage("label.action_date"));
         grid.addColumn(UsageAuditItem::getActionReason)
             .setCaption(ForeignUi.getMessage("label.action_reason"))
@@ -76,10 +71,5 @@ public class UsageHistoryWindow extends Window {
         content.setSizeFull();
         content.setExpandRatio(grid, 1f);
         return content;
-    }
-
-    private String getStringFromDate(Date date) {
-        return null != date ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault())
-            .format(date) : StringUtils.EMPTY;
     }
 }

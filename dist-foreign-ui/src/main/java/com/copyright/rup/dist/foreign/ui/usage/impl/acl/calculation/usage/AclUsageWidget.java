@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.usage;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
@@ -45,7 +45,7 @@ import java.util.function.Function;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWidget {
+public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWidget, IDateFormatter {
 
     private static final String EMPTY_STYLE_NAME = "empty-acl-usages-grid";
     private static final String FOOTER_LABEL = "Usages Count: %s";
@@ -177,7 +177,7 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
             addColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
             addColumn(AclUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200),
-            addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate",
+            addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
     }
 

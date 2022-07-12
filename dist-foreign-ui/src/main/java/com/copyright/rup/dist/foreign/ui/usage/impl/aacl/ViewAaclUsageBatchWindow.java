@@ -81,7 +81,7 @@ public class ViewAaclUsageBatchWindow extends AbstractViewUsageBatchWindow {
             .setCaption(ForeignUi.getMessage("table.column.created_by"))
             .setComparator((batch1, batch2) -> batch1.getCreateUser().compareToIgnoreCase(batch2.getCreateUser()))
             .setWidth(170);
-        grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
+        grid.addColumn(batch -> toLongFormat(batch.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.created_date"))
             .setComparator((batch1, batch2) -> batch1.getCreateDate().compareTo(batch2.getCreateDate()))
             .setWidth(170);

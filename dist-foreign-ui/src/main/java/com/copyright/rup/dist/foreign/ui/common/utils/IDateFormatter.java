@@ -5,8 +5,10 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -18,11 +20,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public final class DateUtils {
-
-    private DateUtils() {
-        throw new AssertionError("Constructor shouldn't be called directly");
-    }
+public interface IDateFormatter {
 
     /**
      * Formats instance of {@link LocalDate} to {@link String} by pattern "MM/dd/yyyy".
@@ -30,7 +28,7 @@ public final class DateUtils {
      * @param date instance of {@link LocalDate}
      * @return formatted date string if date is not {@code null}, otherwise empty string
      */
-    public static String format(LocalDate date) {
+    default String toShortFormat(LocalDate date) {
         return CommonDateUtils.format(date, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     }
 
@@ -40,9 +38,21 @@ public final class DateUtils {
      * @param date instance of {@link Date}
      * @return formatted date string if date is not {@code null}, otherwise empty string
      */
-    public static String format(Date date) {
+    default String toShortFormat(Date date) {
         return Objects.nonNull(date)
             ? FastDateFormat.getInstance(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT).format(date)
+            : StringUtils.EMPTY;
+    }
+
+    /**
+     * Formats instance of {@link Date} to {@link String} by pattern "MM/dd/yyyy h:mm a".
+     *
+     * @param date instance of {@link Date}
+     * @return formatted date string if date is not {@code null}, otherwise empty string
+     */
+    default String toLongFormat(Date date) {
+        return Objects.nonNull(date)
+            ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault()).format(date)
             : StringUtils.EMPTY;
     }
 }

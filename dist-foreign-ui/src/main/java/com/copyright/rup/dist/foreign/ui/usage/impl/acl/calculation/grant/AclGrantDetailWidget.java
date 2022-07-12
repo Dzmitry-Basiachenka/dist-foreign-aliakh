@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.grant;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantDetailDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
-import com.copyright.rup.dist.foreign.ui.common.utils.DateUtils;
+import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailWidget;
@@ -38,7 +38,7 @@ import java.util.Set;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGrantDetailWidget {
+public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGrantDetailWidget, IDateFormatter {
 
     private static final String EMPTY_STYLE_NAME = "empty-grants-grid";
     private static final String FOOTER_LABEL = "Grant Details Count: %s";
@@ -132,8 +132,8 @@ public class AclGrantDetailWidget extends HorizontalSplitPanel implements IAclGr
             addColumn(AclGrantDetailDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 150),
             addColumn(AclGrantDetailDto::getRhName, "table.column.rh_account_name", "rhName", 300),
             addColumn(AclGrantDetailDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
-            addColumn(value -> DateUtils.format(value.getCreateDate()), "table.column.created_date", "createDate", 100),
-            addColumn(value -> DateUtils.format(value.getUpdateDate()), "table.column.updated_date", "updateDate", 100),
+            addColumn(value -> toShortFormat(value.getCreateDate()), "table.column.created_date", "createDate", 100),
+            addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate", 100),
             addColumn(AclGrantDetailDto::getGrantPeriod, "table.column.grant_period", "grantPeriod", 110),
             addBooleanColumn(AclGrantDetailDto::getManualUploadFlag, "table.column.manual_upload_flag",
                 "manualUploadFlag", 150));
