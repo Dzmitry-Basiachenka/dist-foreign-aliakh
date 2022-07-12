@@ -120,9 +120,14 @@ public interface IAclUsageRepository {
 
     /**
      * Finds count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
+     * Check only eligible, granted, with usage age weight > 0 and quantity < 2000 usages
      *
-     * @param batchId ACL batch id
+     * @param batchId            ACL batch id
+     * @param grantSetId         ACL grant set  id
+     * @param periodPriors       list of period priors
+     * @param distributionPeriod distribution period
      * @return count of {@link AclUsageDto}s
      */
-    int findCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId);
+    int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
+                               List<Integer> periodPriors);
 }

@@ -76,6 +76,8 @@ public class AclUsageRepositoryIntegrationTest {
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_BATCH_UID_1 = "36d8901e-1f3b-4e68-8c95-1f8b02740ed2";
     private static final String ACL_USAGE_BATCH_UID_2 = "c653d257-4180-4fb4-9119-f001063e4a56";
+    private static final String ACL_GRANT_SET_UID_1 = "a764abd9-7391-481a-b4fe-755452fd3935";
+    private static final String ACL_GRANT_SET_UID_2 = "c5d66bb6-99c5-4fb5-a30b-22555dd685ea";
     private static final String ACL_USAGE_UID_1 = "8ff48add-0eea-4fe3-81d0-3264c6779936";
     private static final String ACL_USAGE_UID_2 = "0eeef531-b779-4b3b-827d-b44b2261c6db";
     private static final String ACL_USAGE_UID_3 = "2ba0fab7-746d-41e0-87b5-c2b3997ce0ae";
@@ -84,6 +86,7 @@ public class AclUsageRepositoryIntegrationTest {
     private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
+    private static final List<Integer> PERIOD_PRIORS = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
     private static final Set<DetailLicenseeClass> DETAIL_LICENSEE_CLASSES =
         Collections.singleton(buildDetailLicenseeClass(2, "Textiles, Apparel, etc."));
     private static final Set<AggregateLicenseeClass> AGGREGATE_LICENSEE_CLASSES =
@@ -440,7 +443,7 @@ public class AclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterUsageDetailId() {
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
-            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
+                new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
             ACL_USAGE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
@@ -743,10 +746,12 @@ public class AclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FOLDER_NAME + "find-count-with-null-pub-type-or-content-unit-price-by-batch-id.groovy")
-    public void testFindCountWithNullPubTypeOrContentUnitPriceByBatchId() {
-        assertEquals(0, aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_USAGE_BATCH_UID_1));
-        assertEquals(3, aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(ACL_USAGE_BATCH_UID_2));
+    @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
+    public void testFndCountNonValidUsages() {
+        assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1, 202212,
+            PERIOD_PRIORS));
+        assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2, 202212,
+            PERIOD_PRIORS));
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {

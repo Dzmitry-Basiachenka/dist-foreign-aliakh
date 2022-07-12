@@ -98,7 +98,8 @@ public class AclUsageService implements IAclUsageService {
     }
 
     @Override
-    public int getCountWithNullPubTypeOrContentUnitPriceByBatchId(String batchId) {
-        return aclUsageRepository.findCountWithNullPubTypeOrContentUnitPriceByBatchId(batchId);
+    public int getCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
+                                     List<Integer> periodPriors) {
+        return aclUsageRepository.findCountInvalidUsages(batchId, grantSetId, distributionPeriod, periodPriors);
     }
 }

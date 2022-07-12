@@ -198,9 +198,11 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testIsValidUsageBatch() {
-        expect(aclUsageService.getCountWithNullPubTypeOrContentUnitPriceByBatchId(BATCH_UID)).andReturn(0).once();
+        expect(aclUsageService.getCountInvalidUsages(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
+            Collections.singletonList(0))).andReturn(0).once();
         replay(aclUsageService);
-        assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID));
+        assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
+            Collections.singletonList(0)));
         verify(aclUsageService);
     }
 
