@@ -1200,4 +1200,75 @@ databaseChangeLog {
             dropTable(tableName: 'df_acl_pub_type_weight_history', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2022-07-13-00', author: 'Dzmitry Basiachenka <dbasiachenka@copyright.com>') {
+        comment("B-57798 FDA: View scenario specific usage details by RH for ACL: add reported_type_of_use, " +
+                "content_unit_price_flag, price, price_flag, content, content_flag columns to df_acl_scenario_detail " +
+                "and df_acl_usage tables")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'reported_type_of_use', type: 'VARCHAR(128)', remarks: 'The reported type of use')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'content_unit_price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Unit Price Flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'price', type: 'NUMERIC(38,10)', remarks: 'Price')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Price Flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'content', type: 'NUMERIC (38, 10)', remarks: 'Content')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'content_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Flag') {
+                constraints(nullable: false)
+            }
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'reported_type_of_use', type: 'VARCHAR(128)', remarks: 'The reported type of use')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'content_unit_price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Unit Price Flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'price', type: 'NUMERIC(38,10)', remarks: 'Price')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'price_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Price Flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'content', type: 'NUMERIC (38, 10)', remarks: 'Content')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
+            column(name: 'content_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'Content Flag') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'reported_type_of_use')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'content_unit_price_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'price')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'price_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'content')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'content_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'reported_type_of_use')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'content_unit_price_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'price')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'price_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'content')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'content_flag')
+        }
+    }
 }
