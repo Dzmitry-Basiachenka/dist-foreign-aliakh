@@ -1,3 +1,14 @@
+15.1.33
+-
+* B-74268 FDA: Tech Debt: make 'SYSTEM' user after setting NEW status by researcher
+* B-74268 Tech Debt: FDA: change Scenario name to Scenario Name for all windows
+* B-74268 Tech Debt: FDA: change apps schemas in mappers to schema property
+* B-74268 FDA: Tech Debt: unify methods to assert AACL usages in tests
+* B-57800 FDA: Scenario Tab modifications for ACL Metadata Panel: make changes based on comments in code review
+* B-74268 FDA: Tech Debt: unify dates formatting
+* B-57783 FDA: Create an ACL Scenario: make changes based on code review
+* B-57783 FDA: Create an ACL Scenario: Adjust validation logic to usages that are eligible, granted and with usage age weight > 0 will be verified before create scenario
+
 15.1.32
 -
 * FDA: ACL: Calculations tab: Scenarios subtab: There are duplicate records in df_acl_share_detail table after scenario creation
