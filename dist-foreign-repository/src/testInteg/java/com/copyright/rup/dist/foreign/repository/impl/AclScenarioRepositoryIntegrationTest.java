@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
@@ -226,10 +227,11 @@ public class AclScenarioRepositoryIntegrationTest {
         return usageAge;
     }
 
-    private PublicationType buildPublicationType(String publicationTypeId, BigDecimal weight) {
-        PublicationType publicationType = new PublicationType();
+    private AclPublicationType buildPublicationType(String publicationTypeId, BigDecimal weight) {
+        AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId(publicationTypeId);
         publicationType.setWeight(weight);
+        publicationType.setPeriod(201512);
         return publicationType;
     }
 

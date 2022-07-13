@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 
 import java.util.List;
@@ -31,4 +32,18 @@ public interface IPublicationTypeService {
      * @return list of {@link PublicationType}
      */
     List<PublicationType> getPublicationTypes(String productFamily);
+
+    /**
+     * Gets list of all {@link AclPublicationType}s.
+     *
+     * @return list of {@link AclPublicationType}s.
+     */
+    List<AclPublicationType> getAclHistoricalPublicationTypes();
+
+    /**
+     * Insert new ACL publication type.
+     *
+     * @param publicationType instance of {@link AclPublicationType}
+     */
+    void insertAclHistoricalPublicationType(AclPublicationType publicationType);
 }

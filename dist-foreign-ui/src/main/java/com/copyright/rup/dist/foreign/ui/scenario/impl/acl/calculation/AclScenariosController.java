@@ -119,8 +119,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
         // scenario window.
         aclScenario.setDetailLicenseeClasses(
             licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY));
-        aclScenario.setPublicationTypes(
-            publicationTypeService.getPublicationTypes(FdaConstants.ACL_PRODUCT_FAMILY));
+        aclScenario.setPublicationTypes(publicationTypeService.getAclHistoricalPublicationTypes());
         aclScenario.setUsageAges(aclUsageService.getDefaultUsageAgesWeights());
         aclScenarioService.insertScenario(aclScenario);
     }

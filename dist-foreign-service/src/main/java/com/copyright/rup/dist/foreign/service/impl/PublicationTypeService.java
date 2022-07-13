@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -32,5 +33,15 @@ public class PublicationTypeService implements IPublicationTypeService {
     @Override
     public List<PublicationType> getPublicationTypes(String productFamily) {
         return pubTypeRepository.findByProductFamily(productFamily);
+    }
+
+    @Override
+    public List<AclPublicationType> getAclHistoricalPublicationTypes() {
+        return pubTypeRepository.findAclHistoricalPublicationTypes();
+    }
+
+    @Override
+    public void insertAclHistoricalPublicationType(AclPublicationType publicationType) {
+        pubTypeRepository.insertAclHistoricalPublicationType(publicationType);
     }
 }

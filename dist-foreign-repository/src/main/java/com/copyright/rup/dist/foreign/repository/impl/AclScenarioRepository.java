@@ -4,10 +4,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 
@@ -74,7 +74,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     }
 
     @Override
-    public void insertAclScenarioPubTypeWeight(PublicationType publicationType, String scenarioId, String userName) {
+    public void insertAclScenarioPubTypeWeight(AclPublicationType publicationType, String scenarioId, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("publicationType", Objects.requireNonNull(publicationType));
         parameters.put("scenarioId", Objects.requireNonNull(scenarioId));

@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
@@ -55,7 +55,7 @@ public class CreateAclScenarioIntegrationTestBuilder {
         return this;
     }
 
-    CreateAclScenarioIntegrationTestBuilder withPublicationTypes(List<PublicationType> publicationTypes) {
+    CreateAclScenarioIntegrationTestBuilder withPublicationTypes(List<AclPublicationType> publicationTypes) {
         this.expectedScenario.setPublicationTypes(publicationTypes);
         return this;
     }

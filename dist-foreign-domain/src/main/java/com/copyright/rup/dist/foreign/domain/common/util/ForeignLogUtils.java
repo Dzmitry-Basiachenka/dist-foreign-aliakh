@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.common.util;
 
 import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -67,7 +68,7 @@ public final class ForeignLogUtils {
                     aclScenario.getUsageBatchId(),
                     aclScenario.getGrantSetId(),
                     formatUsageAges(aclScenario.getUsageAges()),
-                    formatPublicationTypes(aclScenario.getPublicationTypes()),
+                    formatAclPublicationTypes(aclScenario.getPublicationTypes()),
                     formatDetailLicenseeClasses(aclScenario.getDetailLicenseeClasses()));
             }
         };
@@ -122,6 +123,21 @@ public final class ForeignLogUtils {
                 .map(publicationType -> null == publicationType
                     ? NULL_STRING :
                     String.format("[Name=%s, Weight=%s]", publicationType.getName(), publicationType.getWeight()))
+                .collect(Collectors.joining(LIST_DELIMITER));
+        }
+        return result;
+    }
+
+    private static String formatAclPublicationTypes(List<AclPublicationType> publicationTypes) {
+        String result;
+        if (null == publicationTypes) {
+            result = NULL_STRING;
+        } else {
+            result = publicationTypes.stream()
+                .map(publicationType -> null == publicationType
+                    ? NULL_STRING :
+                    String.format("[Name=%s, Weight=%s, Period=%s]", publicationType.getName(),
+                        publicationType.getWeight(), publicationType.getPeriod()))
                 .collect(Collectors.joining(LIST_DELIMITER));
         }
         return result;
