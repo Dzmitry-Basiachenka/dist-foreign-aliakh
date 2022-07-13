@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
@@ -133,6 +134,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     public boolean isValidUsageBatch(String batchId, String grantSetId, Integer distributionPeriod,
                                      List<Integer> periodPriors) {
         return 0 == aclUsageService.getCountInvalidUsages(batchId, grantSetId, distributionPeriod, periodPriors);
+    }
+
+    @Override
+    public List<AclPublicationType> getAclHistoricalPublicationTypes() {
+        return publicationTypeService.getAclHistoricalPublicationTypes();
     }
 
     @Override

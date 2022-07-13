@@ -19,11 +19,13 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
@@ -48,6 +50,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,7 +86,14 @@ public class CreateAclScenarioWindowTest {
         createButtonClickListener = EasyMock.createMock(ClickListener.class);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
+        AclPublicationType publicationType = new AclPublicationType();
+        publicationType.setId("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e");
+        publicationType.setName("Book");
+        publicationType.setWeight(new BigDecimal("1.00"));
+        publicationType.setPeriod(201506);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
+        expect(controller.getAclHistoricalPublicationTypes()).andReturn(Collections.singletonList(publicationType))
+            .once();
     }
 
     @Test
@@ -107,6 +117,7 @@ public class CreateAclScenarioWindowTest {
         verifyComboBox(content.getComponent(5), "Grant Set");
         verifyComboBox(content.getComponent(6), "Copy From");
         //TODO add verify widgets
+        verifyAclScenarioParameterWidget(content.getComponent(8), "Pub Type Weights") ;
         verifyCheckBox(content.getComponent(10), "Editable", "acl-scenario-editable-check-box");
         verifyDescriptionArea(content.getComponent(11));
         verifyButtonsLayout(content.getComponent(12), "Confirm", "Cancel");
@@ -210,6 +221,12 @@ public class CreateAclScenarioWindowTest {
         assertEquals(caption, comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
+    }
+
+    private void verifyAclScenarioParameterWidget(Component component, String expectedCaption) {
+        assertNotNull(component);
+        AclPublicationTypeWeightsParameterWidget widget = (AclPublicationTypeWeightsParameterWidget) component;
+        assertEquals(expectedCaption, widget.getComponent(0).getCaption());
     }
 
     private void verifyDescriptionArea(Component component) {
