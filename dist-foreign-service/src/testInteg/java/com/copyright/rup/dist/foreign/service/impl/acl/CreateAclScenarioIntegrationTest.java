@@ -3,9 +3,9 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
@@ -88,10 +88,10 @@ public class CreateAclScenarioIntegrationTest {
         });
     }
 
-    public List<PublicationType> loadExpectedAclPublicationType(String fileName) throws IOException {
+    public List<AclPublicationType> loadExpectedAclPublicationType(String fileName) throws IOException {
         String content = TestUtils.fileToString(this.getClass(), fileName);
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(content, new TypeReference<List<PublicationType>>() {
+        return mapper.readValue(content, new TypeReference<List<AclPublicationType>>() {
         });
     }
 

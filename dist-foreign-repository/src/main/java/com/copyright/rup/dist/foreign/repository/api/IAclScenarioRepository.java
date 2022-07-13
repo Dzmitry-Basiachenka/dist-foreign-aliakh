@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import java.util.List;
@@ -70,11 +70,11 @@ public interface IAclScenarioRepository {
     /**
      * Inserts publication type weight of ACL scenario.
      *
-     * @param publicationType instance of {@link PublicationType}
+     * @param publicationType instance of {@link AclPublicationType}
      * @param scenarioId      scenario uid
      * @param userName        username
      */
-    void insertAclScenarioPubTypeWeight(PublicationType publicationType, String scenarioId, String userName);
+    void insertAclScenarioPubTypeWeight(AclPublicationType publicationType, String scenarioId, String userName);
 
     /**
      * Finds of {@link AclScenario}s by its identifier.

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 
@@ -35,14 +36,17 @@ public class PublicationTypeRepositoryIntegrationTest {
 
     private static final String AACL_PRODUCT_FAMILY = "AACL";
     private static final String ACL_PRODUCT_FAMILY = "ACL";
-    private static final String DEFAULT_WEIGHT = "1.00";
+    private static final String DEFAULT_WEIGHT_1_00 = "1.00";
+    private static final String DEFAULT_WEIGHT_1_90 = "1.90";
+    private static final String BOOK = "Book";
+    private static final String PUBLICATION_TYPE_UID = "73876e58-2e87-485e-b6f3-7e23792dd214";
 
     @Autowired
     private IPublicationTypeRepository publicationTypeRepository;
 
     @Test
     public void testIsExistByNameAacl() {
-        assertTrue(publicationTypeRepository.isExistForProductFamily("Book", AACL_PRODUCT_FAMILY));
+        assertTrue(publicationTypeRepository.isExistForProductFamily(BOOK, AACL_PRODUCT_FAMILY));
         assertTrue(publicationTypeRepository.isExistForProductFamily("boOK", AACL_PRODUCT_FAMILY));
         assertFalse(publicationTypeRepository.isExistForProductFamily("Books", AACL_PRODUCT_FAMILY));
     }
@@ -59,11 +63,12 @@ public class PublicationTypeRepositoryIntegrationTest {
         List<PublicationType> pubTypes = publicationTypeRepository.findByProductFamily(AACL_PRODUCT_FAMILY);
         assertNotNull(pubTypes);
         assertEquals(5, pubTypes.size());
-        assertEquals(buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", DEFAULT_WEIGHT),
+        assertEquals(buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", BOOK, DEFAULT_WEIGHT_1_00),
             pubTypes.get(0));
         assertEquals(buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
             pubTypes.get(1));
-        assertEquals(buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", DEFAULT_WEIGHT),
+        assertEquals(buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine",
+                DEFAULT_WEIGHT_1_00),
             pubTypes.get(2));
         assertEquals(buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
             pubTypes.get(3));
@@ -76,32 +81,106 @@ public class PublicationTypeRepositoryIntegrationTest {
         List<PublicationType> pubTypes = publicationTypeRepository.findByProductFamily(ACL_PRODUCT_FAMILY);
         assertNotNull(pubTypes);
         assertEquals(10, pubTypes.size());
-        assertEquals(buildPublicationTypeWithDescription("73876e58-2e87-485e-b6f3-7e23792dd214", "BK", "Book",
-            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT), pubTypes.get(0));
+        assertEquals(buildPublicationTypeWithDescription(PUBLICATION_TYPE_UID, "BK", BOOK,
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(0));
         assertEquals(buildPublicationTypeWithDescription("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series",
-            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT), pubTypes.get(1));
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(1));
         assertEquals(buildPublicationTypeWithDescription("aef4304b-6722-4047-86e0-8c84c72f096d", "NL", "Newsletter",
-            ACL_PRODUCT_FAMILY, "1.90"), pubTypes.get(2));
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(2));
         assertEquals(buildPublicationTypeWithDescription("076f2c40-f524-405d-967a-3840df2b57df", "NP", "Newspaper",
             ACL_PRODUCT_FAMILY, "3.50"), pubTypes.get(3));
         assertEquals(buildPublicationTypeWithDescription("ad8df236-5200-4acf-be55-cf82cd342f14", "OT", "Other",
-            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT), pubTypes.get(4));
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(4));
         assertEquals(buildPublicationTypeWithDescription("34574f62-7922-48b9-b798-73bf5c3163da", "SJ",
             "Scholarly Journal", ACL_PRODUCT_FAMILY, "1.30"), pubTypes.get(5));
         assertEquals(buildPublicationTypeWithDescription("9c5c6797-a861-44ae-ada9-438acb20334d", "STND", "Standards",
-            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT), pubTypes.get(6));
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(6));
         assertEquals(buildPublicationTypeWithDescription("c0db0a37-9854-495f-99b7-1e3486c232cb", "TG",
-            "Trade Magazine/Journal", ACL_PRODUCT_FAMILY, "1.90"), pubTypes.get(7));
+            "Trade Magazine/Journal", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(7));
         assertEquals(buildPublicationTypeWithDescription("0a4bcf78-95cb-445e-928b-e48ad12acfd2", "TGB",
-            "Trade and Business News", ACL_PRODUCT_FAMILY, "1.90"), pubTypes.get(8));
+            "Trade and Business News", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(8));
         assertEquals(buildPublicationTypeWithDescription("56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe", "TGC",
             "Consumer magazine", ACL_PRODUCT_FAMILY, "2.70"), pubTypes.get(9));
+    }
+
+    @Test
+    public void testFindAclHistoryPublicationTypes() {
+        List<AclPublicationType> pubTypes = publicationTypeRepository.findAclHistoricalPublicationTypes();
+        assertNotNull(pubTypes);
+        assertEquals(10, pubTypes.size());
+        assertEquals(buildAclHistoryPublicationType(PUBLICATION_TYPE_UID, "BK", BOOK,
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(0));
+        assertEquals(buildAclHistoryPublicationType("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(1));
+        assertEquals(buildAclHistoryPublicationType("aef4304b-6722-4047-86e0-8c84c72f096d", "NL", "Newsletter",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(2));
+        assertEquals(buildAclHistoryPublicationType("076f2c40-f524-405d-967a-3840df2b57df", "NP", "Newspaper",
+            ACL_PRODUCT_FAMILY, "3.50"), pubTypes.get(3));
+        assertEquals(buildAclHistoryPublicationType("ad8df236-5200-4acf-be55-cf82cd342f14", "OT", "Other",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(4));
+        assertEquals(buildAclHistoryPublicationType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ",
+            "Scholarly Journal", ACL_PRODUCT_FAMILY, "1.30"), pubTypes.get(5));
+        assertEquals(buildAclHistoryPublicationType("9c5c6797-a861-44ae-ada9-438acb20334d", "STND", "Standards",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(6));
+        assertEquals(buildAclHistoryPublicationType("c0db0a37-9854-495f-99b7-1e3486c232cb", "TG",
+            "Trade Magazine/Journal", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(7));
+        assertEquals(buildAclHistoryPublicationType("0a4bcf78-95cb-445e-928b-e48ad12acfd2", "TGB",
+            "Trade and Business News", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(8));
+        assertEquals(buildAclHistoryPublicationType("56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe", "TGC",
+            "Consumer magazine", ACL_PRODUCT_FAMILY, "2.70"), pubTypes.get(9));
+    }
+
+    @Test
+    public void testUpdateHistoryPublicationTypesAcl() {
+        AclPublicationType aclPublicationType =
+            buildAclHistoryPublicationType(PUBLICATION_TYPE_UID, "BK", BOOK,
+                ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00);
+        aclPublicationType.setPeriod(202212);
+        aclPublicationType.setCreateUser("SYSTEM");
+        aclPublicationType.setUpdateUser("SYSTEM");
+        publicationTypeRepository.insertAclHistoricalPublicationType(aclPublicationType);
+        List<AclPublicationType> pubTypes = publicationTypeRepository.findAclHistoricalPublicationTypes();
+        assertNotNull(pubTypes);
+        assertEquals(11, pubTypes.size());
+        assertEquals(buildAclHistoryPublicationType(PUBLICATION_TYPE_UID, "BK", BOOK,
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(0));
+        assertEquals(buildAclHistoryPublicationType("f1f523ca-1b46-4d3a-842d-99252785187c", "BK2", "Book series",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(1));
+        assertEquals(buildAclHistoryPublicationType("aef4304b-6722-4047-86e0-8c84c72f096d", "NL", "Newsletter",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(2));
+        assertEquals(buildAclHistoryPublicationType("076f2c40-f524-405d-967a-3840df2b57df", "NP", "Newspaper",
+            ACL_PRODUCT_FAMILY, "3.50"), pubTypes.get(3));
+        assertEquals(buildAclHistoryPublicationType("ad8df236-5200-4acf-be55-cf82cd342f14", "OT", "Other",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(4));
+        assertEquals(buildAclHistoryPublicationType("34574f62-7922-48b9-b798-73bf5c3163da", "SJ",
+            "Scholarly Journal", ACL_PRODUCT_FAMILY, "1.30"), pubTypes.get(5));
+        assertEquals(buildAclHistoryPublicationType("9c5c6797-a861-44ae-ada9-438acb20334d", "STND", "Standards",
+            ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00), pubTypes.get(6));
+        assertEquals(buildAclHistoryPublicationType("c0db0a37-9854-495f-99b7-1e3486c232cb", "TG",
+            "Trade Magazine/Journal", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(7));
+        assertEquals(buildAclHistoryPublicationType("0a4bcf78-95cb-445e-928b-e48ad12acfd2", "TGB",
+            "Trade and Business News", ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_90), pubTypes.get(8));
+        assertEquals(buildAclHistoryPublicationType("56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe", "TGC",
+            "Consumer magazine", ACL_PRODUCT_FAMILY, "2.70"), pubTypes.get(9));
+        assertEquals(aclPublicationType, pubTypes.get(10));
     }
 
     private PublicationType buildPublicationTypeWithDescription(String id, String name, String description,
                                                                 String productFamily, String weight) {
         PublicationType pubType = new PublicationType();
         pubType.setId(id);
+        pubType.setName(name);
+        pubType.setDescription(description);
+        pubType.setProductFamily(productFamily);
+        pubType.setWeight(new BigDecimal(weight));
+        return pubType;
+    }
+
+    private AclPublicationType buildAclHistoryPublicationType(String id, String name, String description,
+                                                              String productFamily, String weight) {
+        AclPublicationType pubType = new AclPublicationType();
+        pubType.setId(id);
+        pubType.setPeriod(201506);
         pubType.setName(name);
         pubType.setDescription(description);
         pubType.setProductFamily(productFamily);

@@ -8,10 +8,10 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -63,7 +63,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testInsertAclScenarioPubTypeWeights() {
-        PublicationType publicationType = buildPublicationType("Book", new BigDecimal("3.12"));
+        AclPublicationType publicationType = buildPublicationType("Book", new BigDecimal("3.12"));
         aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, SCENARIO_UID, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioRepository);
@@ -133,8 +133,8 @@ public class AclScenarioServiceTest {
         return usageAge;
     }
 
-    private PublicationType buildPublicationType(String name, BigDecimal weight) {
-        PublicationType publicationType = new PublicationType();
+    private AclPublicationType buildPublicationType(String name, BigDecimal weight) {
+        AclPublicationType publicationType = new AclPublicationType();
         publicationType.setName(name);
         publicationType.setWeight(weight);
         return publicationType;

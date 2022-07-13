@@ -29,7 +29,7 @@ public class AclScenario extends StoredEntity<String> {
     private boolean editableFlag;
     private Integer periodEndDate;
     private String licenseType;
-    private List<PublicationType> publicationTypes = new ArrayList<>();
+    private List<AclPublicationType> publicationTypes = new ArrayList<>();
     private List<UsageAge> usageAges = new ArrayList<>();
     private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
 
@@ -105,11 +105,11 @@ public class AclScenario extends StoredEntity<String> {
         this.licenseType = licenseType;
     }
 
-    public List<PublicationType> getPublicationTypes() {
+    public List<AclPublicationType> getPublicationTypes() {
         return publicationTypes;
     }
 
-    public void setPublicationTypes(List<PublicationType> publicationTypes) {
+    public void setPublicationTypes(List<AclPublicationType> publicationTypes) {
         this.publicationTypes = publicationTypes;
     }
 

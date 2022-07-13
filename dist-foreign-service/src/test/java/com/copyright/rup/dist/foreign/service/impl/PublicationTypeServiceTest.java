@@ -2,12 +2,14 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.repository.api.IPublicationTypeRepository;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -61,11 +63,38 @@ public class PublicationTypeServiceTest {
 
     @Test
     public void testGetPublicationTypes() {
-        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType("Book", "1.00"));
+        List<PublicationType> pubTypes = Collections.singletonList(buildPublicationType(PUB_TYPE, "1.00"));
         expect(publicationTypeRepository.findByProductFamily(AACL_PRODUCT_FAMILY)).andReturn(pubTypes).once();
         replay(publicationTypeRepository);
         assertEquals(pubTypes, publicationTypeService.getPublicationTypes(AACL_PRODUCT_FAMILY));
         verify(publicationTypeRepository);
+    }
+
+    @Test
+    public void testGetHistoryPublicationTypes() {
+        List<AclPublicationType> pubTypes = Collections.singletonList(buildAclPublicationType(PUB_TYPE, "1.00"));
+        expect(publicationTypeRepository.findAclHistoricalPublicationTypes()).andReturn(pubTypes).once();
+        replay(publicationTypeRepository);
+        assertEquals(pubTypes, publicationTypeService.getAclHistoricalPublicationTypes());
+        verify(publicationTypeRepository);
+    }
+
+    @Test
+    public void testUpdateHistoryPublicationTypes() {
+        AclPublicationType pubType = buildAclPublicationType("Trade and Business News", "1.90");
+        pubType.setPeriod(202212);
+        publicationTypeRepository.insertAclHistoricalPublicationType(pubType);
+        expectLastCall().once();
+        replay(publicationTypeRepository);
+        publicationTypeService.insertAclHistoricalPublicationType(pubType);
+        verify(publicationTypeRepository);
+    }
+
+    private AclPublicationType buildAclPublicationType(String name, String weight) {
+        AclPublicationType aclPublicationType = new AclPublicationType();
+        aclPublicationType.setName(name);
+        aclPublicationType.setWeight(new BigDecimal(weight));
+        return aclPublicationType;
     }
 
     private PublicationType buildPublicationType(String name, String weight) {

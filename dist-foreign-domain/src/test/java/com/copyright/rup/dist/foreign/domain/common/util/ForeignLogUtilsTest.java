@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.domain.common.util;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -54,8 +55,8 @@ public class ForeignLogUtilsTest {
             buildUsageAge(2018, new BigDecimal("0.75"))
         ));
         scenario.setPublicationTypes(Arrays.asList(
-            buildPublicationType("Book", new BigDecimal("3.12")),
-            buildPublicationType("STMA Journal", new BigDecimal("0.99"))
+            buildAclPublicationType("Book", new BigDecimal("3.12"), 202012),
+            buildAclPublicationType("STMA Journal", new BigDecimal("0.99"), 202006)
         ));
         scenario.setDetailLicenseeClasses(Arrays.asList(
             buildDetailLicenseeClass(108, 141),
@@ -66,7 +67,8 @@ public class ForeignLogUtilsTest {
                 "UsageBatchId='05ed8d36-3e98-4aa8-b3ca-862837e04d92', " +
                 "GrantSetId='94578e03-5581-45d9-b6b6-47cff3806550', " +
                 "UsageAges=[Period=2019, Weight=1.00], [Period=2018, Weight=0.75], " +
-                "PublicationTypes=[Name=Book, Weight=3.12], [Name=STMA Journal, Weight=0.99], " +
+                "PublicationTypes=[Name=Book, Weight=3.12, Period=202012], " +
+                    "[Name=STMA Journal, Weight=0.99, Period=202006], " +
                 "DetailLicenseeClasses=[DLC=108, ALC=141], [DLC=110, ALC=143]]",
             ForeignLogUtils.aclScenario(scenario).toString());
     }
@@ -153,6 +155,14 @@ public class ForeignLogUtilsTest {
         usageAge.setPeriod(period);
         usageAge.setWeight(weight);
         return usageAge;
+    }
+
+    private AclPublicationType buildAclPublicationType(String name, BigDecimal weight, Integer period) {
+        AclPublicationType publicationType = new AclPublicationType();
+        publicationType.setName(name);
+        publicationType.setWeight(weight);
+        publicationType.setPeriod(period);
+        return publicationType;
     }
 
     private PublicationType buildPublicationType(String name, BigDecimal weight) {

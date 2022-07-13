@@ -3,10 +3,10 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -80,7 +80,7 @@ public class AclScenarioService implements IAclScenarioService {
 
     @Override
     @Transactional
-    public void insertAclScenarioPubTypeWeights(List<PublicationType> publicationTypes, String scenarioId,
+    public void insertAclScenarioPubTypeWeights(List<AclPublicationType> publicationTypes, String scenarioId,
                                                 String userName) {
         publicationTypes.forEach(
             publicationType -> aclScenarioRepository.insertAclScenarioPubTypeWeight(publicationType, scenarioId,
