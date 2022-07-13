@@ -12,9 +12,9 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
-import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class AclScenarioService implements IAclScenarioService {
     @Autowired
     private IAclScenarioAuditService aclScenarioAuditService;
     @Autowired
-    private IAclUsageRepository aclUsageRepository;
+    private IAclScenarioUsageService aclScenarioUsageService;
 
     @Override
     @Transactional
@@ -58,7 +58,8 @@ public class AclScenarioService implements IAclScenarioService {
         insertAclScenarioPubTypeWeights(aclScenario.getPublicationTypes(), scenarioId, userName);
         insertAclScenarioUsageAgeWeights(aclScenario.getUsageAges(), scenarioId, userName);
         aclScenarioAuditService.logAction(scenarioId, ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        aclUsageRepository.addToAclScenario(aclScenario, userName);
+        aclScenarioUsageService.addUsagesToAclScenario(aclScenario, userName);
+        aclScenarioUsageService.addScenarioShares(aclScenario, userName);
         LOGGER.info("Insert ACL scenario. Finished. ScenarioName={}, Description={}, UserName={}",
             aclScenario.getName(), aclScenario.getDescription(), userName);
     }

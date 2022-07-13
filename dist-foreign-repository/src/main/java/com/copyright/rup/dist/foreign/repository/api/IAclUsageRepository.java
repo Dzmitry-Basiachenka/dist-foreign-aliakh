@@ -111,6 +111,14 @@ public interface IAclUsageRepository {
     void addToAclScenario(AclScenario aclScenario, String userName);
 
     /**
+     * Creates scenario shares for each usage in scenario.
+     *
+     * @param aclScenario ACL scenario to create shares
+     * @param userName    user name
+     */
+    void addScenarioShares(AclScenario aclScenario, String userName);
+
+    /**
      * Finds list of {@link AclScenarioDetail}s by ACL scenario uid.
      *
      * @param scenarioId scenario id

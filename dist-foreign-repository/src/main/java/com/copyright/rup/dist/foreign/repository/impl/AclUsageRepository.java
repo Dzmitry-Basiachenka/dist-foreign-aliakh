@@ -109,7 +109,16 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         params.put("scenario", Objects.requireNonNull(scenario));
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
-        update("IAclUsageMapper.addToScenario", params);
+        insert("IAclUsageMapper.addToScenario", params);
+    }
+
+    @Override
+    public void addScenarioShares(AclScenario scenario, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("scenario", Objects.requireNonNull(scenario));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        insert("IAclUsageMapper.addScenarioShares", params);
     }
 
     @Override
