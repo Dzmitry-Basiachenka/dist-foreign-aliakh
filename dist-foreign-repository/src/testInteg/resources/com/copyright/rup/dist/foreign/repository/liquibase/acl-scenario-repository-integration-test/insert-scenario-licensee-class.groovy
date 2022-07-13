@@ -58,6 +58,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: 'd18b4933-98c7-45b0-9775-1a86f3525636')
             column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
+            column(name: 'period', value: 201512)
         }
 
         rollback {

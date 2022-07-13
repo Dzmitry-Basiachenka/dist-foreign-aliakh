@@ -78,6 +78,7 @@ public class CreateAclScenarioWindowTest {
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
 
+    private final List<AclPublicationType> publicationTypes = Collections.singletonList(buildAclPublicationType());
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
     private ClickListener createButtonClickListener;
@@ -91,12 +92,8 @@ public class CreateAclScenarioWindowTest {
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
-        AclPublicationType publicationType = new AclPublicationType();
-        publicationType.setId("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e");
-        publicationType.setName("Book");
-        publicationType.setWeight(new BigDecimal("1.00"));
-        publicationType.setPeriod(201506);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
+        expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(Collections.singletonList(publicationType))
             .once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
@@ -123,7 +120,7 @@ public class CreateAclScenarioWindowTest {
         verifyComboBox(content.getComponent(5), "Grant Set");
         verifyComboBox(content.getComponent(6), "Copy From");
         //TODO add verify widgets
-        verifyAclScenarioParameterWidget(content.getComponent(8), "Pub Type Weights") ;
+        verifyAclScenarioParameterWidget(content.getComponent(8), "Pub Type Weights");
         verifyCheckBox(content.getComponent(10), "Editable", "acl-scenario-editable-check-box");
         verifyDescriptionArea(content.getComponent(11));
         verifyButtonsLayout(content.getComponent(12), "Confirm", "Cancel");
@@ -172,6 +169,7 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setEditableFlag(true);
         expectedScenario.setDescription("Description");
         expectedScenario.setLicenseType(LICENSE_TYPE);
+        expectedScenario.setPublicationTypes(publicationTypes);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
         expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
@@ -269,6 +267,15 @@ public class CreateAclScenarioWindowTest {
         aclGrantSet.setId("f5e558ce-2261-4998-8434-fc04d432c1a5");
         aclGrantSet.setName("Grant Set");
         return aclGrantSet;
+    }
+
+    private AclPublicationType buildAclPublicationType() {
+        AclPublicationType publicationType = new AclPublicationType();
+        publicationType.setId("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e");
+        publicationType.setName("Book");
+        publicationType.setWeight(new BigDecimal("1.00"));
+        publicationType.setPeriod(201506);
+        return publicationType;
     }
 
     @SuppressWarnings("unchecked")

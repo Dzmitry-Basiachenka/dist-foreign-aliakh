@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -227,7 +226,7 @@ public class AclScenarioRepositoryIntegrationTest {
         return usageAge;
     }
 
-    private AclPublicationType buildPublicationType(String publicationTypeId, BigDecimal weight) {
+    private AclPublicationType buildAclPublicationType(String publicationTypeId, BigDecimal weight) {
         AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId(publicationTypeId);
         publicationType.setWeight(weight);
@@ -255,7 +254,7 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
         scenario.setDetailLicenseeClasses(Collections.singletonList(buildDetailLicenseeClass(43, 1)));
         scenario.setPublicationTypes(Collections.singletonList(
-            buildPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"))));
+            buildAclPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"))));
         scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, new BigDecimal("1.00000"))));
         return scenario;
     }
@@ -288,10 +287,11 @@ public class AclScenarioRepositoryIntegrationTest {
             actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
     }
 
-    private void verifyAclScenarioPublicationType(PublicationType expectedPublicationType,
-                                                  PublicationType actualPublicationType) {
+    private void verifyAclScenarioPublicationType(AclPublicationType expectedPublicationType,
+                                                  AclPublicationType actualPublicationType) {
         assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
         assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
+        assertEquals(expectedPublicationType.getPeriod(), actualPublicationType.getPeriod());
     }
 
     private void verifyAclScenarioUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {

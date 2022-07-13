@@ -99,6 +99,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: '1995d50d-41c6-4e81-8c82-51a983bbecf8')
             column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
+            column(name: 'period', value: 201512)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
@@ -120,6 +121,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: 'c65e9c0a-006f-4b79-b828-87d2106330b7')
             column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
+            column(name: 'period', value: 201512)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
