@@ -1071,4 +1071,133 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2022-07-12-02', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-74353 FDA: Saving Pub Type Weights: create df_acl_pub_type_weight_history table")
+
+        createTable(tableName: 'df_acl_pub_type_weight_history', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing ACL history publication type weights') {
+
+            column(name: 'df_acl_pub_type_weight_history_uid', type: 'VARCHAR(255)', remarks: 'The identifier of history publication type') {
+                constraints(nullable: false)
+            }
+            column(name: 'df_publication_type_uid', type: 'VARCHAR(255)', remarks: 'Publication Type Id') {
+                constraints(nullable: false)
+            }
+            column(name: 'weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type Weight') {
+                constraints(nullable: false)
+            }
+            column(name: 'period', type: 'NUMERIC(6)', remarks: 'The period in YYYYMM format'){
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema,
+                tablespace: dbIndexTablespace,
+                tableName: 'df_acl_pub_type_weight_history',
+                columnNames: 'df_acl_pub_type_weight_history_uid',
+                constraintName: 'pk_df_acl_pub_type_weight_history')
+
+        addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_pub_type_weight_history',
+                baseColumnNames: 'df_publication_type_uid',
+                referencedTableName: 'df_publication_type',
+                referencedColumnNames: 'df_publication_type_uid',
+                constraintName: 'fk_df_acl_pub_type_weight_historys_2_df_publication_type')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: 'a104b6d3-8431-4173-a50c-96d46f19a27b')
+            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: 'f499b5d8-09ad-4d92-8283-8b35fb5a98a1')
+            column(name: 'df_publication_type_uid', value: 'f1f523ca-1b46-4d3a-842d-99252785187c')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '29a12014-14ea-4f91-994e-c427da1a4adf')
+            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '4dbd8c92-a74c-404b-9129-5cc1809615fb')
+            column(name: 'df_publication_type_uid', value: '076f2c40-f524-405d-967a-3840df2b57df')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '3.5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: 'c17a6e4e-6d21-45a1-9a18-c8e541247890')
+            column(name: 'df_publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '97a5281d-9a04-49d7-b66e-d9034a10901c')
+            column(name: 'df_publication_type_uid', value: '34574f62-7922-48b9-b798-73bf5c3163da')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1.3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: 'c47318d0-a8a6-40ce-98e2-e96fc2afb093')
+            column(name: 'df_publication_type_uid', value: '9c5c6797-a861-44ae-ada9-438acb20334d')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '8a7311ee-2050-4f95-b1cb-09842100e81a')
+            column(name: 'df_publication_type_uid', value: 'c0db0a37-9854-495f-99b7-1e3486c232cb')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '07b9b38b-e2ca-4d84-b5a7-72bf0e054858')
+            column(name: 'df_publication_type_uid', value: '0a4bcf78-95cb-445e-928b-e48ad12acfd2')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '1.9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_pub_type_weight_history') {
+            column(name: 'df_acl_pub_type_weight_history_uid', value: '3a9ef03c-6010-4d32-b5b0-bab4f4d2a4ed')
+            column(name: 'df_publication_type_uid', value: '56e31ea2-2f32-43a5-a0a7-9b1ecb1e73fe')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: '2.7')
+        }
+
+        rollback {
+            dropTable(tableName: 'df_acl_pub_type_weight_history', schemaName: dbAppsSchema)
+        }
+    }
 }
