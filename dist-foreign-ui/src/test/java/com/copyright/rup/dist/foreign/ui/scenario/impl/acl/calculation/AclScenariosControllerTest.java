@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
@@ -59,6 +60,7 @@ public class AclScenariosControllerTest {
     private IAclUsageBatchService usageBatchService;
     private IAclGrantSetService grantSetService;
     private IAclFundPoolService fundPoolService;
+    private IPublicationTypeService publicationTypeService;
     private IAclScenarioController aclScenarioController;
     private IAclUsageService aclUsageService;
 
@@ -70,7 +72,7 @@ public class AclScenariosControllerTest {
         usageBatchService = createMock(IAclUsageBatchService.class);
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
-        IPublicationTypeService publicationTypeService = createMock(IPublicationTypeService.class);
+        publicationTypeService = createMock(IPublicationTypeService.class);
         ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
@@ -204,6 +206,15 @@ public class AclScenariosControllerTest {
         assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
             Collections.singletonList(0)));
         verify(aclUsageService);
+    }
+
+    @Test
+    public void testGetAclHistoricalPublicationTypes() {
+        List<AclPublicationType> publicationTypes = Collections.emptyList();
+        expect(publicationTypeService.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
+        replay(publicationTypeService);
+        assertSame(publicationTypes, aclScenariosController.getAclHistoricalPublicationTypes());
+        verify(publicationTypeService);
     }
 
     private AclScenario buildAclScenario() {

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
@@ -105,4 +106,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      */
     boolean isValidUsageBatch(String batchId, String grantSetId, Integer distributionPeriod,
                               List<Integer> periodPriors);
+
+    /**
+     * Gets list of all historical ACL publication types.
+     *
+     * @return list of {@link AclPublicationType}
+     */
+    List<AclPublicationType> getAclHistoricalPublicationTypes();
 }

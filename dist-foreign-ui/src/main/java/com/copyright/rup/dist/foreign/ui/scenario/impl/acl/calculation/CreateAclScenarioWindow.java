@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -71,7 +73,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
 
     //TODO these fields will be reimplemented. It is stubs for now
     private Button usageAgeWeightWidget;
-    private Button publicationTypeWeightWidget;
+    private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
     private Button licenseeClassMappingWidget;
 
     private TextArea descriptionArea;
@@ -223,9 +225,9 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     }
 
     private void initPubTypeWeightsWidget() {
-        //TODO will be reimplemented later
-        publicationTypeWeightWidget = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
-        publicationTypeWeightWidget.addStyleName(ValoTheme.BUTTON_LINK);
+        publicationTypeWeightWidget =
+            new AclPublicationTypeWeightsParameterWidget(ForeignUi.getMessage("button.publication_type_weights"),
+                controller.getAclHistoricalPublicationTypes(), () -> new AclPublicationTypeWeightsWindow(true));
     }
 
     private void initLicenseeClassesMappingWidget() {
