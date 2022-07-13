@@ -40,12 +40,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -443,7 +446,7 @@ public class AclUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_DTOS_BY_FILTER)
     public void testFindDtosByFilterUsageDetailId() {
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
-                new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
+            new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID, null)),
             ACL_USAGE_UID_2);
         assertFilteringFindDtosByFilter(filter -> filter.setUsageDetailIdExpression(
             new FilterExpression<>(FilterOperatorEnum.EQUALS, USAGE_DETAIL_ID_DIFFERENT_CASE, null)),
@@ -735,7 +738,7 @@ public class AclUsageRepositoryIntegrationTest {
     public void testAddToAclScenario() {
         AclScenario scenario = buildAclScenario("dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
             "11c6590a-cea4-4cb6-a3ce-0f23a6f2e81c", "0f65b9b0-308f-4f73-b232-773a98baba2e",
-            "17970e6b-c020-4c84-9282-045ca465a8af", "ACL Scenario 201512", "Description",
+            "17970e6b-c020-4c84-9282-045ca465a8af", "ACL Scenario 202212", "Description",
             ScenarioStatusEnum.IN_PROGRESS, true, 202212, "ACL", USER_NAME, "2022-02-14T12:00:00+00:00");
         aclUsageRepository.addToAclScenario(scenario, "SYSTEM");
         List<AclScenarioDetail> scenarioDetails =
@@ -747,11 +750,37 @@ public class AclUsageRepositoryIntegrationTest {
 
     @Test
     @TestData(fileName = FOLDER_NAME + "find-count-non-valid-usages.groovy")
-    public void testFndCountNonValidUsages() {
+    public void testFindCountNonValidUsages() {
         assertEquals(0, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_1, ACL_GRANT_SET_UID_1, 202212,
             PERIOD_PRIORS));
         assertEquals(3, aclUsageRepository.findCountInvalidUsages(ACL_USAGE_BATCH_UID_2, ACL_GRANT_SET_UID_2, 202212,
             PERIOD_PRIORS));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "add-scenario-shares.groovy")
+    public void testAddScenarioShares() {
+        AclScenario scenario = buildAclScenario("17d43251-6637-41cb-8831-1bce47a7da85",
+            "f74d4355-2f86-4168-a85d-9233f98ce0eb", "2a8c042c-1d66-469f-b4df-0987de0e308c",
+            "6b821963-c0d1-41f4-8e97-a63f737c34fb", "ACL Scenario 202212", "Description",
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, "ACL", USER_NAME, "2022-02-14T12:00:00+00:00");
+        aclUsageRepository.addScenarioShares(scenario, USER_NAME);
+        List<AclScenarioDetail> scenarioDetails =
+            aclUsageRepository.findScenarioDetailsByScenarioId("17d43251-6637-41cb-8831-1bce47a7da85");
+        assertEquals(2, scenarioDetails.size());
+        Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
+        detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", Collections.singletonList(
+            buildAclScenarioShareDetail(1000028511L, "PRINT", 6.0, 3.0)));
+        detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", Arrays.asList(
+            buildAclScenarioShareDetail(1000028511L, "DIGITAL", 9.5, 5.0),
+            buildAclScenarioShareDetail(2580011451L, "PRINT", 9.5, 5.0)));
+        scenarioDetails.forEach(actualDetail -> {
+            List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
+            List<AclScenarioShareDetail> expectedShareDetails = detailSharesMap.get(actualDetail.getId());
+            assertEquals(expectedShareDetails.size(), actualShareDetails.size());
+            IntStream.range(0, actualDetail.getScenarioShareDetails().size()).forEach(
+                i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i), actualShareDetails.get(i)));
+        });
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {
@@ -770,21 +799,15 @@ public class AclUsageRepositoryIntegrationTest {
         scenarioDetail.setUsageAgeWeight(new BigDecimal("0.50000"));
         scenarioDetail.setWeightedCopies(new BigDecimal("5.0000000000"));
         scenarioDetail.setSurveyCountry("Germany");
-        scenarioDetail.setScenarioShareDetails(buildAclScenarioShareDetails());
         return scenarioDetail;
     }
 
-    private List<AclScenarioShareDetail> buildAclScenarioShareDetails() {
-        return Arrays.asList(
-            buildAclScenarioShareDetail(1000028511L, "DIGITAL"),
-            buildAclScenarioShareDetail(1000028511L, "PRINT"));
-    }
-
-    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, String typeOfUse) {
+    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, String typeOfUse,
+                                                               Double valueWeight, Double volumeWeight) {
         AclScenarioShareDetail aclScenarioShareDetail = new AclScenarioShareDetail();
         aclScenarioShareDetail.setRhAccountNumber(rhAccountNumber);
-        aclScenarioShareDetail.setValueWeight(new BigDecimal("55.0000000000"));
-        aclScenarioShareDetail.setVolumeWeight(new BigDecimal("5.0000000000"));
+        aclScenarioShareDetail.setValueWeight(BigDecimal.valueOf(valueWeight).setScale(10, RoundingMode.HALF_UP));
+        aclScenarioShareDetail.setVolumeWeight(BigDecimal.valueOf(volumeWeight).setScale(10, RoundingMode.HALF_UP));
         aclScenarioShareDetail.setTypeOfUse(typeOfUse);
         return aclScenarioShareDetail;
     }
@@ -813,12 +836,6 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
         assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
         assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
-        List<AclScenarioShareDetail> expectedShareDetails = expectedScenarioDetail.getScenarioShareDetails();
-        List<AclScenarioShareDetail> actualShareDetails = actualScenarioDetail.getScenarioShareDetails();
-        assertEquals(expectedShareDetails.size(), actualShareDetails.size());
-        IntStream.range(0, actualScenarioDetail.getScenarioShareDetails().size()).forEach(i -> {
-            verifyAclScenarioShareDetails(expectedShareDetails.get(i), actualShareDetails.get(i));
-        });
     }
 
     private void verifyAclScenarioShareDetails(AclScenarioShareDetail expectedDetail,

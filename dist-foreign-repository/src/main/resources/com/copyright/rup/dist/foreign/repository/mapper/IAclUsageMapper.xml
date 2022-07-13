@@ -489,73 +489,57 @@
     </select>
 
     <insert id="addToScenario" parameterType="map">
-        with details as (
-            select
-                uuid_generate_v4() df_acl_scenario_detail_uid,
-                #{scenario.id} df_acl_scenario_uid,
-                u.period period_end_date,
-                original_detail_id,
-                u.wr_wrk_inst,
-                u.system_title,
-                detail_licensee_class_id,
-                publication_type_uid,
-                content_unit_price,
-                quantity,
-                uaw.weight usage_age_weight,
-                survey_country,
-                uaw.weight * quantity weighted_copies
-            from ${schema}.df_acl_usage u
-            join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
-            join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
-                and gd.wr_wrk_inst = u.wr_wrk_inst
-                and gd.grant_status = 'GRANT'
-                and gd.is_eligible = true
-            join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
-                and uaw.period_prior = (
-                    <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
-                    select (extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
-                            extract(month from age(to_date(#{scenario.periodEndDate}::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp))
-                        ) / 6
-                    )
-            where df_acl_usage_batch_uid = #{scenario.usageBatchId}
-                and uaw.weight > 0
-                and quantity &lt; 2000
-            group by u.df_acl_usage_uid, uaw.weight
-        ),
-        scenario_details as (
-            insert into ${schema}.df_acl_scenario_detail (
-                df_acl_scenario_detail_uid,
-                df_acl_scenario_uid,
-                period_end_date,
-                original_detail_id,
-                wr_wrk_inst,
-                system_title,
-                detail_licensee_class_id,
-                publication_type_uid,
-                content_unit_price,
-                usage_quantity,
-                usage_age_weight,
-                survey_country,
-                weighted_copies,
-               <include refid="StoredEntityMapper.additionalColumns"/>
-            )
-            select
-                df_acl_scenario_detail_uid,
-                df_acl_scenario_uid,
-                period_end_date,
-                original_detail_id,
-                wr_wrk_inst,
-                system_title,
-                detail_licensee_class_id,
-                publication_type_uid,
-                content_unit_price,
-                quantity,
-                usage_age_weight,
-                survey_country,
-                weighted_copies,
-                <include refid="StoredEntityMapper.insert"/>
-            from details
+        insert into ${schema}.df_acl_scenario_detail (
+            df_acl_scenario_detail_uid,
+            df_acl_scenario_uid,
+            period_end_date,
+            original_detail_id,
+            wr_wrk_inst,
+            system_title,
+            detail_licensee_class_id,
+            publication_type_uid,
+            content_unit_price,
+            usage_quantity,
+            usage_age_weight,
+            survey_country,
+            weighted_copies,
+           <include refid="StoredEntityMapper.additionalColumns"/>
         )
+        select distinct on (u.df_acl_usage_uid)
+            uuid_generate_v4() df_acl_scenario_detail_uid,
+            #{scenario.id} df_acl_scenario_uid,
+            u.period period_end_date,
+            original_detail_id,
+            u.wr_wrk_inst,
+            u.system_title,
+            detail_licensee_class_id,
+            publication_type_uid,
+            content_unit_price,
+            quantity,
+            uaw.weight usage_age_weight,
+            survey_country,
+            uaw.weight * quantity weighted_copies,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_acl_usage u
+        join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
+        join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
+            and gd.wr_wrk_inst = u.wr_wrk_inst
+            and gd.grant_status = 'GRANT'
+            and gd.is_eligible = true
+        join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
+            and uaw.period_prior = (
+                <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
+                select (
+                    extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
+                    extract(month from age(to_date(#{scenario.periodEndDate}::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp))
+                ) / 6
+            )
+        where df_acl_usage_batch_uid = #{scenario.usageBatchId}
+            and uaw.weight > 0
+            and quantity &lt; 2000
+    </insert>
+
+    <insert id="addScenarioShares" parameterType="map">
         insert into ${schema}.df_acl_share_detail (
             df_acl_share_detail_uid,
             df_acl_scenario_uid,
@@ -574,10 +558,10 @@
             gd.type_of_use,
             gd.rh_account_number,
             slc.aggregate_licensee_class_id,
-            quantity * usage_age_weight volume_weight,
-            quantity * usage_age_weight * content_unit_price * spt.weight value_weight,
+            usage_quantity * usage_age_weight volume_weight,
+            usage_quantity * usage_age_weight * content_unit_price * spt.weight value_weight,
             <include refid="StoredEntityMapper.insert"/>
-        from details sd
+        from ${schema}.df_acl_scenario_detail sd
         join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
         join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
             and sd.detail_licensee_class_id = slc.detail_licensee_class_id
@@ -587,8 +571,7 @@
             and  gd.wr_wrk_inst = sd.wr_wrk_inst
             and gd.grant_status = 'GRANT'
             and gd.is_eligible = true
-        group by df_acl_scenario_detail_uid, gd.type_of_use, gd.rh_account_number, slc.aggregate_licensee_class_id,
-            spt.weight, sd.quantity, sd.usage_age_weight, sd.content_unit_price
+        where sd.df_acl_scenario_uid = #{scenario.id}
     </insert>
 
     <select id="findScenarioDetailsByScenarioId" resultMap="aclScenarioDetailResultMap">
@@ -618,18 +601,19 @@
             shd.volume_share,
             shd.volume_weight_denominator,
             shd.value_weight_denominator,
-            shd. net_amount,
+            shd.net_amount,
             shd.gross_amount,
             shd.service_fee_amount
         from ${schema}.df_acl_scenario_detail sd
-        join ${schema}.df_acl_share_detail shd on sd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        left join ${schema}.df_acl_share_detail shd on sd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
         join ${schema}.df_acl_scenario_pub_type_weight spt on sd.df_acl_scenario_uid = spt.df_acl_scenario_uid
             and sd.publication_type_uid = spt.df_publication_type_uid
         join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
             and sd.detail_licensee_class_id = slc.detail_licensee_class_id
         join ${schema}.df_detail_licensee_class dlc on slc.detail_licensee_class_id = dlc.detail_licensee_class_id
         join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
-            where sd.df_acl_scenario_uid = #{scenarioId}
+        where sd.df_acl_scenario_uid = #{scenarioId}
+        order by original_detail_id, shd.type_of_use
     </select>
 
     <select id="findCountInvalidUsages" parameterType="map" resultType="int">
