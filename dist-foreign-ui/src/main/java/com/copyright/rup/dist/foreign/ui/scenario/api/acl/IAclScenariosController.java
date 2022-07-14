@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -115,6 +116,13 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      */
     boolean isValidUsageBatch(String batchId, String grantSetId, Integer distributionPeriod,
                               List<Integer> periodPriors);
+
+    /**
+     * Gets list of all ACL publication types.
+     *
+     * @return list of {@link PublicationType}
+     */
+    List<PublicationType> getPublicationTypes();
 
     /**
      * Gets list of all historical ACL publication types.
