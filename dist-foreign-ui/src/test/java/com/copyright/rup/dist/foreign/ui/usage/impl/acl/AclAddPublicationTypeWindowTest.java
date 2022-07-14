@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.validateFieldAndVerifyErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBox;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
@@ -19,10 +20,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.vaadin.data.Binder;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,12 +32,14 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -62,6 +65,15 @@ public class AclAddPublicationTypeWindowTest {
     private static final String PUBLICATION_TYPE_NAME = "Book";
     private static final Integer PUBLICATION_TYPE_PERIOD = 202206;
     private static final String PUBLICATION_TYPE_WEIGHT = "1.00";
+    private static final String INVALID_NUMBER = "not_a_number";
+    private static final String SPACES_STRING = "   ";
+    private static final String VALID_INTEGER = "1";
+    private static final String VALID_DECIMAL = "0.1";
+    private static final String INTEGER_WITH_SPACES_STRING = " 1 ";
+    private static final String EMPTY_VALIDATION_MESSAGE = "Field value should be specified";
+    private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
+    private static final String DECIMAL_VALIDATION_MESSAGE =
+        "Field value should be positive number and should not exceed 10 digits";
 
     private final List<PublicationType> publicationTypes = Collections.singletonList(buildPublicationType());
     private IAclScenariosController controller;
@@ -74,10 +86,10 @@ public class AclAddPublicationTypeWindowTest {
     @Test
     public void testComponentStructure() {
         expect(controller.getPublicationTypes()).andReturn(publicationTypes).once();
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller);
         AclAddPublicationTypeWindow window = new AclAddPublicationTypeWindow(controller);
         assertEquals("Add Pub Type Weight", window.getCaption());
-        assertEquals(200, window.getWidth(), 0);
+        assertEquals(250, window.getWidth(), 0);
         assertEquals("acl-add-pub-type-weight-window", window.getId());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(4, content.getComponentCount());
@@ -85,7 +97,48 @@ public class AclAddPublicationTypeWindowTest {
         verifyTextField(content.getComponent(1), "Period (YYYYMM)");
         verifyTextField(content.getComponent(2), "Weight");
         verifyButtonsLayout(content.getComponent(3), "Confirm", "Cancel");
-        verify(controller, ForeignSecurityUtils.class);
+        verify(controller);
+    }
+
+    @Test
+    public void testPubTypePeriodFieldValidation() {
+        expect(controller.getPublicationTypes()).andReturn(publicationTypes).once();
+        replay(controller);
+        AclAddPublicationTypeWindow window = new AclAddPublicationTypeWindow(controller);
+        verify(controller);
+        Binder<AclPublicationType> binder = Whitebox.getInternalState(window, "binder");
+        TextField periodField = Whitebox.getInternalState(window, "pubTypePeriodField");
+        String lengthValidationMessage = "Period value should contain 6 digits";
+        String yearValidationMessage = "Year value should be in range from 1950 to 2099";
+        String monthValidationMessage = "Month value should be 06 or 12";
+        validateFieldAndVerifyErrorMessage(periodField, StringUtils.EMPTY, binder, EMPTY_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodField, SPACES_STRING, binder, EMPTY_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodField, INVALID_NUMBER, binder, NUMBER_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(periodField, "20220", binder, lengthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "2022060", binder, lengthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "194912", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "210006", binder, yearValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202200", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202201", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, "202206", binder, null, true);
+        validateFieldAndVerifyErrorMessage(periodField, "202213", binder, monthValidationMessage, false);
+        validateFieldAndVerifyErrorMessage(periodField, " 202206 ", binder, null, true);
+    }
+
+    @Test
+    public void testPubTypeWeightFieldValidation() {
+        expect(controller.getPublicationTypes()).andReturn(publicationTypes).once();
+        replay(controller);
+        AclAddPublicationTypeWindow window = new AclAddPublicationTypeWindow(controller);
+        verify(controller);
+        Binder<AclPublicationType> binder = Whitebox.getInternalState(window, "binder");
+        TextField weightField = Whitebox.getInternalState(window, "pubTypeWeightField");
+        validateFieldAndVerifyErrorMessage(weightField, StringUtils.EMPTY, binder, EMPTY_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(weightField, SPACES_STRING, binder, EMPTY_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(weightField, INVALID_NUMBER, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(weightField, VALID_INTEGER, binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, VALID_DECIMAL, binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, INTEGER_WITH_SPACES_STRING, binder, null, true);
     }
 
     @Test

@@ -232,7 +232,8 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     private void initPubTypeWeightsWidget() {
         publicationTypeWeightWidget =
             new AclPublicationTypeWeightsParameterWidget(ForeignUi.getMessage("button.publication_type_weights"),
-                controller.getAclHistoricalPublicationTypes(), () -> new AclPublicationTypeWeightsWindow(true));
+                controller.getAclHistoricalPublicationTypes(),
+                () -> new AclPublicationTypeWeightsWindow(controller, true));
     }
 
     private void initLicenseeClassesMappingWidget() {

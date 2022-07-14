@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 
+import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -11,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.vaadin.ui.Button;
@@ -34,7 +36,7 @@ import java.util.List;
  * @author Aliaksandr Liakh
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Windows.class})
+@PrepareForTest(Windows.class)
 public class AclPublicationTypeWeightsParameterWidgetTest {
 
     private static final String CAPTION = "Pub Type Weights";
@@ -46,7 +48,7 @@ public class AclPublicationTypeWeightsParameterWidgetTest {
 
     @Before
     public void setUp() {
-        window = new AclPublicationTypeWeightsWindow(false);
+        window = new AclPublicationTypeWeightsWindow(createMock(IAclScenariosController.class), false);
         widget = new AclPublicationTypeWeightsParameterWidget(CAPTION, defaultParameters, () -> window);
     }
 
