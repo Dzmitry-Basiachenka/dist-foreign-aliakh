@@ -66,7 +66,6 @@ public class AclScenariosControllerTest {
     private IAclScenarioController aclScenarioController;
     private ILicenseeClassService licenseeClassService;
     private IAclUsageService aclUsageService;
-    private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
