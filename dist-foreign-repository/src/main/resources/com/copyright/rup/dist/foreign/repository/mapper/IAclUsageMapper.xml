@@ -60,6 +60,7 @@
         <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
         <result property="publicationType.id" column="publication_type_uid"/>
         <result property="publicationType.weight" column="pub_type_weight"/>
+        <result property="publicationType.period" column="pub_type_period"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
         <result property="quantity" column="usage_quantity"/>
         <result property="usageAgeWeight" column="usage_age_weight"/>
@@ -488,6 +489,14 @@
             </if>
     </select>
 
+    <sql id="periodPriorSql">
+        <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
+        select (
+            extract(year from age(to_date(${period}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
+            extract(month from age(to_date(${period}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp))
+        ) / 6
+    </sql>
+
     <insert id="addToScenario" parameterType="map">
         insert into ${schema}.df_acl_scenario_detail (
             df_acl_scenario_detail_uid,
@@ -528,16 +537,35 @@
             and gd.is_eligible = true
         join ${schema}.df_acl_scenario_usage_age_weight uaw on uaw.df_acl_scenario_uid = #{scenario.id}
             and uaw.period_prior = (
-                <!--Gets period_prior for each usage 'years interval * 12 + month interval / 6'  for example: 202212 and 202012 returns 4-->
-                select (
-                    extract(year from age(to_date(#{scenario.periodEndDate} ::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
-                    extract(month from age(to_date(#{scenario.periodEndDate}::text, 'YYYYMM'),to_date(u.period::text, 'YYYYMM')::timestamp))
-                ) / 6
+                <include refid="periodPriorSql">
+                    <property name="period" value="#{scenario.periodEndDate}"/>
+                </include>
             )
         where df_acl_usage_batch_uid = #{scenario.usageBatchId}
             and uaw.weight > 0
             and quantity &lt; 2000
     </insert>
+
+    <update id="populatePubTypeWeights" parameterType="map">
+        with pub_type_weights_period_range as (
+            select
+                df_publication_type_uid,
+                weight,
+                period as start_period,
+                coalesce(lead(period - 1, 1) over (partition by df_publication_type_uid order by period), 209912) as end_period
+            from ${schema}.df_acl_scenario_pub_type_weight
+        )
+        update ${schema}.df_acl_scenario_detail sd
+        set
+            pub_type_weight = (
+                select range.weight
+                from pub_type_weights_period_range range
+                where range.df_publication_type_uid = sd.publication_type_uid
+                    and sd.period_end_date between range.start_period and range.end_period
+            ),
+            <include refid="StoredEntityMapper.update"/>
+        where df_acl_scenario_uid = #{scenarioId}
+    </update>
 
     <insert id="addScenarioShares" parameterType="map">
         insert into ${schema}.df_acl_share_detail (
@@ -559,14 +587,12 @@
             gd.rh_account_number,
             slc.aggregate_licensee_class_id,
             usage_quantity * usage_age_weight volume_weight,
-            usage_quantity * usage_age_weight * content_unit_price * spt.weight value_weight,
+            usage_quantity * usage_age_weight * content_unit_price * pub_type_weight value_weight,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_scenario_detail sd
         join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
         join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
             and sd.detail_licensee_class_id = slc.detail_licensee_class_id
-        join ${schema}.df_acl_scenario_pub_type_weight spt on sd.df_acl_scenario_uid = spt.df_acl_scenario_uid
-            and sd.publication_type_uid = spt.df_publication_type_uid
         join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
             and  gd.wr_wrk_inst = sd.wr_wrk_inst
             and gd.grant_status = 'GRANT'
@@ -587,7 +613,7 @@
             slc.aggregate_licensee_class_id,
             alc.description aggregate_licensee_class_name,
             sd.publication_type_uid,
-            spt.weight pub_type_weight,
+            pub_type_weight,
             content_unit_price,
             usage_quantity,
             usage_age_weight,
@@ -629,11 +655,10 @@
             and
                 <foreach collection="periodPriors" item="periodPrior" open="(" separator=" or " close=")">
                    #{periodPrior} = (
-                        select (
-                            extract(year from age(to_date(#{distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp)) * 12 +
-                            extract(month from age(to_date(#{distributionPeriod}::text, 'YYYYMM'), to_date(u.period::text, 'YYYYMM')::timestamp))
-                        ) / 6
-                   )
+                        <include refid="periodPriorSql">
+                            <property name="period" value="#{distributionPeriod}"/>
+                        </include>
+                    )
                 </foreach>
             and u.quantity &lt; 2000
     </select>
