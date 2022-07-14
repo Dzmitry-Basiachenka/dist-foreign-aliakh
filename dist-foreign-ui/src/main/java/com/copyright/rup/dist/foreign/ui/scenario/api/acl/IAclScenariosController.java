@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import java.util.List;
@@ -82,6 +83,13 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return list of periods
      */
     List<Integer> getAllPeriods();
+
+    /**
+     * Gets list of all {@link DetailLicenseeClass}es.
+     *
+     * @return list of detail licensee classes.
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClasses();
 
     /**
      * Creates ACL scenario.

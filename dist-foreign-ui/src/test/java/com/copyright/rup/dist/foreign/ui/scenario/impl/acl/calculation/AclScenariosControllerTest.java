@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
@@ -63,6 +64,7 @@ public class AclScenariosControllerTest {
     private IPublicationTypeService publicationTypeService;
     private IAclScenarioController aclScenarioController;
     private IAclUsageService aclUsageService;
+    private ILicenseeClassService licenseeClassService;
 
     @Before
     public void setUp() {
@@ -73,7 +75,7 @@ public class AclScenariosControllerTest {
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
         publicationTypeService = createMock(IPublicationTypeService.class);
-        ILicenseeClassService licenseeClassService = createMock(ILicenseeClassService.class);
+        licenseeClassService = createMock(ILicenseeClassService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
@@ -181,6 +183,15 @@ public class AclScenariosControllerTest {
         replay(usageBatchService);
         assertEquals(periods, aclScenariosController.getAllPeriods());
         verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClasses() {
+        List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
+        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClasses());
+        verify(licenseeClassService);
     }
 
     @Test

@@ -22,6 +22,8 @@ import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -84,6 +86,9 @@ public class CreateAclScenarioWindowTest {
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         createButtonClickListener = EasyMock.createMock(ClickListener.class);
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
         AclPublicationType publicationType = new AclPublicationType();
@@ -94,6 +99,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(Collections.singletonList(publicationType))
             .once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
     }
 
     @Test

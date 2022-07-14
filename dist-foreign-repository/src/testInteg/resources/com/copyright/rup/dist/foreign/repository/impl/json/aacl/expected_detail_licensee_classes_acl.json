@@ -3,315 +3,360 @@
     "id": 1,
     "description": "Food and Tobacco",
     "aggregateLicenseeClass": {
-      "id": 1
+      "id": 1,
+      "description": "Food and Tobacco"
     }
   },
   {
     "id": 2,
     "description": "Textiles, Apparel, etc.",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 3,
     "description": "Lumber, Paper, etc.",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 4,
     "description": "Publishing",
     "aggregateLicenseeClass": {
-      "id": 57
+      "id": 57,
+      "description": "Communications"
     }
   },
   {
     "id": 5,
     "description": "Chemicals",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 6,
     "description": "Health Care & Pharm",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   },
   {
     "id": 7,
     "description": "Fuels",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 8,
     "description": "Rubber Products",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 9,
     "description": "Stone, Clay and Glass",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 10,
     "description": "Primary Metals",
     "aggregateLicenseeClass": {
-      "id": 53
+      "id": 53,
+      "description": "Metals"
     }
   },
   {
     "id": 11,
     "description": "Fabricated Metal Products",
     "aggregateLicenseeClass": {
-      "id": 53
+      "id": 53,
+      "description": "Metals"
     }
   },
   {
     "id": 12,
     "description": "Machinery",
     "aggregateLicenseeClass": {
-      "id": 12
+      "id": 12,
+      "description": "Machinery"
     }
   },
   {
     "id": 13,
     "description": "Computers",
     "aggregateLicenseeClass": {
-      "id": 13
+      "id": 13,
+      "description": "Computers"
     }
   },
   {
     "id": 14,
     "description": "Radio, TV, Commun Equip",
     "aggregateLicenseeClass": {
-      "id": 54
+      "id": 54,
+      "description": "Electronics"
     }
   },
   {
     "id": 15,
     "description": "Electronic Components",
     "aggregateLicenseeClass": {
-      "id": 54
+      "id": 54,
+      "description": "Electronics"
     }
   },
   {
     "id": 16,
     "description": "Electric/Electronic Equip",
     "aggregateLicenseeClass": {
-      "id": 54
+      "id": 54,
+      "description": "Electronics"
     }
   },
   {
     "id": 17,
     "description": "Transportation Equipment",
     "aggregateLicenseeClass": {
-      "id": 55
+      "id": 55,
+      "description": "Transportation"
     }
   },
   {
     "id": 18,
     "description": "Aircraft and Aerospace",
     "aggregateLicenseeClass": {
-      "id": 18
+      "id": 18,
+      "description": "Aircraft and Aerospace"
     }
   },
   {
     "id": 19,
     "description": "Scientific Instruments",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 20,
     "description": "Misc. Manufacturing NEC",
     "aggregateLicenseeClass": {
-      "id": 54
+      "id": 54,
+      "description": "Electronics"
     }
   },
   {
     "id": 21,
     "description": "Telecommunications Services",
     "aggregateLicenseeClass": {
-      "id": 57
+      "id": 57,
+      "description": "Communications"
     }
   },
   {
     "id": 22,
     "description": "Banks/Ins/RE/Holding Cos",
     "aggregateLicenseeClass": {
-      "id": 56
+      "id": 56,
+      "description": "Financial"
     }
   },
   {
     "id": 23,
     "description": "Electric and Gas Utilities",
     "aggregateLicenseeClass": {
-      "id": 23
+      "id": 23,
+      "description": "Electric and Gas Utilities"
     }
   },
   {
     "id": 24,
     "description": "Doctors Offices/Genl Hosp",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   },
   {
     "id": 25,
     "description": "Business Services",
     "aggregateLicenseeClass": {
-      "id": 25
+      "id": 25,
+      "description": "Business Services"
     }
   },
   {
     "id": 26,
     "description": "Law Firms",
     "aggregateLicenseeClass": {
-      "id": 26
+      "id": 26,
+      "description": "Law Firms"
     }
   },
   {
     "id": 27,
     "description": "Transportation Services",
     "aggregateLicenseeClass": {
-      "id": 55
+      "id": 55,
+      "description": "Transportation"
     }
   },
   {
     "id": 28,
     "description": "Wholesale & Retail Trade",
     "aggregateLicenseeClass": {
-      "id": 28
+      "id": 28,
+      "description": "Wholesale & Retail Trade"
     }
   },
   {
     "id": 29,
     "description": "Consumer Services",
     "aggregateLicenseeClass": {
-      "id": 29
+      "id": 29,
+      "description": "Consumer Services"
     }
   },
   {
     "id": 31,
     "description": "Fishing/Hunting/Trapping",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 32,
     "description": "Agriculture/Forestry/Fishing",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 34,
     "description": "Construction",
     "aggregateLicenseeClass": {
-      "id": 56
+      "id": 56,
+      "description": "Financial"
     }
   },
   {
     "id": 35,
     "description": "Software & Systems Design",
     "aggregateLicenseeClass": {
-      "id": 13
+      "id": 13,
+      "description": "Computers"
     }
   },
   {
     "id": 36,
     "description": "Consulting & Research",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   },
   {
     "id": 39,
     "description": "Government",
     "aggregateLicenseeClass": {
-      "id": 39
+      "id": 39,
+      "description": "Government"
     }
   },
   {
     "id": 41,
     "description": "Govt - Legal & Health",
     "aggregateLicenseeClass": {
-      "id": 39
+      "id": 39,
+      "description": "Government"
     }
   },
   {
     "id": 42,
     "description": "Govt-Admin,Legislative,Environ",
     "aggregateLicenseeClass": {
-      "id": 39
+      "id": 39,
+      "description": "Government"
     }
   },
   {
     "id": 43,
     "description": "Other - Govt",
     "aggregateLicenseeClass": {
-      "id": 39
+      "id": 39,
+      "description": "Government"
     }
   },
   {
     "id": 93,
     "description": "Membership Organizations",
     "aggregateLicenseeClass": {
-      "id": 25
+      "id": 25,
+      "description": "Business Services"
     }
   },
   {
     "id": 94,
     "description": "Lumber, Paper, Allied Products",
     "aggregateLicenseeClass": {
-      "id": 51
+      "id": 51,
+      "description": "Materials"
     }
   },
   {
     "id": 95,
     "description": "Electronic & Electric Equip",
     "aggregateLicenseeClass": {
-      "id": 54
+      "id": 54,
+      "description": "Electronics"
     }
   },
   {
     "id": 97,
     "description": "Security and Commodity Brokers",
     "aggregateLicenseeClass": {
-      "id": 56
+      "id": 56,
+      "description": "Financial"
     }
   },
   {
     "id": 98,
     "description": "Other Health Services",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   },
   {
     "id": 99,
     "description": "Specialty Hospitals",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   },
   {
     "id": 100,
     "description": "Generic Pharmaceuticals",
     "aggregateLicenseeClass": {
-      "id": 52
+      "id": 52,
+      "description": "Medical"
     }
   }
 ]
