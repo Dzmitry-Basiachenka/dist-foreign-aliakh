@@ -94,8 +94,6 @@ public class CreateAclScenarioWindowTest {
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
-        expect(controller.getAclHistoricalPublicationTypes()).andReturn(Collections.singletonList(publicationType))
-            .once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
     }
 
