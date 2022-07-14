@@ -155,7 +155,8 @@ public class DomainVerifierTest {
             {AclRightsholderTotalsHolder.class},
             {AclScenarioDetail.class},
             {AclScenarioShareDetail.class},
-            {AclPublicationType.class}
+            {AclPublicationType.class},
+            {AclScenarioDetailDto.class}
         };
         return Arrays.asList(testData);
     }
