@@ -4,12 +4,15 @@ import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -74,7 +77,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     //TODO these fields will be reimplemented. It is stubs for now
     private Button usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
-    private Button licenseeClassMappingWidget;
+    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
 
     private TextArea descriptionArea;
 
@@ -231,9 +234,9 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     }
 
     private void initLicenseeClassesMappingWidget() {
-        //TODO will be reimplemented later
-        licenseeClassMappingWidget = Buttons.createButton(ForeignUi.getMessage("button.licensee_class_mapping"));
-        licenseeClassMappingWidget.addStyleName(ValoTheme.BUTTON_LINK);
+        licenseeClassMappingWidget =
+            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
+                controller.getDetailLicenseeClasses(), () -> new AclAggregateLicenseeClassMappingWindow(true));
     }
 
     private void initDescriptionArea() {

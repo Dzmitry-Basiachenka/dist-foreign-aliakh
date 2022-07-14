@@ -19,6 +19,7 @@
         <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
         <result property="aggregateLicenseeClass.discipline" column="agg_discipline"/>
         <result property="aggregateLicenseeClass.enrollmentProfile" column="agg_enrollment_profile"/>
+        <result property="aggregateLicenseeClass.description" column="agg_description"/>
     </resultMap>
 
     <select id="aaclDetailLicenseeClassExists" parameterType="map" resultType="boolean">
@@ -60,7 +61,8 @@
             dlc.description,
             alc.aggregate_licensee_class_id,
             alc.discipline agg_discipline,
-            alc.enrollment_profile agg_enrollment_profile
+            alc.enrollment_profile agg_enrollment_profile,
+            alc.description agg_description
         from ${schema}.df_detail_licensee_class dlc
         join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         where product_family = #{productFamily}
