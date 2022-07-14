@@ -19,9 +19,10 @@
             <result property="period" column="period_prior"/>
             <result property="weight" column="usage_weight"/>
         </collection>
-        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.PublicationType">
+        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclPublicationType">
             <result property="id" column="df_publication_type_uid"/>
             <result property="weight" column="pub_type_weight"/>
+            <result property="period" column="pub_type_period"/>
         </collection>
         <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass">
             <result property="id" column="detail_licensee_class_id"/>
@@ -101,6 +102,7 @@
         sua.weight usage_weight,
         spt.df_publication_type_uid,
         spt.weight pub_type_weight,
+        spt.period pub_type_period,
         slc.detail_licensee_class_id,
         slc.aggregate_licensee_class_id,
         s.created_datetime,
@@ -175,12 +177,14 @@
             df_acl_scenario_uid,
             df_publication_type_uid,
             weight,
+            period,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             uuid_generate_v4(),
             #{scenarioId},
             #{publicationType.id},
             #{publicationType.weight},
+            #{publicationType.period},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

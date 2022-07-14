@@ -51,6 +51,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: '7318b083-278b-44f3-8d3c-7fd22083443a')
             column(name: 'df_publication_type_uid', value: "73876e58-2e87-485e-b6f3-7e23792dd214")
             column(name: 'weight', value: 1)
+            column(name: 'period', value: 201512)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {

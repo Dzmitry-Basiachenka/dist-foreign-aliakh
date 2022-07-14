@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
@@ -63,6 +64,7 @@ public class AclScenariosControllerTest {
     private IAclFundPoolService fundPoolService;
     private IPublicationTypeService publicationTypeService;
     private IAclScenarioController aclScenarioController;
+    private ILicenseeClassService licenseeClassService;
     private IAclUsageService aclUsageService;
     private ILicenseeClassService licenseeClassService;
 
@@ -196,12 +198,18 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testCreateAclScenario() {
+        List<DetailLicenseeClass> detailLicenseeClasses = Collections.emptyList();
+        List<UsageAge> usageAges = Collections.emptyList();
         AclScenario scenario = new AclScenario();
+        scenario.setDetailLicenseeClasses(detailLicenseeClasses);
+        scenario.setUsageAges(usageAges);
         aclScenarioService.insertScenario(scenario);
         expectLastCall().once();
-        replay(aclScenarioService);
+        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(detailLicenseeClasses).once();
+        expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(usageAges).once();
+        replay(aclScenarioService, licenseeClassService, aclUsageService);
         aclScenariosController.createAclScenario(scenario);
-        verify(aclScenarioService);
+        verify(aclScenarioService, licenseeClassService, aclUsageService);
     }
 
     @Test
