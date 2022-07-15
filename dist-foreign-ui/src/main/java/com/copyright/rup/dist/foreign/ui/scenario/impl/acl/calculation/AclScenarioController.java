@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -40,6 +41,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     private IAclScenarioService scenarioService;
     @Autowired
     private IAclUsageService usageService;
+    @Autowired
+    private IAclDrillDownByRightsholderController drillDownByRightsholderController;
     private AclScenario aclScenario;
 
     @Override
@@ -77,6 +80,11 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     public int getSize() {
         return usageService.getAclRightsholderTotalsHolderCountByScenarioId(aclScenario.getId(),
             getWidget().getSearchValue());
+    }
+
+    @Override
+    public void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName) {
+        drillDownByRightsholderController.showWidget(accountNumber, rightsholderName, aclScenario);
     }
 
     @Override
