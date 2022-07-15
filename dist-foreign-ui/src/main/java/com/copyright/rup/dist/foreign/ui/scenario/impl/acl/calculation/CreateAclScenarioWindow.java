@@ -292,6 +292,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                     grantSetComboBox.getSelectedItem()
                         .ifPresent(grantSet -> aclScenario.setGrantSetId(grantSet.getId()));
                     aclScenario.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
+                    aclScenario.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
                     controller.createAclScenario(aclScenario);
                     close();
                 } catch (ValidationException e) {

@@ -124,8 +124,6 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     public void createAclScenario(AclScenario aclScenario) {
         //TODO sets default values. this logic will be changed after implementing additional windows for creating
         // scenario window.
-        aclScenario.setDetailLicenseeClasses(
-            licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY));
         aclScenario.setUsageAges(aclUsageService.getDefaultUsageAgesWeights());
         aclScenarioService.insertScenario(aclScenario);
     }

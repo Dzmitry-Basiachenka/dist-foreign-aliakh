@@ -197,14 +197,11 @@ public class AclScenariosControllerTest {
 
     @Test
     public void testCreateAclScenario() {
-        List<DetailLicenseeClass> detailLicenseeClasses = Collections.emptyList();
         List<UsageAge> usageAges = Collections.emptyList();
         AclScenario scenario = new AclScenario();
-        scenario.setDetailLicenseeClasses(detailLicenseeClasses);
         scenario.setUsageAges(usageAges);
         aclScenarioService.insertScenario(scenario);
         expectLastCall().once();
-        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(detailLicenseeClasses).once();
         expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(usageAges).once();
         replay(aclScenarioService, licenseeClassService, aclUsageService);
         aclScenariosController.createAclScenario(scenario);
