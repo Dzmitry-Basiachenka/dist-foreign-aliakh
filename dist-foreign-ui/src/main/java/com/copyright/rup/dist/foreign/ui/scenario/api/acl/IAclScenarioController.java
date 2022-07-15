@@ -52,4 +52,12 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @return number of items.
      */
     int getSize();
+
+    /**
+     * Handles click on "Rightsholder Account Number" button.
+     *
+     * @param accountNumber    rightsholder account number
+     * @param rightsholderName rightsholder name
+     */
+    void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
 }

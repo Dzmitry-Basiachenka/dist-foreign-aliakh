@@ -111,6 +111,8 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
         rightsholdersGrid.addComponentColumn(holder -> {
             Button button = Buttons.createButton(Objects.toString(holder.getRightsholder().getAccountNumber()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> controller.onRightsholderAccountNumberClicked(
+                holder.getRightsholder().getAccountNumber(), holder.getRightsholder().getName()));
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
             .setId("rightsholder.accountNumber")
