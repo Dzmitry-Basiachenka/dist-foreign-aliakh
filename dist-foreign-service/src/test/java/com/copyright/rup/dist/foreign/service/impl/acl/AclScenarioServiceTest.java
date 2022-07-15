@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -41,6 +42,7 @@ public class AclScenarioServiceTest {
 
     private static final String SCENARIO_UID = "732f1f1f-1d63-45a4-9f07-357cba3429fc";
     private static final String USER_NAME = "SYSTEM";
+    private static final String SEARCH_VALUE = "search";
 
     private IAclScenarioService aclScenarioService;
     private IAclScenarioRepository aclScenarioRepository;
@@ -110,6 +112,20 @@ public class AclScenarioServiceTest {
         replay(aclScenarioRepository);
         assertSame(scenario, aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
         verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetByScenarioIdAndRhAccountNumber() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(),
+            aclScenarioService.getByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_UID, SEARCH_VALUE, null, null));
+    }
+
+    @Test
+    public void testGetCountByScenarioIdAndRhAccountNumber() {
+        //TODO {dbasiachenka} implement
+        assertEquals(0, aclScenarioService.getCountByScenarioIdAndRhAccountNumber(1000009422L, SCENARIO_UID,
+            SEARCH_VALUE));
     }
 
     private AclScenario buildAclScenario() {
