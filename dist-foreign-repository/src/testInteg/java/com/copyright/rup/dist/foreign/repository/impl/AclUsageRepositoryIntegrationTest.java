@@ -758,6 +758,20 @@ public class AclUsageRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "populate-pub-type-weights.groovy")
+    public void testPopulatePubTypeWeights() {
+        aclUsageRepository.populatePubTypeWeights("66facb16-29aa-46ab-b99a-cdf303d4bb7d", USER_NAME);
+        List<AclScenarioDetail> scenarioDetails =
+            aclUsageRepository.findScenarioDetailsByScenarioId("66facb16-29aa-46ab-b99a-cdf303d4bb7d");
+        assertEquals(5, scenarioDetails.size());
+        assertEquals(new BigDecimal("1.00"), scenarioDetails.get(0).getPublicationType().getWeight());
+        assertEquals(new BigDecimal("3.60"), scenarioDetails.get(1).getPublicationType().getWeight());
+        assertEquals(new BigDecimal("2.50"), scenarioDetails.get(2).getPublicationType().getWeight());
+        assertEquals(new BigDecimal("2.50"), scenarioDetails.get(3).getPublicationType().getWeight());
+        assertEquals(new BigDecimal("1.90"), scenarioDetails.get(4).getPublicationType().getWeight());
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "add-scenario-shares.groovy")
     public void testAddScenarioShares() {
         AclScenario scenario = buildAclScenario("17d43251-6637-41cb-8831-1bce47a7da85",
@@ -793,7 +807,7 @@ public class AclUsageRepositoryIntegrationTest {
         scenarioDetail.setDetailLicenseeClass(buildDetailLicenseeClass(43, "Other - Govt"));
         scenarioDetail.setAggregateLicenseeClassId(1);
         scenarioDetail.setAggregateLicenseeClassName("Food and Tobacco");
-        scenarioDetail.setPublicationType(buildPubType(new BigDecimal("1.00")));
+        scenarioDetail.setPublicationType(buildPubType());
         scenarioDetail.setContentUnitPrice(new BigDecimal("11.0000000000"));
         scenarioDetail.setQuantity(10L);
         scenarioDetail.setUsageAgeWeight(new BigDecimal("0.50000"));
@@ -927,15 +941,6 @@ public class AclUsageRepositoryIntegrationTest {
         publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
         publicationType.setName("BK");
         publicationType.setDescription("Book");
-        return publicationType;
-    }
-
-    private static PublicationType buildPubType(BigDecimal weight) {
-        PublicationType publicationType = new PublicationType();
-        publicationType.setId("73876e58-2e87-485e-b6f3-7e23792dd214");
-        publicationType.setName("BK");
-        publicationType.setDescription("Book");
-        publicationType.setWeight(weight);
         return publicationType;
     }
 

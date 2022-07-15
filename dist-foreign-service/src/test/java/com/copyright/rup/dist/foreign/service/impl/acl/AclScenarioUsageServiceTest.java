@@ -62,6 +62,16 @@ public class AclScenarioUsageServiceTest {
         verify(aclUsageRepository);
     }
 
+    @Test
+    public void testPopulatePubTypeWeights() {
+        aclUsageRepository.populatePubTypeWeights(SCENARIO_UID, USER_NAME);
+        expectLastCall().once();
+        replay(aclUsageRepository);
+        aclScenarioUsageService.populatePubTypeWeights(SCENARIO_UID, USER_NAME);
+        verify(aclUsageRepository);
+    }
+
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

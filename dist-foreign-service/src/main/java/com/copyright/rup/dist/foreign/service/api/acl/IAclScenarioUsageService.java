@@ -28,4 +28,12 @@ public interface IAclScenarioUsageService {
      * @param userName    username
      */
     void addScenarioShares(AclScenario aclScenario, String userName);
+
+    /**
+     * Populates Pub Type Weights for all scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   username
+     */
+    void populatePubTypeWeights(String scenarioId, String userName);
 }

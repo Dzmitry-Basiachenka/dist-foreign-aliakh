@@ -36,14 +36,16 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
+    private static final String UPDATE_USER = "updateUser";
+    private static final String CREATE_USER = "createUser";
 
     @Override
     public List<String> populateAclUsages(String usageBatchId, Set<Integer> periods, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put("usageBatchId", Objects.requireNonNull(usageBatchId));
         parameters.put("periods", Objects.requireNonNull(periods));
-        parameters.put("updateUser", Objects.requireNonNull(userName));
-        parameters.put("createUser", userName);
+        parameters.put(UPDATE_USER, Objects.requireNonNull(userName));
+        parameters.put(CREATE_USER, userName);
         return selectList("IAclUsageMapper.populateAclUsages", parameters);
     }
 
@@ -107,17 +109,25 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     public void addToAclScenario(AclScenario scenario, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("scenario", Objects.requireNonNull(scenario));
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(CREATE_USER, Objects.requireNonNull(userName));
+        params.put(UPDATE_USER, Objects.requireNonNull(userName));
         insert("IAclUsageMapper.addToScenario", params);
+    }
+
+    @Override
+    public void populatePubTypeWeights(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER, Objects.requireNonNull(userName));
+        update("IAclUsageMapper.populatePubTypeWeights", params);
     }
 
     @Override
     public void addScenarioShares(AclScenario scenario, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
         params.put("scenario", Objects.requireNonNull(scenario));
-        params.put("createUser", Objects.requireNonNull(userName));
-        params.put("updateUser", Objects.requireNonNull(userName));
+        params.put(CREATE_USER, Objects.requireNonNull(userName));
+        params.put(UPDATE_USER, Objects.requireNonNull(userName));
         insert("IAclUsageMapper.addScenarioShares", params);
     }
 

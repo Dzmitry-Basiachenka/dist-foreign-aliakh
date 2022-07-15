@@ -59,6 +59,7 @@ public class AclScenarioService implements IAclScenarioService {
         insertAclScenarioUsageAgeWeights(aclScenario.getUsageAges(), scenarioId, userName);
         aclScenarioAuditService.logAction(scenarioId, ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         aclScenarioUsageService.addUsagesToAclScenario(aclScenario, userName);
+        aclScenarioUsageService.populatePubTypeWeights(scenarioId, userName);
         aclScenarioUsageService.addScenarioShares(aclScenario, userName);
         LOGGER.info("Insert ACL scenario. Finished. ScenarioName={}, Description={}, UserName={}",
             aclScenario.getName(), aclScenario.getDescription(), userName);

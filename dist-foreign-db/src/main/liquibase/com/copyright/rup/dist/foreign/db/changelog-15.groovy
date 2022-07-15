@@ -1271,4 +1271,21 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_usage', columnName: 'content_flag')
         }
     }
+
+    changeSet(id: '2022-07-13-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-57795 FDA: Calculate ACL Scenario: add pub_type_weight column to df_acl_scenario_detail table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'pub_type_weight', type: 'NUMERIC(10,2)', remarks: 'Publication Type Weight')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail') {
+            column(name: 'detail_share', type: 'NUMERIC (38,10)', remarks: 'Detail share')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'pub_type_weight')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'detail_share')
+        }
+    }
 }
