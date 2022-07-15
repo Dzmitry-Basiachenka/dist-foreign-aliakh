@@ -36,4 +36,14 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     public void populatePubTypeWeights(String scenarioId, String userName) {
         aclUsageRepository.populatePubTypeWeights(scenarioId, userName);
     }
+
+    @Override
+    public void calculateScenarioShares(String scenarioId, String username) {
+        aclUsageRepository.calculateScenarioShares(scenarioId, username);
+    }
+
+    @Override
+    public void calculateScenarioAmounts(String scenarioId, String userName) {
+        aclUsageRepository.calculateScenarioAmounts(scenarioId, userName);
+    }
 }

@@ -71,6 +71,23 @@ public class AclScenarioUsageServiceTest {
         verify(aclUsageRepository);
     }
 
+    @Test
+    public void testCalculateScenarioShares() {
+        aclUsageRepository.calculateScenarioShares(SCENARIO_UID, USER_NAME);
+        expectLastCall().once();
+        replay(aclUsageRepository);
+        aclScenarioUsageService.calculateScenarioShares(SCENARIO_UID, USER_NAME);
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testCalculateScenarioAmounts() {
+        aclUsageRepository.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
+        expectLastCall().once();
+        replay(aclUsageRepository);
+        aclScenarioUsageService.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
+        verify(aclUsageRepository);
+    }
 
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();

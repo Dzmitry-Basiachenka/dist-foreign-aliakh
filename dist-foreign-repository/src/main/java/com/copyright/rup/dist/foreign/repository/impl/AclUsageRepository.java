@@ -117,7 +117,7 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public void populatePubTypeWeights(String scenarioId, String userName) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         params.put(UPDATE_USER, Objects.requireNonNull(userName));
         update("IAclUsageMapper.populatePubTypeWeights", params);
     }
@@ -129,6 +129,22 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         params.put(CREATE_USER, Objects.requireNonNull(userName));
         params.put(UPDATE_USER, Objects.requireNonNull(userName));
         insert("IAclUsageMapper.addScenarioShares", params);
+    }
+
+    @Override
+    public void calculateScenarioShares(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER, Objects.requireNonNull(userName));
+        update("IAclUsageMapper.calculateScenarioShares", params);
+    }
+
+    @Override
+    public void calculateScenarioAmounts(String scenarioId, String userName) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(UPDATE_USER, Objects.requireNonNull(userName));
+        update("IAclUsageMapper.calculateScenarioAmounts", params);
     }
 
     @Override

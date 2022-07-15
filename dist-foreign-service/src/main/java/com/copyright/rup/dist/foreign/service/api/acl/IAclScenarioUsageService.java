@@ -36,4 +36,20 @@ public interface IAclScenarioUsageService {
      * @param userName   username
      */
     void populatePubTypeWeights(String scenarioId, String userName);
+
+    /**
+     * Calculates and updates volume, value and detail shares for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   username
+     */
+    void calculateScenarioShares(String scenarioId, String userName);
+
+    /**
+     * Calculates and updates gross, net and service_fee amounts for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   username
+     */
+    void calculateScenarioAmounts(String scenarioId, String userName);
 }

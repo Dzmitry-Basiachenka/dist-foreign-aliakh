@@ -803,5 +803,11 @@ public class ServiceTestHelper {
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
         assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
+        assertEquals(expectedDetail.getValueShare(), actualDetail.getValueShare());
+        assertEquals(expectedDetail.getVolumeShare(), actualDetail.getVolumeShare());
+        assertEquals(expectedDetail.getDetailShare(), actualDetail.getDetailShare());
+        assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
+        assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
+        assertEquals(expectedDetail.getServiceFeeAmount(), actualDetail.getServiceFeeAmount());
     }
 }

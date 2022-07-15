@@ -127,6 +127,22 @@ public interface IAclUsageRepository {
     void addScenarioShares(AclScenario aclScenario, String userName);
 
     /**
+     * Calculates and updates volume, value and detail shares for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   username
+     */
+    void calculateScenarioShares(String scenarioId, String userName);
+
+    /**
+     * Calculates and updates gross, net and service_fee amounts for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     * @param userName   username
+     */
+    void calculateScenarioAmounts(String scenarioId, String userName);
+
+    /**
      * Finds list of {@link AclScenarioDetail}s by ACL scenario uid.
      *
      * @param scenarioId scenario id
