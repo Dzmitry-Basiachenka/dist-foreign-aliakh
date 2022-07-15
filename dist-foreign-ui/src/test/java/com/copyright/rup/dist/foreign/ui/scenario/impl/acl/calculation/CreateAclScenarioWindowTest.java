@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -82,6 +83,8 @@ public class CreateAclScenarioWindowTest {
     private final List<AclPublicationType> publicationTypes = Collections.singletonList(buildAclPublicationType());
     private final List<DetailLicenseeClass> detailLicenseeClasses =
         Collections.singletonList(buildAclDetailLicenseeClass());
+
+    private final List<UsageAge> usageAges = Collections.singletonList(buildUsageAge());
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
     private ClickListener createButtonClickListener;
@@ -95,6 +98,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
+        expect(controller.getUsageAgeWeights()).andReturn(usageAges).once();
     }
 
     @Test
@@ -170,6 +174,7 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setLicenseType(LICENSE_TYPE);
         expectedScenario.setPublicationTypes(publicationTypes);
         expectedScenario.setDetailLicenseeClasses(detailLicenseeClasses);
+        expectedScenario.setUsageAges(usageAges);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
         expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
@@ -273,6 +278,13 @@ public class CreateAclScenarioWindowTest {
         aclGrantSet.setId("f5e558ce-2261-4998-8434-fc04d432c1a5");
         aclGrantSet.setName("Grant Set");
         return aclGrantSet;
+    }
+
+    private UsageAge buildUsageAge() {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(1);
+        usageAge.setWeight(new BigDecimal("0.75"));
+        return usageAge;
     }
 
     private AclPublicationType buildAclPublicationType() {

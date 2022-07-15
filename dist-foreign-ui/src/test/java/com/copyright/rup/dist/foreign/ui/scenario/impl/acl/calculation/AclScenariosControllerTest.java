@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -202,7 +203,6 @@ public class AclScenariosControllerTest {
         scenario.setUsageAges(usageAges);
         aclScenarioService.insertScenario(scenario);
         expectLastCall().once();
-        expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(usageAges).once();
         replay(aclScenarioService, licenseeClassService, aclUsageService);
         aclScenariosController.createAclScenario(scenario);
         verify(aclScenarioService, licenseeClassService, aclUsageService);
@@ -230,6 +230,15 @@ public class AclScenariosControllerTest {
         replay(publicationTypeService);
         assertSame(publicationTypes, aclScenariosController.getAclHistoricalPublicationTypes());
         verify(publicationTypeService);
+    }
+
+    @Test
+    public void testGetUsageAgeWeights() {
+        UsageAge usageAge = buildUsageAge();
+        expect(aclUsageService.getDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
+        replay(aclUsageService);
+        assertSame(usageAge, aclScenariosController.getUsageAgeWeights().get(0));
+        verify(aclUsageService);
     }
 
     private AclScenario buildAclScenario() {
@@ -271,5 +280,12 @@ public class AclScenariosControllerTest {
         usageBatch.setPeriods(Sets.newHashSet(202106, 202112));
         usageBatch.setEditable(true);
         return usageBatch;
+    }
+
+    private UsageAge buildUsageAge() {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(1);
+        usageAge.setWeight(new BigDecimal("0.57"));
+        return usageAge;
     }
 }

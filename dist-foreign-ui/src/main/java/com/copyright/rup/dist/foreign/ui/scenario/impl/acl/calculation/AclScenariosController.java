@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
 import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
@@ -122,9 +123,6 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public void createAclScenario(AclScenario aclScenario) {
-        //TODO sets default values. this logic will be changed after implementing additional windows for creating
-        // scenario window.
-        aclScenario.setUsageAges(aclUsageService.getDefaultUsageAgesWeights());
         aclScenarioService.insertScenario(aclScenario);
     }
 
@@ -142,6 +140,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public List<AclPublicationType> getAclHistoricalPublicationTypes() {
         return publicationTypeService.getAclHistoricalPublicationTypes();
+    }
+
+    @Override
+    public List<UsageAge> getUsageAgeWeights() {
+        return aclUsageService.getDefaultUsageAgesWeights();
     }
 
     @Override

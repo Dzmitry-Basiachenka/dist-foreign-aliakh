@@ -6,12 +6,14 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
@@ -75,7 +77,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     private CheckBox editableCheckBox;
 
     //TODO these fields will be reimplemented. It is stubs for now
-    private Button usageAgeWeightWidget;
+    private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
     private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
 
@@ -222,8 +224,8 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     }
 
     private void initUsageAgeWeightsWidget() {
-        //TODO will be reimplemented later
-        usageAgeWeightWidget = Buttons.createButton(ForeignUi.getMessage("button.usage_age_weights"));
+        usageAgeWeightWidget = new ScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
+            controller.getUsageAgeWeights(), () -> new AclUsageAgeWeightWindow(true));
         usageAgeWeightWidget.addStyleName(ValoTheme.BUTTON_LINK);
     }
 
@@ -293,6 +295,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                         .ifPresent(grantSet -> aclScenario.setGrantSetId(grantSet.getId()));
                     aclScenario.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
                     aclScenario.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
+                    aclScenario.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
                     controller.createAclScenario(aclScenario);
                     close();
                 } catch (ValidationException e) {
