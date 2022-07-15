@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
@@ -79,6 +80,8 @@ public class CreateAclScenarioWindowTest {
     private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
 
     private final List<AclPublicationType> publicationTypes = Collections.singletonList(buildAclPublicationType());
+    private final List<DetailLicenseeClass> detailLicenseeClasses =
+        Collections.singletonList(buildAclDetailLicenseeClass());
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
     private ClickListener createButtonClickListener;
@@ -87,14 +90,11 @@ public class CreateAclScenarioWindowTest {
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         createButtonClickListener = EasyMock.createMock(ClickListener.class);
-        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
-        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
-        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.singletonList(detailLicenseeClass)).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
     }
 
     @Test
@@ -118,7 +118,8 @@ public class CreateAclScenarioWindowTest {
         verifyComboBox(content.getComponent(5), "Grant Set");
         verifyComboBox(content.getComponent(6), "Copy From");
         //TODO add verify widgets
-        verifyAclScenarioParameterWidget(content.getComponent(8), "Pub Type Weights");
+        verifyAclPublicationTypeWeightsParameterWidget(content.getComponent(8), "Pub Type Weights");
+        verifyAclScenarioParameterWidget(content.getComponent(9), "Licensee Class Mapping");
         verifyCheckBox(content.getComponent(10), "Editable", "acl-scenario-editable-check-box");
         verifyDescriptionArea(content.getComponent(11));
         verifyButtonsLayout(content.getComponent(12), "Confirm", "Cancel");
@@ -168,6 +169,7 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setDescription("Description");
         expectedScenario.setLicenseType(LICENSE_TYPE);
         expectedScenario.setPublicationTypes(publicationTypes);
+        expectedScenario.setDetailLicenseeClasses(detailLicenseeClasses);
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
         expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
             .once();
@@ -225,9 +227,15 @@ public class CreateAclScenarioWindowTest {
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
     }
 
-    private void verifyAclScenarioParameterWidget(Component component, String expectedCaption) {
+    private void verifyAclPublicationTypeWeightsParameterWidget(Component component, String expectedCaption) {
         assertNotNull(component);
         AclPublicationTypeWeightsParameterWidget widget = (AclPublicationTypeWeightsParameterWidget) component;
+        assertEquals(expectedCaption, widget.getComponent(0).getCaption());
+    }
+
+    private void verifyAclScenarioParameterWidget(Component component, String expectedCaption) {
+        assertNotNull(component);
+        ScenarioParameterWidget widget = (ScenarioParameterWidget) component;
         assertEquals(expectedCaption, widget.getComponent(0).getCaption());
     }
 
@@ -274,6 +282,13 @@ public class CreateAclScenarioWindowTest {
         publicationType.setWeight(new BigDecimal("1.00"));
         publicationType.setPeriod(201506);
         return publicationType;
+    }
+
+    private DetailLicenseeClass buildAclDetailLicenseeClass() {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
+        return detailLicenseeClass;
     }
 
     @SuppressWarnings("unchecked")
