@@ -23,7 +23,13 @@
         "rhAccountNumber": 2000017000,
         "typeOfUse": "DIGITAL",
         "valueWeight": 88.0000000000,
-        "volumeWeight": 8.0000000000
+        "volumeWeight": 8.0000000000,
+        "valueShare": 1.0000000000,
+        "volumeShare": 1.0000000000,
+        "detailShare": 1.0000000000,
+        "grossAmount":634420.5100000000,
+        "netAmount": 450799.0100000000,
+        "serviceFeeAmount": 183621.5000000000
       }
     ]
   },
@@ -51,7 +57,13 @@
         "rhAccountNumber": 1000028511,
         "typeOfUse": "PRINT",
         "valueWeight": 19.0000000000,
-        "volumeWeight": 2.0000000000
+        "volumeWeight": 2.0000000000,
+        "valueShare": 1.0000000000,
+        "volumeShare": 1.0000000000,
+        "detailShare": 1.0000000000,
+        "grossAmount": 2015.4800000000,
+        "netAmount": 1799.8800000000,
+        "serviceFeeAmount": 215.6000000000
       }
     ]
   }

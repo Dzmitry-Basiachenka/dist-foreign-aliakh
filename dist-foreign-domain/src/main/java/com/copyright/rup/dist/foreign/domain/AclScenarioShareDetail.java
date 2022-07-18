@@ -23,11 +23,12 @@ public class AclScenarioShareDetail {
     private BigDecimal valueWeight;
     private BigDecimal valueShare;
     private BigDecimal volumeShare;
+    private BigDecimal detailShare;
     private BigDecimal volumeWeightDenominator;
     private BigDecimal valueWeightDenominator;
-    private BigDecimal netAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal serviceFeeAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal totalAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal netAmount;
+    private BigDecimal serviceFeeAmount;
+    private BigDecimal grossAmount;
 
     public Long getRhAccountNumber() {
         return rhAccountNumber;
@@ -77,6 +78,14 @@ public class AclScenarioShareDetail {
         this.volumeShare = volumeShare;
     }
 
+    public BigDecimal getDetailShare() {
+        return detailShare;
+    }
+
+    public void setDetailShare(BigDecimal detailShare) {
+        this.detailShare = detailShare;
+    }
+
     public BigDecimal getVolumeWeightDenominator() {
         return volumeWeightDenominator;
     }
@@ -109,12 +118,12 @@ public class AclScenarioShareDetail {
         this.serviceFeeAmount = serviceFeeAmount;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public BigDecimal getGrossAmount() {
+        return grossAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setGrossAmount(BigDecimal grossAmount) {
+        this.grossAmount = grossAmount;
     }
 
     @Override
@@ -133,11 +142,12 @@ public class AclScenarioShareDetail {
             .append(valueWeight, that.valueWeight)
             .append(valueShare, that.valueShare)
             .append(volumeShare, that.volumeShare)
+            .append(detailShare, that.detailShare)
             .append(volumeWeightDenominator, that.volumeWeightDenominator)
             .append(valueWeightDenominator, that.valueWeightDenominator)
             .append(netAmount, that.netAmount)
             .append(serviceFeeAmount, that.serviceFeeAmount)
-            .append(totalAmount, that.totalAmount)
+            .append(grossAmount, that.grossAmount)
             .isEquals();
     }
 
@@ -150,11 +160,12 @@ public class AclScenarioShareDetail {
             .append(valueWeight)
             .append(valueShare)
             .append(volumeShare)
+            .append(detailShare)
             .append(volumeWeightDenominator)
             .append(valueWeightDenominator)
             .append(netAmount)
             .append(serviceFeeAmount)
-            .append(totalAmount)
+            .append(grossAmount)
             .toHashCode();
     }
 
@@ -167,11 +178,12 @@ public class AclScenarioShareDetail {
             .append("valueWeight", valueWeight)
             .append("valueShare", valueShare)
             .append("volumeShare", volumeShare)
+            .append("detailShare", detailShare)
             .append("volumeWeightDenominator", volumeWeightDenominator)
             .append("valueWeightDenominator", valueWeightDenominator)
             .append("netAmount", netAmount)
             .append("serviceFeeAmount", serviceFeeAmount)
-            .append("totalAmount", totalAmount)
+            .append("grossAmount", grossAmount)
             .toString();
     }
 }

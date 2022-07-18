@@ -12,6 +12,28 @@ databaseChangeLog {
             column(name: 'is_manual', value: true)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail') {
+            column(name: 'df_acl_fund_pool_detail_uid', value: '51823f41-7087-48a0-beb3-d780c7dbf4a4')
+            column(name: 'df_acl_fund_pool_uid', value: 'b6d2b116-a113-4013-b59a-fd166b9257d6')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'net_amount', value: 1799.88)
+            column(name: 'gross_amount', value: 2015.48)
+            column(name: 'is_ldmt', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail') {
+            column(name: 'df_acl_fund_pool_detail_uid', value: '310f31af-c20b-44a9-9696-24c24561fbaa')
+            column(name: 'df_acl_fund_pool_uid', value: 'b6d2b116-a113-4013-b59a-fd166b9257d6')
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'net_amount', value: 450799.01)
+            column(name: 'gross_amount', value: 634420.51)
+            column(name: 'is_ldmt', value: true)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
             column(name: 'df_acl_usage_batch_uid', value: '87ee29b3-fdb6-4d67-a08d-99371aadca77')
             column(name: 'name', value: 'ACL Usage Batch 202112')

@@ -86,6 +86,8 @@ public class AclUsageRepositoryIntegrationTest {
     private static final String ACL_USAGE_UID_3 = "2ba0fab7-746d-41e0-87b5-c2b3997ce0ae";
     private static final String ACL_USAGE_UID_4 = "dfc0f9f4-2c50-4e1f-ad1a-a29fc2f9f4cd";
     private static final String ACL_USAGE_UID_5 = "1e9ab4dd-8526-4309-9c54-20226c48cd27";
+    private static final String PRINT_TOU = "PRINT";
+    private static final String DIGITAL_TOU = "DIGITAL";
     private static final UdmUsageOriginEnum USAGE_ORIGIN = UdmUsageOriginEnum.RFA;
     private static final UdmChannelEnum CHANNEL = UdmChannelEnum.CCC;
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
@@ -155,7 +157,7 @@ public class AclUsageRepositoryIntegrationTest {
         expectedAclUsageDto.setDetailLicenseeClass(buildDetailLicenseeClass(10, "Primary Metals"));
         expectedAclUsageDto.setPublicationType(buildPubType());
         expectedAclUsageDto.setContentUnitPrice(new BigDecimal("1.0000000000"));
-        expectedAclUsageDto.setTypeOfUse("DIGITAL");
+        expectedAclUsageDto.setTypeOfUse(DIGITAL_TOU);
         expectedAclUsageDto.setAnnualizedCopies(new BigDecimal("10.00000"));
         expectedAclUsageDto.setAggregateLicenseeClassId(53);
         expectedAclUsageDto.setAggregateLicenseeClassName("Metals");
@@ -784,10 +786,66 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(2, scenarioDetails.size());
         Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
         detailSharesMap.put("df038efe-72c1-4081-88e7-17fa4fa5ff6a", Collections.singletonList(
-            buildAclScenarioShareDetail(1000028511L, "PRINT", 6.0, 3.0)));
+            buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0)));
         detailSharesMap.put("8827d6c6-16d8-4102-b257-ce861ce77491", Arrays.asList(
-            buildAclScenarioShareDetail(1000028511L, "DIGITAL", 9.5, 5.0),
-            buildAclScenarioShareDetail(2580011451L, "PRINT", 9.5, 5.0)));
+            buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 9.5, 5.0),
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 9.5, 5.0)));
+        scenarioDetails.forEach(actualDetail -> {
+            List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
+            List<AclScenarioShareDetail> expectedShareDetails = detailSharesMap.get(actualDetail.getId());
+            assertEquals(expectedShareDetails.size(), actualShareDetails.size());
+            IntStream.range(0, actualDetail.getScenarioShareDetails().size()).forEach(
+                i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i), actualShareDetails.get(i)));
+        });
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "calculate-scenario-shares.groovy")
+    public void testCalculateScenarioShares() {
+        aclUsageRepository.calculateScenarioShares("8c855d2e-5bb6-435d-9da2-7a937c74cb6d", USER_NAME);
+        List<AclScenarioDetail> scenarioDetails =
+            aclUsageRepository.findScenarioDetailsByScenarioId("8c855d2e-5bb6-435d-9da2-7a937c74cb6d");
+        assertEquals(4, scenarioDetails.size());
+        Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
+        detailSharesMap.put("7edfc465-4588-4c70-b62b-4c9f194e5d06", Collections.singletonList(
+            buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0)));
+        detailSharesMap.put("fe8ba41d-01af-42e4-b400-d88733b3271f", Arrays.asList(
+            buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0),
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711)));
+        detailSharesMap.put("7cb1ebeb-ee71-4ec4-bd0c-611d078dbe4b", Collections.singletonList(
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 119.7, 3.0, 0.5722070845, 0.3, 0.4361035422)));
+        detailSharesMap.put("d7e066bb-2df4-45fe-b767-c716954e5af5", Collections.singletonList(
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 29.64, 2.0, 0.1416893733, 0.2, 0.1708446866)));
+        scenarioDetails.forEach(actualDetail -> {
+            List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
+            List<AclScenarioShareDetail> expectedShareDetails = detailSharesMap.get(actualDetail.getId());
+            assertEquals(expectedShareDetails.size(), actualShareDetails.size());
+            IntStream.range(0, actualDetail.getScenarioShareDetails().size()).forEach(
+                i -> verifyAclScenarioShareDetails(expectedShareDetails.get(i), actualShareDetails.get(i)));
+        });
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "calculate-scenario-amounts.groovy")
+    public void testCalculateScenarioAmounts() {
+        aclUsageRepository.calculateScenarioAmounts("742c3061-50b6-498a-a440-17c3ba5bf7eb", USER_NAME);
+        List<AclScenarioDetail> scenarioDetails =
+            aclUsageRepository.findScenarioDetailsByScenarioId("742c3061-50b6-498a-a440-17c3ba5bf7eb");
+        assertEquals(4, scenarioDetails.size());
+        Map<String, List<AclScenarioShareDetail>> detailSharesMap = new HashMap<>();
+        detailSharesMap.put("9a30d051-24e8-4fb2-8e9a-31fce9653be7", Collections.singletonList(
+            buildAclScenarioShareDetail(1000028511L, PRINT_TOU, 6.0, 3.0, 1.0, 1.0, 1.0, 1550.51, 1200.26, 350.25)));
+        detailSharesMap.put("fdac5a59-0e8f-4416-bee6-f6883a80a917", Arrays.asList(
+            buildAclScenarioShareDetail(1000028511L, DIGITAL_TOU, 59.85, 5.0, 1.0, 1.0, 1.0, 27895.51, 20500.26,
+                7395.25),
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 59.85, 5.0, 0.2861035422, 0.5, 0.3930517711,
+                71846.5581916850, 55813.4772727668, 16033.0809189183)));
+        detailSharesMap.put("f1a8dd33-2a1d-4a5a-8354-5b15eb39ec9a", Collections.singletonList(
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 119.7, 3.0, 0.5722070845, 0.3, 0.4361035422,
+                79716.0598833701, 61926.8425455335, 17789.2173378366)));
+        detailSharesMap.put("e8ebc3f7-9075-4bf4-bdb3-00e9d3f780f4", Collections.singletonList(
+            buildAclScenarioShareDetail(2580011451L, PRINT_TOU, 29.64, 2.0, 0.1416893733, 0.2, 0.1708446866,
+                31228.9719066657, 24260.0001674997, 6968.9717391660)));
         scenarioDetails.forEach(actualDetail -> {
             List<AclScenarioShareDetail> actualShareDetails = actualDetail.getScenarioShareDetails();
             List<AclScenarioShareDetail> expectedShareDetails = detailSharesMap.get(actualDetail.getId());
@@ -826,6 +884,32 @@ public class AclUsageRepositoryIntegrationTest {
         return aclScenarioShareDetail;
     }
 
+    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, String typeOfUse,
+                                                               Double valueWeight, Double volumeWeight,
+                                                               Double valueShare, Double volumeShare,
+                                                               Double detailShare) {
+        AclScenarioShareDetail aclScenarioShareDetail =
+            buildAclScenarioShareDetail(rhAccountNumber, typeOfUse, valueWeight, volumeWeight);
+        aclScenarioShareDetail.setValueShare(BigDecimal.valueOf(valueShare).setScale(10, RoundingMode.HALF_UP));
+        aclScenarioShareDetail.setVolumeShare(BigDecimal.valueOf(volumeShare).setScale(10, RoundingMode.HALF_UP));
+        aclScenarioShareDetail.setDetailShare(BigDecimal.valueOf(detailShare).setScale(10, RoundingMode.HALF_UP));
+        return aclScenarioShareDetail;
+    }
+
+    private AclScenarioShareDetail buildAclScenarioShareDetail(Long rhAccountNumber, String typeOfUse,
+                                                               Double valueWeight, Double volumeWeight,
+                                                               Double valueShare, Double volumeShare,
+                                                               Double detailShare, Double grossAmount, Double netAmount,
+                                                               Double serviceFeeAmount) {
+        AclScenarioShareDetail aclScenarioShareDetail = buildAclScenarioShareDetail(rhAccountNumber, typeOfUse,
+            valueWeight, volumeWeight, valueShare, volumeShare, detailShare);
+        aclScenarioShareDetail.setGrossAmount(BigDecimal.valueOf(grossAmount).setScale(10, RoundingMode.HALF_UP));
+        aclScenarioShareDetail.setNetAmount(BigDecimal.valueOf(netAmount).setScale(10, RoundingMode.HALF_UP));
+        aclScenarioShareDetail.setServiceFeeAmount(
+            BigDecimal.valueOf(serviceFeeAmount).setScale(10, RoundingMode.HALF_UP));
+        return aclScenarioShareDetail;
+    }
+
     private void verifyAclScenarioDetail(AclScenarioDetail expectedScenarioDetail,
                                          AclScenarioDetail actualScenarioDetail) {
         assertEquals(expectedScenarioDetail.getScenarioId(), actualScenarioDetail.getScenarioId());
@@ -858,6 +942,12 @@ public class AclUsageRepositoryIntegrationTest {
         assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
         assertEquals(expectedDetail.getVolumeWeight(), actualDetail.getVolumeWeight());
         assertEquals(expectedDetail.getValueWeight(), actualDetail.getValueWeight());
+        assertEquals(expectedDetail.getVolumeShare(), actualDetail.getVolumeShare());
+        assertEquals(expectedDetail.getValueShare(), actualDetail.getValueShare());
+        assertEquals(expectedDetail.getDetailShare(), actualDetail.getDetailShare());
+        assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
+        assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
+        assertEquals(expectedDetail.getServiceFeeAmount(), actualDetail.getServiceFeeAmount());
     }
 
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
