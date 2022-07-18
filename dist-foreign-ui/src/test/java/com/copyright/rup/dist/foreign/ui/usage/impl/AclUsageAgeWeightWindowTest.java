@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -21,6 +22,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IPar
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
 import com.google.common.collect.ImmutableMap;
+import com.vaadin.data.Binder;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -28,8 +30,10 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -39,6 +43,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AclUsageAgeWeightWindow}.
@@ -65,7 +70,7 @@ public class AclUsageAgeWeightWindowTest {
 
     @Test
     public void testConstructorInEditMode() {
-        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
+        verifyWindow(window, "Usage Age Weights", 600, 300, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -85,7 +90,7 @@ public class AclUsageAgeWeightWindowTest {
     @Test
     public void testConstructorInViewMode() {
         window = new AclUsageAgeWeightWindow(false);
-        verifyWindow(window, "Usage Age Weights", 525, 300, Unit.PIXELS);
+        verifyWindow(window, "Usage Age Weights", 600, 300, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
@@ -154,6 +159,35 @@ public class AclUsageAgeWeightWindowTest {
         replay(listener);
         window.fireParametersSaveEvent(event);
         verify(listener);
+    }
+
+    @Test
+    public void testWeightFieldValidation() {
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        Binder binder = grid.getEditor().getBinder();
+        List<TextField> fields = (List<TextField>) binder.getFields().collect(Collectors.toList());
+        TextField weightField = fields.get(0);
+        String emptyFieldValidationMessage = "Field value should be specified";
+        String rangeNumberValidationMessage = "Field value should be in range from 0 to 1";
+        String scaleNumberValidationMessage = "Field value should not exceed 2 digits after the decimal point";
+        verifyGridEditableFieldErrorMessage(weightField, StringUtils.EMPTY, binder, emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "   ", binder, emptyFieldValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, " -1 ", binder, rangeNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, ".05", binder, scaleNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "99999999999", binder, rangeNumberValidationMessage,
+            false);
+        verifyGridEditableFieldErrorMessage(weightField, "value", binder, rangeNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "-1", binder, rangeNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, " 0.00 ", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "1.1", binder, rangeNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0.1", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "0.12", binder, null, true);
+        verifyGridEditableFieldErrorMessage(weightField, "0.123", binder, scaleNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0.12345", binder, scaleNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0.123456", binder, scaleNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "0.1234567", binder, scaleNumberValidationMessage, false);
+        verifyGridEditableFieldErrorMessage(weightField, "9999999999.99", binder, rangeNumberValidationMessage, false);
     }
 
     @SuppressWarnings("unchecked")
