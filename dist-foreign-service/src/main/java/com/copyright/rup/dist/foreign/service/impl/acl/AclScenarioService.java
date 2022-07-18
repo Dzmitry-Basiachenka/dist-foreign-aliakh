@@ -2,9 +2,12 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -102,6 +106,20 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
         return aclScenarioRepository.findWithAmountsAndLastAction(scenarioId);
+    }
+
+    @Override
+    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                        String searchValue, Pageable pageable,
+                                                                        Sort sort) {
+        //TODO {dbasiachenka} implement
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        //TODO {dbasiachenka} implement
+        return 0;
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
