@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.service.api.ILicenseeClassService;
@@ -221,6 +222,15 @@ public class AclScenariosControllerTest {
         assertTrue(aclScenariosController.isValidUsageBatch(BATCH_UID, "38931a03-d5a3-4576-99d3-722ef1ae49f9", 202212,
             Collections.singletonList(0)));
         verify(aclUsageService);
+    }
+
+    @Test
+    public void testGetPublicationTypes() {
+        List<PublicationType> publicationTypes = Collections.emptyList();
+        expect(publicationTypeService.getPublicationTypes("ACL")).andReturn(publicationTypes).once();
+        replay(publicationTypeService);
+        assertSame(publicationTypes, aclScenariosController.getPublicationTypes());
+        verify(publicationTypeService);
     }
 
     @Test
