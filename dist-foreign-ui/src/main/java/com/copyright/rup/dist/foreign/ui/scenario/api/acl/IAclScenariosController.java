@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import java.util.List;
@@ -121,4 +122,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return list of {@link AclPublicationType}
      */
     List<AclPublicationType> getAclHistoricalPublicationTypes();
+
+    /**
+     * Gets list of {@link UsageAge}s.
+     *
+     * @return list of usage age wights
+     */
+    List<UsageAge> getUsageAgeWeights();
 }
