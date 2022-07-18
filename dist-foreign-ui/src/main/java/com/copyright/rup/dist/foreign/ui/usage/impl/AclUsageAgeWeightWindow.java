@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageAge;
+import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.ui.usage.impl.aacl.BigDecimalConverter;
@@ -9,6 +10,7 @@ import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.data.Binder;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -18,6 +20,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +36,8 @@ import java.util.stream.Collectors;
  */
 public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<UsageAge>> {
 
+    private static final String AMOUNT_SCALE_REGEX = "(0|[1](\\d{0,9}))(\\.\\d{1,2})?";
+
     private List<UsageAge> defaultValues;
     private Map<Integer, BigDecimal> periodsToDefaultWeights;
     private List<UsageAge> currentValues;
@@ -46,7 +51,7 @@ public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<
      */
     public AclUsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
-        setWidth(525, Unit.PIXELS);
+        setWidth(600, Unit.PIXELS);
         setHeight(300, Unit.PIXELS);
         setResizable(false);
         initGrid();
@@ -114,9 +119,11 @@ public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<
         textField.addStyleName("editable-field");
         Binder<UsageAge> binder = grid.getEditor().getBinder();
         return binder.forField(textField)
-            //TODO validators will implement later
+            .withValidator(new RequiredValidator())
+            .withValidator(getUsageAgeWeightValidator(), ForeignUi.getMessage("field.error.number_not_in_range", 0, 1))
+            .withValidator(getUsageAgeWeightScaleValidator(), ForeignUi.getMessage("field.error.number_scale", 2))
             .withConverter(new BigDecimalConverter())
-            .bind(UsageAge::getWeight, UsageAge::setWeight);
+            .bind(value -> value.getWeight().setScale(2, RoundingMode.HALF_UP), UsageAge::setWeight);
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -132,5 +139,14 @@ public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         defaultButton.setVisible(isEditable);
         return new HorizontalLayout(saveButton, Buttons.createCloseButton(this), placeholderLabel, defaultButton);
+    }
+
+    private SerializablePredicate<? super String> getUsageAgeWeightValidator() {
+        return value -> new BigDecimal(value.trim()).compareTo(BigDecimal.ZERO) >= 0
+            && new BigDecimal(value).compareTo(BigDecimal.ONE) <= 0;
+    }
+
+    private SerializablePredicate<? super String> getUsageAgeWeightScaleValidator() {
+        return value -> value.trim().matches(AMOUNT_SCALE_REGEX);
     }
 }
