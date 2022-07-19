@@ -617,8 +617,6 @@
         order by u.df_usage_uid
     </select>
 
-
-
     <delete id="deleteByBatchId" parameterType="string">
         with u as (
             delete from ${schema}.df_usage

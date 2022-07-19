@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -83,4 +86,29 @@ public interface IAclScenarioRepository {
      * @return list of {@link AclScenario}s
      */
     AclScenario findById(String scenarioId);
+
+    /**
+     * Gets list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link AclScenarioDetailDto}s
+     */
+    List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                  String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 }

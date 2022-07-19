@@ -105,6 +105,7 @@
         <typeAlias alias="AclRightsholderTotalsHolder" type="com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder"/>
         <typeAlias alias="AclScenarioDetail" type="com.copyright.rup.dist.foreign.domain.AclScenarioDetail"/>
         <typeAlias alias="AclPubType" type="com.copyright.rup.dist.foreign.domain.AclPublicationType"/>
+        <typeAlias alias="AclScenarioDetailDto" type="com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto"/>
     </typeAliases>
 
     <typeHandlers>

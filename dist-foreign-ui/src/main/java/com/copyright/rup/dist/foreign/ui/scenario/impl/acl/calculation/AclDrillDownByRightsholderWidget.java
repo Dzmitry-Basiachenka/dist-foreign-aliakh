@@ -79,7 +79,7 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             query -> controller.getSize());
         grid = new Grid<>(dataProvider);
         addColumns();
-        grid.getColumns().forEach(usageDtoColumn -> usageDtoColumn.setSortable(true));
+        grid.getColumns().forEach(column -> column.setSortable(true));
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         VaadinUtils.addComponentStyle(grid, "acl-drill-down-by-rightsholder-table");
@@ -87,7 +87,6 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
 
     private HorizontalLayout initSearchWidget() {
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
-        //TODO {dbasiachenka} clarify prompt for search widget
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.drill_down_by_rightsholder.search_widget.acl"));
         searchWidget.setWidth(60, Unit.PERCENTAGE);
         HorizontalLayout layout = new HorizontalLayout(searchWidget);
@@ -130,8 +129,8 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             true, 150);
         addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type", "publicationType",
             true, 120);
-        addColumn(AclScenarioDetailDto::getPubTypeWeight, "table.column.publication_type_weight", "pubTypeWeight",
-            true, 120);
+        addColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
+            "pubTypeWeight", true, 120);
         addAmountColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
         addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 110);
         addAmountColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
@@ -140,20 +139,20 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             "contentUnitPrice", 150);
         addBooleanColumn(AclScenarioDetailDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
             "contentUnitPriceFlag", 160);
-        addAmountColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
-            "valueSharePrint", 140);
-        addAmountColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
-            "volumeSharePrint", 140);
-        addAmountColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
-            "detailSharePrint", 140);
+        addColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
+            "valueSharePrint", true, 140);
+        addColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
+            "volumeSharePrint", true, 140);
+        addColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
+            "detailSharePrint", true, 140);
         addAmountColumn(AclScenarioDetailDto::getNetAmountPrint, "table.column.print_net_amount_in_usd",
             "netAmountPrint", 150);
-        addAmountColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
-            "valueShareDigital", 150);
-        addAmountColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
-            "volumeShareDigital", 150);
-        addAmountColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
-            "detailShareDigital", 150);
+        addColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
+            "valueShareDigital", true, 150);
+        addColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
+            "volumeShareDigital", true, 150);
+        addColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
+            "detailShareDigital", true, 150);
         addAmountColumn(AclScenarioDetailDto::getNetAmountDigital, "table.column.digital_net_amount_in_usd",
             "netAmountDigital", 150);
         addAmountColumn(AclScenarioDetailDto::getCombinedNetAmount, "table.column.combined_net_amount_in_usd",
@@ -161,7 +160,7 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
     }
 
     private void addColumn(ValueProvider<AclScenarioDetailDto, ?> provider, String captionProperty, String sort,
-                             boolean isHidable, double width) {
+                           boolean isHidable, double width) {
         grid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
@@ -170,7 +169,7 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
     }
 
     private void addAmountColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
-                                   String sort, double width) {
+                                 String sort, double width) {
         grid.addColumn(detail -> CurrencyUtils.format(function.apply(detail), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
@@ -179,8 +178,8 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             .setWidth(width);
     }
 
-    private void addBooleanColumn(ValueProvider<AclScenarioDetailDto, Boolean> valueProvider,
-                                                            String captionProperty, String columnId, double width) {
+    private void addBooleanColumn(ValueProvider<AclScenarioDetailDto, Boolean> valueProvider, String captionProperty,
+                                  String columnId, double width) {
         grid.addColumn(value -> BooleanUtils.toYNString(valueProvider.apply(value)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
