@@ -39,10 +39,12 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * Window to create ACL scenario.
@@ -76,7 +78,6 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     private ComboBox<Integer> periodComboBox;
     private CheckBox editableCheckBox;
 
-    //TODO these fields will be reimplemented. It is stubs for now
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
     private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
@@ -330,9 +331,10 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
             periodComboBox.getValue(), getPeriodPriorsWithWeightAboveZero());
     }
 
-    //TODO will return period based on data from ACL Usage Age Weights in Scenario
     private List<Integer> getPeriodPriorsWithWeightAboveZero() {
-        //todo {aazarenka will be rewrite as part of B-57781 story}
-        return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+        return usageAgeWeightWidget.getAppliedParameters().stream()
+            .filter(usageAge -> usageAge.getWeight().compareTo(BigDecimal.ZERO) > 0)
+            .map(UsageAge::getPeriod)
+            .collect(Collectors.toList());
     }
 }
