@@ -226,11 +226,11 @@ public class AclScenarioRepositoryIntegrationTest {
         return usageAge;
     }
 
-    private AclPublicationType buildAclPublicationType(String publicationTypeId, BigDecimal weight) {
+    private AclPublicationType buildAclPublicationType(String publicationTypeId, BigDecimal weight, int period) {
         AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId(publicationTypeId);
         publicationType.setWeight(weight);
-        publicationType.setPeriod(201512);
+        publicationType.setPeriod(period);
         return publicationType;
     }
 
@@ -254,7 +254,7 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setUpdateDate(Date.from(OffsetDateTime.parse(date).toInstant()));
         scenario.setDetailLicenseeClasses(Collections.singletonList(buildDetailLicenseeClass(43, 1)));
         scenario.setPublicationTypes(Collections.singletonList(
-            buildAclPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"))));
+            buildAclPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"), 201512)));
         scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, new BigDecimal("1.00000"))));
         return scenario;
     }

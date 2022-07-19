@@ -217,7 +217,12 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         editableCheckBox = new CheckBox();
         editableCheckBox.setCaption(ForeignUi.getMessage("label.editable"));
         editableCheckBox.setEnabled(hasSpecialistPermission);
-        editableCheckBox.addValueChangeListener(event -> populateComboBoxes());
+        editableCheckBox.addValueChangeListener(event -> {
+            populateComboBoxes();
+            if (!editableCheckBox.getValue()) {
+                publicationTypeWeightWidget.setAppliedParameters(controller.getAclHistoricalPublicationTypes());
+            }
+        });
         editableCheckBox.setValue(true);
         scenarioBinder.forField(editableCheckBox)
             .bind(AclScenario::isEditableFlag, AclScenario::setEditableFlag);
@@ -234,7 +239,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         publicationTypeWeightWidget =
             new AclPublicationTypeWeightsParameterWidget(ForeignUi.getMessage("button.publication_type_weights"),
                 controller.getAclHistoricalPublicationTypes(),
-                () -> new AclPublicationTypeWeightsWindow(controller, true));
+                () -> new AclPublicationTypeWeightsWindow(controller, editableCheckBox.getValue()));
     }
 
     private void initLicenseeClassesMappingWidget() {
@@ -296,9 +301,9 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                         .ifPresent(usageBatch -> aclScenario.setUsageBatchId(usageBatch.getId()));
                     grantSetComboBox.getSelectedItem()
                         .ifPresent(grantSet -> aclScenario.setGrantSetId(grantSet.getId()));
+                    aclScenario.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
                     aclScenario.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
                     aclScenario.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
-                    aclScenario.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
                     controller.createAclScenario(aclScenario);
                     close();
                 } catch (ValidationException e) {
