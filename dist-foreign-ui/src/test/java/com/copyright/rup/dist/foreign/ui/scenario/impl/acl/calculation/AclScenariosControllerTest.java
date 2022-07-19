@@ -58,6 +58,7 @@ public class AclScenariosControllerTest {
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
     private static final String BATCH_UID = "47b4d40a-a6bd-4fe1-b463-4aa52bf0e56f";
     private static final String LICENSE_TYPE = "ACL";
+    private static final String ACL_PRODUCT_FAMILY = "ACL";
 
     private IAclScenariosWidget scenariosWidget;
     private AclScenariosController aclScenariosController;
@@ -192,7 +193,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetDetailLicenseeClasses() {
         List<DetailLicenseeClass> licenseeClasses = Collections.singletonList(new DetailLicenseeClass());
-        expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        expect(licenseeClassService.getDetailLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClasses());
         verify(licenseeClassService);
@@ -201,7 +202,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetAggregateLicenseeClasses() {
         List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
-        expect(licenseeClassService.getAggregateLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        expect(licenseeClassService.getAggregateLicenseeClasses(ACL_PRODUCT_FAMILY)).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, aclScenariosController.getAggregateLicenseeClasses());
         verify(licenseeClassService);
@@ -237,7 +238,7 @@ public class AclScenariosControllerTest {
     @Test
     public void testGetPublicationTypes() {
         List<PublicationType> publicationTypes = Collections.emptyList();
-        expect(publicationTypeService.getPublicationTypes("ACL")).andReturn(publicationTypes).once();
+        expect(publicationTypeService.getPublicationTypes(ACL_PRODUCT_FAMILY)).andReturn(publicationTypes).once();
         replay(publicationTypeService);
         assertSame(publicationTypes, aclScenariosController.getPublicationTypes());
         verify(publicationTypeService);
