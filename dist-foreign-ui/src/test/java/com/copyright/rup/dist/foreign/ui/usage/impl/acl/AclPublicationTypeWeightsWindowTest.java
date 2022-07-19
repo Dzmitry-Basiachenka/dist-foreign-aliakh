@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
@@ -15,6 +14,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
@@ -62,11 +62,13 @@ public class AclPublicationTypeWeightsWindowTest {
         buildAclPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00", 201506),
         buildAclPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "5.00", 201506));
 
+    private IAclScenariosController controller;
     private AclPublicationTypeWeightsWindow window;
 
     @Before
     public void setUp() {
-        window = new AclPublicationTypeWeightsWindow(true);
+        controller = createMock(IAclScenariosController.class);
+        window = new AclPublicationTypeWeightsWindow(controller, true);
     }
 
     @Test
@@ -80,14 +82,16 @@ public class AclPublicationTypeWeightsWindowTest {
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        assertEquals(2, buttonsLayout.getComponentCount());
-        verifyButton(buttonsLayout.getComponent(0), "Save", true);
-        verifyButton(buttonsLayout.getComponent(1), "Close", true);
+        verifyButtonsLayout(content.getComponent(1), "Add", "Save", "Close");
+        verifyButtonsVisibility(ImmutableMap.of(
+            buttonsLayout.getComponent(0), true,
+            buttonsLayout.getComponent(1), true,
+            buttonsLayout.getComponent(2), true));
     }
 
     @Test
     public void testConstructorInViewMode() {
-        window = new AclPublicationTypeWeightsWindow(false);
+        window = new AclPublicationTypeWeightsWindow(controller, false);
         verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -95,11 +99,12 @@ public class AclPublicationTypeWeightsWindowTest {
         assertTrue(component instanceof Grid);
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
-        verifyButtonsLayout(content.getComponent(1), "Save", "Close");
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
+        verifyButtonsLayout(buttonsLayout, "Add", "Save", "Close");
         verifyButtonsVisibility(ImmutableMap.of(
             buttonsLayout.getComponent(0), false,
-            buttonsLayout.getComponent(1), true));
+            buttonsLayout.getComponent(1), false,
+            buttonsLayout.getComponent(2), true));
     }
 
     @Test
@@ -107,7 +112,7 @@ public class AclPublicationTypeWeightsWindowTest {
         window.setAppliedParameters(appliedParams);
         VerticalLayout content = (VerticalLayout) window.getContent();
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        Button saveButton = (Button) buttonsLayout.getComponent(0);
+        Button saveButton = (Button) buttonsLayout.getComponent(1);
         IParametersSaveListener<List<AclPublicationType>> listener = createMock(IParametersSaveListener.class);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
         Capture<ParametersSaveEvent<List<AclPublicationType>>> event = new Capture<>();
@@ -150,7 +155,7 @@ public class AclPublicationTypeWeightsWindowTest {
             Triple.of("Weight", -1.0, -1)));
         List<Column> columns = grid.getColumns();
         columns.forEach(column -> assertFalse(column.isSortable()));
-        assertFalse(grid.getDataProvider().isInMemory());
+        assertTrue(grid.getDataProvider().isInMemory());
         assertFalse(grid.getEditor().isEnabled());
     }
 

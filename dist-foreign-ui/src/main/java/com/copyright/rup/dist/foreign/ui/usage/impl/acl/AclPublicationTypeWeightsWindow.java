@@ -2,10 +2,15 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -13,6 +18,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,16 +34,20 @@ import java.util.stream.Collectors;
  */
 public class AclPublicationTypeWeightsWindow extends Window {
 
-    private List<AclPublicationType> currentValues;
-    private Grid<AclPublicationType> grid;
+    private final IAclScenariosController controller;
+    private final List<AclPublicationType> currentValues = new ArrayList<>();
+    private final ListDataProvider<AclPublicationType> dataProvider = DataProvider.ofCollection(currentValues);
     private final boolean isEditable;
+    private Grid<AclPublicationType> grid;
 
     /**
      * Constructor.
      *
+     * @param controller instance of {@link IAclScenariosController}
      * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      */
-    public AclPublicationTypeWeightsWindow(boolean isEditable) {
+    public AclPublicationTypeWeightsWindow(IAclScenariosController controller, boolean isEditable) {
+        this.controller = controller;
         this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
         setHeight(250, Unit.PIXELS);
@@ -58,8 +69,9 @@ public class AclPublicationTypeWeightsWindow extends Window {
      * @param params to set
      */
     public void setAppliedParameters(List<AclPublicationType> params) {
-        currentValues = params.stream().map(AclPublicationType::new).collect(Collectors.toList());
-        grid.setItems(currentValues);
+        currentValues.clear();
+        currentValues.addAll(params.stream().map(AclPublicationType::new).collect(Collectors.toList()));
+        dataProvider.refreshAll();
     }
 
     /**
@@ -72,10 +84,10 @@ public class AclPublicationTypeWeightsWindow extends Window {
     }
 
     private void initGrid() {
-        grid = new Grid<>();
+        grid = new Grid<>(dataProvider);
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-        grid.addColumn(AclPublicationType::getName)
+        grid.addColumn(AclPublicationType::getNameAndDescription)
             .setCaption(ForeignUi.getMessage("table.column.publication_type"))
             .setSortable(false);
         grid.addColumn(AclPublicationType::getPeriod)
@@ -88,12 +100,27 @@ public class AclPublicationTypeWeightsWindow extends Window {
     }
 
     private HorizontalLayout initButtonsLayout() {
+        Button addButton = new Button(ForeignUi.getMessage("button.add"));
+        addButton.addClickListener(event -> {
+            AclAddPublicationTypeWindow window = new AclAddPublicationTypeWindow(controller);
+            Windows.showModalWindow(window);
+            window.addListener(ParametersSaveEvent.class,
+                (IParametersSaveListener<AclPublicationType>) saveEvent -> {
+                    currentValues.add(saveEvent.getSavedParameters());
+                    currentValues.sort(Comparator.comparing(AclPublicationType::getName)
+                        .thenComparing(AclPublicationType::getPeriod)
+                        .thenComparing(AclPublicationType::getCreateDate));
+                    dataProvider.refreshAll();
+                },
+                IParametersSaveListener.SAVE_HANDLER);
+        });
+        addButton.setVisible(isEditable);
         Button saveButton = new Button(ForeignUi.getMessage("button.save"));
         saveButton.addClickListener(event -> {
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
             close();
         });
         saveButton.setVisible(isEditable);
-        return new HorizontalLayout(saveButton, Buttons.createCloseButton(this));
+        return new HorizontalLayout(addButton, saveButton, Buttons.createCloseButton(this));
     }
 }

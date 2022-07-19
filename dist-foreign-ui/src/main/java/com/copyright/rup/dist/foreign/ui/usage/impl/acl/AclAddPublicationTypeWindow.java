@@ -52,7 +52,7 @@ class AclAddPublicationTypeWindow extends Window {
     AclAddPublicationTypeWindow(IAclScenariosController controller) {
         this.controller = controller;
         setResizable(false);
-        setWidth(200, Unit.PIXELS);
+        setWidth(250, Unit.PIXELS);
         setCaption(ForeignUi.getMessage("window.add_pub_type_weight"));
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout layout = new VerticalLayout(initPublicationTypeCombobox(), initPubTypePeriodLayout(),
