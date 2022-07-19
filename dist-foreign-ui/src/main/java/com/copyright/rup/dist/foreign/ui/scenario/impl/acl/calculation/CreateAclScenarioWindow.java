@@ -240,7 +240,8 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     private void initLicenseeClassesMappingWidget() {
         licenseeClassMappingWidget =
             new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
-                controller.getDetailLicenseeClasses(), () -> new AclAggregateLicenseeClassMappingWindow(true));
+                controller.getDetailLicenseeClasses(),
+                () -> new AclAggregateLicenseeClassMappingWindow(true, controller.getAggregateLicenseeClasses()));
     }
 
     private void initDescriptionArea() {

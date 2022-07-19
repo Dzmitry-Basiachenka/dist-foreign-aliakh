@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
@@ -120,6 +121,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClasses() {
         return licenseeClassService.getDetailLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
+    }
+
+    @Override
+    public List<AggregateLicenseeClass> getAggregateLicenseeClasses() {
+        return licenseeClassService.getAggregateLicenseeClasses(FdaConstants.ACL_PRODUCT_FAMILY);
     }
 
     @Override
