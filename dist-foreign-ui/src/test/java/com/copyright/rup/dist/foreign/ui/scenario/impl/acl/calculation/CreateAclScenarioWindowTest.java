@@ -56,7 +56,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,7 +182,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
             .andReturn(Collections.singletonList(aclGrantSet));
         expect(controller.isValidUsageBatch(ACL_BATCH_UID, "f5e558ce-2261-4998-8434-fc04d432c1a5", 202206,
-            Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11))).andReturn(true);
+            Collections.singletonList(1))).andReturn(true);
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
         replay(controller);
@@ -205,7 +204,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
             .andReturn(Collections.singletonList(aclGrantSet));
         expect(controller.isValidUsageBatch(ACL_BATCH_UID, "f5e558ce-2261-4998-8434-fc04d432c1a5", 202206,
-            Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11))).andReturn(false);
+            Collections.singletonList(1))).andReturn(false);
         Windows.showNotificationWindow(
             "System found usages missing Pub Type and/or CUP. Please update the missing data");
         expectLastCall().once();
