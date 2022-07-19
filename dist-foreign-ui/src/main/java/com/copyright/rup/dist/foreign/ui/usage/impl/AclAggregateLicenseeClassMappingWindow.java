@@ -36,16 +36,20 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
     private final boolean isEditable;
+    private final List<AggregateLicenseeClass> aggregateLicenseeClasses;
 
     /**
      * Constructor.
      *
      * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
+     * @param aggregateLicenseeClasses list of {@link AggregateLicenseeClass}es from a database
      */
-    public AclAggregateLicenseeClassMappingWindow(boolean isEditable) {
+    public AclAggregateLicenseeClassMappingWindow(boolean isEditable,
+                                                  List<AggregateLicenseeClass> aggregateLicenseeClasses) {
         setWidth(600, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
         this.isEditable = isEditable;
+        this.aggregateLicenseeClasses = aggregateLicenseeClasses;
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();
         VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
@@ -132,7 +136,7 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
         ComboBox<AggregateLicenseeClass> comboBox = new ComboBox<>();
         comboBox.setEmptySelectionAllowed(false);
         comboBox.setItemCaptionGenerator(aggregateLicenseeClass -> aggregateLicenseeClass.getId().toString());
-        comboBox.setItems(defaultValues.stream().map(DetailLicenseeClass::getAggregateLicenseeClass));
+        comboBox.setItems(aggregateLicenseeClasses);
         comboBox.setSelectedItem(detailLicenseeClass.getAggregateLicenseeClass());
         comboBox.setWidth("40");
         comboBox.addValueChangeListener(listener -> {

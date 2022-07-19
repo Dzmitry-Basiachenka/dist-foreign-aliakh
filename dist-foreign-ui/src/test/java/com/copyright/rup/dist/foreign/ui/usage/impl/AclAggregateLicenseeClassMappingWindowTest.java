@@ -15,15 +15,18 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 
 import com.google.common.collect.ImmutableMap;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -37,6 +40,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,10 +59,12 @@ public class AclAggregateLicenseeClassMappingWindowTest {
         Arrays.asList(buildDetailLicenseeClass(1), buildDetailLicenseeClass(2));
     private final List<DetailLicenseeClass> appliedParams =
         Arrays.asList(buildDetailLicenseeClass(2), buildDetailLicenseeClass(1));
+    private final List<AggregateLicenseeClass> aggregateLicenseeClasses =
+        Arrays.asList(buildAggregateLicenseeClass(3), buildAggregateLicenseeClass(4));
 
     @Before
     public void setUp() {
-        window = new AclAggregateLicenseeClassMappingWindow(true);
+        window = new AclAggregateLicenseeClassMappingWindow(true, aggregateLicenseeClasses);
         window.setDefault(defaultParams);
     }
 
@@ -77,7 +83,7 @@ public class AclAggregateLicenseeClassMappingWindowTest {
 
     @Test
     public void testConstructorInReadOnlyMode() {
-        window = new AclAggregateLicenseeClassMappingWindow(false);
+        window = new AclAggregateLicenseeClassMappingWindow(false, aggregateLicenseeClasses);
         VerticalLayout content = (VerticalLayout) window.getContent();
         verifyCommonWindowComponents(content);
         verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
@@ -87,6 +93,23 @@ public class AclAggregateLicenseeClassMappingWindowTest {
             buttonsLayout.getComponent(1), true,
             buttonsLayout.getComponent(2), false,
             buttonsLayout.getComponent(3), false));
+    }
+
+    @Test
+    public void testAggregateLicenseeClassIdInGridComboBox() {
+        window.setAppliedParameters(appliedParams);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        Grid<DetailLicenseeClass> grid = (Grid<DetailLicenseeClass>) content.getComponent(0);
+        Collection<DetailLicenseeClass> detLicenseeClasses =
+            ((ListDataProvider<DetailLicenseeClass>) grid.getDataProvider()).getItems();
+        DetailLicenseeClass detLicenseeClass = detLicenseeClasses.iterator().next();
+        assertEquals(2, detLicenseeClass.getAggregateLicenseeClass().getId().intValue());
+        ValueProvider<DetailLicenseeClass, ?> valueProvider = grid.getColumns().get(2).getValueProvider();
+        ComboBox<AggregateLicenseeClass> comboBox =
+            (ComboBox<AggregateLicenseeClass>) valueProvider.apply(detLicenseeClass);
+        assertEquals(buildAggregateLicenseeClass(2), comboBox.getSelectedItem().get());
+        comboBox.setSelectedItem(buildAggregateLicenseeClass(3));
+        assertEquals(3, detLicenseeClass.getAggregateLicenseeClass().getId().intValue());
     }
 
     @Test
@@ -176,6 +199,13 @@ public class AclAggregateLicenseeClassMappingWindowTest {
     private DetailLicenseeClass buildDetailLicenseeClass(Integer id) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(id);
+        detailLicenseeClass.setAggregateLicenseeClass(buildAggregateLicenseeClass(id));
         return detailLicenseeClass;
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer id) {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(id);
+        return aggregateLicenseeClass;
     }
 }

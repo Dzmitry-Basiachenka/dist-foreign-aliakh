@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -193,6 +194,15 @@ public class AclScenariosControllerTest {
         expect(licenseeClassService.getDetailLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
         replay(licenseeClassService);
         assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClasses());
+        verify(licenseeClassService);
+    }
+
+    @Test
+    public void testGetAggregateLicenseeClasses() {
+        List<AggregateLicenseeClass> licenseeClasses = Collections.singletonList(new AggregateLicenseeClass());
+        expect(licenseeClassService.getAggregateLicenseeClasses("ACL")).andReturn(licenseeClasses).once();
+        replay(licenseeClassService);
+        assertSame(licenseeClasses, aclScenariosController.getAggregateLicenseeClasses());
         verify(licenseeClassService);
     }
 

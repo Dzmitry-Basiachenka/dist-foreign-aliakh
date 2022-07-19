@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -91,6 +92,13 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return list of detail licensee classes.
      */
     List<DetailLicenseeClass> getDetailLicenseeClasses();
+
+    /**
+     * Gets list of all {@link AggregateLicenseeClass}es.
+     *
+     * @return list of detail licensee classes.
+     */
+    List<AggregateLicenseeClass> getAggregateLicenseeClasses();
 
     /**
      * Creates ACL scenario.
