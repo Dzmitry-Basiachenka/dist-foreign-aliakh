@@ -1,3 +1,27 @@
+15.1.34
+-
+* B-74353 FDA: Saving Pub Type Weights: Create df_acl_history_pub_type_weight database and populate it 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: implement widget to edit scenario pub types weights 
+* B-57795 FDA: Calculate ACL Scenario: distribute SQL queries to insert details and shares separately 
+* B-74353 FDA: Saving Pub Type Weights: adjust logic to get ACL history pub type and implement logic to insert new data 
+* B-74269 Tech Debt: FDA: remove obsolete TODOs 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: update scenario creation widget to show pub types weights dialog 
+* B-57798 FDA: View scenario specific usage details by RH for ACL: add reported_type_of_use, content_unit_price_flag, price, price_flag, content, content_flag columns to df_acl_scenario_detail and df_acl_usage tables 
+* B-57798 FDA: View scenario specific usage details by RH for ACL: implement ACL scenario detail dto domain object 
+* B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: implement Licensee classes mapping and implement logic to get default values for mapping 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: implement saving scenario pub types weights 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: fix failed test 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: fix failed test 
+* B-57795 FDA: Calculate ACL Scenario: populate Pub Type Weight for scenario details 
+* B-57798 FDA: View scenario specific usage details by RH for ACL: implement ACL drill down by rightsholder window and controller logic 
+* B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: implement logic to save mapping 
+* B-57798 FDA: View scenario specific usage details by RH for ACL: implement service logic to retrieve ACL scenario details by scenario id and RH account number 
+* B-57781 FDA: Edit usage age weights for ACL while creating a scenario: implement window for editing usage age weights 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: implement Add Pub Type Weight dialog 
+* B-57781 FDA: Edit usage age weights for ACL while creating a scenario: implement validation rules for editing usage age weights 
+* B-57795 FDA: Calculate ACL Scenario: implement backend logic to calculate detail shares and amounts 
+* B-57782 FDA: ACL edit scenario Pub Type Weights: implement adding new rows in the Pub Type Weights dialog 
+
 15.1.33
 -
 * B-74268 FDA: Tech Debt: make 'SYSTEM' user after setting NEW status by researcher
