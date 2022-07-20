@@ -145,4 +145,11 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return list of usage age wights
      */
     List<UsageAge> getUsageAgeWeights();
+
+    /**
+     * Insert new ACL publication type.
+     *
+     * @param publicationType instance of {@link AclPublicationType}
+     */
+    void insertAclHistoricalPublicationType(AclPublicationType publicationType);
 }

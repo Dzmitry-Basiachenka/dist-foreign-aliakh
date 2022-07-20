@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -8,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWidget;
@@ -17,7 +19,10 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.PublicationTypeWeightsWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
+import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -79,9 +84,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final IAclScenarioHistoryController aclScenarioHistoryController;
-    private final Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));;
-    private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));;
-
+    private final Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
+    private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
+    private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
@@ -171,11 +177,27 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
         viewButton.setEnabled(Objects.nonNull(getSelectedScenario()));
-        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton);
+        pubTypeWeights.setVisible(hasSpecialistPermission);
+        pubTypeWeights.addClickListener(event -> {
+            AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
+            window.setAppliedParameters(aclScenariosController.getAclHistoricalPublicationTypes());
+            window.addListener(ParametersSaveEvent.class,
+                (IParametersSaveListener<List<AclPublicationType>>)
+                    saveEvent -> insertAclPubTypes(saveEvent.getSavedParameters()),
+                IParametersSaveListener.SAVE_HANDLER);
+            Windows.showModalWindow(window);
+        });
+        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, pubTypeWeights);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setButtonsAutoDisabled(viewButton);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
         return buttonsLayout;
+    }
+
+    private void insertAclPubTypes(List<AclPublicationType> publicationTypes) {
+        publicationTypes.removeAll(aclScenariosController.getAclHistoricalPublicationTypes());
+        publicationTypes.forEach(
+            publicationType -> aclScenariosController.insertAclHistoricalPublicationType(publicationType));
     }
 
     private void onClickViewButton() {

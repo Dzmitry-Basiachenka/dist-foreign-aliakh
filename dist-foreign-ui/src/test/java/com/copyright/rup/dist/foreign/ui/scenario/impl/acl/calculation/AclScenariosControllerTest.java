@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -28,13 +29,18 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -53,6 +59,8 @@ import java.util.List;
  *
  * @author Dzmitry Basiahenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class AclScenariosControllerTest {
 
     private static final String SCENARIO_UID = "7ed0e17d-6baf-454c-803f-1d9be3cb3192";
@@ -83,6 +91,7 @@ public class AclScenariosControllerTest {
         licenseeClassService = createMock(ILicenseeClassService.class);
         aclUsageService = createMock(IAclUsageService.class);
         aclScenarioController = createMock(IAclScenarioController.class);
+        mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
@@ -260,6 +269,16 @@ public class AclScenariosControllerTest {
         replay(aclUsageService);
         assertSame(usageAge, aclScenariosController.getUsageAgeWeights().get(0));
         verify(aclUsageService);
+    }
+
+    @Test
+    public void testInsertAclHistoricalPublicationType() {
+        AclPublicationType aclPublicationType = new AclPublicationType();
+        publicationTypeService.insertAclHistoricalPublicationType(aclPublicationType);
+        expectLastCall().once();
+        replay(publicationTypeService);
+        aclScenariosController.insertAclHistoricalPublicationType(aclPublicationType);
+        verify(publicationTypeService);
     }
 
     private AclScenario buildAclScenario() {
