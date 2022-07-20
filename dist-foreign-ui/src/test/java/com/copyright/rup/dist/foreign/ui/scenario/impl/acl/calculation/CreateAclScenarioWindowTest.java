@@ -38,6 +38,7 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -46,7 +47,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +56,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,11 +81,12 @@ public class CreateAclScenarioWindowTest {
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
 
-    private final List<AclPublicationType> publicationTypes = Collections.singletonList(buildAclPublicationType());
+    private final List<UsageAge> usageAges = Collections.singletonList(buildUsageAge());
+    private final List<AclPublicationType> publicationTypes =
+        Collections.singletonList(buildAclPublicationType(201506));
     private final List<DetailLicenseeClass> detailLicenseeClasses =
         Collections.singletonList(buildAclDetailLicenseeClass());
 
-    private final List<UsageAge> usageAges = Collections.singletonList(buildUsageAge());
     private IAclScenariosController controller;
     private CreateAclScenarioWindow window;
     private ClickListener createButtonClickListener;
@@ -91,7 +94,7 @@ public class CreateAclScenarioWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
-        createButtonClickListener = EasyMock.createMock(ClickListener.class);
+        createButtonClickListener = createMock(ClickListener.class);
         mockStatic(ForeignSecurityUtils.class);
         expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true);
         expect(controller.getAllPeriods()).andReturn(Collections.singletonList(202206));
@@ -120,7 +123,7 @@ public class CreateAclScenarioWindowTest {
         verifyComboBox(content.getComponent(4), "Fund Pool");
         verifyComboBox(content.getComponent(5), "Grant Set");
         verifyComboBox(content.getComponent(6), "Copy From");
-        //TODO add verify widgets
+        verifyAclScenarioParameterWidget(content.getComponent(7), "Usage Age Weights");
         verifyAclPublicationTypeWeightsParameterWidget(content.getComponent(8), "Pub Type Weights");
         verifyAclScenarioParameterWidget(content.getComponent(9), "Licensee Class Mapping");
         verifyCheckBox(content.getComponent(10), "Editable", "acl-scenario-editable-check-box");
@@ -213,6 +216,27 @@ public class CreateAclScenarioWindowTest {
         verify(controller, Windows.class);
     }
 
+    @Test
+    public void testEditableCheckBoxUnchecked() {
+        expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, "editableCheckBox");
+        AclPublicationTypeWeightsParameterWidget pubTypeWeightWidget =
+            Whitebox.getInternalState(window, "publicationTypeWeightWidget");
+        assertTrue(editableCheckBox.getValue());
+        assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());
+        List<AclPublicationType> pubTypes = new ArrayList<>(pubTypeWeightWidget.getAppliedParameters());
+        pubTypes.add(buildAclPublicationType(202206));
+        pubTypeWeightWidget.setAppliedParameters(pubTypes);
+        assertEquals(Arrays.asList(buildAclPublicationType(201506), buildAclPublicationType(202206)),
+            pubTypeWeightWidget.getAppliedParameters());
+        editableCheckBox.setValue(false);
+        assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
     private void verifyScenarioNameField(Component component) {
         assertNotNull(component);
         TextField scenarioNameField = (TextField) component;
@@ -286,12 +310,12 @@ public class CreateAclScenarioWindowTest {
         return usageAge;
     }
 
-    private AclPublicationType buildAclPublicationType() {
+    private AclPublicationType buildAclPublicationType(int period) {
         AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e");
         publicationType.setName("Book");
         publicationType.setWeight(new BigDecimal("1.00"));
-        publicationType.setPeriod(201506);
+        publicationType.setPeriod(period);
         return publicationType;
     }
 
