@@ -6,7 +6,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.vaadin.ui.Button;
 
 /**
- * Mediator class for {@link AclScenarioWidget}.
+ * Mediator class for {@link AclScenariosWidget}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>

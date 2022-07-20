@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -238,7 +239,11 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     }
 
     private HorizontalLayout initButtons() {
-        HorizontalLayout buttons = new HorizontalLayout(Buttons.createCloseButton(this));
+        Button exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        OnDemandFileDownloader exportDetailsFileDownloader =
+            new OnDemandFileDownloader(controller.getExportAclScenarioDetailsStreamSource().getSource());
+        exportDetailsFileDownloader.extend(exportDetailsButton);
+        HorizontalLayout buttons = new HorizontalLayout(exportDetailsButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "acl-scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;

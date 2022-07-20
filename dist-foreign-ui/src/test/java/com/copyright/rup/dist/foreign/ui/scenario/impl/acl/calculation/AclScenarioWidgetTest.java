@@ -1,17 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
-import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButton;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -32,7 +32,9 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AclScenarioWidget}.
@@ -54,12 +56,15 @@ public class AclScenarioWidgetTest {
         scenarioWidget = new AclScenarioWidget(controller);
         scenarioWidget.setController(controller);
         AclScenarioDto scenario = buildAclScenarioDto();
+        IStreamSource streamSource = createMock(IStreamSource.class);
+        expect(streamSource.getSource()).andReturn(new SimpleImmutableEntry(createMock(Supplier.class),
+            createMock(Supplier.class))).once();
+        expect(controller.getExportAclScenarioDetailsStreamSource()).andReturn(streamSource).once();
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
-        replay(controller);
+        replay(controller, streamSource);
         scenarioWidget.init();
-        verify(controller);
-        reset(controller);
+        verify(controller, streamSource);
     }
 
     @Test
@@ -71,7 +76,7 @@ public class AclScenarioWidgetTest {
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyGrid((Grid) content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2), "Close");
+        verifyButtonsLayout((HorizontalLayout) content.getComponent(2));
     }
 
     @Test
@@ -80,6 +85,19 @@ public class AclScenarioWidgetTest {
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(scenarioWidget, searchWidget);
         assertEquals("search", scenarioWidget.getSearchValue());
+    }
+
+    private AclScenarioDto buildAclScenarioDto() {
+        AclScenarioDto scenario = new AclScenarioDto();
+        scenario.setId("24b0a5a9-6380-4519-91f2-779c98ed45cc");
+        scenario.setName("Scenario name");
+        scenario.setGrossTotalPrint(new BigDecimal("20000.00"));
+        scenario.setServiceFeeTotalPrint(new BigDecimal("6400.00"));
+        scenario.setNetTotalPrint(new BigDecimal("13600.00"));
+        scenario.setGrossTotalDigital(new BigDecimal("1000.00"));
+        scenario.setServiceFeeTotalDigital(new BigDecimal("600.00"));
+        scenario.setNetTotalDigital(new BigDecimal("130.00"));
+        return scenario;
     }
 
     private void verifySearchWidget(Component component) {
@@ -120,16 +138,8 @@ public class AclScenarioWidgetTest {
         assertEquals("130.00", footerRow.getCell("netTotalDigital").getText());
     }
 
-    private AclScenarioDto buildAclScenarioDto() {
-        AclScenarioDto scenario = new AclScenarioDto();
-        scenario.setId("24b0a5a9-6380-4519-91f2-779c98ed45cc");
-        scenario.setName("Scenario name");
-        scenario.setGrossTotalPrint(new BigDecimal("20000.00"));
-        scenario.setServiceFeeTotalPrint(new BigDecimal("6400.00"));
-        scenario.setNetTotalPrint(new BigDecimal("13600.00"));
-        scenario.setGrossTotalDigital(new BigDecimal("1000.00"));
-        scenario.setServiceFeeTotalDigital(new BigDecimal("600.00"));
-        scenario.setNetTotalDigital(new BigDecimal("130.00"));
-        return scenario;
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        verifyButton(layout.getComponent(0), "Export Details", true);
+        verifyButton(layout.getComponent(1), "Close", true);
     }
 }
