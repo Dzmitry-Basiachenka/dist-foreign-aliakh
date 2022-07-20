@@ -12,17 +12,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
-
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
@@ -32,13 +35,16 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -57,6 +63,8 @@ import java.util.Date;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class, ForeignSecurityUtils.class})
 public class AclScenariosWidgetTest {
 
     private static final String SCENARIO_UID = "29ca6de6-0496-49e8-8ff4-334ef1bab597";
@@ -71,6 +79,7 @@ public class AclScenariosWidgetTest {
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         scenario = buildAclScenario();
+        mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
@@ -227,16 +236,16 @@ public class AclScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("acl-scenario-buttons-layout", layout.getId());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Create", false, 1);
         verifyButton(layout.getComponent(1), "View", true, 2);
+        verifyButton(layout.getComponent(2), "Pub Type Weights", false, 1);
     }
 
     private void verifyButton(Component component, String caption, boolean isDisabled, int listenersCount) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
-        assertEquals(caption, button.getId());
         assertTrue(button.isEnabled());
         assertEquals(isDisabled, button.isDisableOnClick());
         assertEquals(listenersCount, button.getListeners(ClickEvent.class).size());

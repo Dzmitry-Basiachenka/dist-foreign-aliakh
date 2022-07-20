@@ -160,6 +160,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public void insertAclHistoricalPublicationType(AclPublicationType publicationType) {
+        publicationTypeService.insertAclHistoricalPublicationType(publicationType);
+    }
+
+    @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget(this, aclScenarioHistoryController);
     }
