@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -126,6 +127,23 @@ public class AclUsageServiceTest {
         expect(aclUsageRepository.findPeriods()).andReturn(periods).once();
         replay(aclUsageRepository);
         assertSame(periods, aclUsageService.getPeriods());
+        verify(aclUsageRepository);
+    }
+
+    @Test
+    public void testUsageExistForLicenseeClassesAndTypeOfUse() {
+        String usageBatchId = "ab3602c3-41d7-449b-be4d-e59e28bb46ee";
+        String grantSetId = "914fd4af-cd98-4c34-a629-b78b12cf5c7e";
+        Set<Integer> licenseeClassIds = Collections.singleton(2);
+        expect(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
+            "PRINT")).andReturn(true).once();
+        expect(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
+            "DIGITAL")).andReturn(false).once();
+        replay(aclUsageRepository);
+        assertTrue(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
+            "PRINT"));
+        assertFalse(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
+            "DIGITAL"));
         verify(aclUsageRepository);
     }
 

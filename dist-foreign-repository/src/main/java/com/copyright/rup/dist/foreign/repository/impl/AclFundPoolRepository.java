@@ -37,6 +37,11 @@ public class AclFundPoolRepository extends AclBaseRepository implements IAclFund
     }
 
     @Override
+    public List<AclFundPoolDetailDto> findDetailDtosByFundPoolId(String fundPoolId) {
+        return selectList("IAclFundPoolMapper.findDetailDtosByFundPoolId", Objects.requireNonNull(fundPoolId));
+    }
+
+    @Override
     public boolean isFundPoolExists(String name) {
         return selectOne("IAclFundPoolMapper.isFundPoolExist", Objects.requireNonNull(name));
     }

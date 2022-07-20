@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IAclScenariosController}.
@@ -162,6 +164,13 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public void insertAclHistoricalPublicationType(AclPublicationType publicationType) {
         publicationTypeService.insertAclHistoricalPublicationType(publicationType);
+    }
+
+    @Override
+    public Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
+                                                                          String grantSetId,
+                                                                          List<DetailLicenseeClass> mapping) {
+        return aclScenarioService.getFundPoolDetailsNotToBeDistributed(batchId, fundPoolId, grantSetId, mapping);
     }
 
     @Override

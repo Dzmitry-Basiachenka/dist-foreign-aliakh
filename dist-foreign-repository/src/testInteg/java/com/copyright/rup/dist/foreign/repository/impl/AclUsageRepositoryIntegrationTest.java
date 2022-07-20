@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -672,6 +673,21 @@ public class AclUsageRepositoryIntegrationTest {
         List<Integer> actualPeriods = aclUsageRepository.findPeriods();
         assertFalse(actualPeriods.isEmpty());
         assertEquals(expectedPeriods, actualPeriods);
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "usage-exist-for-licensee-classes-and-type-of-use.groovy")
+    public void testUsageExistForLicenseeClassesAndTypeOfUse() {
+        String grantSetId = "5e8da1ba-3b20-4f8e-96ed-f9506da3b87a";
+        String batchId = "55adc071-8bbb-46be-a56e-0daba0883a97";
+        assertTrue(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+            Sets.newHashSet(1, 3), DIGITAL_TOU));
+        assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+            Sets.newHashSet(1, 3), PRINT_TOU));
+        assertFalse(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+            Collections.singleton(2), DIGITAL_TOU));
+        assertTrue(aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+            Collections.singleton(2), PRINT_TOU));
     }
 
     @Test

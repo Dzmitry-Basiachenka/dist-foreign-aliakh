@@ -83,7 +83,7 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
 
     @Override
     public void insertAclScenarioPubTypeWeight(AclPublicationType publicationType, String scenarioId, String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put("publicationType", Objects.requireNonNull(publicationType));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("createUser", Objects.requireNonNull(userName));

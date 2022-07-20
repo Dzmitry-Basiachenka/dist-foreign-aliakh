@@ -34,6 +34,14 @@ public interface IAclFundPoolRepository {
     AclFundPool findById(String fundPoolId);
 
     /**
+     * Finds {@link AclFundPoolDetailDto}s by fund pool id.
+     *
+     * @param fundPoolId fund pool id
+     * @return list of {@link AclFundPoolDetailDto}s
+     */
+    List<AclFundPoolDetailDto> findDetailDtosByFundPoolId(String fundPoolId);
+
+    /**
      * Checks whether {@link AclFundPool} with the name already exists.
      *
      * @param name fund pool name

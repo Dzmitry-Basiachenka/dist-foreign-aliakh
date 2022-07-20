@@ -102,4 +102,12 @@ public interface IAclFundPoolService {
      * @return instance of {@link AclFundPool} or {@code null} if none exists
      */
     AclFundPool getById(String fundPoolId);
+
+    /**
+     * Gets list of {@link AclFundPoolDetailDto}s by fund pool id.
+     *
+     * @param fundPoolId ACL fund pool id
+     * @return list of {@link AclFundPoolDetailDto}
+     */
+    List<AclFundPoolDetailDto> getDetailDtosByFundPoolId(String fundPoolId);
 }

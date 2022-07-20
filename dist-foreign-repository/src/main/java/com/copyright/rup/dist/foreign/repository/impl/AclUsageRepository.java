@@ -80,6 +80,17 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     }
 
     @Override
+    public boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId,
+                                                            Set<Integer> licenseeClassIds, String typeOfUse) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("batchId", escapeSqlLikePattern(Objects.requireNonNull(batchId)));
+        parameters.put("grantSetId", grantSetId);
+        parameters.put("licenseeClassIds", licenseeClassIds);
+        parameters.put("typeOfUse", typeOfUse);
+        return selectOne("IAclUsageMapper.usageExistForLicenseeClassesAndTypeOfUse", parameters);
+    }
+
+    @Override
     public List<UsageAge> findDefaultUsageAgesWeights() {
         return selectList("IAclUsageMapper.findDefaultUsageAgesWeights");
     }

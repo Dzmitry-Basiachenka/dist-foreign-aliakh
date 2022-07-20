@@ -74,6 +74,18 @@ public interface IAclUsageRepository {
     List<Integer> findPeriods();
 
     /**
+     * Finds list of detail licensee class ids for specified batch.
+     *
+     * @param batchId          batch identifier
+     * @param grantSetId       grant set identifier
+     * @param licenseeClassIds set of detail licensee class mapping
+     * @param typeOfUse        type of use
+     * @return {@code true} if detail exists, {@code false} - otherwise
+     */
+    boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId, Set<Integer> licenseeClassIds,
+                                                     String typeOfUse);
+
+    /**
      * Finds list of {@link UsageAge}.
      *
      * @return list of usage age wights

@@ -447,6 +447,23 @@
         order by period desc
     </select>
 
+    <select id="usageExistForLicenseeClassesAndTypeOfUse" resultType="boolean" parameterType="string">
+        select exists (
+            select
+            from ${schema}.df_acl_usage u
+            join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{grantSetId}
+                and gd.type_of_use = #{typeOfUse}
+                and gd.wr_wrk_inst = u.wr_wrk_inst
+                and gd.grant_status = 'GRANT'
+                and gd.is_eligible = true
+            where u.df_acl_usage_batch_uid = #{batchId}
+                and u.detail_licensee_class_id in
+                <foreach collection="licenseeClassIds" item="detailLicenseeClassId" open="(" close=")" separator=",">
+                    #{detailLicenseeClassId}
+                </foreach>
+        )
+    </select>
+
    <!-- todo  move all scenario related queries to separate AclScenarioUsageMapper-->
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
         select
@@ -531,8 +548,7 @@
             uaw.weight * quantity weighted_copies,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_usage u
-        join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
-        join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
+        join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{scenario.grantSetId}
             and gd.wr_wrk_inst = u.wr_wrk_inst
             and gd.grant_status = 'GRANT'
             and gd.is_eligible = true
@@ -592,10 +608,9 @@
             usage_quantity * usage_age_weight * content_unit_price * pub_type_weight value_weight,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_scenario_detail sd
-        join ${schema}.df_acl_grant_set ags on ags.df_acl_grant_set_uid = #{scenario.grantSetId}
         join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
             and sd.detail_licensee_class_id = slc.detail_licensee_class_id
-        join ${schema}.df_acl_grant_detail gd on ags.df_acl_grant_set_uid = gd.df_acl_grant_set_uid
+        join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{scenario.grantSetId}
             and gd.wr_wrk_inst = sd.wr_wrk_inst
             and gd.grant_status = 'GRANT'
             and gd.is_eligible = true

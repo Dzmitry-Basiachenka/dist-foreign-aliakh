@@ -1,0 +1,50 @@
+[
+  {
+    "id": "a2b2cac9-051b-493e-9582-a4972faf5511",
+    "licenseType": "ACL",
+    "typeOfUse": "DIGITAL",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClass": {
+      "id": 51,
+      "description": "Materials"
+    },
+    "netAmount": 55029.02,
+    "grossAmount": 66912.12,
+    "ldmtFlag": false
+  },
+  {
+    "id": "e029c493-6243-4e21-b8d3-b5240fb54c4f",
+    "licenseType": "ACL",
+    "typeOfUse": "PRINT",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClass": {
+      "id": 51,
+      "description": "Materials"
+    },
+    "netAmount": 500.00,
+    "grossAmount": 590.12,
+    "ldmtFlag": false
+  },
+  {
+    "id": "846db57a-362f-493d-930c-e97ec15866f1",
+    "licenseType": "ACL",
+    "typeOfUse": "PRINT",
+    "detailLicenseeClass": {
+      "id": 12,
+      "description": "Machinery"
+    },
+    "aggregateLicenseeClass": {
+      "id": 12,
+      "description": "Machinery"
+    },
+    "netAmount": 9992.10,
+    "grossAmount": 12861.56,
+    "ldmtFlag": false
+  }
+]

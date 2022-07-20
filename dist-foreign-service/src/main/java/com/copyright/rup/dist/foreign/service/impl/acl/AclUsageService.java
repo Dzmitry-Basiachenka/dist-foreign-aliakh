@@ -76,6 +76,13 @@ public class AclUsageService implements IAclUsageService {
     }
 
     @Override
+    public boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId,
+                                                            Set<Integer> licenseeClassIds, String typeOfUse) {
+        return aclUsageRepository.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId, licenseeClassIds,
+            typeOfUse);
+    }
+
+    @Override
     public int getRecordThreshold() {
         return recordsThreshold;
     }

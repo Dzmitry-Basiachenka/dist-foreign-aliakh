@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api.acl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -10,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for ACL scenario service.
@@ -119,4 +121,17 @@ public interface IAclScenarioService {
      * @return {@link AclScenario}s names associated with grant set id
      */
     List<String> getScenarioNamesByGrantSetId(String grantSetId);
+
+    /**
+     * Gets fund pool details with amounts that can't be distributed for selected batch and fund pool.
+     *
+     * @param batchId    usage batch id
+     * @param fundPoolId fund pool id
+     * @param grantSetId grant set id
+     * @param mapping    {@link DetailLicenseeClass}es mapping
+     * @return list of {@link AclFundPoolDetailDto}es
+     */
+    Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
+                                                                   String grantSetId,
+                                                                   List<DetailLicenseeClass> mapping);
 }

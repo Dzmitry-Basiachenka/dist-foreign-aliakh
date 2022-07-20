@@ -65,6 +65,18 @@ public interface IAclUsageService {
     List<Integer> getPeriods();
 
     /**
+     * Checks whether details in specified batch exist for at least on licensee class and type of use.
+     *
+     * @param batchId          batch identifier
+     * @param grantSetId       grant set identifier
+     * @param licenseeClassIds set of detail licensee class mapping
+     * @param typeOfUse        type of use
+     * @return {@code true} if detail exists, {@code false} - otherwise
+     */
+    boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId, Set<Integer> licenseeClassIds,
+                                                     String typeOfUse);
+
+    /**
      * @return threshold value for size of ACL records.
      */
     int getRecordThreshold();
