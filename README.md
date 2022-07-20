@@ -1,3 +1,12 @@
+15.1.35
+-
+* B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: update logic to fill Aggregate license class Id dropdown box
+* B-57781 FDA: Edit usage age weights for ACL while creating a scenario: adjust logic to validate usage batch
+* B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: fix pmdTest failed
+* B-57782 FDA: ACL edit scenario Pub Type Weights: handle Pub Type Weights for non-editable scenarios
+* CDP-1083 FDA: ACL: Create Scenario: When creating ACL scenario the system takes pub type weights added for previously created scenario
+* B-57798 FDA: View scenario specific usage details by RH for ACL: implement repository logic to retrieve ACL scenario details by scenario id and RH account number
+
 15.1.34
 -
 * B-74353 FDA: Saving Pub Type Weights: Create df_acl_history_pub_type_weight database and populate it 
