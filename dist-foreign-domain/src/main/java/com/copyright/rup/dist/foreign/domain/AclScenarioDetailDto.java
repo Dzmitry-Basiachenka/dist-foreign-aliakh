@@ -40,7 +40,6 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
     private Long numberOfCopies;
     private BigDecimal weightedCopies;
     private PublicationType publicationType;
-    private BigDecimal pubTypeWeight;
     private BigDecimal price;
     private boolean priceFlag;
     private BigDecimal content;
@@ -225,14 +224,6 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
         this.publicationType = publicationType;
     }
 
-    public BigDecimal getPubTypeWeight() {
-        return pubTypeWeight;
-    }
-
-    public void setPubTypeWeight(BigDecimal pubTypeWeight) {
-        this.pubTypeWeight = pubTypeWeight;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -388,7 +379,6 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(numberOfCopies, that.numberOfCopies)
             .append(weightedCopies, that.weightedCopies)
             .append(publicationType, that.publicationType)
-            .append(pubTypeWeight, that.pubTypeWeight)
             .append(price, that.price)
             .append(content, that.content)
             .append(contentUnitPrice, that.contentUnitPrice)
@@ -429,7 +419,6 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append(numberOfCopies)
             .append(weightedCopies)
             .append(publicationType)
-            .append(pubTypeWeight)
             .append(price)
             .append(priceFlag)
             .append(content)
@@ -473,7 +462,6 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
             .append("numberOfCopies", numberOfCopies)
             .append("weightedCopies", weightedCopies)
             .append("publicationType", publicationType)
-            .append("pubTypeWeight", pubTypeWeight)
             .append("price", price)
             .append("priceFlag", priceFlag)
             .append("content", content)

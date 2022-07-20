@@ -86,7 +86,7 @@ public class AclDrillDownByRightsholderWidgetTest {
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(100, horizontalLayout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, horizontalLayout.getWidthUnits());
-        assertEquals("Enter Detail ID or Wr Wrk Inst or Rightsholder Name/Account #",
+        assertEquals("Enter Usage Detail ID or Wr Wrk Inst or System Title or Rightsholder Name/Account #",
             ((TextField) searchWidget.getComponent(0)).getPlaceholder());
     }
 

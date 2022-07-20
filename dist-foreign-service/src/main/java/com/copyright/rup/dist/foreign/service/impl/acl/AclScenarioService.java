@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -114,14 +113,13 @@ public class AclScenarioService implements IAclScenarioService {
     public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
                                                                         String searchValue, Pageable pageable,
                                                                         Sort sort) {
-        //TODO {dbasiachenka} implement
-        return Collections.emptyList();
+        return aclScenarioRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
+            pageable, sort);
     }
 
     @Override
     public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        //TODO {dbasiachenka} implement
-        return 0;
+        return aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
