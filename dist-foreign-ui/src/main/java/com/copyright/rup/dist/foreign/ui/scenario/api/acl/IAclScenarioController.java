@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
+import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -60,4 +61,9 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @param rightsholderName rightsholder name
      */
     void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
+
+    /**
+     * @return instance of {@link IStreamSource} for export details.
+     */
+    IStreamSource getExportAclScenarioDetailsStreamSource();
 }
