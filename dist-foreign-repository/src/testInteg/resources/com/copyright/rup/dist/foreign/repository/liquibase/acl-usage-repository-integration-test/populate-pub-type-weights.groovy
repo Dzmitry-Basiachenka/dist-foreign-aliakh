@@ -186,6 +186,65 @@ databaseChangeLog {
             column(name: 'aggregate_licensee_class_id', value: 1)
         }
 
+        //Second scenario data to cover CDP-1083
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
+            column(name: 'df_acl_fund_pool_uid', value: 'f2a45cea-88a2-4e52-8632-61b5232dde3d')
+            column(name: 'name', value: 'ACL Fund Pool 202206')
+            column(name: 'period', value: 202206)
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_manual', value: true)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_grant_set') {
+            column(name: 'df_acl_grant_set_uid', value: 'd30662f8-56b3-4226-a078-11324780c68c')
+            column(name: 'name', value: 'ACL Grant Set 202206')
+            column(name: 'grant_period', value: 202206)
+            column(name: 'periods', value: '[202106, 202206]')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage_batch') {
+            column(name: 'df_acl_usage_batch_uid', value: '4a17cf07-1eb6-472d-8ece-7f1fa18557ea')
+            column(name: 'name', value: 'ACL Usage Batch 202206')
+            column(name: 'distribution_period', value: 202206)
+            column(name: 'periods', value: '[202106, 202206]')
+            column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario') {
+            column(name: 'df_acl_scenario_uid', value: 'b1fa0b8a-9ff0-4b1b-ae35-16f38eb84ebd')
+            column(name: 'df_acl_fund_pool_uid', value: 'f2a45cea-88a2-4e52-8632-61b5232dde3d')
+            column(name: 'df_acl_usage_batch_uid', value: '4a17cf07-1eb6-472d-8ece-7f1fa18557ea')
+            column(name: 'df_acl_grant_set_uid', value: 'd30662f8-56b3-4226-a078-11324780c68c')
+            column(name: 'name', value: 'ACL Scenario 202206')
+            column(name: 'description', value: 'Description')
+            column(name: 'period_end_date', value: 202206)
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'license_type', value: 'ACL')
+            column(name: 'is_editable', value: true)
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'created_datetime', value: '2022-02-14 12:00:00+00')
+            column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '9f3d05b2-392d-4964-bd67-1f4c68927552')
+            column(name: 'df_acl_scenario_uid', value: 'b1fa0b8a-9ff0-4b1b-ae35-16f38eb84ebd')
+            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
+            column(name: 'period', value: '202012')
+            column(name: 'weight', value: 1.80)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '690dec9e-8c7f-4650-8687-69e5c780fbea')
+            column(name: 'df_acl_scenario_uid', value: 'b1fa0b8a-9ff0-4b1b-ae35-16f38eb84ebd')
+            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'period', value: '202112')
+            column(name: 'weight', value: 2.6)
+        }
+
         rollback {
             dbRollback
         }

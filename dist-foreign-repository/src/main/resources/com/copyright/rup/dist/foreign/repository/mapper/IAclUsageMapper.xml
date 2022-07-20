@@ -555,6 +555,7 @@
                 period as start_period,
                 coalesce(lead(period - 1, 1) over (partition by df_publication_type_uid order by period), 209912) as end_period
             from ${schema}.df_acl_scenario_pub_type_weight
+            where df_acl_scenario_uid = #{scenarioId}
         )
         update ${schema}.df_acl_scenario_detail sd
         set
