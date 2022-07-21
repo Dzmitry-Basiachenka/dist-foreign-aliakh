@@ -40,4 +40,12 @@ public interface IAclCalculationReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes ACL scenario details found by scenario id into csv output stream.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 }

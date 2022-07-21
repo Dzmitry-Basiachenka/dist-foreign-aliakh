@@ -69,4 +69,15 @@ public class AclCalculationReportServiceTest {
         aclCalculationReportService.writeAclFundPoolDetailsCsvReport(filter, outputStream);
         verify(aclCalculationReportRepository);
     }
+
+    @Test
+    public void testWriteAclScenarioDetailsCsvReport() {
+        String scenarioId = "6f753b20-3c8c-4ba8-b804-f1279cf96b3c";
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        aclCalculationReportRepository.writeAclScenarioDetailsCsvReport(scenarioId, outputStream);
+        expectLastCall().once();
+        replay(aclCalculationReportRepository);
+        aclCalculationReportService.writeAclScenarioDetailsCsvReport(scenarioId, outputStream);
+        verify(aclCalculationReportRepository);
+    }
 }

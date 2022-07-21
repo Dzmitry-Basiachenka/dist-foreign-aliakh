@@ -40,4 +40,9 @@ public class AclCalculationReportService implements IAclCalculationReportService
     public void writeAclFundPoolDetailsCsvReport(AclFundPoolDetailFilter filter, PipedOutputStream pipedOutputStream) {
         aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, pipedOutputStream);
     }
+
+    @Override
+    public void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        aclCalculationReportRepository.writeAclScenarioDetailsCsvReport(scenarioId, pipedOutputStream);
+    }
 }
