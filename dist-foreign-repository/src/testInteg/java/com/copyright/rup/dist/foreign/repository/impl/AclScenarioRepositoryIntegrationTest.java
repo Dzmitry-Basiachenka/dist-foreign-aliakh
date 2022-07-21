@@ -374,6 +374,24 @@ public class AclScenarioRepositoryIntegrationTest {
         assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "combinedNetAmount");
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-fund-pool-id.groovy")
+    public void testFindScenarioNamesByFundPoolId() {
+        assertEquals(2,
+            aclScenarioRepository.findScenarioNamesByFundPoolId("f8e623b0-7e18-4a06-a754-0a81decff96f").size());
+        assertTrue(CollectionUtils.isEmpty(
+            aclScenarioRepository.findScenarioNamesByFundPoolId("7df8b1ec-c464-42a8-aa28-52bb5bc7cb7b")));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-scenario-names-by-grant-set-id.groovy")
+    public void testFindScenarioNamesByGrantSetId() {
+        assertEquals(2,
+            aclScenarioRepository.findScenarioNamesByGrantSetId("60e31e39-bac9-4e51-8d5d-009f1ec334fa").size());
+        assertTrue(CollectionUtils.isEmpty(
+            aclScenarioRepository.findScenarioNamesByGrantSetId("f71caf7b-410d-4a8e-b933-e93922067269")));
+    }
+
     private DetailLicenseeClass buildDetailLicenseeClass(Integer detailLicenseeClassId,
                                                          Integer aggregateLicenseeClassId) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();

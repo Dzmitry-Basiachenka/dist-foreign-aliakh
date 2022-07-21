@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolFilterController;
@@ -63,6 +64,9 @@ import java.util.function.Supplier;
 public class AclFundPoolControllerTest {
 
     private static final String LICENSE_TYPE = "ACL";
+    private static final String FUND_POOL_ID = "1c62b986-5766-441d-9888-fa3af6b6b4f7";
+    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
+
     private final AclFundPoolController controller = new AclFundPoolController();
     private CsvProcessorFactory csvProcessorFactory;
     private IAclFundPoolService fundPoolService;
@@ -70,6 +74,7 @@ public class AclFundPoolControllerTest {
     private IAclCalculationReportService aclCalculationReportService;
     private IStreamSourceHandler streamSourceHandler;
     private IAclFundPoolFilterWidget aclFundPoolFilterWidget;
+    private IAclScenarioService aclScenarioService;
 
     @Before
     public void setUp() {
@@ -79,11 +84,13 @@ public class AclFundPoolControllerTest {
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclFundPoolFilterWidget = createMock(IAclFundPoolFilterWidget.class);
+        aclScenarioService = createMock(IAclScenarioService.class);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, fundPoolService);
         Whitebox.setInternalState(controller, fundPoolFilterController);
         Whitebox.setInternalState(controller, aclCalculationReportService);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, aclScenarioService);
     }
 
     @Test
@@ -195,6 +202,14 @@ public class AclFundPoolControllerTest {
         replay(fundPoolService, fundPoolFilterController, aclFundPoolFilterWidget);
         controller.deleteAclFundPool(fundPool);
         verify(fundPoolService, fundPoolFilterController, aclFundPoolFilterWidget);
+    }
+
+    @Test
+    public void testGetScenarioNamesAssociatedWithFundPool() {
+        expect(aclScenarioService.getScenarioNamesByFundPoolId(FUND_POOL_ID)).andReturn(ACL_SCENARIO_NAME).once();
+        replay(aclScenarioService);
+        assertEquals(ACL_SCENARIO_NAME, aclScenarioService.getScenarioNamesByFundPoolId(FUND_POOL_ID));
+        verify(aclScenarioService);
     }
 
     private AclFundPoolDetail buildFundPoolDetail() {

@@ -122,6 +122,16 @@ public class AclScenarioService implements IAclScenarioService {
         return aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
     }
 
+    @Override
+    public List<String> getScenarioNamesByFundPoolId(String fundPoolId) {
+        return aclScenarioRepository.findScenarioNamesByFundPoolId(fundPoolId);
+    }
+
+    @Override
+    public List<String> getScenarioNamesByGrantSetId(String grantSetId) {
+        return aclScenarioRepository.findScenarioNamesByGrantSetId(grantSetId);
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

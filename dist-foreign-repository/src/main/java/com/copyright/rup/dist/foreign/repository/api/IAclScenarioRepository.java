@@ -111,4 +111,20 @@ public interface IAclScenarioRepository {
      * @return count of usage details
      */
     int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+
+    /**
+     * Finds names of {@link AclScenario} associated with fund pool.
+     *
+     * @param fundPoolId fund pool id
+     * @return list of {@link AclScenario} names associated with fund pool
+     */
+    List<String> findScenarioNamesByFundPoolId(String fundPoolId);
+
+    /**
+     * Finds names of {@link AclScenario} associated with grant set.
+     *
+     * @param grantSetId grant set id
+     * @return list of {@link AclScenario} names associated with grant set
+     */
+    List<String> findScenarioNamesByGrantSetId(String grantSetId);
 }

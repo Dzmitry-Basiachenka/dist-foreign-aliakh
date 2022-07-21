@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -67,6 +68,8 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private IAclScenarioService aclScenarioService;
 
     @Override
     public int getBeansCount() {
@@ -156,6 +159,11 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Override
     public AclGrantDetailCsvProcessor getCsvProcessor(String grantSetId) {
         return csvProcessorFactory.getAclGrantDetailCvsProcessor(grantSetId);
+    }
+
+    @Override
+    public List<String> getScenarioNamesAssociatedWithGrantSet(String grantSetId) {
+        return aclScenarioService.getScenarioNamesByGrantSetId(grantSetId);
     }
 
     @Override

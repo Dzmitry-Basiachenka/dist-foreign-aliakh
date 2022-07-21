@@ -46,6 +46,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ViewAclFundPoolWindow}.
@@ -59,6 +60,9 @@ import java.util.Collections;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewAclGrantSetWindow.class})
 public class ViewAclFundPoolWindowTest {
+
+    private static final String FUND_POOL_ID = "8e440297-b89e-4cf2-b3cd-0420aea06a9d";
+    private static final List<String> SCENARIO_NAMES = Arrays.asList("ACL Scenario 2021", "ACL Scenario 2022");
 
     private ViewAclFundPoolWindow window;
     private Grid<AclFundPool> aclFundPoolGrid;
@@ -107,6 +111,8 @@ public class ViewAclFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(true))).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
+            .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'ACL Fund Pool 2021'</b></i> fund pool?"),
             anyObject())).andReturn(confirmWindowCapture).once();
@@ -121,11 +127,30 @@ public class ViewAclFundPoolWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(false))).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
+            .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
             eq("You are about to delete an <span style='color: red'>LDMT</span> <i><b>'ACL Fund Pool 2021'</b></i>" +
                 " fund pool, the data relating to the fund pool will no longer be available." +
                 " Are you sure you want to proceed?"),
             anyObject())).andReturn(confirmWindowCapture).once();
+        replay(Windows.class, confirmWindowCapture, controller, aclFundPoolGrid);
+        listener.buttonClick(null);
+        verify(Windows.class, confirmWindowCapture, controller, aclFundPoolGrid);
+    }
+
+    @Test
+    public void testDeleteClickListenerWithAssociatedScenarios() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(aclFundPoolGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclFundPool(true))).once();
+        expect(controller.getScenarioNamesAssociatedWithFundPool(FUND_POOL_ID))
+            .andReturn(SCENARIO_NAMES).once();
+        Windows.showNotificationWindow(
+            eq("Fund pool cannot be deleted because it is associated with the following scenario(s):" +
+                "<ul><li>ACL Scenario 2021</li><li>ACL Scenario 2022</li></ul>"));
+        expectLastCall().once();
         replay(Windows.class, confirmWindowCapture, controller, aclFundPoolGrid);
         listener.buttonClick(null);
         verify(Windows.class, confirmWindowCapture, controller, aclFundPoolGrid);
@@ -166,6 +191,7 @@ public class ViewAclFundPoolWindowTest {
 
     private AclFundPool buildAclFundPool(boolean manualFlag) {
         AclFundPool fundPool = new AclFundPool();
+        fundPool.setId(FUND_POOL_ID);
         fundPool.setName("ACL Fund Pool 2021");
         fundPool.setPeriod(202112);
         fundPool.setLicenseType("ACL");

@@ -41,6 +41,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ViewAclGrantSetWindow}.
@@ -54,6 +55,9 @@ import java.util.Collections;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, ForeignSecurityUtils.class, ViewAclGrantSetWindow.class})
 public class ViewAclGrantSetWindowTest {
+
+    private static final String GRANT_SET_ID = "ef3faf52-4ccf-4eab-9f44-ed4bfa7c4eef";
+    private static final List<String> SCENARIO_NAMES = Arrays.asList("ACL Scenario 2021", "ACL Scenario 2022");
 
     private ViewAclGrantSetWindow window;
     private Grid<AclGrantSet> aclGrantSetGrid;
@@ -99,9 +103,28 @@ public class ViewAclGrantSetWindowTest {
         Window confirmWindowCapture = createMock(Window.class);
         Button.ClickListener listener = getDeleteButtonClickListener();
         expect(aclGrantSetGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclGrantSet())).once();
+        expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID))
+            .andReturn(Collections.EMPTY_LIST).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'ACL Grant Set 2021'</b></i> grant set?"),
             anyObject())).andReturn(confirmWindowCapture).once();
+        replay(Windows.class, confirmWindowCapture, controller, aclGrantSetGrid);
+        listener.buttonClick(null);
+        verify(Windows.class, confirmWindowCapture, controller, aclGrantSetGrid);
+    }
+
+    @Test
+    public void testDeleteClickListenerWithAssociatedScenarios() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        Button.ClickListener listener = getDeleteButtonClickListener();
+        expect(aclGrantSetGrid.getSelectedItems()).andReturn(Collections.singleton(buildAclGrantSet())).once();
+        expect(controller.getScenarioNamesAssociatedWithGrantSet(GRANT_SET_ID))
+            .andReturn(SCENARIO_NAMES).once();
+        Windows.showNotificationWindow(
+            eq("Grant set cannot be deleted because it is associated with the following scenario(s):" +
+                "<ul><li>ACL Scenario 2021</li><li>ACL Scenario 2022</li></ul>"));
+        expectLastCall().once();
         replay(Windows.class, confirmWindowCapture, controller, aclGrantSetGrid);
         listener.buttonClick(null);
         verify(Windows.class, confirmWindowCapture, controller, aclGrantSetGrid);
@@ -142,6 +165,7 @@ public class ViewAclGrantSetWindowTest {
 
     private AclGrantSet buildAclGrantSet() {
         AclGrantSet grantSet = new AclGrantSet();
+        grantSet.setId(GRANT_SET_ID);
         grantSet.setName("ACL Grant Set 2021");
         grantSet.setGrantPeriod(202112);
         grantSet.setLicenseType("ACL");

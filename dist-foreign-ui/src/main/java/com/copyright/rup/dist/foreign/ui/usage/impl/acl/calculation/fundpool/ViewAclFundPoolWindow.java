@@ -20,6 +20,8 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 /**
  * Modal window that provides functionality for viewing and deleting {@link AclFundPool}s.
  * <p>
@@ -130,12 +132,28 @@ public class ViewAclFundPoolWindow extends Window implements SearchWidget.ISearc
     }
 
     private void deleteFundPool(AclFundPool fundPool) {
-        Windows.showConfirmDialog(ForeignUi.getMessage(fundPool.isManualUploadFlag()
-                ? "message.confirm.delete_action"
-                : "message.confirm.delete_acl_fund_pool", fundPool.getName(), "fund pool"),
-            () -> {
-                controller.deleteAclFundPool(fundPool);
-                grid.setItems(controller.getAllAclFundPools());
-            });
+        List<String> scenarioNames = controller.getScenarioNamesAssociatedWithFundPool(fundPool.getId());
+        if (CollectionUtils.isEmpty(scenarioNames)) {
+            Windows.showConfirmDialog(ForeignUi.getMessage(fundPool.isManualUploadFlag()
+                    ? "message.confirm.delete_action"
+                    : "message.confirm.delete_acl_fund_pool", fundPool.getName(), "fund pool"),
+                () -> {
+                    controller.deleteAclFundPool(fundPool);
+                    grid.setItems(controller.getAllAclFundPools());
+                });
+        } else {
+            Windows.showNotificationWindow(
+                buildNotificationMessage("message.error.delete_action", "Fund pool", "scenario(s)", scenarioNames));
+        }
+    }
+
+    private String buildNotificationMessage(String key, String param, String associatedField,
+                                            List<String> associatedNames) {
+        StringBuilder htmlNamesList = new StringBuilder("<ul>");
+        for (String name : associatedNames) {
+            htmlNamesList.append("<li>").append(name).append("</li>");
+        }
+        htmlNamesList.append("</ul>");
+        return ForeignUi.getMessage(key, param, associatedField, htmlNamesList.toString());
     }
 }

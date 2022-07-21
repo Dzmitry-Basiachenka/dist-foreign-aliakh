@@ -20,6 +20,8 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 /**
  * Modal window that provides functionality for viewing and deleting {@link AclGrantSet}s.
  * <p>
@@ -120,11 +122,27 @@ public class ViewAclGrantSetWindow extends Window implements SearchWidget.ISearc
     }
 
     private void deleteGrantSet(AclGrantSet grantSet) {
-        Windows.showConfirmDialog(
-            ForeignUi.getMessage("message.confirm.delete_action", grantSet.getName(), "grant set"),
-            () -> {
-                controller.deleteAclGrantSet(grantSet);
-                grid.setItems(controller.getAllAclGrantSets());
-            });
+        List<String> scenarioNames = controller.getScenarioNamesAssociatedWithGrantSet(grantSet.getId());
+        if (CollectionUtils.isEmpty(scenarioNames)) {
+            Windows.showConfirmDialog(
+                ForeignUi.getMessage("message.confirm.delete_action", grantSet.getName(), "grant set"),
+                () -> {
+                    controller.deleteAclGrantSet(grantSet);
+                    grid.setItems(controller.getAllAclGrantSets());
+                });
+        } else {
+            Windows.showNotificationWindow(
+                buildNotificationMessage("message.error.delete_action", "Grant set", "scenario(s)", scenarioNames));
+        }
+    }
+
+    private String buildNotificationMessage(String key, String param, String associatedField,
+                                            List<String> associatedNames) {
+        StringBuilder htmlNamesList = new StringBuilder("<ul>");
+        for (String name : associatedNames) {
+            htmlNamesList.append("<li>").append(name).append("</li>");
+        }
+        htmlNamesList.append("</ul>");
+        return ForeignUi.getMessage(key, param, associatedField, htmlNamesList.toString());
     }
 }

@@ -552,4 +552,16 @@
             and <include refid="IAclScenarioMapper.drillDownSearchWhereClause"/>
         </if>
     </select>
+
+    <select id="findScenarioNamesByFundPoolId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_acl_scenario
+        where df_acl_fund_pool_uid = #{fundPoolId}
+    </select>
+
+    <select id="findScenarioNamesByGrantSetId" parameterType="string" resultType="string">
+        select name
+        from ${schema}.df_acl_scenario
+        where df_acl_grant_set_uid = #{grantSetId}
+    </select>
 </mapper>

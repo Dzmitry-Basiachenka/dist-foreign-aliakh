@@ -117,4 +117,12 @@ public interface IAclFundPoolController extends IController<IAclFundPoolWidget> 
      * @param fundPool {@link AclFundPool} to delete
      */
     void deleteAclFundPool(AclFundPool fundPool);
+
+    /**
+     * Gets AclScenario names associated with fund pool.
+     *
+     * @param  fundPoolId fund pool id
+     * @return AclScenario names associated with fund pool
+     */
+    List<String> getScenarioNamesAssociatedWithFundPool(String fundPoolId);
 }
