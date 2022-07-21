@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
@@ -47,6 +48,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     private IAclDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
     private IStreamSourceHandler streamSourceHandler;
+    @Autowired
+    private IAclCalculationReportService aclCalculationReportService;
     private AclScenario aclScenario;
 
     @Override
@@ -93,9 +96,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Override
     public IStreamSource getExportAclScenarioDetailsStreamSource() {
-        //TODO {dbasiachenka} implement
         return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_Details_",
-            pos -> {});
+            pos -> aclCalculationReportService.writeAclScenarioDetailsCsvReport(aclScenario.getId(), pos));
     }
 
     @Override

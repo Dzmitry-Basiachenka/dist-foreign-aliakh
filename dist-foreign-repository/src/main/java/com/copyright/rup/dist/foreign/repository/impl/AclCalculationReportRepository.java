@@ -58,4 +58,9 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
             }
         }
     }
+
+    @Override
+    public void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        //TODO {dbasiachenka} implement
+    }
 }

@@ -114,4 +114,14 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
             outputStream -> aclCalculationReportRepository.writeAclFundPoolDetailsCsvReport(filter, outputStream),
             "acl/fund_pool_details_report_empty.csv");
     }
+
+    @Test
+    public void testWriteAclScenarioDetailsCsvReport() throws IOException {
+        //TODO {dbasiachenka} implement
+    }
+
+    @Test
+    public void testWriteAclScenarioDetailsEmptyCsvReport() throws IOException {
+        //TODO {dbasiachenka} implement
+    }
 }

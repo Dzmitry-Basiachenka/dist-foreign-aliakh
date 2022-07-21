@@ -11,27 +11,38 @@ import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
+import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
 import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collections;
 import java.util.List;
@@ -47,15 +58,19 @@ import java.util.function.Supplier;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({OffsetDateTime.class, StreamSource.class})
 public class AclScenarioControllerTest {
 
     private static final String SCENARIO_UID = "2398769d-8862-42e8-9504-9cbe19376b4b";
+    private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private AclScenarioController controller;
     private IAclScenarioService aclScenarioService;
     private IAclUsageService aclUsageService;
     private AclScenario scenario;
     private IStreamSourceHandler streamSourceHandler;
+    private IAclCalculationReportService aclCalculationReportService;
 
     @Before
     public void setUp() {
@@ -65,9 +80,11 @@ public class AclScenarioControllerTest {
         aclScenarioService = createMock(IAclScenarioService.class);
         aclUsageService = createMock(IAclUsageService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        aclCalculationReportService = createMock(IAclCalculationReportService.class);
         Whitebox.setInternalState(controller, aclScenarioService);
         Whitebox.setInternalState(controller, aclUsageService);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, aclCalculationReportService);
     }
 
     @Test
@@ -162,8 +179,26 @@ public class AclScenarioControllerTest {
     }
 
     @Test
-    public void testGetExportAclScenarioDetailssStreamSource() {
-        //TODO {dbasiachenka} implement
+    public void testGetExportAclScenarioDetailsStreamSource() {
+        mockStatic(OffsetDateTime.class);
+        Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = newCapture();
+        String fileName = scenario.getName() + "_Details_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(OffsetDateTime.now()).andReturn(DATE).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        aclCalculationReportService.writeAclScenarioDetailsCsvReport(scenario.getId(), pos);
+        expectLastCall().once();
+        replay(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
+        IStreamSource streamSource = controller.getExportAclScenarioDetailsStreamSource();
+        assertEquals("Scenario_name_Details_01_02_2019_03_04.csv", streamSource.getSource().getKey().get());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
     private AclScenario buildAclScenario() {
