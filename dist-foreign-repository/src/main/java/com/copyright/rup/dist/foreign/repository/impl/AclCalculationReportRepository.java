@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclCalculationReportRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclFundPoolDetailsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclGrantDetailCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclScenarioDetailCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.acl.AclUsageCsvReportHandler;
 
 import com.google.common.collect.Maps;
@@ -61,6 +62,10 @@ public class AclCalculationReportRepository extends CommonReportRepository imple
 
     @Override
     public void writeAclScenarioDetailsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
-        //TODO {dbasiachenka} implement
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
+        writeCsvReportByParts("IAclCalculationReportMapper.findAclScenarioDetailDtosCount",
+            "IAclCalculationReportMapper.findAclScenarioDetailDtos", parameters,
+            () -> new AclScenarioDetailCsvReportHandler(Objects.requireNonNull(pipedOutputStream)));
     }
 }
