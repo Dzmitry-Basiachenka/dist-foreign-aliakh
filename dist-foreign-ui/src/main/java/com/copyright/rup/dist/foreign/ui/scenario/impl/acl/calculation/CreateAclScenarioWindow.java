@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
@@ -36,6 +37,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -43,6 +45,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -304,8 +307,10 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
                     aclScenario.setUsageAges(usageAgeWeightWidget.getAppliedParameters());
                     aclScenario.setPublicationTypes(publicationTypeWeightWidget.getAppliedParameters());
                     aclScenario.setDetailLicenseeClasses(licenseeClassMappingWidget.getAppliedParameters());
-                    controller.createAclScenario(aclScenario);
-                    close();
+                    if (isValidAggregateClassMapping(aclScenario)) {
+                        controller.createAclScenario(aclScenario);
+                        close();
+                    }
                 } catch (ValidationException e) {
                     ExceptionUtils.printRootCauseStackTrace(e);
                 }
@@ -330,6 +335,22 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         usageBatchBinder.validate();
         grantSetBinder.validate();
         fundPoolBinder.validate();
+    }
+
+    private boolean isValidAggregateClassMapping(AclScenario scenario) {
+        Set<AclFundPoolDetailDto> fundPoolDetailsWithoutUsages =
+            controller.getFundPoolDetailsNotToBeDistributed(scenario.getUsageBatchId(), scenario.getFundPoolId(),
+                scenario.getGrantSetId(), scenario.getDetailLicenseeClasses());
+        if (CollectionUtils.isNotEmpty(fundPoolDetailsWithoutUsages)) {
+            List<String> formattedAggregateClasses = fundPoolDetailsWithoutUsages.stream()
+                .map(detail -> String.format("%s - %s (%s)", detail.getAggregateLicenseeClass().getId(),
+                    detail.getAggregateLicenseeClass().getDescription(), detail.getTypeOfUse()))
+                .collect(Collectors.toList());
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.error.aggregate_licensee_classes_without_usages",
+                    String.join("<br><li>", formattedAggregateClasses)));
+        }
+        return fundPoolDetailsWithoutUsages.isEmpty();
     }
 
     private boolean isValidUsageBatch() {

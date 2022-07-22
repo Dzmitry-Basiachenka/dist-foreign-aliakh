@@ -173,6 +173,25 @@
         )
     </insert>
 
+    <select id="findDetailDtosByFundPoolId" parameterType="string" resultMap="aclFundPoolDetailDtoResultMap">
+        select
+            df_acl_fund_pool_detail_uid,
+            fpd.license_type,
+            fpd.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            alc.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name,
+            type_of_use,
+            net_amount,
+            gross_amount,
+            is_ldmt
+        from ${schema}.df_acl_fund_pool_detail fpd
+        join ${schema}.df_detail_licensee_class dlc on fpd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on dlc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where fpd.df_acl_fund_pool_uid = #{fundPoolId}
+        order by fpd.detail_licensee_class_id, type_of_use
+    </select>
+
     <select id="findDetailsByFundPoolId" parameterType="string" resultMap="aclFundPoolDetailResultMap">
         select
             df_acl_fund_pool_detail_uid,

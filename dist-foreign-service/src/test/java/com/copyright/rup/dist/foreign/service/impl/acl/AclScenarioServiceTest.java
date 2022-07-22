@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -18,9 +19,12 @@ import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +33,11 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link AclScenarioService}.
@@ -48,18 +54,29 @@ public class AclScenarioServiceTest {
     private static final String SCENARIO_NAME = "ACL Scenario";
     private static final String FUND_POOL_ID = "8395a319-2369-4b77-9290-e26e7489fe7c";
     private static final String GRANT_SET_ID = "f91d6b51-4475-49e8-bca1-fea2ff28118f";
+    private static final String BATCH_UID = "50cc0539-d390-4b8a-8067-409368fff896";
+    private static final String FUND_POOL_UID = "d90e2183-1a50-403b-9834-a283a8f568d0";
+    private static final String GRANT_SET_UID = "35cea075-edf1-4355-a2e2-ff9dc2ce5db1";
     private static final String USER_NAME = "SYSTEM";
     private static final String SEARCH_VALUE = "search";
+    private static final String DIGITAL_TOU = "DIGITAL";
+    private static final String PRINT_TOU = "PRINT";
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
 
     private IAclScenarioService aclScenarioService;
     private IAclScenarioRepository aclScenarioRepository;
+    private IAclFundPoolService aclFundPoolService;
+    private IAclUsageService aclUsageService;
 
     @Before
     public void setUp() {
         aclScenarioRepository = createMock(IAclScenarioRepository.class);
+        aclFundPoolService = createMock(IAclFundPoolService.class);
+        aclUsageService = createMock(IAclUsageService.class);
         aclScenarioService = new AclScenarioService();
         Whitebox.setInternalState(aclScenarioService, aclScenarioRepository);
+        Whitebox.setInternalState(aclScenarioService, aclFundPoolService);
+        Whitebox.setInternalState(aclScenarioService, aclUsageService);
     }
 
     @Test
@@ -162,6 +179,60 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository);
     }
 
+    @Test
+    public void testGetFundPoolDetailsNotToBeDistributedValidCase() {
+        List<DetailLicenseeClass> mapping = Arrays.asList(
+            buildDetailLicenseeClass(1, 1), buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        List<AclFundPoolDetailDto> fundPoolDetails =
+            Arrays.asList(buildAclFundPoolDetailDto(1, 1, PRINT_TOU), buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
+        expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
+        expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
+            Collections.singleton(1), PRINT_TOU)).andReturn(true).once();
+        expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
+            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(true).once();
+        replay(aclFundPoolService, aclUsageService);
+        Set<AclFundPoolDetailDto> invalidDetails =
+            aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
+        assertEquals(0, invalidDetails.size());
+        verify(aclFundPoolService, aclUsageService);
+    }
+
+    @Test
+    public void testGetFundPoolDetailsNotToBeDistributedInvalidMapping() {
+        List<DetailLicenseeClass> mapping =
+            Arrays.asList(buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        AclFundPoolDetailDto invalidMappingDetail = buildAclFundPoolDetailDto(1, 1, PRINT_TOU);
+        List<AclFundPoolDetailDto> fundPoolDetails =
+            Arrays.asList(invalidMappingDetail, buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
+        expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
+        expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
+            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(true).once();
+        replay(aclFundPoolService, aclUsageService);
+        Set<AclFundPoolDetailDto> invalidDetails =
+            aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
+        assertEquals(1, invalidDetails.size());
+        assertTrue(invalidDetails.contains(invalidMappingDetail));
+        verify(aclFundPoolService, aclUsageService);
+    }
+
+    @Test
+    public void testGetFundPoolDetailsNotToBeDistributedInvalidMappingAndNoUsages() {
+        List<DetailLicenseeClass> mapping =
+            Arrays.asList(buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        AclFundPoolDetailDto invalidMappingDetail = buildAclFundPoolDetailDto(1, 1, PRINT_TOU);
+        AclFundPoolDetailDto noUsagesDetail = buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU);
+        List<AclFundPoolDetailDto> fundPoolDetails = Arrays.asList(invalidMappingDetail, noUsagesDetail);
+        expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
+        expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
+            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(false).once();
+        replay(aclFundPoolService, aclUsageService);
+        Set<AclFundPoolDetailDto> invalidDetails =
+            aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
+        assertEquals(2, invalidDetails.size());
+        assertTrue(invalidDetails.containsAll(fundPoolDetails));
+        verify(aclFundPoolService, aclUsageService);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
@@ -195,5 +266,14 @@ public class AclScenarioServiceTest {
         detailClass.setId(detailClassId);
         detailClass.getAggregateLicenseeClass().setId(aggregateClassId);
         return detailClass;
+    }
+
+    private AclFundPoolDetailDto buildAclFundPoolDetailDto(Integer detailClassId, Integer aggregateClassId,
+                                                           String typeOfUse) {
+        AclFundPoolDetailDto detail = new AclFundPoolDetailDto();
+        detail.getDetailLicenseeClass().setId(detailClassId);
+        detail.getAggregateLicenseeClass().setId(aggregateClassId);
+        detail.setTypeOfUse(typeOfUse);
+        return detail;
     }
 }

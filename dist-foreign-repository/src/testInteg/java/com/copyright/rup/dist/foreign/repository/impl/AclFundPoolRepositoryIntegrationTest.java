@@ -5,11 +5,20 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.filter.AclFundPoolDetailFilter;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +27,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Integration test for {@link AclFundPoolRepository}.
@@ -47,8 +60,15 @@ public class AclFundPoolRepositoryIntegrationTest {
     private static final String LICENSE_TYPE = "ACL";
     private static final String ROLLBACK_ONLY = "rollback-only.groovy";
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Autowired
     private AclFundPoolRepository repository;
+
+    static {
+        OBJECT_MAPPER.registerModule(new JavaTimeModule());
+        OBJECT_MAPPER.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    }
 
     @Test
     @TestData(fileName = ROLLBACK_ONLY)
@@ -129,6 +149,32 @@ public class AclFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-by-filter.groovy")
+    //TODO cover all filters criteria
+    public void testFindDtosByFilter() {
+        AclFundPoolDetailFilter filter = new AclFundPoolDetailFilter();
+        filter.setLicenseType("ACL");
+        filter.setAggregateLicenseeClasses(Collections.singleton(buildAggregateLicenseeClass(51)));
+        List<AclFundPoolDetailDto> details = repository.findDtosByFilter(filter);
+        assertEquals(1, details.size());
+        verifyFundPoolDetail(
+            loadExpectedDetails(Collections.singletonList("json/acl/acl_fund_pool_detail_find_by_filter.json")).get(0),
+            details.get(0));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-detail-dtos-by-fund-pool-id.groovy")
+    public void testFindDetailDtosByFundPoolId() {
+        List<AclFundPoolDetailDto> actualDetails =
+            repository.findDetailDtosByFundPoolId("8c2e21f0-c1f8-4bd8-8676-968e98617480");
+        assertEquals(3, actualDetails.size());
+        List<AclFundPoolDetailDto> expectedDetails =loadExpectedDetails(
+            Collections.singletonList("json/acl/acl_fund_pool_detail_find_by_grant_set_id.json"));
+        IntStream.range(0, expectedDetails.size())
+            .forEach(index -> verifyFundPoolDetail(expectedDetails.get(index), actualDetails.get(index)));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "find-fund-pools-by-period-and-license-type.groovy")
     public void testFindFundPoolsByLicenseTypeAndPeriod() {
         AclFundPool expectedFundPool = buildAclFundPool("7c3b7ccf-593a-43a5-86d6-83471a073bdc",
@@ -168,6 +214,12 @@ public class AclFundPoolRepositoryIntegrationTest {
         assertEquals(1, repository.findAll().size());
         repository.deleteById(fundPool.getId());
         assertEquals(0, repository.findAll().size());
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(int id) {
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(id);
+        return aggregateLicenseeClass;
     }
 
     private AclFundPoolDetail buildAclFundPoolDetail() {
@@ -219,5 +271,33 @@ public class AclFundPoolRepositoryIntegrationTest {
         assertEquals(expectedFundPool.getNetAmount(), actualFundPool.getNetAmount());
         assertEquals(expectedFundPool.getTotalAmount(), actualFundPool.getTotalAmount());
         assertEquals(expectedFundPool, actualFundPool);
+    }
+
+    private void verifyFundPoolDetail(AclFundPoolDetailDto expectedDetail, AclFundPoolDetailDto actualDetail) {
+        assertNotNull(actualDetail);
+        assertEquals(expectedDetail.getId(), actualDetail.getId());
+        assertEquals(expectedDetail.getFundPoolName(), actualDetail.getFundPoolName());
+        assertEquals(expectedDetail.getFundPoolId(), actualDetail.getFundPoolId());
+        assertEquals(expectedDetail.getPeriod(), actualDetail.getPeriod());
+        assertEquals(expectedDetail.getLicenseType(), actualDetail.getLicenseType());
+        assertEquals(expectedDetail.getTypeOfUse(), actualDetail.getTypeOfUse());
+        assertEquals(expectedDetail.getNetAmount(), actualDetail.getNetAmount());
+        assertEquals(expectedDetail.getGrossAmount(), actualDetail.getGrossAmount());
+        assertEquals(expectedDetail.getAggregateLicenseeClass(), actualDetail.getAggregateLicenseeClass());
+        assertEquals(expectedDetail.getDetailLicenseeClass(), actualDetail.getDetailLicenseeClass());
+    }
+
+    private List<AclFundPoolDetailDto> loadExpectedDetails(List<String> fileNames) {
+        List<AclFundPoolDetailDto> details = new ArrayList<>();
+        fileNames.forEach(fileName -> {
+            try {
+                String content = TestUtils.fileToString(this.getClass(), fileName);
+                details.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<AclFundPoolDetailDto>>() {
+                }));
+            } catch (IOException e) {
+                throw new AssertionError(e);
+            }
+        });
+        return details;
     }
 }

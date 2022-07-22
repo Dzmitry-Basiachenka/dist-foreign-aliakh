@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
@@ -32,6 +33,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.Sets;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
@@ -59,6 +61,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -184,8 +187,10 @@ public class CreateAclScenarioWindowTest {
             .andReturn(Collections.singletonList(aclFundPool));
         expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
             .andReturn(Collections.singletonList(aclGrantSet));
-        expect(controller.isValidUsageBatch(ACL_BATCH_UID, "f5e558ce-2261-4998-8434-fc04d432c1a5", 202206,
+        expect(controller.isValidUsageBatch(ACL_BATCH_UID, aclGrantSet.getId(), 202206,
             Collections.singletonList(1))).andReturn(true);
+        expect(controller.getFundPoolDetailsNotToBeDistributed(ACL_BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
+            detailLicenseeClasses)).andReturn(Collections.emptySet()).once();
         controller.createAclScenario(expectedScenario);
         expectLastCall().once();
         replay(controller);
@@ -210,6 +215,35 @@ public class CreateAclScenarioWindowTest {
             Collections.singletonList(1))).andReturn(false);
         Windows.showNotificationWindow(
             "System found usages missing Pub Type and/or CUP. Please update the missing data");
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        populateCreateScenarioWindowAndClickConfirmButton(aclUsageBatch, aclFundPool, aclGrantSet);
+        verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testConfirmButtonClickListenerWithInvalidFundPoolDetails() {
+        mockStatic(Windows.class);
+        AclUsageBatch aclUsageBatch = buildAclUsageBatch();
+        AclFundPool aclFundPool = buildAclFundPool();
+        AclGrantSet aclGrantSet = buildAclGrantSet();
+        expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).times(4);
+        expect(controller.getUsageBatchesByPeriod(202206, true)).andReturn(Collections.singletonList(aclUsageBatch))
+            .once();
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206))
+            .andReturn(Collections.singletonList(aclFundPool));
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202206, true))
+            .andReturn(Collections.singletonList(aclGrantSet));
+        expect(controller.isValidUsageBatch(ACL_BATCH_UID, aclGrantSet.getId(), 202206,
+            Collections.singletonList(1))).andReturn(true);
+        LinkedHashSet<AclFundPoolDetailDto> invalidDetails = Sets.newLinkedHashSet();
+        invalidDetails.add(buildAclFundPoolDetailDto(1, 1, "Food and Tobacco", "PRINT"));
+        invalidDetails.add(buildAclFundPoolDetailDto(2, 51, "Materials", "DIGITAL"));
+        expect(controller.getFundPoolDetailsNotToBeDistributed(ACL_BATCH_UID, aclFundPool.getId(), aclGrantSet.getId(),
+            detailLicenseeClasses)).andReturn(invalidDetails).once();
+        Windows.showNotificationWindow(
+            "Scenario cannot be created. There are no usages for the following Aggregate Licensee Class(es):" +
+                "<ul><li><i><b>1 - Food and Tobacco (PRINT)<br><li>51 - Materials (DIGITAL)</b></i></ul>");
         expectLastCall().once();
         replay(controller, Windows.class);
         populateCreateScenarioWindowAndClickConfirmButton(aclUsageBatch, aclFundPool, aclGrantSet);
@@ -294,6 +328,16 @@ public class CreateAclScenarioWindowTest {
         aclFundPool.setId("304795bf-9bd1-4377-9b5f-ce247d88f8b2");
         aclFundPool.setName("Fund Pool");
         return aclFundPool;
+    }
+
+    private AclFundPoolDetailDto buildAclFundPoolDetailDto(Integer detailClassId, Integer aggregateClassId,
+                                                           String aggregateClassName, String typeOfUse) {
+        AclFundPoolDetailDto detail = new AclFundPoolDetailDto();
+        detail.getDetailLicenseeClass().setId(detailClassId);
+        detail.getAggregateLicenseeClass().setId(aggregateClassId);
+        detail.getAggregateLicenseeClass().setDescription(aggregateClassName);
+        detail.setTypeOfUse(typeOfUse);
+        return detail;
     }
 
     private AclGrantSet buildAclGrantSet() {

@@ -5,6 +5,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -15,17 +16,29 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+
+import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclScenarioService}.
@@ -47,6 +60,10 @@ public class AclScenarioService implements IAclScenarioService {
     private IAclScenarioAuditService aclScenarioAuditService;
     @Autowired
     private IAclScenarioUsageService aclScenarioUsageService;
+    @Autowired
+    private IAclFundPoolService aclFundPoolService;
+    @Autowired
+    private IAclUsageService aclUsageService;
 
     @Override
     @Transactional
@@ -130,6 +147,34 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public List<String> getScenarioNamesByGrantSetId(String grantSetId) {
         return aclScenarioRepository.findScenarioNamesByGrantSetId(grantSetId);
+    }
+
+    @Override
+    public Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
+                                                                          String grantSetId,
+                                                                          List<DetailLicenseeClass> mapping) {
+        List<AclFundPoolDetailDto> fundPoolDetails = aclFundPoolService.getDetailDtosByFundPoolId(fundPoolId);
+        Map<Integer, Set<Integer>> aggregateToDetailClassIds = mapping.stream()
+            .collect(Collectors.groupingBy(detailClass -> detailClass.getAggregateLicenseeClass().getId(),
+                Collectors.mapping(DetailLicenseeClass::getId, Collectors.toSet())));
+        Set<AclFundPoolDetailDto> unmappedFundPoolDetails = fundPoolDetails.stream()
+            .filter(detail -> !aggregateToDetailClassIds.containsKey(detail.getAggregateLicenseeClass().getId()))
+            .collect(Collectors.toSet());
+        Set<AclFundPoolDetailDto> absentFundPoolDetails = fundPoolDetails.stream()
+            .filter(detail -> aggregateToDetailClassIds.containsKey(detail.getAggregateLicenseeClass().getId()))
+            .filter(detail -> !aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+                aggregateToDetailClassIds.get(detail.getAggregateLicenseeClass().getId()), detail.getTypeOfUse())
+            ).collect(Collectors.toSet());
+        Collection<AclFundPoolDetailDto> invalidDetails = Sets.union(unmappedFundPoolDetails, absentFundPoolDetails)
+            .stream()
+            .collect(Collectors.toMap(
+                detail ->
+                    Pair.of(detail.getAggregateLicenseeClass().getId(), detail.getTypeOfUse()), Function.identity(),
+                (detail1, detail2) -> detail1))
+            .values();
+        return invalidDetails.stream()
+            .sorted(Comparator.comparing(detail -> detail.getAggregateLicenseeClass().getId()))
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {

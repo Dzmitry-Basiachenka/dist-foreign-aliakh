@@ -120,4 +120,9 @@ public class AclFundPoolService implements IAclFundPoolService {
     public AclFundPool getById(String fundPoolId) {
         return fundPoolRepository.findById(fundPoolId);
     }
+
+    @Override
+    public List<AclFundPoolDetailDto> getDetailDtosByFundPoolId(String fundPoolId) {
+        return fundPoolRepository.findDetailDtosByFundPoolId(fundPoolId);
+    }
 }

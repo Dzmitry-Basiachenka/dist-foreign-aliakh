@@ -281,6 +281,20 @@ public class AclScenariosControllerTest {
         verify(publicationTypeService);
     }
 
+    @Test
+    public void testGetFundPoolDetailsNotToBeDistributed() {
+        String grantSetId = "b9f283cf-5d48-4c69-960a-cc30c24d2282";
+        String fundPoolId = "b9f283cf-5d48-4c69-960a-cc30c24d2282";
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        expect(aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, fundPoolId, grantSetId,
+            Collections.singletonList(detailLicenseeClass))).andReturn(Collections.emptySet()).once();
+        replay(aclScenarioService);
+        assertEquals(Collections.emptySet(),
+            aclScenariosController.getFundPoolDetailsNotToBeDistributed(BATCH_UID, fundPoolId, grantSetId,
+                Collections.singletonList(detailLicenseeClass)));
+        verify(aclScenarioService);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
