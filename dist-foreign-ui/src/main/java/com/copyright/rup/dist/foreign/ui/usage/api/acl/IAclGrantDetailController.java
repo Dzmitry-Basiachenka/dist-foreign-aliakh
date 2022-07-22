@@ -144,4 +144,12 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return instance of {@link IStreamSource}
      */
     IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult<AclGrantDetailDto> processingResult);
+
+    /**
+     * Gets AclScenario names associated with grant set.
+     *
+     * @param grantSetId grant set id
+     * @return AclScenario name associated with grant set
+     */
+    List<String> getScenarioNamesAssociatedWithGrantSet(String grantSetId);
 }

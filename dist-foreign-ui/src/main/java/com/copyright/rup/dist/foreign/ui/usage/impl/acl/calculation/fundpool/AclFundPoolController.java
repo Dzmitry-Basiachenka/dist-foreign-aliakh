@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetail;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclFundPoolCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -49,6 +50,8 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IAclCalculationReportService aclCalculationReportService;
+    @Autowired
+    private IAclScenarioService aclScenarioService;
 
     @Override
     public IAclFundPoolFilterWidget initAclFundPoolFilterWidget() {
@@ -118,6 +121,11 @@ public class AclFundPoolController extends CommonController<IAclFundPoolWidget> 
     public void deleteAclFundPool(AclFundPool fundPool) {
         fundPoolService.deleteAclFundPool(fundPool);
         aclFundPoolFilterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public List<String> getScenarioNamesAssociatedWithFundPool(String fundPoolId) {
+        return aclScenarioService.getScenarioNamesByFundPoolId(fundPoolId);
     }
 
     @Override

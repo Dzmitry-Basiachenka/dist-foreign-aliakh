@@ -117,4 +117,14 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IAclScenarioMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
+
+    @Override
+    public List<String> findScenarioNamesByFundPoolId(String fundPoolId) {
+        return selectList("IAclScenarioMapper.findScenarioNamesByFundPoolId", fundPoolId);
+    }
+
+    @Override
+    public List<String> findScenarioNamesByGrantSetId(String grantSetId) {
+        return selectList("IAclScenarioMapper.findScenarioNamesByGrantSetId", grantSetId);
+    }
 }

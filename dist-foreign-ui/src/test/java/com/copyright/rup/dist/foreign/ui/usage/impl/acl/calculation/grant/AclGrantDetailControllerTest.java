@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantDetailService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IUdmBaselineService;
 import com.copyright.rup.dist.foreign.service.impl.csv.AclGrantDetailCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
@@ -69,6 +70,8 @@ import java.util.function.Supplier;
 public class AclGrantDetailControllerTest {
 
     private static final String GRANT_SET_NAME = "Grant Set Name";
+    private static final String GRANT_SET_ID = "4bbe8d57-c37a-40c0-b99b-cdeea5ceb54b";
+    private static final List<String> ACL_SCENARIO_NAME = Collections.singletonList("ACL Scenario");
 
     private final AclGrantDetailController controller = new AclGrantDetailController();
     private final AclGrantDetailFilter aclGrantDetailFilter = new AclGrantDetailFilter();
@@ -83,6 +86,7 @@ public class AclGrantDetailControllerTest {
     private IAclCalculationReportService aclCalculationReportService;
     private IStreamSourceHandler streamSourceHandler;
     private CsvProcessorFactory csvProcessorFactory;
+    private IAclScenarioService aclScenarioService;
 
     @Before
     public void setUp() {
@@ -96,6 +100,7 @@ public class AclGrantDetailControllerTest {
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
         csvProcessorFactory = createMock(CsvProcessorFactory.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
+        aclScenarioService = createMock(IAclScenarioService.class);
         Whitebox.setInternalState(controller, udmBaselineService);
         Whitebox.setInternalState(controller, aclGrantSetService);
         Whitebox.setInternalState(controller, aclGrantDetailFilterController);
@@ -104,6 +109,7 @@ public class AclGrantDetailControllerTest {
         Whitebox.setInternalState(controller, aclCalculationReportService);
         Whitebox.setInternalState(controller, csvProcessorFactory);
         Whitebox.setInternalState(controller, streamSourceHandler);
+        Whitebox.setInternalState(controller, aclScenarioService);
     }
 
     @Test
@@ -266,6 +272,14 @@ public class AclGrantDetailControllerTest {
         assertNotNull(posConsumer);
         verify(OffsetDateTime.class, aclGrantDetailFilterWidget, aclGrantDetailFilterController, streamSourceHandler,
             aclCalculationReportService);
+    }
+
+    @Test
+    public void testGetScenarioNamesAssociatedWithFundPool() {
+        expect(aclScenarioService.getScenarioNamesByFundPoolId(GRANT_SET_ID)).andReturn(ACL_SCENARIO_NAME).once();
+        replay(aclScenarioService);
+        assertEquals(ACL_SCENARIO_NAME, aclScenarioService.getScenarioNamesByFundPoolId(GRANT_SET_ID));
+        verify(aclScenarioService);
     }
 
     private AclGrantSet buildAclGrantSet() {

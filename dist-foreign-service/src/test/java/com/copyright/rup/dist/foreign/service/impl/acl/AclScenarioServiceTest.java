@@ -20,6 +20,8 @@ import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -43,6 +45,9 @@ import java.util.List;
 public class AclScenarioServiceTest {
 
     private static final String SCENARIO_UID = "732f1f1f-1d63-45a4-9f07-357cba3429fc";
+    private static final String SCENARIO_NAME = "ACL Scenario";
+    private static final String FUND_POOL_ID = "8395a319-2369-4b77-9290-e26e7489fe7c";
+    private static final String GRANT_SET_ID = "f91d6b51-4475-49e8-bca1-fea2ff28118f";
     private static final String USER_NAME = "SYSTEM";
     private static final String SEARCH_VALUE = "search";
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
@@ -136,6 +141,24 @@ public class AclScenarioServiceTest {
         replay(aclScenarioRepository);
         assertEquals(1, aclScenarioService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
             SCENARIO_UID, SEARCH_VALUE));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetScenarioNamesByFundPoolId() {
+        List<String> scenarioNames = Lists.newArrayList(SCENARIO_NAME);
+        expect(aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID)).andReturn(scenarioNames).once();
+        replay(aclScenarioRepository);
+        assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByFundPoolId(FUND_POOL_ID));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetScenarioNamesByGrantSetId() {
+        List<String> scenarioNames = Lists.newArrayList(SCENARIO_NAME);
+        expect(aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID)).andReturn(scenarioNames).once();
+        replay(aclScenarioRepository);
+        assertSame(scenarioNames, aclScenarioRepository.findScenarioNamesByGrantSetId(GRANT_SET_ID));
         verify(aclScenarioRepository);
     }
 
