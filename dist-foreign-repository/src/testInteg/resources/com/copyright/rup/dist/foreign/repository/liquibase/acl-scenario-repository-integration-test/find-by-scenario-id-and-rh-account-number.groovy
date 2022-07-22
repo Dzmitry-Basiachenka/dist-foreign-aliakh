@@ -73,7 +73,6 @@ databaseChangeLog {
             column(name: 'usage_quantity', value: 1)
             column(name: 'usage_age_weight', value: 1.00000)
             column(name: 'weighted_copies', value: 1.0000000000)
-            column(name: 'pub_type_weight', value: 1.0000000000)
             column(name: 'pub_type_weight', value: 1.00)
             column(name: 'survey_country', value: 'United States')
             column(name: 'reported_type_of_use', value: 'COPY_FOR_MYSELF')

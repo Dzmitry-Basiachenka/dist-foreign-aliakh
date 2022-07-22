@@ -22,4 +22,12 @@
     <select id="writeAclFundPoolDetailsCsvReport" resultMap="IAclFundPoolMapper.aclFundPoolDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="IAclFundPoolMapper.selectDtosByFilterSql"/>
     </select>
+
+    <select id="findAclScenarioDetailDtosCount" parameterType="map" resultType="int">
+        <include refid="IAclScenarioMapper.selectDtosCountByScenarioIdSql"/>
+    </select>
+
+    <select id="findAclScenarioDetailDtos" resultMap="IAclScenarioMapper.aclScenarioDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclScenarioMapper.selectDtosByScenarioIdSql"/>
+    </select>
 </mapper>

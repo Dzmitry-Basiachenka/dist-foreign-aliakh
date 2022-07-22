@@ -44,6 +44,8 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     private static final String WRITE_USAGE_CSV_REPORT = FOLDER_NAME + "write-usage-csv-report.groovy";
     private static final String WRITE_FUND_POOL_DETAILS_CSV_REPORT =
         FOLDER_NAME + "write-fund-pool-detail-csv-report.groovy";
+    private static final String WRITE_SCENARIO_DETAILS_CSV_REPORT =
+        FOLDER_NAME + "write-scenario-details-csv-report.groovy";
 
     @Autowired
     private IAclCalculationReportRepository aclCalculationReportRepository;
@@ -116,12 +118,18 @@ public class AclCalculationCsvReportsIntegrationTest extends CsvReportsTestHelpe
     }
 
     @Test
+    @TestData(fileName = WRITE_SCENARIO_DETAILS_CSV_REPORT)
     public void testWriteAclScenarioDetailsCsvReport() throws IOException {
-        //TODO {dbasiachenka} implement
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclScenarioDetailsCsvReport("cb3bcdf0-c312-4cb0-bd4c-3f2c9a703d7a",
+                outputStream), "acl/scenario_details_report.csv");
     }
 
     @Test
+    @TestData(fileName = WRITE_SCENARIO_DETAILS_CSV_REPORT)
     public void testWriteAclScenarioDetailsEmptyCsvReport() throws IOException {
-        //TODO {dbasiachenka} implement
+        assertFilesWithExecutor(outputStream ->
+            aclCalculationReportRepository.writeAclScenarioDetailsCsvReport("0d9f5bba-4961-449b-ae7d-4586d1b5c0d5",
+                outputStream), "acl/scenario_details_report_empty.csv");
     }
 }
