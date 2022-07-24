@@ -8,7 +8,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
-import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
@@ -31,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +73,6 @@ public class AclUsageRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "acl-usage-repository-integration-test/";
     private static final String FIND_DTOS_BY_FILTER = FOLDER_NAME + "find-dtos-by-filter.groovy";
     private static final String FIND_PERIODS = FOLDER_NAME + "find-periods.groovy";
-    private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
-        FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String ACL_USAGE_BATCH_UID_1 = "36d8901e-1f3b-4e68-8c95-1f8b02740ed2";
     private static final String ACL_USAGE_BATCH_UID_2 = "c653d257-4180-4fb4-9119-f001063e4a56";
@@ -118,8 +114,6 @@ public class AclUsageRepositoryIntegrationTest {
     private static final int ANNUALIZED_COPIES_1 = 1;
     private static final int ANNUALIZED_COPIES_2 = 3;
     private static final String USER_NAME = "user@copyright.com";
-    private static final String ACL_SCENARIO_UID = "0d0041a3-833e-463e-8ad4-f28461dc961d";
-    private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -697,61 +691,6 @@ public class AclUsageRepositoryIntegrationTest {
     }
 
     @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
-        List<AclRightsholderTotalsHolder> holders = aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, StringUtils.EMPTY, null, null);
-        assertEquals(2, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00,
-            0.00, 0.00, 0.00, 1, 1), holders.get(1));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
-        List<AclRightsholderTotalsHolder> holders = aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, "JohN", null, null);
-        assertEquals(1, holders.size());
-        verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue() {
-        assertEquals(2, aclUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID,
-            StringUtils.EMPTY));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue() {
-        assertEquals(2, aclUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID, null));
-    }
-
-    @Test
-    @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
-    public void testSortingFindAclRightsholderTotalsHoldersByScenarioId() {
-        AclRightsholderTotalsHolder holder1 = buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
-            16.00, 84.00, 220.00, 35.00, 178.00, 2, 2);
-        AclRightsholderTotalsHolder holder2 = buildAclRightsholderTotalsHolder(1000000026L, null, 20.00, 3.00, 10.00,
-            0.00, 0.00, 0.00, 1, 1);
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "rightsholder.accountNumber");
-        assertSortingAclRightsholderTotalsHolder(holder1, holder2, "rightsholder.name");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "grossTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "serviceFeeTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "netTotalPrint");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "grossTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "serviceFeeTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "netTotalDigital");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "numberOfTitles");
-        assertSortingAclRightsholderTotalsHolder(holder2, holder1, "numberOfAggLcClasses");
-        assertSortingAclRightsholderTotalsHolder(holder1, holder1, "licenseType");
-    }
-
-    @Test
     @TestData(fileName = FOLDER_NAME + "add-to-scenario.groovy")
     public void testAddToAclScenario() {
         AclScenario scenario = buildAclScenario("dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
@@ -1080,62 +1019,5 @@ public class AclUsageRepositoryIntegrationTest {
         usages =
             aclUsageRepository.findDtosByFilter(filter, null, new Sort(sortProperty, Sort.Direction.DESC));
         assertEquals(usageIdDesc, usages.get(0).getId());
-    }
-
-    private AclRightsholderTotalsHolder buildAclRightsholderTotalsHolder(Long rhAccountNumber, String rhName,
-                                                                         Double grossTotalPrint,
-                                                                         Double serviceFeeTotalPrint,
-                                                                         Double netTotalPrint, Double grossTotalDigital,
-                                                                         Double serviceFeeTotalDigital,
-                                                                         Double netTotalDigital,
-                                                                         int numberOfTitles, int numberOfAggLcClasses) {
-        AclRightsholderTotalsHolder holder = new AclRightsholderTotalsHolder();
-        holder.getRightsholder().setAccountNumber(rhAccountNumber);
-        holder.getRightsholder().setName(rhName);
-        holder.setGrossTotalPrint(BigDecimal.valueOf(grossTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setServiceFeeTotalPrint(
-            BigDecimal.valueOf(serviceFeeTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setNetTotalPrint(BigDecimal.valueOf(netTotalPrint).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setGrossTotalDigital(
-            BigDecimal.valueOf(grossTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setServiceFeeTotalDigital(
-            BigDecimal.valueOf(serviceFeeTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setNetTotalDigital(BigDecimal.valueOf(netTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
-        holder.setNumberOfTitles(numberOfTitles);
-        holder.setNumberOfAggLcClasses(numberOfAggLcClasses);
-        holder.setLicenseType("ACL");
-        return holder;
-    }
-
-    private void verifyAclRightsholderTotalsHolder(AclRightsholderTotalsHolder expectedHolder,
-                                                   AclRightsholderTotalsHolder actualHolder) {
-        assertEquals(
-            expectedHolder.getRightsholder().getAccountNumber(), actualHolder.getRightsholder().getAccountNumber());
-        assertEquals(expectedHolder.getRightsholder().getName(), actualHolder.getRightsholder().getName());
-        assertEquals(expectedHolder.getGrossTotalPrint(),
-            actualHolder.getGrossTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getServiceFeeTotalPrint(),
-            actualHolder.getServiceFeeTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getNetTotalPrint(),
-            actualHolder.getNetTotalPrint().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getGrossTotalDigital(),
-            actualHolder.getGrossTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getServiceFeeTotalDigital(),
-            actualHolder.getServiceFeeTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getNetTotalDigital(),
-            actualHolder.getNetTotalDigital().setScale(10, BigDecimal.ROUND_HALF_UP));
-        assertEquals(expectedHolder.getNumberOfTitles(), actualHolder.getNumberOfTitles());
-        assertEquals(expectedHolder.getNumberOfAggLcClasses(), actualHolder.getNumberOfAggLcClasses());
-        assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
-    }
-
-    private void assertSortingAclRightsholderTotalsHolder(AclRightsholderTotalsHolder holderAsc,
-                                                          AclRightsholderTotalsHolder holderDesc, String sortProperty) {
-        List<AclRightsholderTotalsHolder> holders = aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
-        verifyAclRightsholderTotalsHolder(holderAsc, holders.get(0));
-        holders = aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
-        verifyAclRightsholderTotalsHolder(holderDesc, holders.get(0));
     }
 }

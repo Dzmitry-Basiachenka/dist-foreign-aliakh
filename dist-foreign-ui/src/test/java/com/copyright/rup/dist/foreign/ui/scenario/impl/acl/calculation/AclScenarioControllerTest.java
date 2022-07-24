@@ -24,7 +24,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
-import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -67,7 +67,7 @@ public class AclScenarioControllerTest {
 
     private AclScenarioController controller;
     private IAclScenarioService aclScenarioService;
-    private IAclUsageService aclUsageService;
+    private IAclScenarioUsageService aclScenarioUsageService;
     private AclScenario scenario;
     private IStreamSourceHandler streamSourceHandler;
     private IAclCalculationReportService aclCalculationReportService;
@@ -78,13 +78,13 @@ public class AclScenarioControllerTest {
         controller = new AclScenarioController();
         controller.setScenario(scenario);
         aclScenarioService = createMock(IAclScenarioService.class);
-        aclUsageService = createMock(IAclUsageService.class);
         streamSourceHandler = createMock(IStreamSourceHandler.class);
         aclCalculationReportService = createMock(IAclCalculationReportService.class);
+        aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
         Whitebox.setInternalState(controller, aclScenarioService);
-        Whitebox.setInternalState(controller, aclUsageService);
         Whitebox.setInternalState(controller, streamSourceHandler);
         Whitebox.setInternalState(controller, aclCalculationReportService);
+        Whitebox.setInternalState(controller, aclScenarioUsageService);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class AclScenarioControllerTest {
         AclScenarioDto scenarioDto = new AclScenarioDto();
         scenarioDto.setId(SCENARIO_UID);
         Capture<Pageable> pageableCapture = newCapture();
-        expect(aclUsageService.getAclRightsholderTotalsHoldersByScenarioId(eq(scenario.getId()), anyString(),
+        expect(aclScenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(eq(scenario.getId()), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(
             aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenarioDto).once();
@@ -136,7 +136,7 @@ public class AclScenarioControllerTest {
             createMock(Supplier.class))).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(streamSource).once();
-        replay(aclScenarioService, aclUsageService, streamSourceHandler, streamSource);
+        replay(aclScenarioService, aclScenarioUsageService, streamSourceHandler, streamSource);
         controller.initWidget();
         List<AclRightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -146,14 +146,14 @@ public class AclScenarioControllerTest {
         assertEquals(0, result.size());
         assertNotNull(fileNameSupplierCapture.getValue());
         assertNotNull(posConsumerCapture.getValue());
-        verify(aclScenarioService, aclUsageService, streamSourceHandler, streamSource);
+        verify(aclScenarioService, aclScenarioUsageService, streamSourceHandler, streamSource);
     }
 
     @Test
     public void testGetSize() {
         AclScenarioDto scenarioDto = new AclScenarioDto();
         scenarioDto.setId(SCENARIO_UID);
-        expect(aclUsageService.getAclRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
+        expect(aclScenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
             StringUtils.EMPTY)).andReturn(1).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction()).andReturn(scenarioDto).once();
         Capture<Supplier<String>> fileNameSupplierCapture = newCapture();
@@ -163,12 +163,12 @@ public class AclScenarioControllerTest {
             createMock(Supplier.class))).once();
         expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
             .andReturn(streamSource).once();
-        replay(aclScenarioService, aclUsageService, streamSourceHandler, streamSource);
+        replay(aclScenarioService, aclScenarioUsageService, streamSourceHandler, streamSource);
         controller.initWidget();
         assertEquals(1, controller.getSize());
         assertNotNull(fileNameSupplierCapture.getValue());
         assertNotNull(posConsumerCapture.getValue());
-        verify(aclScenarioService, aclUsageService, streamSourceHandler, streamSource);
+        verify(aclScenarioService, aclScenarioUsageService, streamSourceHandler, streamSource);
     }
 
     @Test

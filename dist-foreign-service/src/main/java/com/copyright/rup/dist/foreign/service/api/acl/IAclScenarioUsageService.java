@@ -1,6 +1,11 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+
+import java.util.List;
 
 /**
  * Interface for ACL scenario usage service.
@@ -52,4 +57,25 @@ public interface IAclScenarioUsageService {
      * @param userName   username
      */
     void calculateScenarioAmounts(String scenarioId, String userName);
+
+    /**
+     * Gets {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
+     *
+     * @param scenarioId  scenario id
+     * @param searchValue search value
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
+     * @return list of {@link AclRightsholderTotalsHolder}s
+     */
+    List<AclRightsholderTotalsHolder> getAclRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
+                                                                                  Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
+     *
+     * @param scenarioId  scenario id
+     * @param searchValue search value
+     * @return count of {@link AclRightsholderTotalsHolder}s
+     */
+    int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 }

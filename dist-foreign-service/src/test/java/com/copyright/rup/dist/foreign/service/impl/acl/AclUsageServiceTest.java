@@ -15,14 +15,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +47,6 @@ import java.util.Set;
 public class AclUsageServiceTest {
 
     private static final String USER_NAME = "user@copyright.com";
-    private static final String ACL_SCENARIO_UID = "8dbe8fa6-9700-4822-9be3-7075ce4ea378";
     private static final String ACL_BATCH_UID = "73408702-2d7c-48c6-ae7e-a62aa3940ee0";
     private static final String ACL_GRANT_SET_UID = "6fbd9c98-c119-448a-b0a7-3795319dce00";
 
@@ -144,27 +141,6 @@ public class AclUsageServiceTest {
             "PRINT"));
         assertFalse(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(usageBatchId, grantSetId, licenseeClassIds,
             "DIGITAL"));
-        verify(aclUsageRepository);
-    }
-
-    @Test
-    public void testGetAclRightsholderTotalsHoldersByScenarioId() {
-        List<AclRightsholderTotalsHolder> holders = Collections.singletonList(new AclRightsholderTotalsHolder());
-        expect(aclUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(ACL_SCENARIO_UID, StringUtils.EMPTY,
-            null, null)).andReturn(holders).once();
-        replay(aclUsageRepository);
-        assertSame(holders, aclUsageService.getAclRightsholderTotalsHoldersByScenarioId(ACL_SCENARIO_UID,
-            StringUtils.EMPTY, null, null));
-        verify(aclUsageRepository);
-    }
-
-    @Test
-    public void testGetAclRightsholderTotalsHolderCountByScenarioId() {
-        expect(aclUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID, StringUtils.EMPTY))
-            .andReturn(5).once();
-        replay(aclUsageRepository);
-        assertEquals(5, aclUsageService.getAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID,
-            StringUtils.EMPTY));
         verify(aclUsageRepository);
     }
 
