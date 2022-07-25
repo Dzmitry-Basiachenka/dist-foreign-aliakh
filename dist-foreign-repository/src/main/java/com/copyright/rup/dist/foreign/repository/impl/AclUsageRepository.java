@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
@@ -33,7 +32,6 @@ import java.util.Set;
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
     private static final String SCENARIO_ID_KEY = "scenarioId";
-    private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";
@@ -93,27 +91,6 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public List<UsageAge> findDefaultUsageAgesWeights() {
         return selectList("IAclUsageMapper.findDefaultUsageAgesWeights");
-    }
-
-    @Override
-    public List<AclRightsholderTotalsHolder> findAclRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                          String searchValue,
-                                                                                          Pageable pageable,
-                                                                                          Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAclUsageMapper.findAclRightsholderTotalsHoldersByScenarioId", parameters);
-    }
-
-    @Override
-    public int findAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAclUsageMapper.findAclRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
     @Override

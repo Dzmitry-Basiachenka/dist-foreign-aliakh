@@ -10,7 +10,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
-import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
@@ -43,7 +43,7 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     @Autowired
     private IAclScenarioService scenarioService;
     @Autowired
-    private IAclUsageService usageService;
+    private IAclScenarioUsageService scenarioUsageService;
     @Autowired
     private IAclDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
@@ -79,13 +79,13 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId(),
+        return scenarioUsageService.getAclRightsholderTotalsHoldersByScenarioId(aclScenario.getId(),
             getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
     }
 
     @Override
     public int getSize() {
-        return usageService.getAclRightsholderTotalsHolderCountByScenarioId(aclScenario.getId(),
+        return scenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(aclScenario.getId(),
             getWidget().getSearchValue());
     }
 
