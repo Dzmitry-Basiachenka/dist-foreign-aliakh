@@ -9,7 +9,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -49,11 +48,6 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IAclScenarioMapper.findCountByName", name);
-    }
-
-    @Override
-    public AclScenarioDto findWithAmountsAndLastAction(String scenarioId) {
-        return selectOne("IAclScenarioMapper.findWithAmountsAndLastAction", Objects.requireNonNull(scenarioId));
     }
 
     @Override

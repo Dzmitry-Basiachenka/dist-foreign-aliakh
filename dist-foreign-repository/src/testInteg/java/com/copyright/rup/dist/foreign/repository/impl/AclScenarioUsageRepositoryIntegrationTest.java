@@ -1,6 +1,10 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
@@ -8,9 +12,12 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
@@ -34,7 +41,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
- * Verifies {@link AclUsageRepository}.
+ * Verifies {@link AclScenarioUsageRepository}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -54,7 +61,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "acl-usage-repository-integration-test/";
     private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
-    private static final String ACL_SCENARIO_UID = "0d0041a3-833e-463e-8ad4-f28461dc961d";
+    private static final String SCENARIO_UID_1 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
+    private static final String SCENARIO_UID_2 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
+    private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
+    private static final String LICENSE_TYPE_ACL = "ACL";
     private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final String USER_NAME = "user@copyright.com";
     private static final String PRINT_TOU = "PRINT";
@@ -69,7 +79,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         AclScenario scenario = buildAclScenario("dec62df4-6a8f-4c59-ad65-2a5e06b3924d",
             "11c6590a-cea4-4cb6-a3ce-0f23a6f2e81c", "0f65b9b0-308f-4f73-b232-773a98baba2e",
             "17970e6b-c020-4c84-9282-045ca465a8af", "ACL Scenario 202212", "Description",
-            ScenarioStatusEnum.IN_PROGRESS, true, 202212, "ACL", USER_NAME, "2022-02-14T12:00:00+00:00");
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, "2022-02-14T12:00:00+00:00");
         aclScenarioUsageRepository.addToAclScenario(scenario, "SYSTEM");
         List<AclScenarioDetail> scenarioDetails =
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
@@ -84,7 +94,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         AclScenario scenario = buildAclScenario("17d43251-6637-41cb-8831-1bce47a7da85",
             "f74d4355-2f86-4168-a85d-9233f98ce0eb", "2a8c042c-1d66-469f-b4df-0987de0e308c",
             "6b821963-c0d1-41f4-8e97-a63f737c34fb", "ACL Scenario 202212", "Description",
-            ScenarioStatusEnum.IN_PROGRESS, true, 202212, "ACL", USER_NAME, "2022-02-14T12:00:00+00:00");
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE_ACL, USER_NAME, "2022-02-14T12:00:00+00:00");
         aclScenarioUsageRepository.addScenarioShares(scenario, USER_NAME);
         List<AclScenarioDetail> scenarioDetails =
             aclScenarioUsageRepository.findScenarioDetailsByScenarioId("17d43251-6637-41cb-8831-1bce47a7da85");
@@ -207,7 +217,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     public void testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         List<AclRightsholderTotalsHolder> holders =
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                ACL_SCENARIO_UID, StringUtils.EMPTY, null, null);
+                SCENARIO_UID_1, StringUtils.EMPTY, null, null);
         assertEquals(2, holders.size());
         verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
             16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
@@ -220,7 +230,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     public void testFindAclRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
         List<AclRightsholderTotalsHolder> holders =
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                ACL_SCENARIO_UID, "JohN", null, null);
+                SCENARIO_UID_1, "JohN", null, null);
         assertEquals(1, holders.size());
         verifyAclRightsholderTotalsHolder(buildAclRightsholderTotalsHolder(1000002859L, RH_NAME, 100.00,
             16.00, 84.00, 220.00, 35.00, 178.00, 2, 2), holders.get(0));
@@ -249,7 +259,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
     public void testFindAclRightsholderTotalsHolderCountByScenarioIdEmptySearchValue() {
-        assertEquals(2, aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID,
+        assertEquals(2, aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID_1,
             StringUtils.EMPTY));
     }
 
@@ -257,7 +267,75 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
     public void testFindAclRightsholderTotalsHolderCountByScenarioIdNullSearchValue() {
         assertEquals(2,
-            aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(ACL_SCENARIO_UID, null));
+            aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID_1, null));
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
+    public void testFindWithAmountsAndLastAction() {
+        AclScenarioDto scenario = aclScenarioUsageRepository.findWithAmountsAndLastAction(SCENARIO_UID_2);
+        assertNotNull(scenario);
+        assertEquals(SCENARIO_UID_2, scenario.getId());
+        assertEquals("1b48301c-e953-4af1-8ccb-8b3f9ed31544", scenario.getFundPoolId());
+        assertEquals("30d8a41f-9b01-42cd-8041-ce840512a040", scenario.getUsageBatchId());
+        assertEquals("b175a252-2fb9-47da-8d40-8ad82107f546", scenario.getGrantSetId());
+        assertEquals("ACL Scenario 202012", scenario.getName());
+        assertEquals("some description", scenario.getDescription());
+        assertEquals(ScenarioStatusEnum.SUBMITTED, scenario.getStatus());
+        assertTrue(scenario.isEditableFlag());
+        assertEquals(202012, scenario.getPeriodEndDate().intValue());
+        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
+        ScenarioAuditItem auditItem = scenario.getAuditItem();
+        assertNotNull(auditItem);
+        assertEquals(ScenarioActionTypeEnum.SUBMITTED, auditItem.getActionType());
+        assertEquals("Scenario submitted for approval", auditItem.getActionReason());
+        assertEquals(new BigDecimal("300.0000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("100.0000000000"), scenario.getGrossTotalPrint());
+        assertEquals(new BigDecimal("200.0000000000"), scenario.getGrossTotalDigital());
+        assertEquals(new BigDecimal("48.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("16.0000000000"), scenario.getServiceFeeTotalPrint());
+        assertEquals(new BigDecimal("32.0000000000"), scenario.getServiceFeeTotalDigital());
+        assertEquals(new BigDecimal("252.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("84.0000000000"), scenario.getNetTotalPrint());
+        assertEquals(new BigDecimal("168.0000000000"), scenario.getNetTotalDigital());
+        assertEquals(1, scenario.getNumberOfRhsPrint());
+        assertEquals(1, scenario.getNumberOfRhsDigital());
+        assertEquals(1, scenario.getNumberOfWorksPrint());
+        assertEquals(1, scenario.getNumberOfWorksDigital());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
+    public void testFindWithAmountsAndLastActionEmpty() {
+        AclScenarioDto scenario = aclScenarioUsageRepository.findWithAmountsAndLastAction(SCENARIO_UID_3);
+        assertNotNull(scenario);
+        assertEquals(SCENARIO_UID_3, scenario.getId());
+        assertEquals("e8a591d8-2803-4f9e-8cf5-4cd6257917e8", scenario.getFundPoolId());
+        assertEquals("794481d7-41e5-44b5-929b-87f379b28ffa", scenario.getUsageBatchId());
+        assertEquals("fb637adf-04a6-4bee-b195-8cbde93bf672", scenario.getGrantSetId());
+        assertEquals("ACL Scenario 202112", scenario.getName());
+        assertEquals("another description", scenario.getDescription());
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertFalse(scenario.isEditableFlag());
+        assertEquals(202112, scenario.getPeriodEndDate().intValue());
+        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
+        ScenarioAuditItem auditItem = scenario.getAuditItem();
+        assertNotNull(auditItem);
+        assertNull(auditItem.getActionType());
+        assertNull(auditItem.getActionReason());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalDigital());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalDigital());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotalPrint());
+        assertEquals(BigDecimal.ZERO, scenario.getNetTotalDigital());
+        assertEquals(0, scenario.getNumberOfRhsPrint());
+        assertEquals(0, scenario.getNumberOfRhsDigital());
+        assertEquals(0, scenario.getNumberOfWorksPrint());
+        assertEquals(0, scenario.getNumberOfWorksDigital());
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {
@@ -412,7 +490,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         holder.setNetTotalDigital(BigDecimal.valueOf(netTotalDigital).setScale(10, BigDecimal.ROUND_HALF_UP));
         holder.setNumberOfTitles(numberOfTitles);
         holder.setNumberOfAggLcClasses(numberOfAggLcClasses);
-        holder.setLicenseType("ACL");
+        holder.setLicenseType(LICENSE_TYPE_ACL);
         return holder;
     }
 
@@ -442,10 +520,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
                                                           AclRightsholderTotalsHolder holderDesc, String sortProperty) {
         List<AclRightsholderTotalsHolder> holders =
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-                ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+                SCENARIO_UID_1, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
         verifyAclRightsholderTotalsHolder(holderAsc, holders.get(0));
         holders = aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
+            SCENARIO_UID_1, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
         verifyAclRightsholderTotalsHolder(holderDesc, holders.get(0));
     }
 }

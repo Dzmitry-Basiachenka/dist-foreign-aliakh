@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 
 import java.util.List;
 
@@ -85,4 +86,12 @@ public interface IAclScenarioUsageService {
      * @return count of {@link AclRightsholderTotalsHolder}s
      */
     int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+
+    /**
+     * Gets {@link AclScenarioDto} by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return instance of {@link AclScenarioDto}
+     */
+    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
 }

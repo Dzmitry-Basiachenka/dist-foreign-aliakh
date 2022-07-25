@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -119,11 +118,6 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public boolean aclScenarioExists(String scenarioName) {
         return 0 < aclScenarioRepository.findCountByName(scenarioName);
-    }
-
-    @Override
-    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
-        return aclScenarioRepository.findWithAmountsAndLastAction(scenarioId);
     }
 
     @Override

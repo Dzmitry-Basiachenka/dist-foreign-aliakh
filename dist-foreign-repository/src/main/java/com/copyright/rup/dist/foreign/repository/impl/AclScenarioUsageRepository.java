@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
 import com.google.common.collect.Maps;
@@ -110,5 +111,10 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IAclScenarioUsageMapper.findAclRightsholderTotalsHolderCountByScenarioId", parameters);
+    }
+
+    @Override
+    public AclScenarioDto findWithAmountsAndLastAction(String scenarioId) {
+        return selectOne("IAclScenarioUsageMapper.findWithAmountsAndLastAction", Objects.requireNonNull(scenarioId));
     }
 }

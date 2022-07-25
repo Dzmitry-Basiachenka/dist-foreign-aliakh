@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -71,6 +72,7 @@ public class AclScenariosControllerTest {
     private IAclScenariosWidget scenariosWidget;
     private AclScenariosController aclScenariosController;
     private IAclScenarioService aclScenarioService;
+    private IAclScenarioUsageService aclScenarioUsageService;
     private IAclUsageBatchService usageBatchService;
     private IAclGrantSetService grantSetService;
     private IAclFundPoolService fundPoolService;
@@ -84,6 +86,7 @@ public class AclScenariosControllerTest {
         aclScenariosController = new AclScenariosController();
         scenariosWidget = createMock(IAclScenariosWidget.class);
         aclScenarioService = createMock(IAclScenarioService.class);
+        aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
         usageBatchService = createMock(IAclUsageBatchService.class);
         grantSetService = createMock(IAclGrantSetService.class);
         fundPoolService = createMock(IAclFundPoolService.class);
@@ -94,6 +97,7 @@ public class AclScenariosControllerTest {
         mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(aclScenariosController, "widget", scenariosWidget);
         Whitebox.setInternalState(aclScenariosController, aclScenarioService);
+        Whitebox.setInternalState(aclScenariosController, aclScenarioUsageService);
         Whitebox.setInternalState(aclScenariosController, usageBatchService);
         Whitebox.setInternalState(aclScenariosController, grantSetService);
         Whitebox.setInternalState(aclScenariosController, fundPoolService);
@@ -123,10 +127,11 @@ public class AclScenariosControllerTest {
     public void testGetScenarioWithAmountsAndLastAction() {
         AclScenarioDto scenario = new AclScenarioDto();
         scenario.setId(SCENARIO_UID);
-        expect(aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
-        replay(aclScenarioService);
+        expect(aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario)
+            .once();
+        replay(aclScenarioUsageService);
         assertSame(scenario, aclScenariosController.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
-        verify(aclScenarioService);
+        verify(aclScenarioUsageService);
     }
 
     @Test

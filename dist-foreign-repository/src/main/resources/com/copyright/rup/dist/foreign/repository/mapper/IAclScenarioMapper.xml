@@ -30,23 +30,6 @@
         </collection>
     </resultMap>
 
-    <resultMap id="aclScenarioDtoResultMap" type="AclScenarioDto" extends="aclScenarioResultMap">
-        <result property="grossTotal" column="gross_total"/>
-        <result property="grossTotalPrint" column="gross_total_print"/>
-        <result property="grossTotalDigital" column="gross_total_digital"/>
-        <result property="serviceFeeTotal" column="service_fee_total"/>
-        <result property="serviceFeeTotalPrint" column="service_fee_total_print"/>
-        <result property="serviceFeeTotalDigital" column="service_fee_total_digital"/>
-        <result property="netTotal" column="net_total"/>
-        <result property="netTotalPrint" column="net_total_print"/>
-        <result property="netTotalDigital" column="net_total_digital"/>
-        <result property="numberOfRhsPrint" column="number_of_rhs_print"/>
-        <result property="numberOfRhsDigital" column="number_of_rhs_digital"/>
-        <result property="numberOfWorksPrint" column="number_of_works_print"/>
-        <result property="numberOfWorksDigital" column="number_of_works_digital"/>
-        <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
-    </resultMap>
-
     <resultMap id="aclScenarioDetailDtoResultMap" type="AclScenarioDetailDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_acl_scenario_detail_uid"/>
         <result property="originalDetailId" column="original_detail_id"/>
@@ -88,46 +71,6 @@
         <result property="netAmountDigital" column="net_amount_digital"/>
         <result property="combinedNetAmount" column="combined_net_amount"/>
     </resultMap>
-
-    <sql id="fullScenarioInformation">
-        s.df_acl_scenario_uid,
-        s.df_acl_usage_batch_uid,
-        s.df_acl_fund_pool_uid,
-        s.df_acl_grant_set_uid,
-        s.name,
-        s.description,
-        s.status_ind,
-        s.is_editable,
-        s.period_end_date,
-        s.license_type,
-        coalesce(sum(gross_total), 0) gross_total,
-        coalesce(sum(service_fee_total), 0) service_fee_total,
-        coalesce(sum(net_total), 0) net_total,
-        sum(case when type_of_use = 'PRINT' then gross_total else 0 end) gross_total_print,
-        sum(case when type_of_use = 'PRINT' then service_fee_total else 0 end) service_fee_total_print,
-        sum(case when type_of_use = 'PRINT' then net_total else 0 end) net_total_print,
-        sum(case when type_of_use = 'PRINT' then number_of_rhs else 0 end) number_of_rhs_print,
-        sum(case when type_of_use = 'PRINT' then number_of_works else 0 end) number_of_works_print,
-        sum(case when type_of_use = 'DIGITAL' then gross_total else 0 end) gross_total_digital,
-        sum(case when type_of_use = 'DIGITAL' then service_fee_total else 0 end) service_fee_total_digital,
-        sum(case when type_of_use = 'DIGITAL' then net_total else 0 end) net_total_digital,
-        sum(case when type_of_use = 'DIGITAL' then number_of_rhs else 0 end) number_of_rhs_digital,
-        sum(case when type_of_use = 'DIGITAL' then number_of_works else 0 end) number_of_works_digital,
-        sa.df_acl_scenario_audit_uid action_df_scenario_audit_uid,
-        sa.df_acl_scenario_uid action_df_scenario_uid,
-        sa.action_type_ind action_action_type_ind,
-        sa.action_reason action_action_reason,
-        sa.created_datetime action_created_datetime,
-        sa.updated_datetime action_updated_datetime,
-        sa.created_by_user action_created_by_user,
-        sa.updated_by_user action_updated_by_user,
-        s.record_version action_record_version,
-        s.created_datetime created_datetime,
-        s.updated_datetime updated_datetime,
-        s.created_by_user created_by_user,
-        s.updated_by_user updated_by_user,
-        s.record_version record_version
-    </sql>
 
     <sql id="aclScenarioColumns">
         s.df_acl_scenario_uid,
@@ -528,44 +471,6 @@
         select count(name)
         from ${schema}.df_acl_scenario
         where upper(name) = upper(#{name})
-    </select>
-
-    <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
-        select
-            <include refid="fullScenarioInformation"/>
-        from (
-            select 
-                df_acl_scenario_uid,
-                sum(gross_amount) as gross_total,
-                sum(service_fee_amount) as service_fee_total,
-                sum(net_amount) as net_total,
-                count(distinct rh_account_number) number_of_rhs,
-                count(distinct wr_wrk_inst) number_of_works,
-                type_of_use
-                from (
-                    select        
-                        s1.df_acl_scenario_uid,
-                        shd.gross_amount,
-                        shd.service_fee_amount,
-                        shd.net_amount,
-                        shd.type_of_use,
-                        shd.rh_account_number,
-                        scd.wr_wrk_inst
-                    from ${schema}.df_acl_scenario s1
-                    left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s1.df_acl_scenario_uid
-                    left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-                    where s1.df_acl_scenario_uid = #{scenarioId}
-                ) as values
-                group by df_acl_scenario_uid, type_of_use
-            ) as groups    
-        join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
-        left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
-            and sa.created_datetime = (
-                select
-                    max(created_datetime)
-                from ${schema}.df_acl_scenario_audit
-                where df_acl_scenario_uid = s.df_acl_scenario_uid)
-        group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
