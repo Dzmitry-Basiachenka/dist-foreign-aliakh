@@ -1,3 +1,12 @@
+15.1.36
+-
+* B-74353 FDA: Saving Pub Type Weights: implement backend logic to update Pub Type Weights
+* B-71855 FDA: Export Scenario specific usage details: add Export Details button to ACL Single Scenario window
+* B-71855 FDA: Export Scenario specific usage details: implement service logic for ACL scenario details export
+* CDP-1082 FDA: Delete ACL Fund Pool / Grant Set: Exception occurs after trying to delete Fund Pool or Grant Set that is attached to a scenario
+* B-71855 FDA: Export Scenario specific usage details: implement repository logic for ACL scenario details export
+* B-57795 FDA: Calculate ACL Scenario: implement validation to have usages with corresponding licensee classes to distribute all amounts
+
 15.1.35
 -
 * B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: update logic to fill Aggregate license class Id dropdown box
