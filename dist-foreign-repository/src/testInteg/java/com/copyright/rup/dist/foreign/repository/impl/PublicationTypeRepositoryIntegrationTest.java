@@ -104,7 +104,7 @@ public class PublicationTypeRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindAclHistoryPublicationTypes() {
+    public void testFindAclHistoricalPublicationTypes() {
         List<AclPublicationType> pubTypes = publicationTypeRepository.findAclHistoricalPublicationTypes();
         assertNotNull(pubTypes);
         assertEquals(10, pubTypes.size());
@@ -131,7 +131,7 @@ public class PublicationTypeRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateHistoryPublicationTypesAcl() {
+    public void testInsertAclHistoricalPublicationTypes() {
         AclPublicationType aclPublicationType =
             buildAclHistoryPublicationType(PUBLICATION_TYPE_UID, "BK", BOOK,
                 ACL_PRODUCT_FAMILY, DEFAULT_WEIGHT_1_00);
