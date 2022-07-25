@@ -107,11 +107,11 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
             .setCaption(ForeignUi.getMessage("table.column.det_lc_id"))
             .setExpandRatio(1);
         grid.addColumn(DetailLicenseeClass::getDescription)
-            .setCaption(ForeignUi.getMessage("table.column.det_lc_description"))
+            .setCaption(ForeignUi.getMessage("table.column.det_lc_name"))
             .setExpandRatio(2);
         addAggregateLicenseeClassIdColumn();
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDescription())
-            .setCaption(ForeignUi.getMessage("table.column.aggregate_lc_description"))
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setExpandRatio(2);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");
