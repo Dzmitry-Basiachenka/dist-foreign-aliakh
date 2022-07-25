@@ -180,9 +180,9 @@ public class AclAggregateLicenseeClassMappingWindowTest {
     private void verifyGrid(Grid grid) {
         UiTestHelper.verifyGrid(grid, Arrays.asList(
             Triple.of("Det LC ID", -1.0, 1),
-            Triple.of("Det LC Description", -1.0, 2),
+            Triple.of("Det LC Name", -1.0, 2),
             Triple.of("Agg LC ID", -1.0, 1),
-            Triple.of("Agg LC Description", -1.0, 2)));
+            Triple.of("Agg LC Name", -1.0, 2)));
         List<Column> columns = grid.getColumns();
         columns.forEach(column -> assertTrue(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
