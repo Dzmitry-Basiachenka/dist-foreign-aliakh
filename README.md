@@ -1,3 +1,15 @@
+15.1.37
+-
+* B-74269 FDA: Tech Debt: extract scenario related queries from IAclUsageMapper to separate IAclScenarioUsageMapper part 1
+* B-74353 FDA: Saving Pub Type Weights: make changes based on code review
+* B-61503 FDA: Edit Aggregate Licensee Class Scenario Inputs: rename grid column captions
+* B-74269 Tech Debt: improve performance of loading ACL scenarios
+* B-57795 FDA: Calculate ACL Scenario: update calculation and validation to reflect licensee class mapping
+* B-74269 FDA: Tech Debt: extract scenario related queries from IAclUsageMapper to separate IAclScenarioUsageMapper part 2
+* B-57795 FDA: Calculate ACL Scenario: remove usages with zero amount from scenario
+* B-74269 FDA: Tech Debt: extract scenario usages related queries from IAclScenarioMapper to AclScenarioUsageMapper
+* B-57795 FDA: Calculate ACL Scenario: drop foreign key from df_acl_share_detail table to df_acl_scenario_detail
+
 15.1.36
 -
 * B-74353 FDA: Saving Pub Type Weights: implement backend logic to update Pub Type Weights
