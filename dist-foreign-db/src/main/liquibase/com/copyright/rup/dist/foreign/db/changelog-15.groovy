@@ -1288,4 +1288,22 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_share_detail', columnName: 'detail_share')
         }
     }
+
+    changeSet(id: '2022-07-26-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-57795 FDA: Calculate ACL Scenario: drop foreign key from df_acl_share_detail table to df_acl_scenario_detail")
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+            baseTableName: 'df_acl_share_detail',
+            constraintName: 'fk_df_acl_share_detail_2_df_acl_scenario_detail')
+
+        rollback {
+            addForeignKeyConstraint(baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_acl_share_detail',
+                baseColumnNames: 'df_acl_scenario_detail_uid',
+                referencedTableName: 'df_acl_scenario_detail',
+                referencedColumnNames: 'df_acl_scenario_detail_uid',
+                constraintName: 'fk_df_acl_share_detail_2_df_acl_scenario_detail')
+        }
+    }
 }
