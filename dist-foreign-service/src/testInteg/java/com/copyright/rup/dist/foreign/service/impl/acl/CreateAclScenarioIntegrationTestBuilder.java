@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
-import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.ServiceTestHelper;
 
@@ -31,7 +31,7 @@ public class CreateAclScenarioIntegrationTestBuilder {
     @Autowired
     private IAclScenarioService scenarioService;
     @Autowired
-    private IAclUsageRepository usageRepository;
+    private IAclScenarioUsageRepository scenarioUsageRepository;
     @Autowired
     private IAclScenarioRepository scenarioRepository;
     @Autowired
@@ -79,7 +79,7 @@ public class CreateAclScenarioIntegrationTestBuilder {
             AclScenario scenario = scenarioRepository.findById(expectedScenario.getId());
             testHelper.verifyAclScenario(expectedScenario, scenario);
             List<AclScenarioDetail> scenarioDetails =
-                usageRepository.findScenarioDetailsByScenarioId(scenario.getId());
+                scenarioUsageRepository.findScenarioDetailsByScenarioId(scenario.getId());
             testHelper.verifyAclScenarioDetails(pathToScenarioDetailsToUpload, scenarioDetails);
         }
     }

@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
-import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.domain.filter.AclUsageFilter;
@@ -90,54 +88,6 @@ public interface IAclUsageRepository {
      * @return list of usage age wights
      */
     List<UsageAge> findDefaultUsageAgesWeights();
-
-    /**
-     * Attaches usages to scenario.
-     *
-     * @param aclScenario ACL scenario to add ACL usages to
-     * @param userName    user name
-     */
-    void addToAclScenario(AclScenario aclScenario, String userName);
-
-    /**
-     * Populates Pub Type Weights for all scenario usages.
-     *
-     * @param scenarioId scenario identifier
-     * @param userName   username
-     */
-    void populatePubTypeWeights(String scenarioId, String userName);
-
-    /**
-     * Creates scenario shares for each usage in scenario.
-     *
-     * @param aclScenario ACL scenario to create shares
-     * @param userName    user name
-     */
-    void addScenarioShares(AclScenario aclScenario, String userName);
-
-    /**
-     * Calculates and updates volume, value and detail shares for specified scenario.
-     *
-     * @param scenarioId scenario identifier
-     * @param userName   username
-     */
-    void calculateScenarioShares(String scenarioId, String userName);
-
-    /**
-     * Calculates and updates gross, net and service_fee amounts for specified scenario.
-     *
-     * @param scenarioId scenario identifier
-     * @param userName   username
-     */
-    void calculateScenarioAmounts(String scenarioId, String userName);
-
-    /**
-     * Finds list of {@link AclScenarioDetail}s by ACL scenario uid.
-     *
-     * @param scenarioId scenario id
-     * @return list of {@link AclScenarioDetail}s
-     */
-    List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId);
 
     /**
      * Finds count of {@link AclUsageDto}s by ACL batch id where publication type or content unit price is null.
