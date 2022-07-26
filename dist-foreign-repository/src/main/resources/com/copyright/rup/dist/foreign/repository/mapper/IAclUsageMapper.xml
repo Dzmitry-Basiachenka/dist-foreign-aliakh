@@ -518,8 +518,8 @@
             select
                 type_of_use,
                 aggregate_licensee_class_id,
-                coalesce(sum(volume_weight), 1) as volume_weight_denominator,
-                coalesce(sum(value_weight), 1) as value_weight_denominator
+                case when sum(volume_weight) != 0 then sum(volume_weight) else 1 end as volume_weight_denominator,
+                case when sum(value_weight) != 0 then sum(value_weight) else 1 end as value_weight_denominator
             from ${schema}.df_acl_share_detail
             where df_acl_scenario_uid = #{scenarioId}
             group by type_of_use, aggregate_licensee_class_id
@@ -539,15 +539,16 @@
     <update id="calculateScenarioAmounts" parameterType="map">
         with agg_class_amounts as materialized (
             select
-                default_det.aggregate_licensee_class_id,
+                sc_det.aggregate_licensee_class_id,
                 fpd.type_of_use,
                 sum(fpd.net_amount) net_amount,
                 sum(fpd.gross_amount) gross_amount
             from ${schema}.df_acl_scenario s
             join ${schema}.df_acl_fund_pool_detail fpd on s.df_acl_fund_pool_uid = fpd.df_acl_fund_pool_uid
-            join ${schema}.df_detail_licensee_class default_det on fpd.detail_licensee_class_id = default_det.detail_licensee_class_id
-            where df_acl_scenario_uid = #{scenarioId}
-            group by fpd.type_of_use, default_det.aggregate_licensee_class_id
+            join ${schema}.df_acl_scenario_licensee_class sc_det on fpd.detail_licensee_class_id = sc_det.detail_licensee_class_id
+                and sc_det.df_acl_scenario_uid = #{scenarioId}
+            where s.df_acl_scenario_uid = #{scenarioId}
+            group by fpd.type_of_use, sc_det.aggregate_licensee_class_id
         )
         update ${schema}.df_acl_share_detail sh
         set

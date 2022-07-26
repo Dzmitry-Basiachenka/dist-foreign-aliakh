@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -21,8 +22,6 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
-
-import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -157,22 +156,18 @@ public class AclScenarioService implements IAclScenarioService {
         Map<Integer, Set<Integer>> aggregateToDetailClassIds = mapping.stream()
             .collect(Collectors.groupingBy(detailClass -> detailClass.getAggregateLicenseeClass().getId(),
                 Collectors.mapping(DetailLicenseeClass::getId, Collectors.toSet())));
-        Set<AclFundPoolDetailDto> unmappedFundPoolDetails = fundPoolDetails.stream()
-            .filter(detail -> !aggregateToDetailClassIds.containsKey(detail.getAggregateLicenseeClass().getId()))
-            .collect(Collectors.toSet());
-        Set<AclFundPoolDetailDto> absentFundPoolDetails = fundPoolDetails.stream()
-            .filter(detail -> aggregateToDetailClassIds.containsKey(detail.getAggregateLicenseeClass().getId()))
-            .filter(detail -> !aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
-                aggregateToDetailClassIds.get(detail.getAggregateLicenseeClass().getId()), detail.getTypeOfUse())
-            ).collect(Collectors.toSet());
-        Collection<AclFundPoolDetailDto> invalidDetails = Sets.union(unmappedFundPoolDetails, absentFundPoolDetails)
-            .stream()
-            .collect(Collectors.toMap(
-                detail ->
-                    Pair.of(detail.getAggregateLicenseeClass().getId(), detail.getTypeOfUse()), Function.identity(),
-                (detail1, detail2) -> detail1))
+        Map<Integer, Integer> detailToAggregateClassIds = mapping.stream()
+            .collect(Collectors.toMap(BaseEntity::getId, detail -> detail.getAggregateLicenseeClass().getId(),
+                (agg1, agg2) -> agg1));
+        Collection<AclFundPoolDetailDto> uniqueFundPoolDetailsByAggClass = fundPoolDetails.stream()
+            .collect(
+                Collectors.toMap(detail -> Pair.of(detail.getAggregateLicenseeClass().getId(), detail.getTypeOfUse()),
+                    Function.identity(), (detail1, detail2) -> detail1))
             .values();
-        return invalidDetails.stream()
+        return uniqueFundPoolDetailsByAggClass.stream()
+            .filter(detail -> !aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(batchId, grantSetId,
+                aggregateToDetailClassIds.get(detailToAggregateClassIds.get(detail.getDetailLicenseeClass().getId())),
+                detail.getTypeOfUse()))
             .sorted(Comparator.comparing(detail -> detail.getAggregateLicenseeClass().getId()))
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }

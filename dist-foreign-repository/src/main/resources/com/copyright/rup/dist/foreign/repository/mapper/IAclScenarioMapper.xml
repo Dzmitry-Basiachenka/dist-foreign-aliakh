@@ -550,7 +550,7 @@
                         shd.net_amount,
                         shd.type_of_use,
                         shd.rh_account_number,
-                        scd.wr_wrk_inst           
+                        scd.wr_wrk_inst
                     from ${schema}.df_acl_scenario s1
                     left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s1.df_acl_scenario_uid
                     left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid

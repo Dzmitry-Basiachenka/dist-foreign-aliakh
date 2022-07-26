@@ -48,7 +48,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool_detail') {
             column(name: 'df_acl_fund_pool_detail_uid', value: 'd89f67d7-59bf-4651-b040-c3ba10d42fde')
             column(name: 'df_acl_fund_pool_uid', value: 'f2b3fd26-9e1c-48d7-968e-016c55d4ff13')
-            column(name: 'detail_licensee_class_id', value: '5')
+            column(name: 'detail_licensee_class_id', value: '12')
             column(name: 'license_type', value: 'ACL')
             column(name: 'type_of_use', value: 'PRINT')
             column(name: 'is_ldmt', value: true)
@@ -341,9 +341,16 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
-            column(name: 'df_acl_scenario_licensee_class_uid', value: '03aff9d9-86af-4734-bcb7-de3133baec36')
+            column(name: 'df_acl_scenario_licensee_class_uid', value: 'a070faed-ea7c-4695-ac36-394142aad6fa')
             column(name: 'df_acl_scenario_uid', value: '742c3061-50b6-498a-a440-17c3ba5bf7eb')
             column(name: 'detail_licensee_class_id', value: 5)
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: '03aff9d9-86af-4734-bcb7-de3133baec36')
+            column(name: 'df_acl_scenario_uid', value: '742c3061-50b6-498a-a440-17c3ba5bf7eb')
+            column(name: 'detail_licensee_class_id', value: 12)
             column(name: 'aggregate_licensee_class_id', value: 51)
         }
 

@@ -198,38 +198,22 @@ public class AclScenarioServiceTest {
     }
 
     @Test
-    public void testGetFundPoolDetailsNotToBeDistributedInvalidMapping() {
-        List<DetailLicenseeClass> mapping =
-            Arrays.asList(buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
-        AclFundPoolDetailDto invalidMappingDetail = buildAclFundPoolDetailDto(1, 1, PRINT_TOU);
-        List<AclFundPoolDetailDto> fundPoolDetails =
-            Arrays.asList(invalidMappingDetail, buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU));
+    public void testGetFundPoolDetailsNotToBeDistributedInvalidNoUsages() {
+        List<DetailLicenseeClass> mapping = Arrays.asList(buildDetailLicenseeClass(1, 1),
+            buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
+        AclFundPoolDetailDto noUsagesDetail = buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU);
+        List<AclFundPoolDetailDto> fundPoolDetails = Arrays.asList(buildAclFundPoolDetailDto(1, 1, PRINT_TOU),
+            noUsagesDetail, buildAclFundPoolDetailDto(3, 51, DIGITAL_TOU));
         expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
-            Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(true).once();
-        replay(aclFundPoolService, aclUsageService);
-        Set<AclFundPoolDetailDto> invalidDetails =
-            aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
-        assertEquals(1, invalidDetails.size());
-        assertTrue(invalidDetails.contains(invalidMappingDetail));
-        verify(aclFundPoolService, aclUsageService);
-    }
-
-    @Test
-    public void testGetFundPoolDetailsNotToBeDistributedInvalidMappingAndNoUsages() {
-        List<DetailLicenseeClass> mapping =
-            Arrays.asList(buildDetailLicenseeClass(2, 51), buildDetailLicenseeClass(3, 51));
-        AclFundPoolDetailDto invalidMappingDetail = buildAclFundPoolDetailDto(1, 1, PRINT_TOU);
-        AclFundPoolDetailDto noUsagesDetail = buildAclFundPoolDetailDto(2, 51, DIGITAL_TOU);
-        List<AclFundPoolDetailDto> fundPoolDetails = Arrays.asList(invalidMappingDetail, noUsagesDetail);
-        expect(aclFundPoolService.getDetailDtosByFundPoolId(FUND_POOL_UID)).andReturn(fundPoolDetails).once();
+            Collections.singleton(1), PRINT_TOU)).andReturn(true).once();
         expect(aclUsageService.usageExistForLicenseeClassesAndTypeOfUse(BATCH_UID, GRANT_SET_UID,
             Sets.newHashSet(2, 3), DIGITAL_TOU)).andReturn(false).once();
         replay(aclFundPoolService, aclUsageService);
         Set<AclFundPoolDetailDto> invalidDetails =
             aclScenarioService.getFundPoolDetailsNotToBeDistributed(BATCH_UID, FUND_POOL_UID, GRANT_SET_UID, mapping);
-        assertEquals(2, invalidDetails.size());
-        assertTrue(invalidDetails.containsAll(fundPoolDetails));
+        assertEquals(1, invalidDetails.size());
+        assertTrue(invalidDetails.contains(noUsagesDetail));
         verify(aclFundPoolService, aclUsageService);
     }
 
