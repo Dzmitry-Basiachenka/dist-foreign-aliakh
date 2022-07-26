@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +51,13 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public void calculateScenarioAmounts(String scenarioId, String userName) {
         aclScenarioUsageRepository.calculateScenarioAmounts(scenarioId, userName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteZeroAmountUsages(String scenarioId) {
+        aclScenarioUsageRepository.deleteZeroAmountShares(scenarioId);
+        aclScenarioUsageRepository.deleteZeroAmountUsages(scenarioId);
     }
 
     @Override

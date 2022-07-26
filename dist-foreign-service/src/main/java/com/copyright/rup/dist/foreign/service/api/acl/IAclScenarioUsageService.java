@@ -59,6 +59,13 @@ public interface IAclScenarioUsageService {
     void calculateScenarioAmounts(String scenarioId, String userName);
 
     /**
+     * Deletes usages and shares with zero amounts from scenario for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteZeroAmountUsages(String scenarioId);
+
+    /**
      * Gets {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
      * @param scenarioId  scenario id

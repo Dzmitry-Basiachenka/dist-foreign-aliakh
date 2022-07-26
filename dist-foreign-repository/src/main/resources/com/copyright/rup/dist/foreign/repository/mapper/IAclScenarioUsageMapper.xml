@@ -307,6 +307,22 @@
         order by original_detail_id, shd.type_of_use
     </select>
 
+    <delete id="deleteZeroAmountShares" parameterType="string">
+        delete from ${schema}.df_acl_share_detail
+        where df_acl_scenario_uid = #{scenarioId}
+            and (gross_amount is null or gross_amount = 0)
+    </delete>
+
+    <delete id="deleteZeroAmountUsages" parameterType="string">
+        delete from ${schema}.df_acl_scenario_detail
+        where df_acl_scenario_uid = #{scenarioId}
+            and df_acl_scenario_detail_uid not in (
+                select df_acl_scenario_detail_uid
+                from ${schema}.df_acl_share_detail
+                where df_acl_scenario_uid = #{scenarioId}
+            )
+    </delete>
+
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
         select
             shd.rh_account_number,

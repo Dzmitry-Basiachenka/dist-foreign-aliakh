@@ -175,6 +175,34 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "delete-zero-amount-shares.groovy")
+    public void testDeleteZeroAmountShares() {
+        List<AclScenarioDetail> scenarioDetails =
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId("3f55f25f-c2cb-4e7b-aaa9-3c25f7a879cf");
+        assertEquals(2, scenarioDetails.size());
+        assertEquals(1, scenarioDetails.get(0).getScenarioShareDetails().size());
+        assertEquals(2, scenarioDetails.get(1).getScenarioShareDetails().size());
+        aclScenarioUsageRepository.deleteZeroAmountShares("3f55f25f-c2cb-4e7b-aaa9-3c25f7a879cf");
+        scenarioDetails =
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId("3f55f25f-c2cb-4e7b-aaa9-3c25f7a879cf");
+        assertEquals(2, scenarioDetails.size());
+        assertEquals(0, scenarioDetails.get(0).getScenarioShareDetails().size());
+        assertEquals(1, scenarioDetails.get(1).getScenarioShareDetails().size());
+    }
+
+    @Test
+    @TestData(fileName = FOLDER_NAME + "delete-zero-amount-usages.groovy")
+    public void testDeleteZeroAmountUsages() {
+        List<AclScenarioDetail> scenarioDetails =
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId("9fab9b5f-86cd-487a-a5e1-aab5ea8df175");
+        assertEquals(3, scenarioDetails.size());
+        aclScenarioUsageRepository.deleteZeroAmountUsages("9fab9b5f-86cd-487a-a5e1-aab5ea8df175");
+        scenarioDetails =
+            aclScenarioUsageRepository.findScenarioDetailsByScenarioId("9fab9b5f-86cd-487a-a5e1-aab5ea8df175");
+        assertEquals(1, scenarioDetails.size());
+    }
+
+    @Test
     @TestData(fileName = FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID)
     public void testFindAclRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         List<AclRightsholderTotalsHolder> holders =
@@ -414,7 +442,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
                                                           AclRightsholderTotalsHolder holderDesc, String sortProperty) {
         List<AclRightsholderTotalsHolder> holders =
             aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
-            ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+                ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
         verifyAclRightsholderTotalsHolder(holderAsc, holders.get(0));
         holders = aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
             ACL_SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));

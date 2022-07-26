@@ -55,7 +55,7 @@ public class AclScenarioUsageServiceTest {
         aclScenarioUsageRepository.addToAclScenario(scenario, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioUsageRepository);
-         aclScenarioUsageService.addUsagesToAclScenario(scenario, USER_NAME);
+        aclScenarioUsageService.addUsagesToAclScenario(scenario, USER_NAME);
         verify(aclScenarioUsageRepository);
     }
 
@@ -93,6 +93,17 @@ public class AclScenarioUsageServiceTest {
         expectLastCall().once();
         replay(aclScenarioUsageRepository);
         aclScenarioUsageService.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testDeleteZeroAmountUsages() {
+        aclScenarioUsageRepository.deleteZeroAmountShares(SCENARIO_UID);
+        expectLastCall().once();
+        aclScenarioUsageRepository.deleteZeroAmountUsages(SCENARIO_UID);
+        expectLastCall().once();
+        replay(aclScenarioUsageRepository);
+        aclScenarioUsageService.deleteZeroAmountUsages(SCENARIO_UID);
         verify(aclScenarioUsageRepository);
     }
 

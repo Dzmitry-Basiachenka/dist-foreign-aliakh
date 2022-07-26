@@ -77,6 +77,16 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     }
 
     @Override
+    public void deleteZeroAmountShares(String scenarioId) {
+        delete("IAclScenarioUsageMapper.deleteZeroAmountShares", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public void deleteZeroAmountUsages(String scenarioId) {
+        delete("IAclScenarioUsageMapper.deleteZeroAmountUsages", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId) {
         return selectList("IAclScenarioUsageMapper.findScenarioDetailsByScenarioId", scenarioId);
     }
