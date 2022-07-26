@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
@@ -126,16 +125,6 @@ public class AclScenarioServiceTest {
         expect(aclScenarioRepository.findCountByName("ACL Scenario 2022")).andReturn(1).once();
         replay(aclScenarioRepository);
         assertTrue(aclScenarioService.aclScenarioExists("ACL Scenario 2022"));
-        verify(aclScenarioRepository);
-    }
-
-    @Test
-    public void testGetScenarioWithAmountsAndLastAction() {
-        AclScenarioDto scenario = new AclScenarioDto();
-        scenario.setId(SCENARIO_UID);
-        expect(aclScenarioRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
-        replay(aclScenarioRepository);
-        assertSame(scenario, aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
         verify(aclScenarioRepository);
     }
 

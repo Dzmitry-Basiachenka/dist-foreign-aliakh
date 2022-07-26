@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
@@ -74,14 +73,6 @@ public interface IAclScenarioService {
      * otherwise {@code false}
      */
     boolean aclScenarioExists(String scenarioName);
-
-    /**
-     * Gets {@link AclScenarioDto} by scenario id.
-     *
-     * @param scenarioId scenario id
-     * @return instance of {@link AclScenarioDto}
-     */
-    AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId);
 
     /**
      * Gets list of {@link AclScenarioDetailDto}s based on ACL scenario id and rightsholder account number.

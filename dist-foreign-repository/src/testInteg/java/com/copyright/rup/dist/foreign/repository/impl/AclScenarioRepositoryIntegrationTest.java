@@ -1,9 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -12,12 +10,9 @@ import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -60,9 +55,7 @@ public class AclScenarioRepositoryIntegrationTest {
     private static final String FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER =
         FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy";
     private static final String LICENSE_TYPE_ACL = "ACL";
-    private static final String SCENARIO_UID_1 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
-    private static final String SCENARIO_UID_2 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
-    private static final String SCENARIO_UID_3 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
+    private static final String SCENARIO_UID = "f473fa64-12ea-4db6-9d30-94087fe500fd";
     private static final String DESCRIPTION = "Description";
     private static final String USER_NAME = "user@copyright.com";
     private static final String DATE = "2022-02-14T12:00:00+00:00";
@@ -94,74 +87,6 @@ public class AclScenarioRepositoryIntegrationTest {
     public void testFindCountByName() {
         assertEquals(1, aclScenarioRepository.findCountByName("ACL Scenario 202212"));
         assertEquals(0, aclScenarioRepository.findCountByName("ACL Scenario"));
-    }
-
-    @Test
-    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
-    public void testFindWithAmountsAndLastAction() {
-        AclScenarioDto scenario = aclScenarioRepository.findWithAmountsAndLastAction(SCENARIO_UID_1);
-        assertNotNull(scenario);
-        assertEquals(SCENARIO_UID_1, scenario.getId());
-        assertEquals("1b48301c-e953-4af1-8ccb-8b3f9ed31544", scenario.getFundPoolId());
-        assertEquals("30d8a41f-9b01-42cd-8041-ce840512a040", scenario.getUsageBatchId());
-        assertEquals("b175a252-2fb9-47da-8d40-8ad82107f546", scenario.getGrantSetId());
-        assertEquals("ACL Scenario 202012", scenario.getName());
-        assertEquals("some description", scenario.getDescription());
-        assertEquals(ScenarioStatusEnum.SUBMITTED, scenario.getStatus());
-        assertTrue(scenario.isEditableFlag());
-        assertEquals(202012, scenario.getPeriodEndDate().intValue());
-        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
-        ScenarioAuditItem auditItem = scenario.getAuditItem();
-        assertNotNull(auditItem);
-        assertEquals(ScenarioActionTypeEnum.SUBMITTED, auditItem.getActionType());
-        assertEquals("Scenario submitted for approval", auditItem.getActionReason());
-        assertEquals(new BigDecimal("300.0000000000"), scenario.getGrossTotal());
-        assertEquals(new BigDecimal("100.0000000000"), scenario.getGrossTotalPrint());
-        assertEquals(new BigDecimal("200.0000000000"), scenario.getGrossTotalDigital());
-        assertEquals(new BigDecimal("48.0000000000"), scenario.getServiceFeeTotal());
-        assertEquals(new BigDecimal("16.0000000000"), scenario.getServiceFeeTotalPrint());
-        assertEquals(new BigDecimal("32.0000000000"), scenario.getServiceFeeTotalDigital());
-        assertEquals(new BigDecimal("252.0000000000"), scenario.getNetTotal());
-        assertEquals(new BigDecimal("84.0000000000"), scenario.getNetTotalPrint());
-        assertEquals(new BigDecimal("168.0000000000"), scenario.getNetTotalDigital());
-        assertEquals(1, scenario.getNumberOfRhsPrint());
-        assertEquals(1, scenario.getNumberOfRhsDigital());
-        assertEquals(1, scenario.getNumberOfWorksPrint());
-        assertEquals(1, scenario.getNumberOfWorksDigital());
-    }
-
-    @Test
-    @TestData(fileName = FOLDER_NAME + "find-with-amounts-and-last-action.groovy")
-    public void testFindWithAmountsAndLastActionEmpty() {
-        AclScenarioDto scenario = aclScenarioRepository.findWithAmountsAndLastAction(SCENARIO_UID_2);
-        assertNotNull(scenario);
-        assertEquals(SCENARIO_UID_2, scenario.getId());
-        assertEquals("e8a591d8-2803-4f9e-8cf5-4cd6257917e8", scenario.getFundPoolId());
-        assertEquals("794481d7-41e5-44b5-929b-87f379b28ffa", scenario.getUsageBatchId());
-        assertEquals("fb637adf-04a6-4bee-b195-8cbde93bf672", scenario.getGrantSetId());
-        assertEquals("ACL Scenario 202112", scenario.getName());
-        assertEquals("another description", scenario.getDescription());
-        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        assertFalse(scenario.isEditableFlag());
-        assertEquals(202112, scenario.getPeriodEndDate().intValue());
-        assertEquals(LICENSE_TYPE_ACL, scenario.getLicenseType());
-        ScenarioAuditItem auditItem = scenario.getAuditItem();
-        assertNotNull(auditItem);
-        assertNull(auditItem.getActionType());
-        assertNull(auditItem.getActionReason());
-        assertEquals(BigDecimal.ZERO, scenario.getGrossTotal());
-        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalPrint());
-        assertEquals(BigDecimal.ZERO, scenario.getGrossTotalDigital());
-        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotal());
-        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalPrint());
-        assertEquals(BigDecimal.ZERO, scenario.getServiceFeeTotalDigital());
-        assertEquals(BigDecimal.ZERO, scenario.getNetTotal());
-        assertEquals(BigDecimal.ZERO, scenario.getNetTotalPrint());
-        assertEquals(BigDecimal.ZERO, scenario.getNetTotalDigital());
-        assertEquals(0, scenario.getNumberOfRhsPrint());
-        assertEquals(0, scenario.getNumberOfRhsDigital());
-        assertEquals(0, scenario.getNumberOfWorksPrint());
-        assertEquals(0, scenario.getNumberOfWorksDigital());
     }
 
     @Test
@@ -222,10 +147,10 @@ public class AclScenarioRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberNullSearchValue() {
-        assertEquals(0, aclScenarioRepository.findByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID_3, null,
+        assertEquals(0, aclScenarioRepository.findByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID, null,
             null, null).size());
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_3, null, null, null);
+            RH_ACCOUNT_NUMBER, SCENARIO_UID, null, null, null);
         assertEquals(2, scenarioDetailDtos.size());
         AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
         AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
@@ -237,9 +162,9 @@ public class AclScenarioRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         assertEquals(0,
-            aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID_3, null));
+            aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID, null));
         assertEquals(2,
-            aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID_3, null));
+            aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID, null));
     }
 
     @Test
@@ -633,7 +558,7 @@ public class AclScenarioRepositoryIntegrationTest {
     private void verifyFindByScenarioIdAndRhSearch(List<AclScenarioDetailDto> expectedScenarioDetailDtos,
                                                    String searchValue) {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_3, searchValue, null, null);
+            RH_ACCOUNT_NUMBER, SCENARIO_UID, searchValue, null, null);
         assertEquals(expectedScenarioDetailDtos.size(), scenarioDetailDtos.size());
         if (!expectedScenarioDetailDtos.isEmpty()) {
             for (int i = 0; i < scenarioDetailDtos.size(); i++) {
@@ -644,16 +569,16 @@ public class AclScenarioRepositoryIntegrationTest {
 
     private void verifyFindCountByScenarioIdAndRhSearch(int expectedSize, String searchValue) {
         assertEquals(expectedSize, aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
-            SCENARIO_UID_3, searchValue));
+            SCENARIO_UID, searchValue));
     }
 
     private void assertSortingAclAclScenarioDetailDto(AclScenarioDetailDto detailAsc, AclScenarioDetailDto detailDesc,
                                                       String sortProperty) {
         List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_3, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+            RH_ACCOUNT_NUMBER, SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
         verifyAclScenarioDetailDto(detailAsc, scenarioDetailDtos.get(0));
         scenarioDetailDtos = aclScenarioRepository.findByScenarioIdAndRhAccountNumber(
-            RH_ACCOUNT_NUMBER, SCENARIO_UID_3, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
+            RH_ACCOUNT_NUMBER, SCENARIO_UID, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
         verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
     }
 }

@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
-import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
@@ -41,8 +40,6 @@ import java.util.List;
 public class AclScenarioController extends CommonController<IAclScenarioWidget> implements IAclScenarioController {
 
     @Autowired
-    private IAclScenarioService scenarioService;
-    @Autowired
     private IAclScenarioUsageService scenarioUsageService;
     @Autowired
     private IAclDrillDownByRightsholderController drillDownByRightsholderController;
@@ -69,7 +66,7 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Override
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction() {
-        return scenarioService.getAclScenarioWithAmountsAndLastAction(aclScenario.getId());
+        return scenarioUsageService.getAclScenarioWithAmountsAndLastAction(aclScenario.getId());
     }
 
     @Override

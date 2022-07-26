@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
@@ -71,5 +72,10 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public int getAclRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         return aclScenarioUsageRepository.findAclRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
+    }
+
+    @Override
+    public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
+        return aclScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId);
     }
 }

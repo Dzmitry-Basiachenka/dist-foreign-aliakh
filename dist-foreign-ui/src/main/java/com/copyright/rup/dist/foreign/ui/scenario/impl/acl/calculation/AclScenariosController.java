@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IPublicationTypeService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclGrantSetService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -51,6 +52,8 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Autowired
     private IAclScenarioService aclScenarioService;
     @Autowired
+    private IAclScenarioUsageService scenarioUsageService;
+    @Autowired
     private IAclUsageBatchService usageBatchService;
     @Autowired
     private IAclGrantSetService grantSetService;
@@ -74,7 +77,7 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
 
     @Override
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
-        return aclScenarioService.getAclScenarioWithAmountsAndLastAction(scenarioId);
+        return scenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenarioId);
     }
 
     @Override

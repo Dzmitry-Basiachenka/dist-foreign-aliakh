@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -125,6 +126,16 @@ public class AclScenarioUsageServiceTest {
         replay(aclScenarioUsageRepository);
         assertEquals(5, aclScenarioUsageService.getAclRightsholderTotalsHolderCountByScenarioId(SCENARIO_UID,
             StringUtils.EMPTY));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetScenarioWithAmountsAndLastAction() {
+        AclScenarioDto scenario = new AclScenarioDto();
+        scenario.setId(SCENARIO_UID);
+        expect(aclScenarioUsageRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(scenario, aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
         verify(aclScenarioUsageRepository);
     }
 
