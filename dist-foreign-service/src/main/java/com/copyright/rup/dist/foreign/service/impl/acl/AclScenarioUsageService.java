@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,33 +25,31 @@ import java.util.List;
 public class AclScenarioUsageService implements IAclScenarioUsageService {
 
     @Autowired
-    private IAclUsageRepository aclUsageRepository;
-    @Autowired
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
 
     @Override
     public void addUsagesToAclScenario(AclScenario aclScenario, String username) {
-        aclUsageRepository.addToAclScenario(aclScenario, username);
+        aclScenarioUsageRepository.addToAclScenario(aclScenario, username);
     }
 
     @Override
     public void addScenarioShares(AclScenario aclScenario, String username) {
-        aclUsageRepository.addScenarioShares(aclScenario, username);
+        aclScenarioUsageRepository.addScenarioShares(aclScenario, username);
     }
 
     @Override
     public void populatePubTypeWeights(String scenarioId, String userName) {
-        aclUsageRepository.populatePubTypeWeights(scenarioId, userName);
+        aclScenarioUsageRepository.populatePubTypeWeights(scenarioId, userName);
     }
 
     @Override
     public void calculateScenarioShares(String scenarioId, String username) {
-        aclUsageRepository.calculateScenarioShares(scenarioId, username);
+        aclScenarioUsageRepository.calculateScenarioShares(scenarioId, username);
     }
 
     @Override
     public void calculateScenarioAmounts(String scenarioId, String userName) {
-        aclUsageRepository.calculateScenarioAmounts(scenarioId, userName);
+        aclScenarioUsageRepository.calculateScenarioAmounts(scenarioId, userName);
     }
 
     @Override

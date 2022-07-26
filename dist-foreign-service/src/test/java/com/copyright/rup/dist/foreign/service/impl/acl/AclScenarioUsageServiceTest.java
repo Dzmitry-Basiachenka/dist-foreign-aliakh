@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.IAclUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,62 +40,60 @@ public class AclScenarioUsageServiceTest {
     private static final String USER_NAME = "SYSTEM";
 
     private IAclScenarioUsageService aclScenarioUsageService;
-    private IAclUsageRepository aclUsageRepository;
     private IAclScenarioUsageRepository aclScenarioUsageRepository;
 
     @Before
     public void setUp() {
         aclScenarioUsageService = new AclScenarioUsageService();
-        aclUsageRepository = createMock(IAclUsageRepository.class);
         aclScenarioUsageRepository = createMock(IAclScenarioUsageRepository.class);
-        Whitebox.setInternalState(aclScenarioUsageService, aclUsageRepository, aclScenarioUsageRepository);
+        Whitebox.setInternalState(aclScenarioUsageService, aclScenarioUsageRepository);
     }
 
     @Test
     public void testAddUsagesToAclScenario() {
         AclScenario scenario = buildAclScenario();
-        aclUsageRepository.addToAclScenario(scenario, USER_NAME);
+        aclScenarioUsageRepository.addToAclScenario(scenario, USER_NAME);
         expectLastCall().once();
-        replay(aclUsageRepository);
+        replay(aclScenarioUsageRepository);
          aclScenarioUsageService.addUsagesToAclScenario(scenario, USER_NAME);
-        verify(aclUsageRepository);
+        verify(aclScenarioUsageRepository);
     }
 
     @Test
     public void testAddScenarioShares() {
         AclScenario scenario = buildAclScenario();
-        aclUsageRepository.addScenarioShares(scenario, USER_NAME);
+        aclScenarioUsageRepository.addScenarioShares(scenario, USER_NAME);
         expectLastCall().once();
-        replay(aclUsageRepository);
+        replay(aclScenarioUsageRepository);
         aclScenarioUsageService.addScenarioShares(scenario, USER_NAME);
-        verify(aclUsageRepository);
+        verify(aclScenarioUsageRepository);
     }
 
     @Test
     public void testPopulatePubTypeWeights() {
-        aclUsageRepository.populatePubTypeWeights(SCENARIO_UID, USER_NAME);
+        aclScenarioUsageRepository.populatePubTypeWeights(SCENARIO_UID, USER_NAME);
         expectLastCall().once();
-        replay(aclUsageRepository);
+        replay(aclScenarioUsageRepository);
         aclScenarioUsageService.populatePubTypeWeights(SCENARIO_UID, USER_NAME);
-        verify(aclUsageRepository);
+        verify(aclScenarioUsageRepository);
     }
 
     @Test
     public void testCalculateScenarioShares() {
-        aclUsageRepository.calculateScenarioShares(SCENARIO_UID, USER_NAME);
+        aclScenarioUsageRepository.calculateScenarioShares(SCENARIO_UID, USER_NAME);
         expectLastCall().once();
-        replay(aclUsageRepository);
+        replay(aclScenarioUsageRepository);
         aclScenarioUsageService.calculateScenarioShares(SCENARIO_UID, USER_NAME);
-        verify(aclUsageRepository);
+        verify(aclScenarioUsageRepository);
     }
 
     @Test
     public void testCalculateScenarioAmounts() {
-        aclUsageRepository.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
+        aclScenarioUsageRepository.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
         expectLastCall().once();
-        replay(aclUsageRepository);
+        replay(aclScenarioUsageRepository);
         aclScenarioUsageService.calculateScenarioAmounts(SCENARIO_UID, USER_NAME);
-        verify(aclUsageRepository);
+        verify(aclScenarioUsageRepository);
     }
 
     @Test
