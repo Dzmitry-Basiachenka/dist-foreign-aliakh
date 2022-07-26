@@ -68,6 +68,20 @@ public interface IAclScenarioUsageRepository {
     List<AclScenarioDetail> findScenarioDetailsByScenarioId(String scenarioId);
 
     /**
+     * Delete shares with zero amounts for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteZeroAmountShares(String scenarioId);
+
+    /**
+     * Delete usages without corresponding shares for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteZeroAmountUsages(String scenarioId);
+
+    /**
      * Finds {@link AclRightsholderTotalsHolder}s based on ACL scenario id.
      *
      * @param scenarioId  scenario id
