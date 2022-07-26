@@ -58,7 +58,7 @@ import java.util.stream.IntStream;
 )
 public class AclScenarioUsageRepositoryIntegrationTest {
 
-    private static final String FOLDER_NAME = "acl-usage-repository-integration-test/";
+    private static final String FOLDER_NAME = "acl-scenario-usage-repository-integration-test/";
     private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
     private static final String SCENARIO_UID_1 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
