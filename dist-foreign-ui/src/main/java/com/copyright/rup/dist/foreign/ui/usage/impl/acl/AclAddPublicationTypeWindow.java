@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
-import com.copyright.rup.dist.foreign.ui.common.validator.AmountZeroValidator;
+import com.copyright.rup.dist.foreign.ui.common.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.PeriodValidator;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -108,7 +108,7 @@ class AclAddPublicationTypeWindow extends Window {
         pubTypeWeightField.setRequiredIndicatorVisible(true);
         binder.forField(pubTypeWeightField)
             .withValidator(new RequiredValidator())
-            .withValidator(new AmountZeroValidator())
+            .withValidator(new AmountValidator())
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .bind(AclPublicationType::getWeight, AclPublicationType::setWeight);
         pubTypeWeightField.setSizeFull();

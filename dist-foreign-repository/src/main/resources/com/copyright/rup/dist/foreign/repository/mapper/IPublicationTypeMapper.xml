@@ -52,6 +52,7 @@
             ptwh.weight
         from ${schema}.df_acl_pub_type_weight_history ptwh
         join ${schema}.df_publication_type pt on ptwh.df_publication_type_uid = pt.df_publication_type_uid
+        order by pt.name, ptwh.period
     </select>
 
     <insert id="insertAclHistoricalPublicationType" parameterType="AclPubType">

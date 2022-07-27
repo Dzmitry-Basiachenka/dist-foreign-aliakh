@@ -50,7 +50,7 @@ public class AclPublicationTypeWeightsWindow extends Window {
         this.controller = controller;
         this.isEditable = isEditable;
         setWidth(525, Unit.PIXELS);
-        setHeight(250, Unit.PIXELS);
+        setHeight(405, Unit.PIXELS);
         setResizable(false);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();
@@ -108,8 +108,7 @@ public class AclPublicationTypeWeightsWindow extends Window {
                 (IParametersSaveListener<AclPublicationType>) saveEvent -> {
                     currentValues.add(saveEvent.getSavedParameters());
                     currentValues.sort(Comparator.comparing(AclPublicationType::getName)
-                        .thenComparing(AclPublicationType::getPeriod)
-                        .thenComparing(AclPublicationType::getCreateDate));
+                        .thenComparing(AclPublicationType::getPeriod));
                     dataProvider.refreshAll();
                 },
                 IParametersSaveListener.SAVE_HANDLER);
