@@ -114,7 +114,7 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setExpandRatio(2);
         grid.getColumns().forEach(column -> column.setSortable(true));
-        VaadinUtils.addComponentStyle(grid, "aggregate-licensee-class-mapping-grid");
+        VaadinUtils.addComponentStyle(grid, "acl-aggregate-licensee-class-mapping-grid");
     }
 
     private void addAggregateLicenseeClassIdColumn() {
