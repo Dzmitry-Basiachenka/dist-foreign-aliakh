@@ -1,3 +1,8 @@
+15.1.38
+-
+* B-74269 FDA: Tech Debt: move Liquibase scripts for AclScenarioUsageRepositoryIntegrationTest into the correct folder
+* B-57782 FDA: ACL edit scenario Pub Type Weights: allow zeros as Pub Type Weights
+
 15.1.37
 -
 * B-74269 FDA: Tech Debt: extract scenario related queries from IAclUsageMapper to separate IAclScenarioUsageMapper part 1
