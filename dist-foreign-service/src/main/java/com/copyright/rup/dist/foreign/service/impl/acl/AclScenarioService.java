@@ -3,13 +3,10 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -118,19 +115,6 @@ public class AclScenarioService implements IAclScenarioService {
     @Override
     public boolean aclScenarioExists(String scenarioName) {
         return 0 < aclScenarioRepository.findCountByName(scenarioName);
-    }
-
-    @Override
-    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                                        String searchValue, Pageable pageable,
-                                                                        Sort sort) {
-        return aclScenarioRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
-            pageable, sort);
-    }
-
-    @Override
-    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        return aclScenarioRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
     }
 
     @Override

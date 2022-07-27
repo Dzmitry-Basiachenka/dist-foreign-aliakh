@@ -5,7 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderWidget;
@@ -41,7 +41,7 @@ public class AclDrillDownByRightsholderController extends CommonController<IAclD
     implements IAclDrillDownByRightsholderController {
 
     @Autowired
-    private IAclScenarioService aclScenarioService;
+    private IAclScenarioUsageService aclScenarioUsageService;
     private Long selectedRightsholderAccountNumber;
     private AclScenario selectedScenario;
 
@@ -52,13 +52,13 @@ public class AclDrillDownByRightsholderController extends CommonController<IAclD
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return aclScenarioService.getByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
+        return aclScenarioUsageService.getByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
             selectedScenario.getId(), getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
     }
 
     @Override
     public int getSize() {
-        return aclScenarioService.getCountByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
+        return aclScenarioUsageService.getCountByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
             selectedScenario.getId(), getWidget().getSearchValue());
     }
 

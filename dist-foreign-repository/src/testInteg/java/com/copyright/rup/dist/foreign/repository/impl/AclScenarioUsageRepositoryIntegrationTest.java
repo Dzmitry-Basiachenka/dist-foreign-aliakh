@@ -7,11 +7,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioShareDetail;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
@@ -21,6 +23,10 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
@@ -61,10 +68,14 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String FOLDER_NAME = "acl-scenario-usage-repository-integration-test/";
     private static final String FIND_ACL_RH_TOTALS_HOLDERS_BY_SCENARIO_ID =
         FOLDER_NAME + "find-acl-rh-totals-holders-by-scenario-id.groovy";
+    private static final String FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER =
+        FOLDER_NAME + "find-by-scenario-id-and-rh-account-number.groovy";
     private static final String SCENARIO_UID_1 = "0d0041a3-833e-463e-8ad4-f28461dc961d";
     private static final String SCENARIO_UID_2 = "d18d7cab-8a69-4b60-af5a-0a0c99b8a4d3";
     private static final String SCENARIO_UID_3 = "53a1c4e8-f1fe-4b17-877e-2d721b2059b5";
+    private static final String SCENARIO_UID_4 = "f473fa64-12ea-4db6-9d30-94087fe500fd";
     private static final String LICENSE_TYPE_ACL = "ACL";
+    private static final Long RH_ACCOUNT_NUMBER = 1000002859L;
     private static final String RH_NAME = "John Wiley & Sons - Books";
     private static final String USER_NAME = "user@copyright.com";
     private static final String PRINT_TOU = "PRINT";
@@ -338,6 +349,161 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(0, scenario.getNumberOfWorksDigital());
     }
 
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberNullSearchValue() {
+        assertEquals(0, aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_UID_4, null,
+            null, null).size());
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
+            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, null, null, null);
+        assertEquals(2, scenarioDetailDtos.size());
+        AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
+        AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
+        verifyAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDtos.get(0));
+        verifyAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDtos.get(1));
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
+        assertEquals(0, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L,
+            SCENARIO_UID_4, null));
+        assertEquals(2, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+            SCENARIO_UID_4, null));
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberSearchByUsageDetailId() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "OGN674GHHSB108");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "ogN674ghhSB108");
+        verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "ogN674gh hSB108");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberSearchByUsageDetailId() {
+        verifyFindCountByScenarioIdAndRhSearch(1, "OGN674GHHSB108");
+        verifyFindCountByScenarioIdAndRhSearch(1, "ogN674ghhSB108");
+        verifyFindCountByScenarioIdAndRhSearch(0, "ogN674gh hSB108");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "122820638");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "12282");
+        verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "12282 0638");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+        verifyFindCountByScenarioIdAndRhSearch(1, "122820638");
+        verifyFindCountByScenarioIdAndRhSearch(1, "12282");
+        verifyFindCountByScenarioIdAndRhSearch(0, "12282 0638");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberSearchSystemTitle() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "Technology review");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "TeCHNoLOGY REV");
+        verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "Techn ology review");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberSearchSystemTitle() {
+        verifyFindCountByScenarioIdAndRhSearch(1, "Technology review");
+        verifyFindCountByScenarioIdAndRhSearch(1, "TeCHNoLOGY REV");
+        verifyFindCountByScenarioIdAndRhSearch(0, "Techn ology review");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberSearchRhAccountNumber() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Arrays.asList(buildDigitalAclScenarioDetailDto(),
+            buildPrintDigitalAclScenarioDetailDto());
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "1000002859");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "1000002");
+        verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "10000 02859");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberSearchRhAccountNumber() {
+        verifyFindCountByScenarioIdAndRhSearch(2, "1000002859");
+        verifyFindCountByScenarioIdAndRhSearch(2, "1000002");
+        verifyFindCountByScenarioIdAndRhSearch(0, "10000 02859");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindByScenarioIdAndRhAccountNumberSearchRhName() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Arrays.asList(buildDigitalAclScenarioDetailDto(),
+            buildPrintDigitalAclScenarioDetailDto());
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "John Wiley & Sons - Books");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "JOHN Wiley");
+        verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "John Wi ley & Sons - Books");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindCountByScenarioIdAndRhAccountNumberSearchRhName() {
+        verifyFindCountByScenarioIdAndRhSearch(2, "John Wiley & Sons - Books");
+        verifyFindCountByScenarioIdAndRhSearch(2, "JOHN Wiley");
+        verifyFindCountByScenarioIdAndRhSearch(0, "John Wi ley & Sons - Books");
+    }
+
+    @Test
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testSortingFindFindByScenarioIdAndRhAccountNumber() {
+        AclScenarioDetailDto scenarioDetailDto1 = buildDigitalAclScenarioDetailDto();
+        AclScenarioDetailDto scenarioDetailDto2 = buildPrintDigitalAclScenarioDetailDto();
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "detailId");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "usageDetailId");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "productFamily");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "usageBatchName");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "periodEndDate");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "wrWrkInst");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "systemTitle");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhAccountNumberPrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "rhNamePrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhAccountNumberDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto1, "rhNameDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usagePeriod");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "usageAgeWeight");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassId");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailLicenseeClassName");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassId");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "aggregateLicenseeClassName");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "surveyCountry");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "reportedTypeOfUse");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "numberOfCopies");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "weightedCopies");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "publicationType");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "pubTypeWeight");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "price");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "priceFlag");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "content");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentFlag");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPrice");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "contentUnitPriceFlag");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "valueSharePrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "volumeSharePrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailSharePrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "netAmountPrint");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "valueShareDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto1, scenarioDetailDto2, "volumeShareDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "detailShareDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "netAmountDigital");
+        assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "combinedNetAmount");
+    }
+
     private AclScenarioDetail buildAclScenarioDetail() {
         AclScenarioDetail scenarioDetail = new AclScenarioDetail();
         scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
@@ -396,6 +562,47 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedScenarioDetail.getUsageAgeWeight(), actualScenarioDetail.getUsageAgeWeight());
         assertEquals(expectedScenarioDetail.getWeightedCopies(), actualScenarioDetail.getWeightedCopies());
         assertEquals(expectedScenarioDetail.getSurveyCountry(), actualScenarioDetail.getSurveyCountry());
+    }
+
+    private void verifyAclScenarioDetailDto(AclScenarioDetailDto expectedDetail,
+                                            AclScenarioDetailDto actualDetail) {
+        assertEquals(expectedDetail.getId(), actualDetail.getId());
+        assertEquals(expectedDetail.getOriginalDetailId(), actualDetail.getOriginalDetailId());
+        assertEquals(expectedDetail.getProductFamily(), actualDetail.getProductFamily());
+        assertEquals(expectedDetail.getUsageBatchName(), actualDetail.getUsageBatchName());
+        assertEquals(expectedDetail.getPeriodEndPeriod(), actualDetail.getPeriodEndPeriod());
+        assertEquals(expectedDetail.getWrWrkInst(), actualDetail.getWrWrkInst());
+        assertEquals(expectedDetail.getSystemTitle(), actualDetail.getSystemTitle());
+        assertEquals(expectedDetail.getRhAccountNumberPrint(), actualDetail.getRhAccountNumberPrint());
+        assertEquals(expectedDetail.getRhNamePrint(), actualDetail.getRhNamePrint());
+        assertEquals(expectedDetail.getRhAccountNumberDigital(), actualDetail.getRhAccountNumberDigital());
+        assertEquals(expectedDetail.getRhNameDigital(), actualDetail.getRhNameDigital());
+        assertEquals(expectedDetail.getUsagePeriod(), actualDetail.getUsagePeriod());
+        assertEquals(expectedDetail.getUsageAgeWeight(), actualDetail.getUsageAgeWeight());
+        assertEquals(expectedDetail.getDetailLicenseeClassId(), actualDetail.getDetailLicenseeClassId());
+        assertEquals(expectedDetail.getDetailLicenseeClassName(), actualDetail.getDetailLicenseeClassName());
+        assertEquals(expectedDetail.getAggregateLicenseeClassId(), actualDetail.getAggregateLicenseeClassId());
+        assertEquals(expectedDetail.getAggregateLicenseeClassName(), actualDetail.getAggregateLicenseeClassName());
+        assertEquals(expectedDetail.getSurveyCountry(), actualDetail.getSurveyCountry());
+        assertEquals(expectedDetail.getReportedTypeOfUse(), actualDetail.getReportedTypeOfUse());
+        assertEquals(expectedDetail.getNumberOfCopies(), actualDetail.getNumberOfCopies());
+        assertEquals(expectedDetail.getWeightedCopies(), actualDetail.getWeightedCopies());
+        assertEquals(expectedDetail.getPublicationType(), actualDetail.getPublicationType());
+        assertEquals(expectedDetail.getPrice(), actualDetail.getPrice());
+        assertEquals(expectedDetail.isPriceFlag(), actualDetail.isPriceFlag());
+        assertEquals(expectedDetail.getContent(), actualDetail.getContent());
+        assertEquals(expectedDetail.isContentFlag(), actualDetail.isContentFlag());
+        assertEquals(expectedDetail.getContentUnitPrice(), actualDetail.getContentUnitPrice());
+        assertEquals(expectedDetail.isContentUnitPriceFlag(), actualDetail.isContentUnitPriceFlag());
+        assertEquals(expectedDetail.getValueSharePrint(), actualDetail.getValueSharePrint());
+        assertEquals(expectedDetail.getVolumeSharePrint(), actualDetail.getVolumeSharePrint());
+        assertEquals(expectedDetail.getDetailSharePrint(), actualDetail.getDetailSharePrint());
+        assertEquals(expectedDetail.getNetAmountPrint(), actualDetail.getNetAmountPrint());
+        assertEquals(expectedDetail.getValueShareDigital(), actualDetail.getValueShareDigital());
+        assertEquals(expectedDetail.getVolumeShareDigital(), actualDetail.getVolumeShareDigital());
+        assertEquals(expectedDetail.getDetailShareDigital(), actualDetail.getDetailShareDigital());
+        assertEquals(expectedDetail.getNetAmountDigital(), actualDetail.getNetAmountDigital());
+        assertEquals(expectedDetail.getCombinedNetAmount(), actualDetail.getCombinedNetAmount());
     }
 
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
@@ -525,5 +732,53 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         holders = aclScenarioUsageRepository.findAclRightsholderTotalsHoldersByScenarioId(
             SCENARIO_UID_1, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
         verifyAclRightsholderTotalsHolder(holderDesc, holders.get(0));
+    }
+
+    private void verifyFindByScenarioIdAndRhSearch(List<AclScenarioDetailDto> expectedScenarioDetailDtos,
+                                                   String searchValue) {
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
+            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, searchValue, null, null);
+        assertEquals(expectedScenarioDetailDtos.size(), scenarioDetailDtos.size());
+        if (!expectedScenarioDetailDtos.isEmpty()) {
+            for (int i = 0; i < scenarioDetailDtos.size(); i++) {
+                verifyAclScenarioDetailDto(expectedScenarioDetailDtos.get(i), scenarioDetailDtos.get(i));
+            }
+        }
+    }
+
+    private void verifyFindCountByScenarioIdAndRhSearch(int expectedSize, String searchValue) {
+        assertEquals(expectedSize, aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+            SCENARIO_UID_4, searchValue));
+    }
+
+    private void assertSortingAclAclScenarioDetailDto(AclScenarioDetailDto detailAsc, AclScenarioDetailDto detailDesc,
+                                                      String sortProperty) {
+        List<AclScenarioDetailDto> scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
+            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.ASC));
+        verifyAclScenarioDetailDto(detailAsc, scenarioDetailDtos.get(0));
+        scenarioDetailDtos = aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(
+            RH_ACCOUNT_NUMBER, SCENARIO_UID_4, StringUtils.EMPTY, null, new Sort(sortProperty, Sort.Direction.DESC));
+        verifyAclScenarioDetailDto(detailDesc, scenarioDetailDtos.get(0));
+    }
+
+    private AclScenarioDetailDto buildDigitalAclScenarioDetailDto() {
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_digital.json");
+    }
+
+    private AclScenarioDetailDto buildPrintDigitalAclScenarioDetailDto() {
+        return loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_print_digital.json");
+    }
+
+    private AclScenarioDetailDto loadExpectedAclScenarioDetailDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<AclScenarioDetailDto>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

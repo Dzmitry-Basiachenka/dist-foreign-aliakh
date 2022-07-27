@@ -4,11 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioRepository;
@@ -34,9 +31,6 @@ import java.util.Objects;
 @Repository
 public class AclScenarioRepository extends BaseRepository implements IAclScenarioRepository {
 
-    private static final String PAGEABLE_KEY = "pageable";
-    private static final String SORT_KEY = "sort";
-    private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
 
     @Override
@@ -88,28 +82,6 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
     @Override
     public AclScenario findById(String scenarioId) {
         return selectOne("IAclScenarioMapper.findScenarioById", scenarioId);
-    }
-
-    @Override
-    public List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                                         String searchValue, Pageable pageable,
-                                                                         Sort sort) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        parameters.put(PAGEABLE_KEY, pageable);
-        parameters.put(SORT_KEY, sort);
-        return selectList("IAclScenarioMapper.findByScenarioIdAndRhAccountNumber", parameters);
-    }
-
-    @Override
-    public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
-        return selectOne("IAclScenarioMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override

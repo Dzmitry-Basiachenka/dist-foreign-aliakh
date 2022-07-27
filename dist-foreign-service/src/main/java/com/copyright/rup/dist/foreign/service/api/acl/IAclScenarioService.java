@@ -1,11 +1,8 @@
 package com.copyright.rup.dist.foreign.service.api.acl;
 
-import com.copyright.rup.dist.common.repository.api.Pageable;
-import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
-import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 
@@ -73,29 +70,6 @@ public interface IAclScenarioService {
      * otherwise {@code false}
      */
     boolean aclScenarioExists(String scenarioName);
-
-    /**
-     * Gets list of {@link AclScenarioDetailDto}s based on ACL scenario id and rightsholder account number.
-     *
-     * @param accountNumber selected rightsholder account number
-     * @param scenarioId    scenario id
-     * @param searchValue   search value
-     * @param pageable      instance of {@link Pageable}
-     * @param sort          instance of {@link Sort}
-     * @return list of {@link AclScenarioDetailDto}s
-     */
-    List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                                 String searchValue, Pageable pageable, Sort sort);
-
-    /**
-     * Gets count of {@link AclScenarioDetailDto}s based on ACL scenario id and rightsholder account number.
-     *
-     * @param accountNumber selected rightsholder account number
-     * @param scenarioId    scenario id
-     * @param searchValue   search value
-     * @return count of {@link AclScenarioDetailDto}s
-     */
-    int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 
     /**
      * Gets {@link AclScenario} names associated with fund pool id.

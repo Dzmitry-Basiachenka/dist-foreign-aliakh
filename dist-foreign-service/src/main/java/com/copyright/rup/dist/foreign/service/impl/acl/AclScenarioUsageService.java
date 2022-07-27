@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -77,5 +78,19 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public AclScenarioDto getAclScenarioWithAmountsAndLastAction(String scenarioId) {
         return aclScenarioUsageRepository.findWithAmountsAndLastAction(scenarioId);
+    }
+
+    @Override
+    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                        String searchValue, Pageable pageable,
+                                                                        Sort sort) {
+        return aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue,
+            pageable, sort);
+    }
+
+    @Override
+    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        return aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
+            searchValue);
     }
 }

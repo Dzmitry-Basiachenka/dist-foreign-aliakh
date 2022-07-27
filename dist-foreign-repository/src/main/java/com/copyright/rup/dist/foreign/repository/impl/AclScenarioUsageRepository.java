@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
@@ -116,5 +117,27 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     @Override
     public AclScenarioDto findWithAmountsAndLastAction(String scenarioId) {
         return selectOne("IAclScenarioUsageMapper.findWithAmountsAndLastAction", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                         String searchValue, Pageable pageable,
+                                                                         Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        parameters.put(PAGEABLE_KEY, pageable);
+        parameters.put(SORT_KEY, sort);
+        return selectList("IAclScenarioUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
+        return selectOne("IAclScenarioUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 }
