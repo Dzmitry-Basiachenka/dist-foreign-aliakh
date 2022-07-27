@@ -73,7 +73,7 @@ public class AclAddPublicationTypeWindowTest {
     private static final String EMPTY_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String NUMBER_VALIDATION_MESSAGE = "Field value should contain numeric values only";
     private static final String DECIMAL_VALIDATION_MESSAGE =
-        "Field value should be positive number and should not exceed 10 digits";
+        "Field value should be positive number or zero and should not exceed 10 digits";
 
     private final List<PublicationType> publicationTypes = Collections.singletonList(buildPublicationType());
     private IAclScenariosController controller;
@@ -136,6 +136,8 @@ public class AclAddPublicationTypeWindowTest {
         validateFieldAndVerifyErrorMessage(weightField, StringUtils.EMPTY, binder, EMPTY_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(weightField, SPACES_STRING, binder, EMPTY_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(weightField, INVALID_NUMBER, binder, DECIMAL_VALIDATION_MESSAGE, false);
+        validateFieldAndVerifyErrorMessage(weightField, "0", binder, null, true);
+        validateFieldAndVerifyErrorMessage(weightField, " 0.00 ", binder, null, true);
         validateFieldAndVerifyErrorMessage(weightField, VALID_INTEGER, binder, null, true);
         validateFieldAndVerifyErrorMessage(weightField, VALID_DECIMAL, binder, null, true);
         validateFieldAndVerifyErrorMessage(weightField, INTEGER_WITH_SPACES_STRING, binder, null, true);

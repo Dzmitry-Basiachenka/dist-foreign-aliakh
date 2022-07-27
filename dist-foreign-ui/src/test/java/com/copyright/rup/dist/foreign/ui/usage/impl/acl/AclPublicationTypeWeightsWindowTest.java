@@ -73,7 +73,7 @@ public class AclPublicationTypeWeightsWindowTest {
 
     @Test
     public void testConstructorInEditMode() {
-        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
+        verifyWindow(window, "Pub Type Weights", 525, 405, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -92,7 +92,7 @@ public class AclPublicationTypeWeightsWindowTest {
     @Test
     public void testConstructorInViewMode() {
         window = new AclPublicationTypeWeightsWindow(controller, false);
-        verifyWindow(window, "Pub Type Weights", 525, 250, Unit.PIXELS);
+        verifyWindow(window, "Pub Type Weights", 525, 405, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
