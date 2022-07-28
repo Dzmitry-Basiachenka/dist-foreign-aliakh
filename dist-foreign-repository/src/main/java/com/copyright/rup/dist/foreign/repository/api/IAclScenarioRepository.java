@@ -79,7 +79,7 @@ public interface IAclScenarioRepository {
     AclScenario findById(String scenarioId);
 
     /**
-     * Gets list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
      * rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
@@ -93,7 +93,7 @@ public interface IAclScenarioRepository {
                                                                   String searchValue, Pageable pageable, Sort sort);
 
     /**
-     * Gets count of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * Finds count of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
      * rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
