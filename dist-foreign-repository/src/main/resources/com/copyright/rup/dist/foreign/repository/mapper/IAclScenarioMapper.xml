@@ -136,7 +136,7 @@
             digital_details.volume_share volume_share_digital,
             digital_details.detail_share detail_share_digital,
             coalesce(digital_details.net_amount, 0) net_amount_digital,
-            coalesce(print_details.net_amount,0) + coalesce(digital_details.net_amount, 0) combined_net_amount
+            coalesce(print_details.net_amount, 0) + coalesce(digital_details.net_amount, 0) combined_net_amount
         from ${schema}.df_acl_scenario s
         join ${schema}.df_acl_usage_batch ub on s.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
         join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
