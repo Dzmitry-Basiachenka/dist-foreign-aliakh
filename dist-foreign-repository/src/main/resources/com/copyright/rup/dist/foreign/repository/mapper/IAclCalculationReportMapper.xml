@@ -24,10 +24,10 @@
     </select>
 
     <select id="findAclScenarioDetailDtosCount" parameterType="map" resultType="int">
-        <include refid="IAclScenarioMapper.selectDtosCountByScenarioIdSql"/>
+        <include refid="IAclScenarioUsageMapper.selectDtosCountByScenarioIdSql"/>
     </select>
 
-    <select id="findAclScenarioDetailDtos" resultMap="IAclScenarioMapper.aclScenarioDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        <include refid="IAclScenarioMapper.selectDtosByScenarioIdSql"/>
+    <select id="findAclScenarioDetailDtos" resultMap="IAclScenarioUsageMapper.aclScenarioDetailDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        <include refid="IAclScenarioUsageMapper.selectDtosByScenarioIdSql"/>
     </select>
 </mapper>

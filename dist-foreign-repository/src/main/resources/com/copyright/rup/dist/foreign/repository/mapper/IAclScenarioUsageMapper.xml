@@ -70,6 +70,48 @@
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
     </resultMap>
 
+    <resultMap id="aclScenarioDetailDtoResultMap" type="AclScenarioDetailDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_acl_scenario_detail_uid"/>
+        <result property="originalDetailId" column="original_detail_id"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="usageBatchName" column="usage_batch_name"/>
+        <result property="periodEndPeriod" column="period_end_date"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="rhAccountNumberPrint" column="rh_account_number_print"/>
+        <result property="rhNamePrint" column="rh_name_print"/>
+        <result property="rhAccountNumberDigital" column="rh_account_number_digital"/>
+        <result property="rhNameDigital" column="rh_name_digital"/>
+        <result property="usagePeriod" column="usage_period"/>
+        <result property="usageAgeWeight" column="usage_age_weight"/>
+        <result property="detailLicenseeClassId" column="detail_licensee_class_id"/>
+        <result property="detailLicenseeClassName" column="detail_licensee_class_name"/>
+        <result property="aggregateLicenseeClassId" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClassName" column="aggregate_licensee_class_name"/>
+        <result property="surveyCountry" column="survey_country"/>
+        <result property="reportedTypeOfUse" column="reported_type_of_use"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="weightedCopies" column="weighted_copies"/>
+        <result property="publicationType.id" column="publication_type_uid"/>
+        <result property="publicationType.name" column="pub_type_name"/>
+        <result property="publicationType.weight" column="pub_type_weight"/>
+        <result property="price" column="price"/>
+        <result property="priceFlag" column="price_flag"/>
+        <result property="content" column="content"/>
+        <result property="contentFlag" column="content_flag"/>
+        <result property="contentUnitPrice" column="content_unit_price"/>
+        <result property="contentUnitPriceFlag" column="content_unit_price_flag"/>
+        <result property="valueSharePrint" column="value_share_print"/>
+        <result property="volumeSharePrint" column="volume_share_print"/>
+        <result property="detailSharePrint" column="detail_share_print"/>
+        <result property="netAmountPrint" column="net_amount_print"/>
+        <result property="valueShareDigital" column="value_share_digital"/>
+        <result property="volumeShareDigital" column="volume_share_digital"/>
+        <result property="detailShareDigital" column="detail_share_digital"/>
+        <result property="netAmountDigital" column="net_amount_digital"/>
+        <result property="combinedNetAmount" column="combined_net_amount"/>
+    </resultMap>
+
     <sql id="rightsholderAclTotalHoldersOrderBy">
         order by
         <choose>
@@ -168,6 +210,127 @@
         s.created_by_user created_by_user,
         s.updated_by_user updated_by_user,
         s.record_version record_version
+    </sql>
+
+    <sql id="selectDtosByScenarioIdSql">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+        order by scd.df_acl_scenario_detail_uid
+        <include refid="IUsageMapper.ifPageable"/>
+    </sql>
+
+    <sql id="selectDtosCountByScenarioIdSql">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+    </sql>
+
+    <sql id="selectScenarioDetailDtosSql">
+        select
+            scd.df_acl_scenario_detail_uid,
+            original_detail_id,
+            'ACL' product_family,
+            ub.name usage_batch_name,
+            s.period_end_date,
+            wr_wrk_inst,
+            system_title,
+            print_details.rh_account_number rh_account_number_print,
+            print_details.rh_name rh_name_print,
+            digital_details.rh_account_number rh_account_number_digital,
+            digital_details.rh_name rh_name_digital,
+            scd.period_end_date usage_period,
+            usage_age_weight,
+            scd.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            alc.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name,
+            survey_country,
+            reported_type_of_use,
+            usage_quantity number_of_copies,
+            weighted_copies,
+            scd.publication_type_uid,
+            pt.name pub_type_name,
+            pub_type_weight,
+            price,
+            price_flag,
+            content,
+            content_flag,
+            content_unit_price,
+            content_unit_price_flag,
+            print_details.value_share value_share_print,
+            print_details.volume_share volume_share_print,
+            print_details.detail_share detail_share_print,
+            coalesce(print_details.net_amount, 0) net_amount_print,
+            digital_details.value_share value_share_digital,
+            digital_details.volume_share volume_share_digital,
+            digital_details.detail_share detail_share_digital,
+            coalesce(digital_details.net_amount, 0) net_amount_digital,
+            coalesce(print_details.net_amount, 0) + coalesce(digital_details.net_amount, 0) combined_net_amount
+        from ${schema}.df_acl_scenario s
+        join ${schema}.df_acl_usage_batch ub on s.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
+        left join (
+            <include refid="IAclScenarioUsageMapper.selectPrintShareDetailsSql"/>
+        ) as print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
+        left join (
+            <include refid="IAclScenarioUsageMapper.selectDigitalShareDetailsSql"/>
+        ) as digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
+        join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_acl_scenario_licensee_class slc on dlc.detail_licensee_class_id = slc.detail_licensee_class_id
+            and slc.df_acl_scenario_uid = #{scenarioId}
+        join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+    </sql>
+
+    <sql id="selectScenarioDetailDtosCountSql">
+        select count(1)
+        from ${schema}.df_acl_scenario s
+        join ${schema}.df_acl_usage_batch ub on s.df_acl_usage_batch_uid = ub.df_acl_usage_batch_uid
+        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
+        left join (
+            <include refid="IAclScenarioUsageMapper.selectPrintShareDetailsSql"/>
+        ) as print_details on scd.df_acl_scenario_detail_uid = print_details.df_acl_scenario_detail_uid
+        left join (
+            <include refid="IAclScenarioUsageMapper.selectDigitalShareDetailsSql"/>
+        ) as digital_details on scd.df_acl_scenario_detail_uid = digital_details.df_acl_scenario_detail_uid
+        join ${schema}.df_publication_type pt on scd.publication_type_uid = pt.df_publication_type_uid
+        join ${schema}.df_detail_licensee_class dlc on scd.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_acl_scenario_licensee_class slc on dlc.detail_licensee_class_id = slc.detail_licensee_class_id
+            and slc.df_acl_scenario_uid = #{scenarioId}
+        join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+    </sql>
+
+    <sql id="selectPrintShareDetailsSql">
+        select
+            <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
+        from ${schema}.df_acl_share_detail shd
+        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        where df_acl_scenario_uid = #{scenarioId}
+            and type_of_use = 'PRINT'
+        <if test="null != accountNumber">
+            and shd.rh_account_number = #{accountNumber}
+        </if>
+    </sql>
+
+    <sql id="selectDigitalShareDetailsSql">
+        select
+            <include refid="IAclScenarioUsageMapper.shareDetailColumns"/>
+        from ${schema}.df_acl_share_detail shd
+        left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
+        where df_acl_scenario_uid = #{scenarioId}
+            and type_of_use = 'DIGITAL'
+        <if test="null != accountNumber">
+            and shd.rh_account_number = #{accountNumber}
+        </if>
+    </sql>
+
+    <sql id="shareDetailColumns">
+        df_acl_scenario_detail_uid,
+        shd.rh_account_number,
+        r.name rh_name,
+        value_share,
+        volume_share,
+        detail_share,
+        net_amount
     </sql>
 
     <insert id="addToScenario" parameterType="map">
@@ -458,5 +621,25 @@
                 from ${schema}.df_acl_scenario_audit
                 where df_acl_scenario_uid = s.df_acl_scenario_uid)
         group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
+    </select>
+
+    <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+            and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
+        <if test="null != searchValue">
+            and <include refid="IAclScenarioMapper.drillDownSearchWhereClause"/>
+        </if>
+        <include refid="IAclScenarioMapper.ifSortable"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        <include refid="IAclScenarioUsageMapper.selectScenarioDetailDtosCountSql"/>
+        where s.df_acl_scenario_uid = #{scenarioId}
+            and (print_details.rh_account_number = #{accountNumber} or digital_details.rh_account_number = #{accountNumber})
+        <if test="null != searchValue">
+            and <include refid="IAclScenarioMapper.drillDownSearchWhereClause"/>
+        </if>
     </select>
 </mapper>

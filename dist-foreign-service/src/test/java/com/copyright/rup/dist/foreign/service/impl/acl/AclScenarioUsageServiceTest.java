@@ -8,8 +8,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
@@ -37,7 +39,9 @@ import java.util.List;
  */
 public class AclScenarioUsageServiceTest {
 
+    private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
     private static final String SCENARIO_UID = "c3077cca-09a0-454f-8b9f-bf6ecb2fbe66";
+    private static final String SEARCH_VALUE = "search";
     private static final String USER_NAME = "SYSTEM";
 
     private IAclScenarioUsageService aclScenarioUsageService;
@@ -136,6 +140,28 @@ public class AclScenarioUsageServiceTest {
         expect(aclScenarioUsageRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
         replay(aclScenarioUsageRepository);
         assertSame(scenario, aclScenarioUsageService.getAclScenarioWithAmountsAndLastAction(scenario.getId()));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetByScenarioIdAndRhAccountNumber() {
+        List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(new AclScenarioDetailDto());
+        Pageable pageable = new Pageable(0, 2);
+        expect(aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID,
+            SEARCH_VALUE, pageable, null)).andReturn(scenarioDetailDtos).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(scenarioDetailDtos, aclScenarioUsageService.getByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+            SCENARIO_UID, SEARCH_VALUE, pageable, null));
+        verify(aclScenarioUsageRepository);
+    }
+
+    @Test
+    public void testGetCountByScenarioIdAndRhAccountNumber() {
+        expect(aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID,
+            SEARCH_VALUE)).andReturn(1).once();
+        replay(aclScenarioUsageRepository);
+        assertEquals(1, aclScenarioUsageService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER,
+            SCENARIO_UID, SEARCH_VALUE));
         verify(aclScenarioUsageRepository);
     }
 

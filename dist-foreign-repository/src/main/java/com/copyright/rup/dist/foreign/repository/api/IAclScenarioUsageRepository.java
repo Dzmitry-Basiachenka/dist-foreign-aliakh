@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 
 import java.util.List;
@@ -111,4 +112,29 @@ public interface IAclScenarioUsageRepository {
      * @return instance of {@link AclScenarioDto}
      */
     AclScenarioDto findWithAmountsAndLastAction(String scenarioId);
+
+    /**
+     * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link AclScenarioDetailDto}s
+     */
+    List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                  String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Finds count of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier and
+     * rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link AclScenario} identifier
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 }

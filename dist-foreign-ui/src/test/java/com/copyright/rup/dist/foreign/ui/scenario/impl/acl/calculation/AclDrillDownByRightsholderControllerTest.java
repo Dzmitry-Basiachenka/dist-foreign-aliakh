@@ -16,7 +16,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
-import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioService;
+import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -58,15 +58,15 @@ public class AclDrillDownByRightsholderControllerTest {
     private static final String SORT_PROPERTY = "detailId";
 
     private AclDrillDownByRightsholderController controller;
-    private IAclScenarioService aclScenarioService;
+    private IAclScenarioUsageService aclScenarioUsageService;
 
     @Before
     public void setUp() {
         AclScenario scenario = new AclScenario();
         scenario.setId(SCENARIO_UID);
         controller = createPartialMock(AclDrillDownByRightsholderController.class, "initWidget", "getWidget");
-        aclScenarioService = createMock(IAclScenarioService.class);
-        Whitebox.setInternalState(controller, aclScenarioService);
+        aclScenarioUsageService = createMock(IAclScenarioUsageService.class);
+        Whitebox.setInternalState(controller, aclScenarioUsageService);
         Whitebox.setInternalState(controller, scenario);
         Whitebox.setInternalState(controller, RH_ACCOUNT_NUMBER);
     }
@@ -77,9 +77,9 @@ public class AclDrillDownByRightsholderControllerTest {
         Capture<Pageable> pageableCapture = newCapture();
         Capture<Sort> sortCapture = newCapture();
         expect(controller.getWidget()).andReturn(new WidgetMock()).once();
-        expect(aclScenarioService.getByScenarioIdAndRhAccountNumber(eq(RH_ACCOUNT_NUMBER), eq(SCENARIO_UID),
+        expect(aclScenarioUsageService.getByScenarioIdAndRhAccountNumber(eq(RH_ACCOUNT_NUMBER), eq(SCENARIO_UID),
             eq(SEARCH_VALUE), capture(pageableCapture), capture(sortCapture))).andReturn(scenarioDetailDtos).once();
-        replay(controller, aclScenarioService);
+        replay(controller, aclScenarioUsageService);
         List<AclScenarioDetailDto> actualScenarioDetailDtos = controller.loadBeans(OFFSET, COUNT,
             Collections.singletonList(new QuerySortOrder(SORT_PROPERTY, SortDirection.DESCENDING)));
         assertEquals(OFFSET, pageableCapture.getValue().getOffset());
@@ -87,17 +87,17 @@ public class AclDrillDownByRightsholderControllerTest {
         assertEquals(SORT_PROPERTY, sortCapture.getValue().getProperty());
         assertEquals(Direction.DESC.getValue(), sortCapture.getValue().getDirection());
         assertEquals(scenarioDetailDtos, actualScenarioDetailDtos);
-        verify(controller, aclScenarioService);
+        verify(controller, aclScenarioUsageService);
     }
 
     @Test
     public void testGetSize() {
         expect(controller.getWidget()).andReturn(new WidgetMock()).once();
-        expect(aclScenarioService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID,
+        expect(aclScenarioUsageService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_UID,
             SEARCH_VALUE)).andReturn(10).once();
-        replay(controller, aclScenarioService);
+        replay(controller, aclScenarioUsageService);
         assertEquals(10, controller.getSize());
-        verify(controller, aclScenarioService);
+        verify(controller, aclScenarioUsageService);
     }
 
     @Test
