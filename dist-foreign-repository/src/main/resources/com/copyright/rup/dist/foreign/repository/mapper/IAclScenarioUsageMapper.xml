@@ -623,6 +623,7 @@
         ) as dtos
         join ${schema}.df_acl_scenario_pub_type_weight spt on dtos.df_acl_scenario_uid = spt.df_acl_scenario_uid
         join ${schema}.df_publication_type pt on spt.df_publication_type_uid = pt.df_publication_type_uid
+        order by pub_type_name, pub_type_period
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">

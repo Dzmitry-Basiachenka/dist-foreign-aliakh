@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -296,7 +297,7 @@ public class AclScenariosWidgetTest {
         verifyLabel(metadataLayout.getComponent(4), "<b>Description: </b>some description");
         verifyLabel(metadataLayout.getComponent(5), SELECTION_CRITERIA);
         verifyScenarioParameterWidget(metadataLayout.getComponent(6), "Licensee Class Mapping");
-        verifyScenarioParameterWidget(metadataLayout.getComponent(7), "Pub Type Weights");
+        verifyAclPublicationTypeWeightsParameterWidget(metadataLayout.getComponent(7));
         verifyScenarioParameterWidget(metadataLayout.getComponent(8), "Usage Age Weights");
         verifyLabel(metadataLayout.getComponent(9), "<b>Copied From: </b>");
         assertTrue(metadataLayout.getComponent(10) instanceof VerticalLayout);
@@ -314,5 +315,11 @@ public class AclScenariosWidgetTest {
         assertNotNull(component);
         ScenarioParameterWidget widget = (ScenarioParameterWidget) component;
         assertEquals(expectedCaption, widget.getComponent(0).getCaption());
+    }
+
+    private void verifyAclPublicationTypeWeightsParameterWidget(Component component) {
+        assertNotNull(component);
+        AclPublicationTypeWeightsParameterWidget widget = (AclPublicationTypeWeightsParameterWidget) component;
+        assertEquals("Pub Type Weights", widget.getComponent(0).getCaption());
     }
 }

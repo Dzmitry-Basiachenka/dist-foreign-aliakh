@@ -4,7 +4,6 @@ import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
-import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
@@ -17,11 +16,11 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.PublicationTypeWeightsWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
 import com.copyright.rup.dist.foreign.ui.usage.impl.UsageAgeWeightWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -88,11 +87,14 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
+
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ListDataProvider<AclScenario> dataProvider;
+
+    private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
 
     /**
      * Constructor.
@@ -275,13 +277,13 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private VerticalLayout initMetadataLayout() {
-        // TODO use the real Licensee Class Mappings, Publication Type Weights, Usage Age Weights when implemented
+        // TODO use the real Licensee Class Mappings, Usage Age Weights when implemented
         ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
             new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
                 Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
-        ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget =
-            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.publication_type_weights"),
-                Collections.emptyList(), () -> new PublicationTypeWeightsWindow(false));
+        publicationTypeWeightWidget = new AclPublicationTypeWeightsParameterWidget(
+            ForeignUi.getMessage("button.publication_type_weights"),
+            Collections.emptyList(), () -> new AclPublicationTypeWeightsWindow(aclScenariosController, false));
         ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget =
             new ScenarioParameterWidget<>(ForeignUi.getMessage("button.usage_age_weights"),
                 Collections.emptyList(), () -> new UsageAgeWeightWindow(false));
@@ -369,6 +371,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             formatAmount(scenario.getNetTotalDigital())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
         selectionCriteriaLabel.setValue(aclScenariosController.getCriteriaHtmlRepresentation());
+        publicationTypeWeightWidget.setAppliedParameters(scenario.getPublicationTypes());
         // TODO use the real value when field "Copy from" is implemented in the ACL scenario creation dialog
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", StringUtils.EMPTY));
     }
