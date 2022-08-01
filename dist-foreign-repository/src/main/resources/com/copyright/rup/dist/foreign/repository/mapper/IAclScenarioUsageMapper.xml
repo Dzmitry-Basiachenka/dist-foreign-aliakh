@@ -68,6 +68,12 @@
         <result property="numberOfWorksPrint" column="number_of_works_print"/>
         <result property="numberOfWorksDigital" column="number_of_works_digital"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
+        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclPublicationType">
+            <result property="name" column="pub_type_name"/>
+            <result property="description" column="pub_type_description"/>
+            <result property="weight" column="pub_type_weight"/>
+            <result property="period" column="pub_type_period"/>
+        </collection>
     </resultMap>
 
     <resultMap id="aclScenarioDetailDtoResultMap" type="AclScenarioDetailDto" extends="StoredEntityMapper.storedEntityResult">
@@ -583,30 +589,40 @@
 
     <select id="findWithAmountsAndLastAction" parameterType="string" resultMap="aclScenarioDtoResultMap">
         select
-            <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
+            dtos.*,
+            pt.name pub_type_name,
+            pt.description pub_type_description,
+            spt.weight pub_type_weight,
+            spt.period pub_type_period
         from (
             select
-                s.df_acl_scenario_uid,
-                sum(shd.gross_amount) as gross_total,
-                sum(shd.service_fee_amount) as service_fee_total,
-                sum(shd.net_amount) as net_total,
-                count(distinct shd.rh_account_number) number_of_rhs,
-                count(distinct scd.wr_wrk_inst) number_of_works,
-                type_of_use
-            from ${schema}.df_acl_scenario s
-            left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
-            left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
-            where s.df_acl_scenario_uid = #{scenarioId}
-            group by s.df_acl_scenario_uid, type_of_use
-        ) as groups
-        join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
-        left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
-            and sa.created_datetime = (
-                select max(created_datetime)
-                from ${schema}.df_acl_scenario_audit
-                where df_acl_scenario_uid = s.df_acl_scenario_uid
-            )
-        group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
+                <include refid="aclScenarioWithAmountsAndLastActionColumns"/>
+            from (
+                select
+                    s.df_acl_scenario_uid,
+                    sum(shd.gross_amount) as gross_total,
+                    sum(shd.service_fee_amount) as service_fee_total,
+                    sum(shd.net_amount) as net_total,
+                    count(distinct shd.rh_account_number) number_of_rhs,
+                    count(distinct scd.wr_wrk_inst) number_of_works,
+                    type_of_use
+                from ${schema}.df_acl_scenario s
+                left join ${schema}.df_acl_share_detail shd on shd.df_acl_scenario_uid = s.df_acl_scenario_uid
+                left join ${schema}.df_acl_scenario_detail scd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+                where s.df_acl_scenario_uid = #{scenarioId}
+                group by s.df_acl_scenario_uid, type_of_use
+            ) as groups
+            join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = groups.df_acl_scenario_uid
+            left join ${schema}.df_acl_scenario_audit sa on sa.df_acl_scenario_uid = s.df_acl_scenario_uid
+                and sa.created_datetime = (
+                    select max(created_datetime)
+                    from ${schema}.df_acl_scenario_audit
+                    where df_acl_scenario_uid = s.df_acl_scenario_uid
+                )
+            group by s.df_acl_scenario_uid, sa.df_acl_scenario_audit_uid
+        ) as dtos
+        join ${schema}.df_acl_scenario_pub_type_weight spt on dtos.df_acl_scenario_uid = spt.df_acl_scenario_uid
+        join ${schema}.df_publication_type pt on spt.df_publication_type_uid = pt.df_publication_type_uid
     </select>
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="aclScenarioDetailDtoResultMap">

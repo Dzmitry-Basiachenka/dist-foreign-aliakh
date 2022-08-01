@@ -126,6 +126,22 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2022-06-17 02:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'd4f94523-ae40-4e94-ac80-4baccb37520d')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '5ac507e9-0ec8-465d-b814-a927a2e530e6')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: 1.9)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: 'e8a591d8-2803-4f9e-8cf5-4cd6257917e8')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -162,6 +178,22 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'license_type', value: 'ACL')
             column(name: 'is_editable', value: false)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'c49104a1-5f0a-4bd8-a8fd-655a00596858')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
+            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '9ae28409-0ccc-40ee-8bea-21c2fc17cc0e')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
+            column(name: 'period', value: '201506')
+            column(name: 'weight', value: 1.9)
         }
 
         rollback {
