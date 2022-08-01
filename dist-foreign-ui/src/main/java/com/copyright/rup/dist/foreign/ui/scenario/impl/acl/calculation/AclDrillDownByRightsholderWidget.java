@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
@@ -125,8 +126,8 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
         addColumn(AclScenarioDetailDto::getReportedTypeOfUse, "table.column.tou", "reportedTypeOfUse", true, 120);
         addColumn(AclScenarioDetailDto::getNumberOfCopies, "table.column.acl_number_of_copies", "numberOfCopies",
             true, 125);
-        addColumn(AclScenarioDetailDto::getWeightedCopies, "table.column.number_of_weighted_copies", "weightedCopies",
-            true, 150);
+        addAmountColumn(AclScenarioDetailDto::getWeightedCopies, "table.column.number_of_weighted_copies",
+            "weightedCopies", 150);
         addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type", "publicationType",
             true, 120);
         addColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
@@ -139,24 +140,34 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             "contentUnitPrice", 150);
         addBooleanColumn(AclScenarioDetailDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
             "contentUnitPriceFlag", 160);
-        addColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
-            "valueSharePrint", true, 140);
-        addColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
-            "volumeSharePrint", true, 140);
-        addColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
-            "detailSharePrint", true, 140);
+        addShareColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
+            "valueSharePrint", 140);
+        addShareColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
+            "volumeSharePrint", 140);
+        addShareColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
+            "detailSharePrint", 140);
         addAmountColumn(AclScenarioDetailDto::getNetAmountPrint, "table.column.print_net_amount_in_usd",
             "netAmountPrint", 150);
-        addColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
-            "valueShareDigital", true, 150);
-        addColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
-            "volumeShareDigital", true, 150);
-        addColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
-            "detailShareDigital", true, 150);
+        addShareColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
+            "valueShareDigital", 150);
+        addShareColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
+            "volumeShareDigital", 150);
+        addShareColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
+            "detailShareDigital", 150);
         addAmountColumn(AclScenarioDetailDto::getNetAmountDigital, "table.column.digital_net_amount_in_usd",
             "netAmountDigital", 150);
         addAmountColumn(AclScenarioDetailDto::getCombinedNetAmount, "table.column.combined_net_amount_in_usd",
             "combinedNetAmount", 170);
+    }
+
+    private void addShareColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
+                                String sort, double width) {
+        grid.addColumn(detail -> BigDecimalUtils.formatCurrencyForDialog(function.apply(detail)))
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setHidable(true)
+            .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
+            .setWidth(width);
     }
 
     private void addColumn(ValueProvider<AclScenarioDetailDto, ?> provider, String captionProperty, String sort,
