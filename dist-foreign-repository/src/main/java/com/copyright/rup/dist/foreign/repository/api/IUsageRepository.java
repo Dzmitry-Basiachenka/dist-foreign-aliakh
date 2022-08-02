@@ -167,7 +167,7 @@ public interface IUsageRepository {
     int findCountByUsageIdAndStatus(String usageId, UsageStatusEnum statusEnum);
 
     /**
-     * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *
      * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -180,7 +180,7 @@ public interface IUsageRepository {
                                                                              Pageable pageable, Sort sort);
 
     /**
-     * Gets list of {@link PayeeTotalHolder}s by filter.
+     * Finds list of {@link PayeeTotalHolder}s by filter.
      *
      * @param filter instance of {@link ExcludePayeeFilter}
      * @return list of {@link PayeeTotalHolder}s
@@ -188,7 +188,7 @@ public interface IUsageRepository {
     List<PayeeTotalHolder> findPayeeTotalHoldersByFilter(ExcludePayeeFilter filter);
 
     /**
-     * Gets count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *
      * @param scenarioId  com.copyright.rup.dist.foreign.domain.Scenario identifier
@@ -198,7 +198,7 @@ public interface IUsageRepository {
     int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 
     /**
-     * Gets boolean result that shows whether scenario is empty or not.
+     * Finds boolean result that shows whether scenario is empty or not.
      *
      * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
      * @return boolean result that shows whether scenario is empty or not.
@@ -206,7 +206,7 @@ public interface IUsageRepository {
     boolean isScenarioEmpty(String scenarioId);
 
     /**
-     * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
@@ -217,7 +217,7 @@ public interface IUsageRepository {
     int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 
     /**
-     * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
@@ -231,7 +231,7 @@ public interface IUsageRepository {
                                                       Pageable pageable, Sort sort);
 
     /**
-     * Gets list of {@link Usage}s identifiers based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds list of {@link Usage}s identifiers based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier, RRO account number and list of rightsholder account numbers.
      *
      * @param scenarioId       {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier

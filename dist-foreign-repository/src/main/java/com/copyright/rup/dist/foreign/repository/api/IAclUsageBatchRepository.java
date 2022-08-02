@@ -31,7 +31,7 @@ public interface IAclUsageBatchRepository {
     void insert(AclUsageBatch usageBatch);
 
     /**
-     * Gets ACL usage batch by its id.
+     * Finds ACL usage batch by its id.
      *
      * @param usageBatchId id of the {@link AclUsageBatch}
      * @return {@link AclUsageBatch} with the given id or {@code null} if none exists

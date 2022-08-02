@@ -28,7 +28,7 @@ public interface INtsUsageRepository {
     List<String> insertUsages(UsageBatch usageBatch, String userName);
 
     /**
-     * Gets count of archived usages based on markets and period for batch creation.
+     * Finds count of archived usages based on markets and period for batch creation.
      *
      * @param marketPeriodFrom market period from
      * @param marketPeriodTo   market period to

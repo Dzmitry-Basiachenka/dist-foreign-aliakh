@@ -94,7 +94,7 @@ public interface IUsageAuditRepository {
     List<BatchStatistic> findBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo);
 
     /**
-     * Gets usage statistic.
+     * Finds usage statistic.
      *
      * @param usageId usage id
      * @return instance of {@link UsageStatistic}
