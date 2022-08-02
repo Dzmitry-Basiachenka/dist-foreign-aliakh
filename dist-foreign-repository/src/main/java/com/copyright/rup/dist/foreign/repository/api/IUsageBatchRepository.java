@@ -37,7 +37,7 @@ public interface IUsageBatchRepository {
     void updateInitialUsagesCount(int initialUsagesCount, String batchId, String userName);
 
     /**
-     * Gets list of fiscal years from Usage Batches presented in DB and associated with specified Product Family.
+     * Finds list of fiscal years from Usage Batches presented in DB and associated with specified Product Family.
      *
      * @param productFamily Product Family
      * @return list of fiscal years
@@ -50,7 +50,7 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findAll();
 
     /**
-     * Gets {@link UsageBatch} by its id.
+     * Finds {@link UsageBatch} by its id.
      *
      * @param batchId id of the {@link UsageBatch}
      * @return {@link UsageBatch} with the given id or {@code null} if none exists
@@ -73,7 +73,7 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findUsageBatchesForNtsFundPool();
 
     /**
-     * Gets usage batches count with specified name.
+     * Finds usage batches count with specified name.
      *
      * @param name batch name
      * @return count of found batches

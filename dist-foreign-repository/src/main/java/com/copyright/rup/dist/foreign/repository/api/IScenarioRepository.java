@@ -141,7 +141,7 @@ public interface IScenarioRepository {
     List<Rightsholder> findSourceRros(String scenarioId);
 
     /**
-     * Gets reported total, gross amount, service fee amount, net amount and last audited action
+     * Finds reported total, gross amount, service fee amount, net amount and last audited action
      * for selected {@link Scenario}.
      *
      * @param scenarioId {@link Scenario} id
@@ -150,7 +150,7 @@ public interface IScenarioRepository {
     Scenario findWithAmountsAndLastAction(String scenarioId);
 
     /**
-     * Gets reported total, gross amount, service fee amount, net amount and last audited action
+     * Finds reported total, gross amount, service fee amount, net amount and last audited action
      * for selected {@link Scenario} base on archived usages.
      *
      * @param scenarioId {@link Scenario} id

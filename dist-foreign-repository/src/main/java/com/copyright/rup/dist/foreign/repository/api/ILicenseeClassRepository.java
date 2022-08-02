@@ -34,7 +34,7 @@ public interface ILicenseeClassRepository {
     boolean detailLicenseeClassExists(Integer detailLicenseeClassId);
 
     /**
-     * Gets list of {@link AggregateLicenseeClass}es by product family.
+     * Finds list of {@link AggregateLicenseeClass}es by product family.
      *
      * @param productFamily product family
      * @return list of existing {@link AggregateLicenseeClass}es.
@@ -42,7 +42,7 @@ public interface ILicenseeClassRepository {
     List<AggregateLicenseeClass> findAggregateLicenseeClassesByProductFamily(String productFamily);
 
     /**
-     * Gets list of {@link DetailLicenseeClass}es by product family.
+     * Finds list of {@link DetailLicenseeClass}es by product family.
      *
      * @param productFamily product family
      * @return list of existing {@link DetailLicenseeClass}es.

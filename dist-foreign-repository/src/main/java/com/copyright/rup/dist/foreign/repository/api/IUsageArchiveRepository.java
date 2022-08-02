@@ -37,7 +37,7 @@ public interface IUsageArchiveRepository {
     void deleteByIds(List<String> usageIds);
 
     /**
-     * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *
      * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -50,7 +50,7 @@ public interface IUsageArchiveRepository {
                                                                              Pageable pageable, Sort sort);
 
     /**
-     * Gets count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *
      * @param scenarioId  {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -60,7 +60,7 @@ public interface IUsageArchiveRepository {
     int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 
     /**
-     * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -74,7 +74,7 @@ public interface IUsageArchiveRepository {
                                                       Pageable pageable, Sort sort);
 
     /**
-     * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
+     * Finds count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -205,7 +205,7 @@ public interface IUsageArchiveRepository {
     List<UsageDto> findAaclDtosByScenarioId(String scenarioId);
 
     /**
-     * Gets count of archived AACL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds count of archived AACL usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier and rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
@@ -241,7 +241,7 @@ public interface IUsageArchiveRepository {
     int findSalCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
 
     /**
-     * Gets list of archived SAL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
+     * Finds list of archived SAL {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier and rightsholder account number.
      *
      * @param scenarioId    {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier

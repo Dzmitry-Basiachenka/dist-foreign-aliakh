@@ -23,7 +23,7 @@ public interface IAclGrantSetRepository {
     void insert(AclGrantSet grantSet);
 
     /**
-     * Gets ACL grant set by its id.
+     * Finds ACL grant set by its id.
      *
      * @param grantSetId id of the {@link AclGrantSet}
      * @return {@link AclGrantSet} with the given id or {@code null} if none exists

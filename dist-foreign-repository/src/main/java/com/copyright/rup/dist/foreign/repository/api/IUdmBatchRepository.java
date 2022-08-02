@@ -25,7 +25,7 @@ public interface IUdmBatchRepository {
     void insert(UdmBatch udmBatch);
 
     /**
-     * Gets {@link UdmBatch} by its id.
+     * Finds {@link UdmBatch} by its id.
      *
      * @param udmBatchId id of the {@link UdmBatch}
      * @return {@link UdmBatch} with the given id or {@code null} if none exists
