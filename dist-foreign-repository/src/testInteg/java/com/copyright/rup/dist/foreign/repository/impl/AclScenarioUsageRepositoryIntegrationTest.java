@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,6 +43,7 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -314,10 +316,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(1, scenario.getNumberOfRhsDigital());
         assertEquals(1, scenario.getNumberOfWorksPrint());
         assertEquals(1, scenario.getNumberOfWorksDigital());
+        List<UsageAge> usageAges = scenario.getUsageAges();
+        assertEquals(2, usageAges.size());
+        usageAges.sort(Comparator.comparing(UsageAge::getPeriod));
+        verifyAclUsageAge(usageAges.get(0), 0, "1.00000");
+        verifyAclUsageAge(usageAges.get(1), 1, "2.00000");
         List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
         assertEquals(2, publicationTypes.size());
+        publicationTypes.sort(Comparator.comparing(AclPublicationType::getName));
         verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
-        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "1.90", 201506);
+        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "2.00", 201506);
     }
 
     @Test
@@ -352,10 +360,16 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(0, scenario.getNumberOfRhsDigital());
         assertEquals(0, scenario.getNumberOfWorksPrint());
         assertEquals(0, scenario.getNumberOfWorksDigital());
+        List<UsageAge> usageAges = scenario.getUsageAges();
+        assertEquals(2, usageAges.size());
+        usageAges.sort(Comparator.comparing(UsageAge::getPeriod));
+        verifyAclUsageAge(usageAges.get(0), 0, "1.00000");
+        verifyAclUsageAge(usageAges.get(1), 1, "2.00000");
         List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
         assertEquals(2, publicationTypes.size());
+        publicationTypes.sort(Comparator.comparing(AclPublicationType::getName));
         verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
-        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "1.90", 201506);
+        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "2.00", 201506);
     }
 
     @Test
@@ -732,12 +746,17 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
     }
 
+    private void verifyAclUsageAge(UsageAge usageAge, Integer period, String weight) {
+        assertEquals(period, usageAge.getPeriod());
+        assertEquals(new BigDecimal(weight), usageAge.getWeight());
+    }
+
     private void verifyAclPublicationType(AclPublicationType publicationType, String name, String description,
                                           String weight, Integer period) {
-        assertEquals(publicationType.getName(), name);
-        assertEquals(publicationType.getDescription(), description);
-        assertEquals(publicationType.getWeight(), new BigDecimal(weight));
-        assertEquals(publicationType.getPeriod(), period);
+        assertEquals(name, publicationType.getName());
+        assertEquals(description, publicationType.getDescription());
+        assertEquals(new BigDecimal(weight), publicationType.getWeight());
+        assertEquals(period, publicationType.getPeriod());
     }
 
     private void assertSortingAclRightsholderTotalsHolder(AclRightsholderTotalsHolder holderAsc,
