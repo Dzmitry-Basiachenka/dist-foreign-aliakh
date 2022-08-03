@@ -11,6 +11,7 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -264,15 +265,9 @@ public class AaclScenariosWidgetTest {
         Component fundPool = layout.getComponent(6);
         assertTrue(fundPool instanceof Button);
         assertEquals("Fund Pool", fundPool.getCaption());
-        assertTrue(layout.getComponent(7) instanceof ScenarioParameterWidget);
-        ScenarioParameterWidget licenseeClassMappingWidget = (ScenarioParameterWidget) layout.getComponent(7);
-        assertEquals("Licensee Class Mapping", licenseeClassMappingWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(8) instanceof ScenarioParameterWidget);
-        ScenarioParameterWidget pubTypeWeightsWidget = (ScenarioParameterWidget) layout.getComponent(8);
-        assertEquals("Pub Type Weights", pubTypeWeightsWidget.getComponent(0).getCaption());
-        assertTrue(layout.getComponent(9) instanceof ScenarioParameterWidget);
-        ScenarioParameterWidget usageAgeWeightsWidget = (ScenarioParameterWidget) layout.getComponent(9);
-        assertEquals("Usage Age Weights", usageAgeWeightsWidget.getComponent(0).getCaption());
+        verifyScenarioParameterWidget(layout.getComponent(7), "Licensee Class Mapping");
+        verifyScenarioParameterWidget(layout.getComponent(8), "Pub Type Weights");
+        verifyScenarioParameterWidget(layout.getComponent(9), "Usage Age Weights");
         assertTrue(layout.getComponent(10) instanceof VerticalLayout);
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
@@ -282,6 +277,12 @@ public class AaclScenariosWidgetTest {
         verifyLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
         assertTrue(lastActionLayout.getComponent(4) instanceof Button);
         assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
+    }
+
+    private void verifyScenarioParameterWidget(Component component, String expectedCaption) {
+        assertNotNull(component);
+        ScenarioParameterWidget widget = (ScenarioParameterWidget) component;
+        assertEquals(expectedCaption, widget.getComponent(0).getCaption());
     }
 
     private ScenarioAuditItem buildScenarioAuditItem() {
