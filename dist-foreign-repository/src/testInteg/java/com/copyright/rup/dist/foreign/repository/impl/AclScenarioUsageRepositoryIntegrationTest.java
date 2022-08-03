@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
@@ -313,6 +314,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(1, scenario.getNumberOfRhsDigital());
         assertEquals(1, scenario.getNumberOfWorksPrint());
         assertEquals(1, scenario.getNumberOfWorksDigital());
+        List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
+        assertEquals(2, publicationTypes.size());
+        verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
+        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "1.90", 201506);
     }
 
     @Test
@@ -347,6 +352,10 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(0, scenario.getNumberOfRhsDigital());
         assertEquals(0, scenario.getNumberOfWorksPrint());
         assertEquals(0, scenario.getNumberOfWorksDigital());
+        List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
+        assertEquals(2, publicationTypes.size());
+        verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
+        verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "1.90", 201506);
     }
 
     @Test
@@ -721,6 +730,14 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedHolder.getNumberOfTitles(), actualHolder.getNumberOfTitles());
         assertEquals(expectedHolder.getNumberOfAggLcClasses(), actualHolder.getNumberOfAggLcClasses());
         assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
+    }
+
+    private void verifyAclPublicationType(AclPublicationType publicationType, String name, String description,
+                                          String weight, Integer period) {
+        assertEquals(publicationType.getName(), name);
+        assertEquals(publicationType.getDescription(), description);
+        assertEquals(publicationType.getWeight(), new BigDecimal(weight));
+        assertEquals(publicationType.getPeriod(), period);
     }
 
     private void assertSortingAclRightsholderTotalsHolder(AclRightsholderTotalsHolder holderAsc,
