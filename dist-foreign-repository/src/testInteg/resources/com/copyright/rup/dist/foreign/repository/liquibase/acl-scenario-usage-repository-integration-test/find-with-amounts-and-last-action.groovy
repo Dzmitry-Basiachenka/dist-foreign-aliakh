@@ -126,6 +126,20 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2022-06-17 02:00:00+00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'b286ba80-e707-4c0c-8b76-a71d5c6c13b1')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'b8f19984-9baf-41b2-8a46-43efda416c0f')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'period_prior', value: 1)
+            column(name: 'weight', value: 2)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
             column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'd4f94523-ae40-4e94-ac80-4baccb37520d')
             column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
@@ -139,7 +153,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
             column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
             column(name: 'period', value: '201506')
-            column(name: 'weight', value: 1.9)
+            column(name: 'weight', value: 2)
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
@@ -180,6 +194,20 @@ databaseChangeLog {
             column(name: 'is_editable', value: false)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: '562ab45c-93f6-4824-a72a-8a8746f7412f')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'period_prior', value: 0)
+            column(name: 'weight', value: 1)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
+            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'aeafa9af-dc2a-43b4-8a1d-e96d3c582699')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'period_prior', value: 1)
+            column(name: 'weight', value: 2)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
             column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'c49104a1-5f0a-4bd8-a8fd-655a00596858')
             column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
@@ -193,7 +221,7 @@ databaseChangeLog {
             column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
             column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
             column(name: 'period', value: '201506')
-            column(name: 'weight', value: 1.9)
+            column(name: 'weight', value: 2)
         }
 
         rollback {

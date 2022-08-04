@@ -85,6 +85,7 @@ public class AclScenariosWidgetTest {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.init();
         verify(controller);
@@ -296,9 +297,9 @@ public class AclScenariosWidgetTest {
             "<b>Net Amt in USD by Digital: </b><span class='label-amount'>16,800.00</span>");
         verifyLabel(metadataLayout.getComponent(4), "<b>Description: </b>some description");
         verifyLabel(metadataLayout.getComponent(5), SELECTION_CRITERIA);
-        verifyScenarioParameterWidget(metadataLayout.getComponent(6), "Licensee Class Mapping");
+        verifyScenarioParameterWidget(metadataLayout.getComponent(6), "Usage Age Weights");
         verifyAclPublicationTypeWeightsParameterWidget(metadataLayout.getComponent(7));
-        verifyScenarioParameterWidget(metadataLayout.getComponent(8), "Usage Age Weights");
+        verifyScenarioParameterWidget(metadataLayout.getComponent(8), "Licensee Class Mapping");
         verifyLabel(metadataLayout.getComponent(9), "<b>Copied From: </b>");
         assertTrue(metadataLayout.getComponent(10) instanceof VerticalLayout);
         VerticalLayout lastActionLayout = (VerticalLayout) metadataLayout.getComponent(10);
