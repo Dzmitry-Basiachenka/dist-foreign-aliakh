@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
@@ -83,6 +84,7 @@ public class CreateAclScenarioWindowTest {
     private static final String SCENARIO_NAME = "ACL Distribution " + DATE;
     private static final String LICENSE_TYPE = "ACL";
     private static final String ACL_BATCH_UID = "df36a701-8630-45aa-994d-35e3f019192a";
+    private static final String DESCRIPTION = "Description";
 
     private final List<UsageAge> usageAges = Collections.singletonList(buildUsageAge());
     private final List<AclPublicationType> publicationTypes =
@@ -104,6 +106,7 @@ public class CreateAclScenarioWindowTest {
         expect(controller.getAclHistoricalPublicationTypes()).andReturn(publicationTypes).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(detailLicenseeClasses).once();
         expect(controller.getUsageAgeWeights()).andReturn(usageAges).once();
+        expect(controller.getScenarios()).andReturn(Collections.singletonList(new AclScenario())).once();
     }
 
     @Test
@@ -175,7 +178,7 @@ public class CreateAclScenarioWindowTest {
         expectedScenario.setName(SCENARIO_NAME);
         expectedScenario.setPeriodEndDate(202206);
         expectedScenario.setEditableFlag(true);
-        expectedScenario.setDescription("Description");
+        expectedScenario.setDescription(DESCRIPTION);
         expectedScenario.setLicenseType(LICENSE_TYPE);
         expectedScenario.setPublicationTypes(publicationTypes);
         expectedScenario.setDetailLicenseeClasses(detailLicenseeClasses);
@@ -271,6 +274,59 @@ public class CreateAclScenarioWindowTest {
         verify(controller, ForeignSecurityUtils.class);
     }
 
+    @Test
+    public void testFillInFieldsFromCopyScenario() {
+        AclScenario aclScenario = buildAclScenario("36ea5499-85f0-48b8-ba50-52a4ed76574f",
+            "304795bf-9bd1-4377-9b5f-ce247d88f8b2", ACL_BATCH_UID,
+            "f5e558ce-2261-4998-8434-fc04d432c1a5", "ACL Scenario 202212", DESCRIPTION,
+            ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE, "username");
+        expect(controller.aclScenarioExists("ACL Scenario 202212")).andReturn(true).once();
+        expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        expect(controller.getUsageBatchesByPeriod(202212, true))
+            .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
+        expect(controller.getFundPoolsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212))
+            .andReturn(Collections.singletonList(buildAclFundPool())).times(2);
+        expect(controller.getGrantSetsByLicenseTypeAndPeriod(LICENSE_TYPE, 202212, true))
+            .andReturn(Collections.singletonList(buildAclGrantSet())).times(2);
+        expect(controller.getScenarioById("36ea5499-85f0-48b8-ba50-52a4ed76574f")).andReturn(aclScenario).once();
+        replay(controller, ForeignSecurityUtils.class);
+        window = new CreateAclScenarioWindow(controller, createButtonClickListener);
+        ComboBox<AclScenario> copyFromComboBox = Whitebox.getInternalState(window, "aclCopyFromScenarioComboBox");
+        copyFromComboBox.setValue(aclScenario);
+        verifyCreateScenarioWindowFields();
+        verify(controller, ForeignSecurityUtils.class);
+    }
+
+    private void verifyCreateScenarioWindowFields() {
+        TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
+        assertEquals("ACL Scenario 202212", scenarioNameField.getValue());
+        ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
+        assertEquals(Integer.valueOf(202212), periodComboBox.getValue());
+        assertFalse(periodComboBox.isEnabled());
+        ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, "licenseTypeComboBox");
+        assertEquals(LICENSE_TYPE, licenseTypeComboBox.getValue());
+        assertFalse(licenseTypeComboBox.isEnabled());
+        ComboBox<AclUsageBatch> usageBatchComboBox = Whitebox.getInternalState(window, "usageBatchComboBox");
+        assertEquals(buildAclUsageBatch(), usageBatchComboBox.getValue());
+        ComboBox<AclFundPool> fundPoolComboBox = Whitebox.getInternalState(window, "fundPoolComboBox");
+        assertEquals(buildAclFundPool(), fundPoolComboBox.getValue());
+        ComboBox<AclGrantSet> grantSetComboBox = Whitebox.getInternalState(window, "grantSetComboBox");
+        assertEquals(buildAclGrantSet(), grantSetComboBox.getValue());
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, "editableCheckBox");
+        assertTrue(editableCheckBox.getValue());
+        assertFalse(editableCheckBox.isEnabled());
+        TextArea descriptionArea = Whitebox.getInternalState(window, "descriptionArea");
+        assertEquals(DESCRIPTION, descriptionArea.getValue());
+        AclPublicationTypeWeightsParameterWidget pubTypeWeightWidget =
+            Whitebox.getInternalState(window, "publicationTypeWeightWidget");
+        assertEquals(publicationTypes, pubTypeWeightWidget.getAppliedParameters());
+        ScenarioParameterWidget licenseeClassMappingWidget =
+            Whitebox.getInternalState(window, "licenseeClassMappingWidget");
+        assertEquals(detailLicenseeClasses, licenseeClassMappingWidget.getAppliedParameters());
+        ScenarioParameterWidget usageAgeWeightWidget = Whitebox.getInternalState(window, "usageAgeWeightWidget");
+        assertEquals(usageAges, usageAgeWeightWidget.getAppliedParameters());
+    }
+
     private void verifyScenarioNameField(Component component) {
         assertNotNull(component);
         TextField scenarioNameField = (TextField) component;
@@ -304,7 +360,7 @@ public class CreateAclScenarioWindowTest {
     private void verifyDescriptionArea(Component component) {
         assertNotNull(component);
         TextArea descriptionArea = (TextArea) component;
-        assertEquals("Description", descriptionArea.getCaption());
+        assertEquals(DESCRIPTION, descriptionArea.getCaption());
         assertEquals("scenario-description", descriptionArea.getId());
     }
 
@@ -387,10 +443,33 @@ public class CreateAclScenarioWindowTest {
         ComboBox<AclGrantSet> grantSetComboBox = (ComboBox<AclGrantSet>) content.getComponent(5);
         grantSetComboBox.setSelectedItem(aclGrantSet);
         TextArea textField = (TextArea) content.getComponent(11);
-        textField.setValue("Description");
+        textField.setValue(DESCRIPTION);
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(12);
         Button confirmButton = (Button) buttonsLayout.getComponent(0);
         ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
         listener.buttonClick(new ClickEvent(window));
+    }
+
+    private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
+                                         String name, String description, ScenarioStatusEnum status, boolean editable,
+                                         Integer periodEndDate, String licenseType, String user) {
+        AclScenario scenario = new AclScenario();
+        scenario.setId(id);
+        scenario.setFundPoolId(fundPoolId);
+        scenario.setUsageBatchId(usageBatchId);
+        scenario.setGrantSetId(grantSetId);
+        scenario.setName(name);
+        scenario.setDescription(description);
+        scenario.setStatus(status);
+        scenario.setEditableFlag(editable);
+        scenario.setPeriodEndDate(periodEndDate);
+        scenario.setLicenseType(licenseType);
+        scenario.setCreateUser(user);
+        scenario.setUpdateUser(user);
+        scenario.setDetailLicenseeClasses(Collections.singletonList(buildAclDetailLicenseeClass()));
+        scenario.setPublicationTypes(Collections.singletonList(
+            buildAclPublicationType(201506)));
+        scenario.setUsageAges(Collections.singletonList(buildUsageAge()));
+        return scenario;
     }
 }

@@ -177,6 +177,11 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public AclScenario getScenarioById(String scenarioId) {
+        return aclScenarioService.getScenarioById(scenarioId);
+    }
+
+    @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget(this, aclScenarioHistoryController);
     }

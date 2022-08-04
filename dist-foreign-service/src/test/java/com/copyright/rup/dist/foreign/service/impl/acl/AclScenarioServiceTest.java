@@ -180,6 +180,15 @@ public class AclScenarioServiceTest {
         verify(aclFundPoolService, aclUsageService);
     }
 
+    @Test
+    public void testGetScenarioById() {
+        AclScenario scenario = buildAclScenario();
+        expect(aclScenarioRepository.findById(SCENARIO_UID)).andReturn(scenario).once();
+        replay(aclScenarioRepository);
+        assertSame(scenario, aclScenarioService.getScenarioById(SCENARIO_UID));
+        verify(aclScenarioRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

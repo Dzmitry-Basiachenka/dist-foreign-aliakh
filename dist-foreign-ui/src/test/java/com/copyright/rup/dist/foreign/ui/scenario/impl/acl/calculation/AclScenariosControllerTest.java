@@ -300,6 +300,15 @@ public class AclScenariosControllerTest {
         verify(aclScenarioService);
     }
 
+    @Test
+    public void testGetScenarioById() {
+        AclScenario scenario = buildAclScenario();
+        expect(aclScenarioService.getScenarioById(SCENARIO_UID)).andReturn(scenario).once();
+        replay(aclScenarioService);
+        assertSame(scenario, aclScenariosController.getScenarioById(SCENARIO_UID));
+        verify(aclScenarioService);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
