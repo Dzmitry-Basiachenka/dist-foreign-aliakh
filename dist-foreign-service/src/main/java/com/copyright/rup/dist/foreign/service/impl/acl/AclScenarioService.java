@@ -151,6 +151,11 @@ public class AclScenarioService implements IAclScenarioService {
             .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Override
+    public AclScenario getScenarioById(String scenarioId) {
+        return aclScenarioRepository.findById(scenarioId);
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

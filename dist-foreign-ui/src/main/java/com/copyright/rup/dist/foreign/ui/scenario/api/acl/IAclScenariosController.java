@@ -167,4 +167,12 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
     Set<AclFundPoolDetailDto> getFundPoolDetailsNotToBeDistributed(String batchId, String fundPoolId,
                                                                    String grantSetId,
                                                                    List<DetailLicenseeClass> mapping);
+
+    /**
+     * Gets ACl scenario by unique identifier.
+     *
+     * @param scenarioId scenario uid
+     * @return instance of {@link AclScenario}s
+     */
+    AclScenario getScenarioById(String scenarioId);
 }
