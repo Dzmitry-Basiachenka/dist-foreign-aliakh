@@ -15,8 +15,8 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWid
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
-import com.copyright.rup.dist.foreign.ui.usage.impl.AggregateLicenseeClassMappingWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
@@ -95,9 +95,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ListDataProvider<AclScenario> dataProvider;
-
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
+    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
 
     /**
      * Constructor.
@@ -280,16 +280,15 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private VerticalLayout initMetadataLayout() {
-        // TODO use the real Licensee Class Mappings when implemented
         usageAgeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
             aclScenariosController.getUsageAgeWeights(), () -> new AclUsageAgeWeightWindow(false));
         publicationTypeWeightWidget = new AclPublicationTypeWeightsParameterWidget(
             ForeignUi.getMessage("button.publication_type_weights"),
             Collections.emptyList(), () -> new AclPublicationTypeWeightsWindow(aclScenariosController, false));
-        ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget =
-            new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
-                Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
+        licenseeClassMappingWidget = new ScenarioParameterWidget<>(
+            ForeignUi.getMessage("button.licensee_class_mapping"),
+            Collections.emptyList(), () -> new AclAggregateLicenseeClassMappingWindow(false, Collections.emptyList()));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout layout =
@@ -381,6 +380,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         publicationTypeWeightWidget.setAppliedParameters(scenario.getPublicationTypes()
             .stream()
             .sorted(Comparator.comparing(AclPublicationType::getName).thenComparing(AclPublicationType::getPeriod))
+            .collect(Collectors.toList()));
+        licenseeClassMappingWidget.setAppliedParameters(scenario.getDetailLicenseeClasses()
+            .stream()
+            .sorted(Comparator.comparing(DetailLicenseeClass::getId))
             .collect(Collectors.toList()));
         // TODO use the real value when field "Copy from" is implemented in the ACL scenario creation dialog
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", StringUtils.EMPTY));
