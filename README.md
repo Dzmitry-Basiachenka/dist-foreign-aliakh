@@ -1,3 +1,17 @@
+15.1.39
+-
+* B-57798 FDA: View scenario specific usage details by RH for ACL: make changes based on comments in code review
+* B-57798 FDA: View scenario specific usage details by RH for ACL: remove trailing zeros from shares and weighted copies columns
+* B-71852 FDA: Scenario modifications for ACL - View Pub Type Weights: modify the repository to read Pub Type Weights
+* B-71852 FDA: Scenario modifications for ACL - View Pub Type Weights: modify the metadata panel to show Pub Type Weights window
+* B-71853 FDA: Scenario Tab - ACL Usage Age Weights View: modify the metadata panel to show Usage Age Weights window
+* B-72122 FDA: Copy ACL Scenario: adjust create scenario window
+* B-72122 FDA: Copy ACL Scenario: adjust logic to get information about scenario
+* B-72123 FDA: Copy ACL Grant Set: adjust create Grant Set window
+* B-74687 FDA: Fine tune performance for ACL components: add indexes by df_acl_scenario_uid to scenario related columns
+* B-74269 FDA: Tech Debt: extract scenario usages related queries from IAclScenarioMapper to AclScenarioUsageMapper
+* B-74269 FDA: Tech Debt: update formatting in ACL scenario usage mapper
+
 15.1.38
 -
 * B-74269 FDA: Tech Debt: move Liquibase scripts for AclScenarioUsageRepositoryIntegrationTest into the correct folder
