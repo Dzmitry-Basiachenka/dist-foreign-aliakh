@@ -99,6 +99,16 @@ public class AclScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    @TestData(fileName = FOLDER_NAME + "find-all.groovy")
+    public void testFindScenarioById() {
+        AclScenario expectedScenario = buildAclScenario("1995d50d-41c6-4e81-8c82-51a983bbecf8",
+            "2a173b41-75e3-4478-80ef-157527b18996", "65b930f1-777d-4a51-b878-bea3c68624d8",
+            "83e881cf-b258-42c1-849e-b2ec32b302b5", "ACL Scenario 202112", null, ScenarioStatusEnum.IN_PROGRESS,
+            false, 202112, LICENSE_TYPE_ACL, "auser@copyright.com", "2021-02-14T12:00:00+00:00");
+        verifyAclScenario(expectedScenario, aclScenarioRepository.findById("1995d50d-41c6-4e81-8c82-51a983bbecf8"));
+    }
+
+    @Test
     @TestData(fileName = FOLDER_NAME + "insert-scenario-usage-age.groovy")
     public void testInsertAclScenarioUsageAgeWeight() {
         AclScenario expectedScenario = buildAclScenario("7318b083-278b-44f3-8d3c-7fd22083443a",
@@ -156,8 +166,10 @@ public class AclScenarioRepositoryIntegrationTest {
                                                          Integer aggregateLicenseeClassId) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
         detailLicenseeClass.setId(detailLicenseeClassId);
+        detailLicenseeClass.setDescription("Other - Govt");
         AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
         aggregateLicenseeClass.setId(aggregateLicenseeClassId);
+        aggregateLicenseeClass.setDescription("Food and Tobacco");
         detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
         return detailLicenseeClass;
     }
@@ -172,8 +184,10 @@ public class AclScenarioRepositoryIntegrationTest {
     private AclPublicationType buildAclPublicationType(String publicationTypeId, BigDecimal weight, int period) {
         AclPublicationType publicationType = new AclPublicationType();
         publicationType.setId(publicationTypeId);
+        publicationType.setName("BK");
         publicationType.setWeight(weight);
         publicationType.setPeriod(period);
+        publicationType.setDescription("Book");
         return publicationType;
     }
 
@@ -241,15 +255,20 @@ public class AclScenarioRepositoryIntegrationTest {
     private void verifyAclScenarioLicenseeClasses(DetailLicenseeClass expectedDetailLicenseeClass,
                                                   DetailLicenseeClass actualDetailLicenseeClass) {
         assertEquals(expectedDetailLicenseeClass.getId(), actualDetailLicenseeClass.getId());
+        assertEquals(expectedDetailLicenseeClass.getDescription(), actualDetailLicenseeClass.getDescription());
         assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getId(),
             actualDetailLicenseeClass.getAggregateLicenseeClass().getId());
+        assertEquals(expectedDetailLicenseeClass.getAggregateLicenseeClass().getDescription(),
+            actualDetailLicenseeClass.getAggregateLicenseeClass().getDescription());
     }
 
     private void verifyAclScenarioPublicationType(AclPublicationType expectedPublicationType,
                                                   AclPublicationType actualPublicationType) {
         assertEquals(expectedPublicationType.getId(), actualPublicationType.getId());
+        assertEquals(expectedPublicationType.getName(), actualPublicationType.getName());
         assertEquals(expectedPublicationType.getWeight(), actualPublicationType.getWeight());
         assertEquals(expectedPublicationType.getPeriod(), actualPublicationType.getPeriod());
+        assertEquals(expectedPublicationType.getDescription(), actualPublicationType.getDescription());
     }
 
     private void verifyAclScenarioUsageAge(UsageAge expectedUsageAge, UsageAge actualUsageAge) {

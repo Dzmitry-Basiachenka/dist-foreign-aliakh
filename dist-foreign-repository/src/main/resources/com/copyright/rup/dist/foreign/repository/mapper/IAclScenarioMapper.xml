@@ -21,12 +21,16 @@
         </collection>
         <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclPublicationType">
             <result property="id" column="df_publication_type_uid"/>
+            <result property="name" column="pub_type_name"/>
+            <result property="description" column="pub_type_description"/>
             <result property="weight" column="pub_type_weight"/>
             <result property="period" column="pub_type_period"/>
         </collection>
         <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass">
             <result property="id" column="detail_licensee_class_id"/>
+            <result property="description" column="detail_licensee_name"/>
             <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
+            <result property="aggregateLicenseeClass.description" column="aggregate_licensee_name"/>
         </collection>
     </resultMap>
 
@@ -35,8 +39,8 @@
         df_acl_usage_batch_uid,
         df_acl_fund_pool_uid,
         df_acl_grant_set_uid,
-        name,
-        description,
+        s.name,
+        s.description,
         status_ind,
         is_editable,
         period_end_date,
@@ -44,10 +48,14 @@
         sua.period_prior,
         sua.weight usage_weight,
         spt.df_publication_type_uid,
+        pt.name pub_type_name,
+        pt.description pub_type_description,
         spt.weight pub_type_weight,
         spt.period pub_type_period,
         slc.detail_licensee_class_id,
+        dlc.description detail_licensee_name,
         slc.aggregate_licensee_class_id,
+        alc.description aggregate_licensee_name,
         s.created_datetime,
         s.updated_datetime,
         s.updated_by_user,
@@ -300,6 +308,9 @@
         join ${schema}.df_acl_scenario_usage_age_weight sua on s.df_acl_scenario_uid = sua.df_acl_scenario_uid
         join ${schema}.df_acl_scenario_pub_type_weight spt on s.df_acl_scenario_uid = spt.df_acl_scenario_uid
         join ${schema}.df_acl_scenario_licensee_class slc on s.df_acl_scenario_uid = slc.df_acl_scenario_uid
+        join ${schema}.df_detail_licensee_class dlc on slc.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        join ${schema}.df_publication_type pt on spt.df_publication_type_uid = pt.df_publication_type_uid
         where s.df_acl_scenario_uid = #{scenarioId}
         order by updated_datetime desc
     </select>
