@@ -35,6 +35,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -164,6 +165,24 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
     @Override
     public List<String> getScenarioNamesAssociatedWithGrantSet(String grantSetId) {
         return aclScenarioService.getScenarioNamesByGrantSetId(grantSetId);
+    }
+
+    @Override
+    public AclGrantSet getAclGrantSetById(String grantSetId) {
+        //TODO will be reimplemented. It is stub for now
+        AclGrantSet foundAclGrantSetById = new AclGrantSet();
+        foundAclGrantSetById.setName("Grant Set Name");
+        foundAclGrantSetById.setGrantPeriod(202206);
+        foundAclGrantSetById.setPeriods(Collections.singleton(202106));
+        foundAclGrantSetById.setLicenseType("ACL");
+        foundAclGrantSetById.setEditable(true);
+        return foundAclGrantSetById;
+    }
+
+    @Override
+    public int copyAclGrantSet(AclGrantSet aclGrantSet) {
+        //TODO will be reimplemented. It is stub for now
+        return 1;
     }
 
     @Override

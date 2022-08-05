@@ -152,4 +152,20 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
      * @return AclScenario name associated with grant set
      */
     List<String> getScenarioNamesAssociatedWithGrantSet(String grantSetId);
+
+    /**
+     * Gets ACL grant set by id.
+     *
+     * @param grantSetId grant set id
+     * @return instance of {@link AclGrantSet}
+     */
+    AclGrantSet getAclGrantSetById(String grantSetId);
+
+    /**
+     * Copies ACL grant set.
+     *
+     * @param aclGrantSet {@link AclGrantSet} instance
+     * @return count of copied grant details
+     */
+    int copyAclGrantSet(AclGrantSet aclGrantSet);
 }
