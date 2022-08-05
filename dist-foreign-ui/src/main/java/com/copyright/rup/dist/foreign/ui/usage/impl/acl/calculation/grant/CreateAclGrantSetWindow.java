@@ -26,6 +26,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -52,9 +53,11 @@ public class CreateAclGrantSetWindow extends Window {
     private TextField grantPeriodYearField;
     private ComboBox<String> grantPeriodMonthComboBox;
     private TextField periodValidationField;
+    private PeriodFilterWidget periodFilterWidget;
     private ComboBox<String> licenseTypeComboBox;
     private CheckBox editableCheckBox;
     private Set<Integer> selectedPeriods;
+    private ComboBox<AclGrantSet> copyFromComboBox;
 
     /**
      * Constructor.
@@ -67,7 +70,7 @@ public class CreateAclGrantSetWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_acl_grant_set"));
         setResizable(false);
         setWidth(400, Unit.PIXELS);
-        setHeight(260, Unit.PIXELS);
+        setHeight(320, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-grant-set-window");
     }
 
@@ -76,7 +79,12 @@ public class CreateAclGrantSetWindow extends Window {
      */
     void onCreateClicked() {
         if (isValid()) {
-            int grantDetailsCount = aclGrantDetailController.insertAclGrantSet(buildAclGrantSet());
+            int grantDetailsCount;
+            if (Objects.nonNull(copyFromComboBox.getValue())) {
+                grantDetailsCount = aclGrantDetailController.copyAclGrantSet(buildAclGrantSet());
+            } else {
+                grantDetailsCount = aclGrantDetailController.insertAclGrantSet(buildAclGrantSet());
+            }
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", grantDetailsCount));
         } else {
@@ -98,7 +106,8 @@ public class CreateAclGrantSetWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initGrantSetNameField(), initPeriodYearAndPeriodMonthFields(),
-            initPeriodFilterWidget(), initLicenseTypeComboBox(), initEditableCheckBox(), buttonsLayout);
+            initPeriodFilterWidget(), initLicenseTypeComboBox(), initCopyFromComboBox(), initEditableCheckBox(),
+            buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -164,7 +173,7 @@ public class CreateAclGrantSetWindow extends Window {
             .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.period.empty"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
-        PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(aclGrantDetailController::getBaselinePeriods);
+        periodFilterWidget = new PeriodFilterWidget(aclGrantDetailController::getBaselinePeriods);
         VaadinUtils.addComponentStyle(periodFilterWidget, "acl-periods-filter-widget");
         periodFilterWidget.addStyleName(EMPTY_PERIOD_STYLE);
         periodFilterWidget.addFilterSaveListener(event -> {
@@ -194,6 +203,23 @@ public class CreateAclGrantSetWindow extends Window {
         return licenseTypeComboBox;
     }
 
+    private ComboBox<AclGrantSet> initCopyFromComboBox() {
+        copyFromComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
+        copyFromComboBox.setItemCaptionGenerator(AclGrantSet::getName);
+        copyFromComboBox.setItems(aclGrantDetailController.getAllAclGrantSets());
+        copyFromComboBox.setRequiredIndicatorVisible(true);
+        copyFromComboBox.addValueChangeListener(event -> {
+            if (Objects.nonNull(event.getValue())) {
+                populateCopiedGrantSetFields(aclGrantDetailController.getAclGrantSetById(event.getValue().getId()));
+            } else {
+                resetComponents();
+            }
+        });
+        copyFromComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-copy-from-combo-box");
+        return copyFromComboBox;
+    }
+
     private CheckBox initEditableCheckBox() {
         editableCheckBox = new CheckBox();
         editableCheckBox.setValue(true);
@@ -220,5 +246,39 @@ public class CreateAclGrantSetWindow extends Window {
         aclGrantSet.setLicenseType(licenseTypeComboBox.getValue());
         aclGrantSet.setEditable(editableCheckBox.getValue());
         return aclGrantSet;
+    }
+
+    private void populateCopiedGrantSetFields(AclGrantSet aclGrantSet) {
+        grantSetNameFiled.setValue(aclGrantSet.getName());
+        grantPeriodYearField.setValue(String.valueOf(aclGrantSet.getGrantPeriod() / 100));
+        grantPeriodMonthComboBox.setValue(String.valueOf(aclGrantSet.getGrantPeriod() % 100));
+        selectedPeriods = aclGrantSet.getPeriods();
+        periodFilterWidget.setLabelValue(aclGrantSet.getPeriods().size());
+        periodValidationField.setValue(String.valueOf(aclGrantSet.getPeriods().size()));
+        licenseTypeComboBox.setValue(aclGrantSet.getLicenseType());
+        editableCheckBox.setValue(aclGrantSet.getEditable());
+        setEnabledComponents(false);
+    }
+
+    private void resetComponents() {
+        grantSetNameFiled.clear();
+        grantPeriodYearField.clear();
+        grantPeriodMonthComboBox.clear();
+        periodFilterWidget.reset();
+        licenseTypeComboBox.clear();
+        setEnabledComponents(true);
+    }
+
+    private void setEnabledComponents(boolean isEnable) {
+        grantPeriodYearField.setEnabled(isEnable);
+        grantPeriodMonthComboBox.setEnabled(isEnable);
+        if (!isEnable) {
+            periodFilterWidget.removeStyleName(EMPTY_PERIOD_STYLE);
+        } else {
+            periodFilterWidget.addStyleName(EMPTY_PERIOD_STYLE);
+        }
+        periodFilterWidget.setEnabled(isEnable);
+        licenseTypeComboBox.setEnabled(isEnable);
+        editableCheckBox.setEnabled(isEnable);
     }
 }

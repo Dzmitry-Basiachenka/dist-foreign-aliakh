@@ -25,10 +25,12 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclGrantDetailController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -60,9 +62,12 @@ import java.util.Set;
 @PrepareForTest({Windows.class, CreateAclGrantSetWindow.class})
 public class CreateAclGrantSetWindowTest {
 
+    private static final String GRANT_SET_ID = "1caa9169-8587-4d1c-8c07-7f5582daea67";
     private static final String PERIOD_YEAR = "2020";
     private static final String PERIOD_MONTH = "12";
     private static final String GRANT_SET_NAME = "Grant Set Name";
+    private static final String GRANT_SET_NAME_2022 = "Grant Set Name 2022";
+    private static final Integer GRANT_SET_GRANT_PERIOD = 202206;
     private static final String ACL = "ACL";
     private static final String[] MONTHS = new String[]{"06", "12"};
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
@@ -72,7 +77,10 @@ public class CreateAclGrantSetWindowTest {
     private static final String GRANT_PERIOD_YEAR_FIELD = "grantPeriodYearField";
     private static final String GRANT_PERIOD_MONTH_COMBOBOX = "grantPeriodMonthComboBox";
     private static final String PERIOD_VALIDATION_FIELD = "periodValidationField";
+    private static final String PERIOD_FILTER_WIDGET = "periodFilterWidget";
     private static final String LICENSE_TYPE_COMBOBOX = "licenseTypeComboBox";
+    private static final String COPY_FROM_COMBOBOX = "copyFromComboBox";
+    private static final String EDITABLE_CHECK_BOX = "editableCheckBox";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String INVALID_PERIOD_VALIDATION_MESSAGE = "Please select at least one period";
 
@@ -82,13 +90,16 @@ public class CreateAclGrantSetWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclGrantDetailController.class);
+        expect(controller.getAllAclGrantSets()).andReturn(Collections.singletonList(buildAclGrantSet())).once();
     }
 
     @Test
     public void testConstructor() {
+        replay(controller);
         window = new CreateAclGrantSetWindow(controller);
-        verifyWindow(window, "Create ACL Grant Set", 400, 260, Unit.PIXELS);
+        verifyWindow(window, "Create ACL Grant Set", 400, 320, Unit.PIXELS);
         verifyRootLayout(window.getContent());
+        verify(controller);
     }
 
     @Test
@@ -113,13 +124,14 @@ public class CreateAclGrantSetWindowTest {
 
     @Test
     public void testOnCreateClickedValidFields() {
+        expect(controller.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).once();
+        Capture<AclGrantSet> grantSetCapture = newCapture();
+        expect(controller.insertAclGrantSet(capture(grantSetCapture))).andReturn(1).once();
+        replay(controller);
         window = createPartialMock(CreateAclGrantSetWindow.class, new String[]{"isValid", "close"}, controller);
         expect(window.isValid()).andReturn(true).once();
         window.close();
         expectLastCall().once();
-        expect(controller.isGrantSetExist(GRANT_SET_NAME)).andReturn(false).once();
-        Capture<AclGrantSet> grantSetCapture = newCapture();
-        expect(controller.insertAclGrantSet(capture(grantSetCapture))).andReturn(1).once();
         mockStatic(Windows.class);
         Windows.showNotificationWindow("Creation completed: 1 record(s) were stored successfully");
         expectLastCall().once();
@@ -161,6 +173,7 @@ public class CreateAclGrantSetWindowTest {
 
     @Test
     public void testGrantPeriodYearFieldValidation() {
+        replay(controller);
         window = new CreateAclGrantSetWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodYearField = Whitebox.getInternalState(window, GRANT_PERIOD_YEAR_FIELD);
@@ -180,10 +193,12 @@ public class CreateAclGrantSetWindowTest {
         validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, null, true);
         validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, null, true);
         validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, null, true);
+        verify(controller);
     }
 
     @Test
     public void testPeriodValidationFieldValidation() {
+        replay(controller);
         window = new CreateAclGrantSetWindow(controller);
         Binder binder = Whitebox.getInternalState(window, "binder");
         TextField periodValidationField = Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD);
@@ -197,18 +212,55 @@ public class CreateAclGrantSetWindowTest {
             periodValidationField, "0", binder, INVALID_PERIOD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
             periodValidationField, "-1000", binder, INVALID_PERIOD_VALIDATION_MESSAGE, false);
+        verify(controller);
+    }
+
+    @Test
+    public void testFieldsFillingViaCopyFrom() {
+        AclGrantSet aclGrantSet = buildAclGrantSet();
+        expect(controller.isGrantSetExist(GRANT_SET_NAME_2022)).andReturn(true).once();
+        expect(controller.getAclGrantSetById(GRANT_SET_ID)).andReturn(aclGrantSet).once();
+        replay(controller);
+        window = new CreateAclGrantSetWindow(controller);
+        ComboBox<AclGrantSet> copyFromComboBox = Whitebox.getInternalState(window, COPY_FROM_COMBOBOX);
+        copyFromComboBox.setValue(aclGrantSet);
+        verifyCreateGrantSetWindowFields();
+        verify(controller);
+    }
+
+    private void verifyCreateGrantSetWindowFields() {
+        TextField grantSetNameField = Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD);
+        assertEquals(GRANT_SET_NAME_2022, grantSetNameField.getValue());
+        assertTrue(grantSetNameField.isEnabled());
+        TextField grantPeriodYearField = Whitebox.getInternalState(window, GRANT_PERIOD_YEAR_FIELD);
+        assertEquals("2022", grantPeriodYearField.getValue());
+        assertFalse(grantPeriodYearField.isEnabled());
+        ComboBox<String> grantPeriodMonthComboBox = Whitebox.getInternalState(window, GRANT_PERIOD_MONTH_COMBOBOX);
+        assertEquals("6", grantPeriodMonthComboBox.getValue());
+        assertFalse(grantPeriodMonthComboBox.isEnabled());
+        TextField periodValidationField = Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD);
+        assertEquals("1", periodValidationField.getValue());
+        PeriodFilterWidget periodFilterWidget = Whitebox.getInternalState(window, PERIOD_FILTER_WIDGET);
+        assertFalse(periodFilterWidget.isEnabled());
+        ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, LICENSE_TYPE_COMBOBOX);
+        assertEquals(ACL, licenseTypeComboBox.getValue());
+        assertFalse(licenseTypeComboBox.isEnabled());
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECK_BOX);
+        assertTrue(editableCheckBox.getValue());
+        assertFalse(editableCheckBox.isEnabled());
     }
 
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(6, verticalLayout.getComponentCount());
+        assertEquals(7, verticalLayout.getComponentCount());
         verifyGrantSetNameComponent(verticalLayout.getComponent(0));
         verifyPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
         verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
         verifyComboBox(verticalLayout.getComponent(3), "License Type", true, LICENSE_TYPES);
-        verifyCheckBox(verticalLayout.getComponent(4), "Editable", "acl-editable-checkbox");
-        verifyButtonsLayout(verticalLayout.getComponent(5), "Create", "Close");
+        verifyComboBox(verticalLayout.getComponent(4), "Copy From", true, buildAclGrantSet());
+        verifyCheckBox(verticalLayout.getComponent(5), "Editable", "acl-editable-checkbox");
+        verifyButtonsLayout(verticalLayout.getComponent(6), "Create", "Close");
     }
 
     private void verifyGrantSetNameComponent(Component component) {
@@ -225,5 +277,16 @@ public class CreateAclGrantSetWindowTest {
         assertTrue(horizontalLayout.getComponent(1) instanceof ComboBox);
         verifyTextField(horizontalLayout.getComponent(0), "Grant Period Year");
         verifyComboBox(horizontalLayout.getComponent(1), "Grant Period Month", true, MONTHS);
+    }
+
+    private AclGrantSet buildAclGrantSet() {
+        AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId(GRANT_SET_ID);
+        aclGrantSet.setName(GRANT_SET_NAME_2022);
+        aclGrantSet.setGrantPeriod(GRANT_SET_GRANT_PERIOD);
+        aclGrantSet.setPeriods(PERIODS);
+        aclGrantSet.setLicenseType(ACL);
+        aclGrantSet.setEditable(true);
+        return aclGrantSet;
     }
 }
