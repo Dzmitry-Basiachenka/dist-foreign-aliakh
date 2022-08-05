@@ -1306,4 +1306,38 @@ databaseChangeLog {
                 constraintName: 'fk_df_acl_share_detail_2_df_acl_scenario_detail')
         }
     }
+
+    changeSet(id: '2022-08-05-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-74687 FDA: Fine tune performance for ACL components: add index by df_acl_scenario_uid to scenario " +
+                "related tables")
+
+        createIndex(indexName: 'ix_df_acl_scenario_detail_df_acl_scenario_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_scenario_detail', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_uid')
+        }
+        createIndex(indexName: 'ix_df_acl_share_detail_df_acl_scenario_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_share_detail', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_uid')
+        }
+        createIndex(indexName: 'ix_df_acl_scenario_licensee_class_df_acl_scenario_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_scenario_licensee_class', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_uid')
+        }
+        createIndex(indexName: 'ix_df_acl_scenario_pub_type_weight_df_acl_scenario_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_scenario_pub_type_weight', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_uid')
+        }
+        createIndex(indexName: 'ix_df_acl_scenario_usage_age_weight_df_acl_scenario_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_scenario_usage_age_weight', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_detail_df_acl_scenario_uid")
+            sql("drop index ${dbAppsSchema}.ix_df_acl_share_detail_df_acl_scenario_uid")
+            sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_licensee_class_df_acl_scenario_uid")
+            sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_pub_type_weight_df_acl_scenario_uid")
+            sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_usage_age_weight_df_acl_scenario_uid")
+        }
+    }
 }
