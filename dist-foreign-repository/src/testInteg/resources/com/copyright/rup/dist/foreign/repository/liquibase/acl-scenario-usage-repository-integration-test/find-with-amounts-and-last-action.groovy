@@ -156,6 +156,20 @@ databaseChangeLog {
             column(name: 'weight', value: 2)
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: '75058b5c-5f9b-4938-8484-76189b3b098a')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: '9432b9c8-7aff-42e5-8dc0-d84e16d466ab')
+            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'aggregate_licensee_class_id', value: 52)
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: 'e8a591d8-2803-4f9e-8cf5-4cd6257917e8')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -222,6 +236,20 @@ databaseChangeLog {
             column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
             column(name: 'period', value: '201506')
             column(name: 'weight', value: 2)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: 'c34ba39f-9322-4208-a451-8c79f6b05869')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'detail_licensee_class_id', value: 1)
+            column(name: 'aggregate_licensee_class_id', value: 51)
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
+            column(name: 'df_acl_scenario_licensee_class_uid', value: 'e5b7b823-1142-4f80-934d-8762a3009590')
+            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
+            column(name: 'detail_licensee_class_id', value: 2)
+            column(name: 'aggregate_licensee_class_id', value: 52)
         }
 
         rollback {

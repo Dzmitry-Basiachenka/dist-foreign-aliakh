@@ -319,13 +319,18 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<UsageAge> usageAges = scenario.getUsageAges();
         assertEquals(2, usageAges.size());
         usageAges.sort(Comparator.comparing(UsageAge::getPeriod));
-        verifyAclUsageAge(usageAges.get(0), 0, "1.00000");
-        verifyAclUsageAge(usageAges.get(1), 1, "2.00000");
+        verifyUsageAge(usageAges.get(0), 0, "1.00000");
+        verifyUsageAge(usageAges.get(1), 1, "2.00000");
         List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
         assertEquals(2, publicationTypes.size());
         publicationTypes.sort(Comparator.comparing(AclPublicationType::getName));
         verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
         verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "2.00", 201506);
+        List<DetailLicenseeClass> detailLicenseeClasses = scenario.getDetailLicenseeClasses();
+        assertEquals(2, detailLicenseeClasses.size());
+        detailLicenseeClasses.sort(Comparator.comparing(DetailLicenseeClass::getId));
+        verifyDetailLicenseeClass(detailLicenseeClasses.get(0), 1, "Food and Tobacco", 51, "Materials");
+        verifyDetailLicenseeClass(detailLicenseeClasses.get(1), 2, "Textiles, Apparel, etc.", 52, "Medical");
     }
 
     @Test
@@ -363,13 +368,18 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         List<UsageAge> usageAges = scenario.getUsageAges();
         assertEquals(2, usageAges.size());
         usageAges.sort(Comparator.comparing(UsageAge::getPeriod));
-        verifyAclUsageAge(usageAges.get(0), 0, "1.00000");
-        verifyAclUsageAge(usageAges.get(1), 1, "2.00000");
+        verifyUsageAge(usageAges.get(0), 0, "1.00000");
+        verifyUsageAge(usageAges.get(1), 1, "2.00000");
         List<AclPublicationType> publicationTypes = scenario.getPublicationTypes();
         assertEquals(2, publicationTypes.size());
         publicationTypes.sort(Comparator.comparing(AclPublicationType::getName));
         verifyAclPublicationType(publicationTypes.get(0), "BK", "Book", "1.00", 201506);
         verifyAclPublicationType(publicationTypes.get(1), "NL", "Newsletter", "2.00", 201506);
+        List<DetailLicenseeClass> detailLicenseeClasses = scenario.getDetailLicenseeClasses();
+        assertEquals(2, detailLicenseeClasses.size());
+        detailLicenseeClasses.sort(Comparator.comparing(DetailLicenseeClass::getId));
+        verifyDetailLicenseeClass(detailLicenseeClasses.get(0), 1, "Food and Tobacco", 51, "Materials");
+        verifyDetailLicenseeClass(detailLicenseeClasses.get(1), 2, "Textiles, Apparel, etc.", 52, "Medical");
     }
 
     @Test
@@ -746,7 +756,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedHolder.getLicenseType(), actualHolder.getLicenseType());
     }
 
-    private void verifyAclUsageAge(UsageAge usageAge, Integer period, String weight) {
+    private void verifyUsageAge(UsageAge usageAge, Integer period, String weight) {
         assertEquals(period, usageAge.getPeriod());
         assertEquals(new BigDecimal(weight), usageAge.getWeight());
     }
@@ -757,6 +767,15 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(description, publicationType.getDescription());
         assertEquals(new BigDecimal(weight), publicationType.getWeight());
         assertEquals(period, publicationType.getPeriod());
+    }
+
+    private void verifyDetailLicenseeClass(DetailLicenseeClass detailLicenseeClass, Integer detLicClassId,
+                                           String detLicClassDescription, Integer aggLicClassId,
+                                           String aggLicClassDescription) {
+        assertEquals(detLicClassId, detailLicenseeClass.getId());
+        assertEquals(detLicClassDescription, detailLicenseeClass.getDescription());
+        assertEquals(aggLicClassId, detailLicenseeClass.getAggregateLicenseeClass().getId());
+        assertEquals(aggLicClassDescription, detailLicenseeClass.getAggregateLicenseeClass().getDescription());
     }
 
     private void assertSortingAclRightsholderTotalsHolder(AclRightsholderTotalsHolder holderAsc,
