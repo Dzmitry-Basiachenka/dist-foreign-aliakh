@@ -67,6 +67,7 @@
         <result property="numberOfRhsDigital" column="number_of_rhs_digital"/>
         <result property="numberOfWorksPrint" column="number_of_works_print"/>
         <result property="numberOfWorksDigital" column="number_of_works_digital"/>
+        <result property="copiedFrom" column="copied_from"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
         <collection property="usageAges" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.UsageAge">
             <result property="period" column="period_prior"/>
@@ -199,6 +200,7 @@
         s.is_editable,
         s.period_end_date,
         s.license_type,
+        s.copied_from,
         coalesce(sum(gross_total), 0) gross_total,
         coalesce(sum(service_fee_total), 0) service_fee_total,
         coalesce(sum(net_total), 0) net_total,

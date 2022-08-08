@@ -385,8 +385,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             .stream()
             .sorted(Comparator.comparing(DetailLicenseeClass::getId))
             .collect(Collectors.toList()));
-        // TODO use the real value when field "Copy from" is implemented in the ACL scenario creation dialog
-        copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from", StringUtils.EMPTY));
+        copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from",
+            Objects.nonNull(scenario.getCopiedFrom()) ? scenario.getCopiedFrom() : StringUtils.EMPTY));
     }
 
     private String formatScenarioLabel(String caption, Object value) {

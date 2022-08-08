@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -295,6 +296,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals("b175a252-2fb9-47da-8d40-8ad82107f546", scenario.getGrantSetId());
         assertEquals("ACL Scenario 202012", scenario.getName());
         assertEquals("some description", scenario.getDescription());
+        assertEquals("Another Scenario", scenario.getCopiedFrom());
         assertEquals(ScenarioStatusEnum.SUBMITTED, scenario.getStatus());
         assertTrue(scenario.isEditableFlag());
         assertEquals(202012, scenario.getPeriodEndDate().intValue());
@@ -344,6 +346,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals("fb637adf-04a6-4bee-b195-8cbde93bf672", scenario.getGrantSetId());
         assertEquals("ACL Scenario 202112", scenario.getName());
         assertEquals("another description", scenario.getDescription());
+        assertEquals("Another Scenario", scenario.getCopiedFrom());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
         assertFalse(scenario.isEditableFlag());
         assertEquals(202112, scenario.getPeriodEndDate().intValue());
