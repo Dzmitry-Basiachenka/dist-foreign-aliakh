@@ -230,6 +230,18 @@ public class AclUsageControllerTest {
         verify(aclUsageService);
     }
 
+    @Test
+    public void testGetAllAclUsageBatches() {
+        //TODO {dbasiachenka} implement
+        assertEquals(Collections.emptyList(), controller.getAllAclUsageBatches());
+    }
+
+    @Test
+    public void testCopyAclUsageBatch() {
+        //TODO {dbasiachenka} implement
+        assertEquals(0, controller.copyAclUsageBatch(ACL_USAGE_BATCH_NAME, new AclUsageBatch()));
+    }
+
     private AclUsageBatch buildAclUsageBatch() {
         AclUsageBatch usageBatch = new AclUsageBatch();
         usageBatch.setName(ACL_USAGE_BATCH_NAME);

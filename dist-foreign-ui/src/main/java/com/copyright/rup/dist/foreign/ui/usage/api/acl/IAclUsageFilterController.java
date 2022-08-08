@@ -22,7 +22,7 @@ public interface IAclUsageFilterController extends IFilterController<IAclUsageFi
     /**
      * Gets list of all ACL usage batches.
      *
-     * @return list of all {@link AclUsageBatch}s
+     * @return list of all {@link AclUsageBatch}es
      */
     List<AclUsageBatch> getAllAclUsageBatches();
 
