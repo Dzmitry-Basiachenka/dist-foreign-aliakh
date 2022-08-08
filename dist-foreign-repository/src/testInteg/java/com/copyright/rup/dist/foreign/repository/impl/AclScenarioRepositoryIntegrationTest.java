@@ -213,6 +213,7 @@ public class AclScenarioRepositoryIntegrationTest {
         scenario.setPublicationTypes(Collections.singletonList(
             buildAclPublicationType("73876e58-2e87-485e-b6f3-7e23792dd214", new BigDecimal("1.00"), 201512)));
         scenario.setUsageAges(Collections.singletonList(buildUsageAge(0, new BigDecimal("1.00000"))));
+        scenario.setCopiedFrom("Copied Scenario Name");
         return scenario;
     }
 
@@ -227,6 +228,7 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(expectedAclScenario.isEditableFlag(), actualAclScenario.isEditableFlag());
         assertEquals(expectedAclScenario.getPeriodEndDate(), actualAclScenario.getPeriodEndDate());
         assertEquals(expectedAclScenario.getLicenseType(), actualAclScenario.getLicenseType());
+        assertEquals(expectedAclScenario.getCopiedFrom(), actualAclScenario.getCopiedFrom());
         assertEquals(expectedAclScenario.getCreateUser(), actualAclScenario.getCreateUser());
         assertEquals(expectedAclScenario.getUpdateUser(), actualAclScenario.getUpdateUser());
     }
@@ -242,6 +244,7 @@ public class AclScenarioRepositoryIntegrationTest {
         assertEquals(expectedAclScenario.isEditableFlag(), actualAclScenario.isEditableFlag());
         assertEquals(expectedAclScenario.getPeriodEndDate(), actualAclScenario.getPeriodEndDate());
         assertEquals(expectedAclScenario.getLicenseType(), actualAclScenario.getLicenseType());
+        assertEquals(expectedAclScenario.getCopiedFrom(), actualAclScenario.getCopiedFrom());
         assertEquals(expectedAclScenario.getCreateUser(), actualAclScenario.getCreateUser());
         assertEquals(expectedAclScenario.getUpdateUser(), actualAclScenario.getUpdateUser());
         verifyAclScenarioUsageAge(expectedAclScenario.getUsageAges().get(0),

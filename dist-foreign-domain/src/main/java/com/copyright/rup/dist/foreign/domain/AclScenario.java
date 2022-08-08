@@ -29,6 +29,7 @@ public class AclScenario extends StoredEntity<String> {
     private boolean editableFlag;
     private Integer periodEndDate;
     private String licenseType;
+    private String copiedFrom;
     private List<AclPublicationType> publicationTypes = new ArrayList<>();
     private List<UsageAge> usageAges = new ArrayList<>();
     private List<DetailLicenseeClass> detailLicenseeClasses = new ArrayList<>();
@@ -105,6 +106,14 @@ public class AclScenario extends StoredEntity<String> {
         this.licenseType = licenseType;
     }
 
+    public String getCopiedFrom() {
+        return copiedFrom;
+    }
+
+    public void setCopiedFrom(String copiedFrom) {
+        this.copiedFrom = copiedFrom;
+    }
+
     public List<AclPublicationType> getPublicationTypes() {
         return publicationTypes;
     }
@@ -149,6 +158,7 @@ public class AclScenario extends StoredEntity<String> {
             .append(status, scenario.status)
             .append(periodEndDate, scenario.periodEndDate)
             .append(licenseType, scenario.licenseType)
+            .append(copiedFrom, scenario.copiedFrom)
             .append(publicationTypes, scenario.publicationTypes)
             .append(usageAges, scenario.usageAges)
             .append(detailLicenseeClasses, scenario.detailLicenseeClasses)
@@ -168,6 +178,7 @@ public class AclScenario extends StoredEntity<String> {
             .append(editableFlag)
             .append(periodEndDate)
             .append(licenseType)
+            .append(copiedFrom)
             .append(publicationTypes)
             .append(usageAges)
             .append(detailLicenseeClasses)
@@ -187,6 +198,7 @@ public class AclScenario extends StoredEntity<String> {
             .append("editableFlag", editableFlag)
             .append("periodEndDate", periodEndDate)
             .append("licenseType", licenseType)
+            .append("copiedFrom", copiedFrom)
             .append("publicationTypes", publicationTypes)
             .append("usageAges", usageAges)
             .append("detailLicenseeClasses", detailLicenseeClasses)

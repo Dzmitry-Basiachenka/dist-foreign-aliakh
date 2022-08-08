@@ -224,6 +224,8 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         aclCopyFromScenarioComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
         aclCopyFromScenarioComboBox.setItemCaptionGenerator(AclScenario::getName);
         aclCopyFromScenarioComboBox.setItems(controller.getScenarios());
+        scenarioBinder.forField(aclCopyFromScenarioComboBox).bind(scenario -> scenario, (scenario, value) ->
+            scenario.setCopiedFrom(Objects.nonNull(value) ? value.getName() : null));
         aclCopyFromScenarioComboBox.addValueChangeListener(event -> {
             if (Objects.nonNull(event.getValue())) {
                 AclScenario scenario = controller.getScenarioById(event.getValue().getId());
@@ -380,7 +382,6 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
     }
 
     private void populateCopiedScenarioFields(AclScenario scenario) {
-        scenarioNameField.setValue(scenario.getName());
         editableCheckBox.setValue(true);
         licenseTypeComboBox.setValue(scenario.getLicenseType());
         periodComboBox.setValue(scenario.getPeriodEndDate());

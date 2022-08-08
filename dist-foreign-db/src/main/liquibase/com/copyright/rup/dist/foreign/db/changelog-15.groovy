@@ -1340,4 +1340,16 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_acl_scenario_usage_age_weight_df_acl_scenario_uid")
         }
     }
+
+    changeSet(id: '2022-08-05-01', author: 'Anton Azarenka <aazarenka@copyright.com>') {
+        comment("B-72122 FDA: Copy ACL Scenario: add copied_from column to df_acl_scenario table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario') {
+            column(name: 'copied_from', type: 'VARCHAR(255)', remarks: 'Copied From')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario', columnName: 'copied_from')
+        }
+    }
 }

@@ -40,6 +40,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'SUBMITTED')
             column(name: 'license_type', value: 'ACL')
             column(name: 'is_editable', value: true)
+            column(name: 'copied_from', value: "Another Scenario")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
@@ -206,6 +207,7 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'license_type', value: 'ACL')
             column(name: 'is_editable', value: false)
+            column(name: 'copied_from', value: "Another Scenario")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {

@@ -280,7 +280,6 @@ public class CreateAclScenarioWindowTest {
             "304795bf-9bd1-4377-9b5f-ce247d88f8b2", ACL_BATCH_UID,
             "f5e558ce-2261-4998-8434-fc04d432c1a5", "ACL Scenario 202212", DESCRIPTION,
             ScenarioStatusEnum.IN_PROGRESS, true, 202212, LICENSE_TYPE, "username");
-        expect(controller.aclScenarioExists("ACL Scenario 202212")).andReturn(true).once();
         expect(controller.aclScenarioExists(SCENARIO_NAME)).andReturn(false).once();
         expect(controller.getUsageBatchesByPeriod(202212, true))
             .andReturn(Collections.singletonList(buildAclUsageBatch())).times(2);
@@ -299,7 +298,7 @@ public class CreateAclScenarioWindowTest {
 
     private void verifyCreateScenarioWindowFields() {
         TextField scenarioNameField = Whitebox.getInternalState(window, "scenarioNameField");
-        assertEquals("ACL Scenario 202212", scenarioNameField.getValue());
+        assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         ComboBox<Integer> periodComboBox = Whitebox.getInternalState(window, "periodComboBox");
         assertEquals(Integer.valueOf(202212), periodComboBox.getValue());
         assertFalse(periodComboBox.isEnabled());

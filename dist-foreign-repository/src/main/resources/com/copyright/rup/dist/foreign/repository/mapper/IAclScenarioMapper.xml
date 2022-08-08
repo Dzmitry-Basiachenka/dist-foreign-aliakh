@@ -15,6 +15,7 @@
         <result property="editableFlag" column="is_editable"/>
         <result property="periodEndDate" column="period_end_date"/>
         <result property="licenseType" column="license_type"/>
+        <result property="copiedFrom" column="copied_from"/>
         <collection property="usageAges" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.UsageAge">
             <result property="period" column="period_prior"/>
             <result property="weight" column="usage_weight"/>
@@ -45,6 +46,7 @@
         is_editable,
         period_end_date,
         license_type,
+        copied_from,
         sua.period_prior,
         sua.weight usage_weight,
         spt.df_publication_type_uid,
@@ -218,6 +220,7 @@
             is_editable,
             period_end_date,
             license_type,
+            copied_from,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -230,6 +233,7 @@
             #{editableFlag},
             #{periodEndDate},
             #{licenseType},
+            #{copiedFrom},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
@@ -296,6 +300,7 @@
             is_editable,
             period_end_date,
             license_type,
+            copied_from,
             <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_acl_scenario
         order by updated_datetime desc
