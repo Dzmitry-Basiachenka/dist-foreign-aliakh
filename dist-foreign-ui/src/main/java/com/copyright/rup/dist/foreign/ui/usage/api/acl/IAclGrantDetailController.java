@@ -162,10 +162,11 @@ public interface IAclGrantDetailController extends IController<IAclGrantDetailWi
     AclGrantSet getAclGrantSetById(String grantSetId);
 
     /**
-     * Copies ACL grant set.
+     * Copies grant set with grant details by grant set id.
      *
-     * @param aclGrantSet {@link AclGrantSet} instance
+     * @param grantSet         {@link AclGrantSet} instance
+     * @param sourceGrantSetId source grant set id
      * @return count of copied grant details
      */
-    int copyAclGrantSet(AclGrantSet aclGrantSet);
+    int copyAclGrantSet(AclGrantSet grantSet, String sourceGrantSetId);
 }

@@ -1,0 +1,17 @@
+[
+  {
+    "grantStatus": "GRANT",
+    "typeOfUse": "DIGITAL",
+    "typeOfUseStatus": "Digital Only",
+    "wrWrkInst": 122820638,
+    "systemTitle": "Technology review",
+    "rhAccountNumber": 1000028511,
+    "eligible": true,
+    "version": 1,
+    "createUser": "user@copyright.com",
+    "updateUser": "user@copyright.com",
+    "createDate": 1611979200000,
+    "updateDate": 1612065600000,
+    "manualUploadFlag": false
+  }
+]

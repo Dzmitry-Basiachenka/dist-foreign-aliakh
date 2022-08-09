@@ -349,6 +349,22 @@ public class AclGrantDetailServiceTest {
         verify(aclGrantDetailRepository);
     }
 
+    @Test
+    public void testCopyGrantDetails() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        String sourceGrantSetId = "22552173-acfe-45d5-a026-3ded88e38266";
+        String targetGrantSetId = "65f9c87a-cd1e-4854-a76e-cbbeb2122d3c";
+        List<String> grantDetailIds = Collections.singletonList("47388a61-7aa7-439b-a831-d3dfb4a69638");
+        expect(aclGrantDetailRepository.copyGrantDetailsByGrantSetId(sourceGrantSetId, targetGrantSetId, USER_NAME))
+            .andReturn(grantDetailIds);
+        expectLastCall().once();
+        replay(aclGrantDetailRepository);
+        assertEquals(grantDetailIds.size(),
+            aclGrantDetailService.copyGrantDetails(sourceGrantSetId, targetGrantSetId, USER_NAME));
+        verify(aclGrantDetailRepository);
+    }
+
     private void verifyGrantDtoCapture(Capture<AclGrantDetailDto> capture, AclGrantDetailDto expectedGrantDetailDto) {
         AclGrantDetailDto actualGrantDetailDto = capture.getValue();
         assertEquals(expectedGrantDetailDto.getId(), actualGrantDetailDto.getId());

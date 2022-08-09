@@ -284,12 +284,22 @@ public class AclGrantDetailControllerTest {
 
     @Test
     public void testGetAclGrantSetById() {
-        //TODO will be implemented later
+        AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId(GRANT_SET_ID);
+        expect(aclGrantSetService.getById(GRANT_SET_ID)).andReturn(aclGrantSet).once();
+        replay(aclGrantSetService);
+        assertEquals(aclGrantSet, aclGrantSetService.getById(GRANT_SET_ID));
+        verify(aclGrantSetService);
     }
 
     @Test
     public void testCopyAclGrantSet() {
-        //TODO will be implemented later
+        AclGrantSet aclGrantSet = new AclGrantSet();
+        aclGrantSet.setId(GRANT_SET_ID);
+        expect(aclGrantSetService.copyGrantSet(aclGrantSet, GRANT_SET_ID)).andReturn(1).once();
+        replay(aclGrantSetService);
+        assertEquals(1, aclGrantSetService.copyGrantSet(aclGrantSet, GRANT_SET_ID));
+        verify(aclGrantSetService);
     }
 
     private AclGrantSet buildAclGrantSet() {

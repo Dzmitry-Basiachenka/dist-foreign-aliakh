@@ -77,6 +77,17 @@ public class AclGrantDetailRepository extends AclBaseRepository implements IAclG
         return selectOne("IAclGrantDetailMapper.isGrantDetailExist", parameters);
     }
 
+    @Override
+    public List<String> copyGrantDetailsByGrantSetId(String sourceGrantSetId, String targetGrantSetId,
+                                                     String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("sourceGrantSetId", Objects.requireNonNull(sourceGrantSetId));
+        parameters.put("targetGrantSetId", Objects.requireNonNull(targetGrantSetId));
+        parameters.put("createUser", Objects.requireNonNull(userName));
+        parameters.put("updateUser", userName);
+        return selectList("IAclGrantDetailMapper.copyGrantDetails", parameters);
+    }
+
     private AclGrantDetailFilter escapeSqlLikePattern(AclGrantDetailFilter aclGrantDetailFilter) {
         AclGrantDetailFilter filterCopy = new AclGrantDetailFilter(aclGrantDetailFilter);
         filterCopy.setRhNameExpression(
