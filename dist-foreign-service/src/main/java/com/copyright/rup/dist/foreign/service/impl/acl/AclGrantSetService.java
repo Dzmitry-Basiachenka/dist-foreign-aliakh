@@ -99,4 +99,21 @@ public class AclGrantSetService implements IAclGrantSetService {
     public AclGrantSet getById(String grantSetId) {
         return aclGrantSetRepository.findById(grantSetId);
     }
+
+    @Override
+    @Transactional
+    public int copyGrantSet(AclGrantSet aclGrantSet, String sourceGrantSetId) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Copy ACL grant set. Started. AclGrantSet={}, UserName={}", aclGrantSet, userName);
+        String targetGrantSetId = RupPersistUtils.generateUuid();
+        aclGrantSet.setId(targetGrantSetId);
+        aclGrantSet.setCreateUser(userName);
+        aclGrantSet.setUpdateUser(userName);
+        aclGrantSetRepository.insert(aclGrantSet);
+        int countInsertedGrantDetails =
+            aclGrantDetailService.copyGrantDetails(sourceGrantSetId, targetGrantSetId, userName);
+        LOGGER.info("Copy ACL grant set. Finished. AclGrantSet={}, AclGrantSetCount={}, UserName={}",
+            aclGrantSet, countInsertedGrantDetails, userName);
+        return countInsertedGrantDetails;
+    }
 }

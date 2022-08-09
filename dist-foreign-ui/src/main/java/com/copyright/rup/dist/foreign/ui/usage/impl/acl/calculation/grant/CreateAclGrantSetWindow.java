@@ -48,6 +48,7 @@ public class CreateAclGrantSetWindow extends Window {
     private final Binder<AclGrantSet> grantSetBinder = new Binder<>();
     private final Binder<String> binder = new Binder<>();
     private final IAclGrantDetailController aclGrantDetailController;
+    private String sourceAclGrantSetId;
 
     private TextField grantSetNameFiled;
     private TextField grantPeriodYearField;
@@ -81,7 +82,7 @@ public class CreateAclGrantSetWindow extends Window {
         if (isValid()) {
             int grantDetailsCount;
             if (Objects.nonNull(copyFromComboBox.getValue())) {
-                grantDetailsCount = aclGrantDetailController.copyAclGrantSet(buildAclGrantSet());
+                grantDetailsCount = aclGrantDetailController.copyAclGrantSet(buildAclGrantSet(), sourceAclGrantSetId);
             } else {
                 grantDetailsCount = aclGrantDetailController.insertAclGrantSet(buildAclGrantSet());
             }
@@ -210,7 +211,9 @@ public class CreateAclGrantSetWindow extends Window {
         copyFromComboBox.setRequiredIndicatorVisible(true);
         copyFromComboBox.addValueChangeListener(event -> {
             if (Objects.nonNull(event.getValue())) {
-                populateCopiedGrantSetFields(aclGrantDetailController.getAclGrantSetById(event.getValue().getId()));
+                AclGrantSet aclGrantSet = aclGrantDetailController.getAclGrantSetById(event.getValue().getId());
+                sourceAclGrantSetId = aclGrantSet.getId();
+                populateCopiedGrantSetFields(aclGrantSet);
             } else {
                 resetComponents();
             }
@@ -249,14 +252,14 @@ public class CreateAclGrantSetWindow extends Window {
     }
 
     private void populateCopiedGrantSetFields(AclGrantSet aclGrantSet) {
-        grantSetNameFiled.setValue(aclGrantSet.getName());
         grantPeriodYearField.setValue(String.valueOf(aclGrantSet.getGrantPeriod() / 100));
-        grantPeriodMonthComboBox.setValue(String.valueOf(aclGrantSet.getGrantPeriod() % 100));
+        //TODO reimplement filling grantPeriodMonthComboBox using dateformatters
+        grantPeriodMonthComboBox.setValue(String.format("%02d", aclGrantSet.getGrantPeriod() % 100));
         selectedPeriods = aclGrantSet.getPeriods();
         periodFilterWidget.setLabelValue(aclGrantSet.getPeriods().size());
         periodValidationField.setValue(String.valueOf(aclGrantSet.getPeriods().size()));
         licenseTypeComboBox.setValue(aclGrantSet.getLicenseType());
-        editableCheckBox.setValue(aclGrantSet.getEditable());
+        editableCheckBox.setValue(true);
         setEnabledComponents(false);
     }
 

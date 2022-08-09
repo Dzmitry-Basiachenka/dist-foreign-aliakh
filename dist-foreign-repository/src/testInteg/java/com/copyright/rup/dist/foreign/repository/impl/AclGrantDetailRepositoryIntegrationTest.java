@@ -94,7 +94,7 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(1, actualGrantDetails.size());
         AclGrantDetail actualGrantDetail = actualGrantDetails.get(0);
         assertNotNull(actualGrantDetail);
-        verifyAclGrantDetail(grantDetail, actualGrantDetail);
+        verifyAclGrantDetail(grantDetail, actualGrantDetail, false);
     }
 
     @Test
@@ -428,7 +428,25 @@ public class AclGrantDetailRepositoryIntegrationTest {
             aclGrantDetailRepository.isGrantDetailExist("0d651beb-e536-4854-aed7-50f068c369ba", 269040891L, PRINT_TOU));
     }
 
-    private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail) {
+    @Test
+    @TestData(fileName = FOLDER_NAME + "copy-grant-details-by-grant-set-id.groovy")
+    public void testCopyGrantDetailsByGrantSetId() {
+        String sourceGrantSetId = "ba787989-32a5-425c-b0b8-03392554bf2d";
+        String targetGrantSetId = "ce1462d6-c573-4f95-94e5-c295fa6e1525";
+        String userName = "user@copyright.com";
+        List<String> copiedGrantDetailsIds =
+            aclGrantDetailRepository.copyGrantDetailsByGrantSetId(sourceGrantSetId, targetGrantSetId, userName);
+        assertEquals(1, copiedGrantDetailsIds.size());
+        List<AclGrantDetail> actualGrantDetails = aclGrantDetailRepository.findByIds(copiedGrantDetailsIds);
+        assertEquals(1, actualGrantDetails.size());
+        List<AclGrantDetail> expectedGrantDetails = loadExpectedDetails("json/acl/acl_grant_details_for_copy.json");
+        expectedGrantDetails.get(0).setId(copiedGrantDetailsIds.get(0));
+        expectedGrantDetails.get(0).setGrantSetId(targetGrantSetId);
+        verifyAclGrantDetail(expectedGrantDetails.get(0), actualGrantDetails.get(0), true);
+    }
+
+    private void verifyAclGrantDetail(AclGrantDetail expectedGrantDetail, AclGrantDetail actualGrantDetail,
+                                      boolean isValidateAdditionalFields) {
         assertEquals(expectedGrantDetail.getId(), actualGrantDetail.getId());
         assertEquals(expectedGrantDetail.getGrantSetId(), actualGrantDetail.getGrantSetId());
         assertEquals(expectedGrantDetail.getGrantStatus(), actualGrantDetail.getGrantStatus());
@@ -438,6 +456,13 @@ public class AclGrantDetailRepositoryIntegrationTest {
         assertEquals(expectedGrantDetail.getSystemTitle(), actualGrantDetail.getSystemTitle());
         assertEquals(expectedGrantDetail.getRhAccountNumber(), actualGrantDetail.getRhAccountNumber());
         assertEquals(expectedGrantDetail.getEligible(), actualGrantDetail.getEligible());
+        if (isValidateAdditionalFields) {
+            assertEquals(expectedGrantDetail.getVersion(), actualGrantDetail.getVersion());
+            assertEquals(expectedGrantDetail.getCreateUser(), actualGrantDetail.getCreateUser());
+            assertEquals(expectedGrantDetail.getUpdateUser(), actualGrantDetail.getUpdateUser());
+            assertNotNull(actualGrantDetail.getCreateDate());
+            assertNotNull(actualGrantDetail.getUpdateDate());
+        }
         assertEquals(expectedGrantDetail, actualGrantDetail);
     }
 
@@ -504,6 +529,18 @@ public class AclGrantDetailRepositoryIntegrationTest {
         try {
             String content = TestUtils.fileToString(this.getClass(), fileName);
             grantDetails.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<AclGrantDetailDto>>() {
+            }));
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        return grantDetails;
+    }
+
+    private List<AclGrantDetail> loadExpectedDetails(String fileName) {
+        List<AclGrantDetail> grantDetails = new ArrayList<>();
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            grantDetails.addAll(OBJECT_MAPPER.readValue(content, new TypeReference<List<AclGrantDetail>>() {
             }));
         } catch (IOException e) {
             throw new AssertionError(e);

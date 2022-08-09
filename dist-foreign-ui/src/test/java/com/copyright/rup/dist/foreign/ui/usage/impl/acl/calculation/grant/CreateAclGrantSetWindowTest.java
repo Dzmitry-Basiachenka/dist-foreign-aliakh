@@ -218,7 +218,6 @@ public class CreateAclGrantSetWindowTest {
     @Test
     public void testFieldsFillingViaCopyFrom() {
         AclGrantSet aclGrantSet = buildAclGrantSet();
-        expect(controller.isGrantSetExist(GRANT_SET_NAME_2022)).andReturn(true).once();
         expect(controller.getAclGrantSetById(GRANT_SET_ID)).andReturn(aclGrantSet).once();
         replay(controller);
         window = new CreateAclGrantSetWindow(controller);
@@ -230,13 +229,13 @@ public class CreateAclGrantSetWindowTest {
 
     private void verifyCreateGrantSetWindowFields() {
         TextField grantSetNameField = Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD);
-        assertEquals(GRANT_SET_NAME_2022, grantSetNameField.getValue());
+        assertTrue(grantSetNameField.getValue().isEmpty());
         assertTrue(grantSetNameField.isEnabled());
         TextField grantPeriodYearField = Whitebox.getInternalState(window, GRANT_PERIOD_YEAR_FIELD);
         assertEquals("2022", grantPeriodYearField.getValue());
         assertFalse(grantPeriodYearField.isEnabled());
         ComboBox<String> grantPeriodMonthComboBox = Whitebox.getInternalState(window, GRANT_PERIOD_MONTH_COMBOBOX);
-        assertEquals("6", grantPeriodMonthComboBox.getValue());
+        assertEquals("06", grantPeriodMonthComboBox.getValue());
         assertFalse(grantPeriodMonthComboBox.isEnabled());
         TextField periodValidationField = Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD);
         assertEquals("1", periodValidationField.getValue());

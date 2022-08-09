@@ -147,6 +147,12 @@ public class AclGrantDetailService implements IAclGrantDetailService {
         return aclGrantDetailRepository.isGrantDetailExist(grantSetId, wrWrkInst, typeOfUse);
     }
 
+    @Override
+    public int copyGrantDetails(String sourceGrantSetId, String targetGrantSetId, String userName) {
+        return aclGrantDetailRepository.copyGrantDetailsByGrantSetId(sourceGrantSetId, targetGrantSetId, userName)
+            .size();
+    }
+
     private boolean getEligibleStatus(AclGrantDetail grant, Set<AclIneligibleRightsholder> ineligibleRightsholders) {
         return ineligibleRightsholders.stream()
             .noneMatch(

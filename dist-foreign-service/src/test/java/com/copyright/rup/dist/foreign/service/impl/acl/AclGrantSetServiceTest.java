@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl.acl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -27,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -153,6 +156,25 @@ public class AclGrantSetServiceTest {
         replay(aclGrantSetRepository);
         assertSame(grantSets, aclGrantSetService.getGrantSetsByLicenseTypeAndPeriod("ACL", 202212, true));
         verify(aclGrantSetRepository);
+    }
+
+    @Test
+    public void testCopyGrantSet() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        AclGrantSet grantSet = buildAclGrantSet();
+        Capture<String> targetGrantSetId = newCapture();
+        String sourceGrantSetId = "08cfb683-7b1a-473c-b2e3-1e7a14b5e8d8";
+        aclGrantSetRepository.insert(grantSet);
+        expectLastCall().once();
+        expect(aclGrantDetailService.copyGrantDetails(eq(sourceGrantSetId), capture(targetGrantSetId),
+            eq(USER_NAME))).andReturn(1).once();
+        replay(RupContextUtils.class, aclGrantSetRepository, aclGrantDetailService);
+        aclGrantSetService.copyGrantSet(grantSet, sourceGrantSetId);
+        assertEquals(grantSet.getId(), targetGrantSetId.getValue());
+        assertEquals(grantSet.getCreateUser(), USER_NAME);
+        assertEquals(grantSet.getUpdateUser(), USER_NAME);
+        verify(RupContextUtils.class, aclGrantSetRepository, aclGrantDetailService);
     }
 
     private AclGrantSet buildAclGrantSet() {

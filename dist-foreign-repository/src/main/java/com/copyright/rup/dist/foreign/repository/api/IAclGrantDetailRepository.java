@@ -83,4 +83,14 @@ public interface IAclGrantDetailRepository {
      * @return {@code true} if grant detail with provided Wr Wrk Inst and Type of Use exists, otherwise {@code false}
      */
     boolean isGrantDetailExist(String grantSetId, Long wrWrkInst, String typeOfUse);
+
+    /**
+     * Copies grant details by grant set id.
+     *
+     * @param sourceGrantSetId source grant set id
+     * @param targetGrantSetId target grant set id
+     * @param userName         username
+     * @return list of inserted grant details ids
+     */
+    List<String> copyGrantDetailsByGrantSetId(String sourceGrantSetId, String targetGrantSetId, String userName);
 }

@@ -282,4 +282,25 @@
                 and type_of_use = #{typeOfUse}
         )
     </select>
+
+    <select id="copyGrantDetails" parameterType="map" resultType="String">
+        insert into ${schema}.df_acl_grant_detail (
+            <include refid="aclGrantDetailColumns"/>
+        )
+        select
+            uuid_generate_v4(),
+            #{targetGrantSetId},
+            grant_status,
+            type_of_use,
+            type_of_use_status,
+            wr_wrk_inst,
+            system_title,
+            rh_account_number,
+            is_eligible,
+            manual_upload_flag,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_acl_grant_detail
+        where df_acl_grant_set_uid = #{sourceGrantSetId}
+        returning df_acl_grant_detail_uid
+    </select>
 </mapper>

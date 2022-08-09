@@ -69,4 +69,13 @@ public interface IAclGrantSetService {
      * @return instance of {@link AclGrantSet} or {@code null} if none exists
      */
     AclGrantSet getById(String grantSetId);
+
+    /**
+     * Copies grant sets with grant details.
+     *
+     * @param grantSet         instance of {@link AclGrantSet}
+     * @param sourceGrantSetId source grant set id
+     * @return count of copied grant details
+     */
+    int copyGrantSet(AclGrantSet grantSet, String sourceGrantSetId);
 }
