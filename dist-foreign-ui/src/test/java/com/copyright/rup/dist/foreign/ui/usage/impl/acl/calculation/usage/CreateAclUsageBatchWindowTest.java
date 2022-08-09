@@ -9,6 +9,7 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyComboBo
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyItemsFilterWidget;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyTextField;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
@@ -23,13 +24,18 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclUsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclUsageController;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+
 import com.vaadin.data.Binder;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -55,6 +61,7 @@ import java.util.Set;
 @PrepareForTest({Windows.class, CreateAclUsageBatchWindow.class})
 public class CreateAclUsageBatchWindowTest {
 
+    private static final String ACL_USAGE_BATCH_ID = "fe027e07-4aba-4940-9d45-8d342be8dc35";
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String DISTRIBUTION_PERIOD_YEAR = "2021";
     private static final String DISTRIBUTION_PERIOD_MONTH = "12";
@@ -64,7 +71,10 @@ public class CreateAclUsageBatchWindowTest {
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameFiled";
     private static final String DISTRIBUTION_PERIOD_YEAR_FIELD = "distributionPeriodYearField";
     private static final String DISTRIBUTION_PERIOD_MONTH_COMBOBOX = "distributionPeriodMonthComboBox";
+    private static final String COPY_FROM_COMBOBOX = "copyFromComboBox";
+    private static final String PERIOD_FILTER_WIDGET = "periodFilterWidget";
     private static final String PERIOD_VALIDATION_FIELD = "periodValidationField";
+    private static final String EDITABLE_CHECK_BOX = "editableCheckBox";
     private static final String SPACES_STRING = "  ";
     private static final String EMPTY_FIELD_VALIDATION_MESSAGE = "Field value should be specified";
     private static final String FIELD_LENGTH_VALIDATION_MESSAGE = "Field value should not exceed 255 characters";
@@ -78,13 +88,16 @@ public class CreateAclUsageBatchWindowTest {
     @Before
     public void setUp() {
         controller = createMock(IAclUsageController.class);
+        expect(controller.getAllAclUsageBatches()).andReturn(Collections.singletonList(buildAclUsageBatch())).once();
     }
 
     @Test
     public void testConstructor() {
+        replay(controller);
         window = new CreateAclUsageBatchWindow(controller);
-        verifyWindow(window, "Create ACL Usage Batch", 400, 215, Unit.PIXELS);
+        verifyWindow(window, "Create ACL Usage Batch", 400, 265, Unit.PIXELS);
         verifyRootLayout(window.getContent());
+        verify(controller);
     }
 
     @Test
@@ -153,6 +166,8 @@ public class CreateAclUsageBatchWindowTest {
 
     @Test
     public void testDistributionPeriodYearFieldValidation() {
+        expect(controller.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(controller);
         window = new CreateAclUsageBatchWindow(controller);
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, ACL_USAGE_BATCH_NAME);
         setComboBoxValue(window, DISTRIBUTION_PERIOD_MONTH_COMBOBOX, DISTRIBUTION_PERIOD_MONTH);
@@ -175,10 +190,13 @@ public class CreateAclUsageBatchWindowTest {
         validateFieldAndVerifyErrorMessage(periodYearField, " 1999 ", binder, null, true);
         validateFieldAndVerifyErrorMessage(periodYearField, "2099", binder, null, true);
         validateFieldAndVerifyErrorMessage(periodYearField, " 2099 ", binder, null, true);
+        verify(controller);
     }
 
     @Test
     public void testPeriodValidationFieldValidation() {
+        expect(controller.isAclUsageBatchExist(ACL_USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(controller);
         window = new CreateAclUsageBatchWindow(controller);
         setTextFieldValue(window, USAGE_BATCH_NAME_FIELD, ACL_USAGE_BATCH_NAME);
         setTextFieldValue(window, DISTRIBUTION_PERIOD_YEAR_FIELD, DISTRIBUTION_PERIOD_YEAR);
@@ -195,17 +213,49 @@ public class CreateAclUsageBatchWindowTest {
             periodValidationField, "0", binder, EMPTY_PERIOD_VALIDATION_MESSAGE, false);
         validateFieldAndVerifyErrorMessage(
             periodValidationField, "-1", binder, EMPTY_PERIOD_VALIDATION_MESSAGE, false);
+        verify(controller);
+    }
+
+    @Test
+    public void testFieldsWhenCopyFromPopulated() {
+        replay(controller);
+        window = new CreateAclUsageBatchWindow(controller);
+        ComboBox<AclUsageBatch> copyFromComboBox = Whitebox.getInternalState(window, COPY_FROM_COMBOBOX);
+        copyFromComboBox.setValue(buildAclUsageBatch());
+        verifyCreateUsageBatchWindowFields();
+        verify(controller);
+    }
+
+    private void verifyCreateUsageBatchWindowFields() {
+        TextField usageBatchNameField = Whitebox.getInternalState(window, USAGE_BATCH_NAME_FIELD);
+        assertEquals(StringUtils.EMPTY, usageBatchNameField.getValue());
+        assertTrue(usageBatchNameField.isEnabled());
+        TextField distributionPeriodYearField = Whitebox.getInternalState(window, DISTRIBUTION_PERIOD_YEAR_FIELD);
+        assertEquals("2021", distributionPeriodYearField.getValue());
+        assertFalse(distributionPeriodYearField.isEnabled());
+        ComboBox<String> distributionPeriodMonthComboBox = Whitebox.getInternalState(window,
+            DISTRIBUTION_PERIOD_MONTH_COMBOBOX);
+        assertEquals("12", distributionPeriodMonthComboBox.getValue());
+        assertFalse(distributionPeriodMonthComboBox.isEnabled());
+        TextField periodValidationField = Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD);
+        assertEquals("1", periodValidationField.getValue());
+        PeriodFilterWidget periodFilterWidget = Whitebox.getInternalState(window, PERIOD_FILTER_WIDGET);
+        assertFalse(periodFilterWidget.isEnabled());
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECK_BOX);
+        assertTrue(editableCheckBox.getValue());
+        assertFalse(editableCheckBox.isEnabled());
     }
 
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(5, verticalLayout.getComponentCount());
+        assertEquals(6, verticalLayout.getComponentCount());
         verifyTextField(verticalLayout.getComponent(0), "Usage Batch Name");
         verifyDistributionPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
-        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
-        verifyCheckBox(verticalLayout.getComponent(3), "Editable", "acl-editable-checkbox");
-        verifyButtonsLayout(verticalLayout.getComponent(4), "Create", "Close");
+        verifyComboBox(verticalLayout.getComponent(2), "Copy From", true, buildAclUsageBatch());
+        verifyItemsFilterWidget(verticalLayout.getComponent(3), "Periods");
+        verifyCheckBox(verticalLayout.getComponent(4), "Editable", "acl-editable-checkbox");
+        verifyButtonsLayout(verticalLayout.getComponent(5), "Create", "Close");
     }
 
     private void verifyDistributionPeriodYearAndPeriodMonthComponents(Component component) {
@@ -214,5 +264,15 @@ public class CreateAclUsageBatchWindowTest {
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyTextField(horizontalLayout.getComponent(0), "Distribution Period Year");
         verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true, new String[]{"06", "12"});
+    }
+
+    private AclUsageBatch buildAclUsageBatch() {
+        AclUsageBatch aclUsageBatch = new AclUsageBatch();
+        aclUsageBatch.setId(ACL_USAGE_BATCH_ID);
+        aclUsageBatch.setName(ACL_USAGE_BATCH_NAME);
+        aclUsageBatch.setDistributionPeriod(DISTRIBUTION_PERIOD);
+        aclUsageBatch.setPeriods(PERIODS);
+        aclUsageBatch.setEditable(true);
+        return aclUsageBatch;
     }
 }

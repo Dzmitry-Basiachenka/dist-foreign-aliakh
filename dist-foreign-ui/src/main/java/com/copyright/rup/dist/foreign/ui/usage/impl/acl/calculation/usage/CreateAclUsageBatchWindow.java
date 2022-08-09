@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.PeriodFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -21,9 +22,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -47,7 +50,9 @@ public class CreateAclUsageBatchWindow extends Window {
     private TextField usageBatchNameFiled;
     private TextField distributionPeriodYearField;
     private ComboBox<String> distributionPeriodMonthComboBox;
+    private ComboBox<AclUsageBatch> copyFromComboBox;
     private TextField periodValidationField;
+    private PeriodFilterWidget periodFilterWidget;
     private CheckBox editableCheckBox;
     private Set<Integer> selectedPeriods;
 
@@ -62,7 +67,7 @@ public class CreateAclUsageBatchWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_acl_usage_batch"));
         setResizable(false);
         setWidth(400, Unit.PIXELS);
-        setHeight(215, Unit.PIXELS);
+        setHeight(265, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-usage-batch-window");
     }
 
@@ -71,7 +76,13 @@ public class CreateAclUsageBatchWindow extends Window {
      */
     void onCreateClicked() {
         if (isValid()) {
-            int usagesCount = aclUsageController.insertAclUsageBatch(buildAclUsageBatch());
+            int usagesCount;
+            if (Objects.nonNull(copyFromComboBox.getValue())) {
+                usagesCount = aclUsageController.copyAclUsageBatch(copyFromComboBox.getValue().getName(),
+                    buildAclUsageBatch());
+            } else {
+                usagesCount = aclUsageController.insertAclUsageBatch(buildAclUsageBatch());
+            }
             close();
             Windows.showNotificationWindow(ForeignUi.getMessage("message.creation_completed", usagesCount));
         } else {
@@ -93,7 +104,7 @@ public class CreateAclUsageBatchWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUsageBatchNameField(), initDistributionPeriodYearAndPeriodMonthFields(),
-            initPeriodFilterWidget(), initEditableCheckBox(), buttonsLayout);
+            initCopyFromComboBox(), initPeriodFilterWidget(), initEditableCheckBox(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -153,13 +164,29 @@ public class CreateAclUsageBatchWindow extends Window {
         return distributionPeriodMonthComboBox;
     }
 
+    private ComboBox<AclUsageBatch> initCopyFromComboBox() {
+        copyFromComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
+        copyFromComboBox.setItemCaptionGenerator(AclUsageBatch::getName);
+        copyFromComboBox.setItems(aclUsageController.getAllAclUsageBatches());
+        copyFromComboBox.addValueChangeListener(event -> {
+            if (Objects.nonNull(event.getValue())) {
+                populateCopiedUsageBatchFields(event.getValue());
+            } else {
+                resetComponents();
+            }
+        });
+        copyFromComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-copy-from-combo-box");
+        return copyFromComboBox;
+    }
+
     private PeriodFilterWidget initPeriodFilterWidget() {
         periodValidationField = new TextField(ForeignUi.getMessage("label.periods"));
         binder.forField(periodValidationField)
             .withValidator(value -> Integer.parseInt(value) > 0, ForeignUi.getMessage("message.period.empty"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
-        PeriodFilterWidget periodFilterWidget = new PeriodFilterWidget(aclUsageController::getAllPeriods);
+        periodFilterWidget = new PeriodFilterWidget(aclUsageController::getAllPeriods);
         VaadinUtils.addComponentStyle(periodFilterWidget, "acl-periods-filter-widget");
         periodFilterWidget.addStyleName(EMPTY_PERIOD_STYLE);
         periodFilterWidget.addFilterSaveListener(event -> {
@@ -201,5 +228,35 @@ public class CreateAclUsageBatchWindow extends Window {
         usageBatch.setPeriods(selectedPeriods);
         usageBatch.setEditable(editableCheckBox.getValue());
         return usageBatch;
+    }
+
+    private void populateCopiedUsageBatchFields(AclUsageBatch aclUsageBatch) {
+        distributionPeriodYearField.setValue(String.valueOf(aclUsageBatch.getDistributionPeriod() / 100));
+        distributionPeriodMonthComboBox.setValue(String.valueOf(aclUsageBatch.getDistributionPeriod() % 100));
+        selectedPeriods = aclUsageBatch.getPeriods();
+        periodFilterWidget.setLabelValue(selectedPeriods.size());
+        periodValidationField.setValue(String.valueOf(selectedPeriods.size()));
+        setEnabledComponents(false);
+    }
+
+    private void resetComponents() {
+        distributionPeriodYearField.clear();
+        distributionPeriodMonthComboBox.clear();
+        periodFilterWidget.reset();
+        periodValidationField.clear();
+        setEnabledComponents(true);
+    }
+
+    private void setEnabledComponents(boolean isEnable) {
+        distributionPeriodYearField.setEnabled(isEnable);
+        distributionPeriodMonthComboBox.setEnabled(isEnable);
+        if (!isEnable) {
+            periodFilterWidget.removeStyleName(EMPTY_PERIOD_STYLE);
+        } else {
+            periodFilterWidget.addStyleName(EMPTY_PERIOD_STYLE);
+        }
+        periodFilterWidget.setEnabled(isEnable);
+        editableCheckBox.setValue(true);
+        editableCheckBox.setEnabled(isEnable);
     }
 }

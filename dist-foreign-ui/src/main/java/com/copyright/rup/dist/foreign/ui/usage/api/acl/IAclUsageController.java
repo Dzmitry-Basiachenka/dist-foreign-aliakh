@@ -114,4 +114,20 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
      * @return threshold value for size of ACL records.
      */
     int getRecordThreshold();
+
+    /**
+     * Gets list of all ACL usage batches.
+     *
+     * @return list of all {@link AclUsageBatch}es
+     */
+    List<AclUsageBatch> getAllAclUsageBatches();
+
+    /**
+     * Copies ACL usage batch.
+     *
+     * @param usageBatchName name of ACL usage batch being copied
+     * @param aclUsageBatch  {@link AclUsageBatch} instance
+     * @return count of copied ACL usages
+     */
+    int copyAclUsageBatch(String usageBatchName, AclUsageBatch aclUsageBatch);
 }

@@ -33,6 +33,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -134,6 +135,18 @@ public class AclUsageController extends CommonController<IAclUsageWidget> implem
     @Override
     public int getRecordThreshold() {
         return aclUsageService.getRecordThreshold();
+    }
+
+    @Override
+    public List<AclUsageBatch> getAllAclUsageBatches() {
+        //TODO {dbasiachenka} implement
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int copyAclUsageBatch(String usageBatchName, AclUsageBatch aclUsageBatch) {
+        //TODO {dbasiachenka} implement
+        return 0;
     }
 
     @Override
