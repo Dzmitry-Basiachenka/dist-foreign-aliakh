@@ -1,3 +1,10 @@
+15.1.40
+-
+* B-57806 FDA: Scenario Tab - ACL Licensee Class Mapping View: modify the metadata panel to show Licensee Class Mapping window
+* B-72122 FDA: Copy ACL Scenario: implement logic to update metadata panel
+* B-72124 FDA: Copy ACL Usage Batch: add copy from option to create usage batch window
+* B-72123 FDA: Copy ACL Grant Set: implement backend logic and update filling UI components
+
 15.1.39
 -
 * B-57798 FDA: View scenario specific usage details by RH for ACL: make changes based on comments in code review
