@@ -75,18 +75,23 @@ public class AclScenariosWidgetTest {
     private AclScenariosWidget scenariosWidget;
     private IAclScenariosController controller;
     private AclScenario scenario;
+    private AclScenarioDto scenarioDto;
 
     @Before
     public void setUp() {
         controller = createMock(IAclScenariosController.class);
         scenario = buildAclScenario();
+        scenarioDto = buildAclScenarioDto();
         mockStatic(ForeignSecurityUtils.class);
         scenariosWidget = new AclScenariosWidget(controller, createMock(IAclScenarioHistoryController.class));
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
+        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.init();
         verify(controller);
@@ -112,8 +117,11 @@ public class AclScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
+        expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.refresh();
         verify(controller);
@@ -124,9 +132,11 @@ public class AclScenariosWidgetTest {
         Grid grid = Whitebox.getInternalState(scenariosWidget, SCENARIO_GRID);
         grid.deselectAll();
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
-        AclScenarioDto scenarioDto = buildAclScenarioDto();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
+        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -138,9 +148,11 @@ public class AclScenariosWidgetTest {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
-        AclScenarioDto scenarioDto = buildAclScenarioDto();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
+        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();

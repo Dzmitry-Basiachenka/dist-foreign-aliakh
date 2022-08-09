@@ -47,10 +47,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IAclScenariosWidget}.
@@ -373,18 +371,12 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             formatAmount(scenario.getNetTotalDigital())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
         selectionCriteriaLabel.setValue(aclScenariosController.getCriteriaHtmlRepresentation());
-        usageAgeWeightWidget.setAppliedParameters(scenario.getUsageAges()
-            .stream()
-            .sorted(Comparator.comparing(UsageAge::getPeriod))
-            .collect(Collectors.toList()));
-        publicationTypeWeightWidget.setAppliedParameters(scenario.getPublicationTypes()
-            .stream()
-            .sorted(Comparator.comparing(AclPublicationType::getName).thenComparing(AclPublicationType::getPeriod))
-            .collect(Collectors.toList()));
-        licenseeClassMappingWidget.setAppliedParameters(scenario.getDetailLicenseeClasses()
-            .stream()
-            .sorted(Comparator.comparing(DetailLicenseeClass::getId))
-            .collect(Collectors.toList()));
+        usageAgeWeightWidget.setAppliedParameters(
+            aclScenariosController.getUsageAgeWeightsByScenarioId(scenario.getId()));
+        publicationTypeWeightWidget.setAppliedParameters(
+            aclScenariosController.getAclPublicationTypesByScenarioId(scenario.getId()));
+        licenseeClassMappingWidget.setAppliedParameters(
+            aclScenariosController.getDetailLicenseeClassesByScenarioId(scenario.getId()));
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from",
             Objects.nonNull(scenario.getCopiedFrom()) ? scenario.getCopiedFrom() : StringUtils.EMPTY));
     }

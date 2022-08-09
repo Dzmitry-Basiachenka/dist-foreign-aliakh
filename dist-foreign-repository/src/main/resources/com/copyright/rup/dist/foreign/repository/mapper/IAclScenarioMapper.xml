@@ -16,23 +16,42 @@
         <result property="periodEndDate" column="period_end_date"/>
         <result property="licenseType" column="license_type"/>
         <result property="copiedFrom" column="copied_from"/>
-        <collection property="usageAges" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.UsageAge">
+        <collection property="usageAges" javaType="java.util.List" ofType="UsageAge">
             <result property="period" column="period_prior"/>
             <result property="weight" column="usage_weight"/>
         </collection>
-        <collection property="publicationTypes" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.AclPublicationType">
+        <collection property="publicationTypes" javaType="java.util.List" ofType="AclPubType">
             <result property="id" column="df_publication_type_uid"/>
             <result property="name" column="pub_type_name"/>
             <result property="description" column="pub_type_description"/>
             <result property="weight" column="pub_type_weight"/>
             <result property="period" column="pub_type_period"/>
         </collection>
-        <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="com.copyright.rup.dist.foreign.domain.DetailLicenseeClass">
+        <collection property="detailLicenseeClasses" javaType="java.util.List" ofType="DetailLicenseeClass">
             <result property="id" column="detail_licensee_class_id"/>
             <result property="description" column="detail_licensee_name"/>
             <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
             <result property="aggregateLicenseeClass.description" column="aggregate_licensee_name"/>
         </collection>
+    </resultMap>
+
+    <resultMap id="UsageAgeResultMap" type="UsageAge" extends="StoredEntityMapper.storedEntityResult">
+        <result property="period" column="period_prior"/>
+        <result property="weight" column="usage_weight"/>
+    </resultMap>
+
+    <resultMap id="AclPubTypeResultMap" type="AclPubType">
+        <result property="name" column="pub_type_name"/>
+        <result property="description" column="pub_type_description"/>
+        <result property="weight" column="pub_type_weight"/>
+        <result property="period" column="pub_type_period"/>
+    </resultMap>
+
+    <resultMap id="DetailLicenseeClassResultMap" type="DetailLicenseeClass">
+        <result property="id" column="detail_licensee_class_id"/>
+        <result property="description" column="detail_licensee_class_name"/>
+        <result property="aggregateLicenseeClass.id" column="aggregate_licensee_class_id"/>
+        <result property="aggregateLicenseeClass.description" column="aggregate_licensee_class_name"/>
     </resultMap>
 
     <sql id="aclScenarioColumns">
@@ -317,7 +336,6 @@
         join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
         join ${schema}.df_publication_type pt on spt.df_publication_type_uid = pt.df_publication_type_uid
         where s.df_acl_scenario_uid = #{scenarioId}
-        order by updated_datetime desc
     </select>
 
     <select id="findCountByName" parameterType="string" resultType="int">
@@ -336,5 +354,39 @@
         select name
         from ${schema}.df_acl_scenario
         where df_acl_grant_set_uid = #{grantSetId}
+    </select>
+
+    <select id="findUsageAgeWeightsByScenarioId" parameterType="string" resultMap="UsageAgeResultMap">
+        select
+            sua.period_prior,
+            sua.weight usage_weight
+        from ${schema}.df_acl_scenario_usage_age_weight sua
+        where sua.df_acl_scenario_uid = #{scenarioId}
+        order by sua.period_prior
+    </select>
+
+    <select id="findAclPublicationTypesByScenarioId" parameterType="string" resultMap="AclPubTypeResultMap">
+        select
+            pt.name pub_type_name,
+            pt.description pub_type_description,
+            spt.weight pub_type_weight,
+            spt.period pub_type_period
+        from ${schema}.df_acl_scenario_pub_type_weight spt
+        join ${schema}.df_publication_type pt on spt.df_publication_type_uid = pt.df_publication_type_uid
+        where spt.df_acl_scenario_uid = #{scenarioId}
+        order by pt.name, spt.period
+    </select>
+
+    <select id="findDetailLicenseeClassesByScenarioId" parameterType="string" resultMap="DetailLicenseeClassResultMap">
+        select
+            slc.detail_licensee_class_id,
+            dlc.description detail_licensee_class_name,
+            slc.aggregate_licensee_class_id,
+            alc.description aggregate_licensee_class_name
+        from ${schema}.df_acl_scenario_licensee_class slc
+        join ${schema}.df_detail_licensee_class dlc on slc.detail_licensee_class_id = dlc.detail_licensee_class_id
+        join ${schema}.df_aggregate_licensee_class alc on slc.aggregate_licensee_class_id = alc.aggregate_licensee_class_id
+        where slc.df_acl_scenario_uid = #{scenarioId}
+        order by slc.detail_licensee_class_id
     </select>
 </mapper>
