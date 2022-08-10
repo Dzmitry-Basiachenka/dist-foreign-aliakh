@@ -235,6 +235,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
             }
         });
         VaadinUtils.setMaxComponentsWidth(aclCopyFromScenarioComboBox);
+        VaadinUtils.addComponentStyle(aclCopyFromScenarioComboBox, "acl-scenario-copy-from-combo-box");
     }
 
     private void initEditableCheckBox() {
@@ -361,12 +362,11 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         setEnableFieldsForCopyScenario(true);
         periodComboBox.setValue(null);
         licenseTypeComboBox.setValue(null);
+        descriptionArea.setValue(StringUtils.EMPTY);
         this.usageBatches.clear();
         this.fundPools.clear();
         this.grantSets.clear();
         populateComboBoxes();
-        scenarioNameField.setValue(ForeignUi.getMessage("field.scenario_name.default", FdaConstants.ACL_PRODUCT_FAMILY,
-            toShortFormat(LocalDate.now())));
     }
 
     private void setEnableUsageBatchFundPoolAndGrantSetComboBoxes(boolean isEnable) {
