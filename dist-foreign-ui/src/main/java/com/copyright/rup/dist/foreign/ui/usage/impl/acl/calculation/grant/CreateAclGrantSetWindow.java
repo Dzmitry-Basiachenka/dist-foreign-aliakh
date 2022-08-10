@@ -208,7 +208,6 @@ public class CreateAclGrantSetWindow extends Window {
         copyFromComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
         copyFromComboBox.setItemCaptionGenerator(AclGrantSet::getName);
         copyFromComboBox.setItems(aclGrantDetailController.getAllAclGrantSets());
-        copyFromComboBox.setRequiredIndicatorVisible(true);
         copyFromComboBox.addValueChangeListener(event -> {
             if (Objects.nonNull(event.getValue())) {
                 AclGrantSet aclGrantSet = aclGrantDetailController.getAclGrantSetById(event.getValue().getId());
@@ -219,7 +218,7 @@ public class CreateAclGrantSetWindow extends Window {
             }
         });
         copyFromComboBox.setSizeFull();
-        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-copy-from-combo-box");
+        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-grant-set-copy-from-combo-box");
         return copyFromComboBox;
     }
 
@@ -252,19 +251,18 @@ public class CreateAclGrantSetWindow extends Window {
     }
 
     private void populateCopiedGrantSetFields(AclGrantSet aclGrantSet) {
-        grantPeriodYearField.setValue(String.valueOf(aclGrantSet.getGrantPeriod() / 100));
-        //TODO reimplement filling grantPeriodMonthComboBox using dateformatters
-        grantPeriodMonthComboBox.setValue(String.format("%02d", aclGrantSet.getGrantPeriod() % 100));
+        String period = String.valueOf(aclGrantSet.getGrantPeriod());
+        grantPeriodYearField.setValue(StringUtils.left(period, 4));
+        grantPeriodMonthComboBox.setValue(StringUtils.right(period, 2));
         selectedPeriods = aclGrantSet.getPeriods();
-        periodFilterWidget.setLabelValue(aclGrantSet.getPeriods().size());
-        periodValidationField.setValue(String.valueOf(aclGrantSet.getPeriods().size()));
+        periodFilterWidget.setLabelValue(selectedPeriods.size());
+        periodValidationField.setValue(String.valueOf(selectedPeriods.size()));
         licenseTypeComboBox.setValue(aclGrantSet.getLicenseType());
         editableCheckBox.setValue(true);
         setEnabledComponents(false);
     }
 
     private void resetComponents() {
-        grantSetNameFiled.clear();
         grantPeriodYearField.clear();
         grantPeriodMonthComboBox.clear();
         periodFilterWidget.reset();

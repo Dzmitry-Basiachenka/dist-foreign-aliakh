@@ -173,7 +173,9 @@ public class AclGrantDetailController extends CommonController<IAclGrantDetailWi
 
     @Override
     public int copyAclGrantSet(AclGrantSet grantSet, String sourceGrantSetId) {
-        return aclGrantSetService.copyGrantSet(grantSet, sourceGrantSetId);
+        int copiedGrantDetailsCount = aclGrantSetService.copyGrantSet(grantSet, sourceGrantSetId);
+        aclGrantDetailFilterController.getWidget().clearFilter();
+        return copiedGrantDetailsCount;
     }
 
     @Override
