@@ -15,6 +15,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -218,16 +219,21 @@ public class CreateAclGrantSetWindowTest {
     @Test
     public void testFieldsFillingViaCopyFrom() {
         AclGrantSet aclGrantSet = buildAclGrantSet();
+        expect(controller.isGrantSetExist(GRANT_SET_NAME)).andReturn(true).once();
         expect(controller.getAclGrantSetById(GRANT_SET_ID)).andReturn(aclGrantSet).once();
         replay(controller);
         window = new CreateAclGrantSetWindow(controller);
         ComboBox<AclGrantSet> copyFromComboBox = Whitebox.getInternalState(window, COPY_FROM_COMBOBOX);
         copyFromComboBox.setValue(aclGrantSet);
-        verifyCreateGrantSetWindowFields();
+        verifyCreateGrantSetWindowFieldsAfterFillingCopyFromComboBox();
+        TextField grantSetNameField = Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD);
+        grantSetNameField.setValue(GRANT_SET_NAME);
+        copyFromComboBox.clear();
+        verifyCreateGrantSetWindowFieldsAfterClearCopyFromComboBox();
         verify(controller);
     }
 
-    private void verifyCreateGrantSetWindowFields() {
+    private void verifyCreateGrantSetWindowFieldsAfterFillingCopyFromComboBox() {
         TextField grantSetNameField = Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD);
         assertTrue(grantSetNameField.getValue().isEmpty());
         assertTrue(grantSetNameField.isEnabled());
@@ -247,6 +253,26 @@ public class CreateAclGrantSetWindowTest {
         CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECK_BOX);
         assertTrue(editableCheckBox.getValue());
         assertFalse(editableCheckBox.isEnabled());
+    }
+
+    private void verifyCreateGrantSetWindowFieldsAfterClearCopyFromComboBox() {
+        TextField grantSetNameField = Whitebox.getInternalState(window, GRANT_SET_NAME_FIELD);
+        assertEquals(GRANT_SET_NAME, grantSetNameField.getValue());
+        assertTrue(grantSetNameField.isEnabled());
+        TextField grantPeriodYearField = Whitebox.getInternalState(window, GRANT_PERIOD_YEAR_FIELD);
+        assertTrue(grantPeriodYearField.getValue().isEmpty());
+        assertTrue(grantPeriodYearField.isEnabled());
+        ComboBox<String> grantPeriodMonthComboBox = Whitebox.getInternalState(window, GRANT_PERIOD_MONTH_COMBOBOX);
+        assertNull(grantPeriodMonthComboBox.getValue());
+        assertTrue(grantPeriodMonthComboBox.isEnabled());
+        PeriodFilterWidget periodFilterWidget = Whitebox.getInternalState(window, PERIOD_FILTER_WIDGET);
+        assertTrue(periodFilterWidget.isEnabled());
+        ComboBox<String> licenseTypeComboBox = Whitebox.getInternalState(window, LICENSE_TYPE_COMBOBOX);
+        assertNull(licenseTypeComboBox.getValue());
+        assertTrue(licenseTypeComboBox.isEnabled());
+        CheckBox editableCheckBox = Whitebox.getInternalState(window, EDITABLE_CHECK_BOX);
+        assertTrue(editableCheckBox.getValue());
+        assertTrue(editableCheckBox.isEnabled());
     }
 
     private void verifyRootLayout(Component component) {

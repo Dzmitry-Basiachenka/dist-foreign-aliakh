@@ -297,9 +297,12 @@ public class AclGrantDetailControllerTest {
         AclGrantSet aclGrantSet = new AclGrantSet();
         aclGrantSet.setId(GRANT_SET_ID);
         expect(aclGrantSetService.copyGrantSet(aclGrantSet, GRANT_SET_ID)).andReturn(1).once();
-        replay(aclGrantSetService);
-        assertEquals(1, aclGrantSetService.copyGrantSet(aclGrantSet, GRANT_SET_ID));
-        verify(aclGrantSetService);
+        expect(aclGrantDetailFilterController.getWidget()).andReturn(aclGrantDetailFilterWidget).once();
+        aclGrantDetailFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
+        assertEquals(1, controller.copyAclGrantSet(aclGrantSet, GRANT_SET_ID));
+        verify(aclGrantSetService, aclGrantDetailFilterController, aclGrantDetailFilterWidget);
     }
 
     private AclGrantSet buildAclGrantSet() {
