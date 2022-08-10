@@ -1,3 +1,10 @@
+15.1.41
+-
+* B-72122 FDA: Copy ACL Scenario: add style to copy from field and adjust logic to reset fields
+* B-57780 FDA: Migrate historical ACL baseline Usage & Value Data from Sharecalc: drop not null constraint from rh_account_number column in df_udm_value table
+* B-72124 FDA: Copy ACL Usage Batch: implement backend logic to create copy of selected batch
+* B-72123 FDA: Copy ACL Grant Set: add filter clear after copy Grant Set and update filling fields logic
+
 15.1.40
 -
 * B-57806 FDA: Scenario Tab - ACL Licensee Class Mapping View: modify the metadata panel to show Licensee Class Mapping window
