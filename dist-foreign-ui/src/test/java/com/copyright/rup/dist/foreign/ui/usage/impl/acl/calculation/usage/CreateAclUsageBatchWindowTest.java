@@ -64,8 +64,8 @@ public class CreateAclUsageBatchWindowTest {
     private static final String ACL_USAGE_BATCH_ID = "fe027e07-4aba-4940-9d45-8d342be8dc35";
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String DISTRIBUTION_PERIOD_YEAR = "2021";
-    private static final String DISTRIBUTION_PERIOD_MONTH = "12";
-    private static final Integer DISTRIBUTION_PERIOD = 202112;
+    private static final String DISTRIBUTION_PERIOD_MONTH = "06";
+    private static final Integer DISTRIBUTION_PERIOD = 202106;
     private static final Set<Integer> PERIODS = Collections.singleton(202112);
     private static final String PERIODS_COUNT = String.valueOf(PERIODS.size());
     private static final String USAGE_BATCH_NAME_FIELD = "usageBatchNameFiled";
@@ -235,7 +235,7 @@ public class CreateAclUsageBatchWindowTest {
         assertFalse(distributionPeriodYearField.isEnabled());
         ComboBox<String> distributionPeriodMonthComboBox = Whitebox.getInternalState(window,
             DISTRIBUTION_PERIOD_MONTH_COMBOBOX);
-        assertEquals("12", distributionPeriodMonthComboBox.getValue());
+        assertEquals("06", distributionPeriodMonthComboBox.getValue());
         assertFalse(distributionPeriodMonthComboBox.isEnabled());
         TextField periodValidationField = Whitebox.getInternalState(window, PERIOD_VALIDATION_FIELD);
         assertEquals("1", periodValidationField.getValue());
@@ -252,8 +252,8 @@ public class CreateAclUsageBatchWindowTest {
         assertEquals(6, verticalLayout.getComponentCount());
         verifyTextField(verticalLayout.getComponent(0), "Usage Batch Name");
         verifyDistributionPeriodYearAndPeriodMonthComponents(verticalLayout.getComponent(1));
-        verifyComboBox(verticalLayout.getComponent(2), "Copy From", true, buildAclUsageBatch());
-        verifyItemsFilterWidget(verticalLayout.getComponent(3), "Periods");
+        verifyItemsFilterWidget(verticalLayout.getComponent(2), "Periods");
+        verifyComboBox(verticalLayout.getComponent(3), "Copy From", true, buildAclUsageBatch());
         verifyCheckBox(verticalLayout.getComponent(4), "Editable", "acl-editable-checkbox");
         verifyButtonsLayout(verticalLayout.getComponent(5), "Create", "Close");
     }
@@ -263,7 +263,7 @@ public class CreateAclUsageBatchWindowTest {
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
         verifyTextField(horizontalLayout.getComponent(0), "Distribution Period Year");
-        verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true, new String[]{"06", "12"});
+        verifyComboBox(horizontalLayout.getComponent(1), "Distribution Period Month", true, "06", "12");
     }
 
     private AclUsageBatch buildAclUsageBatch() {

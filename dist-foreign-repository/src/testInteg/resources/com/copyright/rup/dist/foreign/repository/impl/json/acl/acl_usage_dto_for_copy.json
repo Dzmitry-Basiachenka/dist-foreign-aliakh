@@ -1,0 +1,57 @@
+[
+  {
+    "usageBatchId": "3516305e-d3ad-413b-819e-a390b81d4aa7",
+    "usageOrigin": "RFA",
+    "channel": "CCC",
+    "period": 202212,
+    "originalDetailId": "OGN674GHHHB0111",
+    "wrWrkInst": 306985867,
+    "systemTitle": "Tenside, surfactants, detergents",
+    "detailLicenseeClass": {
+      "id": 3,
+      "description": "Lumber, Paper, etc."
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "United States",
+    "contentUnitPrice": 10.0000000000,
+    "typeOfUse": "PRINT",
+    "annualizedCopies": 1.00000,
+    "quantity": 10,
+    "editable": true,
+    "createUser": "auser@copyright.com",
+    "updateUser": "auser@copyright.com",
+    "createDate": "2022-02-10T12:00:00+00",
+    "updateDate": "2022-02-14T12:00:00+00"
+  },
+  {
+    "usageBatchId": "3516305e-d3ad-413b-819e-a390b81d4aa7",
+    "usageOrigin": "RFA",
+    "channel": "Rightsdirect",
+    "period": 202212,
+    "originalDetailId": "OGN674GHHHB0112",
+    "wrWrkInst": 123822477,
+    "systemTitle": "The Portland business journal",
+    "detailLicenseeClass": {
+      "id": 2,
+      "description": "Textiles, Apparel, etc."
+    },
+    "aggregateLicenseeClassId": 51,
+    "aggregateLicenseeClassName": "Materials",
+    "surveyCountry": "Portugal",
+    "publicationType": {
+      "id": "73876e58-2e87-485e-b6f3-7e23792dd214",
+      "name": "BK",
+      "description": "Book"
+    },
+    "contentUnitPrice": 9.0000000000,
+    "typeOfUse": "PRINT",
+    "annualizedCopies": 2.00000,
+    "quantity": 11,
+    "editable": true,
+    "createUser": "auser@copyright.com",
+    "updateUser": "auser@copyright.com",
+    "createDate": "2022-02-10T13:00:00+00",
+    "updateDate": "2022-02-14T13:00:00+00"
+  }
+]

@@ -690,6 +690,25 @@ public class AclUsageRepositoryIntegrationTest {
             PERIOD_PRIORS));
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "copy-acl-usages.groovy")
+    public void testCopyAclUsages() {
+        String sourceBatchId = "e0cc3eb3-5c85-4745-b868-e83529864d1a";
+        String targetBatchId = "3516305e-d3ad-413b-819e-a390b81d4aa7";
+        String userName = "auser@copyright.com";
+        List<String> copiedUsagesIds = aclUsageRepository.copyAclUsages(sourceBatchId, targetBatchId, userName);
+        assertEquals(2, copiedUsagesIds.size());
+        List<AclUsageDto> actualUsages = aclUsageRepository.findByIds(copiedUsagesIds);
+        assertEquals(2, actualUsages.size());
+        List<AclUsageDto> expectedUsages = loadExpectedDtos("json/acl/acl_usage_dto_for_copy.json");
+        assertEquals(expectedUsages.size(), actualUsages.size());
+        IntStream.range(0, 2).forEach(i -> {
+            AclUsageDto expectedUsage = expectedUsages.get(i);
+            expectedUsage.setId(copiedUsagesIds.get(i));
+            verifyAclUsageDto(expectedUsage, actualUsages.get(i), false);
+        });
+    }
+
     private void verifyAclUsageDto(AclUsageDto expectedUsage, AclUsageDto actualUsage, boolean isValidateDates) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getUsageBatchId(), actualUsage.getUsageBatchId());

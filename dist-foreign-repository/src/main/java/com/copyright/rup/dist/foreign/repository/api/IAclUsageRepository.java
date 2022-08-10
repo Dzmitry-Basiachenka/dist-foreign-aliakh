@@ -94,11 +94,21 @@ public interface IAclUsageRepository {
      * Check only eligible, granted, with usage age weight > 0 and quantity < 2000 usages
      *
      * @param batchId            ACL batch id
-     * @param grantSetId         ACL grant set  id
+     * @param grantSetId         ACL grant set id
      * @param periodPriors       list of period priors
      * @param distributionPeriod distribution period
      * @return count of {@link AclUsageDto}s
      */
     int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                                List<Integer> periodPriors);
+
+    /**
+     * Copies ACL usages by ACL usage batch id.
+     *
+     * @param sourceUsageBatchId source ACL usage batch id
+     * @param targetUsageBatchId target ACL usage batch id
+     * @param userName           user name
+     * @return ids of inserted ACL usages
+     */
+    List<String> copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName);
 }

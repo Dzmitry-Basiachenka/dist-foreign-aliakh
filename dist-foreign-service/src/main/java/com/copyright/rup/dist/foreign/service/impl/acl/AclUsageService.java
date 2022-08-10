@@ -96,4 +96,9 @@ public class AclUsageService implements IAclUsageService {
                                      List<Integer> periodPriors) {
         return aclUsageRepository.findCountInvalidUsages(batchId, grantSetId, distributionPeriod, periodPriors);
     }
+
+    @Override
+    public int copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName) {
+        return aclUsageRepository.copyAclUsages(sourceUsageBatchId, targetUsageBatchId, userName).size();
+    }
 }

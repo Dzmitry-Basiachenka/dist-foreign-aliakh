@@ -47,6 +47,7 @@ public class AclUsageBatchServiceTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
     private static final String USER_NAME = "user@copyright.com";
+    private static final String ACL_USAGE_BATCH_ID = "cbfc9884-ad28-4760-8b52-794a7e9884a8";
 
     private IAclUsageBatchService aclUsageBatchService;
     private IAclUsageBatchRepository aclUsageBatchRepository;
@@ -112,6 +113,24 @@ public class AclUsageBatchServiceTest {
         replay(aclUsageBatchRepository);
         assertSame(periods, aclUsageBatchService.getPeriods());
         verify(aclUsageBatchRepository);
+    }
+
+    @Test
+    public void testCopyUsageBatch() {
+        mockStatic(RupContextUtils.class);
+        AclUsageBatch usageBatch = buildAclUsageBatch();
+        Capture<String> usageBatchIdCapture = newCapture();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        aclUsageBatchRepository.insert(usageBatch);
+        expectLastCall().once();
+        expect(aclUsageService.copyAclUsages(eq(ACL_USAGE_BATCH_ID), capture(usageBatchIdCapture),
+            eq(USER_NAME))).andReturn(1).once();
+        replay(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
+        assertEquals(1, aclUsageBatchService.copyUsageBatch(ACL_USAGE_BATCH_ID, usageBatch));
+        assertEquals(usageBatch.getId(), usageBatchIdCapture.getValue());
+        assertEquals(usageBatch.getCreateUser(), USER_NAME);
+        assertEquals(usageBatch.getUpdateUser(), USER_NAME);
+        verify(RupContextUtils.class, aclUsageBatchRepository, aclUsageService);
     }
 
     private AclUsageBatch buildAclUsageBatch() {

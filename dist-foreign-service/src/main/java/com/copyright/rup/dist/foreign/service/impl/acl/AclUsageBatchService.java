@@ -73,4 +73,20 @@ public class AclUsageBatchService implements IAclUsageBatchService {
     public AclUsageBatch getById(String usageBatchId) {
         return aclUsageBatchRepository.findById(usageBatchId);
     }
+
+    @Transactional
+    @Override
+    public int copyUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Copy ACL usage batch. Started. SourceBatchId={}, AclUsageBatch={}, UserName={}",
+            sourceUsageBatchId, aclUsageBatch, userName);
+        aclUsageBatch.setId(RupPersistUtils.generateUuid());
+        aclUsageBatch.setCreateUser(userName);
+        aclUsageBatch.setUpdateUser(userName);
+        aclUsageBatchRepository.insert(aclUsageBatch);
+        int count = aclUsageService.copyAclUsages(sourceUsageBatchId, aclUsageBatch.getId(), userName);
+        LOGGER.info("Copy ACL usage batch. Finished. SourceBatchId={}, AclUsageBatch={}, UserName={}, UsagesCount={}",
+            sourceUsageBatchId, aclUsageBatch, userName, count);
+        return count;
+    }
 }
