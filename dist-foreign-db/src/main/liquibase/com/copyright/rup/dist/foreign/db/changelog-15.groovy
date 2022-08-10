@@ -1352,4 +1352,14 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario', columnName: 'copied_from')
         }
     }
+
+    changeSet(id: '2022-08-10-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-57780 FDA: Migrate historical ACL baseline Usage & Value Data from Sharecalc: " +
+                "drop not null constraint from rh_account_number column in df_udm_value table")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_udm_value',
+                columnName: 'rh_account_number', columnDataType: 'NUMERIC(22)')
+
+        rollback ""
+    }
 }
