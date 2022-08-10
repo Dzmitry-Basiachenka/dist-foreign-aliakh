@@ -15,7 +15,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryWid
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingViewWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
@@ -288,7 +288,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             Collections.emptyList(), () -> new AclPublicationTypeWeightsWindow(aclScenariosController, false));
         licenseeClassMappingWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
-            Collections.emptyList(), () -> new AclAggregateLicenseeClassMappingWindow(false, Collections.emptyList()));
+            aclScenariosController.getDetailLicenseeClasses(), AclAggregateLicenseeClassMappingViewWindow::new);
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout layout =

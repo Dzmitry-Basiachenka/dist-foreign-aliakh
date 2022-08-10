@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -40,6 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.powermock.reflect.Whitebox;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -425,6 +427,24 @@ public final class UiTestHelper {
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
         assertEquals(columnsToWidthToExpandRatio.stream().map(Triple::getRight).collect(Collectors.toList()),
             columns.stream().map(Grid.Column::getExpandRatio).collect(Collectors.toList()));
+    }
+
+    /**
+     * Verifies grid items.
+     *
+     * @param expectedItems expected items
+     * @param expectedCells expected cells
+     */
+    public static <T> void verifyGridItems(Grid grid, List<T> expectedItems, Object[]... expectedCells) {
+        assertEquals(expectedItems, ((ListDataProvider<T>) grid.getDataProvider()).getItems());
+        List<Grid.Column<T, ?>> columns = grid.getColumns();
+        Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
+        for (int y = 0; y < expectedItems.size(); y++) {
+            for (int x = 0; x < columns.size(); x++) {
+                actualCells[y][x] = columns.get(x).getValueProvider().apply(expectedItems.get(y));
+            }
+        }
+        assertArrayEquals(expectedCells, actualCells);
     }
 
     /**

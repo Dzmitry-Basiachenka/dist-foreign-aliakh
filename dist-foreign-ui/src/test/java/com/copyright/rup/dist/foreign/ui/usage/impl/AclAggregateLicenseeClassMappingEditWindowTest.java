@@ -44,7 +44,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Verifies {@link AclAggregateLicenseeClassMappingWindow}.
+ * Verifies {@link AclAggregateLicenseeClassMappingEditWindow}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -52,9 +52,9 @@ import java.util.List;
  *
  * @author Mikita Maistrenka
  */
-public class AclAggregateLicenseeClassMappingWindowTest {
+public class AclAggregateLicenseeClassMappingEditWindowTest {
 
-    private AclAggregateLicenseeClassMappingWindow window;
+    private AclAggregateLicenseeClassMappingEditWindow window;
     private final List<DetailLicenseeClass> defaultParams =
         Arrays.asList(buildDetailLicenseeClass(1), buildDetailLicenseeClass(2));
     private final List<DetailLicenseeClass> appliedParams =
@@ -64,12 +64,12 @@ public class AclAggregateLicenseeClassMappingWindowTest {
 
     @Before
     public void setUp() {
-        window = new AclAggregateLicenseeClassMappingWindow(true, aggregateLicenseeClasses);
+        window = new AclAggregateLicenseeClassMappingEditWindow(aggregateLicenseeClasses);
         window.setDefault(defaultParams);
     }
 
     @Test
-    public void testConstructorInEditMode() {
+    public void testConstructor() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         verifyCommonWindowComponents(content);
         verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
@@ -79,20 +79,6 @@ public class AclAggregateLicenseeClassMappingWindowTest {
             buttonsLayout.getComponent(1), true,
             buttonsLayout.getComponent(2), true,
             buttonsLayout.getComponent(3), true));
-    }
-
-    @Test
-    public void testConstructorInReadOnlyMode() {
-        window = new AclAggregateLicenseeClassMappingWindow(false, aggregateLicenseeClasses);
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        verifyCommonWindowComponents(content);
-        verifyButtonsLayout(content.getComponent(1), "Save", "Close", null, "Default");
-        HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
-        verifyButtonsVisibility(ImmutableMap.of(
-            buttonsLayout.getComponent(0), false,
-            buttonsLayout.getComponent(1), true,
-            buttonsLayout.getComponent(2), false,
-            buttonsLayout.getComponent(3), false));
     }
 
     @Test
