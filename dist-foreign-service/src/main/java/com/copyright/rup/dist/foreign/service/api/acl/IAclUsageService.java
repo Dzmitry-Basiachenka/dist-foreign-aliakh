@@ -100,4 +100,14 @@ public interface IAclUsageService {
      */
     int getCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                               List<Integer> periodPriors);
+
+    /**
+     * Copies ACL usages by ACL usage batch id.
+     *
+     * @param sourceUsageBatchId source ACL usage batch id
+     * @param targetUsageBatchId target ACL usage batch id
+     * @param userName         username
+     * @return count of copied grant details
+     */
+    int copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName);
 }

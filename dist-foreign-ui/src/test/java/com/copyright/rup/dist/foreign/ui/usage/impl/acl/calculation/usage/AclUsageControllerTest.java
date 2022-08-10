@@ -70,6 +70,7 @@ import java.util.function.Supplier;
 public class AclUsageControllerTest {
 
     private static final String ACL_USAGE_BATCH_NAME = "ACL Usage Batch 2021";
+    private static final String ACL_USAGE_BATCH_ID = "6367638f-a447-456c-98e3-90d38b5d1f10";
 
     private final AclUsageController controller = new AclUsageController();
 
@@ -232,14 +233,22 @@ public class AclUsageControllerTest {
 
     @Test
     public void testGetAllAclUsageBatches() {
-        //TODO {dbasiachenka} implement
-        assertEquals(Collections.emptyList(), controller.getAllAclUsageBatches());
+        List<AclUsageBatch> batches = Collections.singletonList(new AclUsageBatch());
+        expect(aclUsageBatchService.getAll()).andReturn(batches).once();
+        replay(aclUsageBatchService);
+        assertSame(batches, controller.getAllAclUsageBatches());
+        verify(aclUsageBatchService);
     }
 
     @Test
     public void testCopyAclUsageBatch() {
-        //TODO {dbasiachenka} implement
-        assertEquals(0, controller.copyAclUsageBatch(ACL_USAGE_BATCH_NAME, new AclUsageBatch()));
+        expect(aclUsageBatchService.copyUsageBatch(ACL_USAGE_BATCH_ID, buildAclUsageBatch())).andReturn(1).once();
+        expect(aclUsageFilterController.getWidget()).andReturn(aclUsageFilterWidget).once();
+        aclUsageFilterWidget.clearFilter();
+        expectLastCall().once();
+        replay(aclUsageFilterController, aclUsageFilterWidget, aclUsageBatchService);
+        assertEquals(1, controller.copyAclUsageBatch(ACL_USAGE_BATCH_ID, buildAclUsageBatch()));
+        verify(aclUsageFilterController, aclUsageFilterWidget, aclUsageBatchService);
     }
 
     private AclUsageBatch buildAclUsageBatch() {

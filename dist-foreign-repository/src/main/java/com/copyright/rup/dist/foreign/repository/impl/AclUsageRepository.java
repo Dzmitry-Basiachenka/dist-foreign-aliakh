@@ -101,6 +101,16 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
         return selectOne("IAclUsageMapper.findCountInvalidUsages", params);
     }
 
+    @Override
+    public List<String> copyAclUsages(String sourceUsageBatchId, String targetUsageBatchId, String userName) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("sourceUsageBatchId", Objects.requireNonNull(sourceUsageBatchId));
+        parameters.put("targetUsageBatchId", Objects.requireNonNull(targetUsageBatchId));
+        parameters.put(CREATE_USER, Objects.requireNonNull(userName));
+        parameters.put(UPDATE_USER, userName);
+        return selectList("IAclUsageMapper.copyAclUsages", parameters);
+    }
+
     private AclUsageFilter escapeSqlLikePattern(AclUsageFilter filter) {
         AclUsageFilter filterCopy = new AclUsageFilter(filter);
         filterCopy.setUsageDetailIdExpression(

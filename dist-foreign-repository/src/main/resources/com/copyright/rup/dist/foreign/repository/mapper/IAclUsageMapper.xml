@@ -396,4 +396,30 @@
                 </foreach>
             and u.quantity &lt; 2000
     </select>
+
+    <select id="copyAclUsages" parameterType="map" resultType="string">
+        insert into ${schema}.df_acl_usage (
+            <include refid="aclUsageColumns"/>
+        )
+        select
+            uuid_generate_v4(),
+            #{targetUsageBatchId},
+            usage_origin,
+            channel,
+            period,
+            original_detail_id,
+            wr_wrk_inst,
+            system_title,
+            detail_licensee_class_id,
+            survey_country,
+            publication_type_uid,
+            content_unit_price,
+            type_of_use,
+            annualized_copies,
+            quantity,
+            <include refid="StoredEntityMapper.insert"/>
+        from ${schema}.df_acl_usage
+        where df_acl_usage_batch_uid = #{sourceUsageBatchId}
+        returning df_acl_usage_uid
+    </select>
 </mapper>

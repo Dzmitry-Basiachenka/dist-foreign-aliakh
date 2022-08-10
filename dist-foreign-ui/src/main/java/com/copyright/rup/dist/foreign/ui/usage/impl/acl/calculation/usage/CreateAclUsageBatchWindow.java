@@ -50,9 +50,9 @@ public class CreateAclUsageBatchWindow extends Window {
     private TextField usageBatchNameFiled;
     private TextField distributionPeriodYearField;
     private ComboBox<String> distributionPeriodMonthComboBox;
-    private ComboBox<AclUsageBatch> copyFromComboBox;
     private TextField periodValidationField;
     private PeriodFilterWidget periodFilterWidget;
+    private ComboBox<AclUsageBatch> copyFromComboBox;
     private CheckBox editableCheckBox;
     private Set<Integer> selectedPeriods;
 
@@ -78,7 +78,7 @@ public class CreateAclUsageBatchWindow extends Window {
         if (isValid()) {
             int usagesCount;
             if (Objects.nonNull(copyFromComboBox.getValue())) {
-                usagesCount = aclUsageController.copyAclUsageBatch(copyFromComboBox.getValue().getName(),
+                usagesCount = aclUsageController.copyAclUsageBatch(copyFromComboBox.getValue().getId(),
                     buildAclUsageBatch());
             } else {
                 usagesCount = aclUsageController.insertAclUsageBatch(buildAclUsageBatch());
@@ -104,7 +104,7 @@ public class CreateAclUsageBatchWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUsageBatchNameField(), initDistributionPeriodYearAndPeriodMonthFields(),
-            initCopyFromComboBox(), initPeriodFilterWidget(), initEditableCheckBox(), buttonsLayout);
+            initPeriodFilterWidget(), initCopyFromComboBox(), initEditableCheckBox(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -164,22 +164,6 @@ public class CreateAclUsageBatchWindow extends Window {
         return distributionPeriodMonthComboBox;
     }
 
-    private ComboBox<AclUsageBatch> initCopyFromComboBox() {
-        copyFromComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
-        copyFromComboBox.setItemCaptionGenerator(AclUsageBatch::getName);
-        copyFromComboBox.setItems(aclUsageController.getAllAclUsageBatches());
-        copyFromComboBox.addValueChangeListener(event -> {
-            if (Objects.nonNull(event.getValue())) {
-                populateCopiedUsageBatchFields(event.getValue());
-            } else {
-                resetComponents();
-            }
-        });
-        copyFromComboBox.setSizeFull();
-        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-copy-from-combo-box");
-        return copyFromComboBox;
-    }
-
     private PeriodFilterWidget initPeriodFilterWidget() {
         periodValidationField = new TextField(ForeignUi.getMessage("label.periods"));
         binder.forField(periodValidationField)
@@ -201,6 +185,22 @@ public class CreateAclUsageBatchWindow extends Window {
             selectedPeriods = event.getSelectedItemsIds();
         });
         return periodFilterWidget;
+    }
+
+    private ComboBox<AclUsageBatch> initCopyFromComboBox() {
+        copyFromComboBox = new ComboBox<>(ForeignUi.getMessage("label.copy_from"));
+        copyFromComboBox.setItemCaptionGenerator(AclUsageBatch::getName);
+        copyFromComboBox.setItems(aclUsageController.getAllAclUsageBatches());
+        copyFromComboBox.addValueChangeListener(event -> {
+            if (Objects.nonNull(event.getValue())) {
+                populateCopiedUsageBatchFields(event.getValue());
+            } else {
+                resetComponents();
+            }
+        });
+        copyFromComboBox.setSizeFull();
+        VaadinUtils.addComponentStyle(copyFromComboBox, "acl-copy-from-combo-box");
+        return copyFromComboBox;
     }
 
     private CheckBox initEditableCheckBox() {
@@ -231,8 +231,9 @@ public class CreateAclUsageBatchWindow extends Window {
     }
 
     private void populateCopiedUsageBatchFields(AclUsageBatch aclUsageBatch) {
-        distributionPeriodYearField.setValue(String.valueOf(aclUsageBatch.getDistributionPeriod() / 100));
-        distributionPeriodMonthComboBox.setValue(String.valueOf(aclUsageBatch.getDistributionPeriod() % 100));
+        String period = String.valueOf(aclUsageBatch.getDistributionPeriod());
+        distributionPeriodYearField.setValue(StringUtils.left(period, 4));
+        distributionPeriodMonthComboBox.setValue(StringUtils.right(period, 2));
         selectedPeriods = aclUsageBatch.getPeriods();
         periodFilterWidget.setLabelValue(selectedPeriods.size());
         periodValidationField.setValue(String.valueOf(selectedPeriods.size()));

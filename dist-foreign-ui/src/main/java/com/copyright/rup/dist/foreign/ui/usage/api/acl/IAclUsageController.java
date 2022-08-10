@@ -125,9 +125,9 @@ public interface IAclUsageController extends IController<IAclUsageWidget> {
     /**
      * Copies ACL usage batch.
      *
-     * @param usageBatchName name of ACL usage batch being copied
-     * @param aclUsageBatch  {@link AclUsageBatch} instance
+     * @param sourceUsageBatchId source usage batch id
+     * @param aclUsageBatch      {@link AclUsageBatch} instance
      * @return count of copied ACL usages
      */
-    int copyAclUsageBatch(String usageBatchName, AclUsageBatch aclUsageBatch);
+    int copyAclUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch);
 }

@@ -61,4 +61,13 @@ public interface IAclUsageBatchService {
      * @return instance of {@link AclUsageBatch} or {@code null} if none exists
      */
     AclUsageBatch getById(String usageBatchId);
+
+    /**
+     * Copies ACL usage batch with ACL usages.
+     *
+     * @param sourceUsageBatchId source usage batch id
+     * @param aclUsageBatch      {@link AclUsageBatch} instance
+     * @return count of copied ACL usages
+     */
+    int copyUsageBatch(String sourceUsageBatchId, AclUsageBatch aclUsageBatch);
 }
