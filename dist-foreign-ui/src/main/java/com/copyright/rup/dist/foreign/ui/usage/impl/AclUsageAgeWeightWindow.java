@@ -52,7 +52,7 @@ public class AclUsageAgeWeightWindow extends CommonScenarioParameterWindow<List<
     public AclUsageAgeWeightWindow(boolean isEditable) {
         this.isEditable = isEditable;
         setWidth(600, Unit.PIXELS);
-        setHeight(300, Unit.PIXELS);
+        setHeight(430, Unit.PIXELS);
         setResizable(false);
         initGrid();
         HorizontalLayout buttonsLayout = initButtonsLayout();

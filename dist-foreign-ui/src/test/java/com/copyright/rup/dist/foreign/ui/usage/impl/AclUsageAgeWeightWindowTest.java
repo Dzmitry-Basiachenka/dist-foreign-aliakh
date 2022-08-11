@@ -70,7 +70,7 @@ public class AclUsageAgeWeightWindowTest {
 
     @Test
     public void testConstructorInEditMode() {
-        verifyWindow(window, "Usage Age Weights", 600, 300, Unit.PIXELS);
+        verifyWindow(window, "Usage Age Weights", 600, 430, Unit.PIXELS);
         assertFalse(window.isResizable());
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
@@ -90,7 +90,7 @@ public class AclUsageAgeWeightWindowTest {
     @Test
     public void testConstructorInViewMode() {
         window = new AclUsageAgeWeightWindow(false);
-        verifyWindow(window, "Usage Age Weights", 600, 300, Unit.PIXELS);
+        verifyWindow(window, "Usage Age Weights", 600, 430, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
         Component component = content.getComponent(0);
