@@ -138,7 +138,7 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
         comboBox.setItemCaptionGenerator(aggregateLicenseeClass -> aggregateLicenseeClass.getId().toString());
         comboBox.setItems(aggregateLicenseeClasses);
         comboBox.setSelectedItem(detailLicenseeClass.getAggregateLicenseeClass());
-        comboBox.setWidth("40");
+        comboBox.setWidth("70");
         comboBox.addValueChangeListener(listener -> {
             if (Objects.nonNull(listener.getValue())) {
                 detailLicenseeClass.setAggregateLicenseeClass(listener.getValue());
