@@ -544,7 +544,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         AclScenarioDetail scenarioDetail = new AclScenarioDetail();
         scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
         scenarioDetail.setPeriod(202112);
-        scenarioDetail.setOriginalDetailId("OGN674GHHHB0110");
+        scenarioDetail.setOriginalDetailId("OGN674GHHHB0111");
         scenarioDetail.setWrWrkInst(122820638L);
         scenarioDetail.setSystemTitle("Technology review");
         scenarioDetail.setDetailLicenseeClass(buildDetailLicenseeClass(43, "Other - Govt"));

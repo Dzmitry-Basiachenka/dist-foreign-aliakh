@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,11 +36,13 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";
     private static final String CREATE_USER = "createUser";
+    private static final List<String> ELIGIBLE_GRANT_STATUSES = Arrays.asList("Print&Digital", "Different RH");
 
     @Override
     public void addToAclScenario(AclScenario scenario, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("scenario", Objects.requireNonNull(scenario));
+        params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
         params.put(CREATE_USER, Objects.requireNonNull(userName));
         params.put(UPDATE_USER, Objects.requireNonNull(userName));
         insert("IAclScenarioUsageMapper.addToScenario", params);
@@ -47,8 +50,9 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
 
     @Override
     public void addScenarioShares(AclScenario scenario, String userName) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("scenario", Objects.requireNonNull(scenario));
+        params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
         params.put(CREATE_USER, Objects.requireNonNull(userName));
         params.put(UPDATE_USER, Objects.requireNonNull(userName));
         insert("IAclScenarioUsageMapper.addScenarioShares", params);

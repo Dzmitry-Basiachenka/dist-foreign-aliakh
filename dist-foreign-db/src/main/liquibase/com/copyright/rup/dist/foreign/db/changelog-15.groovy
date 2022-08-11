@@ -1362,4 +1362,17 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2022-08-11-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("DIST-305 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: " +
+                "add type_of_use column to df_acl_scenario_detail")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail') {
+            column(name: 'type_of_use', type: 'VARCHAR(128)', remarks: 'The type of use')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'type_of_use')
+        }
+    }
 }
