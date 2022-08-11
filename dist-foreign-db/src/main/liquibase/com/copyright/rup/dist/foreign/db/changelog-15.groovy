@@ -1375,4 +1375,22 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'type_of_use')
         }
     }
+
+    changeSet(id: '2022-08-11-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("DIST-305 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: " +
+                "rename usage_quantity column to number_of_copies in df_acl_scenario_detail table")
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'usage_quantity', newDataType: 'numeric(38,5)')
+
+        renameColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', oldColumnName: 'usage_quantity',
+            newColumnName: 'number_of_copies', columnDataType: 'NUMERIC(38,5)')
+
+        rollback {
+
+            renameColumn(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', oldColumnName: 'number_of_copies',
+                newColumnName: 'usage_quantity', columnDataType: 'NUMERIC(38, 5)')
+
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'usage_quantity', newDataType: 'numeric(38)')
+        }
+    }
 }

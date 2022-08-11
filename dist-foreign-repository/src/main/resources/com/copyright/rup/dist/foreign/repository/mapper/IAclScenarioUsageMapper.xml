@@ -19,7 +19,7 @@
         <result property="publicationType.weight" column="pub_type_weight"/>
         <result property="publicationType.period" column="pub_type_period"/>
         <result property="contentUnitPrice" column="content_unit_price"/>
-        <result property="quantity" column="usage_quantity"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
         <result property="usageAgeWeight" column="usage_age_weight"/>
         <result property="weightedCopies" column="weighted_copies"/>
         <result property="surveyCountry" column="survey_country"/>
@@ -263,7 +263,7 @@
             alc.description aggregate_licensee_class_name,
             survey_country,
             reported_type_of_use,
-            usage_quantity number_of_copies,
+            number_of_copies,
             weighted_copies,
             scd.publication_type_uid,
             pt.name pub_type_name,
@@ -376,7 +376,7 @@
             detail_licensee_class_id,
             publication_type_uid,
             content_unit_price,
-            usage_quantity,
+            number_of_copies,
             usage_age_weight,
             survey_country,
             weighted_copies,
@@ -393,10 +393,10 @@
             detail_licensee_class_id,
             publication_type_uid,
             content_unit_price,
-            quantity,
+            annualized_copies,
             uaw.weight usage_age_weight,
             survey_country,
-            uaw.weight * quantity weighted_copies,
+            uaw.weight * annualized_copies weighted_copies,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_usage u
         <include refid="grantDetailJoinSql">
@@ -411,7 +411,7 @@
             )
         where df_acl_usage_batch_uid = #{scenario.usageBatchId}
             and uaw.weight > 0
-            and quantity &lt; 2000
+            and annualized_copies &lt; 2000
     </insert>
 
     <insert id="addScenarioShares" parameterType="map">
@@ -433,8 +433,8 @@
             gd.type_of_use,
             gd.rh_account_number,
             slc.aggregate_licensee_class_id,
-            usage_quantity * usage_age_weight volume_weight,
-            usage_quantity * usage_age_weight * content_unit_price * pub_type_weight value_weight,
+            number_of_copies * usage_age_weight volume_weight,
+            number_of_copies * usage_age_weight * content_unit_price * pub_type_weight value_weight,
             <include refid="StoredEntityMapper.insert"/>
         from ${schema}.df_acl_scenario_detail sd
         join ${schema}.df_acl_scenario_licensee_class slc on sd.df_acl_scenario_uid = slc.df_acl_scenario_uid
@@ -532,7 +532,7 @@
             sd.publication_type_uid,
             pub_type_weight,
             content_unit_price,
-            usage_quantity,
+            number_of_copies,
             usage_age_weight,
             weighted_copies,
             survey_country,
