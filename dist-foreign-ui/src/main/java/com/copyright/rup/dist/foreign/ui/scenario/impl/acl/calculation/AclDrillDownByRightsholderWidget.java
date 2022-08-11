@@ -112,8 +112,8 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             "rhAccountNumberDigital", true, 140);
         addColumn(AclScenarioDetailDto::getRhNameDigital, "table.column.digital_rh_name", "rhNameDigital", true, 150);
         addColumn(AclScenarioDetailDto::getUsagePeriod, "table.column.usage_period", "usagePeriod", true, 100);
-        addColumn(
-            AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight", "usageAgeWeight", true, 130);
+        addAmountColumn(
+            AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight", "usageAgeWeight", 130);
         addColumn(AclScenarioDetailDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detailLicenseeClassId",
             true, 100);
         addColumn(AclScenarioDetailDto::getDetailLicenseeClassName, "table.column.det_lc_name",
