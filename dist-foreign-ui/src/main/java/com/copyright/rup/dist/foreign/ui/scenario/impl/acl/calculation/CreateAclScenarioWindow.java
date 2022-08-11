@@ -306,10 +306,6 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         usageBatchComboBox.setSelectedItem(null);
         fundPoolComboBox.setSelectedItem(null);
         grantSetComboBox.setSelectedItem(null);
-        usageAgeWeightWidget.setAppliedParameters(defaultUsageAges);
-        licenseeClassMappingWidget.setAppliedParameters(defaultLicenseeClasses);
-        publicationTypeWeightWidget.setAppliedParameters(historicalPubTypes);
-        editableCheckBox.setEnabled(true);
         if (periodAndLicenseTypeFilled) {
             updateUsageBatchFundPoolAndGrantSetComboBoxes();
         }
@@ -366,6 +362,10 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         this.usageBatches.clear();
         this.fundPools.clear();
         this.grantSets.clear();
+        usageAgeWeightWidget.setAppliedParameters(defaultUsageAges);
+        licenseeClassMappingWidget.setAppliedParameters(defaultLicenseeClasses);
+        publicationTypeWeightWidget.setAppliedParameters(historicalPubTypes);
+        editableCheckBox.setEnabled(hasSpecialistPermission);
         populateComboBoxes();
     }
 
