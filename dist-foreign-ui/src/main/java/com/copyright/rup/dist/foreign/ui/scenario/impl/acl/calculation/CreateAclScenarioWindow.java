@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingEditWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
@@ -275,7 +275,7 @@ public class CreateAclScenarioWindow extends Window implements IDateFormatter {
         licenseeClassMappingWidget =
             new ScenarioParameterWidget<>(ForeignUi.getMessage("button.licensee_class_mapping"),
                 defaultLicenseeClasses,
-                () -> new AclAggregateLicenseeClassMappingWindow(true, controller.getAggregateLicenseeClasses()));
+                () -> new AclAggregateLicenseeClassMappingEditWindow(controller.getAggregateLicenseeClasses()));
     }
 
     private void initDescriptionArea() {

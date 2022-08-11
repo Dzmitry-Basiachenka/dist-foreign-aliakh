@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Window for working with ACL licensee classes.
+ * Window for editing ACL licensee classes.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -30,25 +30,22 @@ import java.util.stream.Collectors;
  *
  * @author Mikita Maistrenka
  */
-public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
+public class AclAggregateLicenseeClassMappingEditWindow
+    extends CommonScenarioParameterWindow<List<DetailLicenseeClass>> {
 
     private List<DetailLicenseeClass> defaultValues;
     private List<DetailLicenseeClass> currentValues;
     private Grid<DetailLicenseeClass> grid;
-    private final boolean isEditable;
     private final List<AggregateLicenseeClass> aggregateLicenseeClasses;
 
     /**
      * Constructor.
      *
-     * @param isEditable {@code true} if window should be in edit mode, otherwise {@code false}
      * @param aggregateLicenseeClasses list of {@link AggregateLicenseeClass}es from a database
      */
-    public AclAggregateLicenseeClassMappingWindow(boolean isEditable,
-                                                  List<AggregateLicenseeClass> aggregateLicenseeClasses) {
+    public AclAggregateLicenseeClassMappingEditWindow(List<AggregateLicenseeClass> aggregateLicenseeClasses) {
         setWidth(600, Unit.PIXELS);
         setHeight(550, Unit.PIXELS);
-        this.isEditable = isEditable;
         this.aggregateLicenseeClasses = aggregateLicenseeClasses;
         initGrid();
         HorizontalLayout buttonsLayout = initButtons();
@@ -78,11 +75,8 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
 
     private HorizontalLayout initButtons() {
         Button saveButton = Buttons.createButton(ForeignUi.getMessage("button.save"));
-        saveButton.setVisible(isEditable);
         Label placeholderLabel = new Label();
-        placeholderLabel.setVisible(isEditable);
         Button defaultButton = Buttons.createButton(ForeignUi.getMessage("button.default"));
-        defaultButton.setVisible(isEditable);
         defaultButton.addClickListener(event -> setAppliedParameters(defaultValues));
         saveButton.addClickListener(event -> {
             fireParametersSaveEvent(new ParametersSaveEvent<>(this, currentValues));
@@ -109,27 +103,17 @@ public class AclAggregateLicenseeClassMappingWindow extends CommonScenarioParame
         grid.addColumn(DetailLicenseeClass::getDescription)
             .setCaption(ForeignUi.getMessage("table.column.det_lc_name"))
             .setExpandRatio(2);
-        addAggregateLicenseeClassIdColumn();
+        grid.addComponentColumn(this::buildComboBox)
+            .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
+            .setStyleGenerator(licensee -> "combobox-column")
+            .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
+                detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
+            .setExpandRatio(1);
         grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getDescription())
             .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setExpandRatio(2);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "acl-aggregate-licensee-class-mapping-grid");
-    }
-
-    private void addAggregateLicenseeClassIdColumn() {
-        if (isEditable) {
-            grid.addComponentColumn(this::buildComboBox)
-                .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-                .setStyleGenerator(licensee -> "combobox-column")
-                .setComparator((SerializableComparator<DetailLicenseeClass>) (detail1, detail2) ->
-                    detail1.getAggregateLicenseeClass().getId().compareTo(detail2.getAggregateLicenseeClass().getId()))
-                .setExpandRatio(1);
-        } else {
-            grid.addColumn(licenseeClass -> licenseeClass.getAggregateLicenseeClass().getId())
-                .setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_id"))
-                .setExpandRatio(1);
-        }
     }
 
     private ComboBox<AggregateLicenseeClass> buildComboBox(DetailLicenseeClass detailLicenseeClass) {

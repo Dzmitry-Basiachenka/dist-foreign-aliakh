@@ -86,6 +86,7 @@ public class AclScenariosWidgetTest {
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(new AclScenarioDto()).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
+        expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.init();
         verify(controller);
