@@ -125,6 +125,7 @@ databaseChangeLog {
             column(name: 'period_end_date', value: 202212)
             column(name: 'original_detail_id', value: 'GGN674GHHSB100')
             column(name: 'wr_wrk_inst', value: 122825555)
+            column(name: 'type_of_use', value: 'PRINT')
             column(name: 'system_title', value: 'Technology review')
             column(name: 'detail_licensee_class_id', value: 1)
             column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
