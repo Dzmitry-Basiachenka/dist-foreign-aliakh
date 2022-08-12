@@ -130,8 +130,8 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             "weightedCopies", 150);
         addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type", "publicationType",
             true, 120);
-        addColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
-            "pubTypeWeight", true, 120);
+        addAmountColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
+            "pubTypeWeight", 120);
         addAmountColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
         addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 110);
         addAmountColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);

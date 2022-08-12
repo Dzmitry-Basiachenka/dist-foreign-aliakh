@@ -19,7 +19,9 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.vaadin.data.Binder;
 import com.vaadin.data.HasValue;
 import com.vaadin.data.ValidationResult;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.AbstractComponent;
@@ -436,7 +438,9 @@ public final class UiTestHelper {
      * @param expectedCells expected cells
      */
     public static <T> void verifyGridItems(Grid grid, List<T> expectedItems, Object[]... expectedCells) {
-        assertEquals(expectedItems, ((ListDataProvider<T>) grid.getDataProvider()).getItems());
+        DataProvider<T, ?> dataProvider = grid.getDataProvider();
+        assertEquals(expectedItems.size(), dataProvider.size(new Query<>()));
+        assertEquals(expectedItems, dataProvider.fetch(new Query<>()).collect(Collectors.toList()));
         List<Grid.Column<T, ?>> columns = grid.getColumns();
         Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
         for (int y = 0; y < expectedItems.size(); y++) {
