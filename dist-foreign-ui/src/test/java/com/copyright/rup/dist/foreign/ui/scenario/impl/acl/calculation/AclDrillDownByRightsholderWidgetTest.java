@@ -1,19 +1,27 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGrid;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
+import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -21,6 +29,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -28,9 +37,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,13 +56,16 @@ import java.util.List;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(JavaScript.class)
 public class AclDrillDownByRightsholderWidgetTest {
 
     private AclDrillDownByRightsholderWidget widget;
+    private IAclDrillDownByRightsholderController controller;
 
     @Before
     public void setUp() {
-        IAclDrillDownByRightsholderController controller = createMock(IAclDrillDownByRightsholderController.class);
+        controller = createMock(IAclDrillDownByRightsholderController.class);
         widget = new AclDrillDownByRightsholderWidget();
         widget.setController(controller);
         widget.init();
@@ -73,6 +90,28 @@ public class AclDrillDownByRightsholderWidgetTest {
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(widget, searchWidget);
         assertEquals("search", widget.getSearchValue());
+    }
+
+    @Test
+    public void testGridValues() {
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        List<AclScenarioDetailDto> scenarioDetails = Collections.singletonList(buildAclScenarioDetailDto());
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.loadBeans(0, Integer.MAX_VALUE, Collections.emptyList())).andReturn(scenarioDetails).once();
+        replay(JavaScript.class, controller);
+        Grid grid = (Grid) ((VerticalLayout) widget.getContent()).getComponent(1);
+        DataProvider dataProvider = grid.getDataProvider();
+        dataProvider.refreshAll();
+        Object[][] expectedCells = {
+            {"73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3", "Usage Detail Id", "ACL", "Usage Batch Name", 202206, 123090280L,
+                "Langmuir", 1000009767L, "American Chemical Society", 1000009767L, "American Chemical",
+                202206, "1.00", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "Belgium", "COPY_FOR_MYSELF",
+                4L, "2.00", "STND", "3.00", "120.54", "N", "4.00", "N", "5.00", "N", "6.00", "7.00", "8.00", "9.00",
+                "10.00", "11.00", "12.00", "13.00", "14.00"}
+        };
+        verifyGridItems(grid, scenarioDetails, expectedCells);
+        verify(JavaScript.class, controller);
     }
 
     private void verifySearchWidget(Component component) {
@@ -141,5 +180,50 @@ public class AclDrillDownByRightsholderWidgetTest {
             assertTrue(column.isSortable());
             assertTrue(column.isResizable());
         });
+    }
+
+    private AclScenarioDetailDto buildAclScenarioDetailDto() {
+        PublicationType pubType = new PublicationType();
+        pubType.setName("STND");
+        pubType.setWeight(new BigDecimal("3.00000"));
+        AclScenarioDetailDto scenarioDetail = new AclScenarioDetailDto();
+        scenarioDetail.setId("73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3");
+        scenarioDetail.setOriginalDetailId("Usage Detail Id");
+        scenarioDetail.setProductFamily("ACL");
+        scenarioDetail.setUsageBatchName("Usage Batch Name");
+        scenarioDetail.setPeriodEndPeriod(202206);
+        scenarioDetail.setWrWrkInst(123090280L);
+        scenarioDetail.setSystemTitle("Langmuir");
+        scenarioDetail.setRhAccountNumberPrint(1000009767L);
+        scenarioDetail.setRhNamePrint("American Chemical Society");
+        scenarioDetail.setRhAccountNumberDigital(1000009767L);
+        scenarioDetail.setRhNameDigital("American Chemical");
+        scenarioDetail.setUsagePeriod(202206);
+        scenarioDetail.setUsageAgeWeight(new BigDecimal("1.00000"));
+        scenarioDetail.setDetailLicenseeClassId(22);
+        scenarioDetail.setDetailLicenseeClassName("Banks/Ins/RE/Holding Cos");
+        scenarioDetail.setAggregateLicenseeClassId(56);
+        scenarioDetail.setAggregateLicenseeClassName("Financial");
+        scenarioDetail.setSurveyCountry("Belgium");
+        scenarioDetail.setReportedTypeOfUse("COPY_FOR_MYSELF");
+        scenarioDetail.setNumberOfCopies(4L);
+        scenarioDetail.setWeightedCopies(new BigDecimal("2.00000"));
+        scenarioDetail.setPublicationType(pubType);
+        scenarioDetail.setPrice(new BigDecimal("120.54000"));
+        scenarioDetail.setPriceFlag(false);
+        scenarioDetail.setContent(new BigDecimal("4.00000"));
+        scenarioDetail.setContentFlag(false);
+        scenarioDetail.setContentUnitPrice(new BigDecimal("5.00000"));
+        scenarioDetail.setContentUnitPriceFlag(false);
+        scenarioDetail.setValueSharePrint(new BigDecimal("6.00000"));
+        scenarioDetail.setVolumeSharePrint(new BigDecimal("7.00000"));
+        scenarioDetail.setDetailSharePrint(new BigDecimal("8.00000"));
+        scenarioDetail.setNetAmountPrint(new BigDecimal("9.00000"));
+        scenarioDetail.setValueShareDigital(new BigDecimal("10.00000"));
+        scenarioDetail.setVolumeShareDigital(new BigDecimal("11.00000"));
+        scenarioDetail.setDetailShareDigital(new BigDecimal("12.00000"));
+        scenarioDetail.setNetAmountDigital(new BigDecimal("13.00000"));
+        scenarioDetail.setCombinedNetAmount(new BigDecimal("14.00000"));
+        return scenarioDetail;
     }
 }
