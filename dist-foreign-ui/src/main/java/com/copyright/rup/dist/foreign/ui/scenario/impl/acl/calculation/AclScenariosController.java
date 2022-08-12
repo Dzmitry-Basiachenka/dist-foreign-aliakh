@@ -182,6 +182,21 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     }
 
     @Override
+    public List<UsageAge> getUsageAgeWeightsByScenarioId(String scenarioId) {
+        return aclScenarioService.getUsageAgeWeightsByScenarioId(scenarioId);
+    }
+
+    @Override
+    public List<AclPublicationType> getAclPublicationTypesByScenarioId(String scenarioId) {
+        return aclScenarioService.getAclPublicationTypesByScenarioId(scenarioId);
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return aclScenarioService.getDetailLicenseeClassesByScenarioId(scenarioId);
+    }
+
+    @Override
     protected IAclScenariosWidget instantiateWidget() {
         return new AclScenariosWidget(this, aclScenarioHistoryController);
     }

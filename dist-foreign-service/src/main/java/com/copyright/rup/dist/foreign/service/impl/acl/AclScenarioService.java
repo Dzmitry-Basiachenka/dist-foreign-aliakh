@@ -156,6 +156,21 @@ public class AclScenarioService implements IAclScenarioService {
         return aclScenarioRepository.findById(scenarioId);
     }
 
+    @Override
+    public List<UsageAge> getUsageAgeWeightsByScenarioId(String scenarioId) {
+        return aclScenarioRepository.findUsageAgeWeightsByScenarioId(scenarioId);
+    }
+
+    @Override
+    public List<AclPublicationType> getAclPublicationTypesByScenarioId(String scenarioId) {
+        return aclScenarioRepository.findAclPublicationTypesByScenarioId(scenarioId);
+    }
+
+    @Override
+    public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return aclScenarioRepository.findDetailLicenseeClassesByScenarioId(scenarioId);
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

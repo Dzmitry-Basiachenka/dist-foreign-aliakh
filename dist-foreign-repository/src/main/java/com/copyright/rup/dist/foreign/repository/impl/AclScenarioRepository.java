@@ -81,16 +81,32 @@ public class AclScenarioRepository extends BaseRepository implements IAclScenari
 
     @Override
     public AclScenario findById(String scenarioId) {
-        return selectOne("IAclScenarioMapper.findScenarioById", scenarioId);
+        return selectOne("IAclScenarioMapper.findScenarioById", Objects.requireNonNull(scenarioId));
     }
 
     @Override
     public List<String> findScenarioNamesByFundPoolId(String fundPoolId) {
-        return selectList("IAclScenarioMapper.findScenarioNamesByFundPoolId", fundPoolId);
+        return selectList("IAclScenarioMapper.findScenarioNamesByFundPoolId", Objects.requireNonNull(fundPoolId));
     }
 
     @Override
     public List<String> findScenarioNamesByGrantSetId(String grantSetId) {
-        return selectList("IAclScenarioMapper.findScenarioNamesByGrantSetId", grantSetId);
+        return selectList("IAclScenarioMapper.findScenarioNamesByGrantSetId", Objects.requireNonNull(grantSetId));
+    }
+
+    @Override
+    public List<UsageAge> findUsageAgeWeightsByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioMapper.findUsageAgeWeightsByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public List<AclPublicationType> findAclPublicationTypesByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioMapper.findAclPublicationTypesByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public List<DetailLicenseeClass> findDetailLicenseeClassesByScenarioId(String scenarioId) {
+        return selectList("IAclScenarioMapper.findDetailLicenseeClassesByScenarioId",
+            Objects.requireNonNull(scenarioId));
     }
 }

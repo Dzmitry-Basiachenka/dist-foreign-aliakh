@@ -175,4 +175,28 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return instance of {@link AclScenario}s
      */
     AclScenario getScenarioById(String scenarioId);
+
+    /**
+     * Gets list of {@link UsageAge}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link UsageAge}es
+     */
+    List<UsageAge> getUsageAgeWeightsByScenarioId(String scenarioId);
+
+    /**
+     * Gets list of {@link AclPublicationType}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link AclPublicationType}es
+     */
+    List<AclPublicationType> getAclPublicationTypesByScenarioId(String scenarioId);
+
+    /**
+     * Gets list of {@link DetailLicenseeClass}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link DetailLicenseeClass}es
+     */
+    List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId);
 }

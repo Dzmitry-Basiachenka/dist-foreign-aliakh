@@ -90,4 +90,28 @@ public interface IAclScenarioRepository {
      * @return list of {@link AclScenario} names associated with grant set
      */
     List<String> findScenarioNamesByGrantSetId(String grantSetId);
+
+    /**
+     * Finds list of {@link UsageAge}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link UsageAge}es
+     */
+    List<UsageAge> findUsageAgeWeightsByScenarioId(String scenarioId);
+
+    /**
+     * Finds list of {@link AclPublicationType}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link AclPublicationType}es
+     */
+    List<AclPublicationType> findAclPublicationTypesByScenarioId(String scenarioId);
+
+    /**
+     * Finds list of {@link DetailLicenseeClass}es by scenario id.
+     *
+     * @param scenarioId scenario id
+     * @return list of {@link DetailLicenseeClass}es
+     */
+    List<DetailLicenseeClass> findDetailLicenseeClassesByScenarioId(String scenarioId);
 }

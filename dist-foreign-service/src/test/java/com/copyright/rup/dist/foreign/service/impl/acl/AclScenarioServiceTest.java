@@ -189,6 +189,35 @@ public class AclScenarioServiceTest {
         verify(aclScenarioRepository);
     }
 
+    @Test
+    public void testGetUsageAgeWeightsByScenarioId() {
+        List<UsageAge> usageAges = Collections.emptyList();
+        expect(aclScenarioRepository.findUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(usageAges).once();
+        replay(aclScenarioRepository);
+        assertSame(usageAges, aclScenarioService.getUsageAgeWeightsByScenarioId(SCENARIO_UID));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetAclPublicationTypesByScenarioId() {
+        List<AclPublicationType> publicationTypes = Collections.emptyList();
+        expect(aclScenarioRepository.findAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(publicationTypes)
+            .once();
+        replay(aclScenarioRepository);
+        assertSame(publicationTypes, aclScenarioService.getAclPublicationTypesByScenarioId(SCENARIO_UID));
+        verify(aclScenarioRepository);
+    }
+
+    @Test
+    public void testGetDetailLicenseeClassesByScenarioId() {
+        List<DetailLicenseeClass> licenseeClasses = Collections.emptyList();
+        expect(aclScenarioRepository.findDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(licenseeClasses)
+            .once();
+        replay(aclScenarioRepository);
+        assertSame(licenseeClasses, aclScenarioService.getDetailLicenseeClassesByScenarioId(SCENARIO_UID));
+        verify(aclScenarioRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

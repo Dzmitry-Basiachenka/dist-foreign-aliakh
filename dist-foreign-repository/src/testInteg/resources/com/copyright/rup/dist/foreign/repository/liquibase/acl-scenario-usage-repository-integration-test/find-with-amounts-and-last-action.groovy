@@ -127,50 +127,6 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2022-06-17 02:00:00+00')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
-            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'b286ba80-e707-4c0c-8b76-a71d5c6c13b1')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'period_prior', value: 0)
-            column(name: 'weight', value: 1)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
-            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'b8f19984-9baf-41b2-8a46-43efda416c0f')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'period_prior', value: 1)
-            column(name: 'weight', value: 2)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
-            column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'd4f94523-ae40-4e94-ac80-4baccb37520d')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
-            column(name: 'period', value: '201506')
-            column(name: 'weight', value: 1)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
-            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '5ac507e9-0ec8-465d-b814-a927a2e530e6')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
-            column(name: 'period', value: '201506')
-            column(name: 'weight', value: 2)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
-            column(name: 'df_acl_scenario_licensee_class_uid', value: '75058b5c-5f9b-4938-8484-76189b3b098a')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'detail_licensee_class_id', value: 1)
-            column(name: 'aggregate_licensee_class_id', value: 51)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
-            column(name: 'df_acl_scenario_licensee_class_uid', value: '9432b9c8-7aff-42e5-8dc0-d84e16d466ab')
-            column(name: 'df_acl_scenario_uid', value: 'd18d7cab-8a69-4b60-af5a-0a0c99b8a4d3')
-            column(name: 'detail_licensee_class_id', value: 2)
-            column(name: 'aggregate_licensee_class_id', value: 52)
-        }
-
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_fund_pool') {
             column(name: 'df_acl_fund_pool_uid', value: 'e8a591d8-2803-4f9e-8cf5-4cd6257917e8')
             column(name: 'name', value: 'ACL Fund Pool 202212')
@@ -208,50 +164,6 @@ databaseChangeLog {
             column(name: 'license_type', value: 'ACL')
             column(name: 'is_editable', value: false)
             column(name: 'copied_from', value: "Another Scenario")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
-            column(name: 'df_acl_scenario_usage_age_weight_uid', value: '562ab45c-93f6-4824-a72a-8a8746f7412f')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'period_prior', value: 0)
-            column(name: 'weight', value: 1)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_usage_age_weight') {
-            column(name: 'df_acl_scenario_usage_age_weight_uid', value: 'aeafa9af-dc2a-43b4-8a1d-e96d3c582699')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'period_prior', value: 1)
-            column(name: 'weight', value: 2)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
-            column(name: 'df_acl_scenario_pub_type_weight_uid', value: 'c49104a1-5f0a-4bd8-a8fd-655a00596858')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'df_publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
-            column(name: 'period', value: '201506')
-            column(name: 'weight', value: 1)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_pub_type_weight') {
-            column(name: 'df_acl_scenario_pub_type_weight_uid', value: '9ae28409-0ccc-40ee-8bea-21c2fc17cc0e')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'df_publication_type_uid', value: 'aef4304b-6722-4047-86e0-8c84c72f096d')
-            column(name: 'period', value: '201506')
-            column(name: 'weight', value: 2)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
-            column(name: 'df_acl_scenario_licensee_class_uid', value: 'c34ba39f-9322-4208-a451-8c79f6b05869')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'detail_licensee_class_id', value: 1)
-            column(name: 'aggregate_licensee_class_id', value: 51)
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_licensee_class') {
-            column(name: 'df_acl_scenario_licensee_class_uid', value: 'e5b7b823-1142-4f80-934d-8762a3009590')
-            column(name: 'df_acl_scenario_uid', value: '53a1c4e8-f1fe-4b17-877e-2d721b2059b5')
-            column(name: 'detail_licensee_class_id', value: 2)
-            column(name: 'aggregate_licensee_class_id', value: 52)
         }
 
         rollback {
