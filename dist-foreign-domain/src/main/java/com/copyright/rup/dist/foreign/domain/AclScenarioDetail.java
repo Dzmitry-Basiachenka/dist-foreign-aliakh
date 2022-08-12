@@ -30,7 +30,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private PublicationType publicationType;
     private BigDecimal contentUnitPrice;
-    private Long quantity;
+    private BigDecimal numberOfCopies;
     private BigDecimal usageAgeWeight;
     private BigDecimal weightedCopies;
     private String surveyCountry;
@@ -100,12 +100,12 @@ public class AclScenarioDetail extends StoredEntity<String> {
         this.contentUnitPrice = contentUnitPrice;
     }
 
-    public Long getQuantity() {
-        return quantity;
+    public BigDecimal getNumberOfCopies() {
+        return numberOfCopies;
     }
 
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
+    public void setNumberOfCopies(BigDecimal numberOfCopies) {
+        this.numberOfCopies = numberOfCopies;
     }
 
     public BigDecimal getUsageAgeWeight() {
@@ -177,7 +177,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName, that.aggregateLicenseeClassName)
             .append(publicationType, that.publicationType)
             .append(contentUnitPrice, that.contentUnitPrice)
-            .append(quantity, that.quantity)
+            .append(numberOfCopies, that.numberOfCopies)
             .append(usageAgeWeight, that.usageAgeWeight)
             .append(weightedCopies, that.weightedCopies)
             .append(surveyCountry, that.surveyCountry)
@@ -199,7 +199,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append(aggregateLicenseeClassName)
             .append(publicationType)
             .append(contentUnitPrice)
-            .append(quantity)
+            .append(numberOfCopies)
             .append(usageAgeWeight)
             .append(weightedCopies)
             .append(surveyCountry)
@@ -221,7 +221,7 @@ public class AclScenarioDetail extends StoredEntity<String> {
             .append("aggregateLicenseeClassName", aggregateLicenseeClassName)
             .append("publicationType", publicationType)
             .append("contentUnitPrice", contentUnitPrice)
-            .append("quantity", quantity)
+            .append("numberOfCopies", numberOfCopies)
             .append("usageAgeWeight", usageAgeWeight)
             .append("weightedCopies", weightedCopies)
             .append("surveyCountry", surveyCountry)

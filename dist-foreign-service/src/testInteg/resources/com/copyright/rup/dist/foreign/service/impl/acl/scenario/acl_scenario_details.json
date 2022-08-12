@@ -14,7 +14,7 @@
       "weight": 1.00
     },
     "contentUnitPrice": 11.0000000000,
-    "quantity": 10,
+    "numberOfCopies": 10.00000,
     "usageAgeWeight": 0.80000,
     "weightedCopies": 8.0000000000,
     "surveyCountry": "Germany",
@@ -48,7 +48,7 @@
       "weight": 1.90
     },
     "contentUnitPrice": 5.0000000000,
-    "quantity": 10,
+    "numberOfCopies": 10.00000,
     "usageAgeWeight": 0.20000,
     "weightedCopies": 2.0000000000,
     "surveyCountry": "Germany",

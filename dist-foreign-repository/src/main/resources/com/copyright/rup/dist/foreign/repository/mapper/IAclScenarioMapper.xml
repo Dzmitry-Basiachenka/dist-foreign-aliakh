@@ -149,7 +149,7 @@
                 reported_type_of_use <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'numberOfCopies'">
-                usage_quantity <include refid="IUsageMapper.direction"/>
+                number_of_copies <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'weightedCopies'">
                 weighted_copies <include refid="IUsageMapper.direction"/>
