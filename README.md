@@ -1,3 +1,15 @@
+15.1.42
+-
+* B-57806 FDA: Scenario Tab - ACL Licensee Class Mapping View: add Default Agg LC ID, Default Agg LC Name columns to Licensee Class Mapping window
+* CDP-1084 FDA: ACL: Calculations tab: Scenarios subtab: Editable checkbox becomes available for Manager when 'Period' or 'License Type' field is populated on 'Create Scenario' window
+* CDP-1085 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: add usages to scenario based on type_of_use field in case of Pring/Digital only grant status
+* CDP-1085 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: replace usage quantity field by annualized_copies and rename it to numberOfCopeis in database
+* B-74687 FDA: Fine tune performance for ACL components: improve the performance of selecting and viewing ACL scenarios
+* B-74270 Tech Debt: FDA: fix security vulnerabilities CVE-2022-22976, CVE-2022-22978 associated with dependency org.springframework.security
+* B-74270 Tech Debt: FDA: extend comoboxes on aggregate licensee classes scenario window
+* B-74270 Tech Debt: FDA: change ACL Usage Age Weight Window size
+* B-74270 Tech Debt: FDA: Usage Age weight remove excess 0 on view scenario rightsholder details window
+
 15.1.41
 -
 * B-72122 FDA: Copy ACL Scenario: add style to copy from field and adjust logic to reset fields
