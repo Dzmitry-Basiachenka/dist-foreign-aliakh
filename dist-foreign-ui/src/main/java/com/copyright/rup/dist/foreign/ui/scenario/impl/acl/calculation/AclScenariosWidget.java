@@ -280,13 +280,28 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private VerticalLayout initMetadataLayout() {
         usageAgeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
-            aclScenariosController.getUsageAgeWeights(), () -> new AclUsageAgeWeightWindow(false));
+            aclScenariosController.getUsageAgeWeights(),
+            () -> {
+                usageAgeWeightWidget.setAppliedParameters(
+                    aclScenariosController.getUsageAgeWeightsByScenarioId(getSelectedScenario().getId()));
+                return new AclUsageAgeWeightWindow(false);
+            });
         publicationTypeWeightWidget = new AclPublicationTypeWeightsParameterWidget(
             ForeignUi.getMessage("button.publication_type_weights"),
-            Collections.emptyList(), () -> new AclPublicationTypeWeightsWindow(aclScenariosController, false));
+            Collections.emptyList(),
+            () -> {
+                publicationTypeWeightWidget.setAppliedParameters(
+                    aclScenariosController.getAclPublicationTypesByScenarioId(getSelectedScenario().getId()));
+                return new AclPublicationTypeWeightsWindow(aclScenariosController, false);
+            });
         licenseeClassMappingWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
-            aclScenariosController.getDetailLicenseeClasses(), AclAggregateLicenseeClassMappingViewWindow::new);
+            aclScenariosController.getDetailLicenseeClasses(),
+            () -> {
+                licenseeClassMappingWidget.setAppliedParameters(
+                    aclScenariosController.getDetailLicenseeClassesByScenarioId(getSelectedScenario().getId()));
+                return new AclAggregateLicenseeClassMappingViewWindow();
+            });
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout layout =
@@ -371,12 +386,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             formatAmount(scenario.getNetTotalDigital())));
         descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
         selectionCriteriaLabel.setValue(aclScenariosController.getCriteriaHtmlRepresentation());
-        usageAgeWeightWidget.setAppliedParameters(
-            aclScenariosController.getUsageAgeWeightsByScenarioId(scenario.getId()));
-        publicationTypeWeightWidget.setAppliedParameters(
-            aclScenariosController.getAclPublicationTypesByScenarioId(scenario.getId()));
-        licenseeClassMappingWidget.setAppliedParameters(
-            aclScenariosController.getDetailLicenseeClassesByScenarioId(scenario.getId()));
         copiedFromLabel.setValue(ForeignUi.getMessage("label.copied_from",
             Objects.nonNull(scenario.getCopiedFrom()) ? scenario.getCopiedFrom() : StringUtils.EMPTY));
     }

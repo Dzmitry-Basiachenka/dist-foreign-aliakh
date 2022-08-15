@@ -3,30 +3,42 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.newCapture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclPublicationType;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
+import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclAggregateLicenseeClassMappingViewWindow;
+import com.copyright.rup.dist.foreign.ui.usage.impl.AclUsageAgeWeightWindow;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsParameterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.acl.AclPublicationTypeWeightsWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
@@ -38,9 +50,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
+import com.vaadin.ui.Window;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +68,8 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AclScenariosWidget}.
@@ -89,9 +105,6 @@ public class AclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
-        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.init();
         verify(controller);
@@ -119,9 +132,6 @@ public class AclScenariosWidgetTest {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(SCENARIO_UID)).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.refresh();
         verify(controller);
@@ -134,9 +144,6 @@ public class AclScenariosWidgetTest {
         assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
-        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller);
         scenariosWidget.selectScenario(scenario);
         assertEquals(scenario, grid.getSelectedItems().iterator().next());
@@ -150,9 +157,6 @@ public class AclScenariosWidgetTest {
         expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
-        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(Collections.emptyList()).once();
         replay(controller, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -177,6 +181,70 @@ public class AclScenariosWidgetTest {
         replay(grid);
         assertNull(scenariosWidget.getSelectedScenario());
         verify(grid);
+    }
+
+    @Test
+    public void testShowUsageAgeWeightsWindow() {
+        mockStatic(Windows.class);
+        List<UsageAge> usageAges = buildUsageAges();
+        expect(controller.getUsageAgeWeightsByScenarioId(SCENARIO_UID)).andReturn(usageAges).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
+        ScenarioParameterWidget widget = (ScenarioParameterWidget) metadataLayout.getComponent(6);
+        assertEquals("Usage Age Weights", widget.getComponent(0).getCaption());
+        Button button = Whitebox.getInternalState(widget, "button");
+        button.click();
+        AclUsageAgeWeightWindow window = (AclUsageAgeWeightWindow) windowCapture.getValue();
+        assertEquals(usageAges, Whitebox.getInternalState(window, "currentValues"));
+        verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testShowPubTypeWeightsWindow() {
+        mockStatic(Windows.class);
+        List<AclPublicationType> publicationTypes = buildPublicationTypes();
+        expect(controller.getAclPublicationTypesByScenarioId(SCENARIO_UID)).andReturn(publicationTypes).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
+        AclPublicationTypeWeightsParameterWidget widget =
+            (AclPublicationTypeWeightsParameterWidget) metadataLayout.getComponent(7);
+        assertEquals("Pub Type Weights", widget.getComponent(0).getCaption());
+        Button button = Whitebox.getInternalState(widget, "button");
+        button.click();
+        AclPublicationTypeWeightsWindow window = (AclPublicationTypeWeightsWindow) windowCapture.getValue();
+        assertEquals(publicationTypes, Whitebox.getInternalState(window, "currentValues"));
+        verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testShowLicenseeClassMappingWindow() {
+        mockStatic(Windows.class);
+        List<DetailLicenseeClass> detailLicenseeClasses = buildDetailLicenseeClasses();
+        expect(controller.getDetailLicenseeClassesByScenarioId(SCENARIO_UID)).andReturn(detailLicenseeClasses).once();
+        Capture<Window> windowCapture = newCapture();
+        Windows.showModalWindow(capture(windowCapture));
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        Panel metadataPanel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        VerticalLayout metadataLayout = (VerticalLayout) metadataPanel.getContent();
+        ScenarioParameterWidget widget = (ScenarioParameterWidget) metadataLayout.getComponent(8);
+        assertEquals("Licensee Class Mapping", widget.getComponent(0).getCaption());
+        Button button = Whitebox.getInternalState(widget, "button");
+        button.click();
+        AclAggregateLicenseeClassMappingViewWindow window =
+            (AclAggregateLicenseeClassMappingViewWindow) windowCapture.getValue();
+        Grid<DetailLicenseeClass> grid = Whitebox.getInternalState(window, "grid");
+        DataProvider<DetailLicenseeClass, ?> dataProvider = grid.getDataProvider();
+        assertEquals(detailLicenseeClasses, dataProvider.fetch(new Query<>()).collect(Collectors.toList()));
+        verify(controller, Windows.class);
     }
 
     private AclScenario buildAclScenario() {
@@ -228,6 +296,32 @@ public class AclScenariosWidgetTest {
         auditItem.setCreateUser("user@copyright.com");
         auditItem.setCreateDate(Date.from(LocalDate.of(2022, 7, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return auditItem;
+    }
+
+    private List<UsageAge> buildUsageAges() {
+        UsageAge usageAge = new UsageAge();
+        usageAge.setPeriod(0);
+        usageAge.setWeight(new BigDecimal("1.00"));
+        return Collections.singletonList(usageAge);
+    }
+
+    private List<AclPublicationType> buildPublicationTypes() {
+        AclPublicationType publicationType = new AclPublicationType();
+        publicationType.setName("BK");
+        publicationType.setWeight(new BigDecimal("1.00"));
+        publicationType.setPeriod(202012);
+        return Collections.singletonList(publicationType);
+    }
+
+    private List<DetailLicenseeClass> buildDetailLicenseeClasses() {
+        DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
+        detailLicenseeClass.setId(1);
+        detailLicenseeClass.setDescription("Food and Tobacco");
+        AggregateLicenseeClass aggregateLicenseeClass = new AggregateLicenseeClass();
+        aggregateLicenseeClass.setId(51);
+        aggregateLicenseeClass.setDescription("Materials");
+        detailLicenseeClass.setAggregateLicenseeClass(aggregateLicenseeClass);
+        return Collections.singletonList(detailLicenseeClass);
     }
 
     private void verifyPanel(Panel panel) {
