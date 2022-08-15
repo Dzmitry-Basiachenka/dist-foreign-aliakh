@@ -68,9 +68,9 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
     private AaclScenariosMediator mediator;
     private FundPool fundPool;
     private List<FundPoolDetail> fundPoolDetails;
-    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
-    private ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
+    private ScenarioParameterWidget<List<PublicationType>> publicationTypeWeightWidget;
+    private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
 
     /**
      * Controller.
@@ -126,20 +126,20 @@ public class AaclScenariosWidget extends CommonScenariosWidget implements IAaclS
         VaadinUtils.setButtonsAutoDisabled(fundPoolButton);
         fundPoolButton.addClickListener(event ->
             Windows.showModalWindow(new ViewAaclFundPoolDetailsWindow(fundPool, fundPoolDetails)));
-        licenseeClassMappingWidget = new ScenarioParameterWidget<>(
-            ForeignUi.getMessage("button.licensee_class_mapping"),
-            Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
-        publicationTypeWeightWidget = new ScenarioParameterWidget<>(
-            ForeignUi.getMessage("button.publication_type_weights"),
-            usageController.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(false));
         usageAgeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
             Collections.emptyList(), () -> new UsageAgeWeightWindow(false));
+        publicationTypeWeightWidget = new ScenarioParameterWidget<>(
+            ForeignUi.getMessage("button.publication_type_weights"),
+            usageController.getPublicationTypes(), () -> new PublicationTypeWeightsWindow(false));
+        licenseeClassMappingWidget = new ScenarioParameterWidget<>(
+            ForeignUi.getMessage("button.licensee_class_mapping"),
+            Collections.emptyList(), () -> new AggregateLicenseeClassMappingWindow(false));
         descriptionLabel.setStyleName("v-label-white-space-normal");
         VerticalLayout metadataLayout =
             new VerticalLayout(ownerLabel, grossTotalLabel, serviceFeeTotalLabel, netTotalLabel, descriptionLabel,
-                selectionCriteriaLabel, fundPoolButton, licenseeClassMappingWidget, publicationTypeWeightWidget,
-                usageAgeWeightWidget);
+                selectionCriteriaLabel, fundPoolButton, usageAgeWeightWidget, publicationTypeWeightWidget,
+                licenseeClassMappingWidget);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
         return metadataLayout;

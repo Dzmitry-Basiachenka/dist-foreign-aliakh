@@ -265,9 +265,9 @@ public class AaclScenariosWidgetTest {
         Component fundPool = layout.getComponent(6);
         assertTrue(fundPool instanceof Button);
         assertEquals("Fund Pool", fundPool.getCaption());
-        verifyScenarioParameterWidget(layout.getComponent(7), "Licensee Class Mapping");
+        verifyScenarioParameterWidget(layout.getComponent(7), "Usage Age Weights");
         verifyScenarioParameterWidget(layout.getComponent(8), "Pub Type Weights");
-        verifyScenarioParameterWidget(layout.getComponent(9), "Usage Age Weights");
+        verifyScenarioParameterWidget(layout.getComponent(9), "Licensee Class Mapping");
         assertTrue(layout.getComponent(10) instanceof VerticalLayout);
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
