@@ -1,3 +1,9 @@
+15.1.43
+-
+* B-74270 Tech Debt: FDA: PubTypeWeight change field formatting and add unit test for verify ACL scenario details values
+* B-74687 FDA: Fine tune performance for ACL components: improve the performance of selecting and viewing ACL scenarios
+* B-74841 FDA: Adjust CUP values to allow 10 decimal points: refine display of values on UI and in export reports for ACL product family
+
 15.1.42
 -
 * B-57806 FDA: Scenario Tab - ACL Licensee Class Mapping View: add Default Agg LC ID, Default Agg LC Name columns to Licensee Class Mapping window
