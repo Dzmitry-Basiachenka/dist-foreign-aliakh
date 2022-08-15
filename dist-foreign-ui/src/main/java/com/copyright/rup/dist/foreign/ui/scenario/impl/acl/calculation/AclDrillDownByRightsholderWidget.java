@@ -132,27 +132,27 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             true, 120);
         addAmountColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
             "pubTypeWeight", 120);
-        addAmountColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
+        addCurrencyColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);
         addBooleanColumn(AclScenarioDetailDto::isPriceFlag, "table.column.price_flag", "priceFlag", 110);
-        addAmountColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
+        addCurrencyColumn(AclScenarioDetailDto::getContent, "table.column.content", "content", 100);
         addBooleanColumn(AclScenarioDetailDto::isContentFlag, "table.column.content_flag", "contentFlag", 110);
-        addAmountColumn(AclScenarioDetailDto::getContentUnitPrice, "table.column.content_unit_price",
+        addCurrencyColumn(AclScenarioDetailDto::getContentUnitPrice, "table.column.content_unit_price",
             "contentUnitPrice", 150);
         addBooleanColumn(AclScenarioDetailDto::isContentUnitPriceFlag, "table.column.content_unit_price_flag",
             "contentUnitPriceFlag", 160);
-        addShareColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
+        addCurrencyColumn(AclScenarioDetailDto::getValueSharePrint, "table.column.print_value_share",
             "valueSharePrint", 140);
-        addShareColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
+        addCurrencyColumn(AclScenarioDetailDto::getVolumeSharePrint, "table.column.print_volume_share",
             "volumeSharePrint", 140);
-        addShareColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
+        addCurrencyColumn(AclScenarioDetailDto::getDetailSharePrint, "table.column.print_detail_share",
             "detailSharePrint", 140);
         addAmountColumn(AclScenarioDetailDto::getNetAmountPrint, "table.column.print_net_amount_in_usd",
             "netAmountPrint", 150);
-        addShareColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
+        addCurrencyColumn(AclScenarioDetailDto::getValueShareDigital, "table.column.digital_value_share",
             "valueShareDigital", 150);
-        addShareColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
+        addCurrencyColumn(AclScenarioDetailDto::getVolumeShareDigital, "table.column.digital_volume_share",
             "volumeShareDigital", 150);
-        addShareColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
+        addCurrencyColumn(AclScenarioDetailDto::getDetailShareDigital, "table.column.digital_detail_share",
             "detailShareDigital", 150);
         addAmountColumn(AclScenarioDetailDto::getNetAmountDigital, "table.column.digital_net_amount_in_usd",
             "netAmountDigital", 150);
@@ -160,9 +160,9 @@ public class AclDrillDownByRightsholderWidget extends Window implements IAclDril
             "combinedNetAmount", 170);
     }
 
-    private void addShareColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
-                                String sort, double width) {
-        grid.addColumn(detail -> BigDecimalUtils.formatCurrencyForDialog(function.apply(detail)))
+    private void addCurrencyColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
+                                   String sort, double width) {
+        grid.addColumn(detail -> BigDecimalUtils.formatCurrencyForGrid(function.apply(detail)))
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)

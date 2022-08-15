@@ -38,7 +38,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_proxy_value') {
             column(name: 'publication_type_uid', value: 'ad8df236-5200-4acf-be55-cf82cd342f14')
             column(name: 'period', value: 211512)
-            column(name: 'content_unit_price', value: 150)
+            column(name: 'content_unit_price', value: 150.0123456789)
             column(name: 'content_unit_price_count', value: 1)
         }
 
@@ -145,7 +145,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_udm_proxy_value') {
             column(name: 'publication_type_uid', value: '73876e58-2e87-485e-b6f3-7e23792dd214')
             column(name: 'period', value: 211006)
-            column(name: 'content_unit_price', value: 500)
+            column(name: 'content_unit_price', value: 500.0001230000)
             column(name: 'content_unit_price_count', value: 1)
         }
 

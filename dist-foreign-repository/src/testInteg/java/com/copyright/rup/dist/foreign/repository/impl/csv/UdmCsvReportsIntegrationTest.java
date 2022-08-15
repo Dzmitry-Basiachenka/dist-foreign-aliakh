@@ -78,7 +78,7 @@ public class UdmCsvReportsIntegrationTest extends CsvReportsTestHelper {
     public void testWriteProxyValueCsvReport() throws IOException {
         UdmProxyValueFilter filter = new UdmProxyValueFilter();
         filter.setPeriods(ImmutableSet.of(211512, 211006));
-        filter.setPubTypeNames(ImmutableSet.of("NP", "OT"));
+        filter.setPubTypeNames(ImmutableSet.of("BK", "NP", "OT"));
         assertFilesWithExecutor(outputStream -> udmReportRepository.writeUdmProxyValueCsvReport(filter, outputStream),
             "udm/proxy_values_report.csv");
     }

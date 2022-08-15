@@ -63,11 +63,11 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
         beanProperties.add(getBeanBigDecimal(bean.getWeightedCopies()));
         beanProperties.add(bean.getPublicationType().getName());
         beanProperties.add(getBeanBigDecimal(bean.getPublicationType().getWeight()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getPrice()));
+        beanProperties.add(getBeanBigDecimal(bean.getPrice()));
         beanProperties.add(getFlagAsString(bean.isPriceFlag()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getContent()));
+        beanProperties.add(getBeanBigDecimal(bean.getContent()));
         beanProperties.add(getFlagAsString(bean.isContentFlag()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getContentUnitPrice()));
+        beanProperties.add(getBeanBigDecimal(bean.getContentUnitPrice()));
         beanProperties.add(getFlagAsString(bean.isContentUnitPriceFlag()));
         beanProperties.add(getBeanBigDecimal(bean.getValueSharePrint()));
         beanProperties.add(getBeanBigDecimal(bean.getVolumeSharePrint()));

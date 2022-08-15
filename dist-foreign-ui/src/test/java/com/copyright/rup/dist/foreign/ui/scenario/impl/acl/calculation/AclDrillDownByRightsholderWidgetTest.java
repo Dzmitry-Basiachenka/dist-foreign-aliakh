@@ -107,8 +107,8 @@ public class AclDrillDownByRightsholderWidgetTest {
             {"73eb89d8-68e7-4f5c-a6a6-1c8c551e6de3", "Usage Detail Id", "ACL", "Usage Batch Name", 202206, 123090280L,
                 "Langmuir", 1000009767L, "American Chemical Society", 1000009767L, "American Chemical",
                 202206, "1.00", 22, "Banks/Ins/RE/Holding Cos", 56, "Financial", "Belgium", "COPY_FOR_MYSELF",
-                4L, "2.00", "STND", "3.00", "120.54", "N", "4.00", "N", "5.00", "N", "6.00", "7.00", "8.00", "9.00",
-                "10.00", "11.00", "12.00", "13.00", "14.00"}
+                4L, "2.00", "STND", "3.00", "120.54", "N", "4.00001", "N", "5.0123456789", "N", "6.01", "7.10",
+                "8.123", "9.12", "10.123", "11.00001", "12.0000000009", "13.00", "14.00"}
         };
         verifyGridItems(grid, scenarioDetails, expectedCells);
         verify(JavaScript.class, controller);
@@ -209,21 +209,21 @@ public class AclDrillDownByRightsholderWidgetTest {
         scenarioDetail.setNumberOfCopies(4L);
         scenarioDetail.setWeightedCopies(new BigDecimal("2.00000"));
         scenarioDetail.setPublicationType(pubType);
-        scenarioDetail.setPrice(new BigDecimal("120.54000"));
+        scenarioDetail.setPrice(new BigDecimal("120.5400000000"));
         scenarioDetail.setPriceFlag(false);
-        scenarioDetail.setContent(new BigDecimal("4.00000"));
+        scenarioDetail.setContent(new BigDecimal("4.0000100000"));
         scenarioDetail.setContentFlag(false);
-        scenarioDetail.setContentUnitPrice(new BigDecimal("5.00000"));
+        scenarioDetail.setContentUnitPrice(new BigDecimal("5.0123456789"));
         scenarioDetail.setContentUnitPriceFlag(false);
-        scenarioDetail.setValueSharePrint(new BigDecimal("6.00000"));
-        scenarioDetail.setVolumeSharePrint(new BigDecimal("7.00000"));
-        scenarioDetail.setDetailSharePrint(new BigDecimal("8.00000"));
-        scenarioDetail.setNetAmountPrint(new BigDecimal("9.00000"));
-        scenarioDetail.setValueShareDigital(new BigDecimal("10.00000"));
-        scenarioDetail.setVolumeShareDigital(new BigDecimal("11.00000"));
-        scenarioDetail.setDetailShareDigital(new BigDecimal("12.00000"));
-        scenarioDetail.setNetAmountDigital(new BigDecimal("13.00000"));
-        scenarioDetail.setCombinedNetAmount(new BigDecimal("14.00000"));
+        scenarioDetail.setValueSharePrint(new BigDecimal("6.0100000000"));
+        scenarioDetail.setVolumeSharePrint(new BigDecimal("7.1000000000"));
+        scenarioDetail.setDetailSharePrint(new BigDecimal("8.1230000000"));
+        scenarioDetail.setNetAmountPrint(new BigDecimal("9.1230000000"));
+        scenarioDetail.setValueShareDigital(new BigDecimal("10.1230000000"));
+        scenarioDetail.setVolumeShareDigital(new BigDecimal("11.0000100000"));
+        scenarioDetail.setDetailShareDigital(new BigDecimal("12.0000000009"));
+        scenarioDetail.setNetAmountDigital(new BigDecimal("13.0000000123"));
+        scenarioDetail.setCombinedNetAmount(new BigDecimal("14.0012300000"));
         return scenarioDetail;
     }
 }
