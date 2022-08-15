@@ -48,7 +48,7 @@ public class UdmBaselineUsageCsvReportHandler extends BaseCsvReportHandler<UdmBa
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getChannel().name());
         beanProperties.add(bean.getTypeOfUse());
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getAnnualizedCopies()));
+        beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(bean.getCreateUser());
         beanProperties.add(convertDateToString(bean.getCreateDate()));
         beanProperties.add(bean.getUpdateUser());

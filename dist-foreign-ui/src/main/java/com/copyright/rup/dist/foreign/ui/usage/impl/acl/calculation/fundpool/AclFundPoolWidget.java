@@ -132,9 +132,9 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
             .setWidth(width);
     }
 
-    private Column<AclFundPoolDetailDto, ?> addAmountColumn(Function<AclFundPoolDetailDto, BigDecimal> function,
-                                                            String captionProperty, String columnId) {
-        return aclFundPoolDetailGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
+    private void addAmountColumn(Function<AclFundPoolDetailDto, BigDecimal> function, String captionProperty,
+                                 String columnId) {
+        aclFundPoolDetailGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)

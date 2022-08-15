@@ -76,10 +76,10 @@ public class UdmUsageCsvReportHandlerSpecialistManager extends BaseCsvReportHand
         beanProperties.add(getBeanLocalDate(bean.getSurveyStartDate()));
         beanProperties.add(getBeanLocalDate(bean.getSurveyEndDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getAnnualMultiplier()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getStatisticalMultiplier()));
+        beanProperties.add(getBeanBigDecimal(bean.getStatisticalMultiplier()));
         beanProperties.add(bean.getReportedTypeOfUse());
         beanProperties.add(getBeanPropertyAsString(bean.getQuantity()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getAnnualizedCopies()));
+        beanProperties.add(getBeanBigDecimal(bean.getAnnualizedCopies()));
         beanProperties.add(Objects.nonNull(bean.getIneligibleReason())
             ? bean.getIneligibleReason().getReason()
             : StringUtils.EMPTY);

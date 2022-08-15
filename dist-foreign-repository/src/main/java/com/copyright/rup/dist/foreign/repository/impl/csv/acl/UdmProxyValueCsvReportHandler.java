@@ -36,7 +36,7 @@ public class UdmProxyValueCsvReportHandler extends BaseCsvReportHandler<UdmProxy
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getPeriod()));
         beanProperties.add(bean.getPubTypeName());
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getContentUnitPrice()));
+        beanProperties.add(getBeanBigDecimal(bean.getContentUnitPrice()));
         beanProperties.add(getBeanPropertyAsString(bean.getContentUnitPriceCount()));
         return beanProperties;
     }
