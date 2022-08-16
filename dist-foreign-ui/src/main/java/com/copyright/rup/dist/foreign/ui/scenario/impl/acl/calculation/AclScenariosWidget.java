@@ -34,6 +34,7 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -278,6 +279,18 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     }
 
     private VerticalLayout initMetadataLayout() {
+        descriptionLabel.setStyleName("v-label-white-space-normal");
+        selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
+        VerticalLayout layout =
+            new VerticalLayout(ownerLabel, grossTotalLayout, serviceFeeTotalLayout, netTotalLayout, descriptionLabel,
+                selectionCriteriaLabel, initUsageAgeWeightWidget(), initPublicationTypeWeightWidget(),
+                initLicenseeClassMappingWidget(), copiedFromLabel);
+        layout.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.setMaxComponentsWidth(layout);
+        return layout;
+    }
+
+    private Component initUsageAgeWeightWidget() {
         usageAgeWeightWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.usage_age_weights"),
             aclScenariosController.getUsageAgeWeights(),
@@ -286,6 +299,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                     aclScenariosController.getUsageAgeWeightsByScenarioId(getSelectedScenario().getId()));
                 return new AclUsageAgeWeightWindow(false);
             });
+        return usageAgeWeightWidget;
+    }
+
+    private Component initPublicationTypeWeightWidget() {
         publicationTypeWeightWidget = new AclPublicationTypeWeightsParameterWidget(
             ForeignUi.getMessage("button.publication_type_weights"),
             Collections.emptyList(),
@@ -294,6 +311,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                     aclScenariosController.getAclPublicationTypesByScenarioId(getSelectedScenario().getId()));
                 return new AclPublicationTypeWeightsWindow(aclScenariosController, false);
             });
+        return publicationTypeWeightWidget;
+    }
+
+    private Component initLicenseeClassMappingWidget() {
         licenseeClassMappingWidget = new ScenarioParameterWidget<>(
             ForeignUi.getMessage("button.licensee_class_mapping"),
             aclScenariosController.getDetailLicenseeClasses(),
@@ -302,15 +323,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                     aclScenariosController.getDetailLicenseeClassesByScenarioId(getSelectedScenario().getId()));
                 return new AclAggregateLicenseeClassMappingViewWindow();
             });
-        descriptionLabel.setStyleName("v-label-white-space-normal");
-        selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
-        VerticalLayout layout =
-            new VerticalLayout(ownerLabel, grossTotalLayout, serviceFeeTotalLayout, netTotalLayout, descriptionLabel,
-                selectionCriteriaLabel, usageAgeWeightWidget, publicationTypeWeightWidget, licenseeClassMappingWidget,
-                copiedFromLabel);
-        layout.setMargin(new MarginInfo(false, true, false, true));
-        VaadinUtils.setMaxComponentsWidth(layout);
-        return layout;
+        return licenseeClassMappingWidget;
     }
 
     private VerticalLayout initScenarioActionLayout() {
