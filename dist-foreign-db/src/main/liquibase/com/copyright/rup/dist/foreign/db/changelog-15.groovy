@@ -1393,4 +1393,17 @@ databaseChangeLog {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_acl_scenario_detail', columnName: 'usage_quantity', newDataType: 'numeric(38)')
         }
     }
+
+    changeSet(id: '2022-08-17-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-74687 FDA: Fine tune performance for ACL components: add index by RH Account # for ACL share detail table")
+
+        createIndex(indexName: 'ix_df_acl_share_detail_rh_account_number', schemaName: dbAppsSchema,
+                tableName: 'df_acl_share_detail', tablespace: dbIndexTablespace) {
+            column(name: 'rh_account_number')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_share_detail_rh_account_number")
+        }
+    }
 }
