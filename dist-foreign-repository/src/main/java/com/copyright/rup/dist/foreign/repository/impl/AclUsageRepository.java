@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +30,7 @@ import java.util.Set;
 @Repository
 public class AclUsageRepository extends AclBaseRepository implements IAclUsageRepository {
 
+    private static final List<String> ELIGIBLE_GRANT_STATUSES = Arrays.asList("Print&Digital", "Different RH");
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
     private static final String UPDATE_USER = "updateUser";
@@ -77,11 +79,12 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public boolean usageExistForLicenseeClassesAndTypeOfUse(String batchId, String grantSetId,
                                                             Set<Integer> licenseeClassIds, String typeOfUse) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("batchId", escapeSqlLikePattern(Objects.requireNonNull(batchId)));
         parameters.put("grantSetId", grantSetId);
         parameters.put("licenseeClassIds", licenseeClassIds);
         parameters.put("typeOfUse", typeOfUse);
+        parameters.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
         return selectOne("IAclUsageMapper.usageExistForLicenseeClassesAndTypeOfUse", parameters);
     }
 
@@ -93,11 +96,12 @@ public class AclUsageRepository extends AclBaseRepository implements IAclUsageRe
     @Override
     public int findCountInvalidUsages(String batchId, String grantSetId, Integer distributionPeriod,
                                       List<Integer> periodPriors) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("batchId", Objects.requireNonNull(batchId));
         params.put("grantSetId", Objects.requireNonNull(grantSetId));
         params.put("periodPriors", Objects.requireNonNull(periodPriors));
         params.put("distributionPeriod", Objects.requireNonNull(distributionPeriod));
+        params.put("grantStatuses", ELIGIBLE_GRANT_STATUSES);
         return selectOne("IAclUsageMapper.findCountInvalidUsages", params);
     }
 

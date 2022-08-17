@@ -351,20 +351,31 @@
         order by period desc
     </select>
 
+    <sql id="grantDetailJoinSql">
+        join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{grantSetId}
+            and gd.wr_wrk_inst = u.wr_wrk_inst
+            and gd.grant_status = 'GRANT'
+            and gd.is_eligible = true
+            and (gd.type_of_use_status in
+                    <foreach collection="grantStatuses" item="status" separator="," open="(" close=")">
+                        #{status}
+                    </foreach>
+                or u.type_of_use = gd.type_of_use
+            )
+    </sql>
+
     <select id="usageExistForLicenseeClassesAndTypeOfUse" resultType="boolean" parameterType="string">
         select exists (
             select
             from ${schema}.df_acl_usage u
-            join ${schema}.df_acl_grant_detail gd on gd.df_acl_grant_set_uid = #{grantSetId}
+            <include refid="grantDetailJoinSql"/>
                 and gd.type_of_use = #{typeOfUse}
-                and gd.wr_wrk_inst = u.wr_wrk_inst
-                and gd.grant_status = 'GRANT'
-                and gd.is_eligible = true
             where u.df_acl_usage_batch_uid = #{batchId}
                 and u.detail_licensee_class_id in
-                <foreach collection="licenseeClassIds" item="detailLicenseeClassId" open="(" close=")" separator=",">
-                    #{detailLicenseeClassId}
-                </foreach>
+                    <foreach collection="licenseeClassIds" item="detailLicenseeClassId" open="(" close=")" separator=",">
+                        #{detailLicenseeClassId}
+                    </foreach>
+                and u.annualized_copies &lt; 2000
         )
     </select>
 
@@ -380,10 +391,7 @@
         select count(1)
         from ${schema}.df_acl_usage u
         join ${schema}.df_acl_usage_batch ub on u.df_acl_usage_batch_uid  = ub.df_acl_usage_batch_uid
-        join ${schema}.df_acl_grant_detail gd on  gd.df_acl_grant_set_uid = #{grantSetId}
-            and gd.wr_wrk_inst = u.wr_wrk_inst
-            and grant_status = 'GRANT'
-            and is_eligible = true
+        <include refid="grantDetailJoinSql"/>
         where u.df_acl_usage_batch_uid = #{batchId}
             and (u.publication_type_uid is null or u.content_unit_price is null)
             and
@@ -394,7 +402,7 @@
                         </include>
                     )
                 </foreach>
-            and u.quantity &lt; 2000
+            and u.annualized_copies &lt; 2000
     </select>
 
     <select id="copyAclUsages" parameterType="map" resultType="string">

@@ -112,8 +112,8 @@ databaseChangeLog {
             column(name: 'df_acl_grant_detail_uid', value: '4b02353b-f891-4ad7-8a75-0e7f711f0232')
             column(name: 'df_acl_grant_set_uid', value: 'c5d66bb6-99c5-4fb5-a30b-22555dd685ea')
             column(name: 'grant_status', value: 'GRANT')
-            column(name: 'type_of_use', value: 'DIGITAL')
-            column(name: 'type_of_use_status', value: 'Digital Only')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use_status', value: 'Print Only')
             column(name: 'wr_wrk_inst', value: 306985867)
             column(name: 'system_title', value: 'Technology review')
             column(name: 'rh_account_number', value: 1000028511)
@@ -193,7 +193,7 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 2)
             column(name: 'survey_country', value: 'Portugal')
             column(name: 'content_unit_price', value: 9.0000000000)
-            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'type_of_use', value: 'DIGITAL')
             column(name: 'annualized_copies', value: 2)
             column(name: 'quantity', value: 2)
             column(name: 'created_by_user', value: 'user@copyright.com')
@@ -264,7 +264,7 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2022-02-14 12:00:00+00')
         }
 
-        //Bigger quantity
+        //Bigger annualized_copies
         insert(schemaName: dbAppsSchema, tableName: 'df_acl_usage') {
             column(name: 'df_acl_usage_uid', value: '2dc5f0b8-ab25-4146-a24c-633a1b9983dd')
             column(name: 'df_acl_usage_batch_uid', value: 'c653d257-4180-4fb4-9119-f001063e4a56')
@@ -277,8 +277,8 @@ databaseChangeLog {
             column(name: 'detail_licensee_class_id', value: 1)
             column(name: 'survey_country', value: 'Germany')
             column(name: 'type_of_use', value: 'DIGITAL')
-            column(name: 'annualized_copies', value: 2)
-            column(name: 'quantity', value: 2000)
+            column(name: 'annualized_copies', value: 2000)
+            column(name: 'quantity', value: 200)
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user1@copyright.com')
             column(name: 'created_datetime', value: '2022-02-10 12:00:00+00')
