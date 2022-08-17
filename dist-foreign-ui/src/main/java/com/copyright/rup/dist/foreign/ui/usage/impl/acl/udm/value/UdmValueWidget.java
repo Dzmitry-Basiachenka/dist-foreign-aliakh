@@ -254,33 +254,34 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             addColumn(value -> Objects.nonNull(value.getPublicationType())
                 ? value.getPublicationType().getName()
                 : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
-            addAmountColumn(UdmValueDto::getLastPriceInUsd, "table.column.last_price_in_usd", "lastPriceInUsd", 120),
+            addBigDecimalColumn(UdmValueDto::getLastPriceInUsd, "table.column.last_price_in_usd", "lastPriceInUsd",
+                120),
             addBooleanColumn(UdmValueDto::isLastPriceFlag, "table.column.last_price_flag", "lastPriceFlag", 120),
             addColumn(UdmValueDto::getLastPriceSource, "table.column.last_price_source", "lastPriceSource", 150),
             addColumn(UdmValueDto::getPriceSource, "table.column.price_source", "priceSource", 150),
             addColumn(UdmValueDto::getLastPriceComment, "table.column.last_price_comment", "lastPriceComment", 150),
-            addAmountColumn(UdmValueDto::getPrice, "table.column.price", "price", 100),
+            addBigDecimalColumn(UdmValueDto::getPrice, "table.column.price", "price", 100),
             addColumn(UdmValueDto::getCurrency, "table.column.currency", "currency", 100),
             addColumn(UdmValueDto::getPriceType, "table.column.price_type", "priceType", 100),
             addColumn(UdmValueDto::getPriceAccessType, "table.column.price_access_type", "priceAccessType", 150),
             addColumn(UdmValueDto::getPriceYear, "table.column.price_year", "priceYear", 100),
             addColumn(UdmValueDto::getPriceComment, "table.column.price_comment", "priceComment", 120),
-            addAmountColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
+            addBigDecimalColumn(UdmValueDto::getPriceInUsd, "table.column.price_in_usd", "priceInUsd", 120),
             addBooleanColumn(UdmValueDto::isPriceFlag, "table.column.price_flag", "priceFlag", 100),
-            addAmountColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
+            addBigDecimalColumn(UdmValueDto::getCurrencyExchangeRate, "table.column.currency_exchange_rate",
                 "currencyExchangeRate", 200),
             addColumn(value -> toShortFormat(value.getCurrencyExchangeRateDate()),
                 "table.column.currency_exchange_rate_date", "currencyExchangeRateDate", 200),
-            addAmountColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
+            addBigDecimalColumn(UdmValueDto::getLastContent, "table.column.last_content", "lastContent", 100),
             addBooleanColumn(UdmValueDto::isLastContentFlag, "table.column.last_content_flag", "lastContentFlag", 130),
             addColumn(UdmValueDto::getLastContentSource, "table.column.last_content_source", "lastContentSource", 150),
             addColumn(UdmValueDto::getContentSource, "table.column.content_source", "contentSource", 150),
             addColumn(UdmValueDto::getLastContentComment, "table.column.last_content_comment", "lastContentComment",
                 200),
-            addAmountColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
+            addBigDecimalColumn(UdmValueDto::getContent, "table.column.content", "content", 100),
             addColumn(UdmValueDto::getContentComment, "table.column.content_comment", "contentComment", 200),
             addBooleanColumn(UdmValueDto::isContentFlag, "table.column.content_flag", "contentFlag", 100),
-            addAmountColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
+            addBigDecimalColumn(UdmValueDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addColumn(UdmValueDto::getLastComment, "table.column.last_comment", "lastComment", 200),
             addColumn(UdmValueDto::getComment, "table.column.comment", "comment", 200),
@@ -300,8 +301,8 @@ public class UdmValueWidget extends HorizontalSplitPanel implements IUdmValueWid
             .setWidth(width);
     }
 
-    private Column<UdmValueDto, ?> addAmountColumn(Function<UdmValueDto, BigDecimal> function, String captionProperty,
-                                                   String columnId, double width) {
+    private Column<UdmValueDto, ?> addBigDecimalColumn(Function<UdmValueDto, BigDecimal> function,
+                                                       String captionProperty, String columnId, double width) {
         return udmValuesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
