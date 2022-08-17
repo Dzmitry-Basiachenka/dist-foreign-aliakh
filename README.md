@@ -1,3 +1,12 @@
+15.1.44
+-
+* CDP-1085 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: update scenario creation validation to use valid grants
+* B-74687 FDA: Fine tune performance for ACL components: add index by RH Account # for ACL share detail table
+* B-71853 FDA: Scenario Tab - ACL Usage Age Weights View: make changes based on comments in code review
+* B-74841 Tech Debt: FDA: adjust display of values with trailing "0" on UI and in export reports for Calculations tab
+* B-74841 Tech Debt: FDA: adjust display of values with trailing "0" on UI for UDM tab
+* B-74270 Tech Debt: FDA: change order of the links in the AACL metadata panel
+
 15.1.43
 -
 * B-74270 Tech Debt: FDA: PubTypeWeight change field formatting and add unit test for verify ACL scenario details values
