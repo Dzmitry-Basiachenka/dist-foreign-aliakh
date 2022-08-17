@@ -1,13 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl.acl.calculation.fundpool;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPoolDetailDto;
-import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolController;
 import com.copyright.rup.dist.foreign.ui.usage.api.acl.IAclFundPoolWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
@@ -134,7 +134,7 @@ public class AclFundPoolWidget extends HorizontalSplitPanel implements IAclFundP
 
     private void addAmountColumn(Function<AclFundPoolDetailDto, BigDecimal> function, String captionProperty,
                                  String columnId) {
-        aclFundPoolDetailGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
+        aclFundPoolDetailGrid.addColumn(value -> CurrencyUtils.format(function.apply(value), null))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
