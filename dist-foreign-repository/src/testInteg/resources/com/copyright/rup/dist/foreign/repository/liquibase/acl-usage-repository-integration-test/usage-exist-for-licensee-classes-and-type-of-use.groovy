@@ -46,7 +46,7 @@ databaseChangeLog {
             column(name: 'survey_country', value: 'Germany')
             column(name: 'publication_type_uid', value: '2fe9c0a0-7672-4b56-bc64-9d4125fecf6e')
             column(name: 'content_unit_price', value: 11.0000000000)
-            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'type_of_use', value: 'PRINT')
             column(name: 'annualized_copies', value: 2)
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_by_user', value: 'user1@copyright.com')
