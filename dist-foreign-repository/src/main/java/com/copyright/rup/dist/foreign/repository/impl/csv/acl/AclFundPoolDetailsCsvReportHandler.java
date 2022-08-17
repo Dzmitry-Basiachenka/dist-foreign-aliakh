@@ -43,8 +43,8 @@ public class AclFundPoolDetailsCsvReportHandler extends BaseCsvReportHandler<Acl
         beanProperties.add(getBeanPropertyAsString(bean.getAggregateLicenseeClass().getId()));
         beanProperties.add(bean.getAggregateLicenseeClass().getDescription());
         beanProperties.add(bean.getTypeOfUse());
-        beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmount()));
         return beanProperties;
     }
 

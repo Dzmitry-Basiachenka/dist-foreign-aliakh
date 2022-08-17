@@ -59,7 +59,7 @@ public class AclScenarioDetailCsvReportHandler extends BaseCsvReportHandler<AclS
         beanProperties.add(bean.getAggregateLicenseeClassName());
         beanProperties.add(bean.getSurveyCountry());
         beanProperties.add(bean.getReportedTypeOfUse());
-        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfCopies()));
+        beanProperties.add(getBeanBigDecimal(bean.getNumberOfCopies()));
         beanProperties.add(getBeanBigDecimal(bean.getWeightedCopies()));
         beanProperties.add(bean.getPublicationType().getName());
         beanProperties.add(getBeanBigDecimal(bean.getPublicationType().getWeight()));

@@ -172,10 +172,11 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             addColumn(AclUsageDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120),
             addColumn(usage -> Objects.nonNull(usage.getPublicationType()) ? usage.getPublicationType().getName()
                 : StringUtils.EMPTY, "table.column.publication_type", "publicationType", 150),
-            addAmountColumn(AclUsageDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
+            addBigDecimalColumn(AclUsageDto::getContentUnitPrice, "table.column.content_unit_price", "contentUnitPrice",
                 200),
             addColumn(AclUsageDto::getTypeOfUse, "table.column.tou", "typeOfUse", 120),
-            addColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
+            addBigDecimalColumn(AclUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
+                130),
             addColumn(AclUsageDto::getUpdateUser, "table.column.updated_by", "updateUser", 200),
             addColumn(value -> toShortFormat(value.getUpdateDate()), "table.column.updated_date", "updateDate",
                 110));
@@ -192,8 +193,8 @@ public class AclUsageWidget extends HorizontalSplitPanel implements IAclUsageWid
             .setWidth(width);
     }
 
-    private Column<AclUsageDto, ?> addAmountColumn(Function<AclUsageDto, BigDecimal> function, String captionProperty,
-                                                   String columnId, double width) {
+    private Column<AclUsageDto, ?> addBigDecimalColumn(Function<AclUsageDto, BigDecimal> function,
+                                                       String captionProperty, String columnId, double width) {
         return aclUsagesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))

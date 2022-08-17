@@ -37,7 +37,7 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
     private String aggregateLicenseeClassName;
     private String surveyCountry;
     private String reportedTypeOfUse;
-    private Long numberOfCopies;
+    private BigDecimal numberOfCopies;
     private BigDecimal weightedCopies;
     private PublicationType publicationType;
     private BigDecimal price;
@@ -200,11 +200,11 @@ public class AclScenarioDetailDto extends StoredEntity<String> {
         this.reportedTypeOfUse = reportedTypeOfUse;
     }
 
-    public Long getNumberOfCopies() {
+    public BigDecimal getNumberOfCopies() {
         return numberOfCopies;
     }
 
-    public void setNumberOfCopies(Long numberOfCopies) {
+    public void setNumberOfCopies(BigDecimal numberOfCopies) {
         this.numberOfCopies = numberOfCopies;
     }
 
