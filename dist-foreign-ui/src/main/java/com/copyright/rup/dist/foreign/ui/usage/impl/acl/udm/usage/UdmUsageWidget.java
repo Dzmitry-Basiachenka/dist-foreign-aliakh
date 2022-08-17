@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UdmUsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -37,12 +38,14 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -363,12 +366,12 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
                 "surveyEndDate", 130, false),
             addColumn(UdmUsageDto::getAnnualMultiplier, "table.column.annual_multiplier", "annualMultiplier", 130,
                 hasResearcherPermission),
-            addColumn(UdmUsageDto::getStatisticalMultiplier, "table.column.statistical_multiplier",
+            addBigDecimalColumn(UdmUsageDto::getStatisticalMultiplier, "table.column.statistical_multiplier",
                 "statisticalMultiplier", 150, hasResearcherPermission),
             addColumn(UdmUsageDto::getReportedTypeOfUse, "table.column.reported_tou", "reportedTypeOfUse", 120, false),
             addColumn(UdmUsageDto::getQuantity, "table.column.quantity", "quantity", 100, hasResearcherPermission),
-            addColumn(UdmUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130,
-                hasResearcherPermission),
+            addBigDecimalColumn(UdmUsageDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies",
+                130, hasResearcherPermission),
             addColumn(u -> null != u.getIneligibleReason() ? u.getIneligibleReason().getReason() : StringUtils.EMPTY,
                 "table.column.ineligible_reason", "ineligibleReason", 200, false),
             addColumn(u -> toShortFormat(u.getCreateDate()), "table.column.load_date", "createDate", 100, false),
@@ -380,6 +383,20 @@ public class UdmUsageWidget extends HorizontalSplitPanel implements IUdmUsageWid
     private Column<UdmUsageDto, ?> addColumn(ValueProvider<UdmUsageDto, ?> valueProvider, String captionProperty,
                                              String columnId, double width, boolean isHidden) {
         return udmUsagesGrid.addColumn(valueProvider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortable(true)
+            .setSortProperty(columnId)
+            .setHidable(!isHidden)
+            .setHidden(isHidden)
+            .setWidth(width);
+    }
+
+    private Column<UdmUsageDto, ?> addBigDecimalColumn(Function<UdmUsageDto, BigDecimal> function,
+                                                       String captionProperty, String columnId, double width,
+                                                       boolean isHidden) {
+        return udmUsagesGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
+            .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setId(columnId)
             .setSortable(true)

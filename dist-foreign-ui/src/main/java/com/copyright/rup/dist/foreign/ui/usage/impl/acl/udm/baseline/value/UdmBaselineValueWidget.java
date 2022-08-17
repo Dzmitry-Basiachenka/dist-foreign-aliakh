@@ -100,11 +100,11 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
             addColumn(UdmValueBaselineDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 120),
             addColumn(UdmValueBaselineDto::getSystemTitle, "table.column.system_title", "systemTitle", 300),
             addColumn(UdmValueBaselineDto::getPublicationType, "table.column.publication_type", "pubType", 200),
-            addAmountColumn(UdmValueBaselineDto::getPrice, "table.column.price", "price", 120),
+            addBigDecimalColumn(UdmValueBaselineDto::getPrice, "table.column.price", "price", 120),
             addBooleanColumn(UdmValueBaselineDto::getPriceFlag, "table.column.price_flag", "priceFlag", 120),
-            addAmountColumn(UdmValueBaselineDto::getContent, "table.column.content", "content", 100),
+            addBigDecimalColumn(UdmValueBaselineDto::getContent, "table.column.content", "content", 100),
             addBooleanColumn(UdmValueBaselineDto::getContentFlag, "table.column.content_flag", "contentFlag", 100),
-            addAmountColumn(UdmValueBaselineDto::getContentUnitPrice, "table.column.content_unit_price",
+            addBigDecimalColumn(UdmValueBaselineDto::getContentUnitPrice, "table.column.content_unit_price",
                 "contentUnitPrice", 200),
             addColumn(UdmValueBaselineDto::getComment, "table.column.comment", "comment", 300),
             addColumn(UdmValueBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
@@ -123,8 +123,8 @@ public class UdmBaselineValueWidget extends HorizontalSplitPanel implements IUdm
             .setWidth(width);
     }
 
-    private Column<UdmValueBaselineDto, ?> addAmountColumn(Function<UdmValueBaselineDto, BigDecimal> function,
-                                                           String captionProperty, String columnId, double width) {
+    private Column<UdmValueBaselineDto, ?> addBigDecimalColumn(Function<UdmValueBaselineDto, BigDecimal> function,
+                                                               String captionProperty, String columnId, double width) {
         return udmBaselineValueGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
             .setStyleGenerator(item -> "v-align-right")
             .setCaption(ForeignUi.getMessage(captionProperty))

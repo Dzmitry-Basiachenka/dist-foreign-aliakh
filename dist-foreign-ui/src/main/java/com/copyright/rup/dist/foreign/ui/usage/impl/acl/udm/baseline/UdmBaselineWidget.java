@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl.udm.baseline;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.UdmBaselineDto;
+import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -33,10 +34,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -146,7 +149,7 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             addColumn(UdmBaselineDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", 120),
             addColumn(UdmBaselineDto::getChannel, "table.column.channel", "channel", 100),
             addColumn(UdmBaselineDto::getTypeOfUse, "table.column.tou", "reportedTypeOfUse", 100),
-            addColumn(UdmBaselineDto::getAnnualizedCopies, "table.column.annualized_copies", "annualizedCopies", 130),
+            addAnnualizedCopiesColumn(UdmBaselineDto::getAnnualizedCopies),
             addColumn(UdmBaselineDto::getCreateUser, "table.column.created_by", "createUser", 200),
             addColumn(u -> getStringFromDate(u.getCreateDate()), "table.column.created_date", "createDate", 110),
             addColumn(UdmBaselineDto::getUpdateUser, "table.column.updated_by", "updateUser", 150),
@@ -162,6 +165,17 @@ public class UdmBaselineWidget extends HorizontalSplitPanel implements IUdmBasel
             .setSortProperty(columnId)
             .setHidable(true)
             .setWidth(width);
+    }
+
+    private Column<UdmBaselineDto, ?> addAnnualizedCopiesColumn(Function<UdmBaselineDto, BigDecimal> function) {
+        return udmBaselineGrid.addColumn(value -> BigDecimalUtils.formatCurrencyForGrid(function.apply(value)))
+            .setStyleGenerator(item -> "v-align-right")
+            .setCaption(ForeignUi.getMessage("table.column.annualized_copies"))
+            .setId("annualizedCopies")
+            .setSortable(true)
+            .setSortProperty("annualizedCopies")
+            .setHidable(true)
+            .setWidth(130);
     }
 
     private String getStringFromDate(Date date) {
