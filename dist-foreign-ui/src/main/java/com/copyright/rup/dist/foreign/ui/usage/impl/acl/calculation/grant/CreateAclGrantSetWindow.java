@@ -71,7 +71,7 @@ public class CreateAclGrantSetWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_acl_grant_set"));
         setResizable(false);
         setWidth(400, Unit.PIXELS);
-        setHeight(320, Unit.PIXELS);
+        setHeight(310, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "create-acl-grant-set-window");
     }
 

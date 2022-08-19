@@ -98,7 +98,7 @@ public class CreateAclGrantSetWindowTest {
     public void testConstructor() {
         replay(controller);
         window = new CreateAclGrantSetWindow(controller);
-        verifyWindow(window, "Create ACL Grant Set", 400, 320, Unit.PIXELS);
+        verifyWindow(window, "Create ACL Grant Set", 400, 310, Unit.PIXELS);
         verifyRootLayout(window.getContent());
         verify(controller);
     }
