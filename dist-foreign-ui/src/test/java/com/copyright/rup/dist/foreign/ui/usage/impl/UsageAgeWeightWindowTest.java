@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -14,7 +15,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.Para
 
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -57,10 +56,14 @@ import java.util.stream.Collectors;
 public class UsageAgeWeightWindowTest {
 
     private UsageAgeWeightWindow window;
-    private final List<UsageAge> defaultParams =
-        Arrays.asList(buildUsageAge(2020, new BigDecimal("1.00")), buildUsageAge(2019, new BigDecimal("0.75")));
-    private final List<UsageAge> appliedParams =
-        Arrays.asList(buildUsageAge(2020, new BigDecimal("0.75")), buildUsageAge(2019, new BigDecimal("1.00")));
+    public static final String WEIGHT_1 = "1.00";
+    public static final String WEIGHT_2 = "0.90";
+    private final List<UsageAge> defaultParams = Arrays.asList(
+        buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
+        buildUsageAge(2019, new BigDecimal(WEIGHT_2)));
+    private final List<UsageAge> appliedParams = Arrays.asList(
+        buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
+        buildUsageAge(2019, new BigDecimal("0.80")));
 
     @Before
     public void setUp() {
@@ -129,7 +132,11 @@ public class UsageAgeWeightWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
         Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
-        assertGridItems(defaultParams);
+        Object[][] expectedCells = {
+            {2020, WEIGHT_1, WEIGHT_1},
+            {2019, WEIGHT_2, WEIGHT_2},
+        };
+        verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), defaultParams, expectedCells);
     }
 
     @Test
@@ -146,7 +153,11 @@ public class UsageAgeWeightWindowTest {
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
-        assertGridItems(appliedParams);
+        Object[][] expectedCells = {
+            {2020, WEIGHT_1, WEIGHT_1},
+            {2019, WEIGHT_2, "0.80"},
+        };
+        verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), appliedParams, expectedCells);
     }
 
     @Test
@@ -184,7 +195,6 @@ public class UsageAgeWeightWindowTest {
         verifyGridEditableFieldErrorMessage(weightField, "9999999999.99", binder, null, true);
     }
 
-
     @SuppressWarnings("unchecked")
     private void verifyGrid(Grid grid, boolean isEditorEnabled) {
         UiTestHelper.verifyGrid((Grid) grid, Arrays.asList(
@@ -195,14 +205,6 @@ public class UsageAgeWeightWindowTest {
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void assertGridItems(List<UsageAge> params) {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<UsageAge> grid = (Grid<UsageAge>) content.getComponent(0);
-        assertTrue(grid.getDataProvider().isInMemory());
-        assertEquals(params, ((ListDataProvider<UsageAge>) grid.getDataProvider()).getItems());
     }
 
     private UsageAge buildUsageAge(Integer period, BigDecimal weight) {
