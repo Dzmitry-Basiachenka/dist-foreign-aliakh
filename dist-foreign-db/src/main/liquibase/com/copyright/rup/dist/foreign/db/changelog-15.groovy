@@ -1406,4 +1406,17 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_acl_share_detail_rh_account_number")
         }
     }
+
+    changeSet(id: '2022-08-18-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-74687 FDA: Fine tune performance for ACL components: add index by df_acl_scenario_detail_uid for ACL share detail table")
+
+        createIndex(indexName: 'ix_df_acl_share_detail_df_acl_scenario_detail_uid', schemaName: dbAppsSchema,
+                tableName: 'df_acl_share_detail', tablespace: dbIndexTablespace) {
+            column(name: 'df_acl_scenario_detail_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_acl_share_detail_df_acl_scenario_detail_uid")
+        }
+    }
 }
