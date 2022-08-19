@@ -1,3 +1,9 @@
+15.1.45
+-
+* B-74270 FDA: Tech Debt: implement unit tests for the AACL scenarios metadata panel
+* B-74270 FDA: Tech Debt: update borders of the Create Acl Grant Set window
+* B-74687 FDA: Fine tune performance for ACL components: add index by df_acl_scenario_detail_uid for ACL share detail table
+
 15.1.44
 -
 * CDP-1085 FDA UAT: Change the calculation from Number of reported copies to Annualized Copies: update scenario creation validation to use valid grants
