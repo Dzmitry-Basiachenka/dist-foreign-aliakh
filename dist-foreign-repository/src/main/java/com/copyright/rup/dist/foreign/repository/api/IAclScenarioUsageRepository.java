@@ -137,4 +137,17 @@ public interface IAclScenarioUsageRepository {
      * @return count of usage details
      */
     int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+
+    /**
+     * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,
+     * rightsholder account number, title, and aggregate licensee class id.
+     *
+     * @param scenarioId    scenario id
+     * @param accountNumber account number
+     * @param title         title
+     * @param aggLicClassId aggregate licensee class id
+     * @return list of {@link AclScenarioDetailDto}s
+     */
+    List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+        String scenarioId, Long accountNumber, String title, Integer aggLicClassId);
 }

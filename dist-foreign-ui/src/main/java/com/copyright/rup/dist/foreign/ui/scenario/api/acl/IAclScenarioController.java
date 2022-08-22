@@ -70,7 +70,7 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
 
     /**
      * Gets list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,
-     * rightsholder account number, title and aggregate licensee class id.
+     * rightsholder account number, title, and aggregate licensee class id.
      *
      * @param scenarioId    scenario id
      * @param accountNumber account number
