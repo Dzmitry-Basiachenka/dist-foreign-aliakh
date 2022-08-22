@@ -167,12 +167,12 @@ public class AclDrillDownByRightsholderWidgetTest {
             Triple.of("Print Value Share", 140.0, -1),
             Triple.of("Print Volume Share", 140.0, -1),
             Triple.of("Print Detail Share", 140.0, -1),
-            Triple.of("Print Net Amt in USD", 150.0, -1),
+            Triple.of("Print Net Amt", 150.0, -1),
             Triple.of("Digital Value Share", 150.0, -1),
             Triple.of("Digital Volume Share", 150.0, -1),
             Triple.of("Digital Detail Share", 150.0, -1),
-            Triple.of("Digital Net Amt in USD", 150.0, -1),
-            Triple.of("Combined Net Amt in USD", 170.0, -1)
+            Triple.of("Digital Net Amt", 150.0, -1),
+            Triple.of("Combined Net Amt", 170.0, -1)
         ));
         verifyWindow(grid, null, 100, 100, Unit.PERCENTAGE);
         List<Column<UsageDto, ?>> columns = grid.getColumns();

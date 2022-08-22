@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -66,4 +67,17 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @return instance of {@link IStreamSource} for export details.
      */
     IStreamSource getExportAclScenarioDetailsStreamSource();
+
+    /**
+     * Gets list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,
+     * rightsholder account number, title and aggregate licensee class id.
+     *
+     * @param scenarioId    scenario id
+     * @param accountNumber account number
+     * @param title         title
+     * @param aggLicClassId aggregate licensee class id
+     * @return list of {@link AclScenarioDetailDto}s
+     */
+    List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+        String scenarioId, Long accountNumber, String title, Integer aggLicClassId);
 }
