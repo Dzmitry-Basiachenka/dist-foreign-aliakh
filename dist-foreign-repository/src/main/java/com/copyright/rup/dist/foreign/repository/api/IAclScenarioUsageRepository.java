@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 
 import java.util.List;
 
@@ -142,12 +143,8 @@ public interface IAclScenarioUsageRepository {
      * Finds list of {@link AclScenarioDetailDto}s based on {@link AclScenario} identifier,
      * rightsholder account number, title, and aggregate licensee class id.
      *
-     * @param scenarioId    scenario id
-     * @param accountNumber account number
-     * @param title         title
-     * @param aggLicClassId aggregate licensee class id
+     * @param filter instance of {@link RightsholderResultsFilter}
      * @return list of {@link AclScenarioDetailDto}s
      */
-    List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-        String scenarioId, Long accountNumber, String title, Integer aggLicClassId);
+    List<AclScenarioDetailDto> findRightsholderDetailsResults(RightsholderResultsFilter filter);
 }

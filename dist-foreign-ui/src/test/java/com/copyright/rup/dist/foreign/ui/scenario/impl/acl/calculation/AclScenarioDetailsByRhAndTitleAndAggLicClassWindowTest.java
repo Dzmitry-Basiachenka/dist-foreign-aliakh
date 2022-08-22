@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.PublicationType;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -41,22 +42,16 @@ import java.util.List;
  */
 public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindowTest {
 
-    private static final String SCENARIO_ID = "49f6841b-2be8-4b8a-962d-f995e9fe52cc";
-    private static final Long ACCOUNT_NUMBER = 1000001863L;
-    private static final String TITLE = "Langmuir";
-    private static final Integer AGG_LIC_CLASS_ID = 56;
-
     private final List<AclScenarioDetailDto> scenarioDetails = Collections.singletonList(buildAclScenarioDetailDto());
     private AclScenarioDetailsByRhAndTitleAndAggLicClassWindow window;
 
     @Before
     public void setUp() {
         IAclScenarioController controller = createMock(IAclScenarioController.class);
-        expect(controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            SCENARIO_ID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID)).andReturn(scenarioDetails).once();
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        expect(controller.getRightsholderDetailsResults(filter)).andReturn(scenarioDetails).once();
         replay(controller);
-        window = new AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(
-            controller, SCENARIO_ID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID);
+        window = new AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(controller, filter);
         verify(controller);
     }
 
