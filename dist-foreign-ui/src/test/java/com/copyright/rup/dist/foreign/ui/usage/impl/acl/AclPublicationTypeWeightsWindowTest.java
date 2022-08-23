@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl.acl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
+
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -18,9 +20,9 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosControlle
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.ParametersSaveEvent;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -28,6 +30,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+
 import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -49,18 +52,9 @@ import java.util.List;
  */
 public class AclPublicationTypeWeightsWindowTest {
 
-    private final List<AclPublicationType> defaultParams = ImmutableList.of(
-        buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00", 201506),
-        buildAclPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50", 201506),
-        buildAclPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00", 201506),
-        buildAclPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00", 201506),
-        buildAclPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "1.10", 201506));
     private final List<AclPublicationType> appliedParams = ImmutableList.of(
-        buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00", 201506),
-        buildAclPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "2.00", 201506),
-        buildAclPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "3.00", 201506),
-        buildAclPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00", 201506),
-        buildAclPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "5.00", 201506));
+        buildAclPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "BK", "Book", "1.00", 201506),
+        buildAclPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "OT", "Other",  "2.00", 201512));
 
     private IAclScenariosController controller;
     private AclPublicationTypeWeightsWindow window;
@@ -132,13 +126,17 @@ public class AclPublicationTypeWeightsWindowTest {
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
-        assertGridItems(appliedParams);
+        Object[][] expectedCells = {
+            {"BK - Book", 201506, "1.00"},
+            {"OT - Other", 201512, "2.00"},
+        };
+        verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), appliedParams, expectedCells);
     }
 
     @Test
     public void testFireParametersSaveEvent() {
         IParametersSaveListener<List<AclPublicationType>> listener = createMock(IParametersSaveListener.class);
-        ParametersSaveEvent<List<AclPublicationType>> event = new ParametersSaveEvent<>(window, defaultParams);
+        ParametersSaveEvent<List<AclPublicationType>> event = new ParametersSaveEvent<>(window, appliedParams);
         window.addListener(ParametersSaveEvent.class, listener, IParametersSaveListener.SAVE_HANDLER);
         listener.onSave(event);
         expectLastCall().once();
@@ -159,18 +157,12 @@ public class AclPublicationTypeWeightsWindowTest {
         assertFalse(grid.getEditor().isEnabled());
     }
 
-    @SuppressWarnings("unchecked")
-    private void assertGridItems(List<AclPublicationType> params) {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<AclPublicationType> grid = (Grid<AclPublicationType>) content.getComponent(0);
-        assertTrue(grid.getDataProvider() instanceof ListDataProvider);
-        assertEquals(params, ((ListDataProvider<AclPublicationType>) grid.getDataProvider()).getItems());
-    }
-
-    private AclPublicationType buildAclPublicationType(String id, String name, String weight, Integer period) {
+    private AclPublicationType buildAclPublicationType(String id, String name, String description, String weight,
+                                                       Integer period) {
         AclPublicationType pubType = new AclPublicationType();
         pubType.setId(id);
         pubType.setName(name);
+        pubType.setDescription(description);
         pubType.setWeight(new BigDecimal(weight));
         pubType.setPeriod(period);
         return pubType;
