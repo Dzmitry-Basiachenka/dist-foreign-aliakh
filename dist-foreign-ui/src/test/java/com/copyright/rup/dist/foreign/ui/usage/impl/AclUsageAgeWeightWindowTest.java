@@ -55,16 +55,16 @@ import java.util.stream.Collectors;
  */
 public class AclUsageAgeWeightWindowTest {
 
-    public static final String WEIGHT_1 = "1.00";
-    public static final String WEIGHT_2 = "0.90";
-    public static final String WEIGHT_3 = "0.80";
+    private static final String WEIGHT_1 = "1.00";
+    private static final String WEIGHT_2 = "0.90";
+    private static final String WEIGHT_3 = "0.80";
+
     private final List<UsageAge> defaultParams = Arrays.asList(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
         buildUsageAge(2019, new BigDecimal(WEIGHT_2)));
     private final List<UsageAge> appliedParams = Arrays.asList(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
         buildUsageAge(2019, new BigDecimal(WEIGHT_3)));
-
     private AclUsageAgeWeightWindow window;
 
     @Before

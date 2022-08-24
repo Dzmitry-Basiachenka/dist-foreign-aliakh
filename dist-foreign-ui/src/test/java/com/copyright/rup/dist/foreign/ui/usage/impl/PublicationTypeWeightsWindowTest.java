@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridEditableFieldErrorMessage;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -25,7 +26,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.Para
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Binder;
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -59,19 +59,18 @@ import java.util.stream.Collectors;
  */
 public class PublicationTypeWeightsWindowTest {
 
-    private final List<PublicationType> defaultParams = ImmutableList.of(
-        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
-        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "1.50"),
-        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "1.00"),
-        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
-        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "1.10"));
-    private final List<PublicationType> appliedParams = ImmutableList.of(
-        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", "Book", "1.00"),
-        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", "Business or Trade Journal", "2.00"),
-        buildPublicationType("46634907-882e-4f91-b1ad-f57db945aff7", "Consumer Magazine", "3.00"),
-        buildPublicationType("a3dff475-fc06-4d8c-b7cc-f093073ada6f", "News Source", "4.00"),
-        buildPublicationType("1f6f1925-7aa1-4b1a-b3a8-8903acc3d18e", "STMA Journal", "5.00"));
+    private static final String NAME_1 = "Book";
+    private static final String NAME_2 = "Business or Trade Journal";
+    private static final String WEIGHT_1 = "1.00";
+    private static final String WEIGHT_2 = "1.50";
+    private static final String WEIGHT_3 = "2.00";
 
+    private final List<PublicationType> defaultParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_2));
+    private final List<PublicationType> appliedParams = ImmutableList.of(
+        buildPublicationType("2fe9c0a0-7672-4b56-bc64-9d4125fecf6e", NAME_1, WEIGHT_1),
+        buildPublicationType("68fd94c0-a8c0-4a59-bfe3-6674c4b12199", NAME_2, WEIGHT_3));
     private PublicationTypeWeightsWindow window;
 
     @Before
@@ -149,7 +148,11 @@ public class PublicationTypeWeightsWindowTest {
         HorizontalLayout buttonsLayout = (HorizontalLayout) content.getComponent(1);
         Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
-        assertGridItems(defaultParams);
+        Object[][] expectedCells = {
+            {NAME_1, WEIGHT_1, WEIGHT_1},
+            {NAME_2, WEIGHT_2, WEIGHT_2},
+        };
+        verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), defaultParams, expectedCells);
     }
 
     @Test
@@ -166,7 +169,11 @@ public class PublicationTypeWeightsWindowTest {
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
-        assertGridItems(appliedParams);
+        Object[][] expectedCells = {
+            {NAME_1, WEIGHT_1, WEIGHT_1},
+            {NAME_2, WEIGHT_2, WEIGHT_3},
+        };
+        verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), appliedParams, expectedCells);
     }
 
     @Test
@@ -217,14 +224,6 @@ public class PublicationTypeWeightsWindowTest {
         columns.forEach(column -> assertFalse(column.isSortable()));
         assertFalse(grid.getDataProvider().isInMemory());
         assertEquals(isEditorEnabled, grid.getEditor().isEnabled());
-    }
-
-    @SuppressWarnings("unchecked")
-    private void assertGridItems(List<PublicationType> params) {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<PublicationType> grid = (Grid<PublicationType>) content.getComponent(0);
-        assertTrue(grid.getDataProvider() instanceof ListDataProvider);
-        assertEquals(params, ((ListDataProvider<PublicationType>) grid.getDataProvider()).getItems());
     }
 
     private PublicationType buildPublicationType(String id, String name, String weight) {

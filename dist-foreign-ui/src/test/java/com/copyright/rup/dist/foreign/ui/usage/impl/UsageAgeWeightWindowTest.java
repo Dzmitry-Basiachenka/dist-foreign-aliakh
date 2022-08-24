@@ -55,15 +55,17 @@ import java.util.stream.Collectors;
  */
 public class UsageAgeWeightWindowTest {
 
-    private UsageAgeWeightWindow window;
-    public static final String WEIGHT_1 = "1.00";
-    public static final String WEIGHT_2 = "0.90";
+    private static final String WEIGHT_1 = "1.00";
+    private static final String WEIGHT_2 = "0.90";
+    private static final String WEIGHT_3 = "0.80";
+
     private final List<UsageAge> defaultParams = Arrays.asList(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
         buildUsageAge(2019, new BigDecimal(WEIGHT_2)));
     private final List<UsageAge> appliedParams = Arrays.asList(
         buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
-        buildUsageAge(2019, new BigDecimal("0.80")));
+        buildUsageAge(2019, new BigDecimal(WEIGHT_3)));
+    private UsageAgeWeightWindow window;
 
     @Before
     public void setUp() {
@@ -155,7 +157,7 @@ public class UsageAgeWeightWindowTest {
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
         Object[][] expectedCells = {
             {2020, WEIGHT_1, WEIGHT_1},
-            {2019, WEIGHT_2, "0.80"},
+            {2019, WEIGHT_2, WEIGHT_3},
         };
         verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), appliedParams, expectedCells);
     }

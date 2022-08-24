@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsLayout;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyButtonsVisibility;
+import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridItems;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
 import static org.easymock.EasyMock.capture;
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.AggregateLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.ui.usage.UiTestHelper;
 import com.copyright.rup.dist.foreign.ui.usage.impl.ScenarioParameterWidget.IParametersSaveListener;
@@ -50,11 +52,13 @@ import java.util.List;
  */
 public class AggregateLicenseeClassMappingWindowTest {
 
+    private final List<DetailLicenseeClass> defaultParams = Arrays.asList(
+        buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
+        buildDetailLicenseeClass(2, "MU", "Business Management", 52, "EXU4", "Medical & Health"));
+    private final List<DetailLicenseeClass> appliedParams = Arrays.asList(
+        buildDetailLicenseeClass(1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"),
+        buildDetailLicenseeClass(2, "MU", "Business Management", 53, "EXU2", "Education"));
     private AggregateLicenseeClassMappingWindow window;
-    private final List<DetailLicenseeClass> defaultParams =
-        Arrays.asList(buildDetailLicenseeClass(1), buildDetailLicenseeClass(2));
-    private final List<DetailLicenseeClass> appliedParams =
-        Arrays.asList(buildDetailLicenseeClass(2), buildDetailLicenseeClass(1));
 
     @Before
     public void setUp() {
@@ -123,13 +127,19 @@ public class AggregateLicenseeClassMappingWindowTest {
 
     @Test
     public void testSetAppliedParameters() {
-        window.setAppliedParameters(appliedParams);
-        List<DetailLicenseeClass> currentValues = Whitebox.getInternalState(window, "currentValues");
+        AggregateLicenseeClassMappingWindow mappingWindow = new AggregateLicenseeClassMappingWindow(false);
+        mappingWindow.setAppliedParameters(appliedParams);
+        List<DetailLicenseeClass> currentValues = Whitebox.getInternalState(mappingWindow, "currentValues");
         assertNotSame(appliedParams, currentValues);
         assertEquals(appliedParams, currentValues);
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
-        assertGridItems(appliedParams);
+        Object[][] expectedCells = {
+            {1, "EXGP", "Life Sciences", 51, "HGP", "Social & Behavioral Sciences"},
+            {2, "MU", "Business Management", 53, "EXU2", "Education"}
+        };
+        Grid grid = (Grid) ((VerticalLayout) mappingWindow.getContent()).getComponent(0);
+        verifyGridItems(grid, appliedParams, expectedCells);
     }
 
     @Test
@@ -175,9 +185,24 @@ public class AggregateLicenseeClassMappingWindowTest {
         assertEquals(params, ((ListDataProvider<DetailLicenseeClass>) grid.getDataProvider()).getItems());
     }
 
-    private DetailLicenseeClass buildDetailLicenseeClass(Integer id) {
+    private DetailLicenseeClass buildDetailLicenseeClass(Integer detLicClassId, String detLicClassEnrollment,
+                                                         String detLicClassDiscipline, Integer aggLicClassId,
+                                                         String aggLicClassEnrollment, String aggLicClassDiscipline) {
         DetailLicenseeClass detailLicenseeClass = new DetailLicenseeClass();
-        detailLicenseeClass.setId(id);
+        detailLicenseeClass.setId(detLicClassId);
+        detailLicenseeClass.setEnrollmentProfile(detLicClassEnrollment);
+        detailLicenseeClass.setDiscipline(detLicClassDiscipline);
+        detailLicenseeClass.setAggregateLicenseeClass(
+            buildAggregateLicenseeClass(aggLicClassId, aggLicClassEnrollment, aggLicClassDiscipline));
         return detailLicenseeClass;
+    }
+
+    private AggregateLicenseeClass buildAggregateLicenseeClass(Integer aggLicClassId, String aggLicClassEnrollment,
+                                                               String aggLicClassDiscipline) {
+        AggregateLicenseeClass aggLicClass = new AggregateLicenseeClass();
+        aggLicClass.setId(aggLicClassId);
+        aggLicClass.setEnrollmentProfile(aggLicClassEnrollment);
+        aggLicClass.setDiscipline(aggLicClassDiscipline);
+        return aggLicClass;
     }
 }
