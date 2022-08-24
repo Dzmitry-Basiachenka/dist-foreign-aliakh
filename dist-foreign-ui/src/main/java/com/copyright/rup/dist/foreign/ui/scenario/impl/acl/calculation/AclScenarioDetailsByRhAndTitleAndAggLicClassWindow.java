@@ -4,16 +4,11 @@ import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
-import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
-import com.copyright.rup.vaadin.widget.SearchWidget;
-
 import com.vaadin.data.ValueProvider;
-import com.vaadin.data.provider.DataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Grid;
@@ -23,113 +18,90 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Implementation of {@link IAclDrillDownByRightsholderWidget}.
+ * Window for displaying ACL scenario details by selected rightsholder, title, and aggregate licensee class.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
- * Date: 07/14/2022
+ * Date: 08/24/2022
  *
- * @author Dzmitry Basiachenka
+ * @author Aliaksandr Liakh
  */
-public class AclDrillDownByRightsholderWidget extends Window implements IAclDrillDownByRightsholderWidget {
+public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
-    private IAclDrillDownByRightsholderController controller;
-    private SearchWidget searchWidget;
+    private final IAclScenarioController controller;
+    private final String scenarioId;
+    private final Long accountNumber;
+    private final String title;
+    private final Integer aggLicClassId;
     private Grid<AclScenarioDetailDto> grid;
-    private DataProvider<AclScenarioDetailDto, Void> dataProvider;
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public AclDrillDownByRightsholderWidget init() {
-        setWidth(1280, Unit.PIXELS);
-        setHeight(600, Unit.PIXELS);
-        VaadinUtils.addComponentStyle(this, "acl-drill-down-by-rightsholder-widget");
-        setContent(initContent());
-        return this;
-    }
-
-    @Override
-    public String getSearchValue() {
-        return searchWidget.getSearchValue();
-    }
-
-    @Override
-    public void setController(IAclDrillDownByRightsholderController controller) {
+    /**
+     * Constructor.
+     *
+     * @param controller    instance of {@link IAclScenarioController}
+     * @param scenarioId    scenario id
+     * @param accountNumber account number
+     * @param title         title
+     * @param aggLicClassId aggregate licensee class id
+     */
+    public AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(IAclScenarioController controller, String scenarioId,
+                                                              Long accountNumber, String title, Integer aggLicClassId) {
         this.controller = controller;
+        this.scenarioId = Objects.requireNonNull(scenarioId);
+        this.accountNumber = Objects.requireNonNull(accountNumber);
+        this.title = Objects.requireNonNull(title);
+        this.aggLicClassId = Objects.requireNonNull(aggLicClassId);
+        VaadinUtils.setMaxComponentsWidth(this);
+        VaadinUtils.addComponentStyle(this, "acl-view-scenario-details-by-rh-title-agg-lic-class-window");
+        setHeight(95, Unit.PERCENTAGE);
+        setDraggable(false);
+        setResizable(false);
+        setContent(initContent());
     }
 
     private VerticalLayout initContent() {
-        initGrid();
+        grid = new Grid<>();
+        grid.setSelectionMode(SelectionMode.NONE);
+        grid.setItems(controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            scenarioId, accountNumber, title, aggLicClassId));
+        addColumns();
+        // TODO implement addFooter();
+        grid.setSizeFull();
+        grid.getColumns().forEach(column -> column.setSortable(true));
+        VaadinUtils.addComponentStyle(grid, "acl-view-scenario-details-by-rh-title-agg-lic-class-table");
         HorizontalLayout buttonsLayout = new HorizontalLayout(Buttons.createCloseButton(this));
-        VerticalLayout content = new VerticalLayout(initSearchWidget(), grid, buttonsLayout);
+        buttonsLayout.setMargin(new MarginInfo(false, true, true, false));
+        VerticalLayout content = new VerticalLayout(grid, buttonsLayout);
         content.setSizeFull();
-        content.setMargin(new MarginInfo(false, true, true, true));
-        content.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        content.setMargin(false);
+        content.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_CENTER);
         content.setExpandRatio(grid, 1);
         return content;
     }
 
-    private void initGrid() {
-        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getSize());
-        grid = new Grid<>(dataProvider);
-        addColumns();
-        grid.getColumns().forEach(column -> column.setSortable(true));
-        grid.setSelectionMode(SelectionMode.NONE);
-        grid.setSizeFull();
-        VaadinUtils.addComponentStyle(grid, "acl-drill-down-by-rightsholder-table");
-    }
-
-    private HorizontalLayout initSearchWidget() {
-        searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.drill_down_by_rightsholder.search_widget.acl"));
-        searchWidget.setWidth(60, Unit.PERCENTAGE);
-        HorizontalLayout layout = new HorizontalLayout(searchWidget);
-        layout.setWidth(100, Unit.PERCENTAGE);
-        layout.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
-        return layout;
-    }
-
     private void addColumns() {
         addColumn(AclScenarioDetailDto::getId, "table.column.detail_id", "detailId", false, 130);
-        addColumn(
-            AclScenarioDetailDto::getOriginalDetailId, "table.column.usage_detail_id", "usageDetailId", true, 130);
-        addColumn(AclScenarioDetailDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
-        addColumn(AclScenarioDetailDto::getUsageBatchName, "table.column.batch_name", "usageBatchName", true, 145);
-        addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.period_end_date", "periodEndDate", true, 125);
-        addColumn(AclScenarioDetailDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
-        addColumn(AclScenarioDetailDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 250);
-        addColumn(AclScenarioDetailDto::getRhAccountNumberPrint, "table.column.print_rh_account_number",
-            "rhAccountNumberPrint", true, 140);
-        addColumn(AclScenarioDetailDto::getRhNamePrint, "table.column.print_rh_name", "rhNamePrint", true, 150);
-        addColumn(AclScenarioDetailDto::getRhAccountNumberDigital, "table.column.digital_rh_account_number",
-            "rhAccountNumberDigital", true, 140);
-        addColumn(AclScenarioDetailDto::getRhNameDigital, "table.column.digital_rh_name", "rhNameDigital", true, 150);
-        addColumn(AclScenarioDetailDto::getUsagePeriod, "table.column.usage_period", "usagePeriod", true, 100);
-        addBigDecimalColumn(
-            AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight", "usageAgeWeight", 130);
-        addColumn(AclScenarioDetailDto::getDetailLicenseeClassId, "table.column.det_lc_id", "detailLicenseeClassId",
-            true, 100);
+        addColumn(AclScenarioDetailDto::getPeriodEndPeriod, "table.column.usage_period", "periodEndDate", true, 125);
+        addBigDecimalColumn(AclScenarioDetailDto::getUsageAgeWeight, "table.column.usage_age_weight",
+            "usageAgeWeight", 130);
+        addColumn(AclScenarioDetailDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120);
+        addColumn(AclScenarioDetailDto::getDetailLicenseeClassId, "table.column.det_lc_id",
+            "detailLicenseeClassId", true, 100);
         addColumn(AclScenarioDetailDto::getDetailLicenseeClassName, "table.column.det_lc_name",
             "detailLicenseeClassName", true, 200);
-        addColumn(AclScenarioDetailDto::getAggregateLicenseeClassId, "table.column.aggregate_licensee_class_id",
-            "aggregateLicenseeClassId", true, 100);
-        addColumn(AclScenarioDetailDto::getAggregateLicenseeClassName, "table.column.aggregate_licensee_class_name",
-            "aggregateLicenseeClassName", true, 200);
-        addColumn(AclScenarioDetailDto::getSurveyCountry, "table.column.survey_country", "surveyCountry", true, 120);
         addColumn(AclScenarioDetailDto::getReportedTypeOfUse, "table.column.tou", "reportedTypeOfUse", true, 120);
         addBigDecimalColumn(AclScenarioDetailDto::getNumberOfCopies, "table.column.acl_number_of_copies",
             "numberOfCopies", 125);
         addBigDecimalColumn(AclScenarioDetailDto::getWeightedCopies, "table.column.number_of_weighted_copies",
             "weightedCopies", 150);
-        addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type", "publicationType",
-            true, 120);
+        addColumn(detail -> detail.getPublicationType().getName(), "table.column.publication_type",
+            "publicationType", true, 120);
         addBigDecimalColumn(detail -> detail.getPublicationType().getWeight(), "table.column.publication_type_weight",
             "pubTypeWeight", 120);
         addBigDecimalColumn(AclScenarioDetailDto::getPrice, "table.column.price", "price", 100);

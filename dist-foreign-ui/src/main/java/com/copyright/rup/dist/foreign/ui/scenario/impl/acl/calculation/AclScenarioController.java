@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,6 +97,12 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     public IStreamSource getExportAclScenarioDetailsStreamSource() {
         return streamSourceHandler.getCsvStreamSource(() -> aclScenario.getName() + "_Details_",
             pos -> aclCalculationReportService.writeAclScenarioDetailsCsvReport(aclScenario.getId(), pos));
+    }
+
+    @Override
+    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
+        return new ArrayList<>(); // TODO implement the service
     }
 
     @Override

@@ -197,6 +197,11 @@ public class AclScenarioControllerTest {
         verify(OffsetDateTime.class, streamSourceHandler, aclCalculationReportService);
     }
 
+    @Test
+    public void testGetByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass() {
+        // TODO implement when the service is implemented
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
