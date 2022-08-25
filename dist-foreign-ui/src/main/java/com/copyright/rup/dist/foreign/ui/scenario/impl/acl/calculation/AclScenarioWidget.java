@@ -3,12 +3,14 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -51,6 +53,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     private SearchWidget searchWidget;
     private Grid<AclRightsholderTotalsHolder> rightsholdersGrid;
     private DataProvider<AclRightsholderTotalsHolder, Void> dataProvider;
+    private AclScenario scenario;
 
     /**
      * Constructor.
@@ -66,7 +69,7 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
     public IAclScenarioWidget init() {
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-view-scenario-widget");
-        AclScenario scenario = controller.getScenario();
+        scenario = controller.getScenario();
         setCaption(scenario.getName());
         setHeight(95, Unit.PERCENTAGE);
         setDraggable(false);
@@ -170,6 +173,13 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
         rightsholdersGrid.addComponentColumn(holder -> {
             Button button = Buttons.createButton(Objects.toString(holder.getNumberOfTitles()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> {
+                RightsholderResultsFilter rightsholderResultsFilter = new RightsholderResultsFilter();
+                rightsholderResultsFilter.setScenarioId(scenario.getId());
+                rightsholderResultsFilter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
+                rightsholderResultsFilter.setRhName(holder.getRightsholder().getName());
+                Windows.showModalWindow(new AclViewTitlesByRightsholderWindow(controller, rightsholderResultsFilter));
+            });
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_titles"))
             .setId("numberOfTitles")

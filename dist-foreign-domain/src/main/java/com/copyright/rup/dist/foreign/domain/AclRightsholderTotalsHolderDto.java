@@ -19,8 +19,8 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
 
     private Long wrWrkInst;
     private String systemTitle;
-    private BigDecimal totalGross = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
-    private BigDecimal totalNet = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
 
     public Long getWrWrkInst() {
         return wrWrkInst;
@@ -38,20 +38,20 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
         this.systemTitle = systemTitle;
     }
 
-    public BigDecimal getTotalGross() {
-        return totalGross;
+    public BigDecimal getGrossTotal() {
+        return grossTotal;
     }
 
-    public void setTotalGross(BigDecimal totalGross) {
-        this.totalGross = totalGross;
+    public void setGrossTotal(BigDecimal grossTotal) {
+        this.grossTotal = grossTotal;
     }
 
-    public BigDecimal getTotalNet() {
-        return totalNet;
+    public BigDecimal getNetTotal() {
+        return netTotal;
     }
 
-    public void setTotalNet(BigDecimal totalNet) {
-        this.totalNet = totalNet;
+    public void setNetTotal(BigDecimal netTotal) {
+        this.netTotal = netTotal;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .appendSuper(super.equals(obj))
             .append(wrWrkInst, that.wrWrkInst)
             .append(systemTitle, that.systemTitle)
-            .append(totalGross, that.totalGross)
-            .append(totalNet, that.totalNet)
+            .append(grossTotal, that.grossTotal)
+            .append(netTotal, that.netTotal)
             .isEquals();
     }
 
@@ -78,8 +78,8 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .appendSuper(super.hashCode())
             .append(wrWrkInst)
             .append(systemTitle)
-            .append(totalGross)
-            .append(totalNet)
+            .append(grossTotal)
+            .append(netTotal)
             .toHashCode();
     }
 
@@ -89,8 +89,8 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .appendSuper(super.toString())
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
-            .append("totalGross", totalGross)
-            .append("totalNet", totalNet)
+            .append("grossTotal", grossTotal)
+            .append("netTotal", netTotal)
             .toString();
     }
 }

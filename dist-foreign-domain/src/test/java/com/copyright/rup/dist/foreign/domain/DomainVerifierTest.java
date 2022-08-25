@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.filter.FilterBetweenExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterEqualsExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterGreaterThanExpression;
 import com.copyright.rup.dist.foreign.domain.filter.FilterLessThanExpression;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmBaselineValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmProxyValueFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UdmUsageFilter;
@@ -157,7 +158,8 @@ public class DomainVerifierTest {
             {AclScenarioShareDetail.class},
             {AclPublicationType.class},
             {AclScenarioDetailDto.class},
-            {AclRightsholderTotalsHolderDto.class}
+            {AclRightsholderTotalsHolderDto.class},
+            {RightsholderResultsFilter.class}
         };
         return Arrays.asList(testData);
     }

@@ -213,6 +213,11 @@ public class AclScenarioControllerTest {
         verify(aclScenarioUsageService);
     }
 
+    @Test
+    public void testGetRightsholderTitleResults() {
+        // TODO {dbasiachenka} implement
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
