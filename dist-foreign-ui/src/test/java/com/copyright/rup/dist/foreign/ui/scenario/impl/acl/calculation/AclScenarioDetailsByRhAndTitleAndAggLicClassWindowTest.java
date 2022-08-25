@@ -52,11 +52,11 @@ public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindowTest {
     @Before
     public void setUp() {
         IAclScenarioController controller = createMock(IAclScenarioController.class);
-        expect(controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(SCENARIO_ID, ACCOUNT_NUMBER, TITLE,
-            AGG_LIC_CLASS_ID)).andReturn(scenarioDetails).once();
+        expect(controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            SCENARIO_ID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID)).andReturn(scenarioDetails).once();
         replay(controller);
-        window = new AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(controller, SCENARIO_ID, ACCOUNT_NUMBER, TITLE,
-            AGG_LIC_CLASS_ID);
+        window = new AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(
+            controller, SCENARIO_ID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID);
         verify(controller);
     }
 

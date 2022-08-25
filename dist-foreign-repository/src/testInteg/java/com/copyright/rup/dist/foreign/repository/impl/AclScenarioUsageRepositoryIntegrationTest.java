@@ -507,6 +507,11 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertSortingAclAclScenarioDetailDto(scenarioDetailDto2, scenarioDetailDto1, "combinedNetAmount");
     }
 
+    @Test
+    public void testFindByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass() {
+        // TODO implement when the repository is implemented
+    }
+
     private AclScenarioDetail buildAclScenarioDetail() {
         AclScenarioDetail scenarioDetail = new AclScenarioDetail();
         scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");

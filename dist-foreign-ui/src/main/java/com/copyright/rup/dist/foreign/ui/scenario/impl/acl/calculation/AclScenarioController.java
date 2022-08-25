@@ -25,7 +25,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,7 +101,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     @Override
     public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
         String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
-        return new ArrayList<>(); // TODO implement the service
+        return scenarioUsageService.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            scenarioId, accountNumber, title, aggLicClassId);
     }
 
     @Override

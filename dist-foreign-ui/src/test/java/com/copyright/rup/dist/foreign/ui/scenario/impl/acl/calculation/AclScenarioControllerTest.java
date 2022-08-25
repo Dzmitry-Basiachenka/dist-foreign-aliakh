@@ -21,6 +21,7 @@ import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
@@ -43,6 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -62,6 +64,9 @@ import java.util.function.Supplier;
 public class AclScenarioControllerTest {
 
     private static final String SCENARIO_UID = "2398769d-8862-42e8-9504-9cbe19376b4b";
+    private static final Long ACCOUNT_NUMBER = 1000001863L;
+    private static final String TITLE = "Langmuir";
+    private static final Integer AGG_LIC_CLASS_ID = 56;
     private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private AclScenarioController controller;
@@ -199,7 +204,13 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass() {
-        // TODO implement when the service is implemented
+        List<AclScenarioDetailDto> scenarioDetails = new ArrayList<>();
+        expect(aclScenarioUsageService.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            SCENARIO_UID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID)).andReturn(scenarioDetails).once();
+        replay(aclScenarioUsageService);
+        assertSame(scenarioDetails, controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            SCENARIO_UID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID));
+        verify(aclScenarioUsageService);
     }
 
     private AclScenario buildAclScenario() {

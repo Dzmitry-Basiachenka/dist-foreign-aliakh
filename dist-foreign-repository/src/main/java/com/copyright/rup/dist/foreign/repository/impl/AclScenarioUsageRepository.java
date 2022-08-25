@@ -13,6 +13,7 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -143,5 +144,11 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IAclScenarioUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
+        return new ArrayList<>(); // implement the repository
     }
 }

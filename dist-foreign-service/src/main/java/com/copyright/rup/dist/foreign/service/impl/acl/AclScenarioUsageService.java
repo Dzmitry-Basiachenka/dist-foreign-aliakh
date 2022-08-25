@@ -93,4 +93,11 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
         return aclScenarioUsageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
             searchValue);
     }
+
+    @Override
+    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
+        return aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
+            scenarioId, accountNumber, title, aggLicClassId);
+    }
 }
