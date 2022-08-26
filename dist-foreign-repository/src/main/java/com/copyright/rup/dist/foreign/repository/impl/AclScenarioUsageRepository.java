@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -15,6 +16,7 @@ import com.google.common.collect.Maps;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -155,5 +157,11 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
         parameters.put("systemTitle", Objects.requireNonNull(filter.getSystemTitle()));
         parameters.put("aggregateLicenseeClassId", Objects.requireNonNull(filter.getAggregateLicenseeClassId()));
         return selectList("IAclScenarioUsageMapper.findRightsholderDetailsResults", parameters);
+    }
+
+    @Override
+    public List<AclRightsholderTotalsHolderDto> findRightsholderTitleResults(RightsholderResultsFilter filter) {
+        // TODO {dbasiachenka} implement
+        return Collections.emptyList();
     }
 }

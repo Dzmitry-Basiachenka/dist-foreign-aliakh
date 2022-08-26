@@ -10,6 +10,7 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -23,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import java.util.List;
 public class AclScenarioUsageServiceTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
+    private static final String RH_NAME = "CANADIAN CERAMIC SOCIETY";
     private static final String SCENARIO_UID = "c3077cca-09a0-454f-8b9f-bf6ecb2fbe66";
     private static final String SEARCH_VALUE = "search";
     private static final String USER_NAME = "SYSTEM";
@@ -177,6 +180,17 @@ public class AclScenarioUsageServiceTest {
         verify(aclScenarioUsageRepository);
     }
 
+    @Test
+    public void testFindRightsholderTitleResults() {
+        List<AclRightsholderTotalsHolderDto> holderDtos =
+            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        expect(aclScenarioUsageRepository.findRightsholderTitleResults(filter)).andReturn(holderDtos).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(holderDtos, aclScenarioUsageService.getRightsholderTitleResults(filter));
+        verify(aclScenarioUsageRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
@@ -189,5 +203,28 @@ public class AclScenarioUsageServiceTest {
         aclScenario.setCreateDate(Date.from(LocalDate.of(2022, 6, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         aclScenario.setCreateUser("user@copyright.com");
         return aclScenario;
+    }
+
+    private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolderDto() {
+        AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
+        holder.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        holder.getRightsholder().setName(RH_NAME);
+        holder.setGrossTotalPrint(new BigDecimal("2000.0000000000"));
+        holder.setNetTotalPrint(new BigDecimal("8300.0000000000"));
+        holder.setGrossTotalDigital(new BigDecimal("1000.0000000000"));
+        holder.setNetTotalDigital(new BigDecimal("2000.0000000000"));
+        holder.setWrWrkInst(127778306L);
+        holder.setSystemTitle("Adaptations");
+        holder.setGrossTotal(new BigDecimal("3000.0000000000"));
+        holder.setNetTotal(new BigDecimal("10300.0000000000"));
+        return holder;
+    }
+
+    private RightsholderResultsFilter buildRightsholderResultsFilter() {
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID);
+        filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        filter.setRhName(RH_NAME);
+        return filter;
     }
 }

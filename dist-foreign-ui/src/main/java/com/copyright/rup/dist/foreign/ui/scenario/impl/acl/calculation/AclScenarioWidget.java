@@ -174,11 +174,11 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
             Button button = Buttons.createButton(Objects.toString(holder.getNumberOfTitles()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> {
-                RightsholderResultsFilter rightsholderResultsFilter = new RightsholderResultsFilter();
-                rightsholderResultsFilter.setScenarioId(scenario.getId());
-                rightsholderResultsFilter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
-                rightsholderResultsFilter.setRhName(holder.getRightsholder().getName());
-                Windows.showModalWindow(new AclViewTitlesByRightsholderWindow(controller, rightsholderResultsFilter));
+                RightsholderResultsFilter filter = new RightsholderResultsFilter();
+                filter.setScenarioId(scenario.getId());
+                filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
+                filter.setRhName(holder.getRightsholder().getName());
+                Windows.showModalWindow(new AclScenarioDrillDownTitlesWindow(controller, filter));
             });
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_titles"))

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -147,4 +148,13 @@ public interface IAclScenarioUsageRepository {
      * @return list of {@link AclScenarioDetailDto}s
      */
     List<AclScenarioDetailDto> findRightsholderDetailsResults(RightsholderResultsFilter filter);
+
+    /**
+     * Finds list of {@link AclRightsholderTotalsHolderDto}s based on {@link AclScenario} identifier,
+     * rightsholder account number, and aggregate licensee class id.
+     *
+     * @param filter instanse of {@link RightsholderResultsFilter}
+     * @return list of {@link AclRightsholderTotalsHolderDto}s
+     */
+    List<AclRightsholderTotalsHolderDto> findRightsholderTitleResults(RightsholderResultsFilter filter);
 }

@@ -20,6 +20,7 @@ import com.copyright.rup.dist.common.reporting.api.IStreamSourceHandler;
 import com.copyright.rup.dist.common.reporting.impl.StreamSource;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -41,6 +42,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.InputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -65,6 +67,8 @@ import java.util.function.Supplier;
 public class AclScenarioControllerTest {
 
     private static final String SCENARIO_UID = "2398769d-8862-42e8-9504-9cbe19376b4b";
+    private static final Long RH_ACCOUNT_NUMBER = 1000001863L;
+    private static final String RH_NAME = "CANADIAN CERAMIC SOCIETY";
     private static final OffsetDateTime DATE = OffsetDateTime.of(2019, 1, 2, 3, 4, 5, 6, ZoneOffset.ofHours(0));
 
     private AclScenarioController controller;
@@ -212,7 +216,13 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetRightsholderTitleResults() {
-        // TODO {dbasiachenka} implement
+        List<AclRightsholderTotalsHolderDto> holderDtos =
+            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        expect(aclScenarioUsageService.getRightsholderTitleResults(filter)).andReturn(holderDtos).once();
+        replay(aclScenarioUsageService);
+        assertSame(holderDtos, controller.getRightsholderTitleResults(filter));
+        verify(aclScenarioUsageService);
     }
 
     private AclScenario buildAclScenario() {
@@ -220,5 +230,28 @@ public class AclScenarioControllerTest {
         aclScenario.setId(SCENARIO_UID);
         aclScenario.setName("Scenario name");
         return aclScenario;
+    }
+
+    private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolderDto() {
+        AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
+        holder.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        holder.getRightsholder().setName(RH_NAME);
+        holder.setGrossTotalPrint(new BigDecimal("2000.0000000000"));
+        holder.setNetTotalPrint(new BigDecimal("8300.0000000000"));
+        holder.setGrossTotalDigital(new BigDecimal("1000.0000000000"));
+        holder.setNetTotalDigital(new BigDecimal("2000.0000000000"));
+        holder.setWrWrkInst(127778306L);
+        holder.setSystemTitle("Adaptations");
+        holder.setGrossTotal(new BigDecimal("3000.0000000000"));
+        holder.setNetTotal(new BigDecimal("10300.0000000000"));
+        return holder;
+    }
+
+    private RightsholderResultsFilter buildRightsholderResultsFilter() {
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID);
+        filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        filter.setRhName(RH_NAME);
+        return filter;
     }
 }
