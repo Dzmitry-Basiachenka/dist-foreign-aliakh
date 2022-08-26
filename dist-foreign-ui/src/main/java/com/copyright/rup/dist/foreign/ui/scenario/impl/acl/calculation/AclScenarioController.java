@@ -6,9 +6,11 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclCalculationReportService;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclDrillDownByRightsholderController;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -103,6 +106,12 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
         String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
         return scenarioUsageService.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
             scenarioId, accountNumber, title, aggLicClassId);
+    }
+
+    @Override
+    public List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter) {
+        // TODO {dbasiachenka} implement
+        return Collections.emptyList();
     }
 
     @Override

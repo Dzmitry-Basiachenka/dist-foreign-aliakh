@@ -445,7 +445,10 @@ public final class UiTestHelper {
         Object[][] actualCells = (Object[][]) Array.newInstance(Object.class, expectedItems.size(), columns.size());
         for (int y = 0; y < expectedItems.size(); y++) {
             for (int x = 0; x < columns.size(); x++) {
-                actualCells[y][x] = columns.get(x).getValueProvider().apply(expectedItems.get(y));
+                Object actualResult = columns.get(x).getValueProvider().apply(expectedItems.get(y));
+                actualCells[y][x] = actualResult instanceof Button
+                    ? ((Button) actualResult).getCaption()
+                    : actualResult;
             }
         }
         assertArrayEquals(expectedCells, actualCells);

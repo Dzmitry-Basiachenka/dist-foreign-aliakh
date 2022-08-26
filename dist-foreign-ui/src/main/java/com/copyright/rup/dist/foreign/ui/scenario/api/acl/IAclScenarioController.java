@@ -2,9 +2,11 @@ package com.copyright.rup.dist.foreign.ui.scenario.api.acl;
 
 import com.copyright.rup.dist.common.reporting.api.IStreamSource;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -80,4 +82,12 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      */
     List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
         String scenarioId, Long accountNumber, String title, Integer aggLicClassId);
+
+    /**
+     * Gets list of {@link AclRightsholderTotalsHolderDto}s based on {@link RightsholderResultsFilter}.
+     *
+     * @param filter instanse of {@link RightsholderResultsFilter}
+     * @return list of {@link AclRightsholderTotalsHolderDto}s
+     */
+    List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter);
 }
