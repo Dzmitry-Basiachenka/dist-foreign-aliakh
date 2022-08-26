@@ -149,7 +149,7 @@
                         number_of_agg_lc_classes <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'licenseType'">
-                        s.license_type <include refid="IUsageMapper.direction"/>
+                        license_type <include refid="IUsageMapper.direction"/>
                     </when>
                 </choose>,
                 r.name
@@ -562,26 +562,37 @@
 
     <select id="findAclRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="aclRightsholderTotalsHolderResultMap">
         select
-            shd.rh_account_number,
-            r.name rh_name,
-            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
-            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_print,
-            sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
-            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
-            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_digital,
-            sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.net_amount, 0) else 0 end) as net_total_digital,
-            count(distinct system_title) number_of_titles,
-            count(distinct aggregate_licensee_class_id) number_of_agg_lc_classes,
-            s.license_type
-        from ${schema}.df_acl_scenario s
-        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
-        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+            shd.*,
+            r.name rh_name
+        from (
+            with titles as (
+                select
+                    df_acl_scenario_detail_uid,
+                    system_title
+                from ${schema}.df_acl_scenario_detail
+                where df_acl_scenario_uid = #{scenarioId}
+            )
+            select
+                shd.rh_account_number,
+                sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_print,
+                sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_print,
+                sum(case when shd.type_of_use = 'PRINT' then coalesce(shd.net_amount, 0) else 0 end) as net_total_print,
+                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.gross_amount, 0) else 0 end) as gross_total_digital,
+                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.service_fee_amount, 0) else 0 end) as service_fee_total_digital,
+                sum(case when shd.type_of_use = 'DIGITAL' then coalesce(shd.net_amount, 0) else 0 end) as net_total_digital,
+                count(distinct system_title) number_of_titles,
+                count(distinct aggregate_licensee_class_id) number_of_agg_lc_classes,
+                s.license_type
+            from ${schema}.df_acl_share_detail shd
+            join ${schema}.df_acl_scenario s on s.df_acl_scenario_uid = #{scenarioId}
+            join titles t on t.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+            where shd.df_acl_scenario_uid = #{scenarioId}
+            group by shd.rh_account_number, s.license_type
+        ) shd
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
-        where s.df_acl_scenario_uid = #{scenarioId}
-            <if test="null != searchValue">
-                and <include refid="IAclScenarioUsageMapper.searchWhereClause"/>
-            </if>
-        group by shd.rh_account_number, rh_name, s.license_type
+        <if test="null != searchValue">
+            where <include refid="IAclScenarioUsageMapper.searchWhereClause"/>
+        </if>
         <include refid="IAclScenarioUsageMapper.rightsholderAclTotalHoldersOrderBy"/>
         <include refid="IUsageMapper.ifPageable"/>
     </select>
@@ -589,8 +600,7 @@
     <select id="findAclRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(distinct shd.rh_account_number)
         from ${schema}.df_acl_scenario s
-        join ${schema}.df_acl_scenario_detail scd on s.df_acl_scenario_uid = scd.df_acl_scenario_uid
-        join ${schema}.df_acl_share_detail shd on scd.df_acl_scenario_detail_uid = shd.df_acl_scenario_detail_uid
+        join ${schema}.df_acl_share_detail shd on s.df_acl_scenario_uid = shd.df_acl_scenario_uid
         left join ${schema}.df_rightsholder r on shd.rh_account_number = r.rh_account_number
         where s.df_acl_scenario_uid = #{scenarioId}
             <if test="null != searchValue">
