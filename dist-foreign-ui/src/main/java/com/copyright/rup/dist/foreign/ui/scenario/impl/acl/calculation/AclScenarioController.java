@@ -102,10 +102,8 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     }
 
     @Override
-    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
-        return scenarioUsageService.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            scenarioId, accountNumber, title, aggLicClassId);
+    public List<AclScenarioDetailDto> getRightsholderDetailsResults(RightsholderResultsFilter filter) {
+        return scenarioUsageService.getRightsholderDetailsResults(filter);
     }
 
     @Override

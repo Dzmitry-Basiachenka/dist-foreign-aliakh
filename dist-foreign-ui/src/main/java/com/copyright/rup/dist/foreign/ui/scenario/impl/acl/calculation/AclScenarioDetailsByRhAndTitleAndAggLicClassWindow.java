@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.common.utils.BigDecimalUtils;
 import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -30,33 +31,25 @@ import java.util.function.Function;
  *
  * @author Aliaksandr Liakh
  */
+// TODO rename the class
 public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private final IAclScenarioController controller;
-    private final String scenarioId;
-    private final Long accountNumber;
-    private final String title;
-    private final Integer aggLicClassId;
+    private final RightsholderResultsFilter filter;
     private Grid<AclScenarioDetailDto> grid;
 
     /**
      * Constructor.
      *
-     * @param controller    instance of {@link IAclScenarioController}
-     * @param scenarioId    scenario id
-     * @param accountNumber account number
-     * @param title         title
-     * @param aggLicClassId aggregate licensee class id
+     * @param controller instance of {@link IAclScenarioController}
+     * @param filter     instance of {@link RightsholderResultsFilter}d
      */
-    public AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(IAclScenarioController controller, String scenarioId,
-                                                              Long accountNumber, String title, Integer aggLicClassId) {
+    public AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(IAclScenarioController controller,
+                                                              RightsholderResultsFilter filter) {
         this.controller = controller;
-        this.scenarioId = Objects.requireNonNull(scenarioId);
-        this.accountNumber = Objects.requireNonNull(accountNumber);
-        this.title = Objects.requireNonNull(title);
-        this.aggLicClassId = Objects.requireNonNull(aggLicClassId);
+        this.filter = Objects.requireNonNull(filter);
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "acl-view-scenario-details-by-rh-title-agg-lic-class-window");
         setHeight(95, Unit.PERCENTAGE);
@@ -68,8 +61,7 @@ public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
     private VerticalLayout initContent() {
         grid = new Grid<>();
         grid.setSelectionMode(SelectionMode.NONE);
-        grid.setItems(controller.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            scenarioId, accountNumber, title, aggLicClassId));
+        grid.setItems(controller.getRightsholderDetailsResults(filter));
         addColumns();
         // TODO implement addFooter();
         grid.setSizeFull();

@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
@@ -42,9 +43,6 @@ public class AclScenarioUsageServiceTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 1000009422L;
     private static final String SCENARIO_UID = "c3077cca-09a0-454f-8b9f-bf6ecb2fbe66";
-    private static final Long ACCOUNT_NUMBER = 1000001863L;
-    private static final String TITLE = "Langmuir";
-    private static final Integer AGG_LIC_CLASS_ID = 56;
     private static final String SEARCH_VALUE = "search";
     private static final String USER_NAME = "SYSTEM";
 
@@ -170,13 +168,12 @@ public class AclScenarioUsageServiceTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass() {
+    public void testGetRightsholderDetailsResults() {
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
         List<AclScenarioDetailDto> scenarioDetails = new ArrayList<>();
-        expect(aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            SCENARIO_UID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID)).andReturn(scenarioDetails).once();
+        expect(aclScenarioUsageRepository.findRightsholderDetailsResults(filter)).andReturn(scenarioDetails).once();
         replay(aclScenarioUsageRepository);
-        assertSame(scenarioDetails, aclScenarioUsageService.getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            SCENARIO_UID, ACCOUNT_NUMBER, TITLE, AGG_LIC_CLASS_ID));
+        assertSame(scenarioDetails, aclScenarioUsageService.getRightsholderDetailsResults(filter));
         verify(aclScenarioUsageRepository);
     }
 

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.acl.IAclScenarioUsageService;
 
@@ -95,9 +96,7 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     }
 
     @Override
-    public List<AclScenarioDetailDto> getByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
-        return aclScenarioUsageRepository.findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-            scenarioId, accountNumber, title, aggLicClassId);
+    public List<AclScenarioDetailDto> getRightsholderDetailsResults(RightsholderResultsFilter filter) {
+        return aclScenarioUsageRepository.findRightsholderDetailsResults(filter);
     }
 }

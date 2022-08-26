@@ -7,13 +7,13 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
 import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -147,8 +147,13 @@ public class AclScenarioUsageRepository extends AclBaseRepository implements IAc
     }
 
     @Override
-    public List<AclScenarioDetailDto> findByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass(
-        String scenarioId, Long accountNumber, String title, Integer aggLicClassId) {
-        return new ArrayList<>(); // implement the repository
+    public List<AclScenarioDetailDto> findRightsholderDetailsResults(RightsholderResultsFilter filter) {
+        Objects.requireNonNull(filter);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(filter.getScenarioId()));
+        parameters.put("accountNumber", Objects.requireNonNull(filter.getRhAccountNumber()));
+        parameters.put("systemTitle", Objects.requireNonNull(filter.getSystemTitle()));
+        parameters.put("aggregateLicenseeClassId", Objects.requireNonNull(filter.getAggregateLicenseeClassId()));
+        return selectList("IAclScenarioUsageMapper.findRightsholderDetailsResults", parameters);
     }
 }

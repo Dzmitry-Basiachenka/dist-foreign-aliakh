@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.domain.PublicationType;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.repository.api.IAclScenarioUsageRepository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -508,8 +509,19 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByScenarioIdAndRhAccountNumberAndTitleAndAggLicClass() {
-        // TODO implement when the repository is implemented
+    @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
+    public void testFindRightsholderDetailsResults() {
+        AclScenarioDetailDto expectedScenarioDetail =
+            loadExpectedAclScenarioDetailDto("json/acl/acl_scenario_detail_dto_d1e23c04.json");
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID_4);
+        filter.setRhAccountNumber(1000002859L);
+        filter.setSystemTitle("Aerospace America");
+        filter.setAggregateLicenseeClassId(1);
+        List<AclScenarioDetailDto> actualScenarioDetails =
+            aclScenarioUsageRepository.findRightsholderDetailsResults(filter);
+        assertEquals(1, actualScenarioDetails.size());
+        verifyAclScenarioDetailDto(expectedScenarioDetail, actualScenarioDetails.get(0));
     }
 
     private AclScenarioDetail buildAclScenarioDetail() {
