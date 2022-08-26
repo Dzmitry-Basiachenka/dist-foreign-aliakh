@@ -189,6 +189,14 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
         rightsholdersGrid.addComponentColumn(holder -> {
             Button button = Buttons.createButton(Objects.toString(holder.getNumberOfAggLcClasses()));
             button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> {
+                RightsholderResultsFilter filter = new RightsholderResultsFilter();
+                filter.setScenarioId(scenario.getId());
+                filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
+                filter.setRhName(holder.getRightsholder().getName());
+                Windows.showModalWindow(
+                    new AclScenarioDrillDownAggLcClassesWindow(controller, filter));
+                });
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_aggregate_licensee_classes"))
             .setId("numberOfAggLcClasses")
