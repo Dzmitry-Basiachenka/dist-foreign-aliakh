@@ -524,6 +524,11 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         verifyAclScenarioDetailDto(expectedScenarioDetail, actualScenarioDetails.get(0));
     }
 
+    @Test
+    public void testFindRightsholderTitleResults() {
+        // TODO {dbasiachenka} implement
+    }
+
     private AclScenarioDetail buildAclScenarioDetail() {
         AclScenarioDetail scenarioDetail = new AclScenarioDetail();
         scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");

@@ -80,7 +80,8 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
     List<AclScenarioDetailDto> getRightsholderDetailsResults(RightsholderResultsFilter filter);
 
     /**
-     * Gets list of {@link AclRightsholderTotalsHolderDto}s based on {@link RightsholderResultsFilter}.
+     * Gets list of {@link AclRightsholderTotalsHolderDto}s based on {@link AclScenario} identifier,
+     * rightsholder account number, and aggregate licensee class id.
      *
      * @param filter instanse of {@link RightsholderResultsFilter}
      * @return list of {@link AclRightsholderTotalsHolderDto}s

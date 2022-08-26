@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.acl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
@@ -98,5 +99,10 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     @Override
     public List<AclScenarioDetailDto> getRightsholderDetailsResults(RightsholderResultsFilter filter) {
         return aclScenarioUsageRepository.findRightsholderDetailsResults(filter);
+    }
+
+    @Override
+    public List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter) {
+        return aclScenarioUsageRepository.findRightsholderTitleResults(filter);
     }
 }

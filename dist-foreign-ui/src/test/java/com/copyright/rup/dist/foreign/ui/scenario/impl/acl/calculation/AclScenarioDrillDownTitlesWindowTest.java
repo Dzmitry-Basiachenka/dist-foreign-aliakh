@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Verifies {@link AclViewTitlesByRightsholderWindow}.
+ * Verifies {@link AclScenarioDrillDownTitlesWindow}.
  * <p>
  * Copyright (C) 2022 copyright.com
  * <p>
@@ -46,24 +46,24 @@ import java.util.Collections;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclViewTitlesByRightsholderWindowTest {
+public class AclScenarioDrillDownTitlesWindowTest {
 
     private static final String SCENARIO_UID = "1236249b-0063-4f7e-888a-3b1051d7a898";
     private static final Long RH_ACCOUNT_NUMBER = 1000010022L;
     private static final String RH_NAME = "Yale University Press";
 
-    private AclViewTitlesByRightsholderWindow window;
+    private AclScenarioDrillDownTitlesWindow window;
     private Grid<AclRightsholderTotalsHolderDto> grid;
 
     @Before
     public void setUp() {
         IAclScenarioController controller = createMock(IAclScenarioController.class);
         grid = createMock(Grid.class);
-        RightsholderResultsFilter rightsholderResultsFilter = buildRightsholderResultsParameter();
+        RightsholderResultsFilter rightsholderResultsFilter = buildRightsholderResultsFilter();
         expect(controller.getRightsholderTitleResults(rightsholderResultsFilter))
             .andReturn(Collections.singletonList(buildAclRightsholderTotalsHolderDto()));
         replay(controller);
-        window = new AclViewTitlesByRightsholderWindow(controller, rightsholderResultsFilter);
+        window = new AclScenarioDrillDownTitlesWindow(controller, rightsholderResultsFilter);
         Whitebox.setInternalState(window, grid);
         verify(controller);
         reset(controller);
@@ -88,8 +88,8 @@ public class AclViewTitlesByRightsholderWindowTest {
             Triple.of("Total Net Amt", 140.0, -1)
         ));
         verifyButton(content.getComponent(2), "Close", true);
-        assertEquals("view-acl-titles-by-rightsholder-window", window.getStyleName());
-        assertEquals("view-acl-titles-by-rightsholder-window", window.getId());
+        assertEquals("acl-scenario-drill-down-titles-window", window.getStyleName());
+        assertEquals("acl-scenario-drill-down-titles-window", window.getId());
     }
 
     @Test
@@ -129,12 +129,12 @@ public class AclViewTitlesByRightsholderWindowTest {
             ((TextField) searchWidget.getComponent(0)).getPlaceholder());
     }
 
-    private RightsholderResultsFilter buildRightsholderResultsParameter() {
-        RightsholderResultsFilter rightsholderResultsFilter = new RightsholderResultsFilter();
-        rightsholderResultsFilter.setScenarioId(SCENARIO_UID);
-        rightsholderResultsFilter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
-        rightsholderResultsFilter.setRhName(RH_NAME);
-        return rightsholderResultsFilter;
+    private RightsholderResultsFilter buildRightsholderResultsFilter() {
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId(SCENARIO_UID);
+        filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
+        filter.setRhName(RH_NAME);
+        return filter;
     }
 
     private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolderDto() {

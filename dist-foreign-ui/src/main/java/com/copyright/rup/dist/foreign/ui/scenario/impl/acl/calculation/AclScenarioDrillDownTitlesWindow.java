@@ -35,7 +35,7 @@ import java.util.function.Function;
  *
  * @author Dzmitry Basiachenka
  */
-public class AclViewTitlesByRightsholderWindow extends Window implements SearchWidget.ISearchController {
+public class AclScenarioDrillDownTitlesWindow extends Window implements SearchWidget.ISearchController {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
     private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
@@ -60,7 +60,7 @@ public class AclViewTitlesByRightsholderWindow extends Window implements SearchW
      * @param controller instance of {@link IAclScenarioController}
      * @param filter     instance of {@link RightsholderResultsFilter}
      */
-    public AclViewTitlesByRightsholderWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
+    public AclScenarioDrillDownTitlesWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = filter;
         setWidth(1280, Unit.PIXELS);
@@ -73,8 +73,8 @@ public class AclViewTitlesByRightsholderWindow extends Window implements SearchW
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_acl_titles_by_rightsholder"));
-        VaadinUtils.addComponentStyle(this, "view-acl-titles-by-rightsholder-window");
+        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_titles"));
+        VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-titles-window");
     }
 
     @Override
