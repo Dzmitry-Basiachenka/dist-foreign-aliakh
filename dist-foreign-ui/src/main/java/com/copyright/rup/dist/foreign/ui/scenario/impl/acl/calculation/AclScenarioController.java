@@ -115,6 +115,12 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
     }
 
     @Override
+    public List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter) {
+        // TODO will be implemented with service layer
+        return Collections.emptyList();
+    }
+
+    @Override
     protected IAclScenarioWidget instantiateWidget() {
         return new AclScenarioWidget(this);
     }

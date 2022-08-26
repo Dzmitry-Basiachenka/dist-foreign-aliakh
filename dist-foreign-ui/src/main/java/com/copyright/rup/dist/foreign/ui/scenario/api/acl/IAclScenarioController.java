@@ -90,4 +90,12 @@ public interface IAclScenarioController extends IController<IAclScenarioWidget>,
      * @return list of {@link AclRightsholderTotalsHolderDto}s
      */
     List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter);
+
+    /**
+     * Gets list of {@link AclRightsholderTotalsHolderDto}s based on {@link RightsholderResultsFilter}.
+     *
+     * @param filter instanse of {@link RightsholderResultsFilter}
+     * @return list of {@link AclRightsholderTotalsHolderDto}s
+     */
+    List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter);
 }

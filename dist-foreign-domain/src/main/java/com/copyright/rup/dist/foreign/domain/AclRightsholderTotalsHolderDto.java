@@ -21,6 +21,7 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
     private String systemTitle;
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+    private AggregateLicenseeClass aggregateLicenseeClass;
 
     public Long getWrWrkInst() {
         return wrWrkInst;
@@ -54,6 +55,14 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
         this.netTotal = netTotal;
     }
 
+    public AggregateLicenseeClass getAggregateLicenseeClass() {
+        return aggregateLicenseeClass;
+    }
+
+    public void setAggregateLicenseeClass(AggregateLicenseeClass aggregateLicenseeClass) {
+        this.aggregateLicenseeClass = aggregateLicenseeClass;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -69,6 +78,7 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .append(systemTitle, that.systemTitle)
             .append(grossTotal, that.grossTotal)
             .append(netTotal, that.netTotal)
+            .append(aggregateLicenseeClass, that.aggregateLicenseeClass)
             .isEquals();
     }
 
@@ -80,6 +90,7 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .append(systemTitle)
             .append(grossTotal)
             .append(netTotal)
+            .append(aggregateLicenseeClass)
             .toHashCode();
     }
 
@@ -91,6 +102,7 @@ public class AclRightsholderTotalsHolderDto extends AclRightsholderTotalsHolder 
             .append("systemTitle", systemTitle)
             .append("grossTotal", grossTotal)
             .append("netTotal", netTotal)
+            .append("aggregateLicenseeClass", aggregateLicenseeClass)
             .toString();
     }
 }

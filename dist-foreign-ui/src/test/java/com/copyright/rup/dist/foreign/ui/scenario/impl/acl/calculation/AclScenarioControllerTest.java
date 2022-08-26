@@ -218,6 +218,11 @@ public class AclScenarioControllerTest {
         // TODO {dbasiachenka} implement
     }
 
+    @Test
+    public void testGetRightsholderAggregateLicenseeClassResults() {
+        //TODO will be implemented with service layer
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);
