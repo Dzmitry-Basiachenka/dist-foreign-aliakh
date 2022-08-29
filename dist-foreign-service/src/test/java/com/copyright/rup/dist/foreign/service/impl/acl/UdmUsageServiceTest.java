@@ -91,11 +91,11 @@ public class UdmUsageServiceTest {
     private static final String NO_REPORTED_USE_UID = "18fbee56-2f5c-450a-999e-54903c0bfb23";
     private static final String USAGE_UID = "a40e5ab4-7591-4e7f-8cab-34a9ff893e15";
     private static final String REASON = "Reason";
-    public static final String ACTION_REASON_1 =
+    private static final String ACTION_REASON_1 =
         "The field 'Detail Status' was edited. Old Value is 'OPS_REVIEW'. New Value is 'ELIGIBLE'";
-    public static final String ACTION_REASON_2 =
+    private static final String ACTION_REASON_2 =
         "The field 'Action Reason' was edited. Old Value is not specified. New Value is 'Public Domain'";
-    public static final String ACTION_REASON_3 =
+    private static final String ACTION_REASON_3 =
         "The field 'Reported Standard Number' was edited. Old Value is '0927-7765'. New Value is not specified";
 
     private final UdmUsageService udmUsageService = new UdmUsageService();

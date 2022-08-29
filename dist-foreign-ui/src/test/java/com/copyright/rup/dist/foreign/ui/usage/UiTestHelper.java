@@ -38,6 +38,8 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Window;
 
+import com.vaadin.ui.components.grid.FooterCell;
+import com.vaadin.ui.components.grid.FooterRow;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -434,6 +436,7 @@ public final class UiTestHelper {
     /**
      * Verifies grid items.
      *
+     * @param grid          grid
      * @param expectedItems expected items
      * @param expectedCells expected cells
      */
@@ -452,6 +455,22 @@ public final class UiTestHelper {
             }
         }
         assertArrayEquals(expectedCells, actualCells);
+    }
+
+    /**
+     * Verifies grid footer items.
+     *
+     * @param grid                  grid
+     * @param expectedFooterColumns expected footer columns
+     */
+    public static <T> void verifyFooterItems(Grid grid, Object[]... expectedFooterColumns) {
+        FooterRow footerRow = grid.getFooterRow(0);
+        assertNotNull(footerRow);
+        for (Object[] expectedFooterColumn : expectedFooterColumns) {
+            FooterCell footerCell = footerRow.getCell(expectedFooterColumn[0].toString());
+            assertEquals(expectedFooterColumn[1], footerCell.getText());
+            assertEquals(expectedFooterColumn[2], footerCell.getStyleName());
+        }
     }
 
     /**

@@ -10,15 +10,17 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.components.grid.FooterCell;
+import com.vaadin.ui.components.grid.FooterRow;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -31,14 +33,14 @@ import java.util.function.Function;
  *
  * @author Aliaksandr Liakh
  */
-// TODO rename the class
-public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
+public class AclScenarioDrillDownDetailsWindow extends Window {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private final IAclScenarioController controller;
     private final RightsholderResultsFilter filter;
     private Grid<AclScenarioDetailDto> grid;
+    private List<AclScenarioDetailDto> scenarioDetails;
 
     /**
      * Constructor.
@@ -46,35 +48,32 @@ public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
      * @param controller instance of {@link IAclScenarioController}
      * @param filter     instance of {@link RightsholderResultsFilter}d
      */
-    public AclScenarioDetailsByRhAndTitleAndAggLicClassWindow(IAclScenarioController controller,
-                                                              RightsholderResultsFilter filter) {
+    public AclScenarioDrillDownDetailsWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = Objects.requireNonNull(filter);
-        VaadinUtils.setMaxComponentsWidth(this);
-        VaadinUtils.addComponentStyle(this, "acl-view-scenario-details-by-rh-title-agg-lic-class-window");
-        setHeight(95, Unit.PERCENTAGE);
-        setDraggable(false);
-        setResizable(false);
-        setContent(initContent());
+        setWidth(1280, Unit.PIXELS);
+        setHeight(600, Unit.PIXELS);
+        initGrid();
+        Button closeButton = Buttons.createCloseButton(this);
+        VerticalLayout content = new VerticalLayout(grid, closeButton);
+        content.setSizeFull();
+        content.setExpandRatio(grid, 1);
+        content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
+        setContent(content);
+        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_details"));
+        VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-details-window");
     }
 
-    private VerticalLayout initContent() {
+    private void initGrid() {
         grid = new Grid<>();
-        grid.setSelectionMode(SelectionMode.NONE);
-        grid.setItems(controller.getRightsholderDetailsResults(filter));
+        scenarioDetails = controller.getRightsholderDetailsResults(filter);
+        grid.setItems(scenarioDetails);
         addColumns();
-        // TODO implement addFooter();
+        addFooter();
+        grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         grid.getColumns().forEach(column -> column.setSortable(true));
-        VaadinUtils.addComponentStyle(grid, "acl-view-scenario-details-by-rh-title-agg-lic-class-table");
-        HorizontalLayout buttonsLayout = new HorizontalLayout(Buttons.createCloseButton(this));
-        buttonsLayout.setMargin(new MarginInfo(false, true, true, false));
-        VerticalLayout content = new VerticalLayout(grid, buttonsLayout);
-        content.setSizeFull();
-        content.setMargin(false);
-        content.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_CENTER);
-        content.setExpandRatio(grid, 1);
-        return content;
+        VaadinUtils.addComponentStyle(grid, "acl-scenario-drill-down-titles-grid");
     }
 
     private void addColumns() {
@@ -124,30 +123,33 @@ public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
             "combinedNetAmount", 170);
     }
 
+    private void addColumn(ValueProvider<AclScenarioDetailDto, ?> provider, String captionProperty, String columnId,
+                           boolean isHidable, double width) {
+        grid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setId(columnId)
+            .setSortProperty(columnId)
+            .setHidable(isHidable)
+            .setWidth(width);
+    }
+
     private void addBigDecimalColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
-                                     String sort, double width) {
+                                     String columnId, double width) {
         grid.addColumn(detail -> BigDecimalUtils.formatCurrencyForGrid(function.apply(detail)))
             .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
+            .setId(columnId)
+            .setSortProperty(columnId)
             .setHidable(true)
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
     }
 
-    private void addColumn(ValueProvider<AclScenarioDetailDto, ?> provider, String captionProperty, String sort,
-                           boolean isHidable, double width) {
-        grid.addColumn(provider)
-            .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
-            .setHidable(isHidable)
-            .setWidth(width);
-    }
-
     private void addAmountColumn(Function<AclScenarioDetailDto, BigDecimal> function, String captionProperty,
-                                 String sort, double width) {
+                                 String columnId, double width) {
         grid.addColumn(detail -> CurrencyUtils.format(function.apply(detail), null))
             .setCaption(ForeignUi.getMessage(captionProperty))
-            .setSortProperty(sort)
+            .setId(columnId)
+            .setSortProperty(columnId)
             .setHidable(true)
             .setStyleGenerator(item -> STYLE_ALIGN_RIGHT)
             .setWidth(width);
@@ -162,5 +164,47 @@ public class AclScenarioDetailsByRhAndTitleAndAggLicClassWindow extends Window {
             .setSortProperty(columnId)
             .setHidable(true)
             .setWidth(width);
+    }
+
+    private void addFooter() {
+        grid.appendFooterRow();
+        grid.setFooterVisible(true);
+        FooterRow row = grid.getFooterRow(0);
+        row.setStyleName("table-ext-footer");
+        row.join("detailId", "periodEndDate", "usageAgeWeight", "surveyCountry", "detailLicenseeClassId",
+            "detailLicenseeClassName", "reportedTypeOfUse", "numberOfCopies", "weightedCopies", "publicationType",
+            "pubTypeWeight", "price", "priceFlag", "content", "contentFlag", "contentUnitPrice", "contentUnitPriceFlag")
+            .setText("Totals");
+        initFooterBigDecimalCell(row, "valueSharePrint", AclScenarioDetailDto::getValueSharePrint);
+        initFooterBigDecimalCell(row, "volumeSharePrint", AclScenarioDetailDto::getVolumeSharePrint);
+        initFooterBigDecimalCell(row, "detailSharePrint", AclScenarioDetailDto::getDetailSharePrint);
+        initFooterAmountCell(row, "netAmountPrint", AclScenarioDetailDto::getNetAmountPrint);
+        initFooterBigDecimalCell(row, "valueShareDigital", AclScenarioDetailDto::getValueShareDigital);
+        initFooterBigDecimalCell(row, "volumeShareDigital", AclScenarioDetailDto::getVolumeShareDigital);
+        initFooterBigDecimalCell(row, "detailShareDigital", AclScenarioDetailDto::getDetailShareDigital);
+        initFooterAmountCell(row, "netAmountDigital", AclScenarioDetailDto::getNetAmountDigital);
+        initFooterAmountCell(row, "combinedNetAmount", AclScenarioDetailDto::getCombinedNetAmount);
+    }
+
+    private void initFooterBigDecimalCell(FooterRow row, String columnId,
+                                          Function<AclScenarioDetailDto, BigDecimal> function) {
+        FooterCell cell = row.getCell(columnId);
+        cell.setText(BigDecimalUtils.formatCurrencyForGrid(
+            scenarioDetails.stream()
+                .map(function)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+        ));
+        cell.setStyleName(STYLE_ALIGN_RIGHT);
+    }
+
+    private void initFooterAmountCell(FooterRow row, String columnId,
+                                      Function<AclScenarioDetailDto, BigDecimal> function) {
+        FooterCell cell = row.getCell(columnId);
+        cell.setText(CurrencyUtils.format(
+            scenarioDetails.stream()
+                .map(function)
+                .reduce(BigDecimal.ZERO, BigDecimal::add),
+            null));
+        cell.setStyleName(STYLE_ALIGN_RIGHT);
     }
 }
