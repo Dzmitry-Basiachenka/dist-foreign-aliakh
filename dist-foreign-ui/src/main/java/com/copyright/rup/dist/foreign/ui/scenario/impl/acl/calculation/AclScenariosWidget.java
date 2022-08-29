@@ -85,6 +85,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final IAclScenarioHistoryController aclScenarioHistoryController;
     private final Button createButton = Buttons.createButton(ForeignUi.getMessage("button.create"));
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
     private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
@@ -181,6 +182,8 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
         viewButton.setEnabled(Objects.nonNull(getSelectedScenario()));
+        deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
+        deleteButton.setEnabled(hasSpecialistPermission || !getSelectedScenario().isEditableFlag());
         pubTypeWeights.setVisible(hasSpecialistPermission);
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
@@ -191,7 +194,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
                 IParametersSaveListener.SAVE_HANDLER);
             Windows.showModalWindow(window);
         });
-        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, pubTypeWeights);
+        HorizontalLayout buttonsLayout = new HorizontalLayout(createButton, viewButton, pubTypeWeights, deleteButton);
         buttonsLayout.setMargin(new MarginInfo(true, true, true, true));
         VaadinUtils.setButtonsAutoDisabled(viewButton);
         VaadinUtils.addComponentStyle(buttonsLayout, "acl-scenario-buttons-layout");
@@ -421,5 +424,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     private void changeButtonsAvailability(AclScenario scenario) {
         viewButton.setEnabled(Objects.nonNull(scenario));
+        deleteButton.setEnabled(
+            hasSpecialistPermission || Objects.nonNull(scenario) && !getSelectedScenario().isEditableFlag());
     }
 }

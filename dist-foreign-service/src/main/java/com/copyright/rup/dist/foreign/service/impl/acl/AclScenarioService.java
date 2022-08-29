@@ -171,6 +171,11 @@ public class AclScenarioService implements IAclScenarioService {
         return aclScenarioRepository.findDetailLicenseeClassesByScenarioId(scenarioId);
     }
 
+    @Override
+    public void deleteAclScenario(AclScenario aclScenario) {
+        //TODO will be implement later
+    }
+
     private void populateScenario(AclScenario aclScenario, String userName, String scenarioId) {
         aclScenario.setId(scenarioId);
         aclScenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);

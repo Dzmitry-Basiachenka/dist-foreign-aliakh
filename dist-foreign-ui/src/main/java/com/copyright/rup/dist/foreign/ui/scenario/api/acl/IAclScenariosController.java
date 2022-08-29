@@ -199,4 +199,9 @@ public interface IAclScenariosController extends IController<IAclScenariosWidget
      * @return list of {@link DetailLicenseeClass}es
      */
     List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId);
+
+    /**
+     * Handles click on 'Delete' button.
+     */
+    void onDeleteButtonClicked();
 }

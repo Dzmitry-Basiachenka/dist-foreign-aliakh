@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,6 +195,17 @@ public class AclScenariosController extends CommonController<IAclScenariosWidget
     @Override
     public List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId) {
         return aclScenarioService.getDetailLicenseeClassesByScenarioId(scenarioId);
+    }
+
+    @Override
+    public void onDeleteButtonClicked() {
+        AclScenario aclScenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(
+            ForeignUi.getMessage("message.confirm.delete_action", aclScenario.getName(), "scenario"),
+            () -> {
+                aclScenarioService.deleteAclScenario(aclScenario);
+                getWidget().refresh();
+            });
     }
 
     @Override
