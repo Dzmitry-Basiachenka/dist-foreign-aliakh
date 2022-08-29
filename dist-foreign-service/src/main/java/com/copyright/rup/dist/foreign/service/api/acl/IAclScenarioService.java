@@ -131,4 +131,11 @@ public interface IAclScenarioService {
      * @return list of {@link DetailLicenseeClass}es
      */
     List<DetailLicenseeClass> getDetailLicenseeClassesByScenarioId(String scenarioId);
+
+    /**
+     * Deletes {@link AclScenario} by given identifier.
+     *
+     * @param aclScenario instance of {@link AclScenario}
+     */
+    void deleteAclScenario(AclScenario aclScenario);
 }

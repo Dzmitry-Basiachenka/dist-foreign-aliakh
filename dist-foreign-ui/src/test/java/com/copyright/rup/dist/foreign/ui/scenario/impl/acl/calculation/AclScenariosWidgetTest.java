@@ -49,8 +49,8 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
-
 import com.vaadin.ui.Window;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Triple;
@@ -154,7 +154,7 @@ public class AclScenariosWidgetTest {
     public void testRefreshSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).times(2);
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, grid);
@@ -345,10 +345,11 @@ public class AclScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("acl-scenario-buttons-layout", layout.getId());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "Create", false, 1);
         verifyButton(layout.getComponent(1), "View", true, 2);
         verifyButton(layout.getComponent(2), "Pub Type Weights", false, 1);
+        verifyButton(layout.getComponent(3), "Delete", false, 1);
     }
 
     private void verifyButton(Component component, String caption, boolean isDisabled, int listenersCount) {

@@ -1,15 +1,17 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl.acl.calculation;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.AclFundPool;
 import com.copyright.rup.dist.foreign.domain.AclGrantSet;
@@ -33,10 +35,12 @@ import com.copyright.rup.dist.foreign.service.api.acl.IAclUsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenariosWidget;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -334,6 +338,25 @@ public class AclScenariosControllerTest {
         replay(aclScenarioService);
         assertSame(licenseeClasses, aclScenariosController.getDetailLicenseeClassesByScenarioId(SCENARIO_UID));
         verify(aclScenarioService);
+    }
+
+    @Test
+    public void testOnDeleteButtonClicked() {
+        mockStatic(Windows.class);
+        Capture<IListener> listenerCapture = new Capture<>();
+        AclScenario scenario = buildAclScenario();
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure you want to delete <i><b>'" + "ACL Scenario name" + "'</b></i> scenario?"),
+            capture(listenerCapture))).andReturn(null).once();
+        aclScenarioService.deleteAclScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, aclScenarioService, Windows.class);
+        aclScenariosController.onDeleteButtonClicked();
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, aclScenarioService, Windows.class);
     }
 
     private AclScenario buildAclScenario() {
