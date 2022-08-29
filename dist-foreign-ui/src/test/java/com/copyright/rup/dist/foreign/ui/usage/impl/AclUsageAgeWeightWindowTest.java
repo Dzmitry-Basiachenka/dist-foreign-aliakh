@@ -60,11 +60,11 @@ public class AclUsageAgeWeightWindowTest {
     private static final String WEIGHT_3 = "0.80";
 
     private final List<UsageAge> defaultParams = Arrays.asList(
-        buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
-        buildUsageAge(2019, new BigDecimal(WEIGHT_2)));
+        buildUsageAge(0, new BigDecimal(WEIGHT_1)),
+        buildUsageAge(1, new BigDecimal(WEIGHT_2)));
     private final List<UsageAge> appliedParams = Arrays.asList(
-        buildUsageAge(2020, new BigDecimal(WEIGHT_1)),
-        buildUsageAge(2019, new BigDecimal(WEIGHT_3)));
+        buildUsageAge(0, new BigDecimal(WEIGHT_1)),
+        buildUsageAge(1, new BigDecimal(WEIGHT_3)));
     private AclUsageAgeWeightWindow window;
 
     @Before
@@ -135,8 +135,8 @@ public class AclUsageAgeWeightWindowTest {
         Button defaultButton = (Button) buttonsLayout.getComponent(3);
         defaultButton.click();
         Object[][] expectedCells = {
-            {2020, WEIGHT_1, WEIGHT_1},
-            {2019, WEIGHT_2, WEIGHT_2},
+            {0, WEIGHT_1, WEIGHT_1},
+            {1, WEIGHT_2, WEIGHT_2},
         };
         verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), defaultParams, expectedCells);
     }
@@ -156,8 +156,8 @@ public class AclUsageAgeWeightWindowTest {
         currentValues.forEach(
             currentValue -> assertNotSame(appliedParams.get(currentValues.indexOf(currentValue)), currentValue));
         Object[][] expectedCells = {
-            {2020, WEIGHT_1, WEIGHT_1},
-            {2019, WEIGHT_2, WEIGHT_3},
+            {0, WEIGHT_1, WEIGHT_1},
+            {1, WEIGHT_2, WEIGHT_3},
         };
         verifyGridItems((Grid) ((VerticalLayout) window.getContent()).getComponent(0), appliedParams, expectedCells);
     }
