@@ -107,7 +107,7 @@ public class AclScenarioServiceTest {
 
     @Test
     public void testInsertAclScenarioUsageAgeWeights() {
-        UsageAge usageAge = buildUsageAge(2019, new BigDecimal("1.00"));
+        UsageAge usageAge = buildUsageAge(0, new BigDecimal("1.00"));
         aclScenarioRepository.insertAclScenarioUsageAgeWeight(usageAge, SCENARIO_UID, USER_NAME);
         expectLastCall().once();
         replay(aclScenarioRepository);

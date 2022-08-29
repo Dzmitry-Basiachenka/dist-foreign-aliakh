@@ -146,7 +146,7 @@ public class AclUsageServiceTest {
 
     @Test
     public void testGetDefaultUsageAgesWeights() {
-        UsageAge usageAge = buildUsageAge(2019, new BigDecimal("1.00"));
+        UsageAge usageAge = buildUsageAge(0, new BigDecimal("1.00"));
         expect(aclUsageRepository.findDefaultUsageAgesWeights()).andReturn(Collections.singletonList(usageAge)).once();
         replay(aclUsageRepository);
         assertSame(usageAge, aclUsageService.getDefaultUsageAgesWeights().get(0));
