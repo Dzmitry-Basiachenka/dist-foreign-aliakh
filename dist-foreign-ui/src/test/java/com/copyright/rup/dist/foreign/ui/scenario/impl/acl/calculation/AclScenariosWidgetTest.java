@@ -105,14 +105,16 @@ public class AclScenariosWidgetTest {
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         expect(controller.getUsageAgeWeights()).andReturn(Collections.emptyList()).once();
         expect(controller.getDetailLicenseeClasses()).andReturn(Collections.emptyList()).once();
-        replay(controller);
+        expect(ForeignSecurityUtils.hasSpecialistPermission()).andReturn(true).once();
+        replay(controller, ForeignSecurityUtils.class);
         scenariosWidget.init();
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
         reset(controller);
     }
 
     @Test
     public void testComponentStructure() {
+        scenario.setEditableFlag(true);
         assertEquals(2, scenariosWidget.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) scenariosWidget.getComponent(0));
         Component component = scenariosWidget.getComponent(1);
@@ -154,7 +156,7 @@ public class AclScenariosWidgetTest {
     public void testRefreshSelectedScenario() {
         Grid grid = createMock(Grid.class);
         Whitebox.setInternalState(scenariosWidget, SCENARIO_GRID, grid);
-        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).times(2);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getAclScenarioWithAmountsAndLastAction(scenarioDto.getId())).andReturn(scenarioDto).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, grid);

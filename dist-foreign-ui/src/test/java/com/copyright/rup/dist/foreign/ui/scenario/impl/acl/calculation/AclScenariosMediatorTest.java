@@ -7,6 +7,8 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.AclScenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
@@ -34,6 +36,9 @@ public class AclScenariosMediatorTest {
     private static final String FDA_MANAGER_PERMISSION = "FDA_MANAGER_PERMISSION";
 
     private final Button createButton = new Button("Create");
+    private final Button viewButton = new Button("View");
+    private final Button pubTypeWeightsButton = new Button("Pub Type Weights");
+    private final Button deleteButton = new Button("Delete");
 
     private AclScenariosMediator mediator;
 
@@ -41,37 +46,116 @@ public class AclScenariosMediatorTest {
     public void setUp() {
         mediator = new AclScenariosMediator();
         mediator.setCreateButton(createButton);
+        mediator.setViewButton(viewButton);
+        mediator.setPubTypeWeights(pubTypeWeightsButton);
+        mediator.setDeleteButton(deleteButton);
+        mockStatic(SecurityUtils.class);
     }
 
     @Test
     public void testApplySpecialistPermissions() {
-        mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).times(2);
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(createButton.isVisible());
+        assertTrue(viewButton.isVisible());
+        assertTrue(pubTypeWeightsButton.isVisible());
+        assertTrue(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyManagerPermissions() {
-        mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(createButton.isVisible());
+        assertTrue(viewButton.isVisible());
+        assertFalse(pubTypeWeightsButton.isVisible());
+        assertTrue(deleteButton.isVisible());
         verify(SecurityUtils.class);
     }
 
     @Test
     public void testApplyNotSpecialistManagerPermissions() {
-        mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).times(2);
         expect(SecurityUtils.hasPermission(FDA_MANAGER_PERMISSION)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(createButton.isVisible());
+        assertTrue(viewButton.isVisible());
+        assertFalse(pubTypeWeightsButton.isVisible());
+        assertFalse(deleteButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectedScenarioChangedNullScenario() {
+        mediator.selectedScenarioChanged(null);
+        assertTrue(createButton.isEnabled());
+        assertFalse(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedEditableScenarioChangedInProgressSpecialistPermissions() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setEditableFlag(true);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
+        replay(SecurityUtils.class);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertTrue(deleteButton.isEnabled());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectedEditableScenarioChangedInProgressManagerPermissions() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setEditableFlag(true);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        replay(SecurityUtils.class);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertTrue(deleteButton.isEnabled());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectedNotEditableScenarioChangedInProgressSpecialistPermissions() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setEditableFlag(false);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(true).once();
+        replay(SecurityUtils.class);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertTrue(deleteButton.isEnabled());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testSelectedNotEditableScenarioChangedInProgressManagerPermissions() {
+        AclScenario scenario = new AclScenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setEditableFlag(false);
+        expect(SecurityUtils.hasPermission(FDA_SPECIALIST_PERMISSION)).andReturn(false).once();
+        replay(SecurityUtils.class);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(createButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
+        assertTrue(pubTypeWeightsButton.isEnabled());
+        assertFalse(deleteButton.isEnabled());
         verify(SecurityUtils.class);
     }
 }

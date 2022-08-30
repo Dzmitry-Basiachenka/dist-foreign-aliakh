@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDto;
 import com.copyright.rup.dist.foreign.domain.DetailLicenseeClass;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAge;
 import com.copyright.rup.dist.foreign.ui.common.utils.IDateFormatter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -88,7 +89,6 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
     private final Button pubTypeWeights = Buttons.createButton(ForeignUi.getMessage("button.publication_type_weights"));
-    private final boolean hasSpecialistPermission = ForeignSecurityUtils.hasSpecialistPermission();
 
     private IAclScenariosController aclScenariosController;
     private Grid<AclScenario> scenarioGrid;
@@ -98,6 +98,7 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
     private ScenarioParameterWidget<List<UsageAge>> usageAgeWeightWidget;
     private AclPublicationTypeWeightsParameterWidget publicationTypeWeightWidget;
     private ScenarioParameterWidget<List<DetailLicenseeClass>> licenseeClassMappingWidget;
+    private AclScenariosMediator mediator;
 
     /**
      * Constructor.
@@ -139,8 +140,11 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
 
     @Override
     public IMediator initMediator() {
-        AclScenariosMediator mediator = new AclScenariosMediator();
+        mediator = new AclScenariosMediator();
         mediator.setCreateButton(createButton);
+        mediator.setViewButton(viewButton);
+        mediator.setDeleteButton(deleteButton);
+        mediator.setPubTypeWeights(pubTypeWeights);
         return mediator;
     }
 
@@ -181,10 +185,10 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
             event -> Windows.showModalWindow(
                 new CreateAclScenarioWindow(aclScenariosController, createEvent -> refresh())));
         viewButton.addClickListener(event -> onClickViewButton());
-        viewButton.setEnabled(Objects.nonNull(getSelectedScenario()));
         deleteButton.addClickListener(event -> aclScenariosController.onDeleteButtonClicked());
-        deleteButton.setEnabled(hasSpecialistPermission || !getSelectedScenario().isEditableFlag());
-        pubTypeWeights.setVisible(hasSpecialistPermission);
+        boolean inProgressStatus = ScenarioStatusEnum.IN_PROGRESS == getSelectedScenario().getStatus();
+        deleteButton.setEnabled(ForeignSecurityUtils.hasSpecialistPermission() && inProgressStatus
+            || getSelectedScenario().isEditableFlag() && inProgressStatus);
         pubTypeWeights.addClickListener(event -> {
             AclPublicationTypeWeightsWindow window = new AclPublicationTypeWeightsWindow(aclScenariosController, true);
             window.setAppliedParameters(aclScenariosController.getAclHistoricalPublicationTypes());
@@ -369,7 +373,9 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         } else {
             metadataPanel.setContent(new Label());
         }
-        changeButtonsAvailability(scenario);
+        if (Objects.nonNull(mediator)) {
+            mediator.selectedScenarioChanged(scenario);
+        }
     }
 
     private void updateScenarioMetadata(AclScenarioDto scenario) {
@@ -420,11 +426,5 @@ public class AclScenariosWidget extends VerticalLayout implements IAclScenariosW
         if (CollectionUtils.isNotEmpty(scenarios)) {
             scenarioGrid.select(scenarios.get(0));
         }
-    }
-
-    private void changeButtonsAvailability(AclScenario scenario) {
-        viewButton.setEnabled(Objects.nonNull(scenario));
-        deleteButton.setEnabled(
-            hasSpecialistPermission || Objects.nonNull(scenario) && !getSelectedScenario().isEditableFlag());
     }
 }
