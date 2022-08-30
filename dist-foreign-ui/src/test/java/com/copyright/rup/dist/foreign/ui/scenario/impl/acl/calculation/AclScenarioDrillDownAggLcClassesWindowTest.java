@@ -82,8 +82,8 @@ public class AclScenarioDrillDownAggLcClassesWindowTest {
             Triple.of("Total Net Amt", 140.0, -1)
         ));
         verifyButton(content.getComponent(1), "Close", true);
-        assertEquals("view-acl-aggregate-licensee-class-by-rightsholder-window", window.getStyleName());
-        assertEquals("view-acl-aggregate-licensee-class-by-rightsholder-window", window.getId());
+        assertEquals("acl-scenario-drill-down-aggregate-licensee-class-window", window.getStyleName());
+        assertEquals("acl-scenario-drill-down-aggregate-licensee-class-window", window.getId());
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.liquibase.LiquibaseTestExecutionListener;
 import com.copyright.rup.dist.common.test.liquibase.TestData;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.AclScenario;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetail;
 import com.copyright.rup.dist.foreign.domain.AclScenarioDetailDto;
@@ -79,6 +80,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     private static final String LICENSE_TYPE_ACL = "ACL";
     private static final Long RH_ACCOUNT_NUMBER = 1000002859L;
     private static final String RH_NAME = "John Wiley & Sons - Books";
+    private static final String SYSTEM_TITLE = "Technology review";
     private static final String USER_NAME = "user@copyright.com";
     private static final String PRINT_TOU = "PRINT";
     private static final String DIGITAL_TOU = "DIGITAL";
@@ -414,7 +416,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindByScenarioIdAndRhAccountNumberSearchSystemTitle() {
         List<AclScenarioDetailDto> scenarioDetailDtos = Collections.singletonList(buildDigitalAclScenarioDetailDto());
-        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "Technology review");
+        verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, SYSTEM_TITLE);
         verifyFindByScenarioIdAndRhSearch(scenarioDetailDtos, "TeCHNoLOGY REV");
         verifyFindByScenarioIdAndRhSearch(Collections.emptyList(), "Techn ology review");
     }
@@ -422,7 +424,7 @@ public class AclScenarioUsageRepositoryIntegrationTest {
     @Test
     @TestData(fileName = FIND_BY_SCENARIO_ID_AND_RH_ACCOUNT_NUMBER)
     public void testFindCountByScenarioIdAndRhAccountNumberSearchSystemTitle() {
-        verifyFindCountByScenarioIdAndRhSearch(1, "Technology review");
+        verifyFindCountByScenarioIdAndRhSearch(1, SYSTEM_TITLE);
         verifyFindCountByScenarioIdAndRhSearch(1, "TeCHNoLOGY REV");
         verifyFindCountByScenarioIdAndRhSearch(0, "Techn ology review");
     }
@@ -529,13 +531,28 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         // TODO {dbasiachenka} implement
     }
 
+    @Test
+    @TestData(fileName = FOLDER_NAME + "find-agg-lc-class-results.groovy")
+    public void testFindRightsholderAggLcClassResults() {
+        AclRightsholderTotalsHolderDto expected = loadExpectedAclRightsholderTotalsHolderDto(
+                "json/acl/acl_scenario_detail_dto_for_find_rightsholder_agg_lc_cl_results.json");
+        RightsholderResultsFilter filter = new RightsholderResultsFilter();
+        filter.setScenarioId("7ae1468e-ae4d-4846-b20d-46f28b75c82c");
+        filter.setRhAccountNumber(1000028511L);
+        filter.setSystemTitle(SYSTEM_TITLE);
+        List<AclRightsholderTotalsHolderDto> actual =
+            aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
+        assertEquals(1, actual.size());
+        verifyAclRightsholderTotalsHolderDto(expected, actual.get(0));
+    }
+
     private AclScenarioDetail buildAclScenarioDetail() {
         AclScenarioDetail scenarioDetail = new AclScenarioDetail();
         scenarioDetail.setScenarioId("dec62df4-6a8f-4c59-ad65-2a5e06b3924d");
         scenarioDetail.setPeriod(202112);
         scenarioDetail.setOriginalDetailId("OGN674GHHHB0111");
         scenarioDetail.setWrWrkInst(122820638L);
-        scenarioDetail.setSystemTitle("Technology review");
+        scenarioDetail.setSystemTitle(SYSTEM_TITLE);
         scenarioDetail.setDetailLicenseeClass(buildDetailLicenseeClass(43, "Other - Govt"));
         scenarioDetail.setAggregateLicenseeClassId(1);
         scenarioDetail.setAggregateLicenseeClassName("Food and Tobacco");
@@ -628,6 +645,19 @@ public class AclScenarioUsageRepositoryIntegrationTest {
         assertEquals(expectedDetail.getDetailShareDigital(), actualDetail.getDetailShareDigital());
         assertEquals(expectedDetail.getNetAmountDigital(), actualDetail.getNetAmountDigital());
         assertEquals(expectedDetail.getCombinedNetAmount(), actualDetail.getCombinedNetAmount());
+    }
+
+    private void verifyAclRightsholderTotalsHolderDto(AclRightsholderTotalsHolderDto expected,
+                                            AclRightsholderTotalsHolderDto actual) {
+        assertEquals(expected.getAggregateLicenseeClass().getId(), actual.getAggregateLicenseeClass().getId());
+        assertEquals(expected.getAggregateLicenseeClass().getDescription(),
+            actual.getAggregateLicenseeClass().getDescription());
+        assertEquals(expected.getGrossTotalPrint(), actual.getGrossTotalPrint());
+        assertEquals(expected.getNetTotalPrint(), actual.getNetTotalPrint());
+        assertEquals(expected.getGrossTotalDigital(), actual.getGrossTotalDigital());
+        assertEquals(expected.getNetTotalDigital(), actual.getNetTotalDigital());
+        assertEquals(expected.getGrossTotal(), actual.getGrossTotal());
+        assertEquals(expected.getNetTotal(), actual.getNetTotal());
     }
 
     private AclScenario buildAclScenario(String id, String fundPoolId, String usageBatchId, String grantSetId,
@@ -801,6 +831,19 @@ public class AclScenarioUsageRepositoryIntegrationTest {
             mapper.registerModule(new JavaTimeModule());
             mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
             return mapper.readValue(content, new TypeReference<AclScenarioDetailDto>() {
+            });
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    private AclRightsholderTotalsHolderDto loadExpectedAclRightsholderTotalsHolderDto(String fileName) {
+        try {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<AclRightsholderTotalsHolderDto>() {
             });
         } catch (IOException e) {
             throw new AssertionError(e);

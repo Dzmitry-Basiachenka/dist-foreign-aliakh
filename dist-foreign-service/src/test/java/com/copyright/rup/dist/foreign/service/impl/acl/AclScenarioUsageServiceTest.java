@@ -191,6 +191,17 @@ public class AclScenarioUsageServiceTest {
         verify(aclScenarioUsageRepository);
     }
 
+    @Test
+    public void testFindRightsholderAggLcClassResults() {
+        List<AclRightsholderTotalsHolderDto> holderDtos =
+            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        expect(aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter)).andReturn(holderDtos).once();
+        replay(aclScenarioUsageRepository);
+        assertSame(holderDtos, aclScenarioUsageService.getRightsholderAggLcClassResults(filter));
+        verify(aclScenarioUsageRepository);
+    }
+
     private AclScenario buildAclScenario() {
         AclScenario aclScenario = new AclScenario();
         aclScenario.setId(SCENARIO_UID);

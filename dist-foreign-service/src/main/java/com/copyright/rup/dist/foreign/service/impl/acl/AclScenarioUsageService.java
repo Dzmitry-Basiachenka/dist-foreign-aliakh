@@ -105,4 +105,9 @@ public class AclScenarioUsageService implements IAclScenarioUsageService {
     public List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter) {
         return aclScenarioUsageRepository.findRightsholderTitleResults(filter);
     }
+
+    @Override
+    public List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter) {
+        return aclScenarioUsageRepository.findRightsholderAggLcClassResults(filter);
+    }
 }

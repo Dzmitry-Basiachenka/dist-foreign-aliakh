@@ -227,7 +227,13 @@ public class AclScenarioControllerTest {
 
     @Test
     public void testGetRightsholderAggregateLicenseeClassResults() {
-        //TODO will be implemented with service layer
+        List<AclRightsholderTotalsHolderDto> holderDtos =
+            Collections.singletonList(buildAclRightsholderTotalsHolderDto());
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter();
+        expect(aclScenarioUsageService.getRightsholderAggLcClassResults(filter)).andReturn(holderDtos).once();
+        replay(aclScenarioUsageService);
+        assertSame(holderDtos, controller.getRightsholderAggLcClassResults(filter));
+        verify(aclScenarioUsageService);
     }
 
     private AclScenario buildAclScenario() {

@@ -138,4 +138,13 @@ public interface IAclScenarioUsageService {
      * @return list of {@link AclRightsholderTotalsHolderDto}s
      */
     List<AclRightsholderTotalsHolderDto> getRightsholderTitleResults(RightsholderResultsFilter filter);
+
+    /**
+     * Gets list of {@link AclRightsholderTotalsHolderDto}s based on {@link AclScenario} identifier,
+     * rightsholder account number and title.
+     *
+     * @param filter instance of {@link RightsholderResultsFilter}
+     * @return list of {@link AclRightsholderTotalsHolderDto}s
+     */
+    List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter);
 }
