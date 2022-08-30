@@ -27,7 +27,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -113,8 +112,7 @@ public class AclScenarioController extends CommonController<IAclScenarioWidget> 
 
     @Override
     public List<AclRightsholderTotalsHolderDto> getRightsholderAggLcClassResults(RightsholderResultsFilter filter) {
-        // TODO will be implemented with service layer
-        return Collections.emptyList();
+        return scenarioUsageService.getRightsholderAggLcClassResults(filter);
     }
 
     @Override

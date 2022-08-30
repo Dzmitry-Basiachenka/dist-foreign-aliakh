@@ -70,8 +70,8 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         setContent(layout);
-        setCaption(ForeignUi.getMessage("window.view_acl_aggregate_licensee_class_by_rightsholder"));
-        VaadinUtils.addComponentStyle(this, "view-acl-aggregate-licensee-class-by-rightsholder-window");
+        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_aggregate-licensee-class"));
+        VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-aggregate-licensee-class-window");
     }
 
     private void initGrid() {
@@ -83,7 +83,7 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
         addFooter();
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
-        VaadinUtils.addComponentStyle(grid, "view-acl-aggregate-licensee-class-by-rightsholder-grid");
+        VaadinUtils.addComponentStyle(grid, "acl-scenario-drill-down-aggregate-licensee-class-grid");
     }
 
     private void addColumns() {
