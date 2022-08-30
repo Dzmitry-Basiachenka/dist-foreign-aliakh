@@ -194,9 +194,8 @@ public class AclScenarioWidget extends Window implements IAclScenarioWidget {
                 filter.setScenarioId(scenario.getId());
                 filter.setRhAccountNumber(holder.getRightsholder().getAccountNumber());
                 filter.setRhName(holder.getRightsholder().getName());
-                Windows.showModalWindow(
-                    new AclScenarioDrillDownAggLcClassesWindow(controller, filter));
-                });
+                Windows.showModalWindow(new AclScenarioDrillDownAggLcClassesWindow(controller, filter));
+            });
             return button;
         }).setCaption(ForeignUi.getMessage("table.column.number_of_aggregate_licensee_classes"))
             .setId("numberOfAggLcClasses")
