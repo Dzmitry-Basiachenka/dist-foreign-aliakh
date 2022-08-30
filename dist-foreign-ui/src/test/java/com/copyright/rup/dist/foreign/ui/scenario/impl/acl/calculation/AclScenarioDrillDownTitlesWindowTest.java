@@ -7,22 +7,30 @@ import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyGridIte
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyLabel;
 import static com.copyright.rup.dist.foreign.ui.usage.UiTestHelper.verifyWindow;
 
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.ValueProvider;
 import com.vaadin.server.Sizeable;
 import com.vaadin.shared.ui.ContentMode;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -32,11 +40,15 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -48,24 +60,29 @@ import java.util.stream.IntStream;
  *
  * @author Dzmitry Basiachenka
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({AclScenarioDrillDownTitlesWindow.class, Windows.class})
 public class AclScenarioDrillDownTitlesWindowTest {
 
     private static final String SCENARIO_UID = "1236249b-0063-4f7e-888a-3b1051d7a898";
     private static final Long RH_ACCOUNT_NUMBER = 1000010022L;
     private static final String RH_NAME = "Yale University Press";
+    private static final Long WR_WRK_INST = 303580015L;
+    private static final String SYSTEM_TITLE = "Fortune";
+    private static final Integer AGG_LIC_CLASS_ID = 1;
     private static final String AGG_LIC_CLASS_NAME = "Food and Tobacco";
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
     private AclScenarioDrillDownTitlesWindow window;
+    private IAclScenarioController controller;
 
     @Before
     public void setUp() {
-        IAclScenarioController controller = createMock(IAclScenarioController.class);
-        RightsholderResultsFilter rightsholderResultsFilter = buildRightsholderResultsFilter();
-        expect(controller.getRightsholderTitleResults(rightsholderResultsFilter))
-            .andReturn(Collections.singletonList(buildAclRightsholderTotalsHolderDto()));
+        controller = createMock(IAclScenarioController.class);
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter(AGG_LIC_CLASS_ID, AGG_LIC_CLASS_NAME);
+        expect(controller.getRightsholderTitleResults(filter)).andReturn(buildAclRightsholderTotalsHolderDtos()).once();
         replay(controller);
-        window = new AclScenarioDrillDownTitlesWindow(controller, rightsholderResultsFilter);
+        window = new AclScenarioDrillDownTitlesWindow(controller, filter);
         verify(controller);
         reset(controller);
     }
@@ -115,7 +132,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
             {127778306L, "Adaptations", "1,500.00", "8,300.00", "1,000.00", "2,000.00", "2,500.00", "10,300.00"}
         };
         Grid grid = (Grid) content.getComponent(2);
-        verifyGridItems(grid, Collections.singletonList(buildAclRightsholderTotalsHolderDto()), expectedCells);
+        verifyGridItems(grid, buildAclRightsholderTotalsHolderDtos(), expectedCells);
         Object[][] expectedFooterColumns = {
             {"grossTotalPrint", "1,500.00", STYLE_ALIGN_RIGHT},
             {"netTotalPrint", "8,300.00", STYLE_ALIGN_RIGHT},
@@ -128,17 +145,68 @@ public class AclScenarioDrillDownTitlesWindowTest {
         verifyFooterItems(grid, expectedFooterColumns);
     }
 
-    private RightsholderResultsFilter buildRightsholderResultsFilter() {
+    @Test
+    public void testSystemTitleCellClickToDrillDownAggLcClassesWindow() throws Exception {
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter(null, null);
+        expect(controller.getRightsholderTitleResults(filter)).andReturn(buildAclRightsholderTotalsHolderDtos()).once();
+        AclScenarioDrillDownAggLcClassesWindow mockWindow = createMock(AclScenarioDrillDownAggLcClassesWindow.class);
+        expectNew(AclScenarioDrillDownAggLcClassesWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
+            .once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
+        window = new AclScenarioDrillDownTitlesWindow(controller, filter);
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
+        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        button.click();
+        verify(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
+    }
+
+    @Test
+    public void testSystemTitleCellClickToDrillDownUsageDetailsWindow() throws Exception {
+        RightsholderResultsFilter filter = buildRightsholderResultsFilter(AGG_LIC_CLASS_ID, AGG_LIC_CLASS_NAME);
+        AclScenarioDrillDownUsageDetailsWindow mockWindow = createMock(AclScenarioDrillDownUsageDetailsWindow.class);
+        expectNew(AclScenarioDrillDownUsageDetailsWindow.class, eq(controller), eq(filter)).andReturn(mockWindow)
+            .once();
+        mockStatic(Windows.class);
+        Windows.showModalWindow(mockWindow);
+        expectLastCall().once();
+        replay(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
+        Grid grid = Whitebox.getInternalState(window, "grid");
+        Grid.Column column = (Grid.Column) grid.getColumns().get(1);
+        ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
+        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        button.click();
+        verify(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
+    }
+
+    private RightsholderResultsFilter buildRightsholderResultsFilter(Integer aggLicClassId, String aggLicClassName) {
         RightsholderResultsFilter filter = new RightsholderResultsFilter();
         filter.setScenarioId(SCENARIO_UID);
         filter.setRhAccountNumber(RH_ACCOUNT_NUMBER);
         filter.setRhName(RH_NAME);
-        filter.setAggregateLicenseeClassId(1);
-        filter.setAggregateLicenseeClassName(AGG_LIC_CLASS_NAME);
+        filter.setWrWrkInst(WR_WRK_INST);
+        filter.setSystemTitle(SYSTEM_TITLE);
+        filter.setAggregateLicenseeClassId(aggLicClassId);
+        filter.setAggregateLicenseeClassName(aggLicClassName);
         return filter;
     }
 
-    private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolderDto() {
+    private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolder() {
+        AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
+        holder.setWrWrkInst(WR_WRK_INST);
+        holder.setSystemTitle(SYSTEM_TITLE);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
+        rightsholder.setName(RH_NAME);
+        holder.setRightsholder(rightsholder);
+        return holder;
+    }
+
+    private List<AclRightsholderTotalsHolderDto> buildAclRightsholderTotalsHolderDtos() {
         AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
         holder.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         holder.getRightsholder().setName(RH_NAME);
@@ -150,7 +218,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         holder.setSystemTitle("Adaptations");
         holder.setGrossTotal(new BigDecimal("2500.0000000002"));
         holder.setNetTotal(new BigDecimal("10300.0000000002"));
-        return holder;
+        return Collections.singletonList(holder);
     }
 
     private void verifyMetaInfoLayout(Component component) {
