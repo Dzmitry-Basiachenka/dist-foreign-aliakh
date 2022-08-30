@@ -7,13 +7,17 @@ import com.copyright.rup.dist.foreign.ui.common.utils.BooleanUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.vaadin.data.ValueProvider;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.FooterCell;
@@ -23,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Window for displaying ACL scenario details by selected rightsholder, title, and aggregate licensee class.
@@ -33,7 +38,7 @@ import java.util.function.Function;
  *
  * @author Aliaksandr Liakh
  */
-public class AclScenarioDrillDownDetailsWindow extends Window {
+public class AclScenarioDrillDownUsageDetailsWindow extends Window {
 
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
 
@@ -48,20 +53,54 @@ public class AclScenarioDrillDownDetailsWindow extends Window {
      * @param controller instance of {@link IAclScenarioController}
      * @param filter     instance of {@link RightsholderResultsFilter}d
      */
-    public AclScenarioDrillDownDetailsWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
+    public AclScenarioDrillDownUsageDetailsWindow(IAclScenarioController controller, RightsholderResultsFilter filter) {
         this.controller = controller;
         this.filter = Objects.requireNonNull(filter);
         setWidth(1280, Unit.PIXELS);
         setHeight(600, Unit.PIXELS);
         initGrid();
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout content = new VerticalLayout(grid, closeButton);
+        VerticalLayout content = new VerticalLayout(initMetaInfoLayout(), grid, closeButton);
         content.setSizeFull();
         content.setExpandRatio(grid, 1);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         setContent(content);
-        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_details"));
-        VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-details-window");
+        setCaption(ForeignUi.getMessage("window.acl_scenario_drill_down_usage_details"));
+        VaadinUtils.addComponentStyle(this, "acl-scenario-drill-down-usage-details-window");
+    }
+
+    private VerticalLayout initMetaInfoLayout() {
+        HorizontalLayout[] components = Stream.of(
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_account_number"), filter.getRhAccountNumber()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.rh_name"), filter.getRhName()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.wr_wrk_inst"), filter.getWrWrkInst()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.system_title"), filter.getSystemTitle()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.agg_lic_class_id"),
+                filter.getAggregateLicenseeClassId()),
+            initLabelsHorizontalLayout(ForeignUi.getMessage("label.agg_lic_class_name"),
+                filter.getAggregateLicenseeClassName())
+        )
+            .filter(Objects::nonNull)
+            .toArray(HorizontalLayout[]::new);
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setMargin(new MarginInfo(true, false, true, false));
+        verticalLayout.setSpacing(false);
+        verticalLayout.addComponents(components);
+        return verticalLayout;
+    }
+
+    private HorizontalLayout initLabelsHorizontalLayout(String title, Object value) {
+        HorizontalLayout horizontalLayout = null;
+        if (Objects.nonNull(value)) {
+            horizontalLayout = new HorizontalLayout();
+            Label titleLabel = new Label(ForeignUi.getMessage("label.title", title));
+            titleLabel.setWidth(125, Unit.PIXELS);
+            titleLabel.addStyleName(Cornerstone.LABEL_BOLD);
+            Label valueLabel = new Label(String.valueOf(value));
+            valueLabel.setWidth(1125, Unit.PIXELS);
+            horizontalLayout.addComponents(titleLabel, valueLabel);
+        }
+        return horizontalLayout;
     }
 
     private void initGrid() {
@@ -73,7 +112,7 @@ public class AclScenarioDrillDownDetailsWindow extends Window {
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         grid.getColumns().forEach(column -> column.setSortable(true));
-        VaadinUtils.addComponentStyle(grid, "acl-scenario-drill-down-titles-grid");
+        VaadinUtils.addComponentStyle(grid, "acl-scenario-drill-down-usage-details-grid");
     }
 
     private void addColumns() {
