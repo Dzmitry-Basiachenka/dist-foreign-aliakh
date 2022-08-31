@@ -19,7 +19,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.AclRightsholderTotalsHolderDto;
 import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
@@ -67,8 +66,8 @@ public class AclScenarioDrillDownTitlesWindowTest {
     private static final String SCENARIO_UID = "1236249b-0063-4f7e-888a-3b1051d7a898";
     private static final Long RH_ACCOUNT_NUMBER = 1000010022L;
     private static final String RH_NAME = "Yale University Press";
-    private static final Long WR_WRK_INST = 303580015L;
-    private static final String SYSTEM_TITLE = "Fortune";
+    private static final Long WR_WRK_INST = 127778306L;
+    private static final String SYSTEM_TITLE = "Adaptations";
     private static final Integer AGG_LIC_CLASS_ID = 1;
     private static final String AGG_LIC_CLASS_NAME = "Food and Tobacco";
     private static final String STYLE_ALIGN_RIGHT = "v-align-right";
@@ -129,7 +128,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
     public void testGridValues() {
         VerticalLayout content = (VerticalLayout) window.getContent();
         Object[][] expectedCells = {
-            {127778306L, "Adaptations", "1,500.00", "8,300.00", "1,000.00", "2,000.00", "2,500.00", "10,300.00"}
+            {WR_WRK_INST, SYSTEM_TITLE, "1,500.00", "8,300.00", "1,000.00", "2,000.00", "2,500.00", "10,300.00"}
         };
         Grid grid = (Grid) content.getComponent(2);
         verifyGridItems(grid, buildAclRightsholderTotalsHolderDtos(), expectedCells);
@@ -160,7 +159,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         Grid grid = Whitebox.getInternalState(window, "grid");
         Grid.Column column = (Grid.Column) grid.getColumns().get(1);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
-        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
         button.click();
         verify(Windows.class, AclScenarioDrillDownAggLcClassesWindow.class, controller);
     }
@@ -178,7 +177,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         Grid grid = Whitebox.getInternalState(window, "grid");
         Grid.Column column = (Grid.Column) grid.getColumns().get(1);
         ValueProvider<AclRightsholderTotalsHolder, Button> provider = column.getValueProvider();
-        Button button = provider.apply(buildAclRightsholderTotalsHolder());
+        Button button = provider.apply(buildAclRightsholderTotalsHolderDtos().get(0));
         button.click();
         verify(Windows.class, AclScenarioDrillDownUsageDetailsWindow.class, controller);
     }
@@ -195,27 +194,16 @@ public class AclScenarioDrillDownTitlesWindowTest {
         return filter;
     }
 
-    private AclRightsholderTotalsHolderDto buildAclRightsholderTotalsHolder() {
-        AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
-        holder.setWrWrkInst(WR_WRK_INST);
-        holder.setSystemTitle(SYSTEM_TITLE);
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
-        rightsholder.setName(RH_NAME);
-        holder.setRightsholder(rightsholder);
-        return holder;
-    }
-
     private List<AclRightsholderTotalsHolderDto> buildAclRightsholderTotalsHolderDtos() {
         AclRightsholderTotalsHolderDto holder = new AclRightsholderTotalsHolderDto();
         holder.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         holder.getRightsholder().setName(RH_NAME);
+        holder.setWrWrkInst(WR_WRK_INST);
+        holder.setSystemTitle(SYSTEM_TITLE);
         holder.setGrossTotalPrint(new BigDecimal("1500.0000000001"));
         holder.setNetTotalPrint(new BigDecimal("8300.0000000001"));
         holder.setGrossTotalDigital(new BigDecimal("1000.0000000001"));
         holder.setNetTotalDigital(new BigDecimal("2000.0000000001"));
-        holder.setWrWrkInst(127778306L);
-        holder.setSystemTitle("Adaptations");
         holder.setGrossTotal(new BigDecimal("2500.0000000002"));
         holder.setNetTotal(new BigDecimal("10300.0000000002"));
         return Collections.singletonList(holder);
@@ -228,7 +216,7 @@ public class AclScenarioDrillDownTitlesWindowTest {
         String[][] expectedMetaInfoCaptions = {
             {"RH Account #:", "1000010022"},
             {"RH Name:", RH_NAME},
-            {"Agg Lic Class ID:", "1"},
+            {"Agg Lic Class ID:", AGG_LIC_CLASS_ID.toString()},
             {"Agg Lic Class Name:", AGG_LIC_CLASS_NAME}
         };
         verifyLabelLayout(verticalLayout, expectedMetaInfoCaptions, verticalLayout.getComponentCount());

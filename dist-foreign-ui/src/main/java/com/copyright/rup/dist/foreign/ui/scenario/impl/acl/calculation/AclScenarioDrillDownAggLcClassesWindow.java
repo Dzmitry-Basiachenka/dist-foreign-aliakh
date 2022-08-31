@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.filter.RightsholderResultsFilter;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.acl.IAclScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -93,11 +94,19 @@ public class AclScenarioDrillDownAggLcClassesWindow extends Window {
             .setSortProperty("aggregateLicenseeClass.id")
             .setWidth(110);
         grid.addComponentColumn(holder -> {
-                Button button = Buttons.createButton(Objects.toString(
-                    holder.getAggregateLicenseeClass().getDescription()));
-                button.addStyleName(ValoTheme.BUTTON_LINK);
-                return button;
-            }).setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
+            Button button = Buttons.createButton(Objects.toString(holder.getAggregateLicenseeClass().getDescription()));
+            button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> {
+                filter.setAggregateLicenseeClassId(holder.getAggregateLicenseeClass().getId());
+                filter.setAggregateLicenseeClassName(holder.getAggregateLicenseeClass().getDescription());
+                Windows.showModalWindow(
+                    Objects.nonNull(filter.getWrWrkInst())
+                        ? new AclScenarioDrillDownUsageDetailsWindow(controller, new RightsholderResultsFilter(filter))
+                        : new AclScenarioDrillDownTitlesWindow(controller, new RightsholderResultsFilter(filter))
+                );
+            });
+            return button;
+        }).setCaption(ForeignUi.getMessage("table.column.aggregate_licensee_class_name"))
             .setId("aggregateLicenseeClass.description")
             .setSortProperty("aggregateLicenseeClass.description")
             .setWidth(256);
